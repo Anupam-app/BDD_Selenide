@@ -29,7 +29,7 @@ pipeline {
                 script {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
-						pom: 'pom.xml',
+						pom: 'foundationBddTests/pom.xml',
 						goals: 'clean test',
 						resolverId: "MAVEN_RESOLVER"
 					)
