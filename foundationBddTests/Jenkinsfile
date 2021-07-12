@@ -1,7 +1,16 @@
 pipeline {
+    agent {
+        label 'bdd tests foundation'
+    }
     tools {
         maven 'apache-maven-3.6.3'
         jdk 'java_11'
+    }
+	options {
+        timestamps()
+        buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
+    }
+    parameters {
     }
 	stages {
         stage('Build & Test') {
