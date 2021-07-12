@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label 'bdd tests foundation'
+        label '!master'
     }
     tools {
         maven 'apache-maven-3.6.3'
