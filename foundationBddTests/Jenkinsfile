@@ -11,6 +11,19 @@ pipeline {
         buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
     }
 	stages {
+		stage('Initialize') {
+            steps {
+                script {
+                    notifyBitbucket(buildStatus: 'INPROGRESS')
+                }
+                rtMavenResolver(
+                        id: "MAVEN_RESOLVER",
+                        serverId: "PRODArtifactory",
+                        releaseRepo: "bio4c-repository-dev",
+                        snapshotRepo: "bio4c-repository-dev"
+                )
+            }
+        }
         stage('Build & Test') {
 			steps {
                 script {
@@ -24,4 +37,12 @@ pipeline {
 			}
 		}
 	}
+	post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                notifyBitbucket(considerUnstableAsSuccess: true)
+            }
+        }
+    }
 }
