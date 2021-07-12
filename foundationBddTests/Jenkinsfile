@@ -4,13 +4,13 @@ pipeline {
         jdk 'java_11'
     }
 	stages {
-        stage('Initialize') {
+        stage('Build & Test') {
 			steps {
                 script {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
 						pom: 'pom.xml',
-						goals: 'clean test,
+						goals: 'clean test',
 						resolverId: "MAVEN_RESOLVER"
 					)
 				}
