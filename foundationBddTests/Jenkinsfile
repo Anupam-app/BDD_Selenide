@@ -10,8 +10,6 @@ pipeline {
         timestamps()
         buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
     }
-    parameters {
-    }
 	stages {
         stage('Build & Test') {
 			steps {
