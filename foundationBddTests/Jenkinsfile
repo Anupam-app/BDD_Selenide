@@ -36,6 +36,21 @@ pipeline {
 				}
 			}
 		}
+		stage("Generate Allure Reports") {
+			steps {
+				script {	
+					dir ('foundationBddTests/target') {
+						allure([
+                            includeProperties: false,
+                            jdk: '',
+                            properties: [],
+                            reportBuildPolicy: 'ALWAYS',
+                            results: [[path: 'allure-results']]
+						])
+					}
+				}                
+			}
+		}
 	}
 	post {
         always {
