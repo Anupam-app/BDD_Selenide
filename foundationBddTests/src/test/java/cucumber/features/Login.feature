@@ -5,9 +5,7 @@ Feature: User login
 
   Scenario: User logged in
     Given I open portal
-    And I open login
-    When I input username with "bio4cservice"
-    And I input password with "MerckApp1@"
+    When I login as "Bio4CAdmin" user
     And I push login
     Then I am logged in
 
@@ -19,5 +17,5 @@ Feature: User login
       | bio4cservice  |  MerckApp2@ |
     And I push login
     Then I am not logged in
-    And I should see this message "Failed to authenticate, unknown error occurred!"
+    And I should see this message "The user name or password is incorrect."
 
