@@ -41,7 +41,7 @@ public class UserPageStepsDefinition {
         userPage.setEmployeeId(user.getEmployeeId());
     }
 
-    @When("I save my changes")
+    @When("I save my user changes")
     public void iSaveMyChanges() {
         userPage.saveMyChanges();
     }

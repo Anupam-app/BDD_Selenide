@@ -5,7 +5,7 @@ Feature: User login
 
   Scenario: User logged in
     Given I open portal
-    When I login as "Bio4CAdmin" user
+    When I login as "bio4cservice" user
     And I push login
     Then I am logged in
 
