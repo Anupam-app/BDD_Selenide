@@ -3,12 +3,11 @@ package cucumber.steps;
 import dataobjects.Recipe;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
-import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
-
 
 
 public class RecipePageStepsDefinition {
@@ -16,9 +15,9 @@ public class RecipePageStepsDefinition {
     private RecipePage recipePage;
     private Recipe recipe;
 
-    public RecipePageStepsDefinition(RecipePage recipePage) {
+    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe) {
         this.recipePage = recipePage;
-        this.recipe=new Recipe();
+        this.recipe = recipe;
     }
 
     @Given("I go to recipe page")
@@ -66,6 +65,6 @@ public class RecipePageStepsDefinition {
 
     @And("I see my changes in recipe")
     public void iSeeMyChangesInRecipe() {
-        Assert.assertEquals(this.recipePage.getPhaseName(),this.recipe.getPhaseName());
+        Assert.assertEquals(this.recipePage.getPhaseName(), this.recipe.getPhaseName());
     }
 }

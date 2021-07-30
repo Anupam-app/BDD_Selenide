@@ -13,10 +13,9 @@ public class UserPageStepsDefinition {
     private final UserPage userPage;
     private final User user;
 
-    public UserPageStepsDefinition(UserPage userPage) {
+    public UserPageStepsDefinition(UserPage userPage, User user) {
         this.userPage = userPage;
-        this.user = new User();
-
+        this.user = user;
     }
 
     @Given("I search {string} user")
@@ -68,6 +67,6 @@ public class UserPageStepsDefinition {
 
     @Then("the employee id is equal to the string input")
     public void theEmployeeIdIsEqualToTheStringInput() {
-        Assert.assertEquals(userPage.getEmployeeIdFromForm(),user.getEmployeeId());
+        Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
 }
