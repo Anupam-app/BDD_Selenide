@@ -1,10 +1,8 @@
 Feature: Recipe management
 
   Background:
-    Given The browser "Chrome_1024x768" is open
-    And I open portal
-    When I login as "bio4cservice" user
-    Then I am logged in
+    Given The browser "Chrome" is open
+    And I login as "bio4cservice" user
 
   Scenario: Recipe modification
     Given I go to recipe page

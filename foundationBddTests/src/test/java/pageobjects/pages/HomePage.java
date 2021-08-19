@@ -6,14 +6,14 @@ import com.xceptance.neodymium.util.Neodymium;
 import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selenide.$;
 
-public class HomePage extends AbstractPageObject {
+public class HomePage {
 
-    private SelenideElement defaultSession = $(By.xpath("//ul[@class='list-group']/button[1]"));
+    private SelenideElement defaultSessionButton = $(By.xpath("//ul[@class='list-group']/button[1]"));
 
     public void open() {
         Selenide.open(Neodymium.configuration().url());
         try {
-            defaultSession.click();
+            defaultSessionButton.click();
         } catch (Exception exception) {
         }
     }

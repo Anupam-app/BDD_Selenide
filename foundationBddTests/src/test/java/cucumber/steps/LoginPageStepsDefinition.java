@@ -3,17 +3,17 @@ package cucumber.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
-
-import java.util.Map;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
+    private final HomePage homepage;
 
-    public LoginPageStepsDefinition(LoginPage loginPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage) {
         this.loginPage = loginPage;
-
+        this.homepage = homepage;
     }
 
     @Given("I open login")
@@ -21,26 +21,11 @@ public class LoginPageStepsDefinition {
         loginPage.openLogin();
     }
 
-    @When("I input username with {string}")
-    public void iInputUsername(String string) {
-        loginPage.setUser(string);
-    }
-
-    @When("I input password with {string}")
-    public void iInputPassword(String string) {
-        loginPage.setPassword(string);
-    }
-
-    @When("I input credentials:")
-    public void iInputCredentials(Map<String,String> credentials) {
-        for (Map.Entry<String, String> entry : credentials.entrySet()) {
-            loginPage.setUser(entry.getKey());
-            loginPage.setPassword(entry.getValue());
-        }
-    }
-
-    @When("I push login")
-    public void iPushLogin() {
+    @When("I enter {string} as username and {string} as password")
+    public void iEnterUsernameAndPassword(String username,String password)
+    {
+        loginPage.setUser(username);
+        loginPage.setPassword(password);
         loginPage.pushLogin();
     }
 
@@ -54,13 +39,14 @@ public class LoginPageStepsDefinition {
         loginPage.checkLoggedIn(false);
     }
 
-    @Then("I should see this message {string}")
-    public void IshouldSeeThisMessage(String message) {
+    @Then("I should see the message {string}")
+    public void iShouldSeeThisMessage(String message) {
         loginPage.checkMessage(message);
     }
 
     @When("I login as {string} user")
     public void iLoginAsGivenUser(String user) {
+        homepage.open();
         loginPage.openLogin();
         loginPage.setUser(user);
         loginPage.setPassword("MerckApp1@");

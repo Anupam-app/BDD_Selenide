@@ -1,10 +1,8 @@
 Feature: User management
 
   Background:
-    Given The browser "Chrome_1024x768" is open
-    And I open portal
-    When I login as "Bio4CAdmin" user
-    Then I am logged in
+    Given The browser "Chrome" is open
+    And I login as "Bio4CAdmin" user
 
   Scenario: User modification
     Given I go to user page

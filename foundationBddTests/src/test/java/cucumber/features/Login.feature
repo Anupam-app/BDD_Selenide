@@ -1,21 +1,21 @@
 Feature: User login
 
   Background:
-    Given The browser "Chrome_1024x768" is open
+    Given The browser "Chrome" is open
+    And I open portal
 
-  Scenario: User logged in
-    Given I open portal
+  Scenario: User login
+    Given I open login
     When I login as "bio4cservice" user
-    And I push login
     Then I am logged in
 
-  Scenario: User can't login because of wrong login or password
-    Given I open portal
-    And I open login
-    When I input credentials:
-      | bio4cservice1 |  MerckApp1@ |
-      | bio4cservice  |  MerckApp2@ |
-    And I push login
+  Scenario Outline: Login errors
+    Given I open login
+    When I enter "<login>" as username and "<password>" as password
     Then I am not logged in
-    And I should see this message "The user name or password is incorrect."
+    And I should see the message "The user name or password is incorrect."
 
+    Examples:
+      | login         | password   |
+      | bio4cservice1 | MerckApp1@ |
+      | bio4cservice  | MerckApp2@ |

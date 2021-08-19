@@ -1,38 +1,39 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 
-public class LoginPage extends AbstractPageObject {
+public class LoginPage {
 
-    private SelenideElement userId = $(By.id("userId"));
-    private SelenideElement userPassword = $(By.id("userPassword"));
-    private SelenideElement submit = $(By.xpath("//button[@type='submit']"));
-    private SelenideElement loginText = $(By.xpath("//button[text()='LOGIN']"));
-    private SelenideElement userProfile = $(By.xpath("//*[@id='userProfile']"));
-    private SelenideElement userLoginModal = $(By.xpath("//*[@id='userLoginModal']"));
+    private final SelenideElement userIdTextBox = $(By.id("userId"));
+    private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
+    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
+    private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
+    private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
+    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
 
     public void setUser(String user) {
-        userId.setValue(user);
+        userIdTextBox.setValue(user);
     }
 
     public void setPassword(String password) {
-        userPassword.setValue(password);
+        userPasswordTextBox.setValue(password);
     }
 
     public void pushLogin() {
-        submit.click();
+        submitButton.click();
     }
 
     public void openLogin() {
-        loginText.click();
+        loginButton.click();
     }
 
     public void checkLoggedIn(boolean loggedInd) {
-        SelenideElement element = userProfile;
+        SelenideElement element = userProfileIcon;
 
         if (loggedInd) {
             element.should(be(visible));
@@ -42,6 +43,7 @@ public class LoginPage extends AbstractPageObject {
     }
 
     public void checkMessage(String message) {
-        userLoginModal.shouldHave(text(message));
+        userLoginAlertText.waitUntil(Condition.visible,5000l);
+        userLoginAlertText.shouldHave(text(message));
     }
 }

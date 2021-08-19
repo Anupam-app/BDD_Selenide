@@ -5,30 +5,30 @@ import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Selenide.$;
 
-public class UserPage extends AbstractPageObject {
+public class UserPage {
 
-    private SelenideElement idManagementPage = $(By.id("UserManagement"));
-    private SelenideElement userSearch = $(By.xpath("//input[@placeholder='Search...']"));
+    private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
+    private SelenideElement userSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
 
     private SelenideElement saveButton = $(By.id("save_Btn"));
     private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
-    private SelenideElement employeeID = $(By.id("employeeID"));
+    private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
 
-    private SelenideElement disableUser = $(By.id("btn_disabl"));
-    private SelenideElement enableUser = $(By.id("btn_enabl"));
+    private SelenideElement disableUserButton = $(By.id("btn_disabl"));
+    private SelenideElement enableUserButton = $(By.id("btn_enabl"));
 
-    private String xpathEditUser = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
+    private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
 
     public void setSearch(String search) {
-        userSearch.setValue(search);
+        userSearchTextBox.setValue(search);
     }
 
     public void edit(String user) {
-        $(By.xpath(String.format(xpathEditUser, user))).click();
+        $(By.xpath(String.format(xpathEditUserIcon, user))).click();
     }
 
     public void setEmployeeId(String employeeId) {
-        employeeID.setValue(employeeId);
+        employeeIDTextBox.setValue(employeeId);
     }
 
     public void saveMyChanges() {
@@ -37,30 +37,30 @@ public class UserPage extends AbstractPageObject {
     }
 
     public String getEmployeeIdFromForm() {
-        return employeeID.getValue();
+        return employeeIDTextBox.getValue();
     }
 
     public void disableUser() {
-        disableUser.click();
+        disableUserButton.click();
     }
 
     public void enableUser() {
-        enableUser.click();
+        enableUserButton.click();
     }
 
     public void goTo() {
-        idManagementPage.click();
+        idManagementPageLinkText.click();
     }
 
     public boolean isUserDisabled() {
-        return disableUser.getAttribute("class").equals("togg_btn toggle_act")
+        return disableUserButton.getAttribute("class").equals("togg_btn toggle_act")
                 &&
-                enableUser.getAttribute("class").equals("togg_btn");
+                enableUserButton.getAttribute("class").equals("togg_btn");
     }
 
     public boolean isUserEnabled() {
-        return enableUser.getAttribute("class").equals("togg_btn toggle_act")
+        return enableUserButton.getAttribute("class").equals("togg_btn toggle_act")
                 &&
-                disableUser.getAttribute("class").equals("togg_btn");
+                disableUserButton.getAttribute("class").equals("togg_btn");
     }
 }

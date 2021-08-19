@@ -9,23 +9,23 @@ import org.openqa.selenium.Keys;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 
-public class RecipePage extends AbstractPageObject {
+public class RecipePage {
 
-    private SelenideElement recipePage = $(By.id("RecipeManagement"));
-    private SelenideElement recipeSearch = $(By.id("search"));
+    private SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
+    private SelenideElement recipeSearchTextBox = $(By.id("search"));
     private SelenideElement openButton=$(By.xpath("//*[@class=\"open-recipe-btn\"]/div/button[contains(.,'Open')]"));
-    private SelenideElement editorLink=$(By.xpath("//a[text()='Editor']"));
-    private SelenideElement browserLink=$(By.xpath("//a[text()='Browser']"));
+    private SelenideElement editorLinkText=$(By.xpath("//a[text()='Editor']"));
+    private SelenideElement browserLinkText=$(By.xpath("//a[text()='Browser']"));
     private SelenideElement plusButton=$(By.className("icon-plus"));
-    private SelenideElement phaseElement=$(By.className("phase-Name"));
+    private SelenideElement phaseElementTextBox =$(By.className("phase-Name"));
 
-    private By phases = By.className("phaseHead");
+    private By phasesList = By.className("phaseHead");
     private By deletePhaseButton = By.className("deleteButton");
 
     private String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
     public void goTo() {
-        recipePage.click();
+        recipePageLinkText.click();
     }
 
     public void switchToFrame() {
@@ -33,17 +33,17 @@ public class RecipePage extends AbstractPageObject {
     }
 
     public void setSearch(String recipeName) {
-        recipeSearch.setValue(recipeName);
-        recipeSearch.sendKeys(Keys.ENTER);
+        recipeSearchTextBox.setValue(recipeName);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
     }
 
     public void goToEditMode() {
-        editorLink.waitUntil(Condition.visible,5000l);
-        editorLink.click();
+        editorLinkText.waitUntil(Condition.visible,5000l);
+        editorLinkText.click();
     }
 
     public void goToBrowserMode() {
-        browserLink.click();
+        browserLinkText.click();
     }
 
     public void edit(String recipeName) {
@@ -52,7 +52,7 @@ public class RecipePage extends AbstractPageObject {
     }
 
     public void deleteAllPhases() {
-        Selenide.$$(phases).forEach(e->{
+        Selenide.$$(phasesList).forEach(e->{
             e.click();
             e.find(deletePhaseButton).click();
         });
@@ -66,8 +66,8 @@ public class RecipePage extends AbstractPageObject {
         searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL+"g");
 
-        phaseElement.sendKeys(phase);
-        phaseElement.sendKeys(Keys.ENTER);
+        phaseElementTextBox.sendKeys(phase);
+        phaseElementTextBox.sendKeys(Keys.ENTER);
     }
 
     public void saveRecipe(String recipeName) {
@@ -79,6 +79,6 @@ public class RecipePage extends AbstractPageObject {
     }
 
     public String getPhaseName() {
-        return phaseElement.getValue();
+        return phaseElementTextBox.getValue();
     }
 }
