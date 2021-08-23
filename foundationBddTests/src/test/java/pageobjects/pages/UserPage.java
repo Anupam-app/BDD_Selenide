@@ -1,8 +1,11 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.conditions.Visible;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class UserPage {
@@ -25,6 +28,10 @@ public class UserPage {
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).click();
+    }
+
+    public void userExists(String user) {
+        $(By.xpath(String.format(xpathEditUserIcon, user))).should(be(visible));
     }
 
     public void setEmployeeId(String employeeId) {

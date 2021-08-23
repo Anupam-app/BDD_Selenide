@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import dataobjects.User;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -68,5 +69,12 @@ public class UserPageStepsDefinition {
     @Then("the employee id is equal to the string input")
     public void theEmployeeIdIsEqualToTheStringInput() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
+    }
+
+    @And("the user {string} exists")
+    public void theUserExists(String user) {
+        userPage.goTo();
+        userPage.setSearch(user);
+        userPage.userExists(user);
     }
 }
