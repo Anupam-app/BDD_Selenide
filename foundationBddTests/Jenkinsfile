@@ -10,6 +10,9 @@ pipeline {
         timestamps()
         buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
     }
+    parameters {
+        string(name: 'Hostname', defaultValue: '', description: 'hostname where the test are launched')
+    }
 	stages {
 		stage('Initialize') {
             steps {
@@ -30,7 +33,7 @@ pipeline {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
 						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test',
+						goals: 'clean test -Dneodymium.url.host=${params.Hostname}',
 						resolverId: "MAVEN_RESOLVER"
 					)
 				}
