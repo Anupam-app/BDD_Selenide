@@ -30,7 +30,7 @@ pipeline {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
 						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test -Dneodymium.url.host=${env.Hostname}',
+						goals: 'clean test -Dneodymium.url.host=' + env.Hostname,
 						resolverId: "MAVEN_RESOLVER"
 					)
 				}
