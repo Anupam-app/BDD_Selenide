@@ -29,6 +29,7 @@ public class LoginPage {
     }
 
     public void openLogin() {
+        loginButton.waitUntil(Condition.visible,5000l);
         loginButton.click();
     }
 
