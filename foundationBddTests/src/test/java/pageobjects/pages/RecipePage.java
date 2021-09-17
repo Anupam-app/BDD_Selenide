@@ -13,7 +13,7 @@ public class RecipePage {
 
     private SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private SelenideElement recipeSearchTextBox = $(By.id("search"));
-    private SelenideElement openButton=$(By.xpath("//*[@class=\"open-recipe-btn\"]/div/button[contains(.,'Open')]"));
+    private SelenideElement openButton=$(By.xpath("//*[@id=\"open_recipe_block\"]/div/button"));
     private SelenideElement editorLinkText=$(By.xpath("//a[text()='Editor']"));
     private SelenideElement browserLinkText=$(By.xpath("//a[text()='Browser']"));
     private SelenideElement plusButton=$(By.className("icon-plus"));
@@ -59,6 +59,7 @@ public class RecipePage {
     }
 
     public void addPhase(String phase) {
+        plusButton.waitUntil(Condition.visible,5000l);
         plusButton.click();
         SelenideElement searchTextBox=$(By.className("search-txt-box"));
 

@@ -12,9 +12,8 @@ public class HomePage {
 
     public void open() {
         Selenide.open(Neodymium.configuration().url());
-        try {
+        if(defaultSessionButton.isDisplayed()){
             defaultSessionButton.click();
-        } catch (Exception exception) {
         }
     }
 }
