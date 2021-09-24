@@ -8,7 +8,7 @@ import io.cucumber.java.en.Given;
 import io.github.bonigarcia.wdm.WebDriverManager;
 
 public class DriverHooks {
-    @Given("^The browser \"([^\"]*)\" is open$")
+    @Given("^the browser \"([^\"]*)\" is open$")
     public static void setUp(String browserProfileName) {
         WebDriverUtils.setUp(browserProfileName);
     }

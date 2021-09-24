@@ -7,7 +7,8 @@ import org.junit.runner.RunWith;
 @RunWith(NeodymiumCucumberRunner.class)
 @CucumberOptions(features = "src/test/java/cucumber/features/", glue = "cucumber", monochrome = true, plugin =
         {
-                "pretty"
+                "pretty",
+                "html:target/cucumber-report.html"
         })
 public class RunAllFeaturesTest {
 }

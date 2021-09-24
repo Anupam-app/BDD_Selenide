@@ -66,7 +66,7 @@ public class UserPageStepsDefinition {
         Assert.assertTrue(userPage.isUserEnabled());
     }
 
-    @Then("the employee id is equal to the string input")
+    @Then("the employee id is the one expected")
     public void theEmployeeIdIsEqualToTheStringInput() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }

@@ -41,7 +41,7 @@ public class RecipePageStepsDefinition {
         recipePage.deleteAllPhases();
     }
 
-    @When("I go to edit mode")
+    @When("I trigger edit mode")
     public void iGoToEditMode() {
         recipePage.goToEditMode();
     }

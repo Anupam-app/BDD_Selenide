@@ -16,7 +16,7 @@ public class LoginPageStepsDefinition {
         this.homepage = homepage;
     }
 
-    @Given("I open login")
+    @Given("I open login page")
     public void iOpenLogin() {
         loginPage.openLogin();
     }
@@ -26,6 +26,11 @@ public class LoginPageStepsDefinition {
     {
         loginPage.setUser(username);
         loginPage.setPassword(password);
+    }
+
+    @When("I push the login button")
+    public void iPushTheLoginButton()
+    {
         loginPage.pushLogin();
     }
 
@@ -44,7 +49,7 @@ public class LoginPageStepsDefinition {
         loginPage.checkMessage(message);
     }
 
-    @When("I login as {string} user")
+    @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String user) {
         homepage.open();
         loginPage.openLogin();

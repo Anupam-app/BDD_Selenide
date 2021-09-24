@@ -1,12 +1,12 @@
 Feature: Recipe management
 
   Background:
-    Given The browser "Chrome" is open
-    And I login as "bio4cservice" user
+    Given the browser "Chrome" is open
+    And I am logged in as "bio4cservice" user
 
-  Scenario: Recipe modification
+  Scenario: Recipe creation
     Given I go to recipe page
-    When I go to edit mode
+    When I trigger edit mode
     And I create a random phase
     And I save the recipe
     Then I go to browser mode
