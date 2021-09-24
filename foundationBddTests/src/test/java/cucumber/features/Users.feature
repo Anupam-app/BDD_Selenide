@@ -22,8 +22,8 @@ Feature: User management
     And I edit the user
     And I disable the user
     And I save my user changes
-    Then I edit the user
-    And the user is disabled
+    And I edit the user
+    Then the user is disabled
 
   Scenario: User enable
     Given I go to user page
@@ -31,5 +31,5 @@ Feature: User management
     And I edit the user
     And I enable the user
     And I save my user changes
-    Then I edit the user
-    And the user is enabled
+    And I edit the user
+    Then the user is enabled
