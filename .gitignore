@@ -8,6 +8,8 @@ ${maven.multiModuleProjectDirectory}
 
 # IDEs
 .idea
+build
+allure-results
 *.iml
 .settings
 .classpath

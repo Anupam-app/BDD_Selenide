@@ -1,0 +1,63 @@
+pipeline {
+    agent {
+        label '!master'
+    }
+    tools {
+        maven 'apache-maven-3.6.3'
+        jdk 'java_11'
+    }
+	options {
+        timestamps()
+        buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
+    }
+	stages {
+		stage('Initialize') {
+            steps {
+                script {
+                    notifyBitbucket(buildStatus: 'INPROGRESS')
+                }
+                rtMavenResolver(
+                        id: "MAVEN_RESOLVER",
+                        serverId: "PRODArtifactory",
+                        releaseRepo: "bio4c-repository-dev",
+                        snapshotRepo: "bio4c-repository-dev"
+                )
+            }
+        }
+        stage('Build & Test') {
+			steps {
+                script {
+					rtMavenRun(
+						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
+						pom: 'foundationBddTests/pom.xml',
+						goals: 'clean test -Dneodymium.url.host=' + env.Hostname,
+						resolverId: "MAVEN_RESOLVER"
+					)
+				}
+			}
+		}
+		stage("Generate Allure Reports") {
+			steps {
+				script {	
+					dir ('foundationBddTests/target') {
+						allure([
+                            includeProperties: false,
+                            jdk: '',
+                            properties: [],
+                            reportBuildPolicy: 'ALWAYS',
+                            results: [[path: 'allure-results']]
+						])
+					}
+				}                
+			}
+		}
+	}
+	post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                notifyBitbucket(considerUnstableAsSuccess: true)
+            }
+        }
+    }
+}
