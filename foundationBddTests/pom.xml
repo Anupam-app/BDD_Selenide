@@ -20,6 +20,7 @@
 		<allure.version>2.10.0</allure.version>
 		<neodymium.version>4.1.0</neodymium.version>
 		<lombok.version>1.18.12</lombok.version>
+		<webdrivermanager.version>5.0.2</webdrivermanager.version>
 	</properties>
 
 	<build>
@@ -104,7 +105,7 @@
 		<dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
-			<version>5.0.2</version>
+			<version>${webdrivermanager.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -118,18 +119,5 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	
-	<!-- Disable Maven Central repo  -->
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>http://repo1.maven.org/maven2</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+
 </project>

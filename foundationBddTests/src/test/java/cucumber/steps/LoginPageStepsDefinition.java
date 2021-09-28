@@ -52,9 +52,11 @@ public class LoginPageStepsDefinition {
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String user) {
         homepage.open();
+        loginPage.waitPnidLoading();
         loginPage.openLogin();
         loginPage.setUser(user);
         loginPage.setPassword("MerckApp1@");
         loginPage.pushLogin();
+        loginPage.waitControlOnPnid();
     }
 }
