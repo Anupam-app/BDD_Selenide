@@ -17,18 +17,74 @@ pipeline {
                     notifyBitbucket(buildStatus: 'INPROGRESS')
                 }
                 rtMavenResolver(
-                        id: "MAVEN_RESOLVER",
-                        serverId: "PRODArtifactory",
-                        releaseRepo: "bio4c-repository-dev",
-                        snapshotRepo: "bio4c-repository-dev"
+					id: "MAVEN_RESOLVER",
+					serverId: "PRODArtifactory",
+					releaseRepo: "bio4c-repository-dev",
+					snapshotRepo: "bio4c-repository-dev"
                 )
+            }
+        }
+		stage('Clean target resources path') {
+            steps {
+				winRMClient(
+					hostName: "${env.Hostname}",
+					credentialsId: "${env.CredentialsId}",
+					winRMOperations: [
+						invokeCommand('cmd /C if exist '+env.targetResourcesPath+' rd /q /s '+env.targetResourcesPath)
+					]
+				)
+            }
+        }
+		stage('Transfer test resources') {
+            steps {
+				script{
+					withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
+					{
+						powershell '''
+					    $user = $env:user
+					    $password = $env:password
+						$sourcePath="$env:WORKSPACE\\foundationBddTests\\src\\test\\resources\\"
+
+						$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword						
+
+						$Session = New-PSSession -ComputerName "$env:Hostname" -Credential $cred
+						
+						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force						
+						'''
+					}
+				}
+            }
+        }
+		stage('Initialize Database') {
+            steps {
+				winRMClient(
+					hostName: "${env.Hostname}",
+					credentialsId: "${env.CredentialsId}",
+					winRMOperations: [
+						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CipHostname+' '+env.targetResourcesPath+'/sqlscripts')
+					]
+				)
+            }
+        }
+		stage('Initialize With Ps Scripts') {
+            steps {
+				script {
+					winRMClient(
+						hostName: "${env.Hostname}",
+						credentialsId: "${env.CredentialsId}",
+						winRMOperations: [
+							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts')
+						]
+					)
+                }				
             }
         }
         stage('Build & Test') {
 			steps {
                 script {
 					rtMavenRun(
-						tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
+						tool: 'apache-maven-3.6.3',
 						pom: 'foundationBddTests/pom.xml',
 						goals: 'clean test -Dneodymium.url.host=' + env.Hostname,
 						resolverId: "MAVEN_RESOLVER"

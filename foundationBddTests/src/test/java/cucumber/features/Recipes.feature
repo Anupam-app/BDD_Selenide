@@ -2,7 +2,7 @@ Feature: Recipe management
 
   Background:
     Given the browser "Chrome" is open
-    And I am logged in as "bio4cservice" user
+    And I am logged in as "bio4cadmin" user
 
   Scenario: Recipe creation
     Given I go to recipe page

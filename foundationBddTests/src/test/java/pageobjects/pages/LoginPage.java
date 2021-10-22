@@ -5,7 +5,10 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.byTestAttribute;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class LoginPage {
 
@@ -15,6 +18,9 @@ public class LoginPage {
     private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+    private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+
+    private final String pnidLoginTestId = "pnid_login_info";
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -29,8 +35,7 @@ public class LoginPage {
     }
 
     public void openLogin() {
-        loginButton.waitUntil(Condition.visible,5000l);
-        loginButton.click();
+        commonWaiter(loginButton,visible).click();
     }
 
     public void checkLoggedIn(boolean loggedInd) {
@@ -44,7 +49,20 @@ public class LoginPage {
     }
 
     public void checkMessage(String message) {
-        userLoginAlertText.waitUntil(Condition.visible,5000l);
+        commonWaiter(userLoginAlertText,visible);
         userLoginAlertText.shouldHave(text(message));
+    }
+
+    public void waitControlOnPnid() {
+        waitPnidMessage("You are controlling main screen");
+    }
+
+    public void waitPnidLoading() {
+        waitPnidMessage("Main screen is view only");
+    }
+
+    public void waitPnidMessage(String message) {
+        commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
+        commonWaiter(loadingIcon, not(visible));
     }
 }
