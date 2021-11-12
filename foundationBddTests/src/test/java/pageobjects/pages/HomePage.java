@@ -5,6 +5,7 @@ import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
 import org.openqa.selenium.By;
 import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.WebDriverRunner;
 
 public class HomePage {
 
@@ -12,6 +13,7 @@ public class HomePage {
 
     public void open() {
         Selenide.open(Neodymium.configuration().url());
+        WebDriverRunner.getWebDriver().manage().window().fullscreen();
         if(defaultSessionButton.isDisplayed()){
             defaultSessionButton.click();
         }

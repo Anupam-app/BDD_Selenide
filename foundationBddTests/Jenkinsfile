@@ -1,6 +1,6 @@
 pipeline {
     agent {
-        label '!master'
+        label 'bddtests'
     }
     tools {
         maven 'apache-maven-3.6.3'
@@ -86,7 +86,7 @@ pipeline {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3',
 						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test -Dneodymium.url.host=' + env.Hostname,
+						goals: 'clean test -Dneodymium.url.host=' + env.CipHostname,
 						resolverId: "MAVEN_RESOLVER"
 					)
 				}
