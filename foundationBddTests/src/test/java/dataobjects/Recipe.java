@@ -11,4 +11,25 @@ public class Recipe {
     @Setter
     @Getter
     String phaseName;
+
+    @Setter
+    @Getter
+    String recipeNode;
+
+    @Setter
+    @Getter
+    String productId;
+
+    @Setter
+    @Getter
+    String batchId;
+
+    @Setter
+    @Getter
+    String beforeComments;
+
+    @Setter
+    @Getter
+    String afterComments;
+
 }
