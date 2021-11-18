@@ -27,7 +27,7 @@ pipeline {
 		stage('Clean target resources path') {
             steps {
 				winRMClient(
-					hostName: "${env.Hostname}",
+					hostName: "${env.CipHostname}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
 						invokeCommand('cmd /C if exist '+env.targetResourcesPath+' rd /q /s '+env.targetResourcesPath)
@@ -48,7 +48,7 @@ pipeline {
 						$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
 						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword						
 
-						$Session = New-PSSession -ComputerName "$env:Hostname" -Credential $cred
+						$Session = New-PSSession -ComputerName "$env:CipHostname" -Credential $cred
 						
 						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force						
 						'''
@@ -59,7 +59,7 @@ pipeline {
 		stage('Initialize Database') {
             steps {
 				winRMClient(
-					hostName: "${env.Hostname}",
+					hostName: "${env.CipHostname}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
 						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CipHostname+' '+env.targetResourcesPath+'/sqlscripts')
@@ -71,7 +71,7 @@ pipeline {
             steps {
 				script {
 					winRMClient(
-						hostName: "${env.Hostname}",
+						hostName: "${env.CipHostname}",
 						credentialsId: "${env.CredentialsId}",
 						winRMOperations: [
 							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts')
