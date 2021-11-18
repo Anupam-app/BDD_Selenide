@@ -59,4 +59,10 @@ public class LoginPageStepsDefinition {
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
     }
+
+    @Given("I change password {string}")
+    public void iChangePassword(String password) {
+        loginPage.setNewpassword(password);
+        loginPage.setConfirmpassword(password);
+    }
 }

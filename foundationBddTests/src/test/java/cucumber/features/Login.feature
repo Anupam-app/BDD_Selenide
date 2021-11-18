@@ -15,9 +15,24 @@ Feature: User login
     When I enter "<login>" as username and "<password>" as password
     And I push the login button
     Then I am not logged in
-    And I should see the message "The user name or password is incorrect."
+    And I should see the message "<message>"
 
     Examples:
-      | login         | password   |
-      | bio4cservice1 | MerckApp1@ |
-      | bio4cservice  | MerckApp2@ |
+      | login         | password   | message                                                   |
+      | bio4cservice1 | MerckApp1@ | Local logon failed for user bio4cservice1                 |
+      | bio4cservice  | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left. |
+
+  Scenario Outline: New user login
+    Given I open login page
+    When I enter "<login>" as username and "<tempPassword>" as password
+    And I push the login button
+    And I change password "<newPassword>"
+    And I open portal
+    And I open login page
+    And I enter "<login>" as username and "<newPassword>" as password
+    And I push the login button
+    Then I am logged in
+
+    Examples:
+      | login             | tempPassword     | newPassword |
+      | testUsrFirstLog   | M)^40kMb8^       | !2345Zxcv1  |

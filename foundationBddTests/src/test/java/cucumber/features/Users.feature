@@ -7,6 +7,19 @@ Feature: User management
     And the user "testUserEnabled" exists
     And the user "testUserDisabled" exists
 
+  Scenario: Create new user
+    Given I go to user page
+    When I create a random username
+    And I select role "Bio4CService"
+    And I enter random firstname
+    And I enter random lastname
+    And I enter random employeeID
+    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I save my user changes
+    And I search the user
+    And I edit the user
+    Then The username is equal to the expected one
+
   Scenario: User modification
     Given I go to user page
     When I search "testUser" user
@@ -14,7 +27,7 @@ Feature: User management
     And I change the employee id with a random string
     And I save my user changes
     And I edit the user
-    Then the employee id is the one expected
+    Then the employee id is the expected one
 
   Scenario: User disable
     Given I go to user page
@@ -32,4 +45,4 @@ Feature: User management
     And I enable the user
     And I save my user changes
     And I edit the user
-    Then the user is enabled
+    And the user is enabled
