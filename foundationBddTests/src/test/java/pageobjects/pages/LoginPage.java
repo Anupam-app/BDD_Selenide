@@ -14,6 +14,9 @@ public class LoginPage {
 
     private final SelenideElement userIdTextBox = $(By.id("userId"));
     private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
+    private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
+    private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
+
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
@@ -64,5 +67,15 @@ public class LoginPage {
     public void waitPnidMessage(String message) {
         commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
         commonWaiter(loadingIcon, not(visible));
+    }
+
+    public void setNewpassword(String newpassword) {
+        commonWaiter(newPasswordTextbox,visible);
+        newPasswordTextbox.setValue(newpassword);
+    }
+
+    public void setConfirmpassword(String newpassword) {
+        confirmPasswordTextbox.setValue(newpassword);
+        submitButton.click();
     }
 }

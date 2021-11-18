@@ -7,9 +7,29 @@ public class User {
 
     @Setter
     @Getter
-    String username;
+    String firstName;
+
+    @Setter
+    @Getter
+    String lastName;
+
+    @Setter
+    @Getter
+    String userName;
+
+    @Setter
+    @Getter
+    String roleName;
 
     @Setter
     @Getter
     String employeeId;
+
+    @Setter
+    @Getter
+    String emailId;
+
+    @Setter
+    @Getter
+    String password;
 }
