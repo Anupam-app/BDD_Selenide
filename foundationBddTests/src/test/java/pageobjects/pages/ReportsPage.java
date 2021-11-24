@@ -140,8 +140,7 @@ public class ReportsPage {
     }
 
     public void checkSigned(String reportName, String username) {
-        String reportNameModifiedAfterSignature = String.format("%s_%s", reportName, username);
-        var reportSigned=$(By.xpath(String.format(XPATH_SIGNED_REPORT, reportNameModifiedAfterSignature, username)));
+        var reportSigned=$(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
         SelenideHelper.commonWaiter(reportSigned,visible);
     }
 
