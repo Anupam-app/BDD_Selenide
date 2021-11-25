@@ -149,7 +149,7 @@ public class ReportsPage {
     }
 
     public void checkReportPdfInPage() {
-        reportEmbed.shouldBe(visible);
+        SelenideHelper.commonWaiter(reportEmbed,visible);
     }
 
     public void includeReport(String reportInclude) {
