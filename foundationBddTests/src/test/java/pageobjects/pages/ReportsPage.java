@@ -39,12 +39,12 @@ public class ReportsPage {
     private final SelenideElement reportSearch = $(By.xpath("//input[@placeholder='Search...']"));
 
     private final SelenideElement templateNameTextBox = $(By.xpath("//input[@placeholder='Create a template name']"));
-    private final SelenideElement reportEmbed = $(By.xpath("//embed[@type='application/pdf']"));
 
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
 
     private final SelenideElement notificationText = $(By.className("notification-summary"));
+    private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
 
     public void goToReports() {
         reportsManagementPage.click();
@@ -144,12 +144,8 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(reportSigned,visible);
     }
 
-    public void goToReportView() {
-        switchTo().frame("ReportViewIFrame");
-    }
-
     public void checkReportPdfInPage() {
-        SelenideHelper.commonWaiter(reportEmbed,visible);
+        absentReportText.should(not(visible));
     }
 
     public void includeReport(String reportInclude) {

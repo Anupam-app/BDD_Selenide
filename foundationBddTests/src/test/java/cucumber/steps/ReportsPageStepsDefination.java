@@ -64,11 +64,6 @@ public class ReportsPageStepsDefination {
         reportPage.viewReports(this.report.getName());
     }
 
-    @When("I go to report view")
-    public void iGoToReportView() {
-        reportPage.goToReportView();
-    }
-
     @Then("I check the report presence")
     public void iCheckTheReportPresence() {
         reportPage.checkReportPdfInPage();
