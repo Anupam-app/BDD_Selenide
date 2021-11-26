@@ -50,6 +50,7 @@ public class ReportsPageStepsDefination {
 
     @Then("I see the report signed")
     public void iSeeTheReportSigned() {
+        this.report.setName(String.format("%s_%s", this.report.getName(), this.user.getUserName()));
         reportPage.checkSigned(this.report.getName(),this.user.getUserName());
     }
 
@@ -61,11 +62,6 @@ public class ReportsPageStepsDefination {
     @When("I view the report")
     public void iViewReports() {
         reportPage.viewReports(this.report.getName());
-    }
-
-    @When("I go to report view")
-    public void iGoToReportView() {
-        reportPage.goToReportView();
     }
 
     @Then("I check the report presence")

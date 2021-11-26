@@ -13,7 +13,6 @@ Background:
     And I esign the report
     Then I see the report signed
     And I view the report
-    And I go to report view
     And I check the report presence
 
   Scenario: Create Report Template and approve it
