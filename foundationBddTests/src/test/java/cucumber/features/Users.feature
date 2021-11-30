@@ -6,6 +6,32 @@ Feature: User management
     And the user "testUser" exists
     And the user "testUserEnabled" exists
     And the user "testUserDisabled" exists
+    
+  Scenario: Verify editable fileds in user
+		Given I goto user management page
+    When I search "testUser" user
+    And I edit the user
+		And I change the role
+		And I change the employee id
+		And I change the email
+		And I change the mobile number
+		And I change the department
+		And I generate audit trail report
+		Then I see user details are changed
+		And I check the audit trail report
+		
+		
+  Scenario: Reset the password
+		Given I goto user management page
+		When I click on edit user
+		And I click on reset password
+		Then I see password reset message is displayed
+
+
+  Scenario: Connect after reset the password
+		Given I goto user management page
+		When I login with new password
+		Then I am logged in
 
   Scenario: User modification
     Given I go to user page
