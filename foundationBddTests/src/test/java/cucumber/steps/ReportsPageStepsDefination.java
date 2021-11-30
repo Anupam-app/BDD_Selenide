@@ -37,6 +37,21 @@ public class ReportsPageStepsDefination {
         reportPage.selectReport(report);
     }
 
+    @When("I choose run {string}")
+    public void iChooseRun(String run) {
+        reportPage.selectRun(run);
+    }
+
+    @When("I choose run {string} for consolidation")
+    public void iChooseRunForConsolidation(String run) {
+        reportPage.selectForConsolidationRun(run);
+    }
+
+    @When("I choose template {string}")
+    public void iChooseTemplate(String template) {
+        reportPage.chooseReportTemplate(template);
+    }
+
     @When("I click on generate button")
     public void iClickOnGenerateButton() {
         reportPage.generateReport();

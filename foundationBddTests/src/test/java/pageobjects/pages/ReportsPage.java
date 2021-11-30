@@ -7,8 +7,7 @@ import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class ReportsPage {
@@ -19,12 +18,16 @@ public class ReportsPage {
     private final String XPATH_SIGNED_REPORT = "//tr[td='Signed' and td='%s' and td='%s']";
     private final String XPATH_REPORT_NAME = "//td[text()='%s']";
     private final String XPATH_TEMPLATE_CHECKBOX = "//div[@class='item_value'][text()='%s']/ancestor::li/div[@class='check_box']";
+    private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[text()='%s']";
+    private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT = "//td[text()='%s']/ancestor::tr//*[@class='checkbox']";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement reportTab = $(By.xpath("//a[text()='Reports']"));
     private final SelenideElement templateTab = $(By.xpath("//a[text()='Templates']"));
 
-    private final SelenideElement selectReportDropdownArrow = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private final SelenideElement selectReportRunReportTemplateDropDown =
+            $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
 
     private final SelenideElement reportGenerateButton = $(By.xpath("//button[text()='Generate']"));
     private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
@@ -55,7 +58,7 @@ public class ReportsPage {
     }
 
     public void selectReport(String reportname) {
-        SelenideHelper.commonWaiter(selectReportDropdownArrow, visible).click();
+        SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
         $(By.xpath(String.format("//option[text()='%s']/ancestor::li/a", reportname))).click();
     }
 
@@ -92,7 +95,7 @@ public class ReportsPage {
 
     public void approveTemplate(String templateName, String password, String status) {
         openReportTemplate(templateName);
-        SelenideHelper.commonWaiter(reportTemplateStatusIcon,visible).click();
+        SelenideHelper.commonWaiter(reportTemplateStatusIcon, visible).click();
         changeStatus(status);
         saveReportTemplate();
         inputPassword.shouldBe(visible);
@@ -140,8 +143,8 @@ public class ReportsPage {
     }
 
     public void checkSigned(String reportName, String username) {
-        var reportSigned=$(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
-        SelenideHelper.commonWaiter(reportSigned,visible);
+        var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
+        SelenideHelper.commonWaiter(reportSigned, visible);
     }
 
     public void checkReportPdfInPage() {
@@ -154,5 +157,24 @@ public class ReportsPage {
 
     public void saveReportTemplate() {
         saveTemplateButton.click();
+    }
+
+    public void selectRun(String run) {
+        $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
+    }
+
+    public void chooseReportTemplate(String template) {
+        selectReportRunReportTemplateDropDown.click();
+        var options = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
+        for (var option : options) {
+            if (option.getValue().equals(template)) {
+                option.parent().click();
+                break;
+            }
+        }
+    }
+
+    public void selectForConsolidationRun(String run) {
+        $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).click();
     }
 }
