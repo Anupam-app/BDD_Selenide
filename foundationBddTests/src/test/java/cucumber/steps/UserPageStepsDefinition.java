@@ -77,4 +77,38 @@ public class UserPageStepsDefinition {
         userPage.setSearch(user);
         userPage.userExists(user);
     }
+
+    @When("I see user management page with list of users")
+    public void iSeeUsers() {
+    	userPage.userList();
+    }
+
+    @When("I create user {string}")
+    public void iCreateUser(String emailId) {
+    	userPage.createUser(emailId);
+    }
+
+    @When("I edit user")
+    public void iEditUser(String user) {
+    	this.user.setUsername(user);
+    	userPage.editUser(user);
+
+    }
+
+    @Then("I verify new user permissions to user management")
+    public void iVerifyNewUserPermissions() {
+    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
+    	
+    }
+
+    @When("I dont see user management page with list of users")
+    public void iVerifyUserList() {
+    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
+    }
+    
+    @Then("I verify user dont have permission to create user and edit user")
+    public void iVerifyCreateUserAndEditUserPermissions() {
+    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
+    }
+
 }

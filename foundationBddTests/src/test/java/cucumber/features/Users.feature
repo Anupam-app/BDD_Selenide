@@ -33,3 +33,19 @@ Feature: User management
     And I save my user changes
     And I edit the user
     Then the user is enabled
+    
+    
+  @Wip
+  Scenario: Verify permissions related to Users Management
+    Given I am logged in as "testUserPermsn" user
+    When I go to user page 
+    And I see user management page with list of users
+    And I create user "mallikarjun.onkar@external.merckgroup.com"
+    And I edit user
+    Then I verify new user permissions to user management
+    
+  Scenario: Verify user do not have permissions to Users Management
+    Given I am logged in as "testUserWithoutUserPerm" user
+    When I go to user page
+    And I dont see user management page with list of users
+    Then I verify user dont have permission to create user and edit user
