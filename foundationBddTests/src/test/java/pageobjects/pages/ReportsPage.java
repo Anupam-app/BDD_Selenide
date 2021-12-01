@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
@@ -28,6 +29,7 @@ public class ReportsPage {
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
+    private final ElementsCollection optionsReportTemplate = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
 
     private final SelenideElement reportGenerateButton = $(By.xpath("//button[text()='Generate']"));
     private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
@@ -165,8 +167,7 @@ public class ReportsPage {
 
     public void chooseReportTemplate(String template) {
         selectReportRunReportTemplateDropDown.click();
-        var options = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
-        for (var option : options) {
+        for (var option : optionsReportTemplate) {
             if (option.getValue().equals(template)) {
                 option.parent().click();
                 break;
