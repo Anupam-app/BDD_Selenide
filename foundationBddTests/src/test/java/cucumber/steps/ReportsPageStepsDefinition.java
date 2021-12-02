@@ -11,14 +11,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 
-public class ReportsPageStepsDefination {
+public class ReportsPageStepsDefinition {
 
     private Report report;
     private ReportsPage reportPage;
     private ReportTemplate reportTemplate;
     private User user;
 
-    public ReportsPageStepsDefination(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
+    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
@@ -37,6 +37,21 @@ public class ReportsPageStepsDefination {
         reportPage.selectReport(report);
     }
 
+    @When("I choose recipe run {string}")
+    public void iChooseRun(String run) {
+        reportPage.selectRun(run);
+    }
+
+    @When("I choose recipe run {string} for consolidation")
+    public void iChooseRunForConsolidation(String run) {
+        reportPage.selectForConsolidationRun(run);
+    }
+
+    @When("I choose template {string}")
+    public void iChooseTemplate(String template) {
+        reportPage.chooseReportTemplate(template);
+    }
+
     @When("I click on generate button")
     public void iClickOnGenerateButton() {
         reportPage.generateReport();
@@ -48,8 +63,8 @@ public class ReportsPageStepsDefination {
         reportPage.gotoReportsTab();
     }
 
-    @Then("I see the report signed")
-    public void iSeeTheReportSigned() {
+    @Then("I should see the report signed")
+    public void iShouldSeeTheReportSigned() {
         this.report.setName(String.format("%s_%s", this.report.getName(), this.user.getUserName()));
         reportPage.checkSigned(this.report.getName(),this.user.getUserName());
     }
@@ -59,13 +74,9 @@ public class ReportsPageStepsDefination {
         reportPage.exists(this.report.getName());
     }
 
-    @When("I view the report")
-    public void iViewReports() {
+    @When("I should see the report file presence")
+    public void iShouldSeeTheReportFilePresence() {
         reportPage.viewReports(this.report.getName());
-    }
-
-    @Then("I check the report presence")
-    public void iCheckTheReportPresence() {
         reportPage.checkReportPdfInPage();
     }
 
