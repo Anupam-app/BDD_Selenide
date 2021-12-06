@@ -80,7 +80,19 @@ pipeline {
                 }				
             }
         }
-        stage('Build & Test') {
+		stage('Smoke Tests') {
+			steps {
+                script {
+					rtMavenRun(
+						tool: 'apache-maven-3.6.3',
+						pom: 'foundationBddTests/pom.xml',
+						goals: 'clean test -Dcucumber.filter.tags=@smoke_test -Dneodymium.url.host=' + env.CipHostname,
+						resolverId: "MAVEN_RESOLVER"
+					)
+				}
+			}
+		}
+        stage('Test all bdd tests') {
 			steps {
                 script {
 					rtMavenRun(
@@ -99,7 +111,7 @@ pipeline {
 						allure([
                             includeProperties: false,
                             jdk: '',
-                            properties: [],
+                            properties: [[key: 'url', value: '${env.CipHostname}']],
                             reportBuildPolicy: 'ALWAYS',
                             results: [[path: 'allure-results']]
 						])
