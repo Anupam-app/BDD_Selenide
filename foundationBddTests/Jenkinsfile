@@ -80,18 +80,6 @@ pipeline {
                 }				
             }
         }
-		stage('Smoke Tests') {
-			steps {
-                script {
-					rtMavenRun(
-						tool: 'apache-maven-3.6.3',
-						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test -Dcucumber.filter.tags=@smoke_test -Dneodymium.url.host=' + env.CipHostname,
-						resolverId: "MAVEN_RESOLVER"
-					)
-				}
-			}
-		}
         stage('Test all bdd tests') {
 			steps {
                 script {
@@ -111,7 +99,7 @@ pipeline {
 						allure([
                             includeProperties: false,
                             jdk: '',
-                            properties: [[key: 'url', value: '${env.CipHostname}']],
+                            properties: [],
                             reportBuildPolicy: 'ALWAYS',
                             results: [[path: 'allure-results']]
 						])
@@ -126,6 +114,13 @@ pipeline {
                 currentBuild.result = currentBuild.result ?: 'SUCCESS'
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
+            emailext (
+                body: '''${BUILD_URL}allure/''',
+                mimeType: 'text/html',
+                replyTo: '$DEFAULT_REPLYTO',
+                subject: '$DEFAULT_SUBJECT',
+                to: '${EmailTo}'
+            )
         }
     }
 }
