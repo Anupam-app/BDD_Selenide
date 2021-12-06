@@ -55,7 +55,7 @@ public class ReportsPageStepsDefinition {
     @When("I click on generate button")
     public void iClickOnGenerateButton() {
         reportPage.generateReport();
-        report.setName(reportPage.getGeneratedName());
+        report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
     }
 
     @When("I trigger report mode")
@@ -65,7 +65,9 @@ public class ReportsPageStepsDefinition {
 
     @Then("I should see the report signed")
     public void iShouldSeeTheReportSigned() {
-        this.report.setName(String.format("%s_%s", this.report.getName(), this.user.getUserName()));
+        reportPage.switchToFrame();
+        reportPage.gotoRunTab();
+        reportPage.gotoReportsTab();
         reportPage.checkSigned(this.report.getName(),this.user.getUserName());
     }
 
@@ -89,6 +91,7 @@ public class ReportsPageStepsDefinition {
     @Then("I esign the report")
     public void iEsignReports() {
         reportPage.esignReports(this.report.getName(),this.user.getPassword());
+        report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
 
     @Given("I trigger report template mode")

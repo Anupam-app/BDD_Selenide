@@ -1,6 +1,5 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -8,7 +7,10 @@ import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class ReportsPage {
@@ -21,10 +23,12 @@ public class ReportsPage {
     private final String XPATH_TEMPLATE_CHECKBOX = "//div[@class='item_value'][text()='%s']/ancestor::li/div[@class='check_box']";
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[text()='%s']";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT = "//td[text()='%s']/ancestor::tr//*[@class='checkbox']";
+    private final String XPATH_NOTIFICATION_TEXT = "//*[@class='notification-summary'][contains(text(),'%s')]";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
-    private final SelenideElement reportTab = $(By.xpath("//a[text()='Reports']"));
+    private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
     private final SelenideElement templateTab = $(By.xpath("//a[text()='Templates']"));
+    private final SelenideElement reportTab = $(By.xpath("//a[text()='Reports']"));
 
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
@@ -48,7 +52,6 @@ public class ReportsPage {
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
 
-    private final SelenideElement notificationText = $(By.className("notification-summary"));
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
 
     public void goToReports() {
@@ -56,7 +59,7 @@ public class ReportsPage {
     }
 
     public void switchToFrame() {
-        switchTo().frame("CrossDomainiframeId");
+        SelenideHelper.goToIFrame();
     }
 
     public void selectReport(String reportname) {
@@ -73,6 +76,9 @@ public class ReportsPage {
         reportTab.click();
     }
 
+    public void gotoRunTab() {
+        runTab.click();
+    }
     public void viewReports(String reportName) {
         $(By.xpath(String.format(XPATH_REPORT_NAME, reportName))).click();
         reportViewButton.click();
@@ -133,10 +139,18 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
 
-    public String getGeneratedName() {
+    public String waitAndGetGeneratedNameFromNotificationWhenFileGenerated() {
+        return waitAndGetGeneratedNameFromNotification("Report file generated");
+    }
+
+    public String waitAndGetGeneratedNameFromNotificationWhenFileSigned() {
+        return waitAndGetGeneratedNameFromNotification("Report file signed");
+    }
+
+    private String waitAndGetGeneratedNameFromNotification(String text) {
         switchTo().parentFrame();
-        notificationText.waitUntil(visible, 30000l, 500l);
-        notificationText.shouldHave(Condition.ownText("Report file generated"));
+        SelenideElement notificationText = $(By.xpath(String.format(XPATH_NOTIFICATION_TEXT, text)));
+        waitForReportGeneration(notificationText);
         return notificationText.text().split(": ")[1];
     }
 
@@ -146,7 +160,11 @@ public class ReportsPage {
 
     public void checkSigned(String reportName, String username) {
         var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
-        SelenideHelper.commonWaiter(reportSigned, visible);
+        reportSigned.shouldBe(visible);
+    }
+
+    public void waitForReportGeneration(SelenideElement element){
+        element.waitUntil(visible,5 * 60 * 1000l, 500l);
     }
 
     public void checkReportPdfInPage() {
