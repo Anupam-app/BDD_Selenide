@@ -61,7 +61,7 @@ Feature: User management
     Then the user is enabled
     
     
-  @Wip
+
   Scenario: Verify permissions related to Users Management
     Given I am logged in as "testUserPermsn" user
     When I go to user page 
