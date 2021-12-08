@@ -121,6 +121,18 @@ public class UserPageStepsDefinition {
         userPage.enterEmpId(user.getEmployeeId());
 
     }
+    
+    @When("I enter random department")
+    public void iEnterRandomDepartment() {
+        this.user.setDeptName(RandomStringUtils.randomAlphabetic(10));
+        userPage.enterDepartmentName(user.getDeptName());
+    }
+    
+    @When("I enter mobile number {string}")
+    public void iEnterMobNum(String user) {
+        this.user.setMobNum(user);
+        userPage.enterMobNum(user);
+    }
 
     @When("I enter email {string}")
     public void iEnterEmail(String user) {
@@ -138,38 +150,30 @@ public class UserPageStepsDefinition {
     public void theEmployeeIdIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
-
-    @When("I see user management page with list of users")
-    public void iSeeUsers() {
-    	userPage.userList();
-    }
-
-    @When("I create user {string}")
-    public void iCreateUser(String emailId) {
-    	userPage.createUser(emailId);
-    }
-
-    @When("I edit user")
-    public void iEditUser(String user) {
-    	this.user.setUsername(user);
-    	userPage.editUser(user);
-
-    }
-
-    @Then("I verify new user permissions to user management")
-    public void iVerifyNewUserPermissions() {
-    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
+    
+    @Then("I see user details are changed")
+    public void verifyUserDetails() {
+    	Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
+    	Assert.assertEquals(userPage.getEmailIdFromForm(), user.getEmailId());
+    	Assert.assertEquals(userPage.getRoleNameFromForm(), user.getRoleName());
+    	Assert.assertEquals(userPage.getMobNumFromForm(), user.getMobNum());
+    	Assert.assertEquals(userPage.getDeptNameFromForm(), user.getDeptName());
     	
     }
-
-    @When("I dont see user management page with list of users")
-    public void iVerifyUserList() {
-    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
-    }
     
-    @Then("I verify user dont have permission to create user and edit user")
-    public void iVerifyCreateUserAndEditUserPermissions() {
-    	Assert.assertEquals(userPage.getUserNameFromForm(), user.getUsername());
+    @When("I click on reset password")
+    public void iClickOnResetPassword() {
+    	userPage.resetPassword();
+    }
+
+    @Then("I see password reset message is displayed")
+    public void iSeePasswordResetMessagedisplayed() {
+    	user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
+    }
+
+    @When("I login with new password")
+    public void iLoginWithNewpassword() {
+ 
     }
 
 }

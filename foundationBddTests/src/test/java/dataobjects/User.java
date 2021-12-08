@@ -32,4 +32,16 @@ public class User {
     @Setter
     @Getter
     String password;
+    
+    @Setter
+    @Getter
+    String mobNum;
+    
+    @Setter
+    @Getter
+    String deptName;
+    
+    @Setter
+    @Getter
+    String name;
 }
