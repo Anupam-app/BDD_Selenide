@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import dataobjects.User;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -10,10 +11,12 @@ public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
+    private final User user;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, User user) {
         this.loginPage = loginPage;
         this.homepage = homepage;
+        this.user = user;
     }
 
     @Given("I open login page")
@@ -50,13 +53,21 @@ public class LoginPageStepsDefinition {
     }
 
     @When("I am logged in as {string} user")
-    public void iLoginAsGivenUser(String user) {
+    public void iLoginAsGivenUser(String username) {
         homepage.open();
         loginPage.waitPnidLoading();
         loginPage.openLogin();
-        loginPage.setUser(user);
-        loginPage.setPassword("MerckApp1@");
+        user.setUserName(username);
+        user.setPassword("MerckApp1@");
+        loginPage.setUser(user.getUserName());
+        loginPage.setPassword(user.getPassword());
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
+    }
+
+    @Given("I change password {string}")
+    public void iChangePassword(String password) {
+        loginPage.setNewpassword(password);
+        loginPage.setConfirmpassword(password);
     }
 }

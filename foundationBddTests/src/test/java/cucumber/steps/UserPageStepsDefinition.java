@@ -21,8 +21,13 @@ public class UserPageStepsDefinition {
 
     @Given("I search {string} user")
     public void iSearchUser(String user) {
-        this.user.setUsername(user);
+        this.user.setUserName(user);
         userPage.setSearch(user);
+    }
+
+    @When("I search the user")
+    public void iSearchTheUser() {
+        userPage.setSearch(this.user.getUserName());
     }
 
     @Given("I go to user page")
@@ -30,9 +35,14 @@ public class UserPageStepsDefinition {
         userPage.goTo();
     }
 
+    @Given("I trigger Users mode")
+    public void iTriggerUsersMode() {
+        userPage.triggerUsersMode();
+    }
+
     @When("I edit the user")
     public void iModifyUser() {
-        userPage.edit(user.getUsername());
+        userPage.edit(user.getUserName());
     }
 
     @When("I change the employee id with a random string")
@@ -66,7 +76,7 @@ public class UserPageStepsDefinition {
         Assert.assertTrue(userPage.isUserEnabled());
     }
 
-    @Then("the employee id is the one expected")
+    @Then("the employee id is equal to the string input")
     public void theEmployeeIdIsEqualToTheStringInput() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
@@ -76,6 +86,57 @@ public class UserPageStepsDefinition {
         userPage.goTo();
         userPage.setSearch(user);
         userPage.userExists(user);
+        userPage.clearSearch();
+    }
+
+    @When("I create a random username")
+    public void iCreateRandomUsername() {
+        this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
+        userPage.createNewUser(this.user.getUserName());
+    }
+
+    @When("I select role {string}")
+    public void iSelectRole(String user) {
+        this.user.setRoleName(user);
+        userPage.selectRole(user);
+    }
+
+    @When("I enter random firstname")
+    public void iEnterRandomFirstName() {
+        this.user.setFirstName(RandomStringUtils.randomAlphabetic(10));
+        userPage.enterFirstName(this.user.getFirstName());
+
+    }
+
+    @When("I enter random lastname")
+    public void iEnterRandomLastName() {
+        this.user.setLastName(RandomStringUtils.randomAlphabetic(10));
+        userPage.enterLastName(this.user.getLastName());
+
+    }
+
+    @When("I enter random employeeID")
+    public void iEnterRandomEmployeeID() {
+        this.user.setEmployeeId(RandomStringUtils.randomAlphabetic(10));
+        userPage.enterEmpId(user.getEmployeeId());
+
+    }
+
+    @When("I enter email {string}")
+    public void iEnterEmail(String user) {
+        this.user.setEmailId(user);
+        userPage.enterEmail(user);
+
+    }
+
+    @Then("The username is equal to the expected one")
+    public void theUserNameIsEqualToTheExpectedOne() {
+        Assert.assertEquals(userPage.getUserNameFromForm(), user.getUserName());
+    }
+
+    @Then("the employee id is the expected one")
+    public void theEmployeeIdIsEqualToTheExpectedOne() {
+        Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
 
     @When("I see user management page with list of users")

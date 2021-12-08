@@ -6,32 +6,19 @@ Feature: User management
     And the user "testUser" exists
     And the user "testUserEnabled" exists
     And the user "testUserDisabled" exists
-    
-  Scenario: Verify editable fileds in user
-		Given I go to user page
-    When I search "testUser" user
+
+  Scenario: Create new user
+    Given I go to user page
+    When I create a random username
+    And I select role "Bio4CService"
+    And I enter random firstname
+    And I enter random lastname
+    And I enter random employeeID
+    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I save my user changes
+    And I search the user
     And I edit the user
-		And I select role "Bio4CService"
-		And I change the employee id
-		And I change the email
-		And I change the mobile number
-		And I change the department
-		And I generate audit trail report
-		Then I see user details are changed
-		And I check the audit trail report
-		
-		
-  Scenario: Reset the password
-		Given I goto user management page
-		When I click on edit user
-		And I click on reset password
-		Then I see password reset message is displayed
-
-
-  Scenario: Connect after reset the password
-		Given I goto user management page
-		When I login with new password
-		Then I am logged in
+    Then The username is equal to the expected one
 
   Scenario: User modification
     Given I go to user page
@@ -40,7 +27,7 @@ Feature: User management
     And I change the employee id with a random string
     And I save my user changes
     And I edit the user
-    Then the employee id is the one expected
+    Then the employee id is the expected one
 
   Scenario: User disable
     Given I go to user page
@@ -58,20 +45,4 @@ Feature: User management
     And I enable the user
     And I save my user changes
     And I edit the user
-    Then the user is enabled
-    
-    
-
-  Scenario: Verify permissions related to Users Management
-    Given I am logged in as "testUserPermsn" user
-    When I go to user page 
-    And I see user management page with list of users
-    And I create user "mallikarjun.onkar@external.merckgroup.com"
-    And I edit user
-    Then I verify new user permissions to user management
-    
-  Scenario: Verify user do not have permissions to Users Management
-    Given I am logged in as "testUserWithoutUserPerm" user
-    When I go to user page
-    And I dont see user management page with list of users
-    Then I verify user dont have permission to create user and edit user
+    And the user is enabled

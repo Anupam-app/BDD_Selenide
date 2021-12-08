@@ -26,6 +26,11 @@ Add a tag in a feature file above one scenario, for instance @WIP
 Add tags = "@Wip" in @CucumberOptions in RunAllFeaturesTest
 Launch maven command mentioned above
 
+##### Debug test in local and see driver actions
+
+By default action in browser are not displayed to ensure that the resolution used is the good one in headless mode
+This can be deactivated for debug purpose in config/browser.properties file: browserprofile.Chrome.headless = false
+
 ##### Consult report
 
 For local development you can consult after mvn command launched foundationBddTests\target\cucumber-report.html with chrome browser
