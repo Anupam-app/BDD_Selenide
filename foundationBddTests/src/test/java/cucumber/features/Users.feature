@@ -8,10 +8,10 @@ Feature: User management
     And the user "testUserDisabled" exists
     
   Scenario: Verify editable fileds in user
-		Given I goto user management page
+		Given I go to user page
     When I search "testUser" user
     And I edit the user
-		And I change the role
+		And I select role "Bio4CService"
 		And I change the employee id
 		And I change the email
 		And I change the mobile number
