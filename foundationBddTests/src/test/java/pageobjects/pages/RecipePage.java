@@ -9,7 +9,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
-
+import static com.codeborne.selenide.Condition.visible;
+import dataobjects.RecipeAction;
 
 public class RecipePage {
 
@@ -33,7 +34,8 @@ public class RecipePage {
     private final SelenideElement primaryButton=$(By.className("btn-primary"));
     private final SelenideElement loadButton=$(By.xpath("//span[contains(text(),'Load')]"));
     private final SelenideElement okButton=$(By.xpath("//button[contains(text(),'OK')]"));
-
+    private final SelenideElement saveButton=$(By.xpath("//button[contains(text(),'Save')]"));
+    
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
     private final By phasesList = By.className("phaseHead");
@@ -52,9 +54,19 @@ public class RecipePage {
     private final SelenideElement runIcon=$(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon=$(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon=$(By.xpath("//img[contains(@src,'RE-RUN')]"));
-
+    private final SelenideElement pauseIcon=$(By.xpath("//img[contains(@src,'PAUSE')]"));
+    private final SelenideElement resumeIcon=$(By.xpath("//img[contains(@src,'RESUME')]"));
+    private final SelenideElement jumpStepIcon=$(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
+    private final SelenideElement inputStepNumber=$(By.xpath("//input[@id='standard-number']"));
+    private final SelenideElement okStepButton=$(By.xpath("//span[contains(text(),'OK')]"));
+    private final SelenideElement clickYes=$(By.xpath("//span[text()='Yes']"));
+    private final SelenideElement executionStatus = $(By.id("runStatus_Id"));
+    private final SelenideElement importButton=$(By.xpath("//button[contains(text(),'Import')]"));
+    private String xpathEditExportIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'export-icon')]";
+    private final String NOTIFICATION_TEXT="Recipe %s Success";
+    private SelenideElement saveText = $(By.className("notification-title"));
     private final String XPATH_LOAD_RECIPE ="//*[@title='%s']";
-
+    private String xpathImportRecipe ="//tr[td[contains(.,'%s')]]";
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -213,5 +225,63 @@ public class RecipePage {
     public void isExecuted() {
         rerunIcon.waitUntil(Condition.visible,5000l);
     }
+    
+    public void clickPauseButton() {
+    	pauseIcon.click();
+    }
+    
+    public void clickResumeButton() {
+    	resumeIcon.click();
+    }
+    
+    public void clickOnJumpToStep(String stepNumber) {
+    	jumpStepIcon.click();
+    	inputStepNumber.setValue(stepNumber);
+    	okStepButton.click();
+    	
+    }
+    
+    public void clickOnAbortButton() {
+    	abortIcon.click();
+    	clickYes.click();
+    	okButton.click();
+    }
+    
+    public String getExecutionStatus() {
+    	return executionStatus.getText();
+    }
+    
+    public void exportRecipe(String recipeName) {
+    	$(By.xpath(String.format(xpathEditExportIcon, recipeName))).waitUntil(visible,5000l).click();
+    	commonWaiter(openButton, Condition.visible) .click();
+    }
+    
+    public void notificationMessage(RecipeAction recipeAction) {
+
+        String expectedNotificationText="";
+        switch (recipeAction){
+            case EXPORT:
+                expectedNotificationText=String.format(NOTIFICATION_TEXT, "Export");
+                break;
+            case IMPORT:
+            	expectedNotificationText=String.format(NOTIFICATION_TEXT, "Import");
+                break;
+            	
+        }
+
+        saveText.shouldHave(Condition.text(expectedNotificationText));
+    }
+    
+    public void importRecipe(String recipeName) {
+        $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
+        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']")).click();
+        $(By.xpath(String.format(xpathImportRecipe, recipeName))).click();
+        importButton.click();
+        SelenideElement recipeInputSave=$(By.className("rename-recipe-import-input"));
+        $(By.className("rename-recipe-import-input")).clear();
+        recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
+        saveButton.click();
+    }
+
 }
 

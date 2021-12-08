@@ -155,5 +155,53 @@ public class RecipePageStepsDefinition {
     public void recipeExecuted() {
         recipePage.isExecuted();
     }
+    
+    @When("I click on pause button")
+    public void iClickOnPauseButton() {
+    	recipePage.clickPauseButton();
+    }
+
+    @When("I click on resume button")
+    public void iClickOnResumeButton() {
+    	recipePage.clickResumeButton();
+    }
+
+    @When("I click on jump step {string}")
+    public void iClickOnJumpToStep(String stepNumber) {
+    	recipePage.clickOnJumpToStep(stepNumber);
+
+    }
+
+    @When("I click on abort button")
+    public void iClickOnAbortButton() {
+    	recipePage.clickOnAbortButton();
+    }
+
+    @Then("I should see the recipe run aborted")
+    public void iVerifyRecipeAbort() {
+    	Assert.assertEquals("Aborted",this.recipePage.getExecutionStatus());
+    }
+
+
+    @When("I click on export recipe {string}")
+    public void iExport(String recipe) {
+    	recipePage.exportRecipe(recipe);
+    }
+
+    @Then("I should see a notification with successful recipe exported")
+    public void iShouldSeeExportMessage() {
+    	recipePage.notificationMessage(this.recipe.getRecipeAction());
+ 
+    }
+
+    @When("I click on import {string}")
+    public void iClickOnImport(String recipe) {
+    	recipePage.importRecipe(recipe);
+    }
+
+    @Then("I should see a notification with successful recipe imported")
+    public void iShouldSeeImportMessage() {
+    	recipePage.notificationMessage(this.recipe.getRecipeAction());
+    }
 
 }

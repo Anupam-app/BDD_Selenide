@@ -4,6 +4,7 @@ Feature: Recipe management
     Given the browser "Chrome" is open
     And I am logged in as "Bio4CAdmin" user
 
+
   Scenario: Recipe modification
     Given I go to recipe page
     When I edit recipe "testDraftRecipeToAddPhase"
@@ -36,3 +37,27 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+    
+
+  Scenario: Recipe operational control workflow
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start recipe execution with project id "testRecipeProjectToExecute"
+    And I click on pause button
+    And I click on resume button
+    And I click on jump step "2"
+    And I click on abort button
+    Then I should see the recipe run aborted
+
+
+  Scenario: Recipe export
+    Given I go to recipe page
+    When I click on export recipe "testDraftRecipeToChangeStatus2"
+    Then I should see a notification with successful recipe exported
+    
+
+  Scenario: Recipe import
+    Given I go to recipe page
+    When I trigger edit mode
+    And I click on import "testRecipeToExecute"
+    Then I should see a notification with successful recipe imported

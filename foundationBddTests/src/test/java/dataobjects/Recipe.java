@@ -31,5 +31,9 @@ public class Recipe {
     @Setter
     @Getter
     String afterComments;
+    
+    @Setter
+    @Getter
+    RecipeAction recipeAction;
 
 }
