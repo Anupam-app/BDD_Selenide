@@ -46,9 +46,8 @@ Feature: User management
     And I save my user changes
     And I edit the user
     And the user is enabled
-    
-    
-  Scenario: Verify editable fileds in user
+
+  Scenario: Verify editable fields in user
     Given I go to user page
     When I search "testUserEnabled" user
     And I edit the user
@@ -68,7 +67,6 @@ Feature: User management
     And I edit the user
     And I click on reset password
     Then I see password reset message is displayed
-
 
   Scenario Outline: Connect after reset the password
     Given I open login page

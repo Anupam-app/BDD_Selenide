@@ -171,9 +171,5 @@ public class UserPageStepsDefinition {
     	user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
     }
 
-    @When("I login with new password")
-    public void iLoginWithNewpassword() {
- 
-    }
 
 }
