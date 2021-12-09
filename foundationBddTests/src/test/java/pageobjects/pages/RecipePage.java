@@ -185,7 +185,9 @@ public class RecipePage {
     }
 
     public void loadRecipe(String recipeName) {
-        clearRecipeText.click();
+        if(clearRecipeText.isDisplayed()){
+            clearRecipeText.click();
+        }
         loadRecipeText.click();
         loadButton.waitUntil(Condition.visible,20000l);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
