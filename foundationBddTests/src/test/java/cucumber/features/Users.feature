@@ -46,19 +46,19 @@ Feature: User management
     And I save my user changes
     And I edit the user
     And the user is enabled
-
+  @Wip
   Scenario: Verify editable fields in user
     Given I go to user page
-    When I search "testUserEnabled" user
+    When I search "testUserToAssignRole" user
     And I edit the user
     And I select role "Bio4CService"
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter random department
-    And I enter mobile number "+ 0019859859855"
+    And I enter mobile number "+0019859859855"
     And I save my user changes
-    And I generate audit trail report
     Then I see user details are changed
+    And I generate audit trail report
     And I check the audit trail report
     
   Scenario: Reset the password

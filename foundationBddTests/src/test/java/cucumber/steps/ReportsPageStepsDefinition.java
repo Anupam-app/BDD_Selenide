@@ -148,6 +148,8 @@ public class ReportsPageStepsDefinition {
     
     @When("I check the audit trail report")
     public void iVerifyTheAuditTrailReport() {
+    	iGotoReportManagementPage();
+    	iTriggerReportMode();
     	iShouldSeeTheReportFilePresence();
     }
     

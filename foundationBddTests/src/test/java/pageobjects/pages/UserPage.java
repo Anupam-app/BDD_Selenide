@@ -32,10 +32,11 @@ public class UserPage {
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
-
+    private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
-
+    private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -44,6 +45,7 @@ public class UserPage {
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible,5000l).click();
+        selectRoleFromDropdown.waitUntil(visible,5000l).click();
     }
 
     public void userExists(String user) {
@@ -121,9 +123,11 @@ public class UserPage {
     public void enterEmail(String emailId) {
         emailIdTextBox.setValue(emailId);
     }
+    
     public void enterMobNum(String mobNum) {
         mobileNumTextBox.setValue(mobNum);
     }
+    
     public void enterDepartmentName(String deptName) {
         departmentTextBox.setValue(deptName);
     }
@@ -137,7 +141,7 @@ public class UserPage {
     }
     
     public String getRoleNameFromForm() {
-        return selectRoleFromDropdown.getValue();
+        return roleNameTextbox.getText();
     }
     
     public String getMobNumFromForm() {
@@ -152,6 +156,7 @@ public class UserPage {
     public void clearSearch() {
         userSearchTextBox.clear();
     }
+    
     public void triggerUsersMode() {
         UsersLinkText.click();
     }
@@ -162,6 +167,11 @@ public class UserPage {
     
     public String getGeneratedNotificationWhenPasswordReset() {
         return XPATH_NOTIFICATION_TEXT.getValue();
+    }
+    
+    public void cancelUser() {
+    	userNameTextBox.click();
+    	cancelButton.click();
     }
 
 }

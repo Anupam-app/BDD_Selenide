@@ -153,12 +153,14 @@ public class UserPageStepsDefinition {
     
     @Then("I see user details are changed")
     public void verifyUserDetails() {
+    	iSearchTheUser();
+    	iModifyUser();
     	Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     	Assert.assertEquals(userPage.getEmailIdFromForm(), user.getEmailId());
     	Assert.assertEquals(userPage.getRoleNameFromForm(), user.getRoleName());
     	Assert.assertEquals(userPage.getMobNumFromForm(), user.getMobNum());
     	Assert.assertEquals(userPage.getDeptNameFromForm(), user.getDeptName());
-    	
+    	userPage.cancelUser();
     }
     
     @When("I click on reset password")
