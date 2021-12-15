@@ -119,14 +119,24 @@ public class UserPageStepsDefinition {
     public void iEnterRandomEmployeeID() {
         this.user.setEmployeeId(RandomStringUtils.randomAlphabetic(10));
         userPage.enterEmpId(user.getEmployeeId());
+    }
 
+    @When("I enter random department")
+    public void iEnterRandomDepartment() {
+        this.user.setDeptName(RandomStringUtils.randomAlphabetic(10));
+        userPage.enterDepartmentName(user.getDeptName());
+    }
+
+    @When("I enter mobile number {string}")
+    public void iEnterMobNum(String user) {
+        this.user.setMobNum(user);
+        userPage.enterMobNum(user);
     }
 
     @When("I enter email {string}")
     public void iEnterEmail(String user) {
         this.user.setEmailId(user);
         userPage.enterEmail(user);
-
     }
 
     @Then("The username is equal to the expected one")
@@ -138,4 +148,28 @@ public class UserPageStepsDefinition {
     public void theEmployeeIdIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
+
+    @Then("I see user details are changed")
+    public void verifyUserDetails() {
+        iSearchTheUser();
+        iModifyUser();
+        Assert.assertEquals(user.getEmployeeId(), userPage.getEmployeeIdFromForm());
+        Assert.assertEquals(user.getEmailId(), userPage.getEmailIdFromForm());
+        Assert.assertEquals(user.getRoleName(), userPage.getRoleNameFromForm());
+        Assert.assertEquals(user.getMobNum(), userPage.getMobNumFromForm());
+        Assert.assertEquals(user.getDeptName(), userPage.getDeptNameFromForm());
+        userPage.cancelUser();
+    }
+
+    @When("I click on reset password")
+    public void iClickOnResetPassword() {
+        userPage.resetPassword();
+    }
+
+    @Then("I see password reset message is displayed")
+    public void iSeePasswordResetMessagedisplayed() {
+        user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
+    }
+
+
 }

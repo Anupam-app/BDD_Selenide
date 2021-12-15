@@ -6,6 +6,8 @@ Feature: User management
     And the user "testUser" exists
     And the user "testUserEnabled" exists
     And the user "testUserDisabled" exists
+    And the user "testUserToEditFields" exists
+    And the user "testUserToResetPwd" exists
 
   Scenario: Create new user
     Given I go to user page
@@ -46,3 +48,24 @@ Feature: User management
     And I save my user changes
     And I edit the user
     And the user is enabled
+
+  Scenario: Verify editable fields in user
+    Given I go to user page
+    When I search "testUserToEditFields" user
+    And I edit the user
+    And I select role "Bio4CService"
+    And I enter random employeeID
+    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter random department
+    And I enter mobile number "+0019859859855"
+    And I save my user changes
+    Then I see user details are changed
+    And I generate audit trail report
+    And I check the audit trail report
+    
+  Scenario: Reset the password
+    Given I go to user page
+    When I search "testUserToResetPwd" user
+    And I edit the user
+    And I click on reset password
+    Then I see password reset message is displayed

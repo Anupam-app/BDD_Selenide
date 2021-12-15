@@ -138,4 +138,19 @@ public class ReportsPageStepsDefinition {
         reportPage.openReportTemplate(this.reportTemplate.getName());
         Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
     }
+    
+    @When("I generate audit trail report")
+    public void iGenerateAuditTrailReport() {
+    	iGotoReportManagementPage();
+        iSelectFromDropdown("Audit Trail");
+        iClickOnGenerateButton();
+    }
+    
+    @When("I check the audit trail report")
+    public void iVerifyTheAuditTrailReport() {
+    	iGotoReportManagementPage();
+    	iTriggerReportMode();
+    	iShouldSeeTheReportFilePresence();
+    }
+    
 }

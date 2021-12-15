@@ -13,3 +13,12 @@ NET USER "testUserToAssignRole" "M)^40kMb8^" /ADD
 NET USER "testUsrFirstLog" /DELETE
 NET USER "testUsrFirstLog" "M)^40kMb8^" /ADD
 NET localgroup administrators "testUsrFirstLog" /ADD
+
+NET USER "testUserToEditFields" /DELETE
+NET USER "testUserToEditFields" "M)^40kMb8^" /ADD
+
+NET USER "testUserToResetPwd" /DELETE
+NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
+
+NET USER "testUsrAfterResetPwd" /DELETE
+NET USER "testUsrAfterResetPwd" "3G4Zin;*a5" /ADD

@@ -70,4 +70,5 @@ public class LoginPageStepsDefinition {
         loginPage.setNewpassword(password);
         loginPage.setConfirmpassword(password);
     }
+    
 }

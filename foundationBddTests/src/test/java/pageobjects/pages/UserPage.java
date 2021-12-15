@@ -7,10 +7,14 @@ import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.switchTo;
+
 import java.util.List;
 
 public class UserPage {
-
+	
+	private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+	
     private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
 
@@ -20,16 +24,19 @@ public class UserPage {
     private SelenideElement lastNameTextBox = $(By.id("lastName"));
     private SelenideElement userNameTextBox = $(By.id("userName"));
     private SelenideElement emailIdTextBox = $(By.id("email"));
-
+    private SelenideElement mobileNumTextBox = $(By.id("phoneNumber"));
+    private SelenideElement departmentTextBox = $(By.id("department"));
     private SelenideElement saveButton = $(By.id("save_Btn"));
+    private SelenideElement resetPwdButton = $(By.id("resetPass_Btn"));
     private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
-
+    private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
-
+    private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -97,7 +104,6 @@ public class UserPage {
                 break;
             }
         }
-
     }
 
     public void enterFirstName(String firstName) {
@@ -115,15 +121,55 @@ public class UserPage {
     public void enterEmail(String emailId) {
         emailIdTextBox.setValue(emailId);
     }
-
+    
+    public void enterMobNum(String mobNum) {
+        mobileNumTextBox.setValue(mobNum);
+    }
+    
+    public void enterDepartmentName(String deptName) {
+        departmentTextBox.setValue(deptName);
+    }
+    
     public String getUserNameFromForm() {
         return userNameTextBox.getValue();
     }
+    
+    public String getEmailIdFromForm() {
+        return emailIdTextBox.getValue();
+    }
+    
+    public String getRoleNameFromForm() {
+        return roleNameTextbox.getText();
+    }
+    
+    public String getMobNumFromForm() {
+        return mobileNumTextBox.getValue();
+    }
+    
+    public String getDeptNameFromForm() {
+        return departmentTextBox.getValue();
+    }
+    
 
     public void clearSearch() {
         userSearchTextBox.clear();
     }
+    
     public void triggerUsersMode() {
         UsersLinkText.click();
     }
+    
+    public void resetPassword() {
+    	resetPwdButton.click();
+    }
+    
+    public String getGeneratedNotificationWhenPasswordReset() {
+        return XPATH_NOTIFICATION_TEXT.getValue();
+    }
+    
+    public void cancelUser() {
+    	userNameTextBox.click();
+    	cancelButton.click();
+    }
+
 }
