@@ -6,6 +6,8 @@ Feature: User management
     And the user "testUser" exists
     And the user "testUserEnabled" exists
     And the user "testUserDisabled" exists
+    And the user "testUserToEditFields" exists
+    And the user "testUserToResetPwd" exists
 
   Scenario: Create new user
     Given I go to user page

@@ -36,4 +36,4 @@ Feature: User login
     Examples:
       | login                  | tempPassword     | newPassword |
       | testUsrFirstLog        | M)^40kMb8^       | !2345Zxcv1  |
-      | testUsrAfterResetPwd   | Hmah2#h(7T       | !2345Zxcv1  |
+      | testUsrAfterResetPwd   | 3G4Zin;*a5       | !2345Zxcv1  |

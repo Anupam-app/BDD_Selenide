@@ -28,7 +28,7 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (9, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserToResetPwd', N'true', 0x0200000028C7DEBA90CF923541E29FCF59F03D4DF297E7CF72DDAD24F1FFF0926BD2C6989371CADAE89587863949DF5E2A7D6FB1FCBC413EE4AE8EB7F678398A0CC10841AAAB5F6AF4BD265A460B93113B2951FFE7835A592C57A2583DF4A088B5FC59D6, N'testUserToResetPwd', NULL, N'testUserToResetPwd', N'', N'testUserToResetPwd', 1, 0, 0, NULL, 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (5, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUsrAfterResetPwd', N'true', 0x020000000CD82DEF553462CC7909C0C291689B23BAB9C767F5C56938895B3660B0F4DD078CE48B539C4A4F7A8610C27E8E3E3AA8DC27258998B48FE54F3AA2DACC6A99752EB50083576C78E769360050782822EC251076E6AF485B8444C100A424EABA90, N'testUsrAfterResetPwd', NULL, N'testUsrAfterResetPwd', N'', N'testUsrAfterResetPwd', 1, 0, 0, NULL, 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (10, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'jYEkjhbrVh', N'true', 0x020000009203AEC38A3E4B202C86A8A547C6B123F46C3717D0487589D35B7DEBDB3A85151CDFA2D5722B3405A1AFFE1CB81B446702E9C51D28C77A080FDFBE32A964B7DD607B167BC8DA98E349FAADBD7FDB5D943CE08687A6F9B45356AAD4F7BC20B84D, N'testUsrAfterResetPwd', NULL, N'testUsrAfterResetPwd', N'', N'testUsrAfterResetPwd', 1, 0, 0, NULL, 0)
 GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
@@ -63,6 +63,10 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (7, 2)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (8, 2)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (9, 2)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 2)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (1, 1)
 GO
