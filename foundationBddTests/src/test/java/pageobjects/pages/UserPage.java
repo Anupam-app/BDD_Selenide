@@ -45,7 +45,6 @@ public class UserPage {
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible,5000l).click();
-        selectRoleFromDropdown.waitUntil(visible,5000l).click();
     }
 
     public void userExists(String user) {
@@ -105,7 +104,6 @@ public class UserPage {
                 break;
             }
         }
-
     }
 
     public void enterFirstName(String firstName) {

@@ -46,10 +46,10 @@ Feature: User management
     And I save my user changes
     And I edit the user
     And the user is enabled
-  @Wip
+
   Scenario: Verify editable fields in user
     Given I go to user page
-    When I search "testUserToAssignRole" user
+    When I search "testUserToEditFields" user
     And I edit the user
     And I select role "Bio4CService"
     And I enter random employeeID
@@ -63,22 +63,7 @@ Feature: User management
     
   Scenario: Reset the password
     Given I go to user page
-    When I search "testUserEnabled" user
+    When I search "testUserToResetPwd" user
     And I edit the user
     And I click on reset password
     Then I see password reset message is displayed
-
-  Scenario Outline: Connect after reset the password
-    Given I open login page
-    When I enter "<login>" as username and "<tempPassword>" as password
-    And I push the login button
-    And I change password "<newPassword>"
-    And I open portal
-    And I open login page
-    And I enter "<login>" as username and "<newPassword>" as password
-    And I push the login button
-    Then I am logged in
-    
-   Examples:
-      | login             | tempPassword     | newPassword |
-      | testUsrFirstLog   | M)^40kMb8^       | !2345Zxcv1  |
