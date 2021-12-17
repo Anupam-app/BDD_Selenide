@@ -127,12 +127,18 @@ pipeline {
                 }
             }
         }
-        stage ('Wait for portal availability') {
+        stage ('Wait for environment availability') {
             steps {
                 retry(30) {
                     sh '''
                     sleep 30
+                    curl -k --fail https://$CipHostname/alarm-management/actuator/health
+                    curl -k --fail https://$CipHostname/analytics/actuator/health
                     curl -k --fail https://$CipHostname/useradminportal/actuator/health
+                    curl -k --fail https://$CipHostname/config-management/actuator/health
+                    curl -k --fail https://$CipHostname/recipe-management/actuator/health
+                    curl -k --fail https://$CipHostname/reportingmanagement/actuator/health
+                    curl -k --fail https://$CipHostname/trends/actuator/health
                     '''
                 }
             }
