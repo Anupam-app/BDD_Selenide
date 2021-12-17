@@ -20,6 +20,7 @@ public class RolePage {
 
     private ElementsCollection permissionsText = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private SelenideElement saveText = $(By.className("roleModalNotificationBar"));
+    private SelenideElement rolesText = $(By.xpath("//div[@class='noDataIndication']"));
 
     private SelenideElement inputRoleName = $(By.className("roleNameInput"));
 
@@ -104,5 +105,13 @@ public class RolePage {
 
     public void roleExists(String role) {
         $(By.xpath(String.format(xpathEditRoleIcon, role))).shouldBe(Condition.visible);
+    }
+
+    public void emptyRolesList() {
+        rolesText.getText().isEmpty();
+    }
+
+    public String getRoleList() {
+        return rolesText.text().substring(0, 35);
     }
 }

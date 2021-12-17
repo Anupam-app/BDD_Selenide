@@ -30,6 +30,8 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (10, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'jYEkjhbrVh', N'true', 0x020000009203AEC38A3E4B202C86A8A547C6B123F46C3717D0487589D35B7DEBDB3A85151CDFA2D5722B3405A1AFFE1CB81B446702E9C51D28C77A080FDFBE32A964B7DD607B167BC8DA98E349FAADBD7FDB5D943CE08687A6F9B45356AAD4F7BC20B84D, N'testUsrAfterResetPwd', NULL, N'testUsrAfterResetPwd', N'', N'testUsrAfterResetPwd', 1, 0, 0, NULL, 0)
 GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (11, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testRoleWithoutPerms', N'true', 0x0200000060FDE0EB0208D9A5B5C715C52443CB0D6E3E3AAFEB9362A021A0926E0F8645ADF3C494FAEC3E125E7CF3B9B5670A483A8EFBAB268C4BA5CBE67578C1F05CD2171C7DD5D3F14A670C265E91DECF2BF86686376BC0AB16FA3C424A730AF14F409A, N'testRoleWithoutPerms', NULL, N'testRoleWithoutPerms', N'', N'testRoleWithoutPerms', 0, 0, 0, NULL, 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -45,6 +47,8 @@ GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status]) VALUES (5, N'testRoleToRemovePermission', N'testRoleToRemovePermission', N'testRoleToRemovePermission', NULL, N'testRoleToRemovePermission', N'User Created', 1)
 GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status]) VALUES (6, N'testRoleToAssign', N'testRoleToAssign', N'testRoleToAssign', NULL, N'testRoleToAssign', N'User Created', 1)
+GO
+INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status]) VALUES (6, N'testRolePermission', N'testRolePermission', N'testRolePermission', NULL, N'testRolePermission', N'User Created', 1)
 GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
@@ -67,6 +71,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (9, 2)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 2)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (11, 6)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (1, 1)
 GO
@@ -649,4 +655,6 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 3)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO
