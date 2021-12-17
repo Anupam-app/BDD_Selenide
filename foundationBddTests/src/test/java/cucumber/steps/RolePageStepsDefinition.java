@@ -96,4 +96,13 @@ public class RolePageStepsDefinition {
 		rolePage.roleExists(role);
     }
 
+	@When("I should not see roles list")
+	public void iShouldNotSeeRolesList() {
+		rolePage.emptyRolesList();
+	}
+
+	@Then("I verify user do not have permission to create and edit roles")
+	public void iVerifyPermissions() {
+    	Assert.assertEquals("No result found for selected filter",rolePage.getRoleList());
+	}
 }
