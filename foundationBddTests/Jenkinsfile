@@ -178,7 +178,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
-                body: '''${BUILD_URL}allure/''',
+                body: '''environment:${CipHostname} link:${BUILD_URL}allure/''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',
                 subject: '$DEFAULT_SUBJECT',
