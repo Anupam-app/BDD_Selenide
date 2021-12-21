@@ -150,6 +150,15 @@ public class RecipePageStepsDefinition {
         this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
         recipePage.recipeExecution(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
+    
+    @When("I start recipe execution flow with {string}")
+    public void iStartRecipeExecutionFlow(String recipe) {
+        this.recipe.setProductId(recipe);
+        this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+        recipePage.recipeExecutionFlow(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments());
+    }
 
     @Then("Recipe should be executed")
     public void recipeExecuted() {
@@ -174,12 +183,13 @@ public class RecipePageStepsDefinition {
 
     @When("I click on abort button")
     public void iClickOnAbortButton() {
-    	recipePage.clickOnAbortButton();
+    	recipePage.clickOnAbortButton(this.recipe.getAfterComments());
     }
 
     @Then("I should see the recipe run aborted")
     public void iVerifyRecipeAbort() {
     	Assert.assertEquals("Aborted",this.recipePage.getExecutionStatus());
+    	recipePage.clickOnOk();
     }
 
 
@@ -188,9 +198,9 @@ public class RecipePageStepsDefinition {
     	recipePage.exportRecipe(recipe);
     }
 
-    @Then("I should see a notification with successful recipe exported")
-    public void iShouldSeeExportMessage() {
-    	recipePage.notificationMessage(this.recipe.getRecipeAction());
+    @Then("I should see {string} exported")
+    public void iShouldSeeExportMessage(String recipe) {
+    	recipePage.notificationMessageExport(recipe);
  
     }
 
@@ -201,7 +211,7 @@ public class RecipePageStepsDefinition {
 
     @Then("I should see a notification with successful recipe imported")
     public void iShouldSeeImportMessage() {
-    	recipePage.notificationMessage(this.recipe.getRecipeAction());
+    	recipePage.notificationMessageImport();
     }
 
 }

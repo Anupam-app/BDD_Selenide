@@ -15,6 +15,7 @@ import dataobjects.RecipeAction;
 public class RecipePage {
 
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
+    private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement editorLinkText=$(By.xpath("//a[text()='Editor']"));
     private final SelenideElement browserLinkText=$(By.xpath("//a[text()='Browser']"));
 
@@ -54,19 +55,23 @@ public class RecipePage {
     private final SelenideElement runIcon=$(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon=$(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon=$(By.xpath("//img[contains(@src,'RE-RUN')]"));
-    private final SelenideElement pauseIcon=$(By.xpath("//img[contains(@src,'PAUSE')]"));
+    private final SelenideElement pauseIcon=$(By.xpath("//img[contains(@src,'Group')]"));
     private final SelenideElement resumeIcon=$(By.xpath("//img[contains(@src,'RESUME')]"));
     private final SelenideElement jumpStepIcon=$(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
     private final SelenideElement inputStepNumber=$(By.xpath("//input[@id='standard-number']"));
-    private final SelenideElement okStepButton=$(By.xpath("//span[contains(text(),'OK')]"));
+    private final SelenideElement okStepButton=$(By.xpath("//span[text()='Ok']"));
     private final SelenideElement clickYes=$(By.xpath("//span[text()='Yes']"));
     private final SelenideElement executionStatus = $(By.id("runStatus_Id"));
     private final SelenideElement importButton=$(By.xpath("//button[contains(text(),'Import')]"));
     private String xpathEditExportIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'export-icon')]";
     private final String NOTIFICATION_TEXT="Recipe %s Success";
+    private final String NOTIFICATION_TEXT_IMPORT="The recipe %s was successfully imported!";
+    private final String NOTIFICATION_TEXT_EXPORT="The recipe %s was successfully exported!";
     private SelenideElement saveText = $(By.className("notification-title"));
+    private SelenideElement saveNotificationText = $(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
     private final String XPATH_LOAD_RECIPE ="//*[@title='%s']";
     private String xpathImportRecipe ="//tr[td[contains(.,'%s')]]";
+    private SelenideElement recipeNameText = $(By.xpath("(//*[contains(@class,'tbl-row')])/td[1]"));
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -222,6 +227,17 @@ public class RecipePage {
         okButton.click();
     }
 
+    public void recipeExecutionFlow(String productId,String batchId,String beforeComments) {
+        runIcon.waitUntil(Condition.visible,20000l);
+        runIcon.click();
+        productIdTextbox.setValue(productId);
+        batchIdTextbox.click();
+        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(Keys.ENTER);
+        preRunComments.sendKeys(beforeComments);
+        okButton.click();
+    }
+    
     public void isExecuted() {
         rerunIcon.waitUntil(Condition.visible,5000l);
     }
@@ -231,45 +247,50 @@ public class RecipePage {
     }
     
     public void clickResumeButton() {
-    	resumeIcon.click();
+    	resumeIcon.waitUntil(Condition.visible,5000l).click();
     }
     
     public void clickOnJumpToStep(String stepNumber) {
-    	jumpStepIcon.click();
+    	jumpStepIcon.waitUntil(Condition.visible,5000l).click();
     	inputStepNumber.setValue(stepNumber);
-    	okStepButton.click();
+    	okStepButton.waitUntil(Condition.visible,5000l).click();
     	
     }
     
-    public void clickOnAbortButton() {
-    	abortIcon.click();
-    	clickYes.click();
-    	okButton.click();
+    public void clickOnAbortButton(String afterComments) {
+        abortIcon.waitUntil(Condition.visible,6000l).click();
+    	clickYes.waitUntil(Condition.visible,5000l).click();
+    	preRunComments.waitUntil(Condition.visible,4000l).sendKeys(afterComments);
     }
     
     public String getExecutionStatus() {
     	return executionStatus.getText();
     }
     
-    public void exportRecipe(String recipeName) {
-    	$(By.xpath(String.format(xpathEditExportIcon, recipeName))).waitUntil(visible,5000l).click();
-    	commonWaiter(openButton, Condition.visible) .click();
+    public void clickOnOk() {
+    okButton.waitUntil(Condition.visible,5000l).click();
     }
     
-    public void notificationMessage(RecipeAction recipeAction) {
+    public void exportRecipe(String recipeName) {
+    	$(By.xpath(String.format(xpathEditExportIcon, recipeName))).waitUntil(visible,5000l).click();
+    	commonWaiter(openButton, Condition.visible).click();
+    }
+    
+    public void notificationMessageImport() {
+    	String newRecipeName=recipeNameText.waitUntil(Condition.visible,5000l).getText();
+    	switchTo().defaultContent();
+    	userProfileIcon.waitUntil(Condition.visible,5000l).click();
+            	String expectedNotificationText=String.format(NOTIFICATION_TEXT_IMPORT, newRecipeName);
 
-        String expectedNotificationText="";
-        switch (recipeAction){
-            case EXPORT:
-                expectedNotificationText=String.format(NOTIFICATION_TEXT, "Export");
-                break;
-            case IMPORT:
-            	expectedNotificationText=String.format(NOTIFICATION_TEXT, "Import");
-                break;
-            	
-        }
+        saveNotificationText.shouldHave(Condition.text(expectedNotificationText));
+    }
+    
+    public void notificationMessageExport(String recipeName) {
+    	switchTo().defaultContent();
+    	userProfileIcon.waitUntil(Condition.visible,5000l).click();
+            	String expectedNotificationText=String.format(NOTIFICATION_TEXT_EXPORT, recipeName);
 
-        saveText.shouldHave(Condition.text(expectedNotificationText));
+        saveNotificationText.shouldHave(Condition.text(expectedNotificationText));
     }
     
     public void importRecipe(String recipeName) {
@@ -281,6 +302,7 @@ public class RecipePage {
         $(By.className("rename-recipe-import-input")).clear();
         recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
         saveButton.click();
+        browserLinkText.waitUntil(Condition.visible,5000l).click();
     }
 
 }
