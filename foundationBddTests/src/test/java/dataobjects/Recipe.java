@@ -36,4 +36,7 @@ public class Recipe {
     @Getter
     RecipeAction recipeAction;
 
+    @Setter
+    @Getter
+    String recipeImportedName;
 }

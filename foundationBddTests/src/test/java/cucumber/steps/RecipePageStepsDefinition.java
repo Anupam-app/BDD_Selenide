@@ -178,12 +178,11 @@ public class RecipePageStepsDefinition {
     @When("I click on jump step {string}")
     public void iClickOnJumpToStep(String stepNumber) {
     	recipePage.clickOnJumpToStep(stepNumber);
-
     }
 
     @When("I click on abort button")
     public void iClickOnAbortButton() {
-    	recipePage.clickOnAbortButton(this.recipe.getAfterComments());
+        recipePage.clickOnAbortButton(this.recipe.getAfterComments());
     }
 
     @Then("I should see the recipe run aborted")
@@ -192,26 +191,31 @@ public class RecipePageStepsDefinition {
     	recipePage.clickOnOk();
     }
 
-
     @When("I click on export recipe {string}")
-    public void iExport(String recipe) {
-    	recipePage.exportRecipe(recipe);
+    public void iExport(String recipeName) {
+        recipe.setRecipeName(recipeName);
+    	recipePage.exportRecipe(recipe.getRecipeName());
     }
 
-    @Then("I should see {string} exported")
-    public void iShouldSeeExportMessage(String recipe) {
-    	recipePage.notificationMessageExport(recipe);
- 
+    @Then("I should see the recipe exported in user notifications")
+    public void iShouldSeeExportMessage() {
+    	recipePage.notificationMessageExport(recipe.getRecipeName());
     }
 
     @When("I click on import {string}")
-    public void iClickOnImport(String recipe) {
-    	recipePage.importRecipe(recipe);
+    public void iClickOnImport(String recipeName) {
+    	recipePage.importRecipe(recipeName);
+    	recipe.setRecipeImportedName(recipePage.getGeneratedName());
     }
 
-    @Then("I should see a notification with successful recipe imported")
+    @Then("I should see the recipe imported in user notifications")
     public void iShouldSeeImportMessage() {
-    	recipePage.notificationMessageImport();
+    	recipePage.notificationMessageImport(recipe.getRecipeImportedName());
+    }
+
+    @Then("I look at the user notification")
+    public void iLookAtTheUserNotification() {
+        recipePage.lookAtTheUserNotification();
     }
 
 }

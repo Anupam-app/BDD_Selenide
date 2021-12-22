@@ -24,8 +24,8 @@ Feature: Recipe management
 
   Scenario: Recipe Execution
     When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start recipe execution with project id "testRecipeProjectToExecute"
+    And I load recipe "testRecipeFlows"
+    And I start recipe execution with project id "testRecipeFlowsExecutionFull"
     Then Recipe should be executed
 
   Scenario: Recipe creation
@@ -41,20 +41,18 @@ Feature: Recipe management
   Scenario: Recipe operational control workflow
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
-    And I start recipe execution flow with "testRecipeProjectToExecute"
+    And I start recipe execution flow with "testRecipeFlowsExecutionControlled"
     And I click on pause button
     And I click on resume button
     And I click on jump step "3"
     And I click on abort button
     Then I should see the recipe run aborted
 
-  Scenario: Recipe export
+  Scenario: Recipe export and import
     Given I go to recipe page
-    When I click on export recipe "testRecipeToExecutePbAUucdMeT"
-    Then I should see "testRecipeToExecutePbAUucdMeT" exported
-    
-  Scenario: Recipe import
-    Given I go to recipe page
-    When I trigger edit mode
+    When I click on export recipe "testRecipeToExecute"
+    And I trigger edit mode
     And I click on import "testRecipeToExecute"
-    Then I should see a notification with successful recipe imported
+    And I look at the user notification
+    Then I should see the recipe exported in user notifications
+    And I should see the recipe imported in user notifications

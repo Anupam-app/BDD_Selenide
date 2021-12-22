@@ -1,77 +1,78 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.apache.commons.lang3.RandomStringUtils;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.SelenideHelper;
+
 import static com.codeborne.selenide.Condition.visible;
-import dataobjects.RecipeAction;
+import static com.codeborne.selenide.Selenide.*;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipePage {
 
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement editorLinkText=$(By.xpath("//a[text()='Editor']"));
-    private final SelenideElement browserLinkText=$(By.xpath("//a[text()='Browser']"));
+    private final SelenideElement editorLinkText = $(By.xpath("//a[text()='Editor']"));
+    private final SelenideElement browserLinkText = $(By.xpath("//a[text()='Browser']"));
 
-    private final SelenideElement recipeElementText =$(By.xpath("//div[@class='recipeTabs']"));
-    private final SelenideElement loadRecipeText=$(By.xpath("//p[text()='Load Recipe']"));
-    private final SelenideElement clearRecipeText=$(By.xpath("//p[text()='Clear Panel']"));
-    private final SelenideElement preRunComments=$(By.xpath("//textarea[@name='comment']"));
+    private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
+    private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
+    private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
+    private final SelenideElement notificationText = $(By.className("notification-summary"));
+
+    private final SelenideElement preRunComments = $(By.xpath("//textarea[@name='comment']"));
 
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
-    private final SelenideElement phaseElementTextBox =$(By.className("phase-Name"));
-    private final SelenideElement productIdTextbox=$(By.xpath("//input[@name='productId']"));
-    private final SelenideElement batchIdTextbox=$(By.xpath("(//*[contains(@class,'autocompletediv')]//input)[1]"));
+    private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
+    private final SelenideElement productIdTextbox = $(By.xpath("//input[@name='productId']"));
+    private final SelenideElement batchIdTextbox = $(By.xpath("(//*[contains(@class,'autocompletediv')]//input)[1]"));
 
-    private final SelenideElement openButton=$(By.className("open-recipe-btn"));
-    private final SelenideElement plusButton=$(By.className("icon-plus"));
+    private final SelenideElement openButton = $(By.className("open-recipe-btn"));
+    private final SelenideElement plusButton = $(By.className("icon-plus"));
     private final By deletePhaseButton = By.className("deleteButton");
-    private final SelenideElement primaryButton=$(By.className("btn-primary"));
-    private final SelenideElement loadButton=$(By.xpath("//span[contains(text(),'Load')]"));
-    private final SelenideElement okButton=$(By.xpath("//button[contains(text(),'OK')]"));
-    private final SelenideElement saveButton=$(By.xpath("//button[contains(text(),'Save')]"));
-    
+    private final SelenideElement primaryButton = $(By.className("btn-primary"));
+    private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
+    private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
+
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
     private final By phasesList = By.className("phaseHead");
-    private final SelenideElement phasesListClick =$(By.className("phaseHead"));
-    private final SelenideElement phasesListClick1 =$(By.xpath("(//label[@class='phaseHead'])[1]"));
-    private final SelenideElement phasesListClick2 =$(By.xpath("((//label[@class='phaseHead'])[1]//following::span[@class='deleteBtn egu-right-block']/input)[1]"));
+    private final SelenideElement phasesListClick = $(By.className("phaseHead"));
+    private final SelenideElement phasesListClick1 = $(By.xpath("(//label[@class='phaseHead'])[1]"));
+    private final SelenideElement phasesListClick2 = $(By.xpath("((//label[@class='phaseHead'])[1]//following::span[@class='deleteBtn egu-right-block']/input)[1]"));
 
-    private final SelenideElement statusDraft=$(By.xpath("//div[@class='status-tooltip']"));
-    private final SelenideElement selectInReview=$(By.xpath("//span[text()='In-Review']"));
-    private final SelenideElement statusInReview=$(By.xpath("//div[@class='status-tooltip']"));
-    private final SelenideElement selectApprove=$(By.xpath("//span[text()='Approved-Active']"));
-    private final SelenideElement inputPassword=$(By.xpath("//input[@type='password']"));
-    private final SelenideElement statusApproved=$(By.xpath("//div[@class='status-tooltip']"));
+    private final SelenideElement statusDraft = $(By.xpath("//div[@class='status-tooltip']"));
+    private final SelenideElement selectInReview = $(By.xpath("//span[text()='In-Review']"));
+    private final SelenideElement statusInReview = $(By.xpath("//div[@class='status-tooltip']"));
+    private final SelenideElement selectApprove = $(By.xpath("//span[text()='Approved-Active']"));
+    private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
+    private final SelenideElement statusApproved = $(By.xpath("//div[@class='status-tooltip']"));
 
-    private final SelenideElement expandIcon=$(By.xpath("//img[@class='jss9']"));
-    private final SelenideElement runIcon=$(By.xpath("//img[contains(@src,'RUN')]"));
-    private final SelenideElement abortIcon=$(By.xpath("//img[contains(@src,'ABORT')]"));
-    private final SelenideElement rerunIcon=$(By.xpath("//img[contains(@src,'RE-RUN')]"));
-    private final SelenideElement pauseIcon=$(By.xpath("//img[contains(@src,'Group')]"));
-    private final SelenideElement resumeIcon=$(By.xpath("//img[contains(@src,'RESUME')]"));
-    private final SelenideElement jumpStepIcon=$(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
-    private final SelenideElement inputStepNumber=$(By.xpath("//input[@id='standard-number']"));
-    private final SelenideElement okStepButton=$(By.xpath("//span[text()='Ok']"));
-    private final SelenideElement clickYes=$(By.xpath("//span[text()='Yes']"));
+    private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss9']"));
+    private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
+    private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
+    private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
+    private final SelenideElement pauseIcon = $(By.xpath("//img[contains(@src,'Group')]"));
+    private final SelenideElement resumeIcon = $(By.xpath("//img[contains(@src,'RESUME')]"));
+    private final SelenideElement jumpStepIcon = $(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
+    private final SelenideElement inputStepNumber = $(By.xpath("//input[@id='standard-number']"));
+    private final SelenideElement okStepButton = $(By.xpath("//span[text()='Ok']"));
+    private final SelenideElement clickYes = $(By.xpath("//span[text()='Yes']"));
     private final SelenideElement executionStatus = $(By.id("runStatus_Id"));
-    private final SelenideElement importButton=$(By.xpath("//button[contains(text(),'Import')]"));
-    private String xpathEditExportIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'export-icon')]";
-    private final String NOTIFICATION_TEXT="Recipe %s Success";
-    private final String NOTIFICATION_TEXT_IMPORT="The recipe %s was successfully imported!";
-    private final String NOTIFICATION_TEXT_EXPORT="The recipe %s was successfully exported!";
-    private SelenideElement saveText = $(By.className("notification-title"));
-    private SelenideElement saveNotificationText = $(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
-    private final String XPATH_LOAD_RECIPE ="//*[@title='%s']";
-    private String xpathImportRecipe ="//tr[td[contains(.,'%s')]]";
-    private SelenideElement recipeNameText = $(By.xpath("(//*[contains(@class,'tbl-row')])/td[1]"));
+    private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
+
+    private final ElementsCollection notificationTexts = $$(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
+
+    private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
+    private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
+    private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[text()='%s']]/td/div[contains(@class, 'export-icon')]";
+
+    private final String NOTIFICATION_TEXT_IMPORT = "The recipe %s was successfully imported!";
+    private final String NOTIFICATION_TEXT_EXPORT = "The recipe %s was successfully exported!";
+
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -82,7 +83,7 @@ public class RecipePage {
     }
 
     public void goToEditMode() {
-        editorLinkText.waitUntil(Condition.visible,5000l);
+        editorLinkText.waitUntil(Condition.visible, 5000l);
         editorLinkText.click();
     }
 
@@ -91,24 +92,24 @@ public class RecipePage {
     }
 
     public void edit(String recipeName) {
-        commonWaiter($(By.xpath(String.format(xpathEditPage, recipeName))), Condition.visible) .click();
-        commonWaiter(openButton, Condition.visible) .click();
+        commonWaiter($(By.xpath(String.format(xpathEditPage, recipeName))), Condition.visible).click();
+        commonWaiter(openButton, Condition.visible).click();
     }
 
     public void deleteAllPhases() {
-        Selenide.$$(phasesList).forEach(e->{
+        $$(phasesList).forEach(e -> {
             e.click();
             e.find(deletePhaseButton).click();
         });
     }
 
     public void addPhase(String phase) {
-        plusButton.waitUntil(Condition.visible,5000l);
+        plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
-        SelenideElement searchTextBox=$(By.className("search-txt-box"));
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys("start");
         searchTextBox.sendKeys(Keys.ENTER);
-        searchTextBox.sendKeys(Keys.LEFT_CONTROL+"g");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
@@ -116,7 +117,7 @@ public class RecipePage {
     public void saveRecipe(String recipeName) {
         $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
         $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
-        SelenideElement recipeInputSave=$(By.className("selected-recipe-input"));
+        SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
         $(By.className("btn_primary")).click();
@@ -138,17 +139,17 @@ public class RecipePage {
     public void naviagateToEditorTab() {
         recipePageLinkText.click();
         switchTo().frame("CrossDomainiframeId");
-        editorLinkText.waitUntil(Condition.visible,5000l);
+        editorLinkText.waitUntil(Condition.visible, 5000l);
         editorLinkText.click();
     }
 
     public void createRecipe(String recipenode) {
-        plusButton.waitUntil(Condition.visible,5000l);
+        plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
-        SelenideElement searchTextBox=$(By.className("search-txt-box"));
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys(recipenode);
         searchTextBox.sendKeys(Keys.ENTER);
-        searchTextBox.sendKeys(Keys.LEFT_CONTROL+"g");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(RandomStringUtils.randomAlphabetic(10));
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
@@ -158,7 +159,7 @@ public class RecipePage {
         recipeSearchTextBox.setValue(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         $(By.xpath(String.format(xpathEditPage, recipeName))).click();
-        openButton.waitUntil(Condition.visible,5000l);
+        openButton.waitUntil(Condition.visible, 5000l);
         openButton.click();
     }
 
@@ -166,12 +167,12 @@ public class RecipePage {
         recipeSearchTextBox.setValue(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         $(By.xpath(String.format(xpathEditPage, recipeName))).click();
-        openButton.waitUntil(Condition.visible,5000l);
+        openButton.waitUntil(Condition.visible, 5000l);
         openButton.click();
     }
 
     public void deletePhaseToRecipe() {
-        phasesListClick.waitUntil(Condition.visible,5000l);
+        phasesListClick.waitUntil(Condition.visible, 5000l);
         phasesListClick1.click();
         phasesListClick2.click();
         $(By.xpath("//button[text()='Ok']")).click();
@@ -187,10 +188,9 @@ public class RecipePage {
         $(By.xpath("//button[text()='Change']")).click();
         inputPassword.sendKeys(password);
         $(By.xpath("//button[text()='SIGN']")).click();
-        statusApproved.waitUntil(Condition.visible,5000l);
+        statusApproved.waitUntil(Condition.visible, 5000l);
         browserLinkText.click();
         editorLinkText.click();
-
     }
 
     public String getStatus() {
@@ -206,14 +206,13 @@ public class RecipePage {
             clearRecipeText.click();
         }
         loadRecipeText.click();
-        loadButton.waitUntil(Condition.visible,20000l);
+        loadButton.waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
-
     }
 
-    public void recipeExecution(String productId,String batchId,String beforeComments,String afterComments) {
-        runIcon.waitUntil(Condition.visible,20000l);
+    public void recipeExecution(String productId, String batchId, String beforeComments, String afterComments) {
+        runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -221,14 +220,14 @@ public class RecipePage {
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunComments.sendKeys(beforeComments);
         okButton.click();
-        abortIcon.waitUntil(Condition.visible,5000l);
-        abortIcon.waitUntil(Condition.not(Condition.visible),30000l);
+        abortIcon.waitUntil(Condition.visible, 5000l);
+        abortIcon.waitUntil(Condition.not(Condition.visible), 30000l);
         preRunComments.sendKeys(afterComments);
         okButton.click();
     }
 
-    public void recipeExecutionFlow(String productId,String batchId,String beforeComments) {
-        runIcon.waitUntil(Condition.visible,20000l);
+    public void recipeExecutionFlow(String productId, String batchId, String beforeComments) {
+        runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -237,73 +236,92 @@ public class RecipePage {
         preRunComments.sendKeys(beforeComments);
         okButton.click();
     }
-    
+
     public void isExecuted() {
-        rerunIcon.waitUntil(Condition.visible,5000l);
+        rerunIcon.waitUntil(Condition.visible, 5000l);
     }
-    
+
     public void clickPauseButton() {
-    	pauseIcon.click();
+        pauseIcon.click();
     }
-    
+
     public void clickResumeButton() {
-    	resumeIcon.waitUntil(Condition.visible,5000l).click();
+        resumeIcon.waitUntil(Condition.visible, 5000l).click();
     }
-    
+
     public void clickOnJumpToStep(String stepNumber) {
-    	jumpStepIcon.waitUntil(Condition.visible,5000l).click();
-    	inputStepNumber.setValue(stepNumber);
-    	okStepButton.waitUntil(Condition.visible,5000l).click();
-    	
+        Selenide.sleep(1000);
+        jumpStepIcon.waitUntil(Condition.visible, 5000l,50l).click();
+        inputStepNumber.waitUntil(Condition.visible, 5000l,50l);
+        Selenide.sleep(1000);
+        inputStepNumber.sendKeys(stepNumber);
+        okStepButton.waitUntil(Condition.visible, 5000l).click();
     }
-    
+
     public void clickOnAbortButton(String afterComments) {
-        abortIcon.waitUntil(Condition.visible,6000l).click();
-    	clickYes.waitUntil(Condition.visible,5000l).click();
-    	preRunComments.waitUntil(Condition.visible,4000l).sendKeys(afterComments);
+        abortIcon.waitUntil(Condition.visible, 6000l).click();
+        clickYes.waitUntil(Condition.visible, 5000l).click();
+        SelenideHelper.commonWaiter(preRunComments,visible).sendKeys(afterComments);
     }
-    
+
     public String getExecutionStatus() {
-    	return executionStatus.getText();
+        return executionStatus.getText();
     }
-    
+
     public void clickOnOk() {
-    okButton.waitUntil(Condition.visible,5000l).click();
+        okButton.waitUntil(Condition.visible, 5000l).click();
     }
-    
+
     public void exportRecipe(String recipeName) {
-    	$(By.xpath(String.format(xpathEditExportIcon, recipeName))).waitUntil(visible,5000l).click();
-    	commonWaiter(openButton, Condition.visible).click();
+        $(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).waitUntil(visible, 5000l).click();
+        commonWaiter(openButton, Condition.visible).click();
     }
-    
-    public void notificationMessageImport() {
-    	String newRecipeName=recipeNameText.waitUntil(Condition.visible,5000l).getText();
-    	switchTo().defaultContent();
-    	userProfileIcon.waitUntil(Condition.visible,5000l).click();
-            	String expectedNotificationText=String.format(NOTIFICATION_TEXT_IMPORT, newRecipeName);
 
-        saveNotificationText.shouldHave(Condition.text(expectedNotificationText));
+    public void notificationMessageImport(String recipeName) {
+        String expectedNotificationText = String.format(NOTIFICATION_TEXT_IMPORT, recipeName);
+        checkNotification(expectedNotificationText);
     }
-    
+
+    public void checkNotification(String notification) {
+        notificationTexts.shouldHave(
+                CollectionCondition.anyMatch("User notification should contain this notification"
+                        , n -> n.getText().equals(notification)));
+    }
+
     public void notificationMessageExport(String recipeName) {
-    	switchTo().defaultContent();
-    	userProfileIcon.waitUntil(Condition.visible,5000l).click();
-            	String expectedNotificationText=String.format(NOTIFICATION_TEXT_EXPORT, recipeName);
-
-        saveNotificationText.shouldHave(Condition.text(expectedNotificationText));
+        String expectedNotificationText = String.format(NOTIFICATION_TEXT_EXPORT, recipeName);
+        checkNotification(expectedNotificationText);
     }
-    
+
     public void importRecipe(String recipeName) {
         $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
         $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']")).click();
-        $(By.xpath(String.format(xpathImportRecipe, recipeName))).click();
+        $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
-        SelenideElement recipeInputSave=$(By.className("rename-recipe-import-input"));
+        SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
         $(By.className("rename-recipe-import-input")).clear();
         recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
         saveButton.click();
-        browserLinkText.waitUntil(Condition.visible,5000l).click();
+        browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
 
+    public void lookAtTheUserNotification() {
+        switchTo().defaultContent();
+        userProfileIcon.waitUntil(Condition.visible, 5000l).click();
+    }
+
+    public String getGeneratedName() {
+        switchTo().parentFrame();
+        notificationText.waitUntil(visible, 30000l, 500l);
+        var notif = notificationText.text();
+        var recipeName = notif.split("The recipe ")[1].split(" ")[0];
+        return recipeName;
+    }
+
+    public void cleanLastRecipeDisplay(){
+        if(okButton.isDisplayed()){
+            okButton.click();
+        }
+    }
 }
 
