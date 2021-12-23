@@ -25,3 +25,4 @@ NET USER "testUsrAfterResetPwd" "3G4Zin;*a5" /ADD
 
 NET USER "testRoleWithoutPerms" /DELETE
 NET USER "testRoleWithoutPerms" "MerckApp1@" /ADD
+NET localgroup administrators "testRoleWithoutPerms" /ADD
