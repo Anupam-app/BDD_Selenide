@@ -25,7 +25,7 @@ Feature: Recipe management
   Scenario: Recipe Execution
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
-    And I start recipe execution with project id "testRecipeFlowsExecutionFull"
+    And I start recipe execution
     Then Recipe should be executed
 
   Scenario: Recipe creation
@@ -41,7 +41,7 @@ Feature: Recipe management
   Scenario: Recipe operational control workflow
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
-    And I start recipe execution flow with "testRecipeFlowsExecutionControlled"
+    And I start recipe execution
     And I click on pause button
     And I click on resume button
     And I click on jump step "3"
