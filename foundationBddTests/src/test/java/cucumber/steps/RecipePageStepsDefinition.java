@@ -150,14 +150,14 @@ public class RecipePageStepsDefinition {
         this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
         recipePage.recipeExecution(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
-    
-    @When("I start recipe execution flow with {string}")
-    public void iStartRecipeExecutionFlow(String recipe) {
-        this.recipe.setProductId(recipe);
+
+    @When("I start recipe execution")
+    public void iStartRecipeExecution() {
+        this.recipe.setProductId(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-        recipePage.recipeExecutionFlow(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments());
+        recipePage.recipeExecution(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
 
     @Then("Recipe should be executed")
