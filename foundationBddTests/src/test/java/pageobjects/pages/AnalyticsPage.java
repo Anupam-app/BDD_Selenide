@@ -45,8 +45,7 @@ public class AnalyticsPage {
 
     private final SelenideElement deleteIcon = $(By.xpath("//img[@class='aggregate-delete-icon']"));
 
-    private final String XPATH_PARAMETER_DISPLAY = "//th[text()='%s']";
-    private final String XPATH_CHECKBOX = "//input[@value='%s']";
+    private final String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
     private final String XPATH_PARAMETER_CHECKBOX = "//label//span[text()='%s']/ancestor::label//span[@class='ant-checkbox']";
@@ -65,8 +64,8 @@ public class AnalyticsPage {
 
     public void selectAggregate(String aggregateName) {
         $(By.xpath(String.format(aggregateNameText, aggregateName))).click();
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon,visible);
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon,not(visible));
+        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
+        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, not(visible));
     }
 
     public void lineGraph(String xparameterName) {
@@ -160,15 +159,11 @@ public class AnalyticsPage {
         } else {
             SelenideHelper.commonWaiter(createAggregateLinkText, Condition.visible).click();
         }
-        SelenideHelper.commonWaiter(aggregateNameTextBox,visible).setValue(aggregateName);
+        SelenideHelper.commonWaiter(aggregateNameTextBox, visible).setValue(aggregateName);
     }
 
-    public void clickCheckBox(String name) {
-        $(By.xpath(String.format(XPATH_CHECKBOX, name))).click();
-    }
-
-    public void checkParamater(String parameter) {
-        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter))).should(visible);
+    public void checkParameter(String parameter, String unit) {
+        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).should(visible);
     }
 
     public void deleteIfExists(String aggregateName) {

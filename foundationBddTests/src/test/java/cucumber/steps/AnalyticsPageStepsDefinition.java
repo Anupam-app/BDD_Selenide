@@ -1,9 +1,6 @@
 package cucumber.steps;
 
-import dataobjects.Analytics;
-import dataobjects.AnalyticsInterval;
-import dataobjects.AnalyticsMode;
-import dataobjects.Recipe;
+import dataobjects.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -37,7 +34,7 @@ public class AnalyticsPageStepsDefinition {
 
     @When("I select {string} graph in x axis")
     public void iselectGraph(String graphName) {
-        String xparameterName = analytics.getXParameters();
+        String xparameterName = analytics.getXParameters().getName();
         switch (graphName) {
             case "line":
                 analytics.setAnalyticsMode(AnalyticsMode.RELATIONAL);
@@ -66,7 +63,7 @@ public class AnalyticsPageStepsDefinition {
 
     @When("I select the y axis")
     public void parametersInYAxis() {
-        analytics.getYParameters().forEach(parameter -> analyticsPage.selectYAxisParameter(parameter));
+        analytics.getYParameters().forEach(parameter -> analyticsPage.selectYAxisParameter(parameter.getName()));
     }
 
     @When("I apply the analytics settings")
@@ -108,15 +105,16 @@ public class AnalyticsPageStepsDefinition {
         analyticsPage.startAggregateCreation(analytics.getName(), usingButton);
     }
 
-    @And("I choose {string} analytics parameter as {string} axis")
-    public void iChooseAnalyticsParameter(String param, String axis) {
+    @And("I choose {string} analytics parameter with unit {string} as {string} axis")
+    public void iChooseAnalyticsParameter(String parameter, String unit, String axis) {
+        var analyticsParameter = new AnalyticsParameter(parameter, unit);
         if (axis.equalsIgnoreCase("x")) {
-            analytics.setXParameters(param);
+            analytics.setXParameters(analyticsParameter);
         }
         if (axis.equalsIgnoreCase("y")) {
-            analytics.getYParameters().add(param);
+            analytics.getYParameters().add(analyticsParameter);
         }
-        analyticsPage.chooseParameter(param);
+        analyticsPage.chooseParameter(parameter);
     }
 
     @And("I validate the analytics creation")
@@ -126,9 +124,9 @@ public class AnalyticsPageStepsDefinition {
 
     @And("I see my changes in analytics aggregate")
     public void iSeeMyChangesInAnalyticsAggregate() {
-        analyticsPage.clickCheckBox(analytics.getName());
-        analytics.getYParameters().forEach(p -> analyticsPage.checkParamater(p));
-        analyticsPage.checkParamater(analytics.getXParameters());
+        analyticsPage.selectAggregate(analytics.getName());
+        analytics.getYParameters().forEach(p -> analyticsPage.checkParameter(p.getName(),p.getUnit()));
+        analyticsPage.checkParameter(analytics.getXParameters().getName(),analytics.getXParameters().getUnit());
     }
 
     @And("I use the recipe for this analytics aggregate with interval {string}")
@@ -144,9 +142,9 @@ public class AnalyticsPageStepsDefinition {
         analyticsPage.deleteIfExists(analytics.getName());
         iCreateAnAnalyticsAggregate();
         iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.WEEKLY);
-        iChooseAnalyticsParameter("PI101 PV", "x");
-        iChooseAnalyticsParameter("PI102 PV", "y");
-        iChooseAnalyticsParameter("PI103 PV", "y");
+        iChooseAnalyticsParameter("PI101 PV", "psi", "x");
+        iChooseAnalyticsParameter("PI102 PV", "psi", "y");
+        iChooseAnalyticsParameter("PI103 PV", "psi", "y");
         iValidateTheAnalyticsCreation();
     }
 }

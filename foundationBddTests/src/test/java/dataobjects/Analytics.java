@@ -13,11 +13,11 @@ public class Analytics {
 
     @Setter
     @Getter
-    Set<String> yParameters = new HashSet<>();
+    Set<AnalyticsParameter> yParameters = new HashSet<>();
 
     @Setter
     @Getter
-    String xParameters;
+    AnalyticsParameter xParameters;
 
     @Setter
     @Getter
