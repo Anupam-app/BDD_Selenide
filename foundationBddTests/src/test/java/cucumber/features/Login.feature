@@ -4,12 +4,11 @@ Feature: User login
     Given the browser "Chrome" is open
     And I open portal
 
-  @smoke_test
   Scenario: User login
     Given I open login page
     When I enter "bio4cservice" as username and "MerckApp1@" as password
     And I push the login button
-    Then I am logged in as "bio4cservice" user
+    Then I am logged in
 
   Scenario Outline: Login errors
     Given I open login page
