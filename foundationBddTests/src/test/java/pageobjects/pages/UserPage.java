@@ -36,7 +36,7 @@ public class UserPage {
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
-    
+    private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -171,5 +171,8 @@ public class UserPage {
     	userNameTextBox.click();
     	cancelButton.click();
     }
-
+    
+    public String getUserDetails() {
+    	return userNameField.getText();
+    }
 }

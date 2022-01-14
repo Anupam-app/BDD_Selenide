@@ -3,12 +3,13 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-
+import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import static com.codeborne.selenide.Selenide.switchTo;
 
 public class LoginPage {
 
@@ -22,7 +23,9 @@ public class LoginPage {
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-
+    private final SelenideElement userPreferences = $(By.xpath("//span[text()='User preferences']"));
+    private final SelenideElement selectDefaultPageDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private SelenideElement defaultPageOption = $(By.xpath("//div[@class='icontitle active']"));
     private final String pnidLoginTestId = "pnid_login_info";
 
     public void setUser(String user) {
@@ -77,5 +80,24 @@ public class LoginPage {
     public void setConfirmpassword(String newpassword) {
         confirmPasswordTextbox.setValue(newpassword);
         submitButton.click();
+    }
+    
+    public void clickOnUserProfile() {
+    	commonWaiter(userProfileIcon,visible);
+    	userProfileIcon.click();
+    }
+    
+    public void clickOnUserPreferences() {
+    	commonWaiter(userPreferences,visible);
+    	userPreferences.click();
+    }
+
+    public void selectDropDown(String defaultPageName) {
+        SelenideHelper.commonWaiter(selectDefaultPageDropdown, visible).click();
+        $(By.xpath(String.format("//li[text()='%s']", defaultPageName))).click();
+        }
+    
+    public String getDefaultPageOption() {
+    	return defaultPageOption.getText();
     }
 }

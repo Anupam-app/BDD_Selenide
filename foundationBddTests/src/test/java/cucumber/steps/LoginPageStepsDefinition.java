@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
+import org.junit.Assert;
 
 public class LoginPageStepsDefinition {
 
@@ -71,4 +72,30 @@ public class LoginPageStepsDefinition {
         loginPage.setConfirmpassword(password);
     }
     
+    
+    @Given("I click on user profile icon")
+    public void iClickOnUserProfileIcon() {
+    	loginPage.clickOnUserProfile();
+    }
+    
+    @When("I click on user preferences link")
+    public void iClickOnUserPreferencesLink() {
+    	loginPage.clickOnUserPreferences();
+    }
+    
+    @When("I select {string} option from drop down")
+    public void iSelectFromDropDown(String defaultPageName) {
+    	loginPage.selectDropDown(defaultPageName);
+    }
+    
+    @When("I relogin")
+    public void ilogout_and_relogin() {
+    	iEnterUsernameAndPassword("Bio4CAdmin","MerckApp1@");
+    }
+    
+    @Then("I should see home page displayed with option")
+    public void iSeeHomepageWithDefaultOption() {
+    	Assert.assertEquals(loginPage.getDefaultPageOption(), user.getDefaultPage());
+    }
 }
+
