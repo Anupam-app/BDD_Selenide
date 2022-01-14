@@ -80,7 +80,70 @@ pipeline {
                 }				
             }
         }
-        stage('Build & Test') {
+        stage ('Change consul portal configuration to be seen as local server') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "d0575da2-cd97-42de-948e-fa7ee4ed91a2", usernameVariable: 'user', passwordVariable: 'password')])
+                {
+                    powershell '''
+                    if(!($env:CIPHostName.ToUpper() -like 'ONEBIOP*' -or $env:CIPHostName.ToUpper() -like 'STLBIOP*'))
+                    {
+                        echo 'SKIP change consul portal'
+                        return
+                    }
+
+                    $hostname = hostname.exe
+                    $ipTarget= Resolve-DNSName $hostname -type A | Select -ExpandProperty IPAddress
+
+                    $user = $env:user
+                    $password = $env:password
+
+                    $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+                    $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
+
+                    $Session = New-PSSession -ComputerName "$env:CipHostname" -Credential $cred
+
+                    function changeConsulConfig {
+                        Param (
+                            $IpTarget
+                        )
+                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" | Select -ExpandProperty Content
+                        $convertedJson = ConvertFrom-Json -InputObject $content
+                        $convertedJsonDecode64 = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($convertedJson.value))
+
+                        if(!($convertedJsonDecode64 -like "*$IpTarget*")){
+                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTarget")
+                            echo $contentReplaced
+                            $headers = @{}
+                            $headers["Content-Type"] = "application/json"
+                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
+                            sc.exe start "CODESYS Control Win V3 - x64"
+							Stop-Service bio4c-portal
+                            Start-Service bio4c-portal
+                        }
+                    }
+
+                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget
+                    '''
+                }
+            }
+        }
+        stage ('Wait for environment availability') {
+            steps {
+                retry(30) {
+                    sh '''
+                    sleep 30
+                    curl -k --fail https://$CipHostname/alarm-management/actuator/health
+                    curl -k --fail https://$CipHostname/analytics/actuator/health
+                    curl -k --fail https://$CipHostname/useradminportal/actuator/health
+                    curl -k --fail https://$CipHostname/config-management/actuator/health
+                    curl -k --fail https://$CipHostname/recipe-management/actuator/health
+                    curl -k --fail https://$CipHostname/reportingmanagement/actuator/health
+                    curl -k --fail https://$CipHostname/trends/actuator/health
+                    '''
+                }
+            }
+        }
+        stage('Test all bdd tests') {
 			steps {
                 script {
 					rtMavenRun(
@@ -114,6 +177,13 @@ pipeline {
                 currentBuild.result = currentBuild.result ?: 'SUCCESS'
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
+            emailext (
+                body: '''environment:${CipHostname} link:${BUILD_URL}allure/''',
+                mimeType: 'text/html',
+                replyTo: '$DEFAULT_REPLYTO',
+                subject: '$DEFAULT_SUBJECT',
+                to: '${EmailTo}'
+            )
         }
     }
 }
