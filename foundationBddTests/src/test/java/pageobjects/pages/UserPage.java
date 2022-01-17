@@ -8,6 +8,7 @@ import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import java.util.List;
 
@@ -37,6 +38,11 @@ public class UserPage {
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
+    private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
+    private SelenideElement upArrow = $(By.xpath("//div[@class='arrowupuserfilter']"));
+    private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
+    private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -174,5 +180,18 @@ public class UserPage {
     
     public String getUserDetails() {
     	return userNameField.getText();
+    }
+    
+    public void selectStatus(String status) {
+    	commonWaiter(filterIcon,visible);
+    	filterIcon.click();
+    	commonWaiter(upArrow,visible);
+    	upArrow.click();
+    	$(By.xpath(String.format("//span[text()='%s']", status))).click();
+    	applyFilterButton.click();
+    }
+    
+    public String getFilterTagText() {
+    	return filterTagText.getText();
     }
 }

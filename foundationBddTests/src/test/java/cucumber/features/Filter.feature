@@ -19,8 +19,9 @@ Feature: Apply Filter
    
   Scenario: Verify filter functionality in User Management
    Given I go to user page
-   When I click on filter icon and select status "<enabled>"
-   Then I should see user details are displayed based on filter
+   When I click on filter icon and select status "<Enabled>"
+   Then I should see user details are displayed
+   And I verify filetr tag "<Enabled>"
    
    Scenario Outline: Verify order sort functionality in User Management
     Given I go to user page
