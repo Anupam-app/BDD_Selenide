@@ -1,6 +1,5 @@
 package cucumber.util;
 
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.WebDriverRunner;
 import com.xceptance.neodymium.util.WebDriverUtils;
 import io.cucumber.java.After;

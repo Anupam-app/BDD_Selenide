@@ -6,17 +6,19 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
-import org.junit.Assert;
+import pageobjects.pages.RecipePage;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
+    private final RecipePage recipePage;
     private final User user;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, User user) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipePage recipePage, User user) {
         this.loginPage = loginPage;
         this.homepage = homepage;
+        this.recipePage = recipePage;
         this.user = user;
     }
 
@@ -64,6 +66,7 @@ public class LoginPageStepsDefinition {
         loginPage.setPassword(user.getPassword());
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
+        recipePage.cleanLastRecipeDisplay();
     }
 
     @Given("I change password {string}")
@@ -72,30 +75,4 @@ public class LoginPageStepsDefinition {
         loginPage.setConfirmpassword(password);
     }
     
-    
-    @Given("I click on user profile icon")
-    public void iClickOnUserProfileIcon() {
-    	loginPage.clickOnUserProfile();
-    }
-    
-    @When("I click on user preferences link")
-    public void iClickOnUserPreferencesLink() {
-    	loginPage.clickOnUserPreferences();
-    }
-    
-    @When("I select {string} option from drop down")
-    public void iSelectFromDropDown(String defaultPageName) {
-    	loginPage.selectDropDown(defaultPageName);
-    }
-    
-    @When("I relogin")
-    public void ilogout_and_relogin() {
-    	iEnterUsernameAndPassword("Bio4CAdmin","MerckApp1@");
-    }
-    
-    @Then("I should see home page displayed with option")
-    public void iSeeHomepageWithDefaultOption() {
-    	Assert.assertEquals(loginPage.getDefaultPageOption(), user.getDefaultPage());
-    }
 }
-

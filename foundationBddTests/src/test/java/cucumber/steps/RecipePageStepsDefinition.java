@@ -151,9 +151,71 @@ public class RecipePageStepsDefinition {
         recipePage.recipeExecution(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
 
+    @When("I start recipe execution")
+    public void iStartRecipeExecution() {
+        this.recipe.setProductId(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+        recipePage.recipeExecution(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
+    }
+
     @Then("Recipe should be executed")
     public void recipeExecuted() {
         recipePage.isExecuted();
+    }
+    
+    @When("I click on pause button")
+    public void iClickOnPauseButton() {
+    	recipePage.clickPauseButton();
+    }
+
+    @When("I click on resume button")
+    public void iClickOnResumeButton() {
+    	recipePage.clickResumeButton();
+    }
+
+    @When("I click on jump step {string}")
+    public void iClickOnJumpToStep(String stepNumber) {
+    	recipePage.clickOnJumpToStep(stepNumber);
+    }
+
+    @When("I click on abort button")
+    public void iClickOnAbortButton() {
+        recipePage.clickOnAbortButton(this.recipe.getAfterComments());
+    }
+
+    @Then("I should see the recipe run aborted")
+    public void iVerifyRecipeAbort() {
+    	Assert.assertEquals("Aborted",this.recipePage.getExecutionStatus());
+    	recipePage.clickOnOk();
+    }
+
+    @When("I click on export recipe {string}")
+    public void iExport(String recipeName) {
+        recipe.setRecipeName(recipeName);
+    	recipePage.exportRecipe(recipe.getRecipeName());
+    }
+
+    @Then("I should see the recipe exported in user notifications")
+    public void iShouldSeeExportMessage() {
+    	recipePage.notificationMessageExport(recipe.getRecipeName());
+    }
+
+    @When("I click on import {string}")
+    public void iClickOnImport(String recipeName) {
+    	recipePage.importRecipe(recipeName);
+    	recipe.setRecipeImportedName(recipePage.getGeneratedName());
+    }
+
+    @Then("I should see the recipe imported in user notifications")
+    public void iShouldSeeImportMessage() {
+    	recipePage.notificationMessageImport(recipe.getRecipeImportedName());
+    }
+
+    @Then("I look at the user notification")
+    public void iLookAtTheUserNotification() {
+        recipePage.lookAtTheUserNotification();
     }
 
 }
