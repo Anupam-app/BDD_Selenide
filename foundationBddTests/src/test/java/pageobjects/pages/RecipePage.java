@@ -12,10 +12,21 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipePage {
 
+    private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
+    private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
+    private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[text()='%s']]/td/div[contains(@class, 'export-icon')]";
+    private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
+
+    private final String NOTIFICATION_TEXT_IMPORT = "The recipe %s was successfully imported!";
+    private final String NOTIFICATION_TEXT_EXPORT = "The recipe %s was successfully exported!";
+
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement editorLinkText = $(By.xpath("//a[text()='Editor']"));
     private final SelenideElement browserLinkText = $(By.xpath("//a[text()='Browser']"));
+    private final SelenideElement restartButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "RESTART")));
+    private final SelenideElement yesButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes")));
+    private final SelenideElement holdButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "HOLD")));
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
@@ -65,13 +76,6 @@ public class RecipePage {
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
 
     private final ElementsCollection notificationTexts = $$(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
-
-    private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
-    private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
-    private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[text()='%s']]/td/div[contains(@class, 'export-icon')]";
-
-    private final String NOTIFICATION_TEXT_IMPORT = "The recipe %s was successfully imported!";
-    private final String NOTIFICATION_TEXT_EXPORT = "The recipe %s was successfully exported!";
 
     public void goTo() {
         recipePageLinkText.click();
@@ -202,7 +206,11 @@ public class RecipePage {
     }
 
     public void loadRecipe(String recipeName) {
-        if(clearRecipeText.isDisplayed()){
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton,visible);
+        }
+        if (clearRecipeText.isDisplayed()) {
             clearRecipeText.click();
         }
         loadRecipeText.click();
@@ -211,7 +219,7 @@ public class RecipePage {
         loadButton.click();
     }
 
-    public void recipeExecution(String productId, String batchId, String beforeComments, String afterComments) {
+    public void startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments) {
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         productIdTextbox.setValue(productId);
@@ -226,7 +234,7 @@ public class RecipePage {
         okButton.click();
     }
 
-    public void recipeExecutionFlow(String productId, String batchId, String beforeComments) {
+    public void startRecipe(String productId, String batchId, String beforeComments) {
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         productIdTextbox.setValue(productId);
@@ -251,8 +259,8 @@ public class RecipePage {
 
     public void clickOnJumpToStep(String stepNumber) {
         Selenide.sleep(1000);
-        jumpStepIcon.waitUntil(Condition.visible, 5000l,50l).click();
-        inputStepNumber.waitUntil(Condition.visible, 5000l,50l);
+        jumpStepIcon.waitUntil(Condition.visible, 5000l, 50l).click();
+        inputStepNumber.waitUntil(Condition.visible, 5000l, 50l);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
         okStepButton.waitUntil(Condition.visible, 5000l).click();
@@ -261,7 +269,7 @@ public class RecipePage {
     public void clickOnAbortButton(String afterComments) {
         abortIcon.waitUntil(Condition.visible, 6000l).click();
         clickYes.waitUntil(Condition.visible, 5000l).click();
-        SelenideHelper.commonWaiter(preRunComments,visible).sendKeys(afterComments);
+        SelenideHelper.commonWaiter(preRunComments, visible).sendKeys(afterComments);
     }
 
     public String getExecutionStatus() {
@@ -318,10 +326,32 @@ public class RecipePage {
         return recipeName;
     }
 
-    public void cleanLastRecipeDisplay(){
-        if(okButton.isDisplayed()){
+    public void cleanLastRecipeDisplay() {
+        if (okButton.isDisplayed()) {
             okButton.click();
         }
+    }
+
+    public void holdAndRestart() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+        }
+        holdSystem();
+        restartSystem();
+    }
+
+    private void restartSystem() {
+        SelenideHelper.commonWaiter(restartButton,visible).click();
+        SelenideHelper.commonWaiter(yesButton,visible).click();
+    }
+
+    private void holdSystem() {
+        SelenideHelper.commonWaiter(holdButton,visible).click();
+        SelenideHelper.commonWaiter(yesButton,visible).click();
+    }
+
+    public void seeSystemOnHold() {
+        SelenideHelper.commonWaiter(holdButton,visible);
     }
 }
 
