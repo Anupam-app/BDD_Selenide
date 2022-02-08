@@ -106,12 +106,8 @@ public class RolePage {
     public void roleExists(String role) {
         $(By.xpath(String.format(xpathEditRoleIcon, role))).shouldBe(Condition.visible);
     }
-
-    public void emptyRolesList() {
-        rolesText.getText().isEmpty();
-    }
-
-    public String getRoleList() {
-        return rolesText.text().substring(0, 35);
+    
+    public void NoRolesTab() {
+        rolesLinkText.should(Condition.not(Condition.visible));
     }
 }
