@@ -170,6 +170,4 @@ public class UserPageStepsDefinition {
     public void iSeePasswordResetMessagedisplayed() {
         user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
     }
-
-
 }

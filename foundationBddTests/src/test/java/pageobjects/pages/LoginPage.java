@@ -1,7 +1,7 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import com.xceptance.neodymium.util.Neodymium;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.*;
@@ -12,14 +12,15 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class LoginPage {
 
+    private final String XPATH_LOGIN_BUTTON = "//button[text()='%s']";
+
     private final SelenideElement userIdTextBox = $(By.id("userId"));
     private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
     private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
-    private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
-    private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
+
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
 
@@ -38,21 +39,12 @@ public class LoginPage {
     }
 
     public void openLogin() {
-        commonWaiter(loginButton,visible).click();
-    }
-
-    public void checkLoggedIn(boolean loggedInd) {
-        SelenideElement element = userProfileIcon;
-
-        if (loggedInd) {
-            element.should(be(visible));
-        } else {
-            element.shouldNot(be(visible));
-        }
+        var login = Neodymium.localizedText("login");
+        commonWaiter($(By.xpath(String.format(XPATH_LOGIN_BUTTON, login))), visible).click();
     }
 
     public void checkMessage(String message) {
-        commonWaiter(userLoginAlertText,visible);
+        commonWaiter(userLoginAlertText, visible);
         userLoginAlertText.shouldHave(text(message));
     }
 
@@ -70,7 +62,7 @@ public class LoginPage {
     }
 
     public void setNewpassword(String newpassword) {
-        commonWaiter(newPasswordTextbox,visible);
+        commonWaiter(newPasswordTextbox, visible);
         newPasswordTextbox.setValue(newpassword);
     }
 

@@ -7,18 +7,22 @@ import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.UserProfilePage;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
     private final RecipePage recipePage;
+    private final UserProfilePage userProfilPage;
     private final User user;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipePage recipePage, User user) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipePage recipePage, UserProfilePage userProfilPage
+            , User user) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipePage = recipePage;
+        this.userProfilPage = userProfilPage;
         this.user = user;
     }
 
@@ -42,12 +46,12 @@ public class LoginPageStepsDefinition {
 
     @Then("I am logged in")
     public void iAmLoggedIn() {
-        loginPage.checkLoggedIn(true);
+        userProfilPage.checkUserProfilePresence(true);
     }
 
     @Then("I am not logged in")
     public void iAmNotLoggedIn() {
-        loginPage.checkLoggedIn(false);
+        userProfilPage.checkUserProfilePresence(false);
     }
 
     @Then("I should see the message {string}")

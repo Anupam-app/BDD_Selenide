@@ -13,3 +13,18 @@ Feature: Settings Modification
     Examples:
          | customLabelName |
          | Pump 21         |
+
+  Scenario Outline: Change language setting
+    Given I goto settings page
+    And I goto general components
+    When I change language to "<language>"
+    And I apply settings
+    And I goto backup page
+    And I goto settings page
+    And I goto general components
+    Then I see the expected language activated
+
+    Examples:
+      | language |
+      | fr-FR    |
+      | en-US    |
