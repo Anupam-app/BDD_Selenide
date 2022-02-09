@@ -40,21 +40,21 @@ INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_na
 GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (3, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (3, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (4, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (4, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (5, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (5, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (6, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (6, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (7, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (7, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (8, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (8, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (9, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (9, 3)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 2)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (11, 6)
 GO
