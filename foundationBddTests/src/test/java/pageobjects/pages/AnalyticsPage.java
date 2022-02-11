@@ -13,6 +13,7 @@ import java.util.List;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
@@ -110,7 +111,8 @@ public class AnalyticsPage {
 
     public void createAggregate(Recipe recipe, String analyticsInterval) {
         $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).click();
-        List<WebElement> options = $(By.xpath(XPATH_OPTION_SELECTION)).findElements(By.tagName("div"));
+
+        var options=$$(By.xpath(XPATH_OPTION_SELECTION));
         for (WebElement option : options) {
             if (option.getText().equals(recipe.getBatchId())) {
                 option.click();
