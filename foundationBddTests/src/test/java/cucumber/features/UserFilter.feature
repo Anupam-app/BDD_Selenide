@@ -1,33 +1,36 @@
-Feature: Apply Filter
+Feature: Apply Filter Users
 
   Background:
     Given the browser "Chrome" is open
     And I am logged in as "Bio4CAdmin" user
     
-
   Scenario: Verify the user preferred homepage is displayed based on the User Preferences
    Given I click on user profile icon
    When I click on user preferences link
    And I select "Analytics" option from drop down
    And I relogin
-   Then I should see home page displayed with option
+   Then I should see home page displayed with option "Analytics"
     
   Scenario: Verify search functionality in User Management
    Given I go to user page
    When I search "testUser" user
-   Then I should see user details are displayed
+   Then the user "testUser" exists
    
-  Scenario: Verify filter functionality in User Management
+  Scenario Outline: Verify filter enabled functionality in User Management
    Given I go to user page
-   When I click on filter icon and select status "<Enabled>"
-   Then I should see user details are displayed
-   And I verify filetr tag "<Enabled>"
+   When I click on filter icon and select status "<status>"
+   Then I should see the status "<status>" and user "<userName>" displayed
+
+    Examples:
+     |userName         | status   |
+     |testUserEnabled  | Enabled  |
+     |testUserDisabled | Disabled |
    
    Scenario Outline: Verify order sort functionality in User Management
     Given I go to user page
     When I select sort by "<columnName>" in "<sortMode>"
-    Then User details should be displayed by "<column name>" in "<sort mode>" order
+    Then Details should be displayed in sort order
 
     Examples:
       | columnName | sortMode  |
-      | username   | ascending |
+      | Username   | Ascending |
