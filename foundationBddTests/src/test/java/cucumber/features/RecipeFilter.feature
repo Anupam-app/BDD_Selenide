@@ -6,18 +6,18 @@ Feature: Apply Filter Recipes
 
   Scenario: Verify search functionality in Recipe Browser
     Given I go to recipe page
-    When I search recipe "testRecipe"
-    Then I should see recipe "testRecipe"
+    When I search recipe "testRecipeFlows"
+    Then I should see recipe "testRecipeFlows"
    
   Scenario: Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Run Summary"
-    Then I should see recipe "testRecipe"
+    Then I should see recipe "testRecipeFlows"
    
   Scenario: Verify created by functionality in Recipe Browser
     Given I go to recipe page
     When I select from dropdown list "Created by"
-    Then I should see recipe "testRecipe"
+    Then I should see recipe "testRecipeFlows"
     
   Scenario Outline: Verify order sort functionality in Recipe Browser
     Given I go to recipe page
