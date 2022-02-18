@@ -21,10 +21,10 @@ Feature: Apply Filter Recipes
     
   Scenario Outline: Verify order sort functionality in Recipe Browser
     Given I go to recipe page
-    When I select sort by "<columnName>" in "<sortMode>"
-    Then Details should be displayed in sort order
+    When I select recipe sort by "<columnName>" in "<ascending>"
+    Then "<columnName>" from recipe should be displayed in sorted order "<ascending>"
 
     Examples:
-      | columnName  | sortMode  |
-      | Recipe Name | Ascending |
-      
+      | columnName  | ascending  |
+      | Recipe Name | true       |
+      | Recipe Name | false      |
