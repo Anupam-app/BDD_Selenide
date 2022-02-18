@@ -53,7 +53,7 @@ Feature: User management
     Given I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
-    And I select role "Bio4CService"
+    And I select role "Operator"
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter random department
