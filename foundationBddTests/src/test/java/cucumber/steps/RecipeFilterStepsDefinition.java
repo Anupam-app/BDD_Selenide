@@ -30,8 +30,8 @@ public class RecipeFilterStepsDefinition {
     }
 
     @When("I select from dropdown list {string}")
-    public void iSelectFromDropdowmList(String recipeStatus) {
-    	recipeFilterPage.selectRecipeStatus(recipeStatus);
+    public void iSelectFromDropdowmList(String adminName) {
+    	recipeFilterPage.selectCreatedBy(adminName);
     }
 
     @When("I select recipe sort by {string} in {string}")

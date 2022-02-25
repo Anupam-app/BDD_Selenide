@@ -19,7 +19,7 @@ public class UserFilterStepsDefinition {
         this.user = user;
     }
     
-	@Given("I click on user profile icon")
+	@When("I click on user profile icon")
 	public void iClickOnUserProfileIcon() {
 		userFilter.userProfile();
 	}
@@ -37,6 +37,7 @@ public class UserFilterStepsDefinition {
 	@Then("I should see home page displayed with option {string}")
 	public void iVerifytOption(String defaultOptionName) {
 		Assert.assertEquals(defaultOptionName, userFilter.getActiveIconTitle());
+		userFilter.setToDefault();
 	}
 
 	/*
@@ -51,5 +52,15 @@ public class UserFilterStepsDefinition {
 		Assert.assertEquals(status, userFilter.getFilterTagText());
 		Assert.assertEquals(userName, userFilter.getUserName());
 	}
+	
+    @When("I select user sort by {string} in {string}")
+    public void iSelectSortBy(String columnName, String sortMode) {
+        userFilter.sortList(columnName,Boolean.parseBoolean(sortMode));
+    }
+
+    @Then("{string} from user should be displayed in sorted order {string}")
+    public void userDetailsShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+        userFilter.checkSortedElement(columnName,Boolean.parseBoolean(sortMode));
+    }
 
 }

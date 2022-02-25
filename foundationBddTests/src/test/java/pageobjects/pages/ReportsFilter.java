@@ -21,10 +21,12 @@ public class ReportsFilter {
 	private SelenideElement columnText = $(By.xpath("//td[1]"));
 	private final SelenideElement reportSearch = $(By.xpath("//input[@placeholder='Search...']"));
 	
+	public void searchTemplate(String templateName) {
+		SelenideHelper.commonWaiter(reportSearch, visible).setValue(templateName);
+	}
 	public void selectTemplateStatus(String templateStatus) {
 		commonWaiter(filterIcon,visible);
     	filterIcon.click();
-    	commonWaiter(upIcon,visible);
     	$(By.xpath(String.format("//span[text()='%s']", templateStatus))).click();
     	applyFilterButton.click();
 	}
@@ -43,7 +45,6 @@ public class ReportsFilter {
 	 public void selectReportType(String reportType) {
 			commonWaiter(filterIcon,visible);
 	    	filterIcon.click();
-	    	commonWaiter(upIcon,visible);
 	    	$(By.xpath(String.format("//span[text()='%s']", reportType))).click();
 	    	applyFilterButton.click(); 
 	 }
@@ -55,8 +56,6 @@ public class ReportsFilter {
 	 public void selectRunStatus(String runReportStatus) {
 			commonWaiter(filterIcon,visible);
 	    	filterIcon.click();
-	    	commonWaiter(upIcon,visible);
-	    	upIcon.click();
 	    	$(By.xpath(String.format("//span[text()='%s']", runReportStatus))).click();
 	    	applyFilterButton.click(); 
 	 }

@@ -25,6 +25,12 @@ public class ReportsFilterStepsDefinition {
         this.report = report;
     }
     
+
+    @When("I search the report template {string}")
+    public void iSearchTheReportTemplate(String templateName) {
+    	reportFilter.searchTemplate(templateName);
+}
+    
     @When("I click on filter icon and select template status {string}")
     public void iSelectTemplateStatus(String templateStatus) {
     	reportFilter.selectTemplateStatus(templateStatus);
@@ -50,7 +56,7 @@ public class ReportsFilterStepsDefinition {
     	reportFilter.selectReportType(reportType);
     }
 
-    @When("I search the recipe run{string}")
+    @When("I search the recipe run {string}")
     public void isearchRunReport(String recipeRunName) {
     	reportFilter.searchReport(recipeRunName);
     }

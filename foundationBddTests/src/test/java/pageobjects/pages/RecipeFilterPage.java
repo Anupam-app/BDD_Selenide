@@ -22,10 +22,10 @@ public class RecipeFilterPage {
 	private final String XPATH_RECIPE_COLUMNS = "//table[@id='recipeListTable']//td[%s]";
 
 	private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-	private SelenideElement upIcon = $(By.xpath("(//div[@class='up-icon']))[1])"));
+	private SelenideElement upIcon = $(By.xpath("(//div[@class='up-icon'])[1]"));
 	private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
 	private final SelenideElement recipeSearch = $(By.xpath("//input[@placeholder='Search...']"));
-
+	private final SelenideElement clickOnDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
 	private SelenideElement columnText = $(By.xpath("//td[1]"));//TODO to be reviewed
 
 	public SelenideElement getRecipeColumnHeader(String columnName) {
@@ -56,6 +56,11 @@ public class RecipeFilterPage {
     	applyFilterButton.click(); 
 	}
 
+    public void selectCreatedBy(String adminName) {
+        SelenideHelper.commonWaiter(clickOnDropdown, visible).click();
+        commonWaiter($(By.xpath(String.format("//option[text()='%s']", adminName))),visible).click();
+    }
+    
 	public void sortList(String columnName, boolean ascending) {
 		//descending by default
 		if (ascending) {

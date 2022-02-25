@@ -4,30 +4,31 @@ Feature: Apply Filter Reports
     Given the browser "Chrome" is open
     And I am logged in as "Bio4CAdmin" user
     
+
   Scenario: Verify search functionality in the templates page
    Given I goto report management page
    And I trigger report template mode
-   When I search the report template
-   Then I verify the report template
-   
+   When I search the report template "testReportTemplate"
+   Then I should see template "testReportTemplate"
+
   Scenario: Verify filter functionality in the templates page
    Given I goto report management page
    And I trigger report template mode
-   When I click on filter icon and select template status "Draft"
-   Then I should see template "testDraftTemplate"
-   
+   When I click on filter icon and select template status "Approved"
+   Then I should see template "oGoomMxfLG"
+
   Scenario: Verify search reports functionality in Report Management
    Given I goto report management page
    And I trigger report mode
-   When I search the report name "AuditTrail_1"
-   Then I should see report "AuditTrail_1"
-   
+   When I search the report name "AuditTrail_97"
+   Then I should see report "AuditTrail_97"
+
   Scenario: Verify filter reports functionality in Report Management
    Given I goto report management page
    And I trigger report mode
    When I click on filter icon and select report type "Run Summary"
-   Then I should see report "RunSummary_18_Bio4CAdmin"
-   
+   Then I should see report "RunSummary_94_Bio4CAdmin"
+
   Scenario: Verify created by reports functionality in Report Management
    Given I goto report management page
    And I trigger report mode
@@ -39,22 +40,12 @@ Feature: Apply Filter Reports
    And I trigger report mode
    When I select from dropdown "Bio4CAdmin"
    Then I should see report "RunSummary_18_Bio4CAdmin"
-   
-   Scenario Outline: Verify order sort functionality in Report Management
-    Given I goto report management page
-    And I trigger report mode
-    When I select sort by "<columnName>" in "<sortMode>"
-    Then Details should be displayed in sort order
 
-    Examples:
-      | columnName  | sortMode  |
-      | Report Name | Ascending |
-   
   Scenario: Verify search runs reports functionality in Report Management
    Given I goto report management page
    When I search the recipe run "recipe4sec220211129035111"
    Then I should see recipe run "recipe4sec220211129035111"
-   
+
   Scenario: Verify filter runs reports functionality in Report Management
    Given I goto report management page
    When I click on filter icon and select runs status "Operation"
@@ -64,12 +55,3 @@ Feature: Apply Filter Reports
    Given I goto report management page
    When I select from dropdown "Audit Trail"
    Then I should see recipe run "reciperunname"
-   
-  Scenario Outline: Verify order sort functionality for runs in Report Management
-    Given I goto report management page
-    When I select sort by "<columnName>" in "<sortMode>"
-    Then Details should be displayed in sort order
-
-    Examples:
-      | columnName | sortMode  |
-      | Run        | Ascending |

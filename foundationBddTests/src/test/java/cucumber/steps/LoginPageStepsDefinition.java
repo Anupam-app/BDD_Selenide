@@ -75,4 +75,11 @@ public class LoginPageStepsDefinition {
         loginPage.setConfirmpassword(password);
     }
     
+    @Then("I relogin")
+    public void iReLogin() {
+        iOpenLogin();
+        iEnterUsernameAndPassword("testUserPref","MerckApp1@");
+        iPushTheLoginButton();
+    }
+    
 }
