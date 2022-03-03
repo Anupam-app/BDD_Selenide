@@ -1,30 +1,17 @@
 package cucumber.steps;
 
-import dataobjects.Report;
-import dataobjects.ReportTemplate;
-import dataobjects.ReportTemplateStatus;
-import dataobjects.User;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-import pageobjects.pages.ReportsFilter;
+import pageobjects.pages.ReportsFilterPage;
 
 public class ReportsFilterStepsDefinition {
 	
-	private Report report;
-    private ReportsFilter reportFilter;
-    private ReportTemplate reportTemplate;
-    private User user;
 
-    public ReportsFilterStepsDefinition(ReportsFilter reportFilter, Report report, ReportTemplate reportTemplate, User user) {
+    private ReportsFilterPage reportFilter;
+
+    public ReportsFilterStepsDefinition(ReportsFilterPage reportFilter) {
         this.reportFilter = reportFilter;
-        this.reportTemplate = reportTemplate;
-        this.user = user;
-        this.report = report;
     }
-    
 
     @When("I search the report template {string}")
     public void iSearchTheReportTemplate(String templateName) {
@@ -38,7 +25,7 @@ public class ReportsFilterStepsDefinition {
     
     @Then("I should see template {string}")
     public void iVerifyTemplate(String templateName) {
-    	Assert.assertEquals(templateName,reportFilter.getTemplateName());
+        reportFilter.checkTableContainsTemplate(templateName);
     }
 
     @When("I search the report name {string}")
@@ -48,7 +35,7 @@ public class ReportsFilterStepsDefinition {
 
     @Then("I should see report {string}")
     public void iVerifyReport(String reportName) {
-    	Assert.assertEquals(reportName, reportFilter.getReportName());
+        reportFilter.checkTableContainsReport(reportName);
     }
     
     @When("I click on filter icon and select report type {string}")
@@ -63,12 +50,27 @@ public class ReportsFilterStepsDefinition {
 
     @Then("I should see recipe run {string}")
     public void iSeeRunReport(String recipeRunName) {
-    	Assert.assertEquals(recipeRunName, reportFilter.getRecipeName());
+        reportFilter.checkTableContainsRecipeRun(recipeRunName);
+    }
+
+    @Then("I should see recipe run {string} from consolidated report")
+    public void iSeeRunFromConsolidatedReport(String recipeRunName) {
+        reportFilter.checkConsolidatedTableContainsRecipeRun(recipeRunName);
     }
 
     @When("I click on filter icon and select runs status {string}")
     public void iSelectRunsStatus(String runStatus) {
     	reportFilter.selectRunStatus(runStatus);
+    }
+
+    @When("I select report user from dropdown created by {string}")
+    public void iSelectReportCreatedByUserStatus(String user) {
+        reportFilter.selectCreatedBy(user);
+    }
+
+    @When("I select report user from dropdown signed by {string}")
+    public void iSelectReportSignedByUserStatus(String user) {
+        reportFilter.selectSignedBy(user);
     }
 
 }

@@ -32,6 +32,8 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (11, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testRoleWithoutPerms', N'true', 0x0200000060FDE0EB0208D9A5B5C715C52443CB0D6E3E3AAFEB9362A021A0926E0F8645ADF3C494FAEC3E125E7CF3B9B5670A483A8EFBAB268C4BA5CBE67578C1F05CD2171C7DD5D3F14A670C265E91DECF2BF86686376BC0AB16FA3C424A730AF14F409A, N'testRoleWithoutPerms', NULL, N'testRoleWithoutPerms', N'', N'testRoleWithoutPerms', 0, 0, 0, NULL, 0)
 GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (12, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testRoleWithoutPerms', N'true', 0x0200000060FDE0EB0208D9A5B5C715C52443CB0D6E3E3AAFEB9362A021A0926E0F8645ADF3C494FAEC3E125E7CF3B9B5670A483A8EFBAB268C4BA5CBE67578C1F05CD2171C7DD5D3F14A670C265E91DECF2BF86686376BC0AB16FA3C424A730AF14F409A, N'testRoleWithoutPerms', NULL, N'testRoleWithoutPerms', N'', N'testRoleWithoutPerms', 0, 0, 0, NULL, 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -73,6 +75,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 2)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (11, 6)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (12, 6)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (1, 1)
 GO

@@ -1,22 +1,16 @@
 package cucumber.steps;
 
-import dataobjects.User;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
-import pageobjects.pages.UserFilter;
+import pageobjects.pages.UserFilterPage;
 
 public class UserFilterStepsDefinition {
 
-    private final UserFilter userFilter;
-    private final User user;
+    private final UserFilterPage userFilter;
 
-    public UserFilterStepsDefinition(UserFilter userFilter, User user) {
+    public UserFilterStepsDefinition(UserFilterPage userFilter) {
         this.userFilter = userFilter;
-        this.user = user;
     }
     
 	@When("I click on user profile icon")
@@ -39,13 +33,6 @@ public class UserFilterStepsDefinition {
 		Assert.assertEquals(defaultOptionName, userFilter.getActiveIconTitle());
 		userFilter.setToDefault();
 	}
-
-	/*
-	@When("I click on filter icon and select status {string}")
-	public void iSelectUserStatus(String status) {
-		userFilter.selectUserStatus(status);
-	}
-	*/
 	
 	@Then("I should see the status {string} and user {string} displayed")
 	public void iSeeUserDisplayed(String status, String userName) {

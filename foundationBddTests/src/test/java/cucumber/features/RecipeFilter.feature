@@ -6,25 +6,25 @@ Feature: Apply Filter Recipes
 
   Scenario: Verify search functionality in Recipe Browser
     Given I go to recipe page
-    When I search recipe "testRecipeToExecuteOwaLscvvzI"
-    Then I should see recipe "testRecipeToExecuteOwaLscvvzI"
+    When I search recipe "testRecipeToExecute"
+    Then I should see recipe "testRecipeToExecute"
     
   Scenario: Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Draft"
-    Then I should see recipe "testRecipeToExecuteOwaLscvvzI"
+    Then I should see recipe "testDraftRecipe"
 
   Scenario: Verify created by functionality in Recipe Browser
     Given I go to recipe page
-    When I select from dropdown list "Bio4CAdmin"
-    Then I should see recipe "testRecipeToExecutePaIbKVJgZb"
+    When I select recipe created by "Bio4CAdmin"
+    Then I should see recipe "testDraftRecipe"
 
   Scenario Outline: Verify order sort functionality in Recipe Browser
     Given I go to recipe page
-    When I select recipe sort by "<columnName>" in "<ascending>"
-    Then "<columnName>" from recipe should be displayed in sorted order "<ascending>"
+    When I select recipe sort by "<columnName>" in "<descending>"
+    Then "<columnName>" from recipe should be displayed in sorted order "<descending>"
 
     Examples:
-      | columnName  | ascending  |
+      | columnName  | descending  |
       | Recipe Name | true       |
       | Recipe Name | false      |

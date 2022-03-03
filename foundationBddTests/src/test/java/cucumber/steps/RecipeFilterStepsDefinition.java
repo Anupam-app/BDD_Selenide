@@ -21,7 +21,7 @@ public class RecipeFilterStepsDefinition {
 
     @Then("I should see recipe {string}")
     public void iVerifyRecipe(String recipeName) {
-    	Assert.assertEquals(recipeName, recipeFilterPage.getRecipeName());
+        recipeFilterPage.checkTableContainsRecipe(recipeName);
     }
 
     @When("I click on filter icon and select recipe status {string}")
@@ -29,9 +29,9 @@ public class RecipeFilterStepsDefinition {
     	recipeFilterPage.selectRecipeStatus(recipeStatus);
     }
 
-    @When("I select from dropdown list {string}")
-    public void iSelectFromDropdowmList(String adminName) {
-    	recipeFilterPage.selectCreatedBy(adminName);
+    @When("I select recipe created by {string}")
+    public void iSelectRecipeCreatedBy(String user) {
+    	recipeFilterPage.selectCreatedBy(user);
     }
 
     @When("I select recipe sort by {string} in {string}")
