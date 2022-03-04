@@ -32,7 +32,7 @@ public class UserFilterPage {
     private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
     private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
     private SelenideElement userNameText = $(By.xpath("//td[1]"));
-    private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+
 
     public SelenideElement getUserColumnHeader(String columnName) {
         return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
@@ -56,36 +56,15 @@ public class UserFilterPage {
         userPreferences.click();
     }
 
-    public void defaultOption(String defaultOptionName) {
+    public void chooseAndSaveDefaultPage(String defaultOptionName) {
         SelenideHelper.commonWaiter(selectOption, visible).click();
         commonWaiter($(By.xpath(String.format("//li[text()='%s']", defaultOptionName))), visible).click();
         SelenideHelper.commonWaiter(saveButton, visible).click();
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
-        SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 
     public String getActiveIconTitle() {
         return activeIconName.getText();
-    }
-
-    public void setToDefault() {
-        switchTo().defaultContent();
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
-        userPreferences.click();
-        SelenideHelper.commonWaiter(selectOption, visible).click();
-        commonWaiter($(By.xpath(String.format("//li[text()='Main']"))), visible).click();
-        SelenideHelper.commonWaiter(saveButton, visible).click();
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
-        SelenideHelper.commonWaiter(logOutButton, visible).click();
-    }
-
-    public void selectUserStatus(String status) {
-        commonWaiter(filterIcon, visible);
-        filterIcon.click();
-        commonWaiter(upArrow, visible);
-        upArrow.click();
-        $(By.xpath(String.format("//span[text()='%s']", status))).click();
-        applyFilterButton.click();
     }
 
     public String getFilterTagText() {

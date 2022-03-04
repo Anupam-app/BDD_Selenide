@@ -78,8 +78,13 @@ public class LoginPageStepsDefinition {
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
-        iEnterUsernameAndPassword("testUserPref","MerckApp1@");
+        iEnterUsernameAndPassword(user.getUserName(),user.getPassword());
         iPushTheLoginButton();
+    }
+
+    @Then("I logout")
+    public void iLogout() {
+        loginPage.iLogout();
     }
     
 }

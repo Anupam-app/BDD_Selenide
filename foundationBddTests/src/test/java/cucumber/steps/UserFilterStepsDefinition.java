@@ -23,15 +23,14 @@ public class UserFilterStepsDefinition {
 		userFilter.userPreferences();
 	}
 	
-	@When("I select {string} option from drop down")
-	public void iselectOption(String defaultOptionName) {
-		userFilter.defaultOption(defaultOptionName);
+	@When("I select default page {string}")
+	public void iselectOption(String optionName) {
+		userFilter.chooseAndSaveDefaultPage(optionName);
 	}
 
 	@Then("I should see home page displayed with option {string}")
 	public void iVerifytOption(String defaultOptionName) {
 		Assert.assertEquals(defaultOptionName, userFilter.getActiveIconTitle());
-		userFilter.setToDefault();
 	}
 	
 	@Then("I should see the status {string} and user {string} displayed")

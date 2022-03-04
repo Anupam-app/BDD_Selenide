@@ -7,7 +7,8 @@ Feature: Apply Filter Users
     Given I am logged in as "testUserPref" user
     When I click on user profile icon
     And I click on user preferences link
-    And I select "<userPref>" option from drop down
+    And I select default page "<userPref>"
+    And I logout
     And I relogin
     Then I should see home page displayed with option "<userPref>"
     
@@ -31,7 +32,7 @@ Feature: Apply Filter Users
     Examples:
       |userName         | status   |
       |testUser         | Enabled  |
-      |testUserEnabled  | Disabled |
+      |testUserDisabledFilter  | Disabled |
 
    Scenario Outline: Verify order sort functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
