@@ -142,22 +142,28 @@ public class RecipePageStepsDefinition {
         recipePage.loadRecipe(recipe);
     }
 
-    @When("I start recipe execution with project id {string}")
-    public void iStartRecipeExecution(String recipe) {
-        this.recipe.setProductId(recipe);
-        this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-        recipePage.recipeExecution(recipe,this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
+    @When("I hold and restart the system")
+    public void iHoldAndRestartTheSystem() {
+        recipePage.holdAndRestart();
+    }
+
+    @When("I start and wait recipe execution")
+    public void iStartAndWaitRecipeExecution() {
+        generateRandomRecipeValues();
+        recipePage.startAndWaitRecipe(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
 
     @When("I start recipe execution")
     public void iStartRecipeExecution() {
+        generateRandomRecipeValues();
+        recipePage.startRecipe(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments());
+    }
+
+    private void generateRandomRecipeValues() {
         this.recipe.setProductId(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-        recipePage.recipeExecution(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
     }
 
     @Then("Recipe should be executed")
@@ -218,4 +224,8 @@ public class RecipePageStepsDefinition {
         recipePage.lookAtTheUserNotification();
     }
 
+    @Then("I see the system on hold")
+    public void iSeeTheSystemOnHold() {
+        recipePage.seeSystemOnHold();
+    }
 }

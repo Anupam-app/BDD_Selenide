@@ -22,10 +22,15 @@ Feature: Recipe management
     When I approve recipe
     Then Recipe should be approved
 
+  Scenario: Recipe system Hold/Restart
+    When I expand recipe console in pnid
+    And I hold and restart the system
+    Then I see the system on hold
+
   Scenario: Recipe Execution
     When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
-    And I start recipe execution
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution
     Then Recipe should be executed
 
   Scenario: Recipe creation

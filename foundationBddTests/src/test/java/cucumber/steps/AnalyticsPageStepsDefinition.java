@@ -140,7 +140,7 @@ public class AnalyticsPageStepsDefinition {
         iGotoAnalytics();
         analytics.setName(aggregateName);
         analyticsPage.deleteIfExists(analytics.getName());
-        iCreateAnAnalyticsAggregate();
+        iCreateAnAnalyticsAggregateWithButton();
         iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.WEEKLY);
         iChooseAnalyticsParameter("PI101 PV", "psi", "x");
         iChooseAnalyticsParameter("PI102 PV", "psi", "y");

@@ -1,5 +1,6 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -150,8 +151,10 @@ public class ReportsPage {
     private String waitAndGetGeneratedNameFromNotification(String text) {
         switchTo().parentFrame();
         SelenideElement notificationText = $(By.xpath(String.format(XPATH_NOTIFICATION_TEXT, text)));
-        waitForReportGeneration(notificationText);
-        return notificationText.text().split(": ")[1];
+        waitForReportGeneration(notificationText,visible);
+        var name=notificationText.text().split(": ")[1];
+        waitForReportGeneration(notificationText,not(visible));
+        return name;
     }
 
     public void exists(String name) {
@@ -163,8 +166,8 @@ public class ReportsPage {
         reportSigned.shouldBe(visible);
     }
 
-    public void waitForReportGeneration(SelenideElement element){
-        element.waitUntil(visible,5 * 60 * 1000l, 500l);
+    public void waitForReportGeneration(SelenideElement element, Condition condition){
+        element.waitUntil(condition,3 * 60 * 1000l, 500l);
     }
 
     public void checkReportPdfInPage() {

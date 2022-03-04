@@ -12,7 +12,7 @@ Feature: User management
   Scenario: Create new user
     Given I go to user page
     When I create a random username
-    And I select role "Bio4CService"
+    And I select role "Operator"
     And I enter random firstname
     And I enter random lastname
     And I enter random employeeID
@@ -53,7 +53,7 @@ Feature: User management
     Given I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
-    And I select role "Bio4CService"
+    And I select role "Operator"
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter random department
