@@ -1,23 +1,38 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import com.codeborne.selenide.Condition;
+import pageobjects.utility.SelenideHelper;
+import pageobjects.utility.SortHelper;
+
+import java.util.List;
+import java.util.function.Function;
+
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
-import java.util.List;
-
 public class UserPage {
-	
-	private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
-	
+
+    private final String XPATH_USER_COLUMN_HEADER = "//th[text()='%s']";
+    private final String XPATH_USER_TABLE = "//table[@id='foundusertable']";
+    private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
+    private final String XPATH_ORDER_ICON = "//span[@class='%s']";
+    private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
+    private final SelenideElement userPreferencesLink = $(By.xpath("//Span[text()='User preferences']"));
+    private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
+    private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
+    private SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
     private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
+    private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
 
     private SelenideElement userSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
     private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
@@ -33,24 +48,29 @@ public class UserPage {
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
+    private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
+    private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
+
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-    private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-    private SelenideElement upArrow = $(By.xpath("//div[@class='arrowupuserfilter']"));
-    private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
-    private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
-    
+
+    Function<Integer, List<String>> getUserColumns = (index) -> {
+        var users =$$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
+        users.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return users;
+    };
+
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
-        userSearchTextBox.waitUntil(Condition.visible,10000l);
+        userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
 
     public void edit(String user) {
-        $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible,5000l).click();
+        $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
     }
 
     public void userExists(String user) {
@@ -102,10 +122,8 @@ public class UserPage {
     public void selectRole(String roleName) {
         selectRoleFromDropdown.click();
         List<WebElement> options = selectRoleFromDropdown.findElements(By.tagName("li"));
-        for (WebElement option : options)
-        {
-            if (option.getText().equals(roleName))
-            {
+        for (WebElement option : options) {
+            if (option.getText().equals(roleName)) {
                 option.click();
                 break;
             }
@@ -127,71 +145,115 @@ public class UserPage {
     public void enterEmail(String emailId) {
         emailIdTextBox.setValue(emailId);
     }
-    
+
     public void enterMobNum(String mobNum) {
         mobileNumTextBox.setValue(mobNum);
     }
-    
+
     public void enterDepartmentName(String deptName) {
         departmentTextBox.setValue(deptName);
     }
-    
+
     public String getUserNameFromForm() {
         return userNameTextBox.getValue();
     }
-    
+
     public String getEmailIdFromForm() {
         return emailIdTextBox.getValue();
     }
-    
+
     public String getRoleNameFromForm() {
         return roleNameTextbox.getText();
     }
-    
+
     public String getMobNumFromForm() {
         return mobileNumTextBox.getValue();
     }
-    
+
     public String getDeptNameFromForm() {
         return departmentTextBox.getValue();
     }
-    
+
 
     public void clearSearch() {
         userSearchTextBox.clear();
     }
-    
+
     public void triggerUsersMode() {
         UsersLinkText.click();
     }
-    
+
     public void resetPassword() {
-    	resetPwdButton.click();
+        resetPwdButton.click();
     }
-    
+
     public String getGeneratedNotificationWhenPasswordReset() {
         return XPATH_NOTIFICATION_TEXT.getValue();
     }
-    
+
     public void cancelUser() {
-    	userNameTextBox.click();
-    	cancelButton.click();
+        userNameTextBox.click();
+        cancelButton.click();
     }
-    
+
     public String getUserDetails() {
-    	return userNameField.getText();
+        return userNameField.getText();
     }
-    
+
     public void selectStatus(String status) {
-    	commonWaiter(filterIcon,visible);
-    	filterIcon.click();
-    	commonWaiter(upArrow,visible);
-    	upArrow.click();
-    	$(By.xpath(String.format("//span[text()='%s']", status))).click();
-    	applyFilterButton.click();
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        commonWaiter(upArrowIcon, visible);
+        upArrowIcon.click();
+        $(By.xpath(String.format("//span[text()='%s']", status))).click();
+        applyFilterButton.click();
     }
-    
+
+    public SelenideElement getUserColumnHeader(String columnName) {
+        return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+    }
+
+    public List<String> getAllUserColumnHeaders() {
+        return $$(By.xpath(XPATH_USER_TABLE + "//th")).texts();
+    }
+
+
+
+    public void userProfile() {
+        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
+    }
+
+    public void userPreferences() {
+        userPreferencesLink.click();
+    }
+
+    public void chooseAndSaveDefaultPage(String defaultOptionName) {
+        SelenideHelper.commonWaiter(selectOption, visible).click();
+        commonWaiter($(By.xpath(String.format("//li[text()='%s']", defaultOptionName))), visible).click();
+        SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
+        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
+    }
+
+    public String getActiveIconTitle() {
+        return activeIcon.getText();
+    }
+
     public String getFilterTagText() {
-    	return filterTagText.getText();
+        return filterTagText.getText();
+    }
+
+    public String getUserName() {
+        return $(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).getText();
+    }
+
+    public void sortList(String columnName, boolean descending) {
+        SelenideElement sortAction = getUserColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+
+    public void checkSortedElement(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
     }
 }

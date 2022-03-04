@@ -8,10 +8,7 @@ import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
-
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class ReportsPage {
@@ -25,6 +22,12 @@ public class ReportsPage {
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[text()='%s']";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT = "//td[text()='%s']/ancestor::tr//*[@class='checkbox']";
     private final String XPATH_NOTIFICATION_TEXT = "//*[@class='notification-summary'][contains(text(),'%s')]";
+    private final String XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT = "//table[@class='table']//td[text()='%s']";
+    private final String XPATH_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT = "//table[@id='foundationRunListTable']//td[text()='%s']";
+    private final String XPATH_TEMPLATE_COLUMNS_BY_TEXT = "//table[@id='templateListTable']//td[text()='%s']";
+    private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[text()='%s']";
+    private final String XPATH_DROPDOWN = "//span[text()='%s']/ancestor::div[@class='custom-drop-down']";
+    private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
@@ -43,17 +46,14 @@ public class ReportsPage {
     private final SelenideElement openButton = $(By.xpath("//button[text()='Open']"));
     private final SelenideElement primaryButton = $(By.xpath("//button[text()='SIGN']"));
     private final SelenideElement reportEsignButton = $(By.xpath("//button[text()='e-sign']"));
-
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
-
     private final SelenideElement reportSearch = $(By.xpath("//input[@placeholder='Search...']"));
-
     private final SelenideElement templateNameTextBox = $(By.xpath("//input[@placeholder='Create a template name']"));
-
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
-
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
+    private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
+    private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
 
     public void goToReports() {
         reportsManagementPage.click();
@@ -65,7 +65,7 @@ public class ReportsPage {
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
-        $(By.xpath(String.format("//option[text()='%s']/ancestor::li/a", reportname))).click();
+        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).click();
     }
 
     public void generateReport() {
@@ -80,6 +80,7 @@ public class ReportsPage {
     public void gotoRunTab() {
         runTab.click();
     }
+
     public void viewReports(String reportName) {
         $(By.xpath(String.format(XPATH_REPORT_NAME, reportName))).click();
         reportViewButton.click();
@@ -151,14 +152,14 @@ public class ReportsPage {
     private String waitAndGetGeneratedNameFromNotification(String text) {
         switchTo().parentFrame();
         SelenideElement notificationText = $(By.xpath(String.format(XPATH_NOTIFICATION_TEXT, text)));
-        waitForReportGeneration(notificationText,visible);
-        var name=notificationText.text().split(": ")[1];
-        waitForReportGeneration(notificationText,not(visible));
+        waitForReportGeneration(notificationText, visible);
+        var name = notificationText.text().split(": ")[1];
+        waitForReportGeneration(notificationText, not(visible));
         return name;
     }
 
     public void exists(String name) {
-        $(By.xpath(String.format(XPATH_REPORT_NAME, name))).isDisplayed();
+        $(By.xpath(String.format(XPATH_REPORT_NAME, name))).shouldBe(visible);
     }
 
     public void checkSigned(String reportName, String username) {
@@ -166,8 +167,8 @@ public class ReportsPage {
         reportSigned.shouldBe(visible);
     }
 
-    public void waitForReportGeneration(SelenideElement element, Condition condition){
-        element.waitUntil(condition,3 * 60 * 1000l, 500l);
+    public void waitForReportGeneration(SelenideElement element, Condition condition) {
+        element.waitUntil(condition, 3 * 60 * 1000l, 500l);
     }
 
     public void checkReportPdfInPage() {
@@ -198,5 +199,52 @@ public class ReportsPage {
 
     public void selectForConsolidationRun(String run) {
         $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).click();
+    }
+
+    public void selectTemplateStatus(String templateStatus) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        $(By.xpath(String.format("//span[text()='%s']", templateStatus))).click();
+        applyFilterButton.click();
+    }
+
+    public void selectReportType(String reportType) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        $(By.xpath(String.format("//span[text()='%s']", reportType))).click();
+        applyFilterButton.click();
+    }
+
+    public void selectRunStatus(String runReportStatus) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        $(By.xpath(String.format("//span[text()='%s']", runReportStatus))).click();
+        applyFilterButton.click();
+    }
+
+    public void selectCreatedBy(String user) {
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created by"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
+    }
+
+    public void checkTableContainsRecipeRun(String recipeRun) {
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT, recipeRun))), visible);
+    }
+
+    public void checkConsolidatedTableContainsRecipeRun(String recipeRun) {
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT, recipeRun))), visible);
+    }
+
+    public void checkTableContainsReport(String reportName) {
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
+    }
+
+    public void checkTableContainsTemplate(String templateName) {
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);
+    }
+
+    public void selectSignedBy(String user) {
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed by"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 }
