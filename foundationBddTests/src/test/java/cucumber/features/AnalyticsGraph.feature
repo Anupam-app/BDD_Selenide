@@ -1,4 +1,4 @@
-Feature: Analytics management
+Feature: Analytics graph
 
   Background: 
     Given the browser "Chrome" is open

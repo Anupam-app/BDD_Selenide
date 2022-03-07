@@ -19,7 +19,5 @@ Feature: Backup creation
     When I schedule backup
     And I go to backup history
     Then I see backup is triggered
-    And I go to backup mode
-    And I wait the end of backup
-    And I go to backup history
+    And I wait the end of scheduled backup
     Then I verify backup history details

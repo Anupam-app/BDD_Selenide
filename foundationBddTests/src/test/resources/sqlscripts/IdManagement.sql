@@ -76,3 +76,5 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 3)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO
+DELETE FROM dbo.user_preferences where user_name='testUserPref';
+GO
