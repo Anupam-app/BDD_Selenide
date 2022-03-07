@@ -25,6 +25,11 @@ public class UserPage {
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userPreferencesLink = $(By.xpath("//Span[text()='User preferences']"));
+    Function<Integer, List<String>> getUserColumns = (index) -> {
+        var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
+        users.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return users;
+    };
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
@@ -33,7 +38,6 @@ public class UserPage {
     private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
-
     private SelenideElement userSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
     private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
     private SelenideElement firstNameTextBox = $(By.id("firstName"));
@@ -50,18 +54,11 @@ public class UserPage {
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
     private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
     private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
-
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
-    Function<Integer, List<String>> getUserColumns = (index) -> {
-        var users =$$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
-        users.removeIf(e -> StringUtils.isEmpty(e.trim()));
-        return users;
-    };
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -218,7 +215,6 @@ public class UserPage {
     }
 
 
-
     public void userProfile() {
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
     }
@@ -248,8 +244,8 @@ public class UserPage {
 
     public void sortList(String columnName, boolean descending) {
         SelenideElement sortAction = getUserColumnHeader(columnName);
-        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
-        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
         SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
     }
 

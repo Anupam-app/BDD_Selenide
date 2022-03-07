@@ -79,7 +79,7 @@ public class RecipePage {
 
     public void setSearch(String recipeName) {
         recipeSearchTextBox.setValue(recipeName);
-        filterIcon.click();
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
     }
 
     public void goToEditMode() {

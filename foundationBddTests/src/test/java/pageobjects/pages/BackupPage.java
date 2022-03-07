@@ -1,10 +1,13 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 import java.text.SimpleDateFormat;
@@ -12,9 +15,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 
 public class BackupPage {
+
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
 
@@ -24,9 +30,13 @@ public class BackupPage {
     private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
     private SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
 
+    private SelenideElement scheduleTextBox = $(By.className("schedule-text-box"));
+
     private SelenideElement downArrow = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement backupNowButton = $(By.xpath("//span[contains(text(),'Backup Now')]"));
+    private SelenideElement backupScheduleButton = $(By.className("btn-schedule"));
     private SelenideElement confirmButton = $(By.xpath("//button[contains(text(),'Confirm')]"));
+    private SelenideElement scheduleOkButton = $(By.className("btn-ok"));
 
     private SelenideElement dailyBackup = $(By.xpath("(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[1]"));
     private SelenideElement dateInput = $(By.xpath("//input[@placeholder='DD/MMM/YYYY']"));
@@ -40,6 +50,13 @@ public class BackupPage {
     }
 
     public void triggerBackup() {
+        chooseBackupPath();
+        backupNowButton.click();
+        confirmButton.click();
+        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
+    }
+
+    private void chooseBackupPath() {
         downArrow.click();
         List<WebElement> options = backupLocation.findElements(By.tagName("li"));
         for (WebElement option : options) {
@@ -48,8 +65,6 @@ public class BackupPage {
                 break;
             }
         }
-        backupNowButton.click();
-        confirmButton.click();
     }
 
     public String getLastStatusText() {
@@ -57,14 +72,7 @@ public class BackupPage {
     }
 
     public void scheduleBackup() {
-        downArrow.click();
-        List<WebElement> options = backupLocation.findElements(By.tagName("li"));
-        for (WebElement option : options) {
-            if (option.getText().equals("C://bio4c/backup1/")) {
-                option.click();
-                break;
-            }
-        }
+        chooseBackupPath();
 
         dailyBackup.click();
         dateInput.click();
@@ -77,13 +85,17 @@ public class BackupPage {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.MINUTE, 02);
+        c.add(Calendar.MINUTE, 01);
         Date currentDatePlusOne = c.getTime();
         String d = dateFormat.format(currentDatePlusOne);
         timeInput.sendKeys(d);
         timeInput.sendKeys(Keys.ENTER);
-        backupNowButton.click();
-        confirmButton.click();
+
+        backupScheduleButton.click();
+        scheduleTextBox.setValue(RandomStringUtils.randomAlphabetic(10));
+        scheduleOkButton.click();
+        //WAIT ONE MINUTE TO BE SURE THE BACKUP WILL BE LAUNCHED
+        Selenide.sleep(60 * 1000);
     }
 
     public void goToHistory() {
