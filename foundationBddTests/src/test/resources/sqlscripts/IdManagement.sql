@@ -28,6 +28,10 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (11, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testRoleWithoutPerms', N'true', 0x0200000060FDE0EB0208D9A5B5C715C52443CB0D6E3E3AAFEB9362A021A0926E0F8645ADF3C494FAEC3E125E7CF3B9B5670A483A8EFBAB268C4BA5CBE67578C1F05CD2171C7DD5D3F14A670C265E91DECF2BF86686376BC0AB16FA3C424A730AF14F409A, N'testRoleWithoutPerms', NULL, N'testRoleWithoutPerms', N'', N'testRoleWithoutPerms', 0, 0, 0, NULL, 0)
 GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (12, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserPref', N'true', 0x0200000060FDE0EB0208D9A5B5C715C52443CB0D6E3E3AAFEB9362A021A0926E0F8645ADF3C494FAEC3E125E7CF3B9B5670A483A8EFBAB268C4BA5CBE67578C1F05CD2171C7DD5D3F14A670C265E91DECF2BF86686376BC0AB16FA3C424A730AF14F409A, N'testUserPref', NULL, N'testUserPref', N'', N'testUserPref', 0, 0, 0, NULL, 0)
+GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (13, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserDisabledFilter', N'false', 0x02000000B45512DBEC40C25B48F71766C234E0611C1F6B0EF06A0FF48C3A959F0AB51F6E7079B1D11E39AE3C2F688250AC1B5FF69D78919FA48CBE58CB5226CC822ED683D5667987ACA65BDC6E92AB3C4128205FABEC9E5CF2075E4F1AF9B53453BB9228, N'testUserDisabledFilter', NULL, N'testUserDisabledFilter', N'', N'testUserDisabledFilter', 1, 0, 0, NULL, 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -58,6 +62,10 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (10, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (11, 6)
 GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (12, 3)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (13, 3)
+GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 3)
@@ -67,4 +75,6 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 3)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
+GO
+DELETE FROM dbo.user_preferences where user_name='testUserPref';
 GO

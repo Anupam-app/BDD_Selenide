@@ -1,4 +1,4 @@
-Feature: Analytics management
+Feature: Analytics creation
 
   Background: 
     Given the browser "Chrome" is open

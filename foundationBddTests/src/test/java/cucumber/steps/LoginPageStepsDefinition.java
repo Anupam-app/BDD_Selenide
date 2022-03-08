@@ -6,19 +6,19 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
-import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeConsolePage;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
-    private final RecipePage recipePage;
+    private final RecipeConsolePage recipeConsolePage;
     private final User user;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipePage recipePage, User user) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user) {
         this.loginPage = loginPage;
         this.homepage = homepage;
-        this.recipePage = recipePage;
+        this.recipeConsolePage = recipeConsolePage;
         this.user = user;
     }
 
@@ -66,7 +66,7 @@ public class LoginPageStepsDefinition {
         loginPage.setPassword(user.getPassword());
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
-        recipePage.cleanLastRecipeDisplay();
+        recipeConsolePage.cleanLastRecipeDisplay();
     }
 
     @Given("I change password {string}")
@@ -75,4 +75,15 @@ public class LoginPageStepsDefinition {
         loginPage.setConfirmpassword(password);
     }
     
+    @Then("I relogin")
+    public void iReLogin() {
+        iOpenLogin();
+        iEnterUsernameAndPassword(user.getUserName(),user.getPassword());
+        iPushTheLoginButton();
+    }
+
+    @Then("I logout")
+    public void iLogout() {
+        loginPage.iLogout();
+    }
 }
