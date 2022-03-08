@@ -114,12 +114,12 @@ public class RecipeConsolePage {
     }
 
     public void clickOnJumpToStep(String stepNumber) {
-        Selenide.sleep(1000);
-        jumpStepIcon.waitUntil(Condition.visible, 5000l, 50l).click();
-        inputStepNumber.waitUntil(Condition.visible, 5000l, 50l);
+        Selenide.sleep(2000);
+        jumpStepIcon.waitUntil(Condition.visible, 4000l, 50l).click();
+        inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
-        okStepButton.waitUntil(Condition.visible, 5000l).click();
+        okStepButton.waitUntil(Condition.visible, 4000l).click();
     }
 
     public void clickOnAbortButton(String afterComments) {
