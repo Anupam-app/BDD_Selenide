@@ -1,3 +1,4 @@
+@Common
 Feature: Roles Permissions Check
 
   Background:

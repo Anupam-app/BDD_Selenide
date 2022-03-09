@@ -1,3 +1,4 @@
+@Common
 Feature: Recipe console
 
   Background:

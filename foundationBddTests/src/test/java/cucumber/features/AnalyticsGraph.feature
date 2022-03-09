@@ -1,3 +1,4 @@
+@Common
 Feature: Analytics graph
 
   Background: 

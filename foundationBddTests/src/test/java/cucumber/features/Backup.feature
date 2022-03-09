@@ -1,3 +1,4 @@
+@Common
 Feature: Backup creation
 
   Background:

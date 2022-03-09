@@ -1,3 +1,4 @@
+@Common
 Feature: Apply Filter Users
 
   Background:

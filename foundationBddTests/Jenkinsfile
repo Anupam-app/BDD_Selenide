@@ -62,7 +62,8 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts')
+						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/common'),
+						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/'+env.PDP)
 					]
 				)
             }
@@ -74,7 +75,8 @@ pipeline {
 						hostName: "${env.CIPHostName}",
 						credentialsId: "${env.CredentialsId}",
 						winRMOperations: [
-							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts')
+							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/common'),
+							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/'+env.PDP),
 						]
 					)
                 }				
@@ -149,7 +151,7 @@ pipeline {
 					rtMavenRun(
 						tool: 'apache-maven-3.6.3',
 						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName,
+						goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@Common or @' + env.PDP + '"',
 						resolverId: "MAVEN_RESOLVER"
 					)
 				}

@@ -1,3 +1,4 @@
+@Common
 Feature: User management
 
   Background:
