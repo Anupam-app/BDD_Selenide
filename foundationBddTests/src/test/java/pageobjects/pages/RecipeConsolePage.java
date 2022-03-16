@@ -13,6 +13,7 @@ import static com.codeborne.selenide.Selenide.$;
 public class RecipeConsolePage {
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
+    private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
 
     private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
     private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
@@ -75,7 +76,7 @@ public class RecipeConsolePage {
         loadButton.click();
     }
 
-    public void startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments) {
+    public void startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments, int seconds) {
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         productIdTextbox.setValue(productId);
@@ -85,7 +86,7 @@ public class RecipeConsolePage {
         preRunCommentsText.sendKeys(beforeComments);
         okButton.click();
         abortIcon.waitUntil(Condition.visible, 5000l);
-        abortIcon.waitUntil(Condition.not(Condition.visible), 30000l);
+        abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
         preRunCommentsText.sendKeys(afterComments);
         okButton.click();
     }
@@ -144,5 +145,9 @@ public class RecipeConsolePage {
         if (okButton.isDisplayed()) {
             okButton.click();
         }
+    }
+
+    public boolean isRunBefore(String recipeName) {
+        return $(By.xpath(String.format(XPATH_RECIPE_LOADED_BEFORE, recipeName, recipeName))).isDisplayed();
     }
 }

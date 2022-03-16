@@ -147,7 +147,7 @@ public class AnalyticsPage {
     }
 
     public void chooseParameter(String param) {
-        $(By.xpath(String.format(XPATH_PARAMETER_CHECKBOX, param))).click();
+        $(By.xpath(String.format(XPATH_PARAMETER_CHECKBOX, param))).scrollTo().click();
     }
 
     public void validateCreation() {
@@ -155,7 +155,7 @@ public class AnalyticsPage {
     }
 
     public void startAggregateCreation(String aggregateName, boolean usingButton) {
-        Selenide.sleep(5000);//TODO remove this hack when problem of loading solved
+        Selenide.sleep(10000);//TODO remove this hack when problem of loading solved
         if (usingButton) {
             SelenideHelper.commonWaiter(createAggregateButton, Condition.visible).click();
         } else {
