@@ -2,5 +2,6 @@ package dataobjects;
 
 public enum BackupStatus {
     Running,
-    Success
+    Success,
+    Aborted,
 }

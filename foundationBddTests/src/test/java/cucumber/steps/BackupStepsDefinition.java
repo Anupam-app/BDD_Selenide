@@ -35,8 +35,15 @@ public class BackupStepsDefinition {
         backupPage.goToBackupMode();
     }
 
+    @Then("I see backup scheduled is triggered")
+    public void iSeeBackupScheduledRunning() {
+        backupPage.waitForScheduledBackupRunning();
+        Assert.assertEquals(BackupStatus.Running.toString(), this.backupPage.getLastStatusText());
+    }
+
     @Then("I see backup is triggered")
     public void iSeeBackupRunning() {
+        backupPage.waitForImmediateBackupRunning();
         Assert.assertEquals(BackupStatus.Running.toString(), this.backupPage.getLastStatusText());
     }
 
@@ -57,6 +64,6 @@ public class BackupStepsDefinition {
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
-        backupPage.waitForEndOfScheduledBackup();
+        backupPage.waitForScheduledBackupFinished();
     }
 }

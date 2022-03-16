@@ -3,6 +3,7 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import pageobjects.utility.TimeHelper;
 import dataobjects.BackupStatus;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
@@ -21,8 +22,11 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class BackupPage {
 
+    private final int BACKUP_FINISH_TIME_TO_WAIT = 7 * TimeHelper.ONE_MINUTE;
+    private final int BACKUP_SCHEDULED_TIME_TO_WAIT = 4 * TimeHelper.ONE_MINUTE;
+    private final int BACKUP_IMMEDIATE_TIME_TO_WAIT = TimeHelper.ONE_MINUTE;
+
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-    private final int backupTimeWait = 7 * 60 * 1000; // 7 minutes
     private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
     private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
     private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
@@ -81,7 +85,8 @@ public class BackupPage {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        c.add(Calendar.MINUTE, 01);
+        int minuteToWait = 1;
+        c.add(Calendar.MINUTE, minuteToWait);
         Date currentDatePlusOne = c.getTime();
         String d = dateFormat.format(currentDatePlusOne);
         timeInput.sendKeys(d);
@@ -90,8 +95,6 @@ public class BackupPage {
         backupScheduleButton.click();
         scheduleTextBox.setValue(RandomStringUtils.randomAlphabetic(10));
         scheduleOkButton.click();
-        //WAIT ONE MINUTE TO BE SURE THE BACKUP WILL BE LAUNCHED
-        Selenide.sleep(60 * 1000);
     }
 
     public void goToHistory() {
@@ -100,25 +103,37 @@ public class BackupPage {
 
     public void waitForEndOfBackup() {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "Backup of Server complete")))
-                .waitUntil(Condition.visible, backupTimeWait);
+                .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
     }
 
     public void goToBackupMode() {
         backupLinkText.click();
     }
 
-    public void waitForEndOfScheduledBackup() {
+    private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait) {
         int timeWaited = 0;
         int deltaTime = 30 * 1000;//every 30 seconds
-        while (timeWaited < backupTimeWait) {
+        while (timeWaited < timeToWait) {
             goToBackupMode();
             goToHistory();
-            if (getLastStatusText().equals(BackupStatus.Running.toString())) {
+            if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+                break;
+            } else {
                 timeWaited += deltaTime;
                 Selenide.sleep(deltaTime);
-            } else {
-                break;
             }
         }
+    }
+
+    public void waitForScheduledBackupRunning() {
+        waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_SCHEDULED_TIME_TO_WAIT);
+    }
+
+    public void waitForScheduledBackupFinished() {
+        waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT);
+    }
+
+    public void waitForImmediateBackupRunning() {
+        waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
     }
 }
