@@ -34,10 +34,18 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.holdAndRestart();
     }
 
-    @When("I start and wait recipe execution")
-    public void iStartAndWaitRecipeExecution() {
+    @When("I start and wait recipe execution during {int} seconds")
+    public void iStartAndWaitRecipeExecution(int seconds) {
         generateRandomRecipeValues();
-        recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments());
+        recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds if not done before")
+    public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
+        if (!recipeConsolePage.isRunBefore(recipe)) {
+            iLoadRecipe(recipe);
+            iStartAndWaitRecipeExecution(seconds);
+        }
     }
 
     @When("I start recipe execution")

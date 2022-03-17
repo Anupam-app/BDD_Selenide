@@ -19,6 +19,6 @@ Feature: Backup creation
     Given I goto backup page
     When I schedule backup
     And I go to backup history
-    Then I see backup is triggered
+    Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
     Then I verify backup history details

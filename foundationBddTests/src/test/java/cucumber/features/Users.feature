@@ -4,11 +4,6 @@ Feature: User management
   Background:
     Given the browser "Chrome" is open
     And I am logged in as "Bio4CAdmin" user
-    And the user "testUser" exists
-    And the user "testUserEnabled" exists
-    And the user "testUserDisabled" exists
-    And the user "testUserToEditFields" exists
-    And the user "testUserToResetPwd" exists
 
   Scenario: Create new user
     Given I go to user page
