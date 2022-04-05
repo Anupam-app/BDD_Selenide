@@ -148,12 +148,26 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
-					rtMavenRun(
-						tool: 'apache-maven-3.6.3',
-						pom: 'foundationBddTests/pom.xml',
-						goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@Common or @' + env.PDP + '"',
-						resolverId: "MAVEN_RESOLVER"
-					)
+					def commandTag = '';
+                    if(env.PDP != 'CRS'){
+                        def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
+                        if(response.status==200){
+                           def jsonResponse = readJSON text: response.content
+                           commandTag = ' -Dcucumber.filter.tags="@Common'
+                           jsonResponse.features.each{val->
+                                commandTag+=' or @'+val
+                            }
+                           commandTag+='"'
+                        }
+                    }
+                    println('commandTag: '+commandTag)
+
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3',
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
+                        resolverId: "MAVEN_RESOLVER"
+                    )
 				}
 			}
 		}
