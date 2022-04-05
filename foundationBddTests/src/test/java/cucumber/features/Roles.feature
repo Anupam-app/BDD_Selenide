@@ -1,4 +1,4 @@
-@Common
+@COMMON
 Feature: Role administration
 
   Background:

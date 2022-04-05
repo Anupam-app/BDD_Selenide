@@ -4,7 +4,7 @@ Feature: Settings Modification
     Given the browser "Chrome" is open
     And I am logged in as "bio4cservice" user
 
-  @CRS
+  @CONFIG_SETTING_SYSTEM_COMPONENTS
   Scenario Outline: Change custom label
     Given I goto settings page 
     And I goto system components
