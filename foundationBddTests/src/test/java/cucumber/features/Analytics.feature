@@ -9,7 +9,7 @@ Feature: Analytics creation
 
   Scenario: aggregate creation
     Given I go to analytics
-    When I create an analytics aggregate using button
+    When I create an analytics aggregate
     And I use the recipe for this analytics aggregate with interval "Weekly"
     And I choose "PI101 PV" analytics parameter with unit "psi" as "x" axis
     And I choose "PI102 PV" analytics parameter with unit "psi" as "y" axis

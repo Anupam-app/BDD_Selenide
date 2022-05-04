@@ -89,20 +89,15 @@ public class AnalyticsPageStepsDefinition {
     }
 
     @And("I create an analytics aggregate")
-    public void iCreateAnAnalyticsAggregate() {
-        createAnalytics(false);
-    }
-
-    @And("I create an analytics aggregate using button")
     public void iCreateAnAnalyticsAggregateWithButton() {
-        createAnalytics(true);
+        createAnalytics();
     }
 
-    private void createAnalytics(boolean usingButton) {
+    private void createAnalytics() {
         if (StringUtils.isEmpty(analytics.getName())) {
             analytics.setName(RandomStringUtils.randomAlphabetic(10));
         }
-        analyticsPage.startAggregateCreation(analytics.getName(), usingButton);
+        analyticsPage.startAggregateCreation(analytics.getName());
     }
 
     @And("I choose {string} analytics parameter with unit {string} as {string} axis")

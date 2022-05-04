@@ -1,5 +1,6 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
@@ -112,7 +113,7 @@ public class AnalyticsPage {
     public void createAggregate(Recipe recipe, String analyticsInterval) {
         $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).click();
 
-        var options=$$(By.xpath(XPATH_OPTION_SELECTION));
+        var options = $$(By.xpath(XPATH_OPTION_SELECTION));
         for (WebElement option : options) {
             if (option.getText().equals(recipe.getBatchId())) {
                 option.click();
@@ -154,13 +155,8 @@ public class AnalyticsPage {
         validateAggregateButton.click();
     }
 
-    public void startAggregateCreation(String aggregateName, boolean usingButton) {
-        Selenide.sleep(10000);//TODO remove this hack when problem of loading solved
-        if (usingButton) {
-            SelenideHelper.commonWaiter(createAggregateButton, Condition.visible).click();
-        } else {
-            SelenideHelper.commonWaiter(createAggregateLinkText, Condition.visible).click();
-        }
+    public void startAggregateCreation(String aggregateName) {
+        SelenideHelper.commonWaiter(createAggregateButton, Condition.visible).click(ClickOptions.usingJavaScript());
         SelenideHelper.commonWaiter(aggregateNameTextBox, visible).setValue(aggregateName);
     }
 
