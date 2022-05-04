@@ -41,7 +41,6 @@ Background:
   Scenario: Generate and sign a custom report
     Given I goto report management page
     When I select report from dropdown "Custom"
-    And I select report include "Pre Run Data"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
     And I click on generate button
@@ -55,7 +54,6 @@ Background:
     Given I goto report management page
     And I trigger report template mode
     When I create random report template
-    And I select report include "Pre Run Data"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
     And I save the report template
