@@ -22,7 +22,7 @@ public class AlarmPageStepsDefinition {
 
     @Then("I see expected texts from alarm module")
     public void iSeeTextsFromAlarmModule() {
-        var expectedText= I18nUtils.getValueFromKey("alarm.alarmList.emptyList.noFound");
+        var expectedText= I18nUtils.getValueFromKey("alarm.alarmList.emptyList.errorMessage");
         alarmPage.seeContent(expectedText);
     }
 }

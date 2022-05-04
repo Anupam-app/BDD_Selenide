@@ -2,12 +2,12 @@
 en-US:
   login: LOGIN
   name: English (USA)
-  alarm.alarmList.emptyList.noFound: No alarms found for your criteria
-  portal.main.header.showKeyboard: Show Keyboard
+  alarm.alarmList.emptyList.errorMessage: No alarms found for your criteria
+  "portal.modal.list.userPreferences": User Preferences
 
 # France
 fr-FR:
   login: CONNEXION
   name: Français (France)
-  alarm.alarmList.emptyList.noFound: No alarms found for your criteria - FR
-  portal.main.header.showKeyboard: Afficher le clavier
+  alarm.alarmList.emptyList.errorMessage: No alarms found for your criteria - FR
+  "portal.modal.list.userPreferences": portal.modal.list.userPreferences

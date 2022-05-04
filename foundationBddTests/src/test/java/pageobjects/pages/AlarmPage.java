@@ -16,7 +16,7 @@ public class AlarmPage {
     }
 
     public void seeContent(String expectedText) {
-        SelenideHelper.commonWaiter($(By.className("not-found-div")),Condition.visible)
+        SelenideHelper.commonWaiter($(By.id("alarm-list-body")),Condition.visible)
                 .shouldHave(Condition.text(expectedText));
     }
 }

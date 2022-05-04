@@ -38,9 +38,11 @@ public class UserProfilePageStepsDefinition {
         userProfilePage.saveUserPreferences();
     }
 
-    @Then("I see expected texts in OnScreenKeyBoard")
+    @Then("I see expected texts in user profile")
     public void iSeeExpectedTextsOnScreenKeyBoard() {
-        var showKeyboardText = I18nUtils.getValueFromKey("portal.main.header.showKeyboard");
-        userProfilePage.seeExpectedTextsOnScreenKeyBoard(showKeyboardText);
+        userProfilePage.goToUserProfile();
+        var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
+        userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
+        userProfilePage.closeUserProfile();
     }
 }

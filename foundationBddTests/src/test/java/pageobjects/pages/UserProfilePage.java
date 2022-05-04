@@ -1,9 +1,9 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
-import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.*;
@@ -20,9 +20,6 @@ public class UserProfilePage {
     private final SelenideElement userPreferencesButton = $(By.className("btn-user-preferences"));
 
     private final SelenideElement userPreferenceLinkText = $(By.xpath("//div[@class='portal-user-preferences-menu']//span"));
-    private final SelenideElement showKeyboardLinkText = $(By.xpath("//span[contains(@class,'OnScreenKeyboardToggle_label')]"));
-
-    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     private SelenideElement languageDropDown = $$(By.className("restore-custom-drop-down-container")).get(1);
 
@@ -38,6 +35,10 @@ public class UserProfilePage {
         userProfileIcon.click();
     }
 
+    public void closeUserProfile() {
+        userProfileIcon.click(ClickOptions.usingJavaScript());
+    }
+
     public void goToUserPreferences() {
         userPreferenceLinkText.click();
     }
@@ -49,16 +50,14 @@ public class UserProfilePage {
 
     public void saveUserPreferences() {
         userPreferencesButton.click();
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, not(visible));
     }
 
     public void seeSelectedLanguage() {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "Select Language"))), not(visible));
     }
 
-
-    public void seeExpectedTextsOnScreenKeyBoard(String showKeyboardText) {
-        showKeyboardLinkText.should(Condition.text(showKeyboardText));
+    public void seeExpectedTextsOnUserProfile(String userPrefMenu) {
+        var userPrefTextMenu = $(By.className(String.format("portal-user-preferences-menu")));
+        userPrefTextMenu.should(Condition.text(userPrefMenu));
     }
 }

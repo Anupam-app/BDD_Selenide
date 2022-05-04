@@ -10,7 +10,7 @@ Feature: Settings Modification
     And I go to user preferences
     When I change default language to "<language>"
     And I save user preferences
-    Then I see expected texts in OnScreenKeyBoard
+    Then I see expected texts in user profile
     And I go to alarm
     And I see expected texts from alarm module
     
