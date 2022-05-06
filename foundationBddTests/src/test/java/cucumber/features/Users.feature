@@ -12,6 +12,7 @@ Feature: User management
     And I enter random lastname
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter mobile number "0123456789"
     And I save my user changes
     And I search the user
     And I edit the user
@@ -52,7 +53,7 @@ Feature: User management
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter random department
-    And I enter mobile number "+0019859859855"
+    And I enter mobile number "0123456789"
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
