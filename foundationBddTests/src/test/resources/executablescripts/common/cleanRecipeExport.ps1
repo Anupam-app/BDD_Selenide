@@ -1,1 +1,1 @@
-rm 'C:\Bio4c\Data\Export\RecipeManagement\CRSFamily\CRSSubFamily\CRS 50L\testRecipeToExecute.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\Cellicon™ Perfusion System\testRecipeToExecute.acercp'
