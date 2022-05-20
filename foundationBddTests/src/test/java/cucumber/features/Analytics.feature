@@ -6,7 +6,7 @@ Feature: Analytics creation
     And I am logged in as "bio4cadmin" user
     And I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
+    And I start and wait recipe execution during 20 seconds
 
   Scenario: aggregate creation
     Given I go to analytics

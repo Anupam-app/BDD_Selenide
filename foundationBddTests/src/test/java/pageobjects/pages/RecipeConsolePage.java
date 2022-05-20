@@ -20,7 +20,7 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
-    private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss9']"));
+    private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss')]"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
@@ -35,7 +35,7 @@ public class RecipeConsolePage {
     private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
     private final SelenideElement okStepButton = $(By.xpath("//span[text()='Ok']"));
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
-    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
 
     private final SelenideElement productIdTextbox = $(By.xpath("//input[@name='productId']"));
     private final SelenideElement batchIdTextbox = $(By.xpath("(//*[contains(@class,'autocompletediv')]//input)[1]"));

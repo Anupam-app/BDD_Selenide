@@ -13,7 +13,7 @@ Feature: Recipe console
   Scenario: Recipe execution
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
+    And I start and wait recipe execution during 20 seconds
     Then Recipe should be executed
 
   Scenario: Recipe operational control workflow
