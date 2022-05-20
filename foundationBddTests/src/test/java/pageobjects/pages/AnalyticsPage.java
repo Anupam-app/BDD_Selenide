@@ -41,7 +41,7 @@ public class AnalyticsPage {
     private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
     private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
-    private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[@placeholder='New aggregate name here']"));
+    private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[@placeholder='New aggregate name here.']"));
 
     private final By dropdownSelection = By.xpath("//*[@class='ant-select-item ant-select-item-option']");
 
@@ -156,7 +156,7 @@ public class AnalyticsPage {
     }
 
     public void startAggregateCreation(String aggregateName) {
-        SelenideHelper.commonWaiter(createAggregateButton, Condition.visible).click(ClickOptions.usingJavaScript());
+        SelenideHelper.commonWaiter(createAggregateButton, enabled).click();
         SelenideHelper.commonWaiter(aggregateNameTextBox, visible).setValue(aggregateName);
     }
 
