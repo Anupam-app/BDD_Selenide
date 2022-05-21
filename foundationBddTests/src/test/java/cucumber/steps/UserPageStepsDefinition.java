@@ -168,7 +168,7 @@ public class UserPageStepsDefinition {
 
     @Then("I see password reset message is displayed")
     public void iSeePasswordResetMessagedisplayed() {
-        user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
+        userPage.isGeneratedNotificationWhenPasswordReset();
     }
     
     @Then("I should see user details are displayed")

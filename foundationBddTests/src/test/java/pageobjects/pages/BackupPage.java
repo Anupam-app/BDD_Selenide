@@ -59,12 +59,7 @@ public class BackupPage {
     private void chooseBackupPath() {
         downArrow.click();
         List<WebElement> options = backupLocation.findElements(By.tagName("li"));
-        for (WebElement option : options) {
-            if (option.getText().equals("C://bio4c/backup1/")) {
-                option.click();
-                break;
-            }
-        }
+        options.stream().findFirst().get().click();
     }
 
     public String getLastStatusText() {

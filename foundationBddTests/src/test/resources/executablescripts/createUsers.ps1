@@ -21,7 +21,7 @@ NET USER "testUserToResetPwd" /DELETE
 NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
 
 NET USER "testUsrAfterResetPwd" /DELETE
-NET USER "testUsrAfterResetPwd" "3G4Zin;*a5" /ADD
+NET USER "testUsrAfterResetPwd" "juZZ63~2#x" /ADD
 
 NET USER "testRoleWithoutPerms" /DELETE
 NET USER "testRoleWithoutPerms" "MerckApp1@" /ADD
