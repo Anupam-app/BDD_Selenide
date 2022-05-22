@@ -30,6 +30,8 @@ public class UserPage {
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
+    //alarm_info_msg alert alert-info fade show
+    //alarm_info_msg alert alert-info fade show
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
@@ -184,8 +186,8 @@ public class UserPage {
         resetPwdButton.click();
     }
 
-    public String getGeneratedNotificationWhenPasswordReset() {
-        return XPATH_NOTIFICATION_TEXT.getValue();
+    public void isGeneratedNotificationWhenPasswordReset() {
+        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
     }
 
     public void cancelUser() {

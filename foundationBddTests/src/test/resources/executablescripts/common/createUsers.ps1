@@ -11,7 +11,7 @@ NET USER "testUserToAssignRole" /DELETE
 NET USER "testUserToAssignRole" "M)^40kMb8^" /ADD
 
 NET USER "testUsrFirstLog" /DELETE
-NET USER "testUsrFirstLog" "M)^40kMb8^" /ADD
+NET USER "testUsrFirstLog" "T8Ul4ie~V)" /ADD
 NET localgroup administrators "testUsrFirstLog" /ADD
 
 NET USER "testUserToEditFields" /DELETE
@@ -21,7 +21,7 @@ NET USER "testUserToResetPwd" /DELETE
 NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
 
 NET USER "testUsrAfterResetPwd" /DELETE
-NET USER "testUsrAfterResetPwd" "3G4Zin;*a5" /ADD
+NET USER "testUsrAfterResetPwd" "juZZ63~2#x" /ADD
 
 NET USER "testRoleWithoutPerms" /DELETE
 NET USER "testRoleWithoutPerms" "MerckApp1@" /ADD
