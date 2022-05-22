@@ -35,5 +35,5 @@ Feature: User login
 
     Examples:
       | login                  | tempPassword     | newPassword |
-      | testUsrFirstLog1       | 05wUa^(ucQ       | !2345Zxcv1  |
+      | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
       | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
