@@ -1,3 +1,4 @@
+@COMMON
 Feature: Analytics creation
 
   Background: 

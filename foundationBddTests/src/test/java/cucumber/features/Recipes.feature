@@ -1,3 +1,4 @@
+@COMMON
 Feature: Recipe management
 
   Background:

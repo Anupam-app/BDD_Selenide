@@ -1,3 +1,4 @@
+@COMMON
 Feature: Report administration
 
 Background:

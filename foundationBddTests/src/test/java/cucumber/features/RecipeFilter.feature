@@ -1,3 +1,4 @@
+@COMMON
 Feature: Apply Filter Recipes
 
   Background:

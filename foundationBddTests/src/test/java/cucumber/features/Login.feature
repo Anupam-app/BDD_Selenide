@@ -1,3 +1,4 @@
+@COMMON
 Feature: User login
 
   Background:
