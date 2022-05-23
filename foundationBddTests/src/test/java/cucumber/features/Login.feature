@@ -7,7 +7,7 @@ Feature: User login
 
   Scenario: User login
     Given I open login page
-    When I enter "bio4cservice" as username and "MerckApp1@" as password
+    When I enter "bio4cadmin" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
 

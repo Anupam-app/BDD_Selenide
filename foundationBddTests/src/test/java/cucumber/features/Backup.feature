@@ -3,7 +3,7 @@ Feature: Backup creation
 
   Background:
     Given the browser "Chrome" is open
-    And I am logged in as "bio4cservice" user
+    And I am logged in as "bio4cadmin" user
     
   Scenario: Create Backup
     Given I goto backup page
