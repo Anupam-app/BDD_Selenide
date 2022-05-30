@@ -1,4 +1,3 @@
-@COMMON
 Feature: Analytics creation
 
   Background: 
@@ -8,6 +7,7 @@ Feature: Analytics creation
     And I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 20 seconds
 
+  @CRS
   Scenario: aggregate creation
     Given I go to analytics
     When I create an analytics aggregate
@@ -15,5 +15,16 @@ Feature: Analytics creation
     And I choose "PI101 PV" analytics parameter with unit "psi" as "x" axis
     And I choose "PI102 PV" analytics parameter with unit "psi" as "y" axis
     And I choose "PI103 PV" analytics parameter with unit "psi" as "y" axis
+    And I validate the analytics creation
+    Then I see my changes in analytics aggregate
+
+  @IVI
+  Scenario: aggregate creation
+    Given I go to analytics
+    When I create an analytics aggregate
+    And I use the recipe for this analytics aggregate with interval "Weekly"
+    And I choose "P001 Speed PV" analytics parameter with unit "psi" as "x" axis
+    And I choose "P002 Speed PV" analytics parameter with unit "psi" as "y" axis
+    And I choose "P003 Speed PV" analytics parameter with unit "psi" as "y" axis
     And I validate the analytics creation
     Then I see my changes in analytics aggregate

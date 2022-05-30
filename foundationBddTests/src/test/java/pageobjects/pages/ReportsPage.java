@@ -27,7 +27,7 @@ public class ReportsPage {
     private final String XPATH_TEMPLATE_COLUMNS_BY_TEXT = "//table[@id='templateListTable']//td[text()='%s']";
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[text()='%s']";
     private final String XPATH_DROPDOWN = "//span[text()='%s']/ancestor::div[@class='custom-drop-down']";
-    private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
+    private final String XPATH_OPTION_DROPDOWN = "//option[text()='%s']/ancestor::li";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
