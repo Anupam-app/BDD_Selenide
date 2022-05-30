@@ -223,7 +223,7 @@ public class ReportsPage {
     }
 
     public void selectCreatedBy(String user) {
-        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created by"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 
@@ -244,7 +244,7 @@ public class ReportsPage {
     }
 
     public void selectSignedBy(String user) {
-        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed by"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 }
