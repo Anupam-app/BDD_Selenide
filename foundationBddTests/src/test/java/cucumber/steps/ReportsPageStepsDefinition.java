@@ -31,8 +31,8 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
     }
 
-    @Given("I select from dropdown {string}")
-    public void iSelectFromDropdown(String report) {
+    @Given("I select report from dropdown {string}")
+    public void iSelectReportFromDropdown(String report) {
         this.reportTemplate.setName(report);
         reportPage.selectReport(report);
     }
@@ -142,7 +142,7 @@ public class ReportsPageStepsDefinition {
     @When("I generate audit trail report")
     public void iGenerateAuditTrailReport() {
     	iGotoReportManagementPage();
-        iSelectFromDropdown("Audit Trail");
+        iSelectReportFromDropdown("Audit Trail");
         iClickOnGenerateButton();
     }
     
@@ -152,5 +152,4 @@ public class ReportsPageStepsDefinition {
     	iTriggerReportMode();
     	iShouldSeeTheReportFilePresence();
     }
-    
 }

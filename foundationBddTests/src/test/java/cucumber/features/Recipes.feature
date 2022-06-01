@@ -1,3 +1,4 @@
+@COMMON
 Feature: Recipe management
 
   Background:
@@ -22,17 +23,6 @@ Feature: Recipe management
     When I approve recipe
     Then Recipe should be approved
 
-  Scenario: Recipe system Hold/Restart
-    When I expand recipe console in pnid
-    And I hold and restart the system
-    Then I see the system on hold
-
-  Scenario: Recipe Execution
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution
-    Then Recipe should be executed
-
   Scenario: Recipe creation
     Given I go to recipe page
     When I trigger edit mode
@@ -42,16 +32,6 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
-
-  Scenario: Recipe operational control workflow
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
-    And I start recipe execution
-    And I click on pause button
-    And I click on resume button
-    And I click on jump step "3"
-    And I click on abort button
-    Then I should see the recipe run aborted
 
   Scenario: Recipe export and import
     Given I go to recipe page

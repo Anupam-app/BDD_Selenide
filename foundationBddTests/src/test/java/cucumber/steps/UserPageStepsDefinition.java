@@ -18,7 +18,7 @@ public class UserPageStepsDefinition {
         this.userPage = userPage;
         this.user = user;
     }
-
+    
     @Given("I search {string} user")
     public void iSearchUser(String user) {
         this.user.setUserName(user);
@@ -168,6 +168,21 @@ public class UserPageStepsDefinition {
 
     @Then("I see password reset message is displayed")
     public void iSeePasswordResetMessagedisplayed() {
-        user.setName(userPage.getGeneratedNotificationWhenPasswordReset());
+        userPage.isGeneratedNotificationWhenPasswordReset();
+    }
+    
+    @Then("I should see user details are displayed")
+    public void iSeeUserDetails() {
+    	Assert.assertEquals(userPage.getUserDetails(), user.getUserName());
+    }
+    
+    @When("I click on filter icon and select status {string}")
+    public void iSelectStatus(String status) {
+        userPage.selectStatus(status);
+    }
+    
+    @When("I verify filetr tag")
+    public void iVerifyFilterTag(String status) {
+    	Assert.assertEquals(status, userPage.getFilterTagText());
     }
 }

@@ -1,3 +1,4 @@
+@COMMON
 Feature: Report administration
 
 Background:
@@ -6,7 +7,7 @@ Background:
 
   Scenario: Generate and sign Audittrail report
     Given I goto report management page
-    When I select from dropdown "Audit Trail"
+    When I select report from dropdown "Audit Trail"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
@@ -16,7 +17,7 @@ Background:
 
   Scenario: Generate and sign a recipe run history report
     Given I goto report management page
-    When I select from dropdown "Run History"
+    When I select report from dropdown "Run History"
     And I choose recipe run "recipe4sec220211129030358"
     And I choose template "testReportTemplate"
     And I click on generate button
@@ -28,7 +29,7 @@ Background:
 
   Scenario: Generate and sign a consolidated report
     Given I goto report management page
-    When I select from dropdown "Consolidated"
+    When I select report from dropdown "Consolidated"
     And I choose recipe run "recipe4sec220211129030358" for consolidation
     And I choose recipe run "recipe4sec220211129035111" for consolidation
     And I click on generate button
@@ -40,8 +41,7 @@ Background:
 
   Scenario: Generate and sign a custom report
     Given I goto report management page
-    When I select from dropdown "Custom"
-    And I select report include "Pre Run Data"
+    When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
     And I click on generate button
@@ -55,7 +55,6 @@ Background:
     Given I goto report management page
     And I trigger report template mode
     When I create random report template
-    And I select report include "Pre Run Data"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
     And I save the report template

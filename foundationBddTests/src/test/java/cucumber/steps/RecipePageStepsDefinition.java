@@ -130,73 +130,6 @@ public class RecipePageStepsDefinition {
         Assert.assertEquals("Approved-Active",this.recipePage.getStatus());
     }
 
-
-    @Given("I expand recipe console in pnid")
-    public void iGotoRecipeConsole() {
-        recipePage.gotoRecipeConsole();
-    }
-
-    @Given("I load recipe {string}")
-    public void iLoadRecipe(String recipe) {
-        this.recipe.setRecipeName(recipe);
-        recipePage.loadRecipe(recipe);
-    }
-
-    @When("I hold and restart the system")
-    public void iHoldAndRestartTheSystem() {
-        recipePage.holdAndRestart();
-    }
-
-    @When("I start and wait recipe execution")
-    public void iStartAndWaitRecipeExecution() {
-        generateRandomRecipeValues();
-        recipePage.startAndWaitRecipe(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments(),this.recipe.getAfterComments());
-    }
-
-    @When("I start recipe execution")
-    public void iStartRecipeExecution() {
-        generateRandomRecipeValues();
-        recipePage.startRecipe(this.recipe.getProductId(),this.recipe.getBatchId(),this.recipe.getBeforeComments());
-    }
-
-    private void generateRandomRecipeValues() {
-        this.recipe.setProductId(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-    }
-
-    @Then("Recipe should be executed")
-    public void recipeExecuted() {
-        recipePage.isExecuted();
-    }
-    
-    @When("I click on pause button")
-    public void iClickOnPauseButton() {
-    	recipePage.clickPauseButton();
-    }
-
-    @When("I click on resume button")
-    public void iClickOnResumeButton() {
-    	recipePage.clickResumeButton();
-    }
-
-    @When("I click on jump step {string}")
-    public void iClickOnJumpToStep(String stepNumber) {
-    	recipePage.clickOnJumpToStep(stepNumber);
-    }
-
-    @When("I click on abort button")
-    public void iClickOnAbortButton() {
-        recipePage.clickOnAbortButton(this.recipe.getAfterComments());
-    }
-
-    @Then("I should see the recipe run aborted")
-    public void iVerifyRecipeAbort() {
-    	Assert.assertEquals("Aborted",this.recipePage.getExecutionStatus());
-    	recipePage.clickOnOk();
-    }
-
     @When("I click on export recipe {string}")
     public void iExport(String recipeName) {
         recipe.setRecipeName(recipeName);
@@ -222,10 +155,5 @@ public class RecipePageStepsDefinition {
     @Then("I look at the user notification")
     public void iLookAtTheUserNotification() {
         recipePage.lookAtTheUserNotification();
-    }
-
-    @Then("I see the system on hold")
-    public void iSeeTheSystemOnHold() {
-        recipePage.seeSystemOnHold();
     }
 }

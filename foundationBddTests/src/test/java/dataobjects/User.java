@@ -44,4 +44,8 @@ public class User {
     @Setter
     @Getter
     String name;
+    
+    @Setter
+    @Getter
+    String defaultPage;
 }

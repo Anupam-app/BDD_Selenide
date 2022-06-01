@@ -2,8 +2,9 @@ Feature: Settings Modification
 
   Background:
     Given the browser "Chrome" is open
-    And I am logged in as "bio4cservice" user
+    And I am logged in as "bio4cadmin" user
 
+  @CONFIG_SETTING_SYSTEM_COMPONENTS
   Scenario Outline: Change custom label
     Given I goto settings page 
     And I goto system components

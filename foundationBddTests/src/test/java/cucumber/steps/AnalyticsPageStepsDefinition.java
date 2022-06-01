@@ -89,24 +89,24 @@ public class AnalyticsPageStepsDefinition {
     }
 
     @And("I create an analytics aggregate")
-    public void iCreateAnAnalyticsAggregate() {
-        createAnalytics(false);
-    }
-
-    @And("I create an analytics aggregate using button")
     public void iCreateAnAnalyticsAggregateWithButton() {
-        createAnalytics(true);
+        createAnalytics();
     }
 
-    private void createAnalytics(boolean usingButton) {
+    private void createAnalytics() {
         if (StringUtils.isEmpty(analytics.getName())) {
             analytics.setName(RandomStringUtils.randomAlphabetic(10));
         }
-        analyticsPage.startAggregateCreation(analytics.getName(), usingButton);
+        analyticsPage.startAggregateCreation(analytics.getName());
     }
 
     @And("I choose {string} analytics parameter with unit {string} as {string} axis")
     public void iChooseAnalyticsParameter(String parameter, String unit, String axis) {
+        makeAnalyticsParameter(parameter, unit, axis);
+        analyticsPage.chooseParameter(parameter);
+    }
+
+    private void makeAnalyticsParameter(String parameter, String unit, String axis) {
         var analyticsParameter = new AnalyticsParameter(parameter, unit);
         if (axis.equalsIgnoreCase("x")) {
             analytics.setXParameters(analyticsParameter);
@@ -114,7 +114,6 @@ public class AnalyticsPageStepsDefinition {
         if (axis.equalsIgnoreCase("y")) {
             analytics.getYParameters().add(analyticsParameter);
         }
-        analyticsPage.chooseParameter(parameter);
     }
 
     @And("I validate the analytics creation")
@@ -125,8 +124,8 @@ public class AnalyticsPageStepsDefinition {
     @And("I see my changes in analytics aggregate")
     public void iSeeMyChangesInAnalyticsAggregate() {
         analyticsPage.selectAggregate(analytics.getName());
-        analytics.getYParameters().forEach(p -> analyticsPage.checkParameter(p.getName(),p.getUnit()));
-        analyticsPage.checkParameter(analytics.getXParameters().getName(),analytics.getXParameters().getUnit());
+        analytics.getYParameters().forEach(p -> analyticsPage.checkParameter(p.getName(), p.getUnit()));
+        analyticsPage.checkParameter(analytics.getXParameters().getName(), analytics.getXParameters().getUnit());
     }
 
     @And("I use the recipe for this analytics aggregate with interval {string}")
@@ -135,16 +134,22 @@ public class AnalyticsPageStepsDefinition {
     }
 
 
-    @And("I create analytics aggregate {string}")
+    @And("I create analytics aggregate {string} if not done before")
     public void iCreateAnAnalyticsAggregate(String aggregateName) {
-        iGotoAnalytics();
         analytics.setName(aggregateName);
-        analyticsPage.deleteIfExists(analytics.getName());
-        iCreateAnAnalyticsAggregateWithButton();
-        iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.WEEKLY);
-        iChooseAnalyticsParameter("PI101 PV", "psi", "x");
-        iChooseAnalyticsParameter("PI102 PV", "psi", "y");
-        iChooseAnalyticsParameter("PI103 PV", "psi", "y");
-        iValidateTheAnalyticsCreation();
+        iGotoAnalytics();
+        makeAnalyticsParameter("PI101 PV", "psi", "x");
+        makeAnalyticsParameter("PI102 PV", "psi", "y");
+        makeAnalyticsParameter("PI103 PV", "psi", "y");
+        if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
+            analyticsPage.deleteIfExists(analytics.getName());
+            iCreateAnAnalyticsAggregateWithButton();
+            iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
+            analyticsPage.chooseParameter(analytics.getXParameters().getName());
+            for (var yparam : analytics.getYParameters()) {
+                analyticsPage.chooseParameter(yparam.getName());
+            }
+            iValidateTheAnalyticsCreation();
+        }
     }
 }

@@ -1,5 +1,6 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
@@ -40,7 +41,7 @@ public class AnalyticsPage {
     private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
     private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
-    private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[@placeholder='New aggregate name here']"));
+    private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[@placeholder='New aggregate name here.']"));
 
     private final By dropdownSelection = By.xpath("//*[@class='ant-select-item ant-select-item-option']");
 
@@ -112,7 +113,7 @@ public class AnalyticsPage {
     public void createAggregate(Recipe recipe, String analyticsInterval) {
         $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).click();
 
-        var options=$$(By.xpath(XPATH_OPTION_SELECTION));
+        var options = $$(By.xpath(XPATH_OPTION_SELECTION));
         for (WebElement option : options) {
             if (option.getText().equals(recipe.getBatchId())) {
                 option.click();
@@ -147,20 +148,15 @@ public class AnalyticsPage {
     }
 
     public void chooseParameter(String param) {
-        $(By.xpath(String.format(XPATH_PARAMETER_CHECKBOX, param))).click();
+        $(By.xpath(String.format(XPATH_PARAMETER_CHECKBOX, param))).scrollTo().click();
     }
 
     public void validateCreation() {
         validateAggregateButton.click();
     }
 
-    public void startAggregateCreation(String aggregateName, boolean usingButton) {
-        Selenide.sleep(5000);//TODO remove this hack when problem of loading solved
-        if (usingButton) {
-            SelenideHelper.commonWaiter(createAggregateButton, Condition.visible).click();
-        } else {
-            SelenideHelper.commonWaiter(createAggregateLinkText, Condition.visible).click();
-        }
+    public void startAggregateCreation(String aggregateName) {
+        SelenideHelper.commonWaiter(createAggregateButton, enabled).click();
         SelenideHelper.commonWaiter(aggregateNameTextBox, visible).setValue(aggregateName);
     }
 

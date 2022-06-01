@@ -1,12 +1,12 @@
-Feature: Analytics management
+@COMMON
+Feature: Analytics graph
 
   Background: 
     Given the browser "Chrome" is open
     And I am logged in as "bio4cadmin" user
     And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution
-    And I create analytics aggregate "tstAggregGraph"
+    And I load recipe "testRecipeToExecute1min" and run it during 65 seconds if not done before
+    And I create analytics aggregate "tstAggregGraph" if not done before
 
   Scenario Outline: Plot Graph
     When I select the aggregate

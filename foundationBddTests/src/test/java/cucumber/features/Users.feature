@@ -1,13 +1,9 @@
+@COMMON
 Feature: User management
 
   Background:
     Given the browser "Chrome" is open
     And I am logged in as "Bio4CAdmin" user
-    And the user "testUser" exists
-    And the user "testUserEnabled" exists
-    And the user "testUserDisabled" exists
-    And the user "testUserToEditFields" exists
-    And the user "testUserToResetPwd" exists
 
   Scenario: Create new user
     Given I go to user page
@@ -17,6 +13,7 @@ Feature: User management
     And I enter random lastname
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter mobile number "0123456789"
     And I save my user changes
     And I search the user
     And I edit the user
@@ -53,11 +50,11 @@ Feature: User management
     Given I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
-    And I select role "Bio4CService"
+    And I select role "Operator"
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter random department
-    And I enter mobile number "+0019859859855"
+    And I enter mobile number "0123456789"
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
