@@ -24,7 +24,7 @@ public class UserPage {
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement userPreferencesLink = $(By.xpath("//Span[text()='User preferences']"));
+    private final SelenideElement userPreferencesLink = $(By.xpath("//span[text()='User Preferences']"));
     Function<Integer, List<String>> getUserColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
