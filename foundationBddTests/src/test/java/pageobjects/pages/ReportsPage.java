@@ -14,7 +14,6 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 public class ReportsPage {
 
     private final String REPORT_TEMPLATE_STATUS_WITH_TEXT = "(//*[@id='template_status']//li)[text()='%s']";
-    private final String PDF_VIEWER_IFRAME = "//iframe[@id='ReportViewIFrame']";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS = "(//*[@class='active-label'])";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS_WITH_TEXT = XPATH_ACTIVE_TEMPLATE_STATUS + "[text()='%s']";
     private final String XPATH_SIGNED_REPORT = "//tr[td='Signed' and td='%s' and td='%s']";
@@ -247,9 +246,5 @@ public class ReportsPage {
     public void selectSignedBy(String user) {
         commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
-    }
-
-    public String getPdfUrl() {
-        return $(By.xpath(PDF_VIEWER_IFRAME)).getAttribute("src");
     }
 }
