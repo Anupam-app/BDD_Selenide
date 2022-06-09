@@ -7,9 +7,14 @@ import dataobjects.User;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.IOException;
+import java.net.URL;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
+import technology.tabula.Table;
+import utils.pdf.PdfTableExtractUtils;
+import utils.ssl.SSLUtils;
 
 public class ReportsPageStepsDefinition {
 
@@ -58,6 +63,11 @@ public class ReportsPageStepsDefinition {
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
     }
 
+    @When("I click on view button")
+    public void iClickOnViewButton() {
+        reportPage.viewReports(this.report.getName());
+    }
+
     @When("I trigger report mode")
     public void iTriggerReportMode() {
         reportPage.gotoReportsTab();
@@ -80,6 +90,16 @@ public class ReportsPageStepsDefinition {
     public void iShouldSeeTheReportFilePresence() {
         reportPage.viewReports(this.report.getName());
         reportPage.checkReportPdfInPage();
+    }
+
+    @Then("I verify the table with headers {string} contains at least one row")
+    public void iVerifyTheTableContainsAtLeastOneRow(String tableHeaders) throws IOException {
+        SSLUtils.disableSslVerification();
+        URL url = new URL(reportPage.getPdfUrl());
+
+        Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), tableHeaders);
+        Assert.assertNotNull(table);
+        Assert.assertTrue(table.getRows().size() > 1);
     }
 
     @When("I search report {string}")

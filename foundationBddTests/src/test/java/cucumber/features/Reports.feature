@@ -65,3 +65,15 @@ Background:
     And I approve the report template
     And I search the report template
     Then I verify the report template
+
+  Scenario: Generate run history report and verify the 'Event Summary' section of generated report is not empty
+    Given I goto report management page
+    When I select report from dropdown "Run History"
+    And I choose recipe run "recipe4sec220211129030358"
+    And I choose template "testReportTemplate"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify the table with headers "Event Time|Event Description|Old Value|New Value" contains at least one row
+
