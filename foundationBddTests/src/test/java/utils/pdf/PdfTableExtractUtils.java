@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -20,7 +21,8 @@ import technology.tabula.detectors.DetectionAlgorithm;
 import technology.tabula.detectors.NurminenDetectionAlgorithm;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
-public class PdfTableExtractUtils {
+@UtilityClass
+public final class PdfTableExtractUtils {
 
     /**
      * Retrieving the page number where the table is located using the table section title
@@ -30,13 +32,8 @@ public class PdfTableExtractUtils {
      */
     public static int getTablePageNumberFromTableTitle(File pdfFile, String tableTitle) throws IOException {
 
-        FileInputStream fis = new FileInputStream(pdfFile);
-
-        try {
+        try (FileInputStream fis = new FileInputStream(pdfFile)) {
             return getTablePageNumberFromTableTitle(fis, tableTitle);
-        }
-        finally {
-            fis.close();
         }
     }
 
@@ -81,13 +78,8 @@ public class PdfTableExtractUtils {
      */
     public static int getTablePageNumberFromTableHeader(File pdfFile, String tableHeader) throws IOException {
 
-        FileInputStream fis = new FileInputStream(pdfFile);
-
-        try {
+        try (FileInputStream fis = new FileInputStream(pdfFile)) {
             return getTablePageNumberFromTableHeader(fis, tableHeader);
-        }
-        finally {
-            fis.close();
         }
     }
 
@@ -102,8 +94,8 @@ public class PdfTableExtractUtils {
         PDDocument document = PDDocument.load(inputStream);
         int pageNumber = -1;
 
-        try {
-            ObjectExtractor oe = new ObjectExtractor(document);
+        try(ObjectExtractor oe = new ObjectExtractor(document)) {
+
             SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
             PageIterator pageIterator = oe.extract();
 
@@ -122,9 +114,6 @@ public class PdfTableExtractUtils {
                 }
             }
         }
-        finally {
-            document.close();
-        }
 
         return pageNumber;
     }
@@ -137,13 +126,8 @@ public class PdfTableExtractUtils {
      */
     public static Table getTableFromTableHeader(File pdfFile, String tableHeader) throws IOException {
 
-        FileInputStream fis = new FileInputStream(pdfFile);
-
-        try {
+        try (FileInputStream fis = new FileInputStream(pdfFile)) {
             return getTableFromTableHeader(fis, tableHeader);
-        }
-        finally {
-            fis.close();
         }
     }
 
@@ -158,8 +142,8 @@ public class PdfTableExtractUtils {
         PDDocument document = PDDocument.load(inputStream);
         Table foundTable = null;
 
-        try {
-            ObjectExtractor oe = new ObjectExtractor(document);
+        try(ObjectExtractor oe = new ObjectExtractor(document)) {
+
             SpreadsheetExtractionAlgorithm sea = new SpreadsheetExtractionAlgorithm();
             PageIterator pageIterator = oe.extract();
 
@@ -173,13 +157,10 @@ public class PdfTableExtractUtils {
 
                 if(table != null) {
                     //foundTable = table; // without auto detection table
-                    foundTable = getTablesFromPage(page).stream().findFirst().get();
+                    foundTable = getTablesFromPage(page).stream().findFirst().orElse(null);
                     break;
                 }
             }
-        }
-        finally {
-            document.close();
         }
 
         return foundTable;
@@ -193,13 +174,8 @@ public class PdfTableExtractUtils {
      */
     public static List<Table> getTablesFromPageNumber(File pdfFile, int pageNumber) throws IOException {
 
-        FileInputStream fis = new FileInputStream(pdfFile);
-
-        try {
+        try (FileInputStream fis = new FileInputStream(pdfFile)) {
             return getTablesFromPageNumber(fis, pageNumber);
-        }
-        finally {
-            fis.close();
         }
     }
 
@@ -217,19 +193,14 @@ public class PdfTableExtractUtils {
         tableExtractor.setMethod(ExtractionMethod.SPREADSHEET);
 
         // load document
-        PDDocument document = PDDocument.load(inputStream);
-
-        try {
+        try (PDDocument document = PDDocument.load(inputStream)) {
             ObjectExtractor oe = new ObjectExtractor(document);
             Page page = oe.extract(pageNumber);
 
-            if(page != null) {
+            if (page != null) {
 
                 tableList.addAll(getTablesFromPage(page));
             }
-        }
-        finally {
-            document.close();
         }
 
         return tableList;
@@ -240,7 +211,7 @@ public class PdfTableExtractUtils {
      * @param page Page
      * @return Tables
      */
-    public static List<Table> getTablesFromPage(Page page) throws IOException {
+    public static List<Table> getTablesFromPage(Page page) {
 
         List<Table> tableList = new ArrayList<>();
         TableExtractor tableExtractor = new TableExtractor();
@@ -255,7 +226,7 @@ public class PdfTableExtractUtils {
 
             for (Rectangle guessRect : guesses) {
 
-                Pair<Integer, Rectangle> areaPair = new Pair<Integer, Rectangle>(1,
+                Pair<Integer, Rectangle> areaPair = new Pair<>(1,
                     new Rectangle(guessRect.getTop(), guessRect.getLeft(),
                         guessRect.getRight() - guessRect.getLeft(),
                         guessRect.getBottom() - guessRect.getTop()));
@@ -292,18 +263,16 @@ public class PdfTableExtractUtils {
     private static Table searchTableWithHeaderHorizontally(Table table, String tableHeader) {
 
         Table correspondingTable = null;
-        List<List<RectangularTextContainer>> rows = table.getRows();
 
-        for (int i = 0; i < rows.size(); i++) {
+        for (List<RectangularTextContainer> row : table.getRows()) {
 
             StringBuilder sb = new StringBuilder();
-            List<RectangularTextContainer> cells = rows.get(i);
 
-            for (int j = 0; j < cells.size(); j++) {
-                sb.append(cells.get(j).getText());
+            for (RectangularTextContainer cell : row) {
+                sb.append(cell.getText());
             }
 
-            if(StringUtils.containsIgnoreCase(sb.toString(), tableHeader.replace("|", ""))) {
+            if (StringUtils.containsIgnoreCase(sb.toString(), tableHeader.replace("|", ""))) {
                 correspondingTable = table;
                 break;
             }
@@ -321,9 +290,9 @@ public class PdfTableExtractUtils {
 
             StringBuilder sb = new StringBuilder();
 
-            for (int j = 0; j < rows.size(); j++) {
+            for (List<RectangularTextContainer> row : rows) {
 
-                sb.append(rows.get(j).get(i).getText());
+                sb.append(row.get(i).getText());
             }
 
             if(StringUtils.containsIgnoreCase(sb.toString(), tableHeader.replace("|", ""))) {
@@ -348,11 +317,10 @@ public class PdfTableExtractUtils {
             for (int i = 0; i < rows.size(); i++) {
 
                 StringBuilder sb = new StringBuilder();
-                List<RectangularTextContainer> cells = rows.get(i);
 
-                sb.append("Row " + i + " | ");
-                for (int j = 0; j < cells.size(); j++) {
-                    sb.append(cells.get(j).getText() + "|");
+                sb.append("Row ").append(i).append(" | ");
+                for (RectangularTextContainer cell : rows.get(i)) {
+                    sb.append(cell.getText()).append("|");
                 }
 
                 System.out.println(sb.toString());
@@ -381,24 +349,20 @@ public class PdfTableExtractUtils {
     public static String getTableFieldValue(Table table, String fieldName) {
 
         boolean nextCellContainsValue = false;
-        List<List<RectangularTextContainer>> rows = table.getRows();
 
-        for (int i = 0; i < rows.size(); i++) {
+        for (List<RectangularTextContainer> row : table.getRows()) {
 
-            StringBuilder sb = new StringBuilder();
-            List<RectangularTextContainer> cells = rows.get(i);
+            for (RectangularTextContainer cell : row) {
+                String cellValue = cell.getText();
 
-            for (int j = 0; j < cells.size(); j++) {
-                String cellValue = cells.get(j).getText();
-
-                if(nextCellContainsValue) {
-                    if(!cellValue.trim().isEmpty()) {
+                if (nextCellContainsValue) {
+                    if (!cellValue.trim().isEmpty()) {
                         return cellValue;
                     }
-                }
-                else {
+                } else {
 
-                    if (StringUtils.containsIgnoreCase(StringUtils.trim(cellValue.trim()), StringUtils.trim(fieldName))) {
+                    if (StringUtils.containsIgnoreCase(StringUtils.trim(cellValue.trim()),
+                        StringUtils.trim(fieldName))) {
                         nextCellContainsValue = true;
                     }
                 }
