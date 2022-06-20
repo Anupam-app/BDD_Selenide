@@ -98,8 +98,8 @@ public class ReportsPageStepsDefinition {
         URL url = new URL(reportPage.getPdfUrl());
 
         Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), tableHeaders);
-        Assert.assertNotNull(table);
-        Assert.assertTrue(table.getRows().size() > 1);
+        Assert.assertNotNull("No table found", table);
+        Assert.assertTrue("Table must contains at least one row", table.getRows().size() > 1);
     }
 
     @When("I search report {string}")
