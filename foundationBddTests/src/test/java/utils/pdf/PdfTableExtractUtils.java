@@ -1,5 +1,7 @@
 package utils.pdf;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -68,6 +70,27 @@ public final class PdfTableExtractUtils {
         }
 
         return pageNumber;
+    }
+
+    /**
+     * Get table from the table section title
+     * @param inputStream PDF File as stream
+     * @param tableTitle Table section title
+     * @return Table
+     */
+    public Table getTableFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        org.apache.commons.io.IOUtils.copy(inputStream, baos);
+        byte[] bytes = baos.toByteArray();
+
+        int pageNumber = getTablePageNumberFromTableTitle(new ByteArrayInputStream(bytes), tableTitle);
+
+        if (pageNumber > 0) {
+            return getTablesFromPageNumber(new ByteArrayInputStream(bytes), pageNumber).stream().findFirst().orElse(null);
+        }
+
+        return null;
     }
 
     /**
@@ -188,9 +211,6 @@ public final class PdfTableExtractUtils {
     public static List<Table> getTablesFromPageNumber(InputStream inputStream, int pageNumber) throws IOException {
 
         List<Table> tableList = new ArrayList<>();
-        TableExtractor tableExtractor = new TableExtractor();
-        tableExtractor.setGuess(true);
-        tableExtractor.setMethod(ExtractionMethod.SPREADSHEET);
 
         // load document
         try (PDDocument document = PDDocument.load(inputStream)) {
@@ -323,7 +343,7 @@ public final class PdfTableExtractUtils {
                     sb.append(cell.getText()).append("|");
                 }
 
-                System.out.println(sb.toString());
+                System.out.println(sb);
             }
         }
     }

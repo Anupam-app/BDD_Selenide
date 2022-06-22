@@ -3,7 +3,13 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import java.time.Duration;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
 import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.not;
@@ -186,6 +192,30 @@ public class ReportsPage {
 
     public void selectRun(String run) {
         $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
+    }
+
+    public void waitAndSelectRun(String reportTemplateName, String run) throws InterruptedException {
+
+        SelenideElement runElement = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run)));
+
+        // after finished a recipe, it takes some times to have the run in page
+        // polling report run page
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(WebDriverRunner.getWebDriver())
+            .withTimeout(Duration.ofSeconds(30))
+            .pollingEvery(Duration.ofSeconds(3))
+            .ignoring(NoSuchElementException.class);
+
+        wait.until((webDriver) -> {
+            WebDriverRunner.getWebDriver().switchTo().parentFrame();
+            goToReports();
+            switchToFrame();
+            selectReport(reportTemplateName);
+
+            return runElement.is(visible);
+        });
+
+        // select corresponding run
+        runElement.click();
     }
 
     public void chooseReportTemplate(String template) {

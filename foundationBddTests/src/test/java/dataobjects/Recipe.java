@@ -18,6 +18,10 @@ public class Recipe {
 
     @Setter
     @Getter
+    String runId;
+
+    @Setter
+    @Getter
     String productId;
 
     @Setter

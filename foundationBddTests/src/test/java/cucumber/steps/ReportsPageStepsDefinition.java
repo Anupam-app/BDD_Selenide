@@ -1,9 +1,11 @@
 package cucumber.steps;
 
+import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
 import dataobjects.User;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -22,12 +24,14 @@ public class ReportsPageStepsDefinition {
     private ReportsPage reportPage;
     private ReportTemplate reportTemplate;
     private User user;
+    private Recipe recipe;
 
-    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
+    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user, Recipe recipe) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
+        this.recipe = recipe;
     }
 
     @Given("I goto report management page")
@@ -45,6 +49,11 @@ public class ReportsPageStepsDefinition {
     @When("I choose recipe run {string}")
     public void iChooseRun(String run) {
         reportPage.selectRun(run);
+    }
+
+    @And("I choose corresponding recipe run")
+    public void iChooseCorrespondingRecipeRun() throws InterruptedException {
+        reportPage.waitAndSelectRun(reportTemplate.getName(), recipe.getRunId());
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -100,6 +109,23 @@ public class ReportsPageStepsDefinition {
         Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), tableHeaders);
         Assert.assertNotNull("No table found", table);
         Assert.assertTrue("Table must contains at least one row", table.getRows().size() > 1);
+    }
+
+    @Then("I verify the {string} in {string}")
+    public void iVerifyTheRunId(String fieldId, String tableTitle) throws IOException {
+
+        SSLUtils.disableSslVerification();
+        URL url = new URL(reportPage.getPdfUrl());
+
+        // get table from table title and check is not null and contains rows
+        Table table = PdfTableExtractUtils.getTableFromTableTitle(url.openStream(), tableTitle);
+        Assert.assertNotNull("No table found", table);
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
+
+        // get field value and check is not null
+        String fieldValue = PdfTableExtractUtils.getTableFieldValue(table, fieldId);
+        Assert.assertNotNull("No field with id " + fieldId, fieldValue);
+        Assert.assertEquals("Unexpected run id value", recipe.getRunId(), fieldValue);
     }
 
     @When("I search report {string}")
