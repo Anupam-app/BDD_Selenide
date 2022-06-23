@@ -53,7 +53,7 @@ public class ReportsPageStepsDefinition {
 
     @And("I choose corresponding recipe run")
     public void iChooseCorrespondingRecipeRun() throws InterruptedException {
-        reportPage.waitAndSelectRun(reportTemplate.getName(), recipe.getRunId());
+        reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId());
     }
 
     @When("I choose recipe run {string} for consolidation")

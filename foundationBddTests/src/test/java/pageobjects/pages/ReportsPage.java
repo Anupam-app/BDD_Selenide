@@ -194,28 +194,30 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
     }
 
-    public void waitAndSelectRun(String reportTemplateName, String run) throws InterruptedException {
-
-        SelenideElement runElement = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run)));
+    public void selectRunWithWaiting(String reportTemplateName, String run) throws InterruptedException {
 
         // after finished a recipe, it takes some times to have the run in page
         // polling report run page
-        Wait<WebDriver> wait = new FluentWait<WebDriver>(WebDriverRunner.getWebDriver())
-            .withTimeout(Duration.ofSeconds(30))
-            .pollingEvery(Duration.ofSeconds(3))
+        Wait<WebDriver> wait = new FluentWait<>(WebDriverRunner.getWebDriver())
+            .withTimeout(Duration.ofSeconds(60))
+            .pollingEvery(Duration.ofSeconds(5))
             .ignoring(NoSuchElementException.class);
 
         wait.until((webDriver) -> {
-            WebDriverRunner.getWebDriver().switchTo().parentFrame();
-            goToReports();
-            switchToFrame();
-            selectReport(reportTemplateName);
+            boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
 
-            return runElement.is(visible);
+            if(!isRunVisible) {
+                WebDriverRunner.getWebDriver().switchTo().parentFrame();
+                goToReports();
+                switchToFrame();
+                selectReport(reportTemplateName);
+            }
+
+            return isRunVisible;
         });
 
         // select corresponding run
-        runElement.click();
+        $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
     }
 
     public void chooseReportTemplate(String template) {
