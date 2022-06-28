@@ -2,6 +2,7 @@ package cucumber.steps;
 
 import dataobjects.Recipe;
 import dataobjects.Report;
+import dataobjects.ReportFile;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
 import dataobjects.User;
@@ -21,8 +22,6 @@ import utils.pdf.PdfTableExtractUtils;
 import utils.ssl.SSLUtils;
 
 public class ReportsPageStepsDefinition {
-
-    private static final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
 
     private Report report;
     private ReportsPage reportPage;
@@ -144,7 +143,7 @@ public class ReportsPageStepsDefinition {
         // for each table, check user data details format
         for(Table reportTable : reportTables) {
 
-            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, "User");
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, ReportFile.USER_COLUMN_NAME);
 
             if(userColumnIndex>0) {
 
@@ -157,8 +156,39 @@ public class ReportsPageStepsDefinition {
                         if (!StringUtils.isEmpty(userColumnValue)) {
                             Assert.assertTrue(String.format(
                                 "User format error. Value : %s. Expected pattern : Login(Firstname Lastname)",
-                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                                userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
 
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @Then("I verify that internal user doesn't appear in the report")
+    public void iVerifyThatInternalUserDoesnTAppearInTheReport() throws IOException {
+
+        SSLUtils.disableSslVerification();
+        URL url = new URL(reportPage.getPdfUrl());
+
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+
+        // for each table, check presence of internal user
+        for(Table reportTable : reportTables) {
+
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, ReportFile.USER_COLUMN_NAME);
+
+            if(userColumnIndex>0) {
+
+                for (int i = 0; i < reportTable.getRowCount(); i++) {
+
+                    if (i > 0) {
+
+                        String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+
+                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), ReportFile.INTERNAL_USER)) {
+                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
                         }
                     }
                 }

@@ -104,3 +104,16 @@ Background:
     And I trigger report mode
     Then I should see the report file presence
     And I verify the user data details are consistent
+
+  Scenario: Generate Audittrail report and verify that internal user like OMIUser0* doesn't appear in the report
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Audit Trail"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify that internal user doesn't appear in the report
