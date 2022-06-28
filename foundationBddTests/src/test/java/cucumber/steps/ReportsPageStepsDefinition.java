@@ -11,6 +11,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
@@ -19,6 +21,8 @@ import utils.pdf.PdfTableExtractUtils;
 import utils.ssl.SSLUtils;
 
 public class ReportsPageStepsDefinition {
+
+    private static final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
 
     private Report report;
     private ReportsPage reportPage;
@@ -126,6 +130,40 @@ public class ReportsPageStepsDefinition {
         String fieldValue = PdfTableExtractUtils.getTableFieldValue(table, fieldId);
         Assert.assertNotNull("No field with id " + fieldId, fieldValue);
         Assert.assertEquals("Unexpected run id value", recipe.getRunId(), fieldValue);
+    }
+
+    @Then("I verify the user data details are consistent")
+    public void iVerifyTheUserDataDetailsAreConsistent() throws IOException {
+
+        SSLUtils.disableSslVerification();
+        URL url = new URL(reportPage.getPdfUrl());
+
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+
+        // for each table, check user data details format
+        for(Table reportTable : reportTables) {
+
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, "User");
+
+            if(userColumnIndex>0) {
+
+                for (int i = 0; i < reportTable.getRowCount(); i++) {
+
+                    if (i > 0) {
+
+                        String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+
+                        if (!StringUtils.isEmpty(userColumnValue)) {
+                            Assert.assertTrue(String.format(
+                                "User format error. Value : %s. Expected pattern : Login(Firstname Lastname)",
+                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @When("I search report {string}")

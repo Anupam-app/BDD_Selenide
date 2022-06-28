@@ -179,7 +179,6 @@ public final class PdfTableExtractUtils {
                 Table table = searchTable(tableList, tableHeader);
 
                 if(table != null) {
-                    //foundTable = table; // without auto detection table
                     foundTable = getTablesFromPage(page).stream().findFirst().orElse(null);
                     break;
                 }
@@ -219,6 +218,31 @@ public final class PdfTableExtractUtils {
 
             if (page != null) {
 
+                tableList.addAll(getTablesFromPage(page));
+            }
+        }
+
+        return tableList;
+    }
+
+    /**
+     * Get all tables of the pdf file
+     * @param inputStream PDF File as Stream
+     * @return Tables
+     * @throws IOException
+     */
+    public static List<Table> getTables(InputStream inputStream) throws IOException {
+
+        List<Table> tableList = new ArrayList<>();
+
+        // load document
+        try (PDDocument document = PDDocument.load(inputStream)) {
+            ObjectExtractor oe = new ObjectExtractor(document);
+            PageIterator pageIterator = oe.extract();
+
+            // foreach each page of the pdf
+            while(pageIterator.hasNext()) {
+                Page page = pageIterator.next();
                 tableList.addAll(getTablesFromPage(page));
             }
         }
@@ -338,9 +362,9 @@ public final class PdfTableExtractUtils {
 
                 StringBuilder sb = new StringBuilder();
 
-                sb.append("Row ").append(i).append(" | ");
+                sb.append("Row ").append(i).append("- | ");
                 for (RectangularTextContainer cell : rows.get(i)) {
-                    sb.append(cell.getText()).append("|");
+                    sb.append(cell.getText(false)).append("|");
                 }
 
                 System.out.println(sb);
@@ -355,7 +379,7 @@ public final class PdfTableExtractUtils {
     public static void printTables(List<Table> tables) {
 
         for(Table table : tables) {
-            System.out.println();
+            System.out.println("============= TABLE =============");
             printTable(table);
         }
     }
@@ -390,5 +414,26 @@ public final class PdfTableExtractUtils {
         }
 
         return null;
+    }
+
+    /**
+     * Get column index of column with specified column label
+     * @param table Table
+     * @param columnLabel Column label to search
+     * @return Index of column
+     */
+    public static int getColumnIndex(Table table, String columnLabel) {
+
+        int columnIndex = -1;
+
+        for (int j = 0; j < table.getColCount(); j++) {
+            if(StringUtils.equalsIgnoreCase(
+                StringUtils.trim(table.getRows().get(0).get(j).getText()), columnLabel)) {
+                columnIndex = j;
+                break;
+            }
+        }
+
+        return columnIndex;
     }
 }

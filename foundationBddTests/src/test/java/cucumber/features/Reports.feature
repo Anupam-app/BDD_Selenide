@@ -77,7 +77,7 @@ Background:
     Then I should see the report file presence
     And I verify the table with headers "Event Time|Event Description|Old Value|New Value" contains at least one row
 
-  Scenario: Run recipe then generate run history report and verify the RunId is present and corresponds to recipe run in the table Report Summary
+  Scenario: Generate run history report and verify the RunId is present and corresponds to recipe run in the table Report Summary
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 10 seconds
@@ -91,3 +91,16 @@ Background:
     And I trigger report mode
     Then I should see the report file presence
     And I verify the "RunId" in "Report Summary"
+
+  Scenario: Generate Audittrail report and verify that user details information are consistent
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Audit Trail"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify the user data details are consistent
