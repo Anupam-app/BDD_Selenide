@@ -9,7 +9,9 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class SSLUtils {
 
     public static void disableSslVerification() {
