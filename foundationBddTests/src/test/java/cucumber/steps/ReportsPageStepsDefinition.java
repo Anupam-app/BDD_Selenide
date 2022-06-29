@@ -108,7 +108,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify the table with headers {string} contains at least one row")
-    public void iVerifyTheTableContainsAtLeastOneRow(String tableHeaders) throws IOException {
+    public void iVerifyTheTableContainsAtLeastOneRow(String tableHeaders) throws Exception {
         SSLUtils.disableSslVerification();
         URL url = new URL(reportPage.getPdfUrl());
 
@@ -120,7 +120,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify the {string} in {string}")
-    public void iVerifyTheRunId(String fieldId, String tableTitle) throws IOException {
+    public void iVerifyTheRunId(String fieldId, String tableTitle) throws Exception {
 
         SSLUtils.disableSslVerification();
         URL url = new URL(reportPage.getPdfUrl());
@@ -137,7 +137,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify the user data details are consistent")
-    public void iVerifyTheUserDataDetailsAreConsistent() throws IOException {
+    public void iVerifyTheUserDataDetailsAreConsistent() throws Exception {
 
         SSLUtils.disableSslVerification();
         URL url = new URL(reportPage.getPdfUrl());
@@ -171,7 +171,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify that internal user doesn't appear in the report")
-    public void iVerifyThatInternalUserDoesnTAppearInTheReport() throws IOException {
+    public void iVerifyThatInternalUserDoesnTAppearInTheReport() throws Exception {
 
         SSLUtils.disableSslVerification();
         URL url = new URL(reportPage.getPdfUrl());
