@@ -152,18 +152,15 @@ public class ReportsPageStepsDefinition {
 
             if (userColumnIndex > 0) {
 
-                for (int i = 0; i < reportTable.getRowCount(); i++) {
+                for (int i = 1; i < reportTable.getRowCount(); i++) {
 
-                    if (i > 0) {
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
 
-                        String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    if (!StringUtils.isEmpty(userColumnValue)) {
+                        Assert.assertTrue(String.format(
+                                "User format error. Value : %s. Expected pattern : Login(Firstname Lastname)",
+                                userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
 
-                        if (!StringUtils.isEmpty(userColumnValue)) {
-                            Assert.assertTrue(String.format(
-                                    "User format error. Value : %s. Expected pattern : Login(Firstname Lastname)",
-                                    userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
-
-                        }
                     }
                 }
             }
@@ -186,16 +183,13 @@ public class ReportsPageStepsDefinition {
 
             if (userColumnIndex > 0) {
 
-                for (int i = 0; i < reportTable.getRowCount(); i++) {
+                for (int i = 1; i < reportTable.getRowCount(); i++) {
 
-                    if (i > 0) {
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
 
-                        String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
-
-                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
-                                ReportFile.INTERNAL_USER)) {
-                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
-                        }
+                    if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
+                            ReportFile.INTERNAL_USER)) {
+                        Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
                     }
                 }
             }
