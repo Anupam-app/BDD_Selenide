@@ -115,7 +115,7 @@ public class ReportsPageStepsDefinition {
         Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), tableHeaders);
 
         if (table != null) {
-            Assert.assertTrue("Table must contains at least one row", table.getRows().size() > 1);
+            Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
         }
     }
 

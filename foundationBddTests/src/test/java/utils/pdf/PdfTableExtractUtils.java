@@ -5,7 +5,8 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import lombok.experimental.UtilityClass;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -22,7 +23,7 @@ import technology.tabula.detectors.DetectionAlgorithm;
 import technology.tabula.detectors.NurminenDetectionAlgorithm;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
 
-@UtilityClass
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PdfTableExtractUtils {
 
     /**
@@ -62,7 +63,7 @@ public final class PdfTableExtractUtils {
      * @param tableTitle Table section title
      * @return Table
      */
-    public Table getTableFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+    public static Table getTableFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
 
         Table resultTable = null;
 
