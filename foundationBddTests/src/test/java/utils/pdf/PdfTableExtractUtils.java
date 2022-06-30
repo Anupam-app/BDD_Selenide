@@ -304,44 +304,6 @@ public final class PdfTableExtractUtils {
     }
 
     /**
-     * Print table
-     * 
-     * @param table Table to print
-     */
-    public static void printTable(Table table) {
-
-        if (table != null) {
-
-            List<List<RectangularTextContainer>> rows = table.getRows();
-
-            for (int i = 0; i < rows.size(); i++) {
-
-                StringBuilder sb = new StringBuilder();
-
-                sb.append("Row ").append(i).append("- | ");
-                for (RectangularTextContainer cell : rows.get(i)) {
-                    sb.append(cell.getText(false)).append("|");
-                }
-
-                System.out.println(sb);
-            }
-        }
-    }
-
-    /**
-     * Print tables
-     * 
-     * @param tables List of tables
-     */
-    public static void printTables(List<Table> tables) {
-
-        for (Table table : tables) {
-            System.out.println("============= TABLE =============");
-            printTable(table);
-        }
-    }
-
-    /**
      * Get table field value from field name
      * 
      * @param table Table
