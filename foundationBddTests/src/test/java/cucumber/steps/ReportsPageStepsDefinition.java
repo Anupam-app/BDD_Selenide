@@ -136,8 +136,8 @@ public class ReportsPageStepsDefinition {
         Assert.assertEquals("Unexpected run id value", recipe.getRunId(), fieldValue);
     }
 
-    @Then("I verify the user data details are consistent")
-    public void iVerifyTheUserDataDetailsAreConsistent() throws Exception {
+    @Then("I verify that user information are consistent")
+    public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
         SSLUtils.disableSslVerification();
         URL url = new URL(reportPage.getPdfUrl());
@@ -145,51 +145,37 @@ public class ReportsPageStepsDefinition {
         // get all tables of the report
         List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
 
-        // for each table, check user data details format
+        // check user information
+        // 1) Expected format : UserLogin(Firstname Lastname)
+        // 2) No internal user like OMIUser
+        checkUserInformation(reportTables);
+    }
+
+    private void checkUserInformation(List<Table> reportTables) {
+
         for (Table reportTable : reportTables) {
 
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, ReportFile.USER_COLUMN_NAME);
 
             if (userColumnIndex > 0) {
 
+                // start from 1 to skip the header row
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
 
                     String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
 
                     if (!StringUtils.isEmpty(userColumnValue)) {
-                        Assert.assertTrue(String.format(
-                                "User format error. Value : %s. Expected pattern : Login(Firstname Lastname)",
-                                userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
 
-                    }
-                }
-            }
-        }
-    }
-
-    @Then("I verify that internal user doesn't appear in the report")
-    public void iVerifyThatInternalUserDoesnTAppearInTheReport() throws Exception {
-
-        SSLUtils.disableSslVerification();
-        URL url = new URL(reportPage.getPdfUrl());
-
-        // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-
-        // for each table, check presence of internal user
-        for (Table reportTable : reportTables) {
-
-            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, ReportFile.USER_COLUMN_NAME);
-
-            if (userColumnIndex > 0) {
-
-                for (int i = 1; i < reportTable.getRowCount(); i++) {
-
-                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
-
-                    if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
+                        // check user is not an internal user
+                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
                             ReportFile.INTERNAL_USER)) {
-                        Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                        }
+
+                        // check user format
+                        Assert.assertTrue(String.format(
+                            "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                            userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
                     }
                 }
             }
