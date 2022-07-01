@@ -1,21 +1,17 @@
 package pageobjects.pages;
 
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.switchTo;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import java.time.Duration;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import pageobjects.utility.SelenideHelper;
-
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class ReportsPage {
 
@@ -198,12 +194,7 @@ public class ReportsPage {
 
         // after finished a recipe, it takes some times to have the run in page
         // polling report run page
-        Wait<WebDriver> wait = new FluentWait<>(WebDriverRunner.getWebDriver())
-            .withTimeout(Duration.ofSeconds(60))
-            .pollingEvery(Duration.ofSeconds(5))
-            .ignoring(NoSuchElementException.class);
-
-        wait.until((webDriver) -> {
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
             boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
 
             if(!isRunVisible) {

@@ -1,16 +1,10 @@
 package cucumber.steps;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
 import dataobjects.Recipe;
 import dataobjects.Report;
-import dataobjects.ReportFile;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
 import dataobjects.User;
@@ -19,9 +13,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.ReportsPage;
-import technology.tabula.Table;
-import utils.pdf.PdfTableExtractUtils;
-import utils.ssl.SSLUtils;
 
 public class ReportsPageStepsDefinition {
 
@@ -107,79 +98,17 @@ public class ReportsPageStepsDefinition {
         reportPage.checkReportPdfInPage();
     }
 
-    @Then("I verify the table with headers {string} contains at least one row")
-    public void iVerifyTheTableContainsAtLeastOneRow(String tableHeaders) throws Exception {
-        SSLUtils.disableSslVerification();
-        URL url = new URL(reportPage.getPdfUrl());
+    @Then("I check report content")
+    public void iCheckReportContent() throws Exception {
 
-        Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), tableHeaders);
-
-        if (table != null) {
-            Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
-        }
-    }
-
-    @Then("I verify the {string} in {string}")
-    public void iVerifyTheRunId(String fieldId, String tableTitle) throws Exception {
-
-        SSLUtils.disableSslVerification();
-        URL url = new URL(reportPage.getPdfUrl());
-
-        // get table from table title and check is not null and contains rows
-        Table table = PdfTableExtractUtils.getTableFromTableTitle(url.openStream(), tableTitle);
-        Assert.assertNotNull("No table found", table);
-        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
-
-        // get field value and check is not null
-        String fieldValue = PdfTableExtractUtils.getTableFieldValue(table, fieldId);
-        Assert.assertNotNull("No field with id " + fieldId, fieldValue);
-        Assert.assertEquals("Unexpected run id value", recipe.getRunId(), fieldValue);
+        this.report.checkEventTable(reportPage.getPdfUrl());
+        this.report.checkRunId(reportPage.getPdfUrl(),this.recipe.getRunId());
     }
 
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
-        SSLUtils.disableSslVerification();
-        URL url = new URL(reportPage.getPdfUrl());
-
-        // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-
-        // check user information
-        // 1) Expected format : UserLogin(Firstname Lastname)
-        // 2) No internal user like OMIUser
-        checkUserInformation(reportTables);
-    }
-
-    private void checkUserInformation(List<Table> reportTables) {
-
-        for (Table reportTable : reportTables) {
-
-            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, ReportFile.USER_COLUMN_NAME);
-
-            if (userColumnIndex > 0) {
-
-                // start from 1 to skip the header row
-                for (int i = 1; i < reportTable.getRowCount(); i++) {
-
-                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
-
-                    if (!StringUtils.isEmpty(userColumnValue)) {
-
-                        // check user is not an internal user
-                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
-                            ReportFile.INTERNAL_USER)) {
-                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
-                        }
-
-                        // check user format
-                        Assert.assertTrue(String.format(
-                            "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                            userColumnValue), userColumnValue.matches(ReportFile.USER_COLUMN_FORMAT));
-                    }
-                }
-            }
-        }
+        this.report.checkUserInformation(reportPage.getPdfUrl());
     }
 
     @When("I search report {string}")
