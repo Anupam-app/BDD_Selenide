@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import technology.tabula.Table;
 import utils.pdf.PdfTableExtractUtils;
-import utils.ssl.SSLUtils;
 
 public class Report {
 
@@ -31,7 +30,6 @@ public class Report {
      */
     public void checkRunId(String reportUrl, String expectedRunId) throws Exception {
 
-        SSLUtils.disableSslVerification(); // TODO - TO REMOVE
         URL url = new URL(reportUrl);
 
         // get table from table title and check is not null and contains rows
@@ -52,7 +50,6 @@ public class Report {
      */
     public void checkEventTable(String reportUrl) throws Exception {
 
-        SSLUtils.disableSslVerification(); // TODO - TO REMOVE
         URL url = new URL(reportUrl);
 
         Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), EVENT_TABLE_HEADER);
@@ -71,7 +68,6 @@ public class Report {
      */
     public void checkUserInformation(String reportUrl) throws Exception {
 
-        SSLUtils.disableSslVerification(); // TODO - TO REMOVE
         URL url = new URL(reportUrl);
 
         // get all tables of the report
