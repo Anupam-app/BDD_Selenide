@@ -2,8 +2,7 @@
 Feature: Recipe management
 
   Background:
-    Given the browser "Chrome" is open
-    And I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
 
 
   Scenario: Recipe modification

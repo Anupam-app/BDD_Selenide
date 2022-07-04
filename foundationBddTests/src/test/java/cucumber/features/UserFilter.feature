@@ -1,9 +1,6 @@
 @COMMON
 Feature: Apply Filter Users
 
-  Background:
-    Given the browser "Chrome" is open
-
   Scenario Outline: Verify the user preferred homepage is displayed based on the User Preferences
     Given I am logged in as "testUserPref" user
     When I click on user profile icon

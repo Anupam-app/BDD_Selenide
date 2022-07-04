@@ -42,10 +42,21 @@ public class RecipeConsoleStepsDefinition {
 
     @When("I load recipe {string} and run it during {int} seconds if not done before")
     public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
+        iGotoRecipeConsole();
         if (!recipeConsolePage.isRunBefore(recipe)) {
-            iLoadRecipe(recipe);
-            iStartAndWaitRecipeExecution(seconds);
+            iLoadRecipeAndIStartIt(recipe, seconds);
         }
+    }
+
+    private void iLoadRecipeAndIStartIt(String recipe, int seconds) {
+        iLoadRecipe(recipe);
+        iStartAndWaitRecipeExecution(seconds);
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds")
+    public void iStartAndWaitRecipeExecution(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        iLoadRecipeAndIStartIt(recipe, seconds);
     }
 
     @When("I start recipe execution")

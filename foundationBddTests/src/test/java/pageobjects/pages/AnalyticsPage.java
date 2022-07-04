@@ -19,10 +19,7 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
 
-    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-
     private final SelenideElement analyticsPageLinkText = $(By.id("Analytics"));
-    private final SelenideElement createAggregateLinkText = $(By.className("message-display-sub-label"));
 
     private final SelenideElement regressionChart = $(By.xpath("//span[text()='Regressions']"));
     private final SelenideElement switchLoess = $(By.xpath("//img[@class='ols-loess-switch']"));
@@ -66,8 +63,6 @@ public class AnalyticsPage {
 
     public void selectAggregate(String aggregateName) {
         $(By.xpath(String.format(aggregateNameText, aggregateName))).click();
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
-        SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, not(visible));
     }
 
     public void lineGraph(String xparameterName) {
