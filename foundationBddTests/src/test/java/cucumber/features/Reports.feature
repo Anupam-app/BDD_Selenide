@@ -64,3 +64,31 @@ Background:
     And I approve the report template
     And I search the report template
     Then I verify the report template
+
+  Scenario: Generate run history report and check report content
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Run History"
+    And I choose corresponding recipe run
+    And I choose template "testReportTemplate"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I check report content
+
+  Scenario: Generate Audittrail report and verify that user information are consistent
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Audit Trail"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify that user information are consistent
