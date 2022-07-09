@@ -2,8 +2,7 @@
 Feature: User management
 
   Background:
-    Given the browser "Chrome" is open
-    And I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
 
   Scenario: Create new user
     Given I go to user page

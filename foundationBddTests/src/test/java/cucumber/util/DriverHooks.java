@@ -11,14 +11,11 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 
 public class DriverHooks {
-    @Given("^the browser \"([^\"]*)\" is open$")
-    public static void setUp(String browserProfileName) {
-        WebDriverUtils.setUp(browserProfileName);
-    }
 
     @Before
     public void before(Scenario scenario) {
         WebDriverManager.chromedriver().setup();
+        WebDriverUtils.setUp("Chrome");
     }
 
     @After(order = 100)

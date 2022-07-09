@@ -2,8 +2,7 @@
 Feature: Recipe console
 
   Background:
-    Given the browser "Chrome" is open
-    And I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
 
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
