@@ -1,18 +1,15 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import java.util.List;
+import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
 import pageobjects.utility.SortHelper;
 
-import java.util.List;
-import java.util.function.Function;
-
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -30,9 +27,9 @@ public class UserPage {
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    //alarm_info_msg alert alert-info fade show
-    //alarm_info_msg alert alert-info fade show
+
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private SelenideElement alertNotificationText = $(By.xpath("//*[@role='alert']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
@@ -65,7 +62,6 @@ public class UserPage {
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
-        userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
 
     public void edit(String user) {
@@ -173,7 +169,6 @@ public class UserPage {
         return departmentTextBox.getValue();
     }
 
-
     public void clearSearch() {
         userSearchTextBox.clear();
     }
@@ -187,7 +182,7 @@ public class UserPage {
     }
 
     public void isGeneratedNotificationWhenPasswordReset() {
-        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
 
     public void cancelUser() {
@@ -253,5 +248,9 @@ public class UserPage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
+    }
+
+    public void waitForUserCreationNotification(String userName) {
+        SelenideHelper.commonWaiter(alertNotificationText, ownText(userName));
     }
 }

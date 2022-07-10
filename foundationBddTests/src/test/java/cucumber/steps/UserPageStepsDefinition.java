@@ -54,6 +54,8 @@ public class UserPageStepsDefinition {
     @When("I save my user changes")
     public void iSaveMyChanges() {
         userPage.saveMyChanges();
+        userPage.waitForUserCreationNotification(user.getUserName());
+
     }
 
     @When("I disable the user")
