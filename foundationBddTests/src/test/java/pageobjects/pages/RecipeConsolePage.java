@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.enabled;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -30,6 +31,8 @@ public class RecipeConsolePage {
     private final SelenideElement inputStepNumber = $(By.xpath("//input[@id='standard-number']"));
 
     private final SelenideElement restartButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "RESTART")));
+    private final SelenideElement confirmButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm")));
+    private final SelenideElement reEstablishStateButton = $(By.xpath("(//*[contains(@class, 'PrivateSwitchBase-input')])[1]"));
     private final SelenideElement yesButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes")));
     private final SelenideElement holdButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "HOLD")));
     private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
@@ -51,7 +54,8 @@ public class RecipeConsolePage {
 
     private void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible).click();
-        SelenideHelper.commonWaiter(yesButton, visible).click();
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
+        SelenideHelper.commonWaiter(confirmButton, visible).click();
     }
 
     private void holdSystem() {
