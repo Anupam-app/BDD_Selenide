@@ -41,7 +41,7 @@ Feature: Role administration
     And I edit the user
     Then I verify user details
     
- @hook
+
   Scenario: Same role name cannot be created
     Given I trigger Roles mode
     When I create role "testRoleToRemovePermission"
