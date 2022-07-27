@@ -2,5 +2,6 @@ package dataobjects;
 
 public enum RoleAction {
     ADDED,
-    UPDATED
+    UPDATED,
+    ERROR
 }

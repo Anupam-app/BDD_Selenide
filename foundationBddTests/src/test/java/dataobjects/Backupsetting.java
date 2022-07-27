@@ -8,5 +8,9 @@ public class Backupsetting {
     @Setter
     @Getter
     String customLabelName;
+    
+    @Setter
+    @Getter
+    String backupName;
 
 }

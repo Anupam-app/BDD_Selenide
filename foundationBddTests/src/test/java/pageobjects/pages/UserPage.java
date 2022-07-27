@@ -61,7 +61,7 @@ public class UserPage {
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -82,6 +82,7 @@ public class UserPage {
 
     public void saveMyChanges() {
         saveButton.click();
+        commonWaiter(confirmationButton, visible).click();
         confirmationButton.click();
     }
 
@@ -104,7 +105,7 @@ public class UserPage {
     public boolean isUserDisabled() {
         return disableUserButton.getAttribute("class").equals("togg_btn toggle_act")
                 &&
-                enableUserButton.getAttribute("class").equals("togg_btn");
+                enableUserButton.getAttribute("clt8ass").equals("togg_btn");
     }
 
     public boolean isUserEnabled() {

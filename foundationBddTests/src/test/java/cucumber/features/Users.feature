@@ -17,6 +17,27 @@ Feature: User management
     And I search the user
     And I edit the user
     Then The username is equal to the expected one
+    
+   
+    Scenario Outline: Create new user
+    Given I go to user page
+    When I create a "<Username>"
+    And I select role "Operator"
+    And I enter random firstname
+    And I enter random lastname
+    And I enter random employeeID
+    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter mobile number "0123456789"
+    And I save my user changes
+    Then I should see the error "<message>"
+    
+    
+    Examples:
+      | Username         |              
+      | testUsrFirstLog  | 
+      | testUsrFirstLog  |    
+      | testUsrFirstLog1 |  
+      
 
   Scenario: User modification
     Given I go to user page

@@ -21,3 +21,11 @@ Feature: Backup creation
     Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
     Then I verify backup history details
+    
+   
+  Scenario: User cannot give same name for backup schedule
+    Given I goto backup page
+    When I schedule "new" backup
+    And I see the notification message "Backup job scheduled"
+    And I schedule "duplicate" backup
+    Then I see the notification message "Unable to schedule backup job"

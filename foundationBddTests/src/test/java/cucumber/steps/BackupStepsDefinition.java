@@ -1,18 +1,25 @@
 package cucumber.steps;
 
 import dataobjects.BackupStatus;
+import dataobjects.Backupsetting;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.BackupPage;
 
 public class BackupStepsDefinition {
 
     private BackupPage backupPage;
+    
+    private Backupsetting backupsetting;
+    //private BackupPage backupPage;
 
-    public BackupStepsDefinition(BackupPage backupPage) {
+    public BackupStepsDefinition(BackupPage backupPage,Backupsetting backupsetting) {
         this.backupPage = backupPage;
+        this.backupsetting = backupsetting;
     }
 
     @Given("I goto backup page")
@@ -24,7 +31,7 @@ public class BackupStepsDefinition {
     public void iTriggerBackup() {
         backupPage.triggerBackup();
     }
-
+	
     @When("I go to backup history")
     public void iGoToHistory() {
         backupPage.goToHistory();
@@ -65,5 +72,24 @@ public class BackupStepsDefinition {
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
         backupPage.waitForScheduledBackupFinished();
+    }
+    @When("I click on backup")
+    public void iClickOnBackup() {
+        
+    }
+    
+    @When("I schedule {string} backup")
+    public void iScheduleBackup(String value) {
+    	if(value.equals("new")){
+    		this.backupsetting.setBackupName(RandomStringUtils.randomAlphabetic(10));
+            backupPage.scheduleBackup(this.backupsetting.getBackupName());
+    	}
+    	else if (value.equals("duplicate")) {
+    		backupPage.scheduleBackup(this.backupsetting.getBackupName());	
+    	}
+    }
+    @Then("I see the notification message {string}")
+    public void iVerifyNotificationMessage(String message) {
+    	backupPage.notificationMessage(message);
     }
 }

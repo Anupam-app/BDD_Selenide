@@ -185,5 +185,11 @@ public class UserPageStepsDefinition {
     public void iVerifyFilterTag(String status) {
     	Assert.assertEquals(status, userPage.getFilterTagText());
     }
-
+    
+    @When("I create a {string}")
+    public void iCreateNewUsername() {
+        //this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
+        userPage.createNewUser(this.user.getUserName());
+    }
+   
 }
