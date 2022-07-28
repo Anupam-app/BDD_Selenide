@@ -66,6 +66,17 @@ public class RecipePageStepsDefinition {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
         recipePage.saveRecipe(this.recipe.getRecipeName());
     }
+    
+    @And("I save the recipe with name {string}")
+    public void iSaveTheRecipeExistingName(String recipeName) {
+        this.recipe.setRecipeName(recipeName);
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+    }
+    
+    @Then("I see warning message is displayed {string}")
+    public void iSeeWarningMessagedisplayed(String message) {
+    	recipePage.isGeneratedNotificationWhenCreateExistingRecipe(message);
+    }
 
     @And("I see my changes in recipe")
     public void iSeeMyChangesInRecipe() {

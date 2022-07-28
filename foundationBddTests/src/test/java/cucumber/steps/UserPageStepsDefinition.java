@@ -138,6 +138,12 @@ public class UserPageStepsDefinition {
         this.user.setEmailId(user);
         userPage.enterEmail(user);
     }
+    
+    @When("I enter username {string}")
+    public void iEnterUsername(String user) {
+        this.user.setUserName(user);
+        userPage.createNewUser(this.user.getUserName());
+    }
 
     @Then("The username is equal to the expected one")
     public void theUserNameIsEqualToTheExpectedOne() {
@@ -169,6 +175,11 @@ public class UserPageStepsDefinition {
     @Then("I see password reset message is displayed")
     public void iSeePasswordResetMessagedisplayed() {
         userPage.isGeneratedNotificationWhenPasswordReset();
+    }
+    
+    @Then("I see error message is displayed {string}")
+    public void iSeeErrorMessagedisplayed(String message) {
+        userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
     }
     
     @Then("I should see user details are displayed")

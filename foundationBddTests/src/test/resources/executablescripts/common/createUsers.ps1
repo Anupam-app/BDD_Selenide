@@ -33,3 +33,9 @@ NET localgroup administrators "testUserPref" /ADD
 
 NET USER "testUserDisabledFilter" /DELETE
 NET USER "testUserDisabledFilter" "qI50x#J^n*" /ADD
+
+NET USER "acclock" /DELETE
+NET USER "acclock" "qI50x#J^n*" /ADD
+
+NET USER "accunlock" /DELETE
+NET USER "accunlock" "qI50x#J^n*" /ADD
