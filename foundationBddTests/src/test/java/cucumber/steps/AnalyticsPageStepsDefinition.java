@@ -138,9 +138,9 @@ public class AnalyticsPageStepsDefinition {
     public void iCreateAnAnalyticsAggregate(String aggregateName) {
         analytics.setName(aggregateName);
         iGotoAnalytics();
-        makeAnalyticsParameter("PI101 PV", "psi", "x");
-        makeAnalyticsParameter("PI102 PV", "psi", "y");
-        makeAnalyticsParameter("PI103 PV", "psi", "y");
+        makeAnalyticsParameter("P001.SpeedFbck", "psi", "x");
+        makeAnalyticsParameter("P002.SpeedFbck", "psi", "y");
+        makeAnalyticsParameter("P003.SpeedFbck", "psi", "y");
         if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
             analyticsPage.deleteIfExists(analytics.getName());
             createAnalytics();

@@ -47,7 +47,7 @@ public class AnalyticsPage {
     private final String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
-    private final String XPATH_PARAMETER_CHECKBOX = "//label//span[text()='%s']/ancestor::label//span[@class='ant-checkbox']";
+    private final String XPATH_PARAMETER_CHECKBOX = "//*[@id='%s']";
 
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
