@@ -92,3 +92,13 @@ Background:
     And I trigger report mode
     Then I should see the report file presence
     And I verify that user information are consistent
+
+  @hooks  
+  Scenario: Report Approval E-Sign Failure On Entering Wrong Password
+    Given I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    And I esign the report with wrong password "abcde#23"
+    Then I verify the password error message "Incorrect Password"
