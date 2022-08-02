@@ -12,7 +12,7 @@ Feature: User management
     And I enter random firstname
     And I enter random lastname
     And I enter random employeeID
-    And I enter email "varun.mittal@external.merckgroup.com"
+    And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
     And I save my user changes
     And I search the user
@@ -27,7 +27,7 @@ Feature: User management
     And I enter random firstname
     And I enter random lastname
     And I enter random employeeID
-    And I enter email "varun.mittal@external.merckgroup.com"
+    And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
     And I save my user changes
     Then I see error message is displayed "Failed to create user account. Username: bio4cadmin already exists. Use a different username"
