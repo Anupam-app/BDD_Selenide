@@ -1,9 +1,8 @@
 #Author: Sailesh Botcha
-@COMMON @hooks
-Feature: Report Template error validations
+@COMMON
+Feature: Report Template module validations
 
 Background:
-    #Given the browser "Chrome" is open
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     And I trigger report template mode
@@ -14,6 +13,12 @@ Background:
     And I search the report template
     And I put the report template in review
     And I save the report template
+    
+  Scenario: Create Report Template and approve it
+    Given I search the report template
+    When I approve the report template
+    And I search the report template
+    Then I verify the report template
 
   Scenario: Create Two Report Templates With Same Names
     Given I search the report template
