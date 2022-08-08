@@ -2,6 +2,7 @@ package cucumber.steps;
 
 import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -39,15 +40,27 @@ public class RecipeConsoleStepsDefinition {
     @When("I start and wait recipe execution during {int} seconds")
     public void iStartAndWaitRecipeExecution(int seconds) {
         generateRandomRecipeValues();
-        recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+        String runId = recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+        recipe.setRunId(runId);
     }
 
     @When("I load recipe {string} and run it during {int} seconds if not done before")
     public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
+        iGotoRecipeConsole();
         if (!recipeConsolePage.isRunBefore(recipe)) {
-            iLoadRecipe(recipe);
-            iStartAndWaitRecipeExecution(seconds);
+            iLoadRecipeAndIStartIt(recipe, seconds);
         }
+    }
+
+    private void iLoadRecipeAndIStartIt(String recipe, int seconds) {
+        iLoadRecipe(recipe);
+        iStartAndWaitRecipeExecution(seconds);
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds")
+    public void iStartAndWaitRecipeExecution(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        iLoadRecipeAndIStartIt(recipe, seconds);
     }
 
     @When("I start recipe execution")
@@ -65,6 +78,11 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("Recipe should be executed")
     public void recipeExecuted() {
+        recipeConsolePage.isExecuted();
+    }
+
+    @And("I wait the end of the execution of the recipe")
+    public void iWaitTheEndOfTheExecutionOfTheRecipe() throws InterruptedException {
         recipeConsolePage.isExecuted();
     }
 

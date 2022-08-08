@@ -1,8 +1,7 @@
 Feature: I18N on all modules
 
   Background:
-    Given the browser "Chrome" is open
-    And I am using language "en-US"
+    Given I am using language "en-US"
     And I am logged in as "bio4cadmin" user
 
   Scenario Outline: Test i18n all modules

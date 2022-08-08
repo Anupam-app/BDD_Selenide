@@ -5,14 +5,25 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
 
 public class ReportsPage {
 
     private final String REPORT_TEMPLATE_STATUS_WITH_TEXT = "(//*[@id='template_status']//li)[text()='%s']";
+    private final String PDF_VIEWER_IFRAME = "//iframe[@id='ReportViewIFrame']";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS = "(//*[@class='active-label'])";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS_WITH_TEXT = XPATH_ACTIVE_TEMPLATE_STATUS + "[text()='%s']";
     private final String XPATH_SIGNED_REPORT = "//tr[td='Signed' and td='%s' and td='%s']";
@@ -187,6 +198,27 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
     }
 
+    public void selectRunWithWaiting(String reportTemplateName, String run) throws InterruptedException {
+
+        // after finished a recipe, it takes some times to have the run in page
+        // polling report run page
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
+
+            if(!isRunVisible) {
+                WebDriverRunner.getWebDriver().switchTo().parentFrame();
+                goToReports();
+                switchToFrame();
+                selectReport(reportTemplateName);
+            }
+
+            return isRunVisible;
+        });
+
+        // select corresponding run
+        $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
+    }
+
     public void chooseReportTemplate(String template) {
         selectReportRunReportTemplateDropDown.click();
         for (var option : optionsReportTemplate) {
@@ -250,5 +282,9 @@ public class ReportsPage {
 
     public void seeContent(String expectedText) {
         commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
+	}
+
+    public String getPdfUrl() {
+        return $(By.xpath(PDF_VIEWER_IFRAME)).getAttribute("src");
     }
 }

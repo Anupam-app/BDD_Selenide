@@ -40,6 +40,7 @@ public class RecipeConsolePage {
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
 
+    private final SelenideElement runIdTextbox = $(By.xpath("//input[@name='runId']"));
     private final SelenideElement productIdTextbox = $(By.xpath("//input[@name='productId']"));
     private final SelenideElement batchIdTextbox = $(By.xpath("(//*[contains(@class,'autocompletediv')]//input)[1]"));
 
@@ -79,9 +80,13 @@ public class RecipeConsolePage {
         loadButton.click();
     }
 
-    public void startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments, int seconds) {
+    public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments, int seconds) {
+
+        String runId;
+
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
+        runId = runIdTextbox.getValue();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
         batchIdTextbox.sendKeys(batchId);
@@ -92,6 +97,8 @@ public class RecipeConsolePage {
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
         preRunCommentsText.sendKeys(afterComments);
         okButton.click();
+
+        return runId;
     }
 
     public void startRecipe(String productId, String batchId, String beforeComments) {
