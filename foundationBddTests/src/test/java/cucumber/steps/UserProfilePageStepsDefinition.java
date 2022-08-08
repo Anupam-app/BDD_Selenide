@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.UserProfilePage;
+import pageobjects.utility.SelenideHelper;
 
 public class UserProfilePageStepsDefinition {
 
@@ -17,6 +18,7 @@ public class UserProfilePageStepsDefinition {
 
     @Given("I go to user profile")
     public void iGoToUserProfile() {
+        SelenideHelper.goParentFrame();
         userProfilePage.goToUserProfile();
     }
 
@@ -44,5 +46,13 @@ public class UserProfilePageStepsDefinition {
         var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
         userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
         userProfilePage.closeUserProfile();
+    }
+
+    @Then("I reset my language to {string}")
+    public void iResetMyLanguageTo(String language) {
+        iGoToUserProfile();
+        iGoToUserPreferences();
+        iGoToUserPreferences(language);
+        iSaveUserPreferences();
     }
 }

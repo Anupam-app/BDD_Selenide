@@ -24,5 +24,6 @@ public class AlarmPageStepsDefinition {
     public void iSeeTextsFromAlarmModule() {
         var expectedText= I18nUtils.getValueFromKey("alarm.alarmList.emptyList.errorMessage");
         alarmPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
 }

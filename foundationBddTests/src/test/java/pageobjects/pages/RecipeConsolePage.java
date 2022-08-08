@@ -7,11 +7,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipeConsolePage {
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
+    private final String XPATH_RESTART_BUTTON = "//span[@class='MuiButton-label']";
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
 
@@ -20,7 +23,7 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
-    private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss9']"));
+    private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss8']"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
@@ -149,5 +152,9 @@ public class RecipeConsolePage {
 
     public boolean isRunBefore(String recipeName) {
         return $(By.xpath(String.format(XPATH_RECIPE_LOADED_BEFORE, recipeName, recipeName))).isDisplayed();
+    }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_RESTART_BUTTON)), text(expectedText));
     }
 }

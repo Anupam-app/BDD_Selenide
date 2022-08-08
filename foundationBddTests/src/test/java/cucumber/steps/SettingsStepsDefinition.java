@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import pageobjects.pages.SettingPage;
+import pageobjects.utility.SelenideHelper;
 
 public class SettingsStepsDefinition {
 
@@ -57,5 +58,12 @@ public class SettingsStepsDefinition {
     public void iSeeLanguageActivated() {
         String languageName = I18nUtils.getLanguageName();
         settingPage.seeLanguageActivated(languageName);
+    }
+
+    @Then("I see expected texts from setting module")
+    public void iSeeExpectedTextsFromSettingModule() {
+        var expectedText= I18nUtils.getValueFromKey("configmgmt.systems.header.title");
+        settingPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
 }

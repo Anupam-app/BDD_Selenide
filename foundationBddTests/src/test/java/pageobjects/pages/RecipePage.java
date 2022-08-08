@@ -1,6 +1,9 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.*;
+import static com.codeborne.selenide.Condition.text;
+import cucumber.util.I18nUtils;
+import java.util.ArrayList;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -33,12 +36,15 @@ public class RecipePage {
 
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement editorLinkText = $(By.xpath("//a[text()='Editor']"));
-    private final SelenideElement browserLinkText = $(By.xpath("//a[text()='Browser']"));
+    private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor')]"));
+    private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser')]"));
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement notificationText = $(By.className("notification-summary"));
+    private final SelenideElement headerText = $(By.xpath("//div[@class='navWrapper']//h2"));
+    private final ElementsCollection deviceShapeElements = $$(By.xpath("//div[@class='search-node']//span"));
 
+    private final SelenideElement recipeCriteriaSearchTextBox = $(By.className("search-txt-box"));
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
 
@@ -70,6 +76,7 @@ public class RecipePage {
 
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
+    private final ElementsCollection deleteButtons = $$(By.xpath("//*[@class='deleteButton']"));
 
     Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
 
@@ -146,10 +153,9 @@ public class RecipePage {
     public void createRecipe(String recipenode) {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
-        SelenideElement searchTextBox = $(By.className("search-txt-box"));
-        searchTextBox.sendKeys(recipenode);
-        searchTextBox.sendKeys(Keys.ENTER);
-        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
+        recipeCriteriaSearchTextBox.sendKeys(recipenode);
+        recipeCriteriaSearchTextBox.sendKeys(Keys.ENTER);
+        recipeCriteriaSearchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(RandomStringUtils.randomAlphabetic(10));
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
@@ -196,7 +202,6 @@ public class RecipePage {
     public String getStatus() {
         return statusApproved.getText();
     }
-
 
 
     public void exportRecipe(String recipeName) {
@@ -279,5 +284,21 @@ public class RecipePage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
+    }
+
+    public void seeContent(String expectedText) {
+        headerText.shouldHave(text(expectedText));
+    }
+
+    public List<String> getDeviceShapeElementNotLoaded() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        recipeCriteriaSearchTextBox.click();
+
+        var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
+
+        deleteButtons.forEach(deleteButton->deleteButton.click());
+
+        return elementNotTranslated;
     }
 }

@@ -6,8 +6,7 @@ import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
@@ -28,6 +27,7 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[text()='%s']";
     private final String XPATH_DROPDOWN = "//span[text()='%s']/ancestor::div[@class='custom-drop-down']";
     private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
+    private final String XPATH_NAV = "//div[@class='navWrapper']//h2";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
@@ -246,5 +246,9 @@ public class ReportsPage {
     public void selectSignedBy(String user) {
         commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed by"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
+    }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
     }
 }

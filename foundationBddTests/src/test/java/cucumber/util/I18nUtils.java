@@ -1,7 +1,10 @@
 package cucumber.util;
 
+import com.codeborne.selenide.ElementsCollection;
 import com.xceptance.neodymium.util.Neodymium;
 import io.cucumber.java.en.Given;
+import java.util.ArrayList;
+import java.util.List;
 
 public class I18nUtils {
 
@@ -20,5 +23,15 @@ public class I18nUtils {
 
     public static String getValueFromKey(String key) {
         return Neodymium.localizedText(key);
+    }
+
+    public static List<String> getElementsNotI18N(ElementsCollection elementsCollection) {
+        var elementNotTranslated = new ArrayList<String>();
+        elementsCollection.forEach(element -> {
+            if (element.text().matches(".*\\..*\\..*")) {
+                elementNotTranslated.add(element.text());
+            }
+        });
+        return elementNotTranslated;
     }
 }

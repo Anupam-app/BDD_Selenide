@@ -6,7 +6,9 @@ import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class SettingPage {
 
@@ -14,6 +16,7 @@ public class SettingPage {
     private final String XPATH_LANGUAGE_TEXT ="//*[@class='system-connect-dropdown-container']//*//li[text()='%s']";
     private final String XPATH_LANGUAGE_ACTIVE_TEXT =
             "//*[@class='system-connect-dropdown-container']//*[@class='active-label' and text()='%s']";
+    private final String XPATH_HEADER = "//div[@class='setting-header-title']";
 
     private SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
     private SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));
@@ -61,5 +64,9 @@ public class SettingPage {
 
     public void seeLanguageActivated(String languageName) {
        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, languageName))),Condition.visible);
+    }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
     }
 }

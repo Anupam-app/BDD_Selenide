@@ -11,14 +11,14 @@ import pageobjects.utility.SortHelper;
 import java.util.List;
 import java.util.function.Function;
 
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class UserPage {
 
+    private static final String XPATH_HEADER = "//div[@class='headerTitle']";
     private final String XPATH_USER_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_USER_TABLE = "//table[@id='foundusertable']";
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
@@ -253,5 +253,9 @@ public class UserPage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
+    }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
     }
 }

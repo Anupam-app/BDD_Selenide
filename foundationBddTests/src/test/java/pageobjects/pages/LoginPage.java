@@ -13,13 +13,12 @@ import static com.codeborne.selenide.Selenide.switchTo;
 
 public class LoginPage {
 
-    private final String XPATH_LOGIN_BUTTON = "//button[text()='%s']";
-
     private final SelenideElement userIdTextBox = $(By.id("userId"));
     private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
     private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
+    private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
 
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
@@ -40,8 +39,7 @@ public class LoginPage {
     }
 
     public void openLogin() {
-        var login = Neodymium.localizedText("login");
-        commonWaiter($(By.xpath(String.format(XPATH_LOGIN_BUTTON, login))), visible).click();
+        commonWaiter(loginButton,visible).click();
     }
 
     public void checkMessage(String message) {
@@ -50,7 +48,8 @@ public class LoginPage {
     }
 
     public void waitControlOnPnid() {
-        waitPnidMessage("You are controlling main screen");
+        var message = Neodymium.localizedText("portal.pnid.info.screen_controlling");
+        waitPnidMessage(message);
     }
 
     public void waitPnidLoading() {

@@ -2,9 +2,12 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
+import java.util.ArrayList;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.components.SpinnerComponent;
@@ -22,7 +25,6 @@ public class AnalyticsPage {
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     private final SelenideElement analyticsPageLinkText = $(By.id("Analytics"));
-    private final SelenideElement createAggregateLinkText = $(By.className("message-display-sub-label"));
 
     private final SelenideElement regressionChart = $(By.xpath("//span[text()='Regressions']"));
     private final SelenideElement switchLoess = $(By.xpath("//img[@class='ols-loess-switch']"));
@@ -31,6 +33,7 @@ public class AnalyticsPage {
     private final SelenideElement createAggregateButton = $(By.id("create-aggregate"));
     private final SelenideElement validateAggregateButton = $(By.id("create-aggregate-button"));
     private final SelenideElement deleteButton = $(By.id("delete-aggregate-button"));
+    private final SelenideElement cancelButton = $(By.xpath("//span[@class='cancel-aggregate']"));
     private final SelenideElement applyRelationalSettingsButton = $(By.xpath("//*[@id = 'relational-apply'][@class != 'ant-btn relational-apply-button-disabled']"));
     private final SelenideElement applyRegressionSettingsButton = $(By.xpath("//*[@id = 'regression-apply'][@class != 'ant-btn regression-apply-button-disabled']"));
 
@@ -38,10 +41,12 @@ public class AnalyticsPage {
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
     private final SelenideElement switchToXaxis = $(By.xpath("//img[@class='x-axis-switch']"));
     private final String aggregateNameText = "//*[text()='%s']//parent::div//input";
+    private final SelenideElement aggregateHeaderText = $(By.xpath("//span[@class='aggregate-header']"));
     private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
     private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
     private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[@placeholder='New aggregate name here.']"));
+    private final ElementsCollection deviceShapeElements = $$(By.xpath("//div[@class='parameters-list']//span"));
 
     private final By dropdownSelection = By.xpath("//*[@class='ant-select-item ant-select-item-option']");
 
@@ -180,5 +185,16 @@ public class AnalyticsPage {
     public void regressionApplySettings() {
         applyRegressionSettingsButton.scrollTo();
         applyRegressionSettingsButton.click();
+    }
+
+    public void seeContent(String expectedText) {
+        aggregateHeaderText.shouldHave(text(expectedText));
+    }
+
+    public List<String> getDeviceShapeElementNotLoaded() {
+        createAggregateButton.click();
+        var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
+        cancelButton.click();
+        return elementNotTranslated;
     }
 }

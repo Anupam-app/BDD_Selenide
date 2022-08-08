@@ -1,11 +1,13 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import dataobjects.BackupStatus;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
 import pageobjects.pages.BackupPage;
+import pageobjects.utility.SelenideHelper;
 
 public class BackupStepsDefinition {
 
@@ -65,5 +67,12 @@ public class BackupStepsDefinition {
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
         backupPage.waitForScheduledBackupFinished();
+    }
+
+    @Then("I see expected texts from backup module")
+    public void iSeeExpectedTextsFromBackupModule() {
+        var expectedText= I18nUtils.getValueFromKey("backupmanagement.main.header.title");
+        backupPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
 }
