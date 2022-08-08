@@ -18,6 +18,8 @@ import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipePage {
+    private final String XPATH_STEP = "//*[contains(@data-contextmenu,'step%s')]";
+
     private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
     private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[text()='%s']]/td/div[contains(@class, 'export-icon')]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
@@ -50,16 +52,16 @@ public class RecipePage {
 
     private final SelenideElement openButton = $(By.className("open-recipe-btn"));
     private final SelenideElement plusButton = $(By.className("icon-plus"));
+    private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'add-step-button')]"));
     private final By deletePhaseButton = By.className("deleteButton");
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[text()='Ok']"));
+    private final SelenideElement deleteButton = $(By.xpath("//*[contains(@class, 'delete-step-button')]"));
 
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
     private final By phasesList = By.className("phaseHead");
-    private final SelenideElement phasesListClick = $(By.className("phaseHead"));
-    private final SelenideElement phasesListClick1 = $(By.xpath("(//label[@class='phaseHead'])[1]"));
-    private final SelenideElement phasesListClick2 = $(By.xpath("((//label[@class='phaseHead'])[1]//following::span[@class='deleteBtn egu-right-block']/input)[1]"));
 
     private final SelenideElement statusDraft = $(By.xpath("//div[@class='status-tooltip']"));
     private final SelenideElement selectInReview = $(By.xpath("//span[text()='In-Review']"));
@@ -111,8 +113,7 @@ public class RecipePage {
     }
 
     public void addPhase(String phase) {
-        plusButton.waitUntil(Condition.visible, 5000l);
-        plusButton.click();
+        addStepButton.click();
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys("start");
         searchTextBox.sendKeys(Keys.ENTER);
@@ -178,17 +179,15 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipe() {
-        phasesListClick.waitUntil(Condition.visible, 5000l);
-        phasesListClick1.click();
-        phasesListClick2.click();
-        $(By.xpath("//button[text()='Ok']")).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_STEP, 5))), visible).click();
+        deleteButton.click();
     }
 
     public void approveRecipe(String password) {
         statusDraft.click();
         selectInReview.click();
         primaryButton.click();
-        $(By.xpath("//button[text()='Ok']")).click();
+        okButton.click();
         statusInReview.click();
         selectApprove.click();
         $(By.xpath("//button[text()='Change']")).click();

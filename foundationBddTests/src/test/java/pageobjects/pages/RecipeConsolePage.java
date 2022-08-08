@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.enabled;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -23,7 +24,7 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
-    private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss8']"));
+    private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss')]"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
@@ -33,12 +34,14 @@ public class RecipeConsolePage {
     private final SelenideElement inputStepNumber = $(By.xpath("//input[@id='standard-number']"));
 
     private final SelenideElement restartButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "RESTART")));
+    private final SelenideElement confirmButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm")));
+    private final SelenideElement reEstablishStateButton = $(By.xpath("(//*[contains(@class, 'PrivateSwitchBase-input')])[1]"));
     private final SelenideElement yesButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes")));
     private final SelenideElement holdButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "HOLD")));
     private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
     private final SelenideElement okStepButton = $(By.xpath("//span[text()='Ok']"));
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
-    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
 
     private final SelenideElement runIdTextbox = $(By.xpath("//input[@name='runId']"));
     private final SelenideElement productIdTextbox = $(By.xpath("//input[@name='productId']"));
@@ -54,7 +57,8 @@ public class RecipeConsolePage {
 
     private void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible).click();
-        SelenideHelper.commonWaiter(yesButton, visible).click();
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
+        SelenideHelper.commonWaiter(confirmButton, visible).click();
     }
 
     private void holdSystem() {

@@ -1,15 +1,13 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
+import java.util.List;
+import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
 import pageobjects.utility.SortHelper;
-
-import java.util.List;
-import java.util.function.Function;
 
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
@@ -24,15 +22,15 @@ public class UserPage {
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement userPreferencesLink = $(By.xpath("//Span[text()='User preferences']"));
+    private final SelenideElement userPreferencesLink = $(By.xpath("//span[text()='User Preferences']"));
     Function<Integer, List<String>> getUserColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    //alarm_info_msg alert alert-info fade show
-    //alarm_info_msg alert alert-info fade show
+
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private SelenideElement alertNotificationText = $(By.xpath("//*[@role='alert']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
@@ -65,7 +63,6 @@ public class UserPage {
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
-        userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
 
     public void edit(String user) {
@@ -173,7 +170,6 @@ public class UserPage {
         return departmentTextBox.getValue();
     }
 
-
     public void clearSearch() {
         userSearchTextBox.clear();
     }
@@ -187,7 +183,7 @@ public class UserPage {
     }
 
     public void isGeneratedNotificationWhenPasswordReset() {
-        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
 
     public void cancelUser() {
@@ -257,5 +253,9 @@ public class UserPage {
 
     public void seeContent(String expectedText) {
         commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+	}
+
+    public void waitForUserCreationNotification(String userName) {
+        SelenideHelper.commonWaiter(alertNotificationText, ownText(userName));
     }
 }
