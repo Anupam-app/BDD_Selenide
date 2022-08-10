@@ -153,13 +153,12 @@ pipeline {
                         def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
                         if(response.status==200){
                            def jsonResponse = readJSON text: response.content
-                           commandTag = ' -Dcucumber.filter.tags="@COMMON'
+                           commandTag = ' -Dcucumber.filter.tags="@COMMON or @'+env.PDP
                            jsonResponse.features.each{val->
                                 commandTag+=' or @'+val
                             }
                            commandTag+='"'
                         }
-                        commandTag+=' or @'+env.PDP
                     }
                     println('commandTag: '+commandTag)
 
