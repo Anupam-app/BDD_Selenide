@@ -24,6 +24,7 @@
 		<tabula.version>1.0.5</tabula.version>
 		<pdfbox.version>2.0.25</pdfbox.version>
 		<commons.lang3.version>3.12.0</commons.lang3.version>
+		<com.typesafe.version>1.4.2</com.typesafe.version>
 	</properties>
 
 	<build>
@@ -125,6 +126,11 @@
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-lang3</artifactId>
 			<version>${commons.lang3.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+			<version>${com.typesafe.version}</version>
 		</dependency>
 	</dependencies>
 

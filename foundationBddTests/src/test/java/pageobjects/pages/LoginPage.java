@@ -19,7 +19,7 @@ public class LoginPage {
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
-    private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
+    private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
