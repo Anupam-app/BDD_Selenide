@@ -1,4 +1,3 @@
-#Author: Sailesh Botcha
 @COMMON
 Feature: Report Template module validations
 
