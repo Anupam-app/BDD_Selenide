@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import com.typesafe.config.ConfigParseOptions;
 import dataobjects.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -8,6 +9,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import pageobjects.pages.AnalyticsPage;
+import com.typesafe.config.ConfigFactory;
 
 public class AnalyticsPageStepsDefinition {
 
@@ -134,22 +136,25 @@ public class AnalyticsPageStepsDefinition {
         analyticsPage.createAggregate(recipe, interval);
     }
 
-    @And("I create analytics aggregate {string} if not done before")
-    public void iCreateAnAnalyticsAggregate(String aggregateName) {
+    @And("I create analytics aggregate {string} with {string} if not done before")
+    public void iCreateAnAnalyticsAggregate(String aggregateName, String analyticsParams) {
         analytics.setName(aggregateName);
         iGotoAnalytics();
-        makeAnalyticsParameter("PI101 PV", "psi", "x");
-        makeAnalyticsParameter("PI102 PV", "psi", "y");
-        makeAnalyticsParameter("PI103 PV", "psi", "y");
-        if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
-            analyticsPage.deleteIfExists(analytics.getName());
-            createAnalytics();
-            iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
-            analyticsPage.chooseParameter(analytics.getXParameters().getName());
-            for (var yparam : analytics.getYParameters()) {
-                analyticsPage.chooseParameter(yparam.getName());
-            }
-            iValidateTheAnalyticsCreation();
+
+        var config = ConfigFactory.parseResourcesAnySyntax(analyticsParams, ConfigParseOptions.defaults());
+        var params = config.getConfigList("Params.list");
+
+        for (var param : params) {
+            makeAnalyticsParameter(param.getString("value"), param.getString("unit"), param.getString("axis"));
         }
+
+        analyticsPage.deleteIfExists(analytics.getName());
+        createAnalytics();
+        iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
+        analyticsPage.chooseParameter(analytics.getXParameters().getName());
+        for (var yparam : analytics.getYParameters()) {
+            analyticsPage.chooseParameter(yparam.getName());
+        }
+        iValidateTheAnalyticsCreation();
     }
 }
