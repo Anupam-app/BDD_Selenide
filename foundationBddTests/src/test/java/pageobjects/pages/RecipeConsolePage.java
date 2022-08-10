@@ -19,8 +19,9 @@ public class RecipeConsolePage {
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
 
-    private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
-    private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
+
+    private final SelenideElement loadRecipeText = $(By.xpath("//p[contains(text(),'Load Recipe')]"));
+    private final SelenideElement clearRecipeText = $(By.xpath("//p[contains(text(),'Clear Panel')]"));
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 

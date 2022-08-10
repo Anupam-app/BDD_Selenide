@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import cucumber.util.I18nUtils;
+import com.typesafe.config.ConfigParseOptions;
 import dataobjects.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -11,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import pageobjects.pages.AnalyticsPage;
 import pageobjects.utility.SelenideHelper;
+import com.typesafe.config.ConfigFactory;
 
 public class AnalyticsPageStepsDefinition {
 
@@ -137,13 +139,18 @@ public class AnalyticsPageStepsDefinition {
         analyticsPage.createAggregate(recipe, interval);
     }
 
-    @And("I create analytics aggregate {string} if not done before")
-    public void iCreateAnAnalyticsAggregate(String aggregateName) {
+    @And("I create analytics aggregate {string} with {string} if not done before")
+    public void iCreateAnAnalyticsAggregate(String aggregateName, String analyticsParams) {
         analytics.setName(aggregateName);
         iGotoAnalytics();
-        makeAnalyticsParameter("PI101 PV", "psi", "x");
-        makeAnalyticsParameter("PI102 PV", "psi", "y");
-        makeAnalyticsParameter("PI103 PV", "psi", "y");
+
+        var config = ConfigFactory.parseResourcesAnySyntax(analyticsParams, ConfigParseOptions.defaults());
+        var params = config.getConfigList("Params.list");
+
+        for (var param : params) {
+            makeAnalyticsParameter(param.getString("value"), param.getString("unit"), param.getString("axis"));
+        }
+
         if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
             analyticsPage.deleteIfExists(analytics.getName());
             createAnalytics();

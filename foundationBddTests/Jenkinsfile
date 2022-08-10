@@ -159,6 +159,7 @@ pipeline {
                             }
                            commandTag+='"'
                         }
+                        commandTag+=' or @'+env.PDP
                     }
                     println('commandTag: '+commandTag)
 

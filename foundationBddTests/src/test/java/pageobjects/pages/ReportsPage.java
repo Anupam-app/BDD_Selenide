@@ -60,7 +60,7 @@ public class ReportsPage {
     private final SelenideElement reportEsignButton = $(By.xpath("//button[text()='e-sign']"));
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
     private final SelenideElement reportSearch = $(By.xpath("//input[@placeholder='Search...']"));
-    private final SelenideElement templateNameTextBox = $(By.xpath("//input[@placeholder='Create a template name']"));
+    private final SelenideElement templateNameTextBox = $(By.xpath("//input[@placeholder='Create a Template Name']"));
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
