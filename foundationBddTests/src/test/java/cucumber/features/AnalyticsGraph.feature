@@ -1,14 +1,10 @@
 @COMMON
 Feature: Analytics graph
 
-  Background: 
-    Given the browser "Chrome" is open
-    And I am logged in as "bio4cadmin" user
-    And I expand recipe console in pnid
+  Scenario Outline: Plot Graph
+    Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute1min" and run it during 65 seconds if not done before
     And I create analytics aggregate "tstAggregGraph" if not done before
-
-  Scenario Outline: Plot Graph
     When I select the aggregate
     And I select "<graphName>" graph in x axis
     And I select the y axis

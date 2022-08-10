@@ -2,8 +2,7 @@
 Feature: User login
 
   Background:
-    Given the browser "Chrome" is open
-    And I open portal
+    Given I open portal
 
   Scenario: User login
     Given I open login page

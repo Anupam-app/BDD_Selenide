@@ -2,8 +2,7 @@
 Feature: Role administration
 
   Background:
-    Given the browser "Chrome" is open
-    And I am logged in as "bio4cadmin" user
+    Given I am logged in as "bio4cadmin" user
     And I go to user page
     And the user "testUserToAssignRole" exists
     And I trigger Roles mode

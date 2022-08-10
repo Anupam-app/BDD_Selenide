@@ -1,0 +1,1 @@
+Remove-Item "C:\Historian\Data\Circular\*" -Recurse

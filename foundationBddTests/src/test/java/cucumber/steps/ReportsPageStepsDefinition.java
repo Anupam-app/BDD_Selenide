@@ -1,28 +1,34 @@
 package cucumber.steps;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
+import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
 import dataobjects.User;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 
 public class ReportsPageStepsDefinition {
 
-    private Report report;
-    private ReportsPage reportPage;
-    private ReportTemplate reportTemplate;
-    private User user;
+    private final Report report;
+    private final ReportsPage reportPage;
+    private final ReportTemplate reportTemplate;
+    private final User user;
+    private final Recipe recipe;
 
-    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
+    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+            Recipe recipe) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
+        this.recipe = recipe;
     }
 
     @Given("I goto report management page")
@@ -42,6 +48,11 @@ public class ReportsPageStepsDefinition {
         reportPage.selectRun(run);
     }
 
+    @And("I choose corresponding recipe run")
+    public void iChooseCorrespondingRecipeRun() throws InterruptedException {
+        reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId());
+    }
+
     @When("I choose recipe run {string} for consolidation")
     public void iChooseRunForConsolidation(String run) {
         reportPage.selectForConsolidationRun(run);
@@ -58,6 +69,11 @@ public class ReportsPageStepsDefinition {
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
     }
 
+    @When("I click on view button")
+    public void iClickOnViewButton() {
+        reportPage.viewReports(this.report.getName());
+    }
+
     @When("I trigger report mode")
     public void iTriggerReportMode() {
         reportPage.gotoReportsTab();
@@ -68,7 +84,7 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
         reportPage.gotoRunTab();
         reportPage.gotoReportsTab();
-        reportPage.checkSigned(this.report.getName(),this.user.getUserName());
+        reportPage.checkSigned(this.report.getName(), this.user.getUserName());
     }
 
     @Then("I see the report")
@@ -82,6 +98,19 @@ public class ReportsPageStepsDefinition {
         reportPage.checkReportPdfInPage();
     }
 
+    @Then("I check report content")
+    public void iCheckReportContent() throws Exception {
+
+        this.report.checkEventTable(reportPage.getPdfUrl());
+        this.report.checkRunId(reportPage.getPdfUrl(),this.recipe.getRunId());
+    }
+
+    @Then("I verify that user information are consistent")
+    public void iVerifyThatUserInformationAreConsistent() throws Exception {
+
+        this.report.checkUserInformation(reportPage.getPdfUrl());
+    }
+
     @When("I search report {string}")
     public void iSearchReports(String report) {
         this.report.setName(report);
@@ -90,7 +119,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I esign the report")
     public void iEsignReports() {
-        reportPage.esignReports(this.report.getName(),this.user.getPassword());
+        reportPage.esignReports(this.report.getName(), this.user.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
 
@@ -130,7 +159,8 @@ public class ReportsPageStepsDefinition {
     @Then("I approve the report template")
     public void iApproveTheReportTemplate() {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
-        reportPage.approveTemplate(this.reportTemplate.getName(), this.user.getPassword(), this.reportTemplate.getStatus());
+        reportPage.approveTemplate(this.reportTemplate.getName(), this.user.getPassword(),
+                this.reportTemplate.getStatus());
     }
 
     @Then("I verify the report template")
@@ -138,18 +168,18 @@ public class ReportsPageStepsDefinition {
         reportPage.openReportTemplate(this.reportTemplate.getName());
         Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
     }
-    
+
     @When("I generate audit trail report")
     public void iGenerateAuditTrailReport() {
-    	iGotoReportManagementPage();
+        iGotoReportManagementPage();
         iSelectReportFromDropdown("Audit Trail");
         iClickOnGenerateButton();
     }
-    
+
     @When("I check the audit trail report")
     public void iVerifyTheAuditTrailReport() {
-    	iGotoReportManagementPage();
-    	iTriggerReportMode();
-    	iShouldSeeTheReportFilePresence();
+        iGotoReportManagementPage();
+        iTriggerReportMode();
+        iShouldSeeTheReportFilePresence();
     }
 }

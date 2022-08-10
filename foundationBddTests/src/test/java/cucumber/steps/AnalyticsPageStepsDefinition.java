@@ -90,7 +90,8 @@ public class AnalyticsPageStepsDefinition {
     }
 
     @And("I create an analytics aggregate")
-    public void iCreateAnAnalyticsAggregateWithButton() {
+    public void iCreateAnAnalyticsAggregate() {
+        iGotoAnalytics();
         createAnalytics();
     }
 
@@ -134,7 +135,6 @@ public class AnalyticsPageStepsDefinition {
         analyticsPage.createAggregate(recipe, interval);
     }
 
-
     @And("I create analytics aggregate {string} if not done before")
     public void iCreateAnAnalyticsAggregate(String aggregateName) {
         analytics.setName(aggregateName);
@@ -144,7 +144,7 @@ public class AnalyticsPageStepsDefinition {
         makeAnalyticsParameter("PI103 PV", "psi", "y");
         if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
             analyticsPage.deleteIfExists(analytics.getName());
-            iCreateAnAnalyticsAggregateWithButton();
+            createAnalytics();
             iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
             analyticsPage.chooseParameter(analytics.getXParameters().getName());
             for (var yparam : analytics.getYParameters()) {
