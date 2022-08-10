@@ -2,7 +2,7 @@ Feature: Analytics creation
 
   Scenario Outline: Aggregate creation
     Given I am logged in as "bio4cadmin" user
-    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    And I load recipe "testRecipeToExecute" and run it during 15 seconds
     When I create an analytics aggregate
     And I use the recipe for this analytics aggregate with interval "Weekly"
     And I choose "<Param1>" analytics parameter with unit "<Unit1>" as "x" axis

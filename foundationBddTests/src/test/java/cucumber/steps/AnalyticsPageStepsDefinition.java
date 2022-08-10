@@ -148,13 +148,15 @@ public class AnalyticsPageStepsDefinition {
             makeAnalyticsParameter(param.getString("value"), param.getString("unit"), param.getString("axis"));
         }
 
-        analyticsPage.deleteIfExists(analytics.getName());
-        createAnalytics();
-        iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
-        analyticsPage.chooseParameter(analytics.getXParameters().getName());
-        for (var yparam : analytics.getYParameters()) {
-            analyticsPage.chooseParameter(yparam.getName());
+        if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
+            analyticsPage.deleteIfExists(analytics.getName());
+            createAnalytics();
+            iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
+            analyticsPage.chooseParameter(analytics.getXParameters().getName());
+            for (var yparam : analytics.getYParameters()) {
+                analyticsPage.chooseParameter(yparam.getName());
+            }
+            iValidateTheAnalyticsCreation();
         }
-        iValidateTheAnalyticsCreation();
     }
 }
