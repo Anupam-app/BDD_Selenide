@@ -37,7 +37,7 @@ public class UserPage {
     private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
-    private SelenideElement userSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
+    private SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
     private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
     private SelenideElement firstNameTextBox = $(By.id("firstName"));
     private SelenideElement lastNameTextBox = $(By.id("lastName"));
