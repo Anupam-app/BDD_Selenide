@@ -35,8 +35,8 @@ public class RecipePage {
 
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement editorLinkText = $(By.xpath("//a[text()='Editor']"));
-    private final SelenideElement browserLinkText = $(By.xpath("//a[text()='Browser']"));
+    private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor')]"));
+    private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser')]"));
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement notificationText = $(By.className("notification-summary"));
@@ -72,6 +72,7 @@ public class RecipePage {
 
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
+    private final SelenideElement saveEditorButton = $(By.xpath("//*[contains(@class,'save-button')]"));
 
     Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
 
@@ -80,6 +81,7 @@ public class RecipePage {
     }
 
     public void setSearch(String recipeName) {
+        commonWaiter(recipeSearchTextBox,visible);
         recipeSearchTextBox.setValue(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
     }
@@ -108,7 +110,7 @@ public class RecipePage {
     public void addPhase(String phase) {
         addStepButton.click();
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
-        searchTextBox.sendKeys("start");
+        searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
@@ -116,8 +118,7 @@ public class RecipePage {
     }
 
     public void saveRecipe(String recipeName) {
-        $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
+        saveEditorButton.click();
         SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
@@ -125,8 +126,7 @@ public class RecipePage {
     }
 
     public void saveModifiedRecipe() {
-        $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
+        saveEditorButton.click();
     }
 
     public String getPhaseName() {

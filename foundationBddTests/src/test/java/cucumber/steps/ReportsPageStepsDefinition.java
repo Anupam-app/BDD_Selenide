@@ -84,7 +84,7 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
         reportPage.gotoRunTab();
         reportPage.gotoReportsTab();
-        reportPage.checkSigned(this.report.getName(), this.user.getUserName());
+        reportPage.checkSigned(this.report.getName());
     }
 
     @Then("I see the report")

@@ -19,7 +19,7 @@ public class ReportsPage {
     private final String PDF_VIEWER_IFRAME = "//iframe[@id='ReportViewIFrame']";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS = "(//*[@class='active-label'])";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS_WITH_TEXT = XPATH_ACTIVE_TEMPLATE_STATUS + "[text()='%s']";
-    private final String XPATH_SIGNED_REPORT = "//tr[td='Signed' and td='%s' and td='%s']";
+    private final String XPATH_SIGNED_REPORT = "//tr//td[contains(text(),'Signed')]/ancestor::tr//td[contains(text(),'%s')]";
     private final String XPATH_REPORT_NAME = "//td[text()='%s']";
     private final String XPATH_TEMPLATE_CHECKBOX = "//div[@class='item_value'][text()='%s']/ancestor::li/div[@class='check_box']";
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[text()='%s']";
@@ -30,27 +30,27 @@ public class ReportsPage {
     private final String XPATH_TEMPLATE_COLUMNS_BY_TEXT = "//table[@id='templateListTable']//td[text()='%s']";
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[text()='%s']";
     private final String XPATH_DROPDOWN = "//span[text()='%s']/ancestor::div[@class='custom-drop-down']";
-    private final String XPATH_OPTION_DROPDOWN = "//option[text()='%s']/ancestor::li";
+    private final String XPATH_OPTION_DROPDOWN = "//option[contains(text(),'%s')]/ancestor::li";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
-    private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
-    private final SelenideElement templateTab = $(By.xpath("//a[text()='Templates']"));
-    private final SelenideElement reportTab = $(By.xpath("//a[text()='Reports']"));
+    private final SelenideElement runTab = $(By.xpath("//a[contains(text(),'Runs')]"));
+    private final SelenideElement templateTab = $(By.xpath("//a[contains(text(),'Templates')]"));
+    private final SelenideElement reportTab = $(By.xpath("//a[contains(text(),'Reports')]"));
 
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
     private final ElementsCollection optionsReportTemplate = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
 
-    private final SelenideElement reportGenerateButton = $(By.xpath("//button[text()='Generate']"));
-    private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
+    private final SelenideElement reportGenerateButton = $(By.xpath("//button[contains(text(),'Generate')]"));
+    private final SelenideElement reportViewButton = $(By.xpath("//button[contains(text(),'View')]"));
     private final SelenideElement createButton = $(By.xpath("//button[text()='Create']"));
     private final SelenideElement saveTemplateButton = $(By.xpath("//b[text()='Save']"));
     private final SelenideElement openButton = $(By.xpath("//button[text()='Open']"));
-    private final SelenideElement primaryButton = $(By.xpath("//button[text()='SIGN']"));
-    private final SelenideElement reportEsignButton = $(By.xpath("//button[text()='e-sign']"));
+    private final SelenideElement primaryButton = $(By.xpath("//button[contains(text(),'SIGN')]"));
+    private final SelenideElement reportEsignButton = $(By.xpath("//button[contains(text(),'e-sign')]"));
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
-    private final SelenideElement reportSearch = $(By.xpath("//input[@placeholder='Search...']"));
+    private final SelenideElement reportSearch = $(By.xpath("//input[contains(@placeholder,'Search...')]"));
     private final SelenideElement templateNameTextBox = $(By.xpath("//input[@placeholder='Create a Template Name']"));
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
@@ -165,8 +165,8 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_REPORT_NAME, name))).shouldBe(visible);
     }
 
-    public void checkSigned(String reportName, String username) {
-        var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
+    public void checkSigned(String reportName) {
+        var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName)));
         reportSigned.shouldBe(visible);
     }
 

@@ -34,9 +34,10 @@ Feature: Recipe management
 
   Scenario: Recipe export and import
     Given I go to recipe page
-    When I click on export recipe "testRecipeToExecute"
+    And I search the recipe "testRecipeToExecute"
+    When I export the recipe
     And I trigger edit mode
-    And I click on import "testRecipeToExecute"
+    And I import the recipe
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
