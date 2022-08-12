@@ -33,3 +33,6 @@ NET localgroup administrators "testUserPref" /ADD
 
 NET USER "testUserDisabledFilter" /DELETE
 NET USER "testUserDisabledFilter" "qI50x#J^n*" /ADD
+
+NET USER "UserDisabled" /DELETE
+NET USER "UserDisabled" "MerckApp1@" /ADD

@@ -21,8 +21,7 @@ Feature: Backup creation
     Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
     Then I verify backup history details
-    
-   
+ 
   Scenario: User cannot give same name for backup schedule
     Given I goto backup page
     When I schedule "new" backup

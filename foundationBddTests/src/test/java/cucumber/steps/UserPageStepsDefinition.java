@@ -188,7 +188,6 @@ public class UserPageStepsDefinition {
     
     @When("I create a {string}")
     public void iCreateNewUsername() {
-        //this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
         userPage.createNewUser(this.user.getUserName());
     }
    

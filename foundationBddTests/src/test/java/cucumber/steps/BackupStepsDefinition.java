@@ -15,7 +15,7 @@ public class BackupStepsDefinition {
     private BackupPage backupPage;
     
     private Backupsetting backupsetting;
-    //private BackupPage backupPage;
+   
 
     public BackupStepsDefinition(BackupPage backupPage,Backupsetting backupsetting) {
         this.backupPage = backupPage;
@@ -73,11 +73,7 @@ public class BackupStepsDefinition {
     public void iWaitTheEndOfScheduledBackup() {
         backupPage.waitForScheduledBackupFinished();
     }
-    @When("I click on backup")
-    public void iClickOnBackup() {
-        
-    }
-    
+   
     @When("I schedule {string} backup")
     public void iScheduleBackup(String value) {
     	if(value.equals("new")){

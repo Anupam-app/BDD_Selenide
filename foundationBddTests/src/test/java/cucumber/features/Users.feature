@@ -34,7 +34,6 @@ Feature: User management
     
     Examples:
       | Username         |              
-      | testUsrFirstLog  | 
       | testUsrFirstLog  |    
       | testUsrFirstLog1 |  
       

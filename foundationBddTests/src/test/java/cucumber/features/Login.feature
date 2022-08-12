@@ -39,22 +39,12 @@ Feature: User login
       | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
       | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
    
-    
-  Scenario: Cannnot login if User disable
-    Given I am logged in as "Bio4CService" user
-    And I go to user page
-    When I search "testUserEnabled" user
-    And I edit the user
-    And I disable the user
-    And I save my user changes
-    And I click on user profile icon
-    And I logout
-    And I open login page
-    And I enter "testUserEnabled" as username and "MerckApp1@" as password
+  @tag1 
+  Scenario: User login
+    Given I open login page
+    When I enter "UserDisable" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate" 
-    
-      
       
 
  
