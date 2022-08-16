@@ -54,3 +54,38 @@ Feature: Apply Filter Reports
     Given I goto report management page
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
+    
+    #New FeatureFile
+    
+  Scenario: Verify filter run reports functionality in Report Management Based on status
+ 		Given I goto report management page
+ 		When  I click on filter icon and select run status 
+ 		Then  I should see run status 
+
+	
+	Scenario Outline: Verify run history functionality based on the Date range.
+ 		Given I goto report management page 
+ 	  When  I select "<option>" any date range dropdown
+ 		Then  I should see recipe run list displayed based on "<option>"
+			  Examples:
+				        |option				|
+   				      |today				|
+				        |Yesterday		|                                                           
+				        |last 7 days	|
+				        |last 30 days	|
+				        |last month		|								
+				        |custom range	|  
+	 									
+	Scenario Outline: Verify sort run functionality all columns in ascending order
+ 		Given I goto report management page
+ 		When  I select run sort by "<columns>" in "<ascending>"
+ 		Then "<columns>" list should be sorted in "<ascending>" order
+			  Examples:
+      				  |columns      | ascending    |
+      				  |run 	        | true         |
+     				    |Startdate    | true         | 
+      				  |processtype  | true         |
+      				  |status       | true         | 
+    
+    
+    
