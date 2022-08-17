@@ -16,12 +16,12 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class UserPage {
 
-    private final String XPATH_USER_COLUMN_HEADER = "//th[text()='%s']";
+    private final String XPATH_USER_COLUMN_HEADER = "//th[contains(text(),'%s')]";
     private final String XPATH_USER_TABLE = "//table[@id='foundusertable']";
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement userPreferencesLink = $(By.xpath("//span[text()='User Preferences']"));
+    private final SelenideElement userPreferencesLink = $(By.xpath("//span[contains(text(),'User Preferences')]"));
     Function<Integer, List<String>> getUserColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -34,7 +34,7 @@ public class UserPage {
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
-    private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
+    private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Users')]"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
     private SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
@@ -51,12 +51,12 @@ public class UserPage {
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
-    private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
+    private SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
     private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
-    private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
+    private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
 
     public void setSearch(String search) {
@@ -199,7 +199,7 @@ public class UserPage {
         filterIcon.click();
         commonWaiter(upArrowIcon, visible);
         upArrowIcon.click();
-        $(By.xpath(String.format("//span[text()='%s']", status))).click();
+        $(By.xpath(String.format("//span[contains(text(),'%s')]", status))).click();
         applyFilterButton.click();
     }
 
@@ -222,7 +222,7 @@ public class UserPage {
 
     public void chooseAndSaveDefaultPage(String defaultOptionName) {
         SelenideHelper.commonWaiter(selectOption, visible).click();
-        commonWaiter($(By.xpath(String.format("//li[text()='%s']", defaultOptionName))), visible).click();
+        commonWaiter($(By.xpath(String.format("//li[contains(text(),'%s')]", defaultOptionName))), visible).click();
         SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
     }

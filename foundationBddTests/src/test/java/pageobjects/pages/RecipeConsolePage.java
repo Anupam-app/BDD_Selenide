@@ -37,7 +37,7 @@ public class RecipeConsolePage {
     private final SelenideElement yesButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes")));
     private final SelenideElement holdButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "HOLD")));
     private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
-    private final SelenideElement okStepButton = $(By.xpath("//span[text()='Ok']"));
+    private final SelenideElement okStepButton = $(By.xpath("//span[contains(text(),'Ok')]"));
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
 

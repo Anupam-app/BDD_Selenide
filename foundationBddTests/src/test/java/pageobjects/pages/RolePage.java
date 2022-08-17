@@ -16,7 +16,7 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class RolePage {
 
-    private SelenideElement rolesLinkText = $(By.xpath("//*[@class='subMenu'][text()='Roles']"));
+    private SelenideElement rolesLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Roles')]"));
 
     private ElementsCollection permissionsText = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private SelenideElement saveText = $(By.className("roleModalNotificationBar"));
@@ -35,7 +35,7 @@ public class RolePage {
     private SelenideElement selectRoleDropdown = $(By.id("role"));
 
     private final String NOTIFICATION_TEXT="Successfully %s role.";
-    private final String PERMISSION_TEXT = "//span[text()='%s']";
+    private final String PERMISSION_TEXT = "//span[contains(text(),'%s')]";
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();

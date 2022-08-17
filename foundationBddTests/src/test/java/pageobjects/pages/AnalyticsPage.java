@@ -34,9 +34,9 @@ public class AnalyticsPage {
     private final SelenideElement clickOnData = $(By.xpath("//span[text()='Data']"));
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
     private final SelenideElement switchToXaxis = $(By.xpath("//img[@class='x-axis-switch']"));
-    private final String aggregateNameText = "//*[text()='%s']//parent::div//input";
-    private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
-    private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
+    private final String aggregateNameText = "//*[contains(text(),'%s')]//parent::div//input";
+    private final String xparameterNameText = "//*[contains(text(),'%s')]//parent::label//span";
+    private final String yparameterNameText = "(//*[contains(text(),'%s')]//parent::label//input)[2]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
     private final SelenideElement aggregateNameTextBox = $(By.xpath("//input[contains(@placeholder,'New aggregate name here')]"));
 
@@ -47,7 +47,7 @@ public class AnalyticsPage {
     private final String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
-    private final String XPATH_PARAMETER_CHECKBOX = "//*[@id='%s']";
+    private final String XPATH_PARAMETER_CHECKBOX = "//*[contains(@title,'%s')]";
 
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
@@ -160,7 +160,7 @@ public class AnalyticsPage {
     }
 
     public void deleteIfExists(String aggregateName) {
-        if ($(By.xpath(String.format("//*[text()='%s']", aggregateName))).isDisplayed()) {
+        if ($(By.xpath(String.format("//*[contains(text(),'%s')]", aggregateName))).isDisplayed()) {
             selectAggregate(aggregateName);
             deleteIcon.click();
             deleteButton.click();
