@@ -24,15 +24,8 @@ Feature: User login
   
   Scenario: Account unlock for locked account
     Given I open login page
-    When I login to application with wrong password
-      | username  | password   | message                                                   |
-      | accunlock | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left. | 
-      | accunlock | MerckApp2@ | Invalid username or password. You have 3 attempt(s) left. |    
-	  | accunlock | MerckApp2@ | Invalid username or password. You have 2 attempt(s) left. | 
-      | accunlock | MerckApp2@ | Invalid username or password. You have 1 attempt(s) left. |    
-      | accunlock | MerckApp2@ | Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator.|    
-		And I am logged in as "Bio4CAdmin" user
-		And I go to user page
+    And I am logged in as "Bio4CAdmin" user
+    And I go to user page
     And I search "acclock" user
     And I edit the user
     And I click on reset password
