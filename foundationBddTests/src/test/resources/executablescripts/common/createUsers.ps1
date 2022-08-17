@@ -16,5 +16,5 @@ NET USER "testUserToEditFields" "M)^40kMb8^" /ADD
 NET USER "testUserToResetPwd" /DELETE
 NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
 
-NET USER "acclock" /DELETE
-NET USER "acclock" "MerckApp1@" /ADD
+NET USER "Acclock" /DELETE
+NET USER "Acclock" "MerckApp1@" /ADD
