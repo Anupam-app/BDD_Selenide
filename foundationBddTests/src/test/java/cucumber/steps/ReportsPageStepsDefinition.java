@@ -36,6 +36,11 @@ public class ReportsPageStepsDefinition {
         reportPage.goToReports();
         reportPage.switchToFrame();
     }
+    
+    @When("I see list of runs are displayed")
+    public void iSeeListOfRuns() {
+        reportsPage.
+    }
 
     @Given("I select report from dropdown {string}")
     public void iSelectReportFromDropdown(String report) {

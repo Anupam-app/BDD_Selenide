@@ -3,7 +3,12 @@ Feature: Report administration
 
 Background:
     Given I am logged in as "Bio4CAdmin" user
-
+@acc	
+	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
+    When I goto report management page
+    And  I see list of runs are displayed
+		And I see the Run name,Process type,Start date and Status column present
+	
   Scenario: Generate and sign Audittrail report
     Given I goto report management page
     When I select report from dropdown "Audit Trail"

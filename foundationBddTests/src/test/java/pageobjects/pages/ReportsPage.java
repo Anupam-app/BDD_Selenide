@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.collections.*;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.Disabled;
@@ -16,8 +17,12 @@ import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.codeborne.selenide.collections.SizeGreaterThan;
+
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
+
+import org.jsoup.select.Evaluator.IndexGreaterThan;
 import org.junit.Assert;
 import dataobjects.ReportTemplate;
 
@@ -49,7 +54,7 @@ public class ReportsPage {
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
     private final ElementsCollection optionsReportTemplate = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
-
+    private final ElementsCollection foundationRunListTable = $$(By.xpath("//*[@id='foundationRunListTable']/tbody/tr"));
     private final SelenideElement reportGenerateButton = $(By.xpath("//button[text()='Generate']"));
     private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
     private final SelenideElement createButton = $(By.xpath("//button[text()='Create']"));
@@ -79,6 +84,10 @@ public class ReportsPage {
 
     public void switchToFrame() {
         SelenideHelper.goToIFrame();
+    }
+    
+    public void verifyList() {
+    	foundationRunListTable.shouldHaveSize(SizeGreaterThan());
     }
 
     public void selectReport(String reportname) {
