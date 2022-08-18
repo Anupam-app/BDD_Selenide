@@ -1,6 +1,9 @@
 package cucumber.steps;
 
+import java.util.List;
+
 import dataobjects.User;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -57,6 +60,24 @@ public class LoginPageStepsDefinition {
     public void iShouldSeeThisMessage(String message) {
         loginPage.checkMessage(message);
     }
+    
+
+    
+    @When("^I login to application with wrong password$")
+    public void iShouldSeeLoginMessage(DataTable table) {
+    	List<List<String>> list = table.asLists(String.class);
+        
+        for (int i=1; i<list.size(); i++) {
+        	loginPage.setUser(list.get(i).get(0));
+            loginPage.setPassword(list.get(i).get(1));
+        	loginPage.pushLogin();
+        	loginPage.checkLoggedIn(false);
+        	loginPage.checkMessage(list.get(i).get(2));
+
+        }
+    }
+        
+  
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {

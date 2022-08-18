@@ -182,4 +182,35 @@ public class ReportsPageStepsDefinition {
         iTriggerReportMode();
         iShouldSeeTheReportFilePresence();
     }
+    
+    @And("I create new report template with existing name")
+    public void iEnterExistingReportTemplateName() {
+        reportPage.createTemplate(this.reportTemplate.getName());
+    }
+    
+    @Then("I verify the template name error message")
+    public void iVerifyErrorMessage() {
+    	reportPage.errorMessage(this.reportTemplate.getName());
+    }
+    
+    @Then("I verify the password error message {string}")
+    public void iVerifyPasswordErrorMessage(String value) {
+    	reportPage.errorMessageValidation(value);
+    }
+    
+    @And("I try to approve the report template with wrong password {string}")
+    public void iApproveTemplateWrongPassword(String value) {
+    	this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
+    	reportPage.approveTemplate(this.reportTemplate.getName(), value,  this.reportTemplate.getStatus());
+    }
+    
+    @Then("I esign the report with wrong password {string}")
+    public void iEsignReportsWrongPassword(String value) {
+        reportPage.esignReports(this.report.getName(),value);
+    }
+    
+    @Then("I verify template is not editable")
+    public void iVerifyTemplateIsEditable() {
+    	reportPage.approvedTemplateValidation();
+    }
 }

@@ -58,6 +58,11 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
 	}
 
+    public String getLastStatusText() {
+		SelenideHelper.commonWaiter(lastStatusText, visible);
+        return lastStatusText.getText();
+    }
+
 	private void chooseBackupPath() {
 		downArrow.click();
 		List<WebElement> options = backupLocation.findElements(By.tagName("li"));
