@@ -38,16 +38,9 @@ Feature: User login
       | login                  | tempPassword     | newPassword |
       | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
       | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
-   
-  @tag1 
+
   Scenario: User login
     Given I open login page
-    When I enter "UserDisable" as username and "MerckApp1@" as password
+    When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate" 
-      
-
- 
-    
-    
-     
