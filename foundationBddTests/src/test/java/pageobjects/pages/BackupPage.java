@@ -69,10 +69,6 @@ public class BackupPage {
 		options.stream().findFirst().get().click();
 	}
 
-	public String getLastStatusText() {
-		return lastStatusText.getText();
-	}
-
 	public void scheduleBackup() {
 		chooseBackupPath();
 
