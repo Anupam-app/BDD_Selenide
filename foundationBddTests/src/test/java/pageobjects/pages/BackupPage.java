@@ -63,6 +63,7 @@ public class BackupPage {
     }
 
     public String getLastStatusText() {
+		SelenideHelper.commonWaiter(lastStatusText, visible);
         return lastStatusText.getText();
     }
 
