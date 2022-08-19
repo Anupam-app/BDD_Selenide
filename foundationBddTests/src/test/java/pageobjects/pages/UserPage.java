@@ -86,7 +86,6 @@ public class UserPage {
     public void saveMyChanges() {
         saveButton.click();
         commonWaiter(confirmationButton, visible).click();
-        confirmationButton.click();
     }
 
     public String getEmployeeIdFromForm() {

@@ -32,8 +32,7 @@ Feature: User management
 
     Examples:
       | Username         |              
-      | testUsrFirstLog  |    
-      | testUsrFirstLog1 |  
+      | testUsrFirstLog  |
 
   Scenario: User modification
     Given I go to user page
