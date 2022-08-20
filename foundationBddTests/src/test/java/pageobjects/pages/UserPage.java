@@ -107,7 +107,7 @@ public class UserPage {
     public boolean isUserDisabled() {
         return disableUserButton.getAttribute("class").equals("togg_btn toggle_act")
                 &&
-                enableUserButton.getAttribute("clt8ass").equals("togg_btn");
+                enableUserButton.getAttribute("class").equals("togg_btn");
     }
 
     public boolean isUserEnabled() {
