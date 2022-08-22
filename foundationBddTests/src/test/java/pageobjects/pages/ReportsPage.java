@@ -44,17 +44,23 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[text()='%s']";
     private final String XPATH_DROPDOWN = "//span[text()='%s']/ancestor::div[@class='custom-drop-down']";
     private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
-
+    private final String XPATH_RunsColumnName = "//*[@id=\"foundationRunListTable\"]/thead/tr/th[%d]";
+    private final String XPATH_RunsColumnName_Value = "//*[@id=\"foundationRunListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_TemplateColumnName = "//*[@id=\"templateListTable\"]/thead/tr/th[%d]";
+    private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
+    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr/td[%d]";
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
     private final SelenideElement templateTab = $(By.xpath("//a[text()='Templates']"));
     private final SelenideElement reportTab = $(By.xpath("//a[text()='Reports']"));
-
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
     private final ElementsCollection optionsReportTemplate = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
     private final ElementsCollection foundationRunListTable = $$(By.xpath("//*[@id='foundationRunListTable']/tbody/tr"));
+    private final ElementsCollection templateListTable = $$(By.xpath("//*[@id='templateListTable']/tbody/tr"));
+    private final ElementsCollection reportListTable = $$(By.xpath("//*[@id='reportListTable']/tbody/tr"));    
     private final SelenideElement reportGenerateButton = $(By.xpath("//button[text()='Generate']"));
     private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
     private final SelenideElement createButton = $(By.xpath("//button[text()='Create']"));
@@ -86,9 +92,44 @@ public class ReportsPage {
         SelenideHelper.goToIFrame();
     }
     
-    public void verifyList() {
-    	foundationRunListTable.shouldHaveSize(SizeGreaterThan());
+    public void verifyList(String tab) throws InterruptedException { 
+    	switch (tab){
+    	case "runs": 
+    		$$(foundationRunListTable).shouldHave(CollectionCondition.size($$(foundationRunListTable).size()));   	 
+    		break;  
+        case "templates": 
+        	$$(templateListTable).shouldHave(CollectionCondition.size($$(templateListTable).size()));   	 
+    		break;  
+        case "reports": 
+        	Thread.sleep(5000);
+        	$$(reportListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
+    		break;  
+    	}
+    	}
+    
+    public void verifyTabs() {  	
+    	runTab.shouldBe(visible);
+    	templateTab.shouldBe(visible);
+    	reportTab.shouldBe(visible);
     }
+    
+    public void verifyColoumn(String columnName, String tab, int columnIndex) {
+    	switch (tab){
+    	case "runs": 
+    		$(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
+    		Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, columnIndex))).getText().isBlank()); 
+    		break;  
+        case "templates": 
+        	$(By.xpath(String.format(XPATH_TemplateColumnName, columnIndex))).shouldHave(text(columnName));
+        	Assert.assertFalse($(By.xpath(String.format(XPATH_TemplateColumnName_Value, columnIndex))).getText().isBlank()); 
+        	break;  
+        case "reports": 
+        	$(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
+        	Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, columnIndex))).getText().isBlank()); 
+        	break;  
+    	}
+    	}
+    
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
@@ -285,7 +326,11 @@ public class ReportsPage {
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-    }
+        for (int i=1;i<7;i++) {
+        Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
+            }
+        }
+        
 
     public void checkTableContainsTemplate(String templateName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);

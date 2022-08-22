@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
@@ -8,6 +10,7 @@ import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
 import dataobjects.User;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -37,9 +40,23 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
     }
     
-    @When("I see list of runs are displayed")
-    public void iSeeListOfRuns() {
-        reportsPage.
+    @Then("I see Runs, Templates, Reports tabs are displayed")
+    public void iSeeTabs() {  	
+        reportPage.verifyTabs();
+             
+    }
+    
+    @And("I see list of {string} are displayed")
+    public void iSeeListOfRuns(String tab) throws InterruptedException {  	
+        reportPage.verifyList(tab);
+             
+    }
+    
+    @And("below {string} columns are displayed")
+    public void verifyColumn(String tab,DataTable table) {
+    	List<List<String>> list = table.asLists(String.class);
+        for (int i=1; i<list.size(); i++) {
+        reportPage.verifyColoumn(list.get(i).get(0),tab, i); }
     }
 
     @Given("I select report from dropdown {string}")

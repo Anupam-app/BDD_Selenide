@@ -3,12 +3,44 @@ Feature: Report administration
 
 Background:
     Given I am logged in as "Bio4CAdmin" user
-@acc	
+
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
     When I goto report management page
-    And  I see list of runs are displayed
-		And I see the Run name,Process type,Start date and Status column present
+    Then I see Runs, Templates, Reports tabs are displayed
+    And  I see list of "runs" are displayed
+    And below "runs" columns are displayed
+    |columns|
+    |Run    			 |
+    |Start Date    |
+    |Process Type  |
+    |Status 			 |
 	
+	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
+    When I goto report management page
+    And I trigger report template mode
+    Then  I see list of "templates" are displayed
+    And below "templates" columns are displayed
+    |columns           |
+    |Template Name		 |
+    |Status            |
+    |Last Modified By  |
+    |Last Modified On	 |	
+
+
+	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
+    When I goto report management page
+    And I trigger report mode
+    Then  I see list of "reports" are displayed
+    And below "reports" columns are displayed
+    |columns        |
+    |Report Name		|
+    |Date Generated |
+    |Created By  		|
+    |Report Type	 	|	
+    |E-Sign.Status	|
+    |Signed By			|
+    
+    
   Scenario: Generate and sign Audittrail report
     Given I goto report management page
     When I select report from dropdown "Audit Trail"
