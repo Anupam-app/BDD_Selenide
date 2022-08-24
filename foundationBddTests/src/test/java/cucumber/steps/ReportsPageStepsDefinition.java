@@ -161,7 +161,32 @@ public class ReportsPageStepsDefinition {
     public void iSelectReportInclude(String reportInclude) {
         reportPage.includeReport(reportInclude);
     }
-
+    
+    @When("I select below parameters")
+    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
+    	List<List<String>> list = table.asLists(String.class);
+        for (int i=1; i<list.size(); i++) {
+        reportPage.selectParams(list.get(i).get(0));
+        }
+    }
+    
+    @And ("I create five trends chart")
+    public void iCreate5TrendsCharts() {
+        reportPage.createTrends();
+    }
+    @Then ("I verify that sixth chart is not allowed")
+    public void iSixthTrendsChartNotAllowed() {
+        reportPage.verifySixthChartNotAllowed();
+    }
+    
+    
+    @Then("I verify the error message {string}")
+    public void iverifyTheErrMsg(String message) {
+    	reportPage.isGeneratedNotificationWhenMoreThanSixParams(message);
+    }
+   
+    
+    
     @When("I save the report template")
     public void iSaveReportTemplate() {
         reportPage.saveReportTemplate();
@@ -170,6 +195,10 @@ public class ReportsPageStepsDefinition {
     @When("I search the report template")
     public void iSearchTheReportTemplate() {
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+    }
+    @When("I edit the report template")
+    public void ieditTheReportTemplate() {
+        reportPage.editReportOrTemplate(this.reportTemplate.getName());
     }
 
     @When("I put the report template in review")

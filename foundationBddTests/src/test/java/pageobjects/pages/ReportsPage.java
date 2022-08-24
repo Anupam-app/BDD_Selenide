@@ -15,13 +15,17 @@ import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.codeborne.selenide.collections.SizeGreaterThan;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+
 import pageobjects.utility.SelenideHelper;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jsoup.select.Evaluator.IndexGreaterThan;
 import org.junit.Assert;
 import dataobjects.ReportTemplate;
@@ -35,6 +39,7 @@ public class ReportsPage {
     private final String XPATH_SIGNED_REPORT = "//tr[td='Signed' and td='%s' and td='%s']";
     private final String XPATH_REPORT_NAME = "//td[text()='%s']";
     private final String XPATH_TEMPLATE_CHECKBOX = "//div[@class='item_value'][text()='%s']/ancestor::li/div[@class='check_box']";
+    private final String XPATH_TEMPLATE_EYEICON = "//div[@class='item_value'][text()='%s']/ancestor::li/div[@class='eye_icon']";    
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[text()='%s']";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT = "//td[text()='%s']/ancestor::tr//*[@class='checkbox']";
     private final String XPATH_NOTIFICATION_TEXT = "//*[@class='notification-summary'][contains(text(),'%s')]";
@@ -50,6 +55,9 @@ public class ReportsPage {
     private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
     private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
     private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
+    private final String XPATH_TRENDS_PARAMS = "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
+    
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[text()='Runs']"));
     private final SelenideElement templateTab = $(By.xpath("//a[text()='Templates']"));
@@ -65,6 +73,7 @@ public class ReportsPage {
     private final SelenideElement reportViewButton = $(By.xpath("//button[text()='View']"));
     private final SelenideElement createButton = $(By.xpath("//button[text()='Create']"));
     private final SelenideElement saveTemplateButton = $(By.xpath("//b[text()='Save']"));
+    private final SelenideElement saveAlarmButton = $(By.xpath("//button[text()='Save']"));
     private final SelenideElement openButton = $(By.xpath("//button[text()='Open']"));
     private final SelenideElement primaryButton = $(By.xpath("//button[text()='SIGN']"));
     private final SelenideElement reportEsignButton = $(By.xpath("//button[text()='e-sign']"));
@@ -76,11 +85,14 @@ public class ReportsPage {
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-
+    private SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
+    private SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
+    private SelenideElement trendsSaveButton = $(By.xpath("//*[@id='done_btn']"));
+    private SelenideElement trendsName = $(By.xpath("//*[@id='trend_name']/input"));
     private final SelenideElement errorMsgSameTemplateName = $(By.xpath("//div[contains(@class,'alert_msg')]"));
     private final SelenideElement errorMsgTemplateApproval = $(By.xpath("//span[@class='validate-error']"));
     private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
-
+    private final SelenideElement XPATH_ERRORNOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification = "Failed to create report template because %s already exists. Use a different name.";
 
     
@@ -198,6 +210,12 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(reportSearch, visible).setValue(templateName);
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
+    
+    public void editReportOrTemplate(String templateName) {
+    	openReportTemplate(templateName);
+
+        
+    }
 
     public String getStatus() {
         return $(By.xpath(XPATH_ACTIVE_TEMPLATE_STATUS)).getText();
@@ -242,10 +260,58 @@ public class ReportsPage {
     public void checkReportPdfInPage() {
         absentReportText.should(not(visible));
     }
+    
+    public void selectParams(String parameter) throws InterruptedException {
+    	
+    	commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))),visible);
+    	$(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))).click();
+    }
+    
+    public void createTrends(){
+    	for (int j=0; j<5; j++) {
+    		
+    		for(int i=1; i<6; i++) {
+    			commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))),visible);
+    			$(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))).click();
+    	}
+    		trendsName.setValue(RandomStringUtils.randomAlphabetic(10));
+    		trendsSaveButton.click();
+    		trendsAddButton.click();
+    	
+    	}
+    }
+    
+    public void verifySixthChartNotAllowed() {
+    	trendsAddButton.click();
+    	Assert.assertFalse(trendsAddButton.isEnabled());
+    	trendsCancelButton.click();
+    	
+    }
+    
+    
+    public void isGeneratedNotificationWhenMoreThanSixParams(String message) {   	
+        XPATH_ERRORNOTIFICATION.shouldHave(text(message));  
+    }
 
     public void includeReport(String reportInclude) {
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
-    }
+    	if(reportInclude=="Alarms") {
+    		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();    		
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+    		saveAlarmButton.click();
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
+    		
+    	}
+    	else if(reportInclude.contains("Trends")){
+    		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
+    		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
+    		trendsAddButton.click();
+    		
+    	}
+    	else {
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
+    	}
+         }
 
     public void saveReportTemplate() {
         saveTemplateButton.click();
