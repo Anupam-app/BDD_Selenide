@@ -42,7 +42,8 @@ Feature: User login
       | login         | password   | message                                                   |
       | bio4cservice1 | MerckApp1@ | Bad credentials                                           |
       | bio4cservice  | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left. |
-
+     
+      
   Scenario Outline: New user login Or Connect after reset the password
     Given I open login page
     When I enter "<login>" as username and "<tempPassword>" as password
@@ -58,3 +59,9 @@ Feature: User login
       | login                  | tempPassword     | newPassword |
       | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
       | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
+
+  Scenario: User login
+    Given I open login page
+    When I enter "UserDisabled" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I see the error message "Unauthorized access, Failed to authenticate" 
