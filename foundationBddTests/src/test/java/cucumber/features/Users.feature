@@ -18,10 +18,9 @@ Feature: User management
     And I edit the user
     Then The username is equal to the expected one
     
-   
-  Scenario: Create new user with existing username
+  Scenario Outline: Create new user with existing username
     Given I go to user page
-    When I enter username "bio4cadmin"
+    When I enter username "<Username>"
     And I select role "Operator"
     And I enter random firstname
     And I enter random lastname
@@ -29,8 +28,12 @@ Feature: User management
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
     And I save my user changes
-    Then I see error message is displayed "Failed to create user account. Username: bio4cadmin already exists. Use a different username"
-    
+    Then I see error message is displayed for "<Username>"
+
+    Examples:
+      | Username         |              
+      | testUsrFirstLog  |
+
   Scenario: User modification
     Given I go to user page
     When I search "testUser" user

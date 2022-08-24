@@ -10,6 +10,7 @@ import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.pages.UserPage;
 
 public class LoginPageStepsDefinition {
 
@@ -17,12 +18,14 @@ public class LoginPageStepsDefinition {
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
     private final User user;
+    private final UserPage userPage;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user ,UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
         this.user = user;
+        this.userPage = userPage;
     }
 
     @Given("I open login page")
@@ -106,5 +109,10 @@ public class LoginPageStepsDefinition {
     @Then("I logout")
     public void iLogout() {
         loginPage.iLogout();
+    }
+     
+    @Then( "I see the error message {string}")
+    public void iSeetheErrorMessage(String message) {
+        loginPage.checkMessage(message);
     }
 }
