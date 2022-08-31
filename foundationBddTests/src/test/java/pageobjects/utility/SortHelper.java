@@ -33,9 +33,9 @@ public class SortHelper {
 
         var expectedList = new ArrayList<>(displayedList);
         if (descending) {
-            expectedList.sort(Collections.reverseOrder());
+            expectedList.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
         } else {
-            Collections.sort(expectedList);
+            expectedList.sort(String.CASE_INSENSITIVE_ORDER);
         }
 
         Assert.assertEquals(expectedList, displayedList);

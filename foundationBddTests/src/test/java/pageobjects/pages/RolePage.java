@@ -12,7 +12,10 @@ import pageobjects.utility.SelenideHelper;
 
 import java.util.List;
 
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RolePage {
 
@@ -33,10 +36,15 @@ public class RolePage {
     private String xpathEditRoleIcon = "//div[div[contains(.,'%s')]]/div/div[contains(@class, 'edit-icon')]";
 
     private SelenideElement selectRoleDropdown = $(By.id("role"));
-
+    
+    private final SelenideElement roleNotificationBar = $(By.xpath("//*[@class = 'roleModalNotificationBar error-bar']"));
     private final String NOTIFICATION_TEXT="Successfully %s role.";
-    private final String PERMISSION_TEXT = "//span[contains(text(),'%s')]";
 
+    private final String PERMISSION_TEXT = "//span[contains(text(),'%s')]";
+    
+    private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
+   
+    
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
     }
@@ -50,8 +58,8 @@ public class RolePage {
         SelenideHelper.commonWaiter(inputRoleName, Condition.visible).setValue(roleName);
     }
 
-    public void saveRole(RoleAction roleAction) {
-        saveRoleButton.click();
+    public void notification(RoleAction roleAction) {
+    	//saveRoleButton.click();
 
         String expectedNotificationText="";
         switch (roleAction){
@@ -61,6 +69,10 @@ public class RolePage {
             case UPDATED:
                 expectedNotificationText=String.format(NOTIFICATION_TEXT, "updated");
                 break;
+            case ERROR:
+            	expectedNotificationText=String.format(NOTIFICATION_ERROR, "testRoleToRemovePermission");
+            	break;
+            	
         }
 
         saveText.shouldHave(Condition.text(expectedNotificationText));
@@ -96,7 +108,6 @@ public class RolePage {
         roleSearchTextBox.clear();
         roleSearchTextBox.sendKeys(roleName);
     }
-
     public List<String> getPermissionList() {
         return permissionsText
                 .shouldHave(CollectionCondition.allMatch("textNotEmpty",e-> !e.getText().isEmpty()))
@@ -110,4 +121,20 @@ public class RolePage {
     public void NoRolesTab() {
         rolesLinkText.should(Condition.not(Condition.visible));
     }
+
+	public void checkMessage(String message) {
+		commonWaiter(roleNotificationBar,visible);
+		roleNotificationBar.shouldHave(text(message));
+		
+	}
+	
+	public void saveButton() {
+		saveRoleButton.click();
+	}
+	
+	public void notificationError(String name) {
+		commonWaiter(roleNotificationBar, visible);
+	    String expectedNotificationText = String.format(NOTIFICATION_ERROR, name);
+	    roleNotificationBar.shouldHave(text(expectedNotificationText));
+	}
 }

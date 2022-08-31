@@ -2,16 +2,24 @@ package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.conditions.Attribute;
+import com.codeborne.selenide.conditions.Disabled;
+import com.codeborne.selenide.conditions.Enabled;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
+import org.junit.Assert;
+import dataobjects.ReportTemplate;
 
 public class ReportsPage {
 
@@ -58,6 +66,13 @@ public class ReportsPage {
     private SelenideElement applyFilterButton = $(By.xpath("//span[contains(text(),'Apply Filters')]"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
 
+    private final SelenideElement errorMsgSameTemplateName = $(By.xpath("//div[contains(@class,'alert_msg')]"));
+    private final SelenideElement errorMsgTemplateApproval = $(By.xpath("//span[@class='validate-error']"));
+    private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
+
+    private final String duplicateNameNotification = "Failed to create report template because %s already exists. Use a different name.";
+
+    
     public void goToReports() {
         reportsManagementPage.click();
     }
@@ -274,4 +289,29 @@ public class ReportsPage {
     public String getPdfUrl() {
         return $(By.xpath(PDF_VIEWER_IFRAME)).getAttribute("src");
     }
+    
+    public void errorMessage(String name) {
+    	               commonWaiter(errorMsgSameTemplateName, visible);
+    	               String expectedNotificationText = String.format(duplicateNameNotification, name);
+    	               errorMsgSameTemplateName.shouldHave(text(expectedNotificationText));
+    	       }
+    	
+    	    public void errorMessageValidation(String name) {
+    	       commonWaiter(errorMsgTemplateApproval,visible);
+    	       errorMsgTemplateApproval.shouldHave(text(name));
+        }
+    	
+    	    public void approvedTemplateValidation(){
+    	       SelenideHelper.commonWaiter(templateNameTextBox, disabled);
+    	         for (var option : checkBoxTemplate) {
+    	                
+    	              if (option.getAttribute("class").contains("disabled")) {
+    	                  Assert.assertTrue(true);
+    	                  break;
+                  }
+    	              else
+    	                 Assert.assertTrue(false);
+    	          }
+    	    }
+
 }

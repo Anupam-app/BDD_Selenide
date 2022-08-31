@@ -31,6 +31,13 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+     
+  Scenario: Create new recipe with existing Recipe name
+    Given I go to recipe page
+    When I trigger edit mode
+    And I create a random phase
+    And I save the recipe with name "testRecipeToExecute"
+    Then I see warning message is displayed "Recipe is locked. Please save it as new copy."
 
   Scenario: Recipe export and import
     Given I go to recipe page

@@ -30,3 +30,38 @@ INSERT [dbo].[report_repository] ([report_id], [report_name], [created_by], [cau
 GO
 SET IDENTITY_INSERT [dbo].[report_repository] OFF
 GO
+DELETE FROM [dbo].[report_template_section]
+GO
+SET IDENTITY_INSERT [dbo].[report_template_section] ON 
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2823, N'runHeader', N'Run Header', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2824, N'preRunData', N'Pre Run Data', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2825, N'auditTrail', N'Audit Trail', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2826, N'runSummary', N'Run Summary', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2827, N'alarms', N'Alarms', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2828, N'events', N'Events', NULL, 0, 1, 2827)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2829, N'process', N'Process', NULL, 0, 1, 2828)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2830, N'system', N'System', NULL, 0, 1, 2828)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2831, N'chromatograms', N'Trends', NULL, 1, 1, NULL)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2832, N'Id_0', N'TT', NULL, 0, 1, 2831)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2833, N'AI001', N'AI001.Obj.Out_rCurrentValue', NULL, 1, 1, 2832)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2834, N'AI002', N'AI002.Obj.Out_rCurrentValue', NULL, 1, 1, 2832)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2835, N'CSPR1', N'CSPR1.Obj.Out_rCurrentValue', NULL, 1, 1, 2832)
+GO
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2836, N'eventSummary', N'Event Summary', NULL, 1, 1, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[report_template_section] OFF
+GO
+

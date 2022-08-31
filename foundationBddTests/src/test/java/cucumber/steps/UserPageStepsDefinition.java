@@ -18,7 +18,7 @@ public class UserPageStepsDefinition {
         this.userPage = userPage;
         this.user = user;
     }
-    
+
     @Given("I search {string} user")
     public void iSearchUser(String user) {
         this.user.setUserName(user);
@@ -141,6 +141,12 @@ public class UserPageStepsDefinition {
         userPage.enterEmail(user);
     }
 
+    @When("I enter username {string}")
+    public void iEnterUsername(String user) {
+        this.user.setUserName(user);
+        userPage.createNewUser(this.user.getUserName());
+    }
+
     @Then("The username is equal to the expected one")
     public void theUserNameIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getUserNameFromForm(), user.getUserName());
@@ -172,20 +178,31 @@ public class UserPageStepsDefinition {
     public void iSeePasswordResetMessagedisplayed() {
         userPage.isGeneratedNotificationWhenPasswordReset();
     }
-    
+
+    @Then("I see error message is displayed for {string}")
+    public void iSeeErrorMessagedisplayed(String username) {
+        var message = String.format("Failed to create user account. Username: %s already exists. Use a different username", username);
+        userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+    }
+
     @Then("I should see user details are displayed")
     public void iSeeUserDetails() {
-    	Assert.assertEquals(userPage.getUserDetails(), user.getUserName());
+        Assert.assertEquals(userPage.getUserDetails(), user.getUserName());
     }
-    
+
     @When("I click on filter icon and select status {string}")
     public void iSelectStatus(String status) {
         userPage.selectStatus(status);
     }
-    
+
     @When("I verify filetr tag")
     public void iVerifyFilterTag(String status) {
-    	Assert.assertEquals(status, userPage.getFilterTagText());
+        Assert.assertEquals(status, userPage.getFilterTagText());
+    }
+
+    @When("I create a {string}")
+    public void iCreateNewUsername() {
+        userPage.createNewUser(this.user.getUserName());
     }
 
 }

@@ -25,7 +25,8 @@ public class LoginPage {
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-
+    
+    
     public void setUser(String user) {
         userIdTextBox.setValue(user);
     }
