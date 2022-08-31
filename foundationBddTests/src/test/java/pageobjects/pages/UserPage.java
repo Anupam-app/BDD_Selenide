@@ -71,9 +71,9 @@ public class UserPage {
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-    
+
     public void setSearch(String search) {
-        userSearchTextBox.clear();
+        SelenideHelper.commonWaiter(userSearchTextBox, visible).clear();
         userSearchTextBox.setValue(search);
     }
 
@@ -123,7 +123,7 @@ public class UserPage {
     }
 
     public void createNewUser(String userName) {
-        createUserPlusButton.click();
+        SelenideHelper.commonWaiter(createUserPlusButton, visible).click();
         userNameTextBox.setValue(userName);
     }
 
@@ -197,11 +197,11 @@ public class UserPage {
     public void isGeneratedNotificationWhenPasswordReset() {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
-    
+
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
-        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT,visible);
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT, visible);
         XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
-        
+
     }
 
     public void cancelUser() {

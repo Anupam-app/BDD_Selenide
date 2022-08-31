@@ -18,13 +18,13 @@ public class LoginPage {
     private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
-    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
+    private final SelenideElement submitButton = $(By.xpath("//button[contains(text(),'Login')]"));
     private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
-    private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+    private SelenideElement logOutButton = $(By.xpath("//button[contains(text(),'Log out')]"));
     
     
     public void setUser(String user) {
