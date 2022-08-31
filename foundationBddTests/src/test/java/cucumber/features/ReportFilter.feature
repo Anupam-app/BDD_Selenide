@@ -1,8 +1,8 @@
 @COMMON
 Feature: Apply Filter Reports
 
-  Background:
-    Given I am logged in as "Bio4CAdmin" user
+  Background: 
+    Given I am logged in as "Bio4Cadmin" user
 
   Scenario: Verify search functionality in the templates page
     Given I goto report management page
@@ -55,35 +55,26 @@ Feature: Apply Filter Reports
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
     
-     #New FeatureFile
-    
+   
   Scenario: Verify filter run reports functionality in Report Management Based on status
  		Given I goto report management page
- 		When  I click on filter icon and select run status 
- 		Then  I should see run status 
+ 		When  I filter on icon and select run status as "Completed"
+ 		Then  I should see run status as "Completed"
+ 		When  I filter on icon and select run status as "Aborted"
+ 		Then  I should see run status as "Aborted" 
 
-	
-	Scenario Outline: Verify run history functionality based on the Date range.
+
+	Scenario: Verify run history functionality based on the Date range.
  		Given I goto report management page 
- 	  When  I select "<option>" any date range dropdown
- 		Then  I should see recipe run list displayed based on "<option>"
-			  Examples:
-				        |option				|
-								|today				|
-				        |Yesterday		|                                                           
-				        |last 7 days	|
-				        |last 30 days	|
-				        |last month		|								
-				        |custom range	|  
+ 		Then  I should see recipe run list displayed based on date range dropdown
+ 			|Today|Yesterday|Last 7 Days|Last 30 Days|This Month|Last Month|Custom Range|
+	  
 	 									
-	Scenario Outline: Verify sort run functionality all columns in ascending order
+	Scenario: Verify sort run functionality all columns in ascending order
  		Given I goto report management page
- 		When  I select run sort by "<columns>" in "<ascending>"
- 		Then "<columns>" list should be sorted in "<ascending>" order
-			  Examples:
-      				  |columns      | ascending    |
-      				  |run 	        | true         |
-     				  	|Startdate    | true         | 
-      				  |processtype  | true         |
-      				  |status       | true         | 
-   
+ 		Then  Report columns should be sorted in ascending order
+ 			|Run|Start Date|Process Type|Status|
+ 		Then  Report columns should be sorted in descending order
+ 			|Run|Start Date|Process Type|Status|
+			 
+  
