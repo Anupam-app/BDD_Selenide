@@ -63,7 +63,7 @@ Feature: Apply Filter Reports
  		When  I filter on icon and select run status as "Aborted"
  		Then  I should see run status as "Aborted" 
 
-
+	@test1
 	Scenario: Verify run history functionality based on the Date range.
  		Given I goto report management page 
  		Then  I should see recipe run list displayed based on date range dropdown

@@ -392,7 +392,6 @@ public class ReportsPage {
 		for (SelenideElement element : options) {
 			if (element.getText().equalsIgnoreCase(option)) {
 				element.click();
-				Thread.sleep(3000);
 				break;
 			}
 		}
@@ -401,13 +400,11 @@ public class ReportsPage {
 			commonWaiter(previousMonth, visible);
 			previousMonth.click();
 			Thread.sleep(1000);
-			System.out.println(availableDates.size());
 			int index = getRandomNumber(0, availableDates.size() / 2);
 			availableDates.get(index).click();
-			Thread.sleep(500);
 			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
 			availableDates.get(index).click();
-			Thread.sleep(500);
+			
 		}
 
 	}
