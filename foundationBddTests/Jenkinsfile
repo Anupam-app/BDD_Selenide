@@ -46,11 +46,11 @@ pipeline {
 						$sourcePath="$env:WORKSPACE\\foundationBddTests\\src\\test\\resources\\"
 
 						$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
-						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword						
+						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
 
 						$Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
-						
-						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force						
+
+						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force
 						'''
 					}
 				}
@@ -79,7 +79,7 @@ pipeline {
 							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/'+env.PDP),
 						]
 					)
-                }				
+                }
             }
         }
         stage ('Change consul portal configuration to be seen as local server') {
@@ -135,17 +135,28 @@ pipeline {
         }
         stage ('Wait for environment availability') {
             steps {
-                retry(30) {
-                    sh '''
-                    sleep 30
-                    curl -k --fail https://$CIPHostName/alarm-management/actuator/health
-                    curl -k --fail https://$CIPHostName/analytics/actuator/health
-                    curl -k --fail https://$CIPHostName/useradminportal/actuator/health
-                    curl -k --fail https://$CIPHostName/config-management/actuator/health
-                    curl -k --fail https://$CIPHostName/recipe-management/actuator/health
-                    curl -k --fail https://$CIPHostName/reportingmanagement/actuator/health
-                    curl -k --fail https://$CIPHostName/trends/actuator/health
-                    '''
+                script {
+                    if(env.PDP != 'ORCHESTRATOR'){
+                        retry(30) {
+                            sh '''
+                            sleep 30
+                            curl -k --fail https://$CIPHostName/analytics/actuator/health
+                            curl -k --fail https://$CIPHostName/recipe-management/actuator/health
+                            '''
+                        }
+                    }
+                    retry(30) {
+                        sh '''
+                        sleep 30
+                        curl -k --fail https://$CIPHostName/alarm-management/actuator/health
+                        curl -k --fail https://$CIPHostName/analytics/actuator/health
+                        curl -k --fail https://$CIPHostName/useradminportal/actuator/health
+                        curl -k --fail https://$CIPHostName/config-management/actuator/health
+                        curl -k --fail https://$CIPHostName/recipe-management/actuator/health
+                        curl -k --fail https://$CIPHostName/reportingmanagement/actuator/health
+                        curl -k --fail https://$CIPHostName/trends/actuator/health
+                        '''
+                    }
                 }
             }
         }
@@ -177,7 +188,7 @@ pipeline {
 		}
 		stage("Generate Allure Reports") {
 			steps {
-				script {	
+				script {
 					dir ('foundationBddTests/target') {
 						allure([
                             includeProperties: false,
@@ -187,7 +198,7 @@ pipeline {
                             results: [[path: 'allure-results']]
 						])
 					}
-				}                
+				}
 			}
 		}
 	}
