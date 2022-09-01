@@ -27,7 +27,7 @@ Background:
 		|TMP1 PV     |
 		|TPH1 PV     |
    Then I verify the error message "Maximum of 5 sensors allowed"
- @acc   
+  
   Scenario: BIOCRS-5240| More than 5 trends chart not allowed in report template
     Given I search the report template
     And I edit the report template
