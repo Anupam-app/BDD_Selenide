@@ -268,14 +268,15 @@ public class ReportsPage {
     }
     
     public void createTrends(){
+      		SelenideHelper.commonWaiter(trendsName,visible);         
+    		trendsName.setValue(RandomStringUtils.randomAlphabetic(10));
     	for (int j=0; j<5; j++) {
     		
     		for(int i=1; i<6; i++) {
     			commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))),visible);
     			$(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))).click();
     	}
-			commonWaiter(trendsName,visible);         
-    		trendsName.setValue(RandomStringUtils.randomAlphabetic(10));
+			
     		trendsSaveButton.click();
     		trendsAddButton.click();
     	
