@@ -64,6 +64,23 @@ public class ReportsPageStepsDefinition {
         this.reportTemplate.setName(report);
         reportPage.selectReport(report);
     }
+    
+    @Given("I select user from dropdown {string}")
+    public void iSelectUserFromDropdown(String user) {
+        this.user.setName(user);
+        reportPage.selectUser(user);
+    }
+    
+    @Given("I select user in dropdown {string}")
+    public void iSelectUserInDropdown(String user) {
+        this.user.setName(user);
+        reportPage.selectUserOnRunPage(user);
+    }
+    
+    @Given("I select date range as {string}")
+    public void iSelectDateRange(String dateFilter) {
+        reportPage.selectDateFilterOnRunPage(dateFilter);
+    }
 
     @When("I choose recipe run {string}")
     public void iChooseRun(String run) {
@@ -85,7 +102,12 @@ public class ReportsPageStepsDefinition {
         reportPage.chooseReportTemplate(template);
     }
 
-    @When("I click on generate button")
+    @When("I dont see the presence of generate button")
+    public void iDontSeeGenerateButton() {
+        reportPage.verifyGenerateButton();
+    }
+    
+    @Then("I click on generate button")
     public void iClickOnGenerateButton() {
         reportPage.generateReport();
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());

@@ -27,15 +27,14 @@ Background:
 		|TMP1 PV     |
 		|TPH1 PV     |
    Then I verify the error message "Maximum of 5 sensors allowed"
-
-  #TODO fix the application or the scenario to make it work on headless mode
-  #Scenario: BIOCRS-5240| More than 5 trends chart not allowed in report template
-    #Given I search the report template
-    #And I edit the report template
-    #When I select report include "Trends"
-    #And I create five trends chart
-   	#Then I verify that sixth chart is not allowed
-
+ @acc
+  Scenario: BIOCRS-5240| More than 5 trends chart not allowed in report template
+    Given I search the report template
+    And I edit the report template
+    When I select report include "Trends"
+    And I create five trends chart
+   	Then I verify that sixth chart is not allowed
+  
   Scenario: Create Report Template and approve it
     Given I search the report template
     When I approve the report template

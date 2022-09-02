@@ -4,6 +4,14 @@ Feature: Apply Filter Reports
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
+  Scenario: Verify filter functionality in the runs page
+    Given I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
+    And I select date range as "Last 30 Days"
+    Then I see Audit logs are displayed for date range and "Bio4CAdmin (Administrator Bio4C)"
+
+
   Scenario: Verify search functionality in the templates page
     Given I goto report management page
     And I trigger report template mode
