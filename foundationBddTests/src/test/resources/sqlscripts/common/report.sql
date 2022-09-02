@@ -60,7 +60,7 @@ INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [co
 GO
 INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2835, N'CSPR1', N'CSPR1.Obj.Out_rCurrentValue', NULL, 1, 1, 2832)
 GO
-INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2836, N'eventSummary', N'Event Summary', NULL, 1, 1, NULL)
+INSERT [dbo].[report_template_section] ([id], [config_name], [config_value], [config_value_numeric], [config_isChecked], [report_template_id], [parent_id]) VALUES (2836, N'eventSummary', N'Event Summary', NULL, 0, 1, NULL)
 GO
 SET IDENTITY_INSERT [dbo].[report_template_section] OFF
 GO
