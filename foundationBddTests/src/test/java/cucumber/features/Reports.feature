@@ -17,7 +17,7 @@ Feature: Report administration
     |Status 			 |
 	
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
-		Given I am logged in as "Bio4CAdmin" user
+	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report template mode
     Then  I see list of "templates" are displayed
@@ -30,7 +30,7 @@ Feature: Report administration
 
 
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
-		Given I am logged in as "Bio4CAdmin" user
+	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report mode
     Then  I see list of "reports" are displayed
@@ -42,12 +42,12 @@ Feature: Report administration
     |Report Type	 	|	
     |E-Sign.Status	|
     |Signed By			|
-       
+ @acc       
   Scenario: Generate and sign Audittrail report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    And I select user from dropdown "Bio4CAdmin"
+    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
@@ -55,9 +55,9 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
     
- 
+
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
-    Given I am logged in as "testverify130" user
+    Given I am logged in as "reportUnauthUser" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     Then I dont see the presence of generate button 

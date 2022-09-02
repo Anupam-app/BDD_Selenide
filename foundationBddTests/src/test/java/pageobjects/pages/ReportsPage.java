@@ -122,7 +122,7 @@ public class ReportsPage {
     		$$(foundationRunListTable).shouldHave(CollectionCondition.size($$(foundationRunListTable).size()));   	 
     		break;  
         case "templates": 
-        	$$(templateListTable).shouldHave(CollectionCondition.size($$(templateListTable).size()));   	 
+        	$$(templateListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));   	 
     		break;  
         case "reports": 
         	Thread.sleep(5000);
