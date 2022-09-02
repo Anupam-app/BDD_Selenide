@@ -55,7 +55,7 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
     
-   
+ 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "testverify130" user
     And I goto report management page

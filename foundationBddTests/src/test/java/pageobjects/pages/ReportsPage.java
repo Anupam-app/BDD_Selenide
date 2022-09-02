@@ -431,17 +431,12 @@ public class ReportsPage {
     public void checkTableContainsUser(String userid) throws InterruptedException, ParseException {
     	Thread.sleep(5000);
         for (int i=1;i<=(auditListTable.size());i++) {
-        	//System.out.println("User: "+$(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText());
-        	Assert.assertEquals($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText(),userid);
-        	//System.out.println("Date: "+$(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
-        	$(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText();
+        	Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
         	SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
-        	Date date = new Date();
-        	//System.out.println(formatter.format(date));
-        	String date1 = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
-        	Date date2 = formatter.parse(date1);
-        	//System.out.println(date2);
-        	int diffInDays = (int)( (date.getTime() - date2.getTime())
+        	Date currentdate = new Date();
+        	String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
+        	Date eventDateTime = formatter.parse(eventDate);
+        	int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
         	        / (1000 * 60 * 60 * 24) );
         	System.out.println("Days difference= "+ diffInDays);
         	if (diffInDays <= 7) {
