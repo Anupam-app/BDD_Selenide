@@ -438,9 +438,8 @@ public class ReportsPage {
         	Date eventDateTime = formatter.parse(eventDate);
         	int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
         	        / (1000 * 60 * 60 * 24) );
-        	System.out.println("Days difference= "+ diffInDays);
         	if (diffInDays <= 7) {
-        		System.out.println("In Line");
+        		
         		Assert.assertTrue(true);
         	}
         	else {
