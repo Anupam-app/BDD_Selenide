@@ -4,7 +4,7 @@ Feature: Trends Management
 Background:
       Given I am logged in as "bio4cAdmin" user
       And I navigate to trends page
-@hook       
+       
 Scenario: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Page
           When I am on Trends Panel
           Then I see availability of Trends panel and chart area message "You currently have no selections to display."
@@ -70,7 +70,7 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
           Then I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
           And I delete the collection name
                               
-				  @CRS1
+				  @CRS
 					Examples:
                 |Param1   |Param2   |
                 |PI101 PV |PI102 PV |
