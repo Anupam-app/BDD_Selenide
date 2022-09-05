@@ -2,31 +2,33 @@
 Feature: Trends Management
 
 Background:
-      Given I am logged in as "bio4cadmin" user
+      Given I am logged in as "bio4cAdmin" user
       And I navigate to trends page
-           
+@hook       
 Scenario: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Page
           When I am on Trends Panel
-          Then I see availability of Trends panel and chart area
+          Then I see availability of Trends panel and chart area message "You currently have no selections to display."
           And footer section is not displayed.
 
+
 Scenario Outline: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Panel- 1
-          When I collapse “<TrendPanelType>”
-          Then I see the “<TrendPanelType>” collapsed
-          When I expand “<TrendPanelType>”
-          Then I see the “<TrendPanelType>” expanded
-                              
-        Examples:
+          When I collapse "<TrendPanelType>"
+          Then I see the "<TrendPanelType>" collapsed
+          When I expand "<TrendPanelType>"
+          Then I see the "<TrendPanelType>" expanded
+          
+          Examples:
                   |TrendPanelType      |
 							    |Trends_Area_Panel   |
                   |Starred_Collection  |
                   |Default_Collection  |
                   |List of Collection  |
-
-Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-2  
+                  
+        
+Scenario: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-2  
            When I am on Trends Panel
-           Then I see the availability of below options
-           |Area graph                    |
+           Then I see the availability of below   
+           |Area graph                     |
            |Line graph                     |
            |Default Parameters Collection  |
            |Starred Parameters Collection  |
@@ -35,14 +37,20 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
 			  
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-3               
           When I choose "<Param1>","<Param2>" parameters as default collection
-          And  I see the availability of below options
+          Then I see the Live graph is display
+          And  I see the availability of below footer
+               |options						 |
                |Save as Collection |
                |Staked             |
                |Overlay            |
                |Live               |
                |Entire run         |
                |Current run        |
-           And I see the Live option displays last 60 minutes data
+               |start date				 |
+               |end date					 |
+               |download					 |
+               |selectInterval		 |
+           
 
 			   @CRS
 			   Examples:
@@ -52,16 +60,17 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
 				 @IVI
 				 Examples:
 							  |Param1          |Param2          |
-							  |P001 - Speed PV |P002 - Speed PV |
+							  |PI103 PV        |TMP1 PV         |
 							  
-			    
+	    
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -list of collection            
           When I choose "<Param1>","<Param2>" parameters as default collection
           And I save as trends collections called "test"
           And I choose collection name as "test"
-          Then I see the graph is plotted for selected parameters in chart area
+          Then I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
+          And I delete the collection name
                               
-				  @CRS
+				  @CRS1
 					Examples:
                 |Param1   |Param2   |
                 |PI101 PV |PI102 PV |
@@ -69,12 +78,12 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
 					@IVI
 					Examples:
                 |Param1          |Param2         |
-                |P001 - Speed PV |P002 - Speed PV |
-		
+                |PI103 PV        |TMP1 PV        |
+	
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -Default collections                         
-           When I select the default collection
+           When I select the "Default" collection
            And I choose "<Param1>","<Param2>" parameters
-           Then I see the graph is plotted for selected parameters in chart area				
+           Then I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"				
 			                  
 					 @CRS
 					 Examples:
@@ -84,19 +93,19 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
 					 @IVI
 					 Examples:
                  |Param1          |Param2          |
-                 |P001 - Speed PV |P002 - Speed PV |
+                 | PI103 PV       |TMP1 PV         |
 							  
-                              
+                            
 Scenario: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List                
-           When I select the default collection
+           When I select the "Default" collection
            Then I verify default list of parameters
 
-           
+         
 Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Trends Parameters List                
-           When I select the default collection
+           When I select the "Default" collection
            And I select star icons for "<Param1>","<Param2>" parameters 
-           And I select the starred collection
-           And I see the graph is plotted for selected parameters in chart area
+           And I select the "Starred" collection
+           And I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
            And  I uselect the star icons for "<Param1>","<Param2>" parameters
            Then I validate no parameters are present in starred collection
 				
@@ -108,5 +117,5 @@ Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Tr
 					 @IVI
 					 Examples:
 							  |Param1          |Param2          |
-							  |P001 - Speed PV |P002 - Speed PV |
+							  |PI101 PV        |PI102 PV        |
 							  
