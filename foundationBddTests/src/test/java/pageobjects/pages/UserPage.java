@@ -4,12 +4,21 @@ import com.codeborne.selenide.SelenideElement;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
 import pageobjects.utility.SortHelper;
 
+
 import static com.codeborne.selenide.Condition.*;
+
+import java.util.List;
+import java.util.function.Function;
+
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -17,12 +26,13 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 public class UserPage {
 
     private static final String XPATH_HEADER = "//div[@class='headerTitle']";
-    private final String XPATH_USER_COLUMN_HEADER = "//th[text()='%s']";
+    private final String XPATH_USER_COLUMN_HEADER = "//th[contains(text(),'%s')]";
     private final String XPATH_USER_TABLE = "//table[@id='foundusertable']";
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement userPreferencesLink = $(By.xpath("//span[text()='User Preferences']"));
+    private final SelenideElement userPreferencesLink = $(By.xpath("//span[contains(text(),'User Preferences')]"));
+	
     Function<Integer, List<String>> getUserColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -30,15 +40,19 @@ public class UserPage {
     };
 
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+
     private SelenideElement alertNotificationText = $(By.xpath("//*[@role='alert']"));
+
+    private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
+
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
-    private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][text()='Users']"));
+    private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Users')]"));
     private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private SelenideElement filterTagText = $(By.xpath("//div[@class='userfiltertag']"));
-    private SelenideElement userSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
+    private SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
     private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
     private SelenideElement firstNameTextBox = $(By.id("firstName"));
     private SelenideElement lastNameTextBox = $(By.id("lastName"));
@@ -52,14 +66,14 @@ public class UserPage {
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
-    private SelenideElement applyFilterButton = $(By.xpath("//button/b[text()='Apply Filter']"));
+    private SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
     private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
-    private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
+    private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -79,7 +93,7 @@ public class UserPage {
 
     public void saveMyChanges() {
         saveButton.click();
-        confirmationButton.click();
+        commonWaiter(confirmationButton, visible).click();
     }
 
     public String getEmployeeIdFromForm() {
@@ -185,6 +199,12 @@ public class UserPage {
     public void isGeneratedNotificationWhenPasswordReset() {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
+    
+    public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT,visible);
+        XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
+        
+    }
 
     public void cancelUser() {
         userNameTextBox.click();
@@ -200,7 +220,7 @@ public class UserPage {
         filterIcon.click();
         commonWaiter(upArrowIcon, visible);
         upArrowIcon.click();
-        $(By.xpath(String.format("//span[text()='%s']", status))).click();
+        $(By.xpath(String.format("//span[contains(text(),'%s')]", status))).click();
         applyFilterButton.click();
     }
 
@@ -223,7 +243,7 @@ public class UserPage {
 
     public void chooseAndSaveDefaultPage(String defaultOptionName) {
         SelenideHelper.commonWaiter(selectOption, visible).click();
-        commonWaiter($(By.xpath(String.format("//li[text()='%s']", defaultOptionName))), visible).click();
+        commonWaiter($(By.xpath(String.format("//li[contains(text(),'%s')]", defaultOptionName))), visible).click();
         SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
     }

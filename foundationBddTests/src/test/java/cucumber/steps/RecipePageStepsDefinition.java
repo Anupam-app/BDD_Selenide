@@ -38,6 +38,12 @@ public class RecipePageStepsDefinition {
         recipePage.setSearch(this.recipe.getRecipeName());
     }
 
+    @Then("I search the recipe {string}")
+    public void iSearchRecipe(String recipeName) {
+        this.recipe.setRecipeName(recipeName);
+        recipePage.setSearch(this.recipe.getRecipeName());
+    }
+
     @And("I edit the recipe")
     public void iEditTheRecipe() {
         recipePage.edit(this.recipe.getRecipeName());
@@ -68,6 +74,17 @@ public class RecipePageStepsDefinition {
     public void iSaveTheRecipe() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
         recipePage.saveRecipe(this.recipe.getRecipeName());
+    }
+    
+    @And("I save the recipe with name {string}")
+    public void iSaveTheRecipeExistingName(String recipeName) {
+        this.recipe.setRecipeName(recipeName);
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+    }
+    
+    @Then("I see warning message is displayed {string}")
+    public void iSeeWarningMessagedisplayed(String message) {
+    	recipePage.isGeneratedNotificationWhenCreateExistingRecipe(message);
     }
 
     @And("I see my changes in recipe")
@@ -133,9 +150,8 @@ public class RecipePageStepsDefinition {
         Assert.assertEquals("Approved-Active",this.recipePage.getStatus());
     }
 
-    @When("I click on export recipe {string}")
-    public void iExport(String recipeName) {
-        recipe.setRecipeName(recipeName);
+    @When("I export the recipe")
+    public void iExport() {
     	recipePage.exportRecipe(recipe.getRecipeName());
     }
 
@@ -144,9 +160,9 @@ public class RecipePageStepsDefinition {
     	recipePage.notificationMessageExport(recipe.getRecipeName());
     }
 
-    @When("I click on import {string}")
-    public void iClickOnImport(String recipeName) {
-    	recipePage.importRecipe(recipeName);
+    @When("I import the recipe")
+    public void iClickOnImport() {
+    	recipePage.importRecipe(recipe.getRecipeName());
     	recipe.setRecipeImportedName(recipePage.getGeneratedName());
     }
 

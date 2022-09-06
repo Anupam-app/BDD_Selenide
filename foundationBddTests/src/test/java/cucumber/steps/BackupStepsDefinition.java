@@ -2,9 +2,12 @@ package cucumber.steps;
 
 import cucumber.util.I18nUtils;
 import dataobjects.BackupStatus;
+import dataobjects.Backupsetting;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.BackupPage;
 import pageobjects.utility.SelenideHelper;
@@ -13,8 +16,12 @@ public class BackupStepsDefinition {
 
     private BackupPage backupPage;
 
-    public BackupStepsDefinition(BackupPage backupPage) {
+    private Backupsetting backupsetting;
+
+
+    public BackupStepsDefinition(BackupPage backupPage, Backupsetting backupsetting) {
         this.backupPage = backupPage;
+        this.backupsetting = backupsetting;
     }
 
     @Given("I goto backup page")
@@ -61,7 +68,8 @@ public class BackupStepsDefinition {
 
     @When("I schedule backup")
     public void iScheduleBackup() {
-        backupPage.scheduleBackup();
+        backupsetting.setBackupName(RandomStringUtils.randomAlphabetic(10));
+        backupPage.scheduleBackup(backupsetting.getBackupName());
     }
 
     @Then("I wait the end of scheduled backup")
@@ -69,10 +77,21 @@ public class BackupStepsDefinition {
         backupPage.waitForScheduledBackupFinished();
     }
 
+
     @Then("I see expected texts from backup module")
     public void iSeeExpectedTextsFromBackupModule() {
-        var expectedText= I18nUtils.getValueFromKey("backupmanagement.main.header.title");
+        var expectedText = I18nUtils.getValueFromKey("backupmanagement.main.header.title");
         backupPage.seeContent(expectedText);
         SelenideHelper.goParentFrame();
+    }
+
+    @When("I schedule backup with existing name")
+    public void iScheduleBackupWithExistingName() {
+        backupPage.scheduleBackup(this.backupsetting.getBackupName());
+    }
+
+    @Then("I see the notification message {string}")
+    public void iVerifyNotificationMessage(String message) {
+        backupPage.notificationMessage(message);
     }
 }

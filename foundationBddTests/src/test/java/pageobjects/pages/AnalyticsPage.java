@@ -1,23 +1,17 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import com.codeborne.selenide.SelenideElement;
 import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
-import java.util.ArrayList;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
-
-import java.util.List;
-
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
@@ -38,10 +32,12 @@ public class AnalyticsPage {
     private final SelenideElement clickOnData = $(By.xpath("//span[text()='Data']"));
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
     private final SelenideElement switchToXaxis = $(By.xpath("//img[@class='x-axis-switch']"));
-    private final String aggregateNameText = "//*[text()='%s']//parent::div//input";
+
     private final SelenideElement aggregateHeaderText = $(By.xpath("//span[@class='aggregate-header']"));
-    private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
-    private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
+    private final String aggregateNameText = "//*[contains(text(),'%s')]//parent::div//input";
+    private final String xparameterNameText = "//*[contains(text(),'%s')]//parent::label//span";
+    private final String yparameterNameText = "(//*[contains(text(),'%s')]//parent::label//input)[2]";
+
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
 
     private final ElementsCollection deviceShapeElements = $$(By.xpath("//div[@class='parameters-list']//span"));
@@ -55,7 +51,7 @@ public class AnalyticsPage {
     private final String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
-    private final String XPATH_PARAMETER_CHECKBOX = "//*[@id='%s']";
+    private final String XPATH_PARAMETER_CHECKBOX = "//*[contains(@title,'%s')]";
 
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
@@ -168,7 +164,7 @@ public class AnalyticsPage {
     }
 
     public void deleteIfExists(String aggregateName) {
-        if ($(By.xpath(String.format("//*[text()='%s']", aggregateName))).isDisplayed()) {
+        if ($(By.xpath(String.format("//*[contains(text(),'%s')]", aggregateName))).isDisplayed()) {
             selectAggregate(aggregateName);
             deleteIcon.click();
             deleteButton.click();
