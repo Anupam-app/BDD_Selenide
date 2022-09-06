@@ -84,7 +84,7 @@ pipeline {
         }
         stage ('Change consul portal configuration to be seen as local server') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "d0575da2-cd97-42de-948e-fa7ee4ed91a2", usernameVariable: 'user', passwordVariable: 'password')])
+                withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
                 {
                     powershell '''
                     if(!($env:CIPHostName.ToUpper() -like 'ONEBIOP*' -or $env:CIPHostName.ToUpper() -like 'STLBIOP*'))

@@ -22,3 +22,6 @@ NET USER "UserDisabled" "MerckApp1@" /ADD
 NET USER "Acclock" /DELETE
 NET USER "Acclock" "MerckApp1@" /ADD
 
+NET USER "reportUnauthUser" /DELETE
+NET USER "reportUnauthUser" "MerckApp1@" /ADD
+

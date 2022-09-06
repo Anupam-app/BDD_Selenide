@@ -69,7 +69,7 @@ public class BackupPage {
 		options.stream().findFirst().get().click();
 	}
 
-	public void scheduleBackup() {
+	public void scheduleBackup(String name) {
 		chooseBackupPath();
 
 		dailyBackup.click();
@@ -92,7 +92,7 @@ public class BackupPage {
 
 		backupScheduleButton.click();
 		SelenideHelper.commonWaiter(scheduleTextBox, visible);
-		scheduleTextBox.setValue(RandomStringUtils.randomAlphabetic(10));
+		scheduleTextBox.setValue(name);
 		scheduleOkButton.click();
 	}
 
@@ -136,37 +136,8 @@ public class BackupPage {
 		waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
 	}
 
-	public void scheduleBackup(String name) {
-		chooseBackupPath();
-
-		dailyBackup.click();
-		dateInput.click();
-		selectDate.click();
-		SelenideHelper.commonWaiter(timeInput, Condition.visible).click();
-		timeInput.sendKeys(Keys.LEFT_CONTROL + "a");
-		timeInput.sendKeys(Keys.BACK_SPACE);
-		SelenideHelper.commonWaiter(timeInput, Condition.visible).click();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Date date = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int minuteToWait = 1;
-		c.add(Calendar.MINUTE, minuteToWait);
-		Date currentDatePlusOne = c.getTime();
-		String d = dateFormat.format(currentDatePlusOne);
-		timeInput.sendKeys(d);
-		timeInput.sendKeys(Keys.ENTER);
-
-		backupScheduleButton.click();
-		SelenideHelper.commonWaiter(scheduleTextBox, visible);
-		scheduleTextBox.setValue(name);
-		scheduleOkButton.click();
-	}
-
 	public void notificationMessage(String message) {
 		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
 		waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
-
 	}
-	
 }
