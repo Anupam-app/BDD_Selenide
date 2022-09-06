@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import java.text.ParseException;
 import java.util.List;
 
 import dataobjects.User;
@@ -90,7 +91,8 @@ public class TrendsPageStepsDefinition {
 	}
 
 	@When("I see the Live graph is display")
-	public void i_see_the_live_option_displays_last_minutes_data() {
+	public void i_see_the_live_option_displays_last_minutes_data() throws ParseException {
+		trendsPage.graphTime();
 		trendsPage.validateGraph();
 
 	}
@@ -107,8 +109,9 @@ public class TrendsPageStepsDefinition {
 	}
 
 	@When("I see the graph is plotted for selected parameters in chart area{string},{string}")
-	public void i_see_the_graph_is_plotted_for_selected_parameters_in_chart_area(String param1, String param2) {
+	public void i_see_the_graph_is_plotted_for_selected_parameters_in_chart_area(String param1, String param2) throws ParseException {
 		trendsPage.ledggerParameterOnChartArea(param1, param2);
+		trendsPage.graphTime();
 	}
 
 
@@ -128,8 +131,9 @@ public class TrendsPageStepsDefinition {
 	}
 
 	@When("I select star icons for {string},{string} parameters")
-	public void i_select_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
+	public void i_select_star_icons_for_parameters(String param1, String param2) throws InterruptedException, ParseException {
 		trendsPage.iselectstaricon(param1,param2);
+		trendsPage.graphTime();
 	}
 	@When("I uselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {

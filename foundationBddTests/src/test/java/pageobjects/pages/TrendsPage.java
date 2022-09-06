@@ -13,6 +13,7 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -36,6 +37,8 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets; 
 import java.nio.file.Files; 
 import java.nio.file.Paths;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
@@ -55,7 +58,9 @@ public class TrendsPage {
 	private ElementsCollection defaultCollectionParams = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
 	private ElementsCollection staricon = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/span[2]"));
 	private ElementsCollection grapgAreaElement = $$(By.xpath("//*[@class='highcharts-graph']"));
-
+	
+    private SelenideElement graphStartTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
+    private SelenideElement graphLastTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
 	private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
 	private SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
 	private SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
@@ -253,7 +258,7 @@ public class TrendsPage {
 	}
 
 	public void footerValidation(String options) {
-		//commonWaiter(options,visible);
+		
 		switch(options){
 		case "Save as Collection":
 			saveAsCollections_Text.shouldBe(visible);
@@ -376,7 +381,10 @@ public class TrendsPage {
 		commonWaiter($(By.xpath(String.format(ledggerParam,param1))),Condition.visible);
 
 		commonWaiter($(By.xpath(String.format(ledggerParam,param2))),Condition.visible);
-
+         
+		validateGraph();
+		
+		
 
 	}		
 	public void noParametes_starred() {
@@ -386,6 +394,20 @@ public class TrendsPage {
 	public void deleteCollection() {
 		deleteCollection.click();
 		deleteCollectionButton.click();;
+	}
+	public void graphTime() throws ParseException {
+		String startTime = graphStartTime.getText();
+		String lastTime  = graphLastTime.getText();
+		
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		Date date1 = format.parse(startTime);
+		System.out.print(date1);
+		Date date2 = format.parse(lastTime);
+		System.out.print(date2);
+		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
+        System.out.print("Time difference:"+difference);
+        Assert.assertTrue(difference<=60);
+        Assert.assertTrue(difference>=55);
 	}
 
 }
