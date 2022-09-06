@@ -30,6 +30,8 @@ public class ReportsPage {
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[contains(text(),'%s')]";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT = "//td[contains(text(),'%s')]/ancestor::tr//*[@class='checkbox']";
     private final String XPATH_NOTIFICATION_TEXT = "//*[@class='notification-summary'][contains(text(),'%s')]";
+
+    private final String XPATH_NAV = "//div[@class='navWrapper']//h2";
     private final String XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT = "//table[@class='table']//td[contains(text(),'%s')]";
     private final String XPATH_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT = "//table[@id='foundationRunListTable']//td[contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_COLUMNS_BY_TEXT = "//table[@id='templateListTable']//td[contains(text(),'%s')]";
@@ -446,6 +448,10 @@ public class ReportsPage {
         commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
+	}
 
     public String getPdfUrl() {
         return $(By.xpath(PDF_VIEWER_IFRAME)).getAttribute("src");

@@ -9,6 +9,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
+import pageobjects.pages.UserProfilePage;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.pages.UserPage;
 
@@ -18,13 +19,15 @@ public class LoginPageStepsDefinition {
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
     private final User user;
+    private final UserProfilePage userProfilePage;
     private final UserPage userPage;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user ,UserPage userPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user, UserProfilePage userProfilePage, UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
         this.user = user;
+		this.userProfilePage = userProfilePage;
         this.userPage = userPage;
     }
 
@@ -48,12 +51,12 @@ public class LoginPageStepsDefinition {
 
     @Then("I am logged in")
     public void iAmLoggedIn() {
-        loginPage.checkLoggedIn(true);
+        userProfilePage.checkUserProfilePresence(true);
     }
 
     @Then("I am not logged in")
     public void iAmNotLoggedIn() {
-        loginPage.checkLoggedIn(false);
+        userProfilePage.checkUserProfilePresence(false);
     }
 
     @Then("I should see the message {string}")
@@ -73,7 +76,6 @@ public class LoginPageStepsDefinition {
         	loginPage.pushLogin();
         	loginPage.checkLoggedIn(false);
         	loginPage.checkMessage(list.get(i).get(2));
-
         }
     }
         

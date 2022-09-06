@@ -1,24 +1,23 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
-import pageobjects.utility.TimeHelper;
 import dataobjects.BackupStatus;
-import org.apache.commons.lang3.RandomStringUtils;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.TimeHelper;
 
 public class BackupPage {
 
@@ -28,6 +27,8 @@ public class BackupPage {
 
 	private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 	private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
+	private String XPATH_HEADER = "//div[@class='header-title']";
+	
 	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
 	private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 	private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
@@ -43,9 +44,6 @@ public class BackupPage {
 	private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
 	private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
 	private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
-
-
-
 
 	public void goToBackupPage() {
 		backupPageLinkText.click();
@@ -127,6 +125,10 @@ public class BackupPage {
 	public void waitForScheduledBackupRunning() {
 		waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_SCHEDULED_TIME_TO_WAIT);
 	}
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+    }
 
 	public void waitForScheduledBackupFinished() {
 		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT);

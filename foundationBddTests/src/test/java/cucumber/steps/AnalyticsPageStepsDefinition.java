@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import com.typesafe.config.ConfigParseOptions;
 import dataobjects.*;
 import io.cucumber.java.en.And;
@@ -8,7 +9,9 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import pageobjects.pages.AnalyticsPage;
+import pageobjects.utility.SelenideHelper;
 import com.typesafe.config.ConfigFactory;
 
 public class AnalyticsPageStepsDefinition {
@@ -158,5 +161,20 @@ public class AnalyticsPageStepsDefinition {
             }
             iValidateTheAnalyticsCreation();
         }
+    }
+
+    @Then("I see expected texts from analytics module")
+    public void iSeeExpectedTextsFromAnalyticsModule() {
+        var expectedText= I18nUtils.getValueFromKey("analytics.label.aggregates");
+        analyticsPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
+    }
+
+    @Then("I see expected texts from analytics module parameters")
+    public void iSeeExpectedTextsFromAnalyticsModuleParameters() {
+        var deviceShapeElementNotTranslated = analyticsPage.getDeviceShapeElementNotLoaded();
+        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+                deviceShapeElementNotTranslated.isEmpty());
+        SelenideHelper.goParentFrame();
     }
 }

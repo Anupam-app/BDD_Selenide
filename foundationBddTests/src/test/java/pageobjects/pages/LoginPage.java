@@ -1,15 +1,14 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.SelenideElement;
+import com.xceptance.neodymium.util.Neodymium;
+import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static com.codeborne.selenide.Selenide.switchTo;
 
 public class LoginPage {
 
@@ -18,9 +17,10 @@ public class LoginPage {
     private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
-    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
+    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
+
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
@@ -54,12 +54,13 @@ public class LoginPage {
     }
 
     public void checkMessage(String message) {
-        commonWaiter(userLoginAlertText,visible);
+        commonWaiter(userLoginAlertText, visible);
         userLoginAlertText.shouldHave(text(message));
     }
 
     public void waitControlOnPnid() {
-        waitPnidMessage("You are controlling main screen");
+        var message = Neodymium.localizedText("portal.pnid.info.screen_controlling");
+        waitPnidMessage(message);
     }
 
     public void waitPnidLoading() {
@@ -72,7 +73,7 @@ public class LoginPage {
     }
 
     public void setNewpassword(String newpassword) {
-        commonWaiter(newPasswordTextbox,visible);
+        commonWaiter(newPasswordTextbox, visible);
         newPasswordTextbox.setValue(newpassword);
     }
 

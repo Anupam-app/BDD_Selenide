@@ -1,10 +1,9 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
-
 import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
@@ -16,6 +15,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.ReportsPage;
+import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
 
@@ -255,6 +255,13 @@ public class ReportsPageStepsDefinition {
         iTriggerReportMode();
         iShouldSeeTheReportFilePresence();
     }
+
+    @Then("I see expected texts from report module")
+    public void iSeeExpectedTextsFromReportModule() {
+        var expectedText= I18nUtils.getValueFromKey("report.reportNavbar.menu.reportManagement");
+        reportPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
+	}
     
     @And("I create new report template with existing name")
     public void iEnterExistingReportTemplateName() {

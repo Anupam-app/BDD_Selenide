@@ -1,7 +1,9 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
 import dataobjects.User;
+import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,6 +11,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
+import pageobjects.utility.SelenideHelper;
 
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
@@ -171,5 +174,24 @@ public class RecipePageStepsDefinition {
     @Then("I look at the user notification")
     public void iLookAtTheUserNotification() {
         recipePage.lookAtTheUserNotification();
+    }
+
+    @Then("I see expected texts from recipe module")
+    public void iSeeExpectedTextsFromRecipeModule() {
+        var expectedText= I18nUtils.getValueFromKey("recipe.app.header.name");
+        recipePage.seeContent(expectedText);
+
+        SelenideHelper.goParentFrame();
+    }
+
+    @Then("I see expected texts from recipe module criterias")
+    public void iSeeExpectedTextsFromRecipeModuleParameters() {
+        recipePage.goToEditMode();
+
+        var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
+        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+                deviceShapeElementNotTranslated.isEmpty());
+
+        SelenideHelper.goParentFrame();
     }
 }

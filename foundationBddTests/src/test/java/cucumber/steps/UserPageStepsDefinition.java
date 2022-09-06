@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import dataobjects.User;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -8,6 +9,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.UserPage;
+import pageobjects.utility.SelenideHelper;
 
 public class UserPageStepsDefinition {
 
@@ -205,4 +207,10 @@ public class UserPageStepsDefinition {
         userPage.createNewUser(this.user.getUserName());
     }
 
+    @Then("I see expected texts from user module")
+    public void iSeeExpectedTextsFromUserModule() {
+        var expectedText= I18nUtils.getValueFromKey("user.header.title");
+        userPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
+    }
 }
