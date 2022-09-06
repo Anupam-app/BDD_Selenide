@@ -1,20 +1,18 @@
 @COMMON
 Feature: Report administration
 
-#Background:
-    #Given I am logged in as "Bio4CAdmin" user
 
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
-		Given I am logged in as "Bio4CAdmin" user
+	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     Then I see Runs, Templates, Reports tabs are displayed
     And  I see list of "runs" are displayed
     And below "runs" columns are displayed
-    |columns|
-    |Run    			 |
-    |Start Date    |
-    |Process Type  |
-    |Status 			 |
+    |columns		|
+    |Run    		|
+    |Start Date     |
+    |Process Type 	|
+    |Status 		|
 	
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
 	Given I am logged in as "Bio4CAdmin" user
@@ -23,10 +21,10 @@ Feature: Report administration
     Then  I see list of "templates" are displayed
     And below "templates" columns are displayed
     |columns           |
-    |Template Name		 |
+    |Template Name	   |
     |Status            |
     |Last Modified By  |
-    |Last Modified On	 |	
+    |Last Modified On  |	
 
 
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
@@ -36,13 +34,13 @@ Feature: Report administration
     Then  I see list of "reports" are displayed
     And below "reports" columns are displayed
     |columns        |
-    |Report Name		|
+    |Report Name	|
     |Date Generated |
-    |Created By  		|
-    |Report Type	 	|	
+    |Created By  	|
+    |Report Type	|	
     |E-Sign.Status	|
-    |Signed By			|
- @acc       
+    |Signed By		|
+     
   Scenario: Generate and sign Audittrail report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
