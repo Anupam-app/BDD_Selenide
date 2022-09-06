@@ -1,5 +1,8 @@
 package cucumber.steps;
 
+import java.text.ParseException;
+
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.ReportsPage;
@@ -26,6 +29,7 @@ public class ReportsFilterStepsDefinition {
     public void iVerifyTemplate(String templateName) {
         reportPage.checkTableContainsTemplate(templateName);
     }
+    
 
     @When("I search the report name {string}")
     public void iSearchReport(String reportName) {
@@ -35,6 +39,11 @@ public class ReportsFilterStepsDefinition {
     @Then("I should see report {string}")
     public void iVerifyReport(String reportName) {
         reportPage.checkTableContainsReport(reportName);
+    }
+    
+    @Then("I see Audit logs are displayed for date range and {string}")
+    public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
+        reportPage.checkTableContainsUser(userid);
     }
     
     @When("I click on filter icon and select report type {string}")
