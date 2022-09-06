@@ -1,24 +1,23 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
-import pageobjects.utility.TimeHelper;
 import dataobjects.BackupStatus;
-import org.apache.commons.lang3.RandomStringUtils;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.TimeHelper;
 
 public class BackupPage {
 
@@ -28,6 +27,8 @@ public class BackupPage {
 
 	private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 	private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
+	private String XPATH_HEADER = "//div[@class='header-title']";
+	
 	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
 	private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 	private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
@@ -43,9 +44,6 @@ public class BackupPage {
 	private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
 	private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
 	private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
-
-
-
 
 	public void goToBackupPage() {
 		backupPageLinkText.click();
@@ -69,7 +67,7 @@ public class BackupPage {
 		options.stream().findFirst().get().click();
 	}
 
-	public void scheduleBackup() {
+	public void scheduleBackup(String name) {
 		chooseBackupPath();
 
 		dailyBackup.click();
@@ -92,7 +90,7 @@ public class BackupPage {
 
 		backupScheduleButton.click();
 		SelenideHelper.commonWaiter(scheduleTextBox, visible);
-		scheduleTextBox.setValue(RandomStringUtils.randomAlphabetic(10));
+		scheduleTextBox.setValue(name);
 		scheduleOkButton.click();
 	}
 
@@ -128,6 +126,10 @@ public class BackupPage {
 		waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_SCHEDULED_TIME_TO_WAIT);
 	}
 
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+    }
+
 	public void waitForScheduledBackupFinished() {
 		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT);
 	}
@@ -136,37 +138,8 @@ public class BackupPage {
 		waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
 	}
 
-	public void scheduleBackup(String name) {
-		chooseBackupPath();
-
-		dailyBackup.click();
-		dateInput.click();
-		selectDate.click();
-		SelenideHelper.commonWaiter(timeInput, Condition.visible).click();
-		timeInput.sendKeys(Keys.LEFT_CONTROL + "a");
-		timeInput.sendKeys(Keys.BACK_SPACE);
-		SelenideHelper.commonWaiter(timeInput, Condition.visible).click();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
-		Date date = new Date();
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int minuteToWait = 1;
-		c.add(Calendar.MINUTE, minuteToWait);
-		Date currentDatePlusOne = c.getTime();
-		String d = dateFormat.format(currentDatePlusOne);
-		timeInput.sendKeys(d);
-		timeInput.sendKeys(Keys.ENTER);
-
-		backupScheduleButton.click();
-		SelenideHelper.commonWaiter(scheduleTextBox, visible);
-		scheduleTextBox.setValue(name);
-		scheduleOkButton.click();
-	}
-
 	public void notificationMessage(String message) {
 		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
 		waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
-
 	}
-	
 }

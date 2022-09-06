@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -8,6 +9,7 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.utility.SelenideHelper;
 
 public class RecipeConsoleStepsDefinition {
 
@@ -113,5 +115,12 @@ public class RecipeConsoleStepsDefinition {
     public void iVerifyRecipeAbort() {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
         recipeConsolePage.clickOnOk();
+    }
+
+    @Then("I see expected texts from recipe console")
+    public void iSeeExpectedTextsFromRecipeConsole() {
+        var expectedText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
+        recipeConsolePage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
 }

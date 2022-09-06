@@ -1,20 +1,21 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.*;
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import com.codeborne.selenide.ElementsCollection;
+import static com.codeborne.selenide.Selenide.*;
+import com.codeborne.selenide.SelenideElement;
+import cucumber.util.I18nUtils;
+import java.util.List;
+import java.util.function.Function;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
-import pageobjects.utility.SortHelper;
-
-import java.util.List;
-import java.util.function.Function;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.SortHelper;
 
 public class RecipePage {
     private final String XPATH_STEP = "//*[contains(@data-contextmenu,'step%s')]";
@@ -42,7 +43,10 @@ public class RecipePage {
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement notificationText = $(By.className("notification-summary"));
+    private final SelenideElement headerText = $(By.xpath("//div[@class='navWrapper']//h2"));
+    private final ElementsCollection deviceShapeElements = $$(By.xpath("//div[@class='search-node']//span"));
 
+    private final SelenideElement recipeCriteriaSearchTextBox = $(By.className("search-txt-box"));
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
     
@@ -75,6 +79,8 @@ public class RecipePage {
     private SelenideElement upIcon = $(By.xpath("(//div[@class='up-icon'])[1]"));
 
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
+
+    private final ElementsCollection deleteButtons = $$(By.xpath("//*[@class='deleteButton']"));
     private final SelenideElement saveEditorButton = $(By.xpath("//button[contains(@class,'save-button')]"));
     private final SelenideElement importMenuButton = $(By.xpath("//button[contains(@class,'import-button')]"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(@class,'import-button-text')]"));
@@ -158,10 +164,9 @@ public class RecipePage {
     public void createRecipe(String recipenode) {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
-        SelenideElement searchTextBox = $(By.className("search-txt-box"));
-        searchTextBox.sendKeys(recipenode);
-        searchTextBox.sendKeys(Keys.ENTER);
-        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
+        recipeCriteriaSearchTextBox.sendKeys(recipenode);
+        recipeCriteriaSearchTextBox.sendKeys(Keys.ENTER);
+        recipeCriteriaSearchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(RandomStringUtils.randomAlphabetic(10));
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
@@ -284,5 +289,21 @@ public class RecipePage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
+    }
+
+    public void seeContent(String expectedText) {
+        headerText.shouldHave(text(expectedText));
+    }
+
+    public List<String> getDeviceShapeElementNotLoaded() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        recipeCriteriaSearchTextBox.click();
+
+        var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
+
+        deleteButtons.forEach(deleteButton->deleteButton.click());
+
+        return elementNotTranslated;
     }
 }

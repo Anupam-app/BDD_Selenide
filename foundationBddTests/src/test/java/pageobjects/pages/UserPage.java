@@ -25,12 +25,14 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class UserPage {
 
+    private static final String XPATH_HEADER = "//div[@class='headerTitle']";
     private final String XPATH_USER_COLUMN_HEADER = "//th[contains(text(),'%s')]";
     private final String XPATH_USER_TABLE = "//table[@id='foundusertable']";
     private final String XPATH_USER_COLUMNS = "//table[@id='foundusertable']//td[%s]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement userPreferencesLink = $(By.xpath("//span[contains(text(),'User Preferences')]"));
+	
     Function<Integer, List<String>> getUserColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -268,6 +270,10 @@ public class UserPage {
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
     }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+	}
 
     public void waitForUserCreationNotification(String userName) {
         SelenideHelper.commonWaiter(alertNotificationText, ownText(userName));

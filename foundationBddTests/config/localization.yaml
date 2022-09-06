@@ -1,4 +1,31 @@
-default:
-  homepage:
-    title: Xceptance - The Software Testing Experts 
-   
+# USA
+en-US:
+  login: LOGIN
+  name: English (USA)
+  alarm.alarmList.emptyList.errorMessage: No alarms found for your criteria
+  analytics.label.aggregates: Aggregates
+  backupmanagement.main.header.title: Backup and Restore
+  configmgmt.systems.header.title: Settings
+  portal.modal.list.userPreferences: User Preferences
+  portal.pnid.info.screen_controlling: You are controlling main screen
+  portal.recipeConsole.button.processRestart: Restart
+  recipe.app.header.name: Recipe Management
+  report.reportNavbar.menu.reportManagement: Report Management
+  trends.collection.starred: Starred
+  user.header.title: User Management
+
+# France
+fr-FR:
+  login: CONNEXION
+  name: Français (France)
+  alarm.alarmList.emptyList.errorMessage: alarm.alarmList.emptyList.errorMessage
+  analytics.label.aggregates: Aggregates-FR
+  backupmanagement.main.header.title: backupmanagement.main.header.title
+  configmgmt.systems.header.title: configmgmt.systems.header.title
+  portal.modal.list.userPreferences: portal.modal.list.userPreferences
+  portal.pnid.info.screen_controlling: portal.pnid.info.screen_controlling
+  portal.recipeConsole.button.processRestart: portal.recipeConsole.button.processRestart
+  recipe.app.header.name: recipe.app.header.name
+  report.reportNavbar.menu.reportManagement: report.reportNavbar.menu.reportManagement
+  trends.collection.starred: trends.collection.starred
+  user.header.title: User Management-FE

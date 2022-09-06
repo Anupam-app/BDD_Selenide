@@ -32,4 +32,9 @@ public class SelenideHelper {
     public static void goToIFrame(){
         switchTo().frame("CrossDomainiframeId");
     }
+
+    public static void goParentFrame(){
+        switchTo().parentFrame();
+    }
 }
+

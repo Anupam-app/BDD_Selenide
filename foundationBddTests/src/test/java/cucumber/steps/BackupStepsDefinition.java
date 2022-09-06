@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import cucumber.util.I18nUtils;
 import dataobjects.BackupStatus;
 import dataobjects.Backupsetting;
 import io.cucumber.java.en.Given;
@@ -9,15 +10,16 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.BackupPage;
+import pageobjects.utility.SelenideHelper;
 
 public class BackupStepsDefinition {
 
     private BackupPage backupPage;
-    
-    private Backupsetting backupsetting;
-   
 
-    public BackupStepsDefinition(BackupPage backupPage,Backupsetting backupsetting) {
+    private Backupsetting backupsetting;
+
+
+    public BackupStepsDefinition(BackupPage backupPage, Backupsetting backupsetting) {
         this.backupPage = backupPage;
         this.backupsetting = backupsetting;
     }
@@ -31,7 +33,7 @@ public class BackupStepsDefinition {
     public void iTriggerBackup() {
         backupPage.triggerBackup();
     }
-	
+
     @When("I go to backup history")
     public void iGoToHistory() {
         backupPage.goToHistory();
@@ -66,26 +68,30 @@ public class BackupStepsDefinition {
 
     @When("I schedule backup")
     public void iScheduleBackup() {
-        backupPage.scheduleBackup();
+        backupsetting.setBackupName(RandomStringUtils.randomAlphabetic(10));
+        backupPage.scheduleBackup(backupsetting.getBackupName());
     }
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
         backupPage.waitForScheduledBackupFinished();
     }
-   
-    @When("I schedule {string} backup")
-    public void iScheduleBackup(String value) {
-    	if(value.equals("new")){
-    		this.backupsetting.setBackupName(RandomStringUtils.randomAlphabetic(10));
-            backupPage.scheduleBackup(this.backupsetting.getBackupName());
-    	}
-    	else if (value.equals("duplicate")) {
-    		backupPage.scheduleBackup(this.backupsetting.getBackupName());	
-    	}
+
+
+    @Then("I see expected texts from backup module")
+    public void iSeeExpectedTextsFromBackupModule() {
+        var expectedText = I18nUtils.getValueFromKey("backupmanagement.main.header.title");
+        backupPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
+
+    @When("I schedule backup with existing name")
+    public void iScheduleBackupWithExistingName() {
+        backupPage.scheduleBackup(this.backupsetting.getBackupName());
+    }
+
     @Then("I see the notification message {string}")
     public void iVerifyNotificationMessage(String message) {
-    	backupPage.notificationMessage(message);
+        backupPage.notificationMessage(message);
     }
 }
