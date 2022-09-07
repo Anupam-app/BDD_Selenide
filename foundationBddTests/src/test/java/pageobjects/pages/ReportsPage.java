@@ -76,7 +76,13 @@ public class ReportsPage {
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
     //private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     //private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-
+    private final SelenideElement saveAs_btn = $(By.xpath("//*[text()='Save As']"));
+    private final SelenideElement saveTemplateAs= $(By.xpath("//div[@class='input-wrapper']/input"));
+    private final SelenideElement saveTemplateTxt= $(By.xpath("//div[text()='Save Template As']"));
+    private final SelenideElement saveBtn = $(By.xpath("//button[text()='Save']"));
+    private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
+    private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
+    private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
     private final SelenideElement errorMsgSameTemplateName = $(By.xpath("//div[contains(@class,'alert_msg')]"));
     private final SelenideElement errorMsgTemplateApproval = $(By.xpath("//span[@class='validate-error']"));
     private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
@@ -399,7 +405,7 @@ public class ReportsPage {
 		if (option.equalsIgnoreCase("Custom Range")) {
 			commonWaiter(previousMonth, visible);
 			previousMonth.click();
-			Thread.sleep(1000);
+			commonWaiter(previousMonth, visible);
 			int index = getRandomNumber(0, availableDates.size() / 2);
 			availableDates.get(index).click();
 			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
@@ -435,7 +441,7 @@ public class ReportsPage {
 		case "This Month":
 		case "Last Month":
 		case "Custom Range":
-			Thread.sleep(3000);
+			commonWaiter(dateColumn, visible);
 			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
 			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
 			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
@@ -482,6 +488,62 @@ public class ReportsPage {
 	public int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
 	}
-    
 
+    public void iValidation() {
+    	if (saveAs_btn.isEnabled()) {
+    		saveAs_btn.shouldBe(visible);
+    	}
+    }
+    
+	public void iSaveAs() {
+		saveAs_btn.click();
+	}
+	
+	public void ivalidateWindow() {
+		saveTemplateTxt.shouldBe(visible);
+	}
+	
+	public void iRename(String templateName) throws InterruptedException {
+		saveTemplateAs.click();
+		saveTemplateAs.clear();
+		saveTemplateAs.setValue(templateName);
+		isave();
+	}
+	
+	public void isave() {
+		saveBtn.click();
+	}
+	
+	public void putReportTemplateToinactive(String templateName, String status) {
+        openReportTemplate(templateName);
+        reportTemplateStatusIcon.click();
+        changeStatus(status);
+        saveReportTemplate();
+    }
+	
+	public boolean iCheckNotifactionMsg(String status) {
+		boolean isTrue = false;
+		if (!notificationMsg.isDisplayed()) {
+		       notificationMsg.shouldNot(visible);
+		} else {
+			isTrue = notificationMsg.getText().equalsIgnoreCase(status);
+			notificationMsg.shouldBe(visible);
+		}
+		return isTrue;
+	}
+	
+	public void iSearchrepo(String templateName) {
+		SelenideHelper.commonWaiter(reportSearch, visible).setValue(templateName);
+        SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
+	}
+	
+	public boolean iValidationdraft() {
+		boolean isTrue = false;
+		if (!column_temp.isDisplayed()) {
+			column_temp.shouldNotBe(visible);
+		} else {
+			column_temp.shouldBe(visible);
+		}
+		return isTrue;
+	}
 }

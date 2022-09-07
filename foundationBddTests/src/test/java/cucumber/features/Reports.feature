@@ -86,3 +86,19 @@ Background:
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
+ 
+  Scenario: Verify Save As options in template page
+    Given I goto report management page
+    And I trigger report template mode
+    When I create random report template
+    And I select report include "Audit Trail"
+    And I select report include "Run Summary"
+    Then I save the report template
+    And I search the report template
+    And I select the report template
+    Then I see "Save As" button enable and save As the report template
+    And I see SaveTemplate popup window
+    When I modify the Existing template
+    Then I see "Report template created" successfully message
+    And I search modified the template
+    And I see report template status Draft in template page

@@ -213,4 +213,58 @@ public class ReportsPageStepsDefinition {
     public void iVerifyTemplateIsEditable() {
     	reportPage.approvedTemplateValidation();
     }
+    
+    @Given("I select the report template")
+    public void i_select_report_template() throws InterruptedException {
+    	reportPage.openReportTemplate(this.reportTemplate.getName());
+       //Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+    }
+    @When("I save As the report template")
+    public void i_save_as_the_report_template() {
+    	reportPage.iSaveAs();        
+    }
+    
+    @Then("I see SaveTemplate popup window")
+    public void i_see_save_template_popup_window() {
+        reportPage.ivalidateWindow();
+    }
+    
+    @When("I modify the Existing template")
+    public void i_modify_the_existing_template() throws InterruptedException {
+    	this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
+        this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
+    	reportPage.iRename(this.reportTemplate.getSaveAsName());    
+    }
+
+    @When("I change the templete status Approved to Inactive")
+    public void i_change_template_status_approved_to_inactive() {
+        this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
+        reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
+    }
+    
+    @Then("I see {string} button enable and save As the report template")
+    public void i_see_button_enable_and_save_as_the_report_template(String string) {
+        reportPage.iValidation();
+        reportPage.iSaveAs();
+    }
+    
+    @And("I save report template")
+    public void i_save_report_template() {
+    	reportPage.isave();
+    }
+    
+    @Then("I see {string} successfully message")
+    public void i_see_successfully_message(String message) {
+    	reportPage.iCheckNotifactionMsg(message);
+    }
+
+    @When("I search modified the template")
+    public void i_search_modified_template() throws InterruptedException {
+        reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
+    }
+    
+    @And("I see report template status Draft in template page")
+    public void i_see_report_template_status_draft_template_page() {
+    	reportPage.iValidationdraft();
+    }
 }
