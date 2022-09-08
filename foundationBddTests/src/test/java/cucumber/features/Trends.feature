@@ -24,7 +24,7 @@ Scenario Outline: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Pan
                   |Default_Collection  |
                   |List of Collection  |
                   
-        
+      
 Scenario: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-2  
            When I am on Trends Panel
            Then I see the availability of below   
@@ -33,7 +33,7 @@ Scenario: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-2
            |Default Parameters Collection  |
            |Starred Parameters Collection  |
            |List of collection             |
- 
+
 			  
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-3               
           When I choose "<Param1>","<Param2>" parameters as default collection
@@ -60,7 +60,7 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
 				 @IVI
 				 Examples:
 							  |Param1          |Param2          |
-							  |PI103 PV        |TMP1 PV         |
+							  |P001 - Speed PV |P002 - Speed PV |
 							  
 	    
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -list of collection            
@@ -77,8 +77,8 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
 							  
 					@IVI
 					Examples:
-                |Param1          |Param2         |
-                |PI103 PV        |TMP1 PV        |
+                |Param1          |Param2          |
+                |P001 - Speed PV |P002 - Speed PV |
 	
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -Default collections                         
            When I select the "Default" collection
@@ -93,7 +93,7 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
 					 @IVI
 					 Examples:
                  |Param1          |Param2          |
-                 | PI103 PV       |TMP1 PV         |
+                 |P001 - Speed PV |P002 - Speed PV |
 							  
                             
 Scenario: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List                
@@ -117,5 +117,5 @@ Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Tr
 					 @IVI
 					 Examples:
 							  |Param1          |Param2          |
-							  |PI101 PV        |PI102 PV        |
+							  |P001 - Speed PV |P002 - Speed PV |
 							  
