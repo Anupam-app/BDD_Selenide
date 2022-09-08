@@ -3,6 +3,7 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -33,6 +35,7 @@ public class UserPage {
     //alarm_info_msg alert alert-info fade show
     //alarm_info_msg alert alert-info fade show
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
@@ -61,7 +64,7 @@ public class UserPage {
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -82,7 +85,7 @@ public class UserPage {
 
     public void saveMyChanges() {
         saveButton.click();
-        confirmationButton.click();
+        commonWaiter(confirmationButton, visible).click();
     }
 
     public String getEmployeeIdFromForm() {
@@ -188,6 +191,12 @@ public class UserPage {
 
     public void isGeneratedNotificationWhenPasswordReset() {
         commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+    }
+    
+    public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT,visible);
+        XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
+        
     }
 
     public void cancelUser() {

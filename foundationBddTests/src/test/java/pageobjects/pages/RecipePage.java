@@ -2,6 +2,7 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
@@ -10,6 +11,7 @@ import pageobjects.utility.SortHelper;
 import java.util.List;
 import java.util.function.Function;
 
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.*;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -41,13 +43,13 @@ public class RecipePage {
 
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
-
+    
     private final SelenideElement openButton = $(By.className("open-recipe-btn"));
     private final SelenideElement plusButton = $(By.className("icon-plus"));
     private final By deletePhaseButton = By.className("deleteButton");
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
-
+    private final SelenideElement XPATH_WARNNOTIFICATION_TEXT = $(By.xpath("//*[@class='editor-dialog']/div/div[1]"));
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
     private final By phasesList = By.className("phaseHead");
@@ -121,6 +123,12 @@ public class RecipePage {
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
         $(By.className("btn_primary")).click();
+    }
+    
+    public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {   	
+        commonWaiter(XPATH_WARNNOTIFICATION_TEXT,visible);
+        XPATH_WARNNOTIFICATION_TEXT.shouldHave(text(message));
+        $(By.xpath("//*[@class='btn-primary']")).click();         
     }
 
     public void saveModifiedRecipe() {

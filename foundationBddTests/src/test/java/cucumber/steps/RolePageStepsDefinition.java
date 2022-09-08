@@ -40,10 +40,12 @@ public class RolePageStepsDefinition {
 		this.role.getPermissions().add(role);
 		rolePage.clickOnPermission(role);
 	}
+	
+	
 
-	@When("I click on save button")
-	public void iSaveRole() {
-    	rolePage.saveRole(this.role.getRoleAction());
+	@When("I see notification")
+	public void iSeeNotification() {
+    	rolePage.notification(this.role.getRoleAction());
 	}
 
 	@Then("I verify role details")
@@ -100,4 +102,20 @@ public class RolePageStepsDefinition {
 	public void iDoNotSeeRolesMode() {
 		rolePage.NoRolesTab();
 	}
+	@Then( "I see the error message of role {string}")
+    public void iSeetheErrorMessage(String message) {
+        rolePage.checkMessage(message);
+    }
+	@Then("I create role {string}")
+	public void iCreateRole(String name) {
+		this.role.setRoleName(name);
+		this.role.setRoleAction(RoleAction.ERROR);
+		rolePage.createNewrole(this.role.getRoleName());	
+		
+	}
+	@When("I click on save button")
+	public void iSaveRole() {
+    	rolePage.saveButton();
+	}
+
 }

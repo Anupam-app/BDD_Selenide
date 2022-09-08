@@ -3,6 +3,14 @@ Feature: Apply Filter Reports
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
+  
+  Scenario: Verify audit Trail search based on user and date range
+    Given I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
+    And I select date range as "Last 7 Days"
+    Then I see Audit logs are displayed for date range and "bio4cadmin"
+
 
   Scenario: Verify search functionality in the templates page
     Given I goto report management page
@@ -19,8 +27,8 @@ Feature: Apply Filter Reports
   Scenario: Verify search reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I search the report name "AuditTrail_1"
-    Then I should see report "AuditTrail_1"
+    When I search the report name "AuditTrail_1_Bio4CAdmin"
+    Then I should see report "AuditTrail_1_Bio4CAdmin"
 
   Scenario: Verify filter reports functionality in Report Management
     Given I goto report management page
@@ -32,7 +40,7 @@ Feature: Apply Filter Reports
     Given I goto report management page
     And I trigger report mode
     When I select report user from dropdown created by "Bio4CAdmin"
-    Then I should see report "AuditTrail_1"
+    Then I should see report "AuditTrail_1_Bio4CAdmin"
 
   Scenario: Verify signed by reports functionality in Report Management
     Given I goto report management page
