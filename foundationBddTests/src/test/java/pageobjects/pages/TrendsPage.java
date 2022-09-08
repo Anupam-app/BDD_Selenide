@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -29,6 +30,7 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.typesafe.config.ConfigParseOptions;
 
 import dataobjects.AnalyticsMode;
 
@@ -42,6 +44,7 @@ import java.text.SimpleDateFormat;
 
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
+
 
 public class TrendsPage {
 
@@ -304,25 +307,19 @@ public class TrendsPage {
 		$(By.xpath(String.format(nameOfListCollection,name))).click();
 	}
 
-	public void defaultCollectionTagsValidation( ) {
+	public void defaultCollectionTagsValidation(String parameters ) {
 		int count=defaultCollectionParams.size();
 		List <String> values = new ArrayList <String>();	
 		for (int i=1;i<=count;i++)
 		{
 			values.add($(By.xpath(String.format(tagLabel, i))).getText());
 		}
-		System.out.println("list of tags :"+values);
-		List<String> lines = Collections.emptyList(); 
-		try { 
-			lines = Files.readAllLines(Paths.get("C:\\Users\\sadm-X243305\\Desktop\\listOfParams.txt"), StandardCharsets.UTF_8); 
-		} catch (IOException e) { 
-			e.printStackTrace(); 
-		} 
-		System.out.println("Content of List:"); 
-		System.out.println(lines);
+		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
+	    var params = config.getConfigList("Params.list");
+		System.out.println(params);
 		Collections.sort(values);
-		Collections.sort(lines);
-		Assert.assertEquals(values, lines);
+		Collections.sort();
+		//Assert.assertEquals( );
 	}
 
 	public void starredButton() {

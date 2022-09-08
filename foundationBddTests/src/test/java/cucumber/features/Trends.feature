@@ -96,9 +96,19 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area
                  |P001 - Speed PV |P002 - Speed PV |
 							  
                             
-Scenario: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List                
+Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List                
            When I select the "Default" collection
-           Then I verify default list of parameters
+           Then I verify default list of "<parameters>"
+           
+            @CRS1
+            Examples:
+            |parameters                    |
+            |parameters/crs/trendsParams   |
+            
+            @IVI
+            Examples:
+            |parameters                    |
+            |parameters/ivi/trendsParams   |
 
          
 Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Trends Parameters List                

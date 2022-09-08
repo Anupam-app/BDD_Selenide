@@ -3,6 +3,10 @@ package cucumber.steps;
 import java.text.ParseException;
 import java.util.List;
 
+import org.aeonbits.owner.ConfigFactory;
+
+import com.typesafe.config.ConfigParseOptions;
+
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -125,9 +129,10 @@ public class TrendsPageStepsDefinition {
 		trendsPage.selectMultipleCheckbox(param1,param2);
 	}
 
-	@Then("I verify default list of parameters")
-	public void i_verify_default_list_of_parameters() {
-		trendsPage.defaultCollectionTagsValidation();
+	@Then("I verify default list of {string}")
+	public void i_verify_default_list_of_parameters(String parameters) {
+		trendsPage.defaultCollectionTagsValidation(parameters);
+
 	}
 
 	@When("I select star icons for {string},{string} parameters")
