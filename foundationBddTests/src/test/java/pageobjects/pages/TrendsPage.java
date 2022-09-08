@@ -6,6 +6,7 @@ import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static com.codeborne.selenide.Selenide.$x;
+import com.typesafe.config.ConfigFactory;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -17,7 +18,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.aeonbits.owner.ConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -314,6 +314,7 @@ public class TrendsPage {
 		{
 			values.add($(By.xpath(String.format(tagLabel, i))).getText());
 		}
+
 		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
 	    var params = config.getConfigList("Params.list");
 		System.out.println(params);
