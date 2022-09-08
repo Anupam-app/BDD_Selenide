@@ -318,7 +318,7 @@ public class TrendsPage {
 	    var params = config.getConfigList("Params.list");
 		System.out.println(params);
 		Collections.sort(values);
-		Collections.sort();
+		//Collections.sort();
 		//Assert.assertEquals( );
 	}
 
