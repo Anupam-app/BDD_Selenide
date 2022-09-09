@@ -19,7 +19,7 @@ Scenario Outline: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Pan
           
           Examples:
                   |TrendPanelType      |
-							    |Trends_Area_Panel   |
+			      |Trends_Area_Panel   |
                   |Starred_Collection  |
                   |Default_Collection  |
                   |List of Collection  |
@@ -46,10 +46,10 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
                |Live               |
                |Entire run         |
                |Current run        |
-               |start date				 |
-               |end date					 |
-               |download					 |
-               |selectInterval		 |
+               |start date		   |
+               |end date		   |
+               |download		   |
+               |selectInterval	   |
            
 
 			   @CRS
