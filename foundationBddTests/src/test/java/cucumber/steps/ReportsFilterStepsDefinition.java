@@ -93,7 +93,7 @@ public class ReportsFilterStepsDefinition {
 		List<String> options = datatable.asList();
 		for (String datarange : options) {
 			reportPage.selectDateRange(datarange);
-			Assert.assertTrue(reportPage.verifyDateRanges(datarange));
+			//Assert.assertTrue(reportPage.verifyDateRanges(datarange));
 		}
 	}
 
@@ -114,5 +114,31 @@ public class ReportsFilterStepsDefinition {
 			reportPage.checkSortedElement(columnName, true);
 		}
 	}
-
+	
+	@Then("^I should see recipe report list displayed based on date range dropdown$")
+	public void iviewrecipereportlistdaterange(DataTable datatable)
+		throws ParseException, InterruptedException {
+			List<String> options = datatable.asList();
+			for (String datarange : options) {
+				reportPage.selectDateRangeRprt(datarange);
+				reportPage.verifyDateRangesRprt(datarange);
+			}
+	}
+	@Then("^Reports columns should be sorted in ascending order$")
+	public void reports_columns_sorted_ascending_order(DataTable datatable) {
+		List<String> options = datatable.asList();
+		for (String columnName : options) {
+			reportPage.sortList(columnName, false);
+			reportPage.checkSortedElements(columnName, false);
+		}
+	}
+	
+	@Then("^Reports columns should be sorted in descending order$")
+	public void reports_columns_sorted_descending_order(DataTable datatable) {
+		List<String> options = datatable.asList();
+		for (String columnName : options) {
+			reportPage.sortList(columnName, true);
+			reportPage.checkSortedElement(columnName, true);
+		}
+	}
 }

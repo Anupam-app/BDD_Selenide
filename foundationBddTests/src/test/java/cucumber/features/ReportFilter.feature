@@ -63,18 +63,32 @@ Feature: Apply Filter Reports
  		When  I filter on icon and select run status as "Aborted"
  		Then  I should see run status as "Aborted" 
 
-	@test1
+   
 	Scenario: Verify run history functionality based on the Date range.
  		Given I goto report management page 
  		Then  I should see recipe run list displayed based on date range dropdown
  			|Today|Yesterday|Last 7 Days|Last 30 Days|This Month|Last Month|Custom Range|
 	  
-	 									
+	 								
 	Scenario: Verify sort run functionality all columns in ascending order
  		Given I goto report management page
  		Then  Report columns should be sorted in ascending order
  			|Run|Start Date|Process Type|Status|
  		Then  Report columns should be sorted in descending order
  			|Run|Start Date|Process Type|Status|
-			 
-  
+ 			
+		  	
+  Scenario: Verify report history functionality based on the Date range.
+ 		Given I goto report management page
+ 		And   I trigger report mode 
+ 		Then  I should see recipe report list displayed based on date range dropdown
+ 			|Today|Yesterday|Last 7 Days|Last 30 Days|This Month|Last Month|Custom Range|
+ 			
+ 	
+ 	Scenario: Verify sort reports functionality all columns in ascending order
+ 		Given I goto report management page
+ 		And   I trigger report mode
+ 		Then  Reports columns should be sorted in ascending order
+ 			|Report Name|Date Generated|Created By|Report Type|E-Sign.Status|Signed By|
+ 		Then  Reports columns should be sorted in descending order
+ 			|Report Name|Date Generated|Created By|Report Type|E-Sign.Status|Signed By|

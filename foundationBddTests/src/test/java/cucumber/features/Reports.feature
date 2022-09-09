@@ -49,7 +49,7 @@ Background:
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-
+@test1
   Scenario: Generate run history report and check report content
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
@@ -101,4 +101,16 @@ Background:
     When I modify the Existing template
     Then I see "Report template created" successfully message
     And I search modified the template
+    
+   
+ Scenario: Verify Create Custom Template   
+    When I goto report management page
+    And I select report from dropdown "Run History"
+    And I choose corresponding recipe run
+    And I choose template "Test123"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I check report content
     And I see report template status Draft in template page

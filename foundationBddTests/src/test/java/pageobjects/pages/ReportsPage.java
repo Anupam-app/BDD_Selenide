@@ -94,10 +94,12 @@ public class ReportsPage {
 	private ElementsCollection dateRange = $$(By.xpath("//div[(@class='ranges')]//li[i]"));
 	private final SelenideElement dateColumn=$(By.xpath("//input[@name='dateRange']"));
 	private final SelenideElement datePopup=$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
+	private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
 	private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
 	private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
 	private final SelenideElement startDateDesendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='order']"));
 	private final SelenideElement startDateAsendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
+	private final SelenideElement startDateRep=$(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
 	private final SelenideElement statusColumn=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
 	private final SelenideElement startDate=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
 	private final SelenideElement clearAllFilters=$(By.xpath("//div[text()='Clear All']"));
@@ -107,8 +109,15 @@ public class ReportsPage {
     private final String XPATH_USER_TABLE = "//table[@id='foundationRunListTable']";
 	private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
+    private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
 	Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
+        users.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return users;
+    };
+    
+	Function<Integer, List<String>> getReportsColumns = (index) -> {
+        var users = $$(By.xpath(String.format(XPATH_REPORTS_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
@@ -545,5 +554,96 @@ public class ReportsPage {
 			column_temp.shouldBe(visible);
 		}
 		return isTrue;
+	}
+	
+	public void selectDateRprt(String daterange) {
+
+		ElementsCollection options = dateRange;
+		options.shouldBe(CollectionCondition.size(7));
+		for (SelenideElement d : options) {
+			for (int i = 0; i < options.size(); i++) {
+				date.click();
+				options.get(i).click();
+			}
+		}
+	}
+
+	public void selectDateRangeRprt(String option) throws InterruptedException {
+		commonWaiter(dateColumn, visible);
+		dateColumn.click();
+		ElementsCollection options = dateOptionsRprt;
+		for (SelenideElement element : options) {
+			if (element.getText().equalsIgnoreCase(option)) {
+				element.click();
+				break;
+			}
+		}
+
+		if (option.equalsIgnoreCase("Custom Range")) {
+			commonWaiter(previousMonth, visible);
+			previousMonth.click();
+			commonWaiter(previousMonth, visible);
+			int index = getRandomNumber(0, availableDates.size() / 2);
+			availableDates.get(index).click();
+			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
+			availableDates.get(index).click();
+			
+		}
+
+	}
+
+	public boolean verifyDateRangesRprt(String dateRange) throws ParseException, InterruptedException {
+		boolean isTrue = false;
+		switch (dateRange) {
+		case "Today":
+		case "Yesterday":
+			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+			if (startDateRep.isDisplayed()) {
+				sortList("Date Generated", false);
+				String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+				sortList("Date Generated", true);
+				startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+					isTrue = true;
+				}
+			} else if (noDatamsg.isDisplayed()) {
+				isTrue = true;
+			}
+			break;
+		case "Last 7 Days":
+		case "Last 30 Days":
+		case "This Month":
+		case "Last Month":
+		case "Custom Range":
+			commonWaiter(dateColumn, visible);
+			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+			if (startDateRep.isDisplayed()) {
+				sortList("Date Generated", false);
+				String startDateRow = startDateRep.getText().split(" ")[0].trim();
+				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+				sortList("Date Generated", true);
+				String endDateRow = startDateRep.getText().split(" ")[0].trim();
+				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
+				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
+						&& (selectedDesendingDate.equals(selectedDate2)
+								|| selectedDesendingDate.before(selectedDate2))) {
+					isTrue = true;
+				}
+			} else if (noDatamsg.isDisplayed()) {
+				isTrue = true;
+			}
+			break;
+		}
+		return isTrue;
+	}
+
+	public void checkSortedElements(String columnName, boolean descending) {
+		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
 	}
 }
