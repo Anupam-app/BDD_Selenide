@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.aeonbits.owner.ConfigFactory;
+import com.typesafe.config.ConfigFactory;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -309,17 +309,24 @@ public class TrendsPage {
 
 	public void defaultCollectionTagsValidation(String parameters ) {
 		int count=defaultCollectionParams.size();
-		List <String> values = new ArrayList <String>();	
+		List <String> acceptedParams = new ArrayList <String>();
+		List <String> expectedParams = new ArrayList <String>();
 		for (int i=1;i<=count;i++)
 		{
-			values.add($(By.xpath(String.format(tagLabel, i))).getText());
+			acceptedParams.add($(By.xpath(String.format(tagLabel, i))).getText());
 		}
 		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
 	    var params = config.getConfigList("Params.list");
-		System.out.println(params);
-		Collections.sort(values);
-		//Collections.sort();
-		//Assert.assertEquals( );
+	    int paramsSize = params.size();
+		for (var param : params) {
+			expectedParams.add(param.getString("value"));
+        }
+		if((count==paramsSize) && (count!=0 && paramsSize!=0)) {
+			Collections.sort(acceptedParams);
+			Collections.sort(expectedParams);
+			Assert.assertEquals(acceptedParams,expectedParams );
+		}
+		
 	}
 
 	public void starredButton() {
