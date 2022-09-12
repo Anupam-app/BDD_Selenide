@@ -12,6 +12,7 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.collections.*;
@@ -95,6 +96,7 @@ public class ReportsPage {
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
     private final SelenideElement absentReportText = $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
+    private final SelenideElement pdfViwer = $(By.xpath("//*[@id='viewer']"));
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
@@ -292,6 +294,19 @@ public class ReportsPage {
         absentReportText.should(not(visible));
     }
     
+    public void printReport() {
+    	//WebElement parentShadowElement = driver.findElement(By.cssSelector("[page='home']"));
+    	//Map<String, Object> params = new HashMap<>();
+    	//params.put("parentElement", pdfViwer);
+    	//params.put("innerSelector", "div#tabContainer shop-tabs shop-tab:nth-child(1) a");
+    	//clickElementShadowDOM(((RemoteWebDriver)driver), params);
+    	//Selenide.executeJavaScript("arguments[0].shadowRoot.getElementById('toolbar').shadowRoot.getElementById('toolbar').shadowRoot.getElementById('leftContent').click()",pdfViwer);
+    	Selenide.sleep(6000);
+    	SelenideElement printButton= (Selenide.executeJavaScript("return document.querySelector('#viewer').shadowRoot.querySelector('#toolbar').shadowRoot.querySelector('#print').shadowRoot.querySelector('#icon > iron-icon').shadowRoot.querySelector('svg')"));
+        Selenide.executeJavaScript("arguments[0].click();",  printButton);
+        Selenide.sleep(6000);
+    }
+    
     public void selectParams(String parameter) throws InterruptedException {
     	
     	commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))),visible);
@@ -428,7 +443,7 @@ public class ReportsPage {
         Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
             }
         }
-    public void checkTableContainsUser(String userid) throws InterruptedException, ParseException {
+    public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
     	Thread.sleep(5000);
         for (int i=1;i<=(auditListTable.size());i++) {
         	Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));

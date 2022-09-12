@@ -208,7 +208,10 @@ public class RecipePage {
 
 
     public void exportRecipe(String recipeName) {
-        $(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).waitUntil(visible, 5000l).click();
+        //$(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).waitUntil(visible, 15000l).click();
+    	//$(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).shouldBe(visible);
+        commonWaiter($(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))), Condition.visible).click();
+        Selenide.sleep(20000);
         commonWaiter(openButton, Condition.visible).click();
     }
 
@@ -221,6 +224,7 @@ public class RecipePage {
         notificationTexts.shouldHave(
                 CollectionCondition.anyMatch("User notification should contain this notification"
                         , n -> n.getText().equals(notification)));
+        //notificationTexts.shouldHave(CollectionCondition.exactTexts(notification));
     }
 
     public void notificationMessageExport(String recipeName) {

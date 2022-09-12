@@ -141,6 +141,12 @@ public class ReportsPageStepsDefinition {
         reportPage.viewReports(this.report.getName());
         reportPage.checkReportPdfInPage();
     }
+    
+    @When("I verify the report is printable")
+    public void iShouldBeAblePrint() {
+        reportPage.printReport();
+        
+    }
 
     @Then("I check report content")
     public void iCheckReportContent() throws Exception {
@@ -148,11 +154,19 @@ public class ReportsPageStepsDefinition {
         this.report.checkEventTable(reportPage.getPdfUrl());
         this.report.checkRunId(reportPage.getPdfUrl(),this.recipe.getRunId());
     }
+    
+    @Then("I check audit trial report content")
+    public void iCheckAuditTrialReportContent() throws Exception {
+
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
+        this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+    }
 
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
-        this.report.checkUserInformation(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
     }
 
     @When("I search report {string}")

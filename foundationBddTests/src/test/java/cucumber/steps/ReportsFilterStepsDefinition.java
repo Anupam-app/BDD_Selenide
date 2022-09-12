@@ -43,7 +43,7 @@ public class ReportsFilterStepsDefinition {
     
     @Then("I see Audit logs are displayed for date range and {string}")
     public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
-        reportPage.checkTableContainsUser(userid);
+        reportPage.checkTableContainsUserAndDateRange(userid);
     }
     
     @When("I click on filter icon and select report type {string}")

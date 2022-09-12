@@ -27,7 +27,7 @@ Feature: Report administration
     |Last Modified On  |	
 
 
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
+	Scenario: BIOCRS-5238/5239/5241 | Report Management Dashboard -  Reports Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report mode
@@ -40,18 +40,21 @@ Feature: Report administration
     |Report Type	|	
     |E-Sign.Status	|
     |Signed By		|
-     
-  Scenario: Generate and sign Audittrail report
+ @acc    
+  Scenario: BIOCRS-5106/592 | Generate and sign Audittrail report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
+    And I select date range as "Last 7 Days"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
-    And I esign the report
-    Then I should see the report signed
+    #And I esign the report
+    #Then I should see the report signed
     And I should see the report file presence
+    And I verify the report is printable
+    And I check audit trial report content
     
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
@@ -92,6 +95,7 @@ Feature: Report administration
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
+    And I select report include "Alarms"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
@@ -123,6 +127,7 @@ Feature: Report administration
     And I wait the end of the execution of the recipe
     When I goto report management page
     And I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
