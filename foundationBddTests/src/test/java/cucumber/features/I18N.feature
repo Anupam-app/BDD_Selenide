@@ -1,3 +1,4 @@
+@COMMON
 Feature: I18N on all modules
 
   Background:
