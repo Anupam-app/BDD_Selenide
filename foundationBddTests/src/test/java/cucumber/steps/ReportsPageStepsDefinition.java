@@ -267,4 +267,12 @@ public class ReportsPageStepsDefinition {
     public void i_see_report_template_status_draft_template_page() {
     	reportPage.iValidationdraft();
     }
+    
+    @Then("I verify run summary report report")
+    public void i_verify_run_summary_report() throws Exception {
+    	this.report.checkEventTable(reportPage.getPdfUrl());
+        this.report.checkFiledIds(reportPage.getPdfUrl());
+        this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
+        this.report.checkRecipeColumnsInReport(reportPage.getPdfUrl());
+    }
 }
