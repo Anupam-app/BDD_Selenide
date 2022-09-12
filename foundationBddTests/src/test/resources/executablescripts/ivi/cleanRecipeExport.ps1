@@ -1,1 +1,1 @@
-rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testRecipeToExecute.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testDraftRecipeToAddPhase.acercp'

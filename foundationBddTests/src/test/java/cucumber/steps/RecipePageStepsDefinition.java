@@ -73,13 +73,13 @@ public class RecipePageStepsDefinition {
     @And("I save the recipe")
     public void iSaveTheRecipe() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
-        recipePage.saveRecipe(this.recipe.getRecipeName(),true);
+        recipePage.saveRecipe(this.recipe.getRecipeName());
     }
     
     @And("I save the recipe with name {string}")
     public void iSaveTheRecipeExistingName(String recipeName) {
         this.recipe.setRecipeName(recipeName);
-        recipePage.saveRecipe(this.recipe.getRecipeName(),true);
+        recipePage.saveRecipe(this.recipe.getRecipeName());
     }
     
     @Then("I see warning message is displayed {string}")
@@ -106,7 +106,7 @@ public class RecipePageStepsDefinition {
     @And("I save the recipe as {string}")
     public void iSaveRecipeAs(String recipe) {
         this.recipe.setRecipeName(recipe);
-        recipePage.saveRecipe(recipe,true);
+        recipePage.saveRecipe(recipe);
     }
 
     @Then("I save the modified recipe")

@@ -2,8 +2,7 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
@@ -128,11 +127,9 @@ public class RecipePage {
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
 
-    public void saveRecipe(String recipeName, boolean editor) {
-        if (editor) {
-            saveEditorButton.click();
-        }
-        SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
+    public void saveRecipe(String recipeName) {
+        saveEditorButton.click();
+        SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         recipeInputSave.click();
         SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
         recipeInputSave.setValue(recipeName);
@@ -141,7 +138,7 @@ public class RecipePage {
 
     public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
         commonWaiter(XPATH_WARNNOTIFICATION_TEXT, visible);
-        XPATH_WARNNOTIFICATION_TEXT.shouldHave(text(message));
+        XPATH_WARNNOTIFICATION_TEXT.shouldHave(ownText(message));
         $(By.xpath("//*[@class='btn-primary']")).click();
     }
 
@@ -241,7 +238,13 @@ public class RecipePage {
         var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
         importRecipe.click();
         importButton.click();
-        saveRecipe(RandomStringUtils.randomAlphabetic(10), false);
+        SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
+        recipeInputSave.click();
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
+        recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
+        saveButton.click();
+
+
         browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
 
