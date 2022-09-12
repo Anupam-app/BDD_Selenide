@@ -130,7 +130,7 @@ public class Report {
      * @param reportUrl Report url     * 
      * @throws Exception
      */
-    public void checkFiledIds(String reportUrl, String batchId) throws Exception {
+    public void checkFiledIds(String reportUrl) throws Exception {
 
         URL url = new URL(reportUrl);
 
@@ -141,8 +141,8 @@ public class Report {
 
         // get field value and check is not null
         Assert.assertNotNull("No field with id " + UNIT_OPERATION_NAME, PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));
-        //Assert.assertNotNull("No field with id " + BATCH_ID, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
-      Assert.assertEquals("Unexpected run id value", batchId, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
+        Assert.assertNotNull("No field with id " + BATCH_ID, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
+      //Assert.assertEquals("Unexpected run id value", batchId, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
         Assert.assertNotNull("No field with id " + PRODUCT_ID, PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
         Assert.assertNotNull("No field with id " + RUN_ID_FIELD, PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD));
         Assert.assertNotNull("No field with id " + RECIPE_NAME, PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
