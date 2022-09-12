@@ -41,7 +41,7 @@ Feature: Recipe management
 
   Scenario: Recipe export and import
     Given I go to recipe page
-    And I search the recipe "testRecipeToExecute"
+    And I search the recipe "testDraftRecipeToAddPhase"
     When I export the recipe
     And I trigger edit mode
     And I import the recipe
