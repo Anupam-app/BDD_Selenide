@@ -1,6 +1,8 @@
 package cucumber.steps;
 
+
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
@@ -105,6 +107,12 @@ public class ReportsFilterStepsDefinition {
 			reportPage.checkSortedElement(columnName, false);
 		}
 	}
+
+    @Then("I see Audit logs are displayed for date range and {string}")
+    public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
+        reportPage.checkTableContainsUser(userid);
+    }
+    
 
 	@Then("^Report columns should be sorted in descending order$")
 	public void report_columns_sorted_in_desc_order(DataTable datatable) {

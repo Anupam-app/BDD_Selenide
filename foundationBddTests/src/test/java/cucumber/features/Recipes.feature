@@ -31,12 +31,19 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+     
+  Scenario: Create new recipe with existing Recipe name
+    Given I go to recipe page
+    When I trigger edit mode
+    And I create a random phase
+    And I save the recipe with name "testRecipeToExecute"
+    Then I see warning message is displayed "Recipe is locked. Please save it as new copy."
 
   Scenario: Recipe export and import
     Given I go to recipe page
-    When I click on export recipe "testRecipeToExecute"
+    When I click on export recipe "testDraftRecipeToAddPhase"
     And I trigger edit mode
-    And I click on import "testRecipeToExecute"
+    And I click on import "testDraftRecipeToAddPhase"
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications

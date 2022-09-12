@@ -1,9 +1,12 @@
 package cucumber.steps;
 
 import dataobjects.BackupStatus;
+import dataobjects.Backupsetting;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.BackupPage;
 
@@ -11,8 +14,12 @@ public class BackupStepsDefinition {
 
     private BackupPage backupPage;
 
-    public BackupStepsDefinition(BackupPage backupPage) {
+    private Backupsetting backupsetting;
+
+
+    public BackupStepsDefinition(BackupPage backupPage, Backupsetting backupsetting) {
         this.backupPage = backupPage;
+        this.backupsetting = backupsetting;
     }
 
     @Given("I goto backup page")
@@ -59,11 +66,22 @@ public class BackupStepsDefinition {
 
     @When("I schedule backup")
     public void iScheduleBackup() {
-        backupPage.scheduleBackup();
+        backupsetting.setBackupName(RandomStringUtils.randomAlphabetic(10));
+        backupPage.scheduleBackup(backupsetting.getBackupName());
     }
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
         backupPage.waitForScheduledBackupFinished();
+    }
+
+    @When("I schedule backup with existing name")
+    public void iScheduleBackupWithExistingName() {
+        backupPage.scheduleBackup(this.backupsetting.getBackupName());
+    }
+
+    @Then("I see the notification message {string}")
+    public void iVerifyNotificationMessage(String message) {
+        backupPage.notificationMessage(message);
     }
 }
