@@ -50,7 +50,7 @@ INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_na
 GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (7, N'testRolePermission', N'testRolePermission', N'testRolePermission', NULL, N'testRolePermission', N'user.role.roletype', 1, 0, N'ENABLED')
 GO
-INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status]) VALUES (8, N'testroleviewpermission', N'testroleviewpermission', N'testroleviewpermission', NULL, N'testroleviewpermission', N'User Created', 1)
+INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (8, N'testroleviewpermission', N'testroleviewpermission', N'testroleviewpermission', NULL, N'testroleviewpermission', N'User Created', 1, 0, N'ENABLED')
 GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
