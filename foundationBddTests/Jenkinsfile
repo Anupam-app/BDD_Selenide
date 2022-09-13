@@ -62,8 +62,8 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/common'),
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/'+env.PDP)
+						invokeCommand('powershell ' +env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/common'),
+						invokeCommand('powershell ' +env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/'+env.PDP)
 					]
 				)
             }
