@@ -28,7 +28,7 @@ public class I18nUtils {
     public static List<String> getElementsNotI18N(ElementsCollection elementsCollection) {
         var elementNotTranslated = new ArrayList<String>();
         elementsCollection.forEach(element -> {
-            if (element.text().matches(".*\\..*\\..*")) {
+            if (!element.text().endsWith("...") && element.text().matches(".*\\..*\\..*")) {
                 elementNotTranslated.add(element.text());
             }
         });

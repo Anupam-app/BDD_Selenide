@@ -1,5 +1,6 @@
 Feature: Analytics creation
 
+  @SMOKE
   Scenario Outline: Aggregate creation
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute" and run it during 15 seconds

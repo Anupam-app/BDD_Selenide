@@ -15,7 +15,7 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipeConsolePage {
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
-    private final String XPATH_RESTART_BUTTON = "//span[@class='MuiButton-label']";
+    private final String XPATH_RESTART_OR_HOLD_BUTTON = "//span[@class='MuiButton-label']";
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
 
@@ -166,7 +166,7 @@ public class RecipeConsolePage {
         return $(By.xpath(String.format(XPATH_RECIPE_LOADED_BEFORE, recipeName, recipeName))).isDisplayed();
     }
 
-    public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_RESTART_BUTTON)), text(expectedText));
+    public String seeRestartOrHoldContent() {
+        return commonWaiter($(By.xpath(XPATH_RESTART_OR_HOLD_BUTTON)), visible).text();
     }
 }
