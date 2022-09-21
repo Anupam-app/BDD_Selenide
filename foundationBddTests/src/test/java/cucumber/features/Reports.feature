@@ -138,7 +138,8 @@ Feature: Report administration
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
- 
+
+  @WIP
   Scenario: Verify Save As options in template page
     Given I goto report management page
     And I trigger report template mode
@@ -153,8 +154,8 @@ Feature: Report administration
     When I modify the Existing template
     Then I see "Report template created" successfully message
     And I search modified the template
-    
-@test1   
+
+  @WIP
  Scenario: Verify Create Custom Template  
   	Given I expand recipe console in pnid
     And 	I load recipe "testRecipeToExecute"
