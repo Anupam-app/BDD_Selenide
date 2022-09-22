@@ -100,7 +100,7 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 83)
 GO
-DELETE FROM dbo.user_preferences where user_name='testUserPref';
+DELETE FROM dbo.user_preferences;
 GO
 UPDATE [IdManagement].[dbo].[user_store] set [is_locked]=0 ,[unsuccessful_login_attempts]=0 where user_name in ('Bio4cService','Bio4CAdmin');
 GO
