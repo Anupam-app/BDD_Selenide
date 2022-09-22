@@ -157,6 +157,7 @@ public class ReportsPage {
 	
     
     public void goToReports() {
+    	commonWaiter(reportsManagementPage,visible);
         reportsManagementPage.click();
     }
 
@@ -819,4 +820,5 @@ public class ReportsPage {
 	public void checkSortedElements(String columnName, boolean descending) {
 		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
 	}
+	
 }

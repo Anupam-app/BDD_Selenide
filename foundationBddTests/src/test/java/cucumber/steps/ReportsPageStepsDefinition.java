@@ -15,6 +15,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 
 public class ReportsPageStepsDefinition {
@@ -24,14 +25,17 @@ public class ReportsPageStepsDefinition {
     private final ReportTemplate reportTemplate;
     private final User user;
     private final Recipe recipe;
+    private final LoginPage loginPage;
 
-    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+    public ReportsPageStepsDefinition(LoginPage loginPage,ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
             Recipe recipe) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
         this.recipe = recipe;
+        this.loginPage = loginPage;
+        
     }
 
     @Given("I goto report management page")
@@ -100,6 +104,7 @@ public class ReportsPageStepsDefinition {
     @When("I choose template {string}")
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
+        this.report.setReportName(template);
     }
 
     @When("I dont see the presence of generate button")
@@ -342,10 +347,22 @@ public class ReportsPageStepsDefinition {
     }
     
     @Then("I verify run summary report report")
-    public void i_verify_run_summary_report() throws Exception {
-    	this.report.checkEventTable(reportPage.getPdfUrl());
-        this.report.checkFiledIds(reportPage.getPdfUrl());
+    public void i_verify_run_summary_report() throws Exception {    	
+    	this.report.checkEventTable(reportPage.getPdfUrl());    	
+        this.report.checkFiledIds(reportPage.getPdfUrl(),this.recipe.getMachineName(),this.recipe.getBatchId(),this.recipe.getProductId(),this.recipe.getRecipeName(),
+        		this.recipe.getBeforeComments(),this.recipe.getAfterComments(),
+        		this.recipe.getStartDate(),this.recipe.getEndDate(),this.report.getReportName());
         this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
         this.report.checkRecipeColumnsInReport(reportPage.getPdfUrl());
+    }
+    @When("I enter {string} as username and {string} password")
+    public void i_Enter_Username_Password(String username1,String password1) {
+    	loginPage.setUser(username1);
+        loginPage.setPassword(password1);
+    }
+    
+    @Then("I validate generate button not displayed")
+    public void iValidateGenerateButton() {
+    	reportPage.verifyGenerateButton();
     }
 }

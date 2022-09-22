@@ -86,44 +86,44 @@ Feature: Apply Filter Reports
 	Scenario: Verify sort run functionality all columns in ascending order
  		Given I goto report management page
  		Then  Report columns should be sorted in ascending order
- 			|Run|
- 			|Start Date|
+ 			|Run         |
+ 			|Start Date  |
  			|Process Type|
- 			|Status|
+ 			|Status      |
  		Then  Report columns should be sorted in descending order
- 			|Run|
- 			|Start Date|
+ 			|Run         |
+ 			|Start Date  |
  			|Process Type|
- 			|Status|
+ 			|Status      |
  			
-		  	
+		 @WIP 	
   Scenario: Verify report history functionality based on the Date range.
  		Given I goto report management page
  		And   I trigger report mode 
  		Then  I should see recipe report list displayed based on date range dropdown
- 			|Today|
- 			|Yesterday|
- 			|Last 7 Days|
+ 			|Today       |
+ 			|Yesterday   |
+ 			|Last 7 Days |
  			|Last 30 Days|
- 			|This Month|
- 			|Last Month|
+ 			|This Month  |
+ 			|Last Month  |
  			|Custom Range|
  			
- 	
+ 	@WIP
  	Scenario: Verify sort reports functionality all columns in ascending order
  		Given I goto report management page
  		And   I trigger report mode
  		Then  Reports columns should be sorted in ascending order
- 			|Report Name|
+ 			|Report Name   |
  			|Date Generated|
- 			|Created By|
- 			|Report Type|
- 			|E-Sign.Status|
- 			|Signed By|
+ 			|Created By    |
+ 			|Report Type   |
+ 			|E-Sign.Status |
+ 			|Signed By     |
  		Then  Reports columns should be sorted in descending order
- 			|Report Name|
+ 			|Report Name   |
  			|Date Generated|
- 			|Created By|
- 			|Report Type|
- 			|E-Sign.Status|
- 			|Signed By|
+ 			|Created By    |
+ 			|Report Type   |
+ 			|E-Sign.Status |
+ 			|Signed By     |
