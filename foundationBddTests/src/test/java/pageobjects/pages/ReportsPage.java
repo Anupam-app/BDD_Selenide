@@ -57,7 +57,7 @@ public class ReportsPage {
 
 
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private final SelenideElement selectUserDropdownRunPage = $(By.xpath("//span[text()='Select User']/following-sibling::*"));
+    private final SelenideElement selectUserDropdownRunPage = $(By.xpath("//span[contains(text(),'Select User')]/following-sibling::*"));
     private final SelenideElement selectDateDropdownRunPage = $(By.xpath("//*[@id='calendar']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));

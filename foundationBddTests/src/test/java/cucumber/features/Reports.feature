@@ -40,7 +40,8 @@ Feature: Report administration
     |Report Type	|	
     |E-Sign.Status	|
     |Signed By		|
-     
+
+  @SMOKE
   Scenario: Generate and sign Audittrail report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -52,14 +53,14 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-    
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    Then I dont see the presence of generate button 
+    Then I dont see the presence of generate button
 
+  @SMOKE
   Scenario: Generate and sign a recipe run history report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -73,6 +74,7 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
 
+  @SMOKE
   Scenario: Generate and sign a consolidated report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -86,6 +88,7 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
 
+  @SMOKE
   Scenario: Generate and sign a custom report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
