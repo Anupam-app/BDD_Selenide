@@ -4,6 +4,7 @@ Feature: User management
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
+  @SMOKE
   Scenario: Create new user
     Given I go to user page
     When I create a random username

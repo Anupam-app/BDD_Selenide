@@ -12,6 +12,7 @@ import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
@@ -186,9 +187,10 @@ public class AnalyticsPage {
     }
 
     public List<String> getDeviceShapeElementNotLoaded() {
-        createAggregateButton.click();
+        commonWaiter(createAggregateButton,visible).click();
+        var cancelButtonVisible=commonWaiter(cancelButton,visible);
         var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
-        cancelButton.click();
+        cancelButtonVisible.click();
         return elementNotTranslated;
     }
 }

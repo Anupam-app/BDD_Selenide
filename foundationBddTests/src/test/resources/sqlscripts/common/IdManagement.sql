@@ -40,6 +40,8 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (17, NULL, N'', N'varun.mittal@external.merckgroup.com', N'reportUnauthUser', N'true', 0x020000002D1F14707D54068EAAE1838604B7C91B0E158370CFD2C87A7637999193D08C34C3F6BF649E92CAC1934C4E9A4B83DF4CA6B90795B99E39DB448B18527CBB21358C376772BFC83D2EB55AC1BE1BAAA3743803C9CA00B0DE652753EE5DC5126E9E, N'reportUnauthUser', NULL, N'reportUnauthUser', NULL, N'reportUnauthUser', 0, 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
 GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user], [salt], [iv]) VALUES (19, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserForI18N', N'true', 0x02000000507CBAB959087CF6B9726B7252A69773321505EF613F644A1E22AED98A9F57E375C66641D8B173D9A16BBE202ACEEE17945DEC08F5FFCB0EDA64B8069C02054F6BDE23F9613CA340A73D877A1246E522A33A3149DF42E78A84ECEF7377467C0A, N'testUserForI18N', NULL, N'testUserForI18N', N'', N'testUserForI18N', 0, 0, 0, NULL, 0, N'MCVc1t4F+WRi/t4Udui8ow==', N'2P0iN7zxGZua4AxJlZN2WA==')
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -84,6 +86,8 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (16, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (17, 8)
 GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 1)
+GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 3)
@@ -96,7 +100,7 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 83)
 GO
-DELETE FROM dbo.user_preferences where user_name='testUserPref';
+DELETE FROM dbo.user_preferences;
 GO
 UPDATE [IdManagement].[dbo].[user_store] set [is_locked]=0 ,[unsuccessful_login_attempts]=0 where user_name in ('Bio4cService','Bio4CAdmin');
 GO

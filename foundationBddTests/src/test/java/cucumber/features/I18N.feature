@@ -1,8 +1,10 @@
+@COMMON
+@SMOKE
 Feature: I18N on all modules
 
   Background:
     Given I am using language "en-US"
-    And I am logged in as "bio4cadmin" user
+    And I am logged in as "testUserForI18N" user
 
   Scenario Outline: Test i18n all modules
     Given I go to user profile

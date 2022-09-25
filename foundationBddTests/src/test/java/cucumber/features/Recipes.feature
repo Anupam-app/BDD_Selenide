@@ -16,12 +16,14 @@ Feature: Recipe management
     And I edit the recipe
     Then I see my changes in recipe
 
+  @SMOKE
   Scenario: Recipe approval
     Given I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
     When I approve recipe
     Then Recipe should be approved
 
+  @SMOKE
   Scenario: Recipe creation
     Given I go to recipe page
     When I trigger edit mode
@@ -41,7 +43,7 @@ Feature: Recipe management
 
   Scenario: Recipe export and import
     Given I go to recipe page
-    And I search the recipe "testRecipeToExecute"
+    And I search the recipe "testDraftRecipeToAddPhase"
     When I export the recipe
     And I trigger edit mode
     And I import the recipe

@@ -2,8 +2,7 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
@@ -49,7 +48,7 @@ public class RecipePage {
     private final SelenideElement recipeCriteriaSearchTextBox = $(By.className("search-txt-box"));
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
-    
+
     private final SelenideElement openButton = $(By.className("open-recipe-btn"));
     private final SelenideElement plusButton = $(By.className("icon-plus"));
     private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'add-step-button')]"));
@@ -131,15 +130,16 @@ public class RecipePage {
     public void saveRecipe(String recipeName) {
         saveEditorButton.click();
         SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
-        $(By.className("selected-recipe-input")).clear();
+        recipeInputSave.click();
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
         recipeInputSave.setValue(recipeName);
-        $(By.className("btn_primary")).click();
+        saveButton.click();
     }
-    
-    public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {   	
-        commonWaiter(XPATH_WARNNOTIFICATION_TEXT,visible);
-        XPATH_WARNNOTIFICATION_TEXT.shouldHave(text(message));
-        $(By.xpath("//*[@class='btn-primary']")).click();         
+
+    public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
+        commonWaiter(XPATH_WARNNOTIFICATION_TEXT, visible);
+        XPATH_WARNNOTIFICATION_TEXT.shouldHave(ownText(message));
+        $(By.xpath("//*[@class='btn-primary']")).click();
     }
 
     public void saveModifiedRecipe() {
@@ -235,10 +235,16 @@ public class RecipePage {
 
     public void importRecipe(String recipeName) {
         importMenuButton.click();
-        var importRecipe = $(By.xpath(String.format("//td[@title='%s']", recipeName)));
+        var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
         importRecipe.click();
         importButton.click();
-        saveRecipe(RandomStringUtils.randomAlphabetic(10));
+        SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
+        recipeInputSave.click();
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
+        recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
+        saveButton.click();
+
+
         browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
 
@@ -302,7 +308,7 @@ public class RecipePage {
 
         var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
 
-        deleteButtons.forEach(deleteButton->deleteButton.click());
+        deleteButtons.forEach(deleteButton -> deleteButton.click());
 
         return elementNotTranslated;
     }
