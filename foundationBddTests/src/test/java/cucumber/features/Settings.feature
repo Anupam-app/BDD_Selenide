@@ -14,6 +14,7 @@ Feature: Settings Modification
          | customLabelName |
          | Pump 21         |
 
+  @COMMON
   Scenario Outline: Change language setting
     Given I goto settings page
     And I goto general components
