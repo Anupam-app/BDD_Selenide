@@ -46,7 +46,6 @@ Feature: Report administration
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
