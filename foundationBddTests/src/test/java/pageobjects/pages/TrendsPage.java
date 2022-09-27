@@ -415,7 +415,7 @@ public class TrendsPage {
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
         System.out.print("Time difference:"+difference);
         Assert.assertTrue(difference<=60);
-        Assert.assertTrue(difference>=45);
+        Assert.assertTrue(difference>=50);
 	}
 
 }
