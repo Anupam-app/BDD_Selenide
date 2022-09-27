@@ -234,8 +234,10 @@ public class RecipePage {
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
         SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
-        $(By.className("rename-recipe-import-input")).clear();
-        recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
+        recipeInputSave.click();
+        SelenideHelper.commonWaiter(recipeInputSave,visible).clear();
+        var value=RandomStringUtils.randomAlphabetic(10);
+        recipeInputSave.setValue(value);
         saveButton.click();
         browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
