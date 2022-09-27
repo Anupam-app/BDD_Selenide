@@ -96,8 +96,8 @@ public class TrendsPageStepsDefinition {
 
 	@When("I see the Live graph is display")
 	public void i_see_the_live_option_displays_last_minutes_data() throws ParseException {
-		trendsPage.graphTime();
 		trendsPage.validateGraph();
+		trendsPage.graphTime();
 
 	}
 
@@ -138,7 +138,7 @@ public class TrendsPageStepsDefinition {
 	@When("I select star icons for {string},{string} parameters")
 	public void i_select_star_icons_for_parameters(String param1, String param2) throws InterruptedException, ParseException {
 		trendsPage.iselectstaricon(param1,param2);
-		trendsPage.graphTime();
+		
 	}
 	@When("I uselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {

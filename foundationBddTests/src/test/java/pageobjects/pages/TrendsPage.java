@@ -382,9 +382,11 @@ public class TrendsPage {
 	}
 
 	public void ledggerParameterOnChartArea(String param1, String param2) {
-
+		
+        
 		commonWaiter($(By.xpath(String.format(ledggerParam,param1))),Condition.visible);
-
+		
+		Selenide.sleep(5000);
 		commonWaiter($(By.xpath(String.format(ledggerParam,param2))),Condition.visible);
          
 		validateGraph();
@@ -393,7 +395,8 @@ public class TrendsPage {
 
 	}		
 	public void noParametes_starred() {
-		starredNullParameters.waitWhile(disabled, 5);
+		starredNullParameters.waitWhile(disabled, 20);
+		
 		starredNullParameters.shouldNotBe(visible);
 	}
 	public void deleteCollection() {
@@ -412,7 +415,7 @@ public class TrendsPage {
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
         System.out.print("Time difference:"+difference);
         Assert.assertTrue(difference<=60);
-        Assert.assertTrue(difference>=55);
+        Assert.assertTrue(difference>=45);
 	}
 
 }
