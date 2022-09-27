@@ -34,7 +34,7 @@ Scenario: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-2
            |Starred Parameters Collection  |
            |List of collection             |
 
-			  
+		  
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-3               
           When I choose "<Param1>","<Param2>" parameters as default collection
           Then I see the Live graph is display
@@ -46,9 +46,9 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
                |Live               |
                |Entire run         |
                |Current run        |
-               |start date		   |
-               |end date		   |
-               |download		   |
+               |start date		     |
+               |end date		       |
+               |download		       |
                |selectInterval	   |
            
 
@@ -62,7 +62,7 @@ Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Pan
 							  |Param1          |Param2          |
 							  |P001 - Speed PV |P002 - Speed PV |
 							  
-	    
+    
 Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -list of collection            
           When I choose "<Param1>","<Param2>" parameters as default collection
           And I save as trends collections called "test"
@@ -100,7 +100,7 @@ Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Default Tr
            When I select the "Default" collection
            Then I verify default list of "<parameters>"
            
-            @CRS1
+            @CRS
             Examples:
             |parameters                    |
             |parameters/crs/trendsParams   |
