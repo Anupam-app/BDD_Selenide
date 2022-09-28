@@ -4,6 +4,7 @@ Feature: User login
   Background:
     Given I open portal
 
+  @SMOKE
   Scenario: User login
     Given I open login page
     When I enter "bio4cadmin" as username and "MerckApp1@" as password
@@ -60,7 +61,7 @@ Feature: User login
       | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
       | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
 
-  Scenario: User login
+  Scenario: User login Unauthorized
     Given I open login page
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button

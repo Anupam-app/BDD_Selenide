@@ -119,8 +119,10 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I see expected texts from recipe console")
     public void iSeeExpectedTextsFromRecipeConsole() {
-        var expectedText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
-        recipeConsolePage.seeContent(expectedText);
+        var expectedRestartText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
+        var expectedHoldText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processHold");
+        var restartOrHoldContent=recipeConsolePage.seeRestartOrHoldContent();
+        Assert.assertTrue(restartOrHoldContent.equals(expectedRestartText) || restartOrHoldContent.equals(expectedHoldText));
         SelenideHelper.goParentFrame();
     }
 }

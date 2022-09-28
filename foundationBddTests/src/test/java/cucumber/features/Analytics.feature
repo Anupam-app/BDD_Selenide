@@ -16,7 +16,7 @@ Feature: Analytics creation
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
       | PI101 PV        | psi   | PI102 PV        | psi   | PI103 PV       | psi   |
 
-    @IVI
+    @IVI @SMOKE
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
       | P001 - Speed PV | psi   | P002 - Speed PV | psi   | P003 - Speed PV| psi   |

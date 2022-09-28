@@ -3,7 +3,8 @@ Feature: Backup creation
 
   Background:
     Given I am logged in as "bio4cadmin" user
-   
+    
+  @SMOKE
   Scenario: Create Backup
     Given I goto backup page
     When I trigger a immediate backup
@@ -13,7 +14,7 @@ Feature: Backup creation
     And I wait the end of backup
     And I go to backup history
     Then I verify backup history details
-   @testrun
+
   Scenario: Schedule backup
     Given I goto backup page
     When I schedule backup

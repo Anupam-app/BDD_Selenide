@@ -8,7 +8,8 @@ en-US:
   configmgmt.systems.header.title: Settings
   portal.modal.list.userPreferences: User Preferences
   portal.pnid.info.screen_controlling: You are controlling main screen
-  portal.recipeConsole.button.processRestart: Restart
+  portal.recipeConsole.button.processRestart: PROCESS RESTART
+  portal.recipeConsole.button.processHold: PROCESS HOLD
   recipe.app.header.name: Recipe Management
   report.reportNavbar.menu.reportManagement: Report Management
   trends.collection.starred: Starred
@@ -25,6 +26,7 @@ fr-FR:
   portal.modal.list.userPreferences: portal.modal.list.userPreferences
   portal.pnid.info.screen_controlling: portal.pnid.info.screen_controlling
   portal.recipeConsole.button.processRestart: portal.recipeConsole.button.processRestart
+  portal.recipeConsole.button.processHold: portal.recipeConsole.button.processHold
   recipe.app.header.name: recipe.app.header.name
   report.reportNavbar.menu.reportManagement: report.reportNavbar.menu.reportManagement
   trends.collection.starred: trends.collection.starred
