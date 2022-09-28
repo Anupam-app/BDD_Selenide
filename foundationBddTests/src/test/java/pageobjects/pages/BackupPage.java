@@ -7,6 +7,8 @@ import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import dataobjects.BackupStatus;
+import dataobjects.Backupsetting;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,8 @@ import pageobjects.utility.TimeHelper;
 
 public class BackupPage {
 
+	private Backupsetting backupsetting;
+	
 	private final int BACKUP_FINISH_TIME_TO_WAIT = 7 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_SCHEDULED_TIME_TO_WAIT = 4 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_IMMEDIATE_TIME_TO_WAIT = TimeHelper.ONE_MINUTE;
@@ -44,13 +48,16 @@ public class BackupPage {
 	private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
 	private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
 	private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
+	private SelenideElement confirmationModal = $(By.xpath("//div[@class='modal-msg-block']"));
+	private SelenideElement okButton = $(By.xpath("//button[@class='btn-ok']"));
+	private SelenideElement lastScheduledBackUpName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
 
 	public void goToBackupPage() {
 		backupPageLinkText.click();
 	}
 
 	public void triggerBackup() {
-		chooseBackupPath();
+		//chooseBackupPath(); //removed in IVI
 		backupNowButton.click();
 		confirmButton.click();
 		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
@@ -60,6 +67,11 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(lastStatusText, visible);
         return lastStatusText.getText();
     }
+    
+    public String getLastBackupName() {
+		SelenideHelper.commonWaiter(lastScheduledBackUpName, visible);
+        return lastScheduledBackUpName.getText();
+    }
 
 	private void chooseBackupPath() {
 		downArrow.click();
@@ -68,7 +80,7 @@ public class BackupPage {
 	}
 
 	public void scheduleBackup(String name) {
-		chooseBackupPath();
+		//chooseBackupPath(); // removed in IVI
 
 		dailyBackup.click();
 		dateInput.click();
@@ -81,7 +93,7 @@ public class BackupPage {
 		Date date = new Date();
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		int minuteToWait = 1;
+		int minuteToWait = 2;
 		c.add(Calendar.MINUTE, minuteToWait);
 		Date currentDatePlusOne = c.getTime();
 		String d = dateFormat.format(currentDatePlusOne);
@@ -92,6 +104,7 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(scheduleTextBox, visible);
 		scheduleTextBox.setValue(name);
 		scheduleOkButton.click();
+		confirmationPopUpAccept();
 	}
 
 	public void goToHistory() {
@@ -115,10 +128,29 @@ public class BackupPage {
 			goToHistory();
 			if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
 				break;
-			} else {
+
+			}else {
 				timeWaited += deltaTime;
 				Selenide.sleep(deltaTime);
 			}
+
+		}
+	}
+	private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait,String name) {
+		int timeWaited = 0;
+		int deltaTime = 15 * 1000;//every 15 seconds
+		while (timeWaited < timeToWait) {
+			goToBackupMode();
+			goToHistory();
+			if(name.equals(getLastBackupName())) {
+				if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+					break;
+				} 
+			}else {
+				timeWaited += deltaTime;
+				Selenide.sleep(deltaTime);
+			}
+
 		}
 	}
 
@@ -142,4 +174,16 @@ public class BackupPage {
 		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
 		waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
 	}
+	
+	public void confirmationPopUpAccept()
+	{
+		SelenideHelper.commonWaiter(confirmationModal, visible);
+		okButton.click();
+	}
+	
+	public void waitForScheduledBackupFinished(String name) {
+		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT, name);
+	}
+	
+	
 }
