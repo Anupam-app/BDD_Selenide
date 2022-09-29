@@ -138,3 +138,42 @@ Feature: Report administration
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
+    
+  Scenario: BIOCRS-5818 |Generate a consodilated report with same batch Id
+    Given I am logged in as "Bio4CAdmin" user
+    And I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 15 seconds
+    And I wait the end of the execution of the recipe
+    And I clear the recipe
+    And I load recipe "testRecipeToExecute"
+    And I start and wait second recipe execution with "same" batchID during 15 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Consolidated"
+    And I choose "same" BatchID from Consolidation run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify "same" consolidate summary report
+    
+  @test  
+  Scenario: BIOCRS-5818 |Generate a consodilated report with different batch Id
+   Given I am logged in as "Bio4CAdmin" user
+   And I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+   And I start and wait recipe execution during 15 seconds
+    And I wait the end of the execution of the recipe
+    And I clear the recipe
+   And I load recipe "testRecipeToExecute"
+   And I start and wait second recipe execution with "different" batchID during 15 seconds
+   And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Consolidated"
+    And I choose "different" BatchID from Consolidation run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify "different" consolidate summary report

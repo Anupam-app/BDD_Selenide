@@ -114,4 +114,37 @@ public class RecipeConsoleStepsDefinition {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
         recipeConsolePage.clickOnOk();
     }
+    @When("I start and wait second recipe execution with {string} batchID during {int} seconds")
+    public void iStartAndWaitRecipeExecutionSecondRecipe(String value,int seconds) {
+    	 
+    	String runId = null;
+    	if(value.equalsIgnoreCase("new")) {
+    		generateRandomRecipeValues();
+            runId = recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+            recipe.setRunId(runId);
+    	}
+    	else if(value.equalsIgnoreCase("different"))
+    	{
+    		generateRandomRecipeValues_SecondRecipe();
+    		runId = recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId2(), this.recipe.getBatchId2(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+    		recipe.setRunId2(runId);
+    	}
+    	
+    	else if(value.equalsIgnoreCase("same"))
+    	{
+    		runId = recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
+
+    		recipe.setRunId3(runId);
+    	}
+    }
+    private void generateRandomRecipeValues_SecondRecipe() {
+        this.recipe.setProductId2(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setBatchId2(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+    }
+    @And("I clear the recipe")
+	public void clearRecipePanel() {
+    	 recipeConsolePage.clearRecipe();
+	}
 }
