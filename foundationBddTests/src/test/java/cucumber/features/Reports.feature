@@ -86,8 +86,8 @@ Background:
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
+
     
- 
   Scenario: Verify Save As options in template page
     Given I goto report management page
     And I trigger report template mode
@@ -102,8 +102,7 @@ Background:
     When I modify the Existing template
     Then I see "Report template created" successfully message
     And I search modified the template
-    
-   
+
  Scenario: Verify Create Custom Template  
   	Given I expand recipe console in pnid
     And 	I load recipe "testRecipeToExecute"
@@ -118,7 +117,7 @@ Background:
     And 	I trigger report mode
     Then  I should see the report file presence
     And 	I verify run summary report report   
-    @crs
+   
  Scenario: verify generate by second user
     Given I am logged in
     And I logout
