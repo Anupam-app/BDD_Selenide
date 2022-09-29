@@ -365,4 +365,5 @@ public class ReportsPageStepsDefinition {
     public void iValidateGenerateButton() {
     	reportPage.verifyGenerateButton();
     }
+    
 }

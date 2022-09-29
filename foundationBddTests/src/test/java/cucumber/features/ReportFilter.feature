@@ -96,7 +96,7 @@ Feature: Apply Filter Reports
  			|Process Type|
  			|Status      |
  			
-		 @WIP 	
+			
   Scenario: Verify report history functionality based on the Date range.
  		Given I goto report management page
  		And   I trigger report mode 
@@ -109,7 +109,7 @@ Feature: Apply Filter Reports
  			|Last Month  |
  			|Custom Range|
  			
- 	@WIP
+ 		
  	Scenario: Verify sort reports functionality all columns in ascending order
  		Given I goto report management page
  		And   I trigger report mode
@@ -127,3 +127,24 @@ Feature: Apply Filter Reports
  			|Report Type   |
  			|E-Sign.Status |
  			|Signed By     |
+ 	
+ 		
+ 	Scenario: Verify consolidated reports functionality  all columns in sorting order
+ 	  Given I goto report management page
+ 	  When I select report from dropdown "Consolidated"
+ 	  Then I verify consolidated columns and columns should be sorted
+ 	    |Run					|
+ 	    |Batch ID			|
+ 	    |Start Date		|
+ 	    |Process Type	|
+ 	    |Status				|
+ 	    
+ 	    
+ 	 Scenario: Verify filter consolidated reports functionality in Report Management Based on status 
+ 	  Given I goto report management page
+ 	  When I select report from dropdown "Consolidated"
+ 	  And  I filter on icon and select run status as "Operation"
+ 	  Then  I should see consolidated status as "Operation"
+ 	  
+ 	  
+ 	  

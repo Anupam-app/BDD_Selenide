@@ -149,4 +149,17 @@ public class ReportsFilterStepsDefinition {
 			reportPage.checkSortedElement(columnName, true);
 		}
 	}
+
+	@Then("^I verify consolidated columns and columns should be sorted$")
+	public void iVerifyConsilidatedColumnsSorted(DataTable datatable) {
+		List<String> options = datatable.asList();
+		for (String columnName : options) {
+			reportPage.sortListConsolidated(columnName, true);			
+			reportPage.checkSortedElementConsolidate(columnName, true);			
+		}
+	}
+	@Then("I should see consolidated status as {string}")
+	public void i_hould_see_consolidated_status(String status) {
+		Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
+	}
 }

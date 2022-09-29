@@ -133,15 +133,19 @@ public class ReportsPage {
 	private final SelenideElement startDateAsendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
 	private final SelenideElement startDateRep=$(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
 	private final SelenideElement statusColumn=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
+	private final SelenideElement consolidateColumn=$(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));
 	private final SelenideElement startDate=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
 	private final SelenideElement clearAllFilters=$(By.xpath("//div[text()='Clear All']"));
 	private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
 	private ElementsCollection availableDates=$$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
+	private final SelenideElement processType = $(By.xpath("//div[text()='Process Types']"));
+	private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
 	private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final String XPATH_USER_TABLE = "//table[@id='foundationRunListTable']";
 	private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
+    private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
 	Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -153,6 +157,12 @@ public class ReportsPage {
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
+    
+   	Function<Integer, List<String>> consolidatedColumns = (index) -> {
+           var users = $$(By.xpath(String.format(XAPATH_CONSOLIDATED_COLUMNS, index))).texts();
+           users.removeIf(e -> StringUtils.isEmpty(e.trim()));
+           return users;
+       };
 	private SelenideElement date;
 	
     
@@ -667,7 +677,8 @@ public class ReportsPage {
 	public void checkSortedElement(String columnName, boolean descending) {
 		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns);
 	}
-
+	
+	
 	public int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
 	}
@@ -821,4 +832,36 @@ public class ReportsPage {
 		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
 	}
 	
+	public void checkSortedElementConsolidate(String columnName, boolean descending) {
+		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns);
+	}
+	public void sortListConsolidated(String columnName, boolean descending) {
+		SelenideElement sortAction = getReportColumnHeader(columnName);
+		var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order")));
+		var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order dropup")));
+		SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+	}
+	
+	public void selectConsolidatedStatus(String consolidatedreportstatus) {
+		commonWaiter(filterIcon, visible);
+		filterIcon.click();
+		processType.shouldBe(visible);
+		status.shouldBe(visible);
+		if (clearAllFilters.isDisplayed()) {
+			clearAllFilters.click();
+		}
+		if (!$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).isSelected()) {
+			$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).click();
+		}
+		applyFilterButton.click();
+	}
+	public boolean verifyConsolidatedStatus(String status) {
+		boolean isTrue = false;
+		if (!consolidateColumn.isDisplayed()) {
+			isTrue = noDatamsg.isDisplayed();
+		} else {
+			isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
+		}
+		return isTrue;
+	}
 }

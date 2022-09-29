@@ -87,7 +87,7 @@ Background:
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
     
- @WIP
+ 
   Scenario: Verify Save As options in template page
     Given I goto report management page
     And I trigger report template mode
@@ -103,7 +103,7 @@ Background:
     Then I see "Report template created" successfully message
     And I search modified the template
     
-   @WIP
+   
  Scenario: Verify Create Custom Template  
   	Given I expand recipe console in pnid
     And 	I load recipe "testRecipeToExecute"
@@ -118,3 +118,12 @@ Background:
     And 	I trigger report mode
     Then  I should see the report file presence
     And 	I verify run summary report report   
+    @crs
+ Scenario: verify generate by second user
+    Given I am logged in
+    And I logout
+    Given I open login page
+    When I enter "reportUnauthUser" as username and "MerckApp1@" password
+    And I push the login button
+    And  I goto report management page
+    Then I validate generate button not displayed
