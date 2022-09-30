@@ -113,7 +113,7 @@ Feature: Trends Management
     And I select star icons for "<Param1>","<Param2>" parameters
     And I select the "Starred" collection
     And I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
-    And  I uselect the star icons for "<Param1>","<Param2>" parameters
+    And  I unselect the star icons for "<Param1>","<Param2>" parameters
     Then I validate no parameters are present in starred collection
 				
     @CRS

@@ -395,7 +395,7 @@ public class TrendsPage {
 
 	}		
 	public void noParametes_starred() {
-		starredNullParameters.waitWhile(disabled, 20);
+		starredNullParameters.waitWhile(not(visible), 20);
 		
 		starredNullParameters.shouldNotBe(visible);
 	}

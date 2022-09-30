@@ -140,7 +140,7 @@ public class TrendsPageStepsDefinition {
 		trendsPage.iselectstaricon(param1,param2);
 		
 	}
-	@When("I uselect the star icons for {string},{string} parameters")
+	@When("I unselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
 		trendsPage.unSelectstar(param1,param2);
 
