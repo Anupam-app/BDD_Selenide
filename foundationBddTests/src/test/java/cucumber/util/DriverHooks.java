@@ -16,6 +16,8 @@ public class DriverHooks {
     public void before(Scenario scenario) {
         WebDriverManager.chromedriver().setup();
         WebDriverUtils.setUp("Chrome");
+
+        TrustAllCertificates.install();
     }
 
     @After(order = 100)
