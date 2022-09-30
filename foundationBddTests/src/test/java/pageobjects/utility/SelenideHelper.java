@@ -18,7 +18,7 @@ public class SelenideHelper {
     }
 
     public static SelenideElement commonWaiter(SelenideElement element,Condition condition){
-        return element.waitUntil(condition,20000l,2000l);
+        return element.waitUntil(condition,20000l,500l);
     }
 
     public static Wait<WebDriver> fluentWaiter() {
