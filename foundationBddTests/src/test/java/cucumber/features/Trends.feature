@@ -1,5 +1,4 @@
 @COMMON
-@WIP
 Feature: Trends Management
 
 Background:
@@ -20,7 +19,7 @@ Scenario Outline: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Pan
           
           Examples:
                   |TrendPanelType      |
-			      |Trends_Area_Panel   |
+			            |Trends_Area_Panel   |
                   |Starred_Collection  |
                   |Default_Collection  |
                   |List of Collection  |
