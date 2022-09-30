@@ -1,5 +1,4 @@
 @COMMON
-@WIP
 Feature: Trends Management
 
   Background:
@@ -54,10 +53,10 @@ Feature: Trends Management
       |Param1   |Param2   |
       |PI101 PV |PI102 PV |
                                                    
-    #@IVI
-    #Examples:
-    #  |Param1          |Param2          |
-    #  |P001 - Speed PV |P002 - Speed PV |
+    @IVI
+    Examples:
+      |Param1          |Param2          |
+      |P001 - Speed PV |P002 - Speed PV |
 							  
     
   Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -list of collection
@@ -72,10 +71,10 @@ Feature: Trends Management
       |Param1   |Param2   |
       |PI101 PV |PI102 PV |
 							  
-    #@IVI
-    #Examples:
-    #  |Param1          |Param2          |
-    #  |P001 - Speed PV |P002 - Speed PV |
+    @IVI
+    Examples:
+      |Param1          |Param2          |
+      |P001 - Speed PV |P002 - Speed PV |
 	
   Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -Default collections
     When I select the "Default" collection
@@ -87,10 +86,10 @@ Feature: Trends Management
       |Param1   |Param2   |
       |PI101 PV |PI102 PV |
 							  
-    #@IVI
-    #Examples:
-    #  |Param1          |Param2          |
-    #  |P001 - Speed PV |P002 - Speed PV |
+    @IVI
+    Examples:
+      |Param1          |Param2          |
+      |P001 - Speed PV |P002 - Speed PV |
 							  
                             
   Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List
@@ -102,10 +101,10 @@ Feature: Trends Management
       |parameters                    |
       |parameters/crs/trendsParams   |
             
-    #@IVI
-    #Examples:
-    #  |parameters                    |
-    #  |parameters/ivi/trendsParams   |
+    @IVI
+    Examples:
+      |parameters                    |
+      |parameters/ivi/trendsParams   |
 
          
   Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Trends Parameters List
@@ -121,8 +120,7 @@ Feature: Trends Management
       |Param1   |Param2   |
       |PI101 PV |PI102 PV |
 							  
-    #@IVI
-    #Examples:
-    #  |Param1          |Param2          |
-    #  |P001 - Speed PV |P002 - Speed PV |
-							  
+    @IVI
+    Examples:
+      |Param1          |Param2          |
+      |P001 - Speed PV |P002 - Speed PV |
