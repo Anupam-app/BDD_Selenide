@@ -62,3 +62,5 @@ Feature: Apply Filter Reports
     Given I goto report management page
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
+    
+   
