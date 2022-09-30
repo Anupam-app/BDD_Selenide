@@ -715,15 +715,8 @@ public class ReportsPage {
         saveReportTemplate();
     }
 	
-	public boolean iCheckNotifactionMsg(String status) {
-		boolean isTrue = false;
-		if (!notificationMsg.isDisplayed()) {
-		       notificationMsg.shouldNot(visible);
-		} else {
-			isTrue = notificationMsg.getText().equalsIgnoreCase(status);
-			notificationMsg.shouldBe(visible);
-		}
-		return isTrue;
+	public void iCheckNotifactionMsg(String status) {
+        SelenideHelper.commonWaiter(notificationMsg,visible);
 	}
 	
 	public void iSearchrepo(String templateName) {

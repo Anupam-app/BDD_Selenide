@@ -4,8 +4,6 @@ Feature: Report administration
 Background:
     Given I am logged in as "Bio4CAdmin" user
 
-<<<<<<< HEAD
-=======
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
@@ -46,7 +44,6 @@ Background:
     |Signed By		|
 
   @SMOKE
->>>>>>> origin/master
   Scenario: Generate and sign Audittrail report
     Given I goto report management page
     When I select report from dropdown "Audit Trail"
@@ -56,16 +53,12 @@ Background:
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-<<<<<<< HEAD
-=======
-    
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     Then I dont see the presence of generate button
->>>>>>> origin/master
 
   @SMOKE
   Scenario: Generate and sign a recipe run history report
@@ -161,18 +154,18 @@ Background:
 
  Scenario: Verify Create Custom Template  
   	Given I expand recipe console in pnid
-    And 	I load recipe "testRecipeToExecute"
-    And 	I start and wait recipe execution during 10 seconds
-    And 	I wait the end of the execution of the recipe
-    When  I goto report management page
-    And 	I select report from dropdown "Run History"
-    And 	I choose corresponding recipe run
-    And 	I choose template "testReportTemplate"
-    And   I click on generate button
-    And 	I goto report management page
-    And 	I trigger report mode
-    Then  I should see the report file presence
-    And 	I verify run summary report report   
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Run History"
+    And I choose corresponding recipe run
+    And I choose template "testReportTemplate"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify run summary report report
    
  Scenario: verify generate by second user
     Given I am logged in
