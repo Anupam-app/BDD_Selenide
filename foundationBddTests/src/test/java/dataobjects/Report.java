@@ -51,9 +51,9 @@ public class Report {
      * Check run id matches expected run id in the report
      * @param reportUrl Report url
      * @param expectedRunId Expected run id
-     * @throws Exception
+     * @throws IOException
      */
-    public void checkRunId(String reportUrl, String expectedRunId) throws Exception {
+    public void checkRunId(String reportUrl, String expectedRunId) throws IOException {
 
         URL url = new URL(reportUrl);
 
@@ -71,9 +71,9 @@ public class Report {
     /**
      * Check event table in the report
      * @param reportUrl Report url
-     * @throws Exception
+     * @throws IOException
      */
-    public void checkEventTable(String reportUrl) throws Exception {
+    public void checkEventTable(String reportUrl) throws IOException {
 
         URL url = new URL(reportUrl);
 
@@ -89,9 +89,9 @@ public class Report {
      * - Expected format : UserLogin(Firstname Lastname)
      * - No internal user like OMIUser
      * @param reportUrl Report url
-     * @throws Exception
+     * @throws IOException
      */
-    public void checkUserInformation(String reportUrl) throws Exception {
+    public void checkUserInformation(String reportUrl) throws IOException {
 
         URL url = new URL(reportUrl);
 
@@ -131,10 +131,10 @@ public class Report {
     /**
      * Check filed ids are not null in the report
      * @param reportUrl Report url     * 
-     * @throws Exception
+     * @throws IOException
      */
     public void checkFiledIds(String reportUrl, String machineName,String batchID, String productId,String recipeName, String beforeComments,String afterComments,String startDate,String endDate,
-    		String template) throws Exception {
+    		String template) throws IOException {
 
 
     	URL url = new URL(reportUrl);
@@ -162,10 +162,8 @@ public class Report {
     /**
      * Check Pre run columns present in the report
      * @param reportUrl Report url     * 
-     * @throws IOException 
-     * @throws Exception
+     * @throws IOException
      */
-    
     public void checkPreRunColumnsInReport(String reportUrl) throws IOException {
     	 URL url = new URL(reportUrl);
          Table table = PdfTableExtractUtils.getTableFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE);
@@ -179,10 +177,8 @@ public class Report {
     /**
      * Check Pre run columns present in the report
      * @param reportUrl Report url     * 
-     * @throws IOException 
-     * @throws Exception
+     * @throws IOException
      */
-    
     public void checkRecipeColumnsInReport(String reportUrl) throws IOException {
     	 URL url = new URL(reportUrl);
          Table table = PdfTableExtractUtils.getTableFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY);

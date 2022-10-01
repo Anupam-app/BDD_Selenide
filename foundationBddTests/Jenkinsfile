@@ -151,7 +151,7 @@ pipeline {
                     rtMavenRun(
                         tool: 'apache-maven-3.6.3',
                         pom: 'foundationBddTests/pom.xml',
-                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN"',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN" -DtestFailureIgnoreProp=false',
                         resolverId: "MAVEN_RESOLVER"
                     )
                 }
@@ -178,7 +178,7 @@ pipeline {
 
                             }
                         }
-                        commandTag+='"'
+                        commandTag+='" -DtestFailureIgnoreProp=true'
                     }
 
                     println('commandTag: '+commandTag)
