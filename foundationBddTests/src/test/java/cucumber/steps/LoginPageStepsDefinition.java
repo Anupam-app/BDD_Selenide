@@ -47,6 +47,7 @@ public class LoginPageStepsDefinition {
     public void iPushTheLoginButton()
     {
         loginPage.pushLogin();
+        
     }
 
     @Then("I am logged in")

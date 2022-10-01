@@ -145,6 +145,18 @@ pipeline {
                 }
             }
         }
+        stage('Test able to login') {
+            steps {
+                script {
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3',
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN" -DtestFailureIgnoreProp=false',
+                        resolverId: "MAVEN_RESOLVER"
+                    )
+                }
+            }
+        }
         stage('Test all bdd tests') {
 			steps {
                 script {
@@ -166,7 +178,7 @@ pipeline {
 
                             }
                         }
-                        commandTag+='"'
+                        commandTag+='" -DtestFailureIgnoreProp=true'
                     }
 
                     println('commandTag: '+commandTag)

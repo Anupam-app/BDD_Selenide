@@ -245,7 +245,6 @@ public class UserPage {
         SelenideHelper.commonWaiter(selectOption, visible).click();
         commonWaiter($(By.xpath(String.format("//li[contains(text(),'%s')]", defaultOptionName))), visible).click();
         SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
     }
 
     public String getActiveIconTitle() {
