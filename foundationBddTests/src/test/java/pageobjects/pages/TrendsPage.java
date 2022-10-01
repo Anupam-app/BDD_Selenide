@@ -1,60 +1,28 @@
 package pageobjects.pages;
 
 
-
+import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.$x;
+import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
-import static org.junit.Assert.assertArrayEquals;
-import static org.junit.Assert.assertEquals;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static pageobjects.utility.SelenideHelper.goToIFrame;
-
+import com.typesafe.config.ConfigParseOptions;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.Wait;
-
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.typesafe.config.ConfigParseOptions;
-
-import dataobjects.AnalyticsMode;
-
-import java.io.Console;
-import java.io.IOException; 
-import java.nio.charset.StandardCharsets; 
-import java.nio.file.Files; 
-import java.nio.file.Paths;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import pageobjects.components.SpinnerComponent;
-import pageobjects.utility.SelenideHelper;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 
 public class TrendsPage {
-
-	private String Default;
-	private String Starred;
-	private String ListOfCollections;
-
-	private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-
-	private ElementsCollection star_staricon1 = $$(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]"));
 
 	private ElementsCollection starredStaricon = $$(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li/span[2]"));
 	private ElementsCollection leddgerParametersCheckBox= $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));

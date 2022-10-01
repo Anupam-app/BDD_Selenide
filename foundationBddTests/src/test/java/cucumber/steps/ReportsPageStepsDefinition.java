@@ -361,9 +361,6 @@ public class ReportsPageStepsDefinition {
         loginPage.setPassword(password1);
     }
     
-    @Then("I validate generate button not displayed")
-    public void iValidateGenerateButton() {
-    	reportPage.verifyGenerateButton();
-    }
+
     
 }
