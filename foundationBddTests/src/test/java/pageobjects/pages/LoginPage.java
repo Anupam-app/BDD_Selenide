@@ -83,7 +83,7 @@ public class LoginPage {
     }
 
     public void iLogout() {
-    	userProfileIcon.click();
+        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 }

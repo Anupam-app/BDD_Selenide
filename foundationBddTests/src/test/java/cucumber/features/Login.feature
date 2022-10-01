@@ -5,6 +5,7 @@ Feature: User login
     Given I open portal
 
   @SMOKE
+  @LOGIN
   Scenario: User login
     Given I open login page
     When I enter "bio4cadmin" as username and "MerckApp1@" as password
