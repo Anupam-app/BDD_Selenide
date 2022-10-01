@@ -11,7 +11,6 @@ Feature: Apply Filter Reports
     And I select date range as "Last 7 Days"
     Then I see Audit logs are displayed for date range and "bio4cadmin"
 
-
   Scenario: Verify search functionality in the templates page
     Given I goto report management page
     And I trigger report template mode
@@ -64,3 +63,87 @@ Feature: Apply Filter Reports
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
     
    
+  Scenario: Verify filter run reports functionality in Report Management Based on status
+    Given I goto report management page
+    When  I filter on icon and select run status as "Completed"
+    Then  I should see run status as "Completed"
+    When  I filter on icon and select run status as "Aborted"
+    Then  I should see run status as "Aborted" 
+
+   
+  Scenario: Verify run history functionality based on the Date range.
+    Given I goto report management page 
+    Then  I should see recipe run list displayed based on date range dropdown
+        |Today|
+        |Yesterday|
+        |Last 7 Days|
+        |Last 30 Days|
+        |This Month|
+        |Last Month|
+		|Custom Range|
+	  
+	 							
+  Scenario: Verify sort run functionality all columns in ascending order
+    Given I goto report management page
+    Then  Report columns should be sorted in ascending order
+        |Run         |
+        |Start Date  |
+        |Process Type|
+        |Status      |
+     Then  Report columns should be sorted in descending order
+        |Run         |
+        |Start Date  |
+        |Process Type|
+        |Status      |
+ 			
+			
+  Scenario: Verify report history functionality based on the Date range.
+    Given I goto report management page
+    And   I trigger report mode 
+    Then  I should see recipe report list displayed based on date range dropdown
+		|Today       |
+		|Yesterday   |
+		|Last 7 Days |
+		|Last 30 Days|
+		|This Month  |
+		|Last Month  |
+		|Custom Range|
+ 			
+ 		
+  Scenario: Verify sort reports functionality all columns in ascending order
+    Given I goto report management page
+    And   I trigger report mode
+    Then  Reports columns should be sorted in ascending order
+		|Report Name   |
+		|Date Generated|
+		|Created By    |
+		|Report Type   |
+		|E-Sign.Status |
+		|Signed By     |
+    Then  Reports columns should be sorted in descending order
+		|Report Name   |
+		|Date Generated|
+		|Created By    |
+		|Report Type   |
+		|E-Sign.Status |
+		|Signed By     |
+ 	
+ 		
+  Scenario: Verify consolidated reports functionality  all columns in sorting order
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    Then I verify consolidated columns and columns should be sorted
+ 	    |Run            |
+ 	    |Batch ID       |
+ 	    |Start Date		|
+ 	    |Process Type	|
+ 	    |Status         |
+ 	    
+ 	    
+  Scenario: Verify filter consolidated reports functionality in Report Management Based on status 
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    And  I filter on icon and select run status as "Operation"
+    Then  I should see consolidated status as "Operation"
+ 	  
+ 	  
