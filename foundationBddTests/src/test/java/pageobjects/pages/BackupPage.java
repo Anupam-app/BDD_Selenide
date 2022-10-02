@@ -58,10 +58,12 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
 	}
 
-    public String getLastStatusText() {
-		SelenideHelper.commonWaiter(lastStatusText, visible);
-        return lastStatusText.getText();
-    }
+	public String getLastStatusText() {
+		if(lastStatusText.isDisplayed()){
+			return lastStatusText.getText();
+		}
+		return "";
+	}
 
 	private void chooseBackupPath() {
 		downArrow.click();
@@ -115,7 +117,7 @@ public class BackupPage {
 		while (timeWaited < timeToWait) {
 			goToBackupMode();
 			goToHistory();
-			if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+			if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
 				break;
 			} else {
 				timeWaited += deltaTime;
