@@ -18,23 +18,16 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
+
 public class TrendsPage {
 
-    private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
-    private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
-    private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
-		private String Default;
-	private String Starred;
-	private String ListOfCollections;
-
-	private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-
-	private ElementsCollection star_staricon1 = $$(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]"));
+	private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
+	private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
+	private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
 
 	private ElementsCollection starredStaricon = $$(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li/span[2]"));
 	private ElementsCollection leddgerParametersCheckBox= $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));
