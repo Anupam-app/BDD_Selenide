@@ -3,20 +3,11 @@ package cucumber.steps;
 import java.text.ParseException;
 import java.util.List;
 
-import org.aeonbits.owner.ConfigFactory;
-
-import com.typesafe.config.ConfigParseOptions;
-
-import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pageobjects.pages.HomePage;
-import pageobjects.pages.LoginPage;
-import pageobjects.pages.RecipeConsolePage;
 import pageobjects.pages.TrendsPage;
-import pageobjects.pages.UserPage;
 
 public class TrendsPageStepsDefinition {
 
@@ -142,8 +133,7 @@ public class TrendsPageStepsDefinition {
 	}
 	@When("I unselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
-		trendsPage.unSelectstar(param1,param2);
-
+		trendsPage.unSelectStarParam(param1,param2);
 	}
 
 	@Then("I validate no parameters are present in starred collection")
