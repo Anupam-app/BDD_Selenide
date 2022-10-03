@@ -345,13 +345,16 @@ public class TrendsPage {
 		}
 	}
 
-	public void unSelectstar(String param1, String param2) throws InterruptedException {
+	public void unSelectStarParam(String param1, String param2) {
+		uncheckParam(param1);
+		uncheckParam(param2);
+	}
 
-		$(By.xpath(String.format(listOfStarredstaricons, param1))).click();
-		$(By.xpath(String.format(listOfStarredstaricons, param2))).click();
-
-
-	}	
+	private void uncheckParam(String param) {
+		var paramElement=$(By.xpath(String.format(listOfStarredstaricons, param)));
+		paramElement.click();
+		commonWaiter(paramElement,not(visible));
+	}
 
 	public void trendsBarCollapse() {
 		trendsCollapse.shouldBe(visible);

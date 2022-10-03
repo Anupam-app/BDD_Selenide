@@ -11,6 +11,7 @@ import org.junit.Assert;
 import pageobjects.pages.TrendsPage;
 import pageobjects.utility.SelenideHelper;
 
+
 public class TrendsPageStepsDefinition {
 
 	private final TrendsPage trendsPage;
@@ -155,8 +156,7 @@ public class TrendsPageStepsDefinition {
 	}
 	@When("I unselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
-		trendsPage.unSelectstar(param1,param2);
-
+		trendsPage.unSelectStarParam(param1,param2);
 	}
 
 	@Then("I validate no parameters are present in starred collection")
