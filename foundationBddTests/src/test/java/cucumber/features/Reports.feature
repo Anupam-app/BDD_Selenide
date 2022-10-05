@@ -1,7 +1,6 @@
 @COMMON
 Feature: Report administration
 
-
 	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
@@ -52,7 +51,6 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-    
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user
@@ -141,39 +139,26 @@ Feature: Report administration
     
   Scenario: BIOCRS-5818 |Generate a consodilated report with same batch Id
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 15 seconds
-    And I wait the end of the execution of the recipe
-    And I clear the recipe
-    And I load recipe "testRecipeToExecute"
-    And I start and wait second recipe execution with "same" batchID during 15 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
     When I goto report management page
     And I select report from dropdown "Consolidated"
-    And I choose "same" BatchID from Consolidation run
+    And I choose recipes from consolidation run
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify "same" consolidate summary report
-    
-  @test  
+    And I verify consolidate summary report
+
   Scenario: BIOCRS-5818 |Generate a consodilated report with different batch Id
-   Given I am logged in as "Bio4CAdmin" user
-   And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-   And I start and wait recipe execution during 15 seconds
-    And I wait the end of the execution of the recipe
-    And I clear the recipe
-   And I load recipe "testRecipeToExecute"
-   And I start and wait second recipe execution with "different" batchID during 15 seconds
-   And I wait the end of the execution of the recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Consolidated"
-    And I choose "different" BatchID from Consolidation run
+    And I choose recipes from consolidation run
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify "different" consolidate summary report
+    And I verify consolidate summary report

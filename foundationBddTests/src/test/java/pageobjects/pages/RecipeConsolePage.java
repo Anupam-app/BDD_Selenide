@@ -50,13 +50,6 @@ public class RecipeConsolePage {
     
     private final SelenideElement clearRecipeButton = $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
     
-    private Recipe recipe;
-    public RecipeConsolePage(Recipe recipe) {
-        
-        this.recipe = recipe;
-    }
-    
-    
     public void holdAndRestart() {
         if (restartButton.isDisplayed()) {
             restartSystem();
@@ -76,7 +69,9 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        expandIcon.click();
+        if(expandIcon.isDisplayed()){
+            expandIcon.click();
+        }
     }
 
     public void loadRecipe(String recipeName) {
@@ -93,7 +88,7 @@ public class RecipeConsolePage {
         loadButton.click();
     }
 
-    public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments, int seconds) {
+    public String startAndWaitRecipe(Recipe recipe, int seconds) {
 
         String runId;
         String[] dateParts = null;
@@ -102,24 +97,20 @@ public class RecipeConsolePage {
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
         runId = runIdTextbox.getValue();
-        productIdTextbox.setValue(productId);
+        productIdTextbox.setValue(recipe.getProductId());
         batchIdTextbox.click();
-        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(beforeComments);
+        preRunCommentsText.sendKeys(recipe.getBeforeComments());
         okButton.click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
         SelenideHelper.commonWaiter(startDate, visible);
-        String startDate1 = startDate.getText(); 
-        String endDate1 = endDate.getText();
-        dateParts = startDate1.split(" ");
-        dateparts1 = endDate1.split(" ");
-        this.recipe.setStartDate(dateParts[0]);   
-        this.recipe.setEndDate(dateparts1[0]);
-        this.recipe.setMachineName(machineName.getText());
-        preRunCommentsText.sendKeys(afterComments);
-        System.out.println(afterComments);
+        recipe.setStartDate(startDate.getText());
+        recipe.setEndDate(endDate.getText());
+        recipe.setMachineName(machineName.getText());
+        recipe.setStatus(executionStatusText.getText());
+        preRunCommentsText.sendKeys(recipe.getAfterComments());
         okButton.click();
 
         return runId;

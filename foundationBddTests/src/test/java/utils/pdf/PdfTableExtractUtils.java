@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -63,15 +64,15 @@ public final class PdfTableExtractUtils {
      * @param tableTitle Table section title
      * @return Table
      */
-    public static Table getTableFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+    public static List<Table> getTablesFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
 
-        Table resultTable = null;
+        List<Table> resultTable = new ArrayList<>();
 
         try (PDDocument document = PDDocument.load(inputStream)) {
 
             ObjectExtractor oe = new ObjectExtractor(document);
 
-            for (int i = 1; i <= document.getNumberOfPages(); i++) {
+            for (int i = 0; i <= document.getNumberOfPages(); i++) {
 
                 PDFTextStripper textStripper = new PDFTextStripper();
                 textStripper.setStartPage(i);
@@ -82,10 +83,8 @@ public final class PdfTableExtractUtils {
                     Page page = oe.extract(i);
 
                     if (page != null) {
-                        resultTable = getTablesFromPage(page).stream().findFirst().orElse(null);
+                        resultTable.addAll(new ArrayList<>(getTablesFromPage(page)));
                     }
-
-                    break;
                 }
             }
         }
