@@ -49,5 +49,3 @@ Feature: Role administration
     And I assign permission "Actuator controls"
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
-    
-  
