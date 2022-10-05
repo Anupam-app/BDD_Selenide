@@ -58,7 +58,7 @@ public final class PdfTableExtractUtils {
     }
 
     /**
-     * Get table (first found) from table section title
+     * Get tables from table section title
      * 
      * @param inputStream PDF File as stream
      * @param tableTitle Table section title

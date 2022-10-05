@@ -8,6 +8,8 @@ INSERT [dbo].[runheader] ([id], [product_id], [batch_id], [run_id], [device_id],
 GO
 INSERT [dbo].[runheader] ([id], [product_id], [batch_id], [run_id], [device_id], [machine_name], [recipe_procedure], [file_name], [start_date_time], [end_date_time], [user_name], [run_state], [preRun_comment], [postRun_comment], [step_id], [column_info], [packedBed_info], [sample_info], [buffer_info], [cip_start_time], [cip_end_time]) VALUES (2, N'p11', N'b11', N'recipe4sec220211129035111', N'CRS 50L', N'CRS 50L', N'Operation', N'recipe4sec2', DATEADD(ss, -10, GETUTCDATE()), DATEADD(ss, -6, GETUTCDATE()), N'Bio4cService', N'Aborted', N'pre comm', N'last c', N'', N'', N'', N'', N'', DATEADD(ss, -10, GETUTCDATE()), DATEADD(ss, -6, GETUTCDATE()))
 GO
+INSERT [dbo].[runheader] ([id], [product_id], [batch_id], [run_id], [device_id], [machine_name], [recipe_procedure], [file_name], [start_date_time], [end_date_time], [user_name], [run_state], [preRun_comment], [postRun_comment], [step_id], [column_info], [packedBed_info], [sample_info], [buffer_info], [cip_start_time], [cip_end_time]) VALUES (3, N'p12', N'b10', N'recipe10sec220211129035112', N'CRS 50L', N'CRS 50L', N'Operation', N'recipe4sec2', DATEADD(ss, -10, GETUTCDATE()), DATEADD(ss, -6, GETUTCDATE()), N'Bio4cService', N'Aborted', N'pre comm', N'last c', N'', N'', N'', N'', N'', DATEADD(ss, -10, GETUTCDATE()), DATEADD(ss, -6, GETUTCDATE()))
+GO
 SET IDENTITY_INSERT [dbo].[runheader] OFF
 GO
 DELETE FROM [dbo].[report_template]

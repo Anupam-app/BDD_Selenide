@@ -16,9 +16,10 @@ In order to be able to build all the modules, the following software have to be 
 
 ##### Launch tests
 
-    mvn clean test -Dneodymium.url.host=HostOfYourChoice
+    mvn clean test -Dneodymium.url.host=HostOfYourChoice -DtestFailureIgnoreProp=true
 
 HostOfYourChoice, you can use an IP or DNS
+testFailureIgnoreProp, true if you want to run all tests and have a report or false (by default) to make the build failed if tests are red
 
 ##### Test only one scenario
 

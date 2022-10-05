@@ -16,6 +16,7 @@ public class User {
     @Setter
     @Getter
     String userName;
+    String userName1;
 
     @Setter
     @Getter
@@ -32,6 +33,7 @@ public class User {
     @Setter
     @Getter
     String password;
+    String password1;
     
     @Setter
     @Getter
