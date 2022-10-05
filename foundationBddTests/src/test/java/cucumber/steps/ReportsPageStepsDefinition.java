@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -24,16 +25,14 @@ public class ReportsPageStepsDefinition {
     private final ReportsPage reportPage;
     private final ReportTemplate reportTemplate;
     private final User user;
-    private final Recipe currentRecipe;
     private final LoginPage loginPage;
 
-    public ReportsPageStepsDefinition(LoginPage loginPage,ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-            Recipe recipe) {
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+                                      Recipe recipe) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
-        this.currentRecipe = recipe;
         this.loginPage = loginPage;
     }
 
@@ -90,8 +89,8 @@ public class ReportsPageStepsDefinition {
     }
 
     @And("I choose corresponding recipe run")
-    public void iChooseCorrespondingRecipeRun() throws InterruptedException {
-        reportPage.selectRunWithWaiting(reportTemplate.getName(), currentRecipe.getRunId());
+    public void iChooseCorrespondingRecipeRun() {
+        report.getRecipes().forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -147,9 +146,8 @@ public class ReportsPageStepsDefinition {
 
     @Then("I check report content")
     public void iCheckReportContent() throws Exception {
-
         this.report.checkEventTable(reportPage.getPdfUrl());
-        this.report.checkRunId(reportPage.getPdfUrl(), this.currentRecipe.getRunId());
+        this.report.checkRunId(reportPage.getPdfUrl(), report.getRecipes());
     }
 
     @Then("I verify that user information are consistent")
@@ -300,27 +298,27 @@ public class ReportsPageStepsDefinition {
     public void iChooseRecipeRunForConsolidation() {
         report.getRecipes().forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
-    
+
     @Given("I select the report template")
-    public void i_select_report_template() throws InterruptedException {
-    	reportPage.openReportTemplate(this.reportTemplate.getName());
-       //Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+    public void i_select_report_template() {
+        reportPage.openReportTemplate(this.reportTemplate.getName());
     }
+
     @When("I save As the report template")
     public void i_save_as_the_report_template() {
-    	reportPage.iSaveAs();        
+        reportPage.iSaveAs();
     }
-    
+
     @Then("I see SaveTemplate popup window")
     public void i_see_save_template_popup_window() {
         reportPage.ivalidateWindow();
     }
-    
+
     @When("I modify the Existing template")
     public void i_modify_the_existing_template() throws InterruptedException {
-    	this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
+        this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
         this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
-    	reportPage.iRename(this.reportTemplate.getSaveAsName());    
+        reportPage.iRename(this.reportTemplate.getSaveAsName());
     }
 
     @When("I change the templete status Approved to Inactive")
@@ -328,49 +326,46 @@ public class ReportsPageStepsDefinition {
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
         reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
-    
+
     @Then("I see {string} button enable and save As the report template")
     public void i_see_button_enable_and_save_as_the_report_template(String string) {
         reportPage.iValidation();
         reportPage.iSaveAs();
     }
-    
+
     @And("I save report template")
     public void i_save_report_template() {
-    	reportPage.isave();
+        reportPage.isave();
     }
-    
+
     @Then("I see {string} successfully message")
     public void i_see_successfully_message(String message) {
-    	reportPage.iCheckNotifactionMsg(message);
+        reportPage.iCheckNotifactionMsg(message);
     }
 
     @When("I search modified the template")
     public void i_search_modified_template() throws InterruptedException {
         reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
     }
-    
+
     @And("I see report template status Draft in template page")
     public void i_see_report_template_status_draft_template_page() {
-    	reportPage.iValidationdraft();
+        reportPage.iValidationdraft();
     }
-    
+
     @Then("I verify run summary report report")
-    public void i_verify_run_summary_report() throws Exception {    	
-    	this.report.checkEventTable(reportPage.getPdfUrl());    	
-        this.report.checkFiledIds(reportPage.getPdfUrl(),this.currentRecipe.getMachineName(),this.currentRecipe.getBatchId()
-                ,this.currentRecipe.getProductId(),this.currentRecipe.getRecipeName(),
-        		this.currentRecipe.getBeforeComments(),this.currentRecipe.getAfterComments(),
-        		this.currentRecipe.getStartDate(),this.currentRecipe.getEndDate(),this.report.getReportName());
+    public void i_verify_run_summary_report() throws IOException {
+        this.report.checkEventTable(reportPage.getPdfUrl());
+        this.report.checkFiledIds(reportPage.getPdfUrl(), report.getRecipes(), report.getReportName());
         this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
         this.report.checkRecipeColumnsInReport(reportPage.getPdfUrl());
     }
-    @When("I enter {string} as username and {string} password")
-    public void i_Enter_Username_Password(String username1,String password1) {
-    	loginPage.setUser(username1);
-        loginPage.setPassword(password1);
-    }
-    
 
-    
+    @When("I enter {string} as username and {string} password")
+    public void i_Enter_Username_Password(String username, String password) {
+        loginPage.setUser(username);
+        loginPage.setPassword(password);
+    }
+
+
 }

@@ -393,8 +393,7 @@ public class ReportsPage {
 		$(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
 	}
 
-	public void selectRunWithWaiting(String reportTemplateName, String run) throws InterruptedException {
-
+	public void selectRunWithWaiting(String reportTemplateName, String run) {
 		// after finished a recipe, it takes some times to have the run in page
 		// polling report run page
 		SelenideHelper.fluentWaiter().until((webDriver) -> {

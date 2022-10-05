@@ -17,7 +17,8 @@ public class Report {
     private final String INTERNAL_USER = "OMIUser";
     private final String EVENT_TABLE_HEADER = "Event Time|Event Description|Old Value|New Value";
     private final String REPORT_SUMMARY_TITLE = "Report Summary";
-    private final String RUN_ID_FIELD = "RunID";
+    private final String RUN_ID_FIELD_CONSOLIDATED = "RunID";
+    private final String RUN_ID_FIELD = "RunId";
     private final String BATCH_ID = "Batch ID";
     private final String PRODUCT_ID_SUMMARY = "Product ID";
     private final String PRODUCT_ID = "ProductID";
@@ -61,15 +62,15 @@ public class Report {
     private final String RECIPE_STEPS_SUMMARY = "Recipe Steps Summary";
     private final String START_DATE = "Start Date";
     private final String END_DATE = "End Date";
-    private final String PRE_RUN_DATE_TITLE="Pre Run Data";
-    private final String EVENT_DESCRIPTION="Event Description";
-    private final String SETPOINT="Setpoint";
-    private final String EGU="EGU";
+    private final String PRE_RUN_DATE_TITLE = "Pre Run Data";
+    private final String EVENT_DESCRIPTION = "Event Description";
+    private final String SETPOINT = "Setpoint";
+    private final String EGU = "EGU";
 
     @Setter
     @Getter
     String name;
-	
+
     @Setter
     @Getter
     String reportName;
@@ -86,7 +87,7 @@ public class Report {
      * @param expectedRunId Expected run id
      * @throws IOException
      */
-    public void checkRunId(String reportUrl, String expectedRunId) throws IOException {
+    public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
 
         URL url = new URL(reportUrl);
 
@@ -98,7 +99,7 @@ public class Report {
         // get field value and check is not null
         String fieldValue = PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD);
         Assert.assertNotNull("No field with id " + RUN_ID_FIELD, fieldValue);
-        Assert.assertEquals("Unexpected run id value", expectedRunId, fieldValue);
+        recipes.forEach(recipe -> Assert.assertEquals("Unexpected run id value", recipe.getRunId(), fieldValue));
     }
 
     /**
@@ -304,7 +305,7 @@ public class Report {
         Assert.assertEquals("Unexpected batch id value", recipe.batchId, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
 
         Assert.assertEquals("Unexpected productId id value ", recipe.productId, PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
-        Assert.assertEquals("No field with id ", recipe.runId, PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD));
+        Assert.assertEquals("No field with id ", recipe.runId, PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD_CONSOLIDATED));
         Assert.assertEquals("recipename id value ", recipe.recipeName, PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
 
         Assert.assertEquals("No field with start date", recipe.startDate, PdfTableExtractUtils.getTableFieldValue(table, START_DATE));
@@ -346,7 +347,7 @@ public class Report {
         //    Assert.assertTrue(runsFromReport.contains(recipe.runId));
         //});
 
-        for (int i = 0; i < runSummaryTables.size()-1; i++) {
+        for (int i = 0; i < runSummaryTables.size() - 1; i++) {
             var recipe = recipes.get(recipes.size() - i - 1);
             var runSummaryTable = runSummaryTables.get(i + 1);
 
@@ -356,67 +357,69 @@ public class Report {
             //TODO validate steps
 
         }
-	}
-    
+    }
+
     /**
      * Check filed ids are not null in the report
-     * @param reportUrl Report url     * 
+     *
+     * @param reportUrl Report url     *
      * @throws IOException
      */
-    public void checkFiledIds(String reportUrl, String machineName,String batchID, String productId,String recipeName, String beforeComments,String afterComments,String startDate,String endDate,
-    		String template) throws IOException {
+    public void checkFiledIds(String reportUrl, List<Recipe> recipes, String template) throws IOException {
 
+        URL url = new URL(reportUrl);
 
-    	URL url = new URL(reportUrl);
+        // get table from table title and check is not null and contains rows
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream().findFirst().get();
+        Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
-    	// get table from table title and check is not null and contains rows
-    	Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream().findFirst().get();
-    	Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
-    	Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
-
-    	// get field value and check is not null
-    	Assert.assertNotNull("No field with id " + machineName, PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));    	
-    	Assert.assertEquals("Unexpected batch id value", batchID, PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
-    	Assert.assertEquals("Unexpected productId id value " , productId, PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
-    	Assert.assertEquals("recipename id value " , recipeName, PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
-    	String sdate =PdfTableExtractUtils.getTableFieldValue(table, START_DATE);
-    	Assert.assertTrue("No field with start date" , PdfTableExtractUtils.getTableFieldValue(table, START_DATE).contains(startDate));        
-    	Assert.assertTrue("No field with end date" , PdfTableExtractUtils.getTableFieldValue(table, END_DATE).contains(endDate));
-    	Assert.assertEquals("No field with pre run comment", beforeComments, PdfTableExtractUtils.getTableFieldValue(table, PRE_RUN_COMMENT));
-    	Assert.assertEquals("post run comment value" , afterComments, PdfTableExtractUtils.getTableFieldValue(table, POST_RUN_COMMENT));
-    	Assert.assertEquals("run status value" , "Completed", PdfTableExtractUtils.getTableFieldValue(table, RUN_STATUS));
-    	Assert.assertEquals("tempalte name value" , template, PdfTableExtractUtils.getTableFieldValue(table, TEMPLATE_NAME));
-
+        for (var recipe : recipes) {
+            // get field value and check is not null
+            Assert.assertNotNull("No field with id " + recipe.getMachineName(), PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));
+            Assert.assertEquals("Unexpected batch id value", recipe.getBatchId(), PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
+            Assert.assertEquals("Unexpected productId id value ", recipe.getProductId(), PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
+            Assert.assertEquals("recipename id value ", recipe.getRecipeName(), PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
+            String sdate = PdfTableExtractUtils.getTableFieldValue(table, START_DATE);
+            Assert.assertTrue("No field with start date", PdfTableExtractUtils.getTableFieldValue(table, START_DATE).contains(recipe.getStartDate()));
+            Assert.assertTrue("No field with end date", PdfTableExtractUtils.getTableFieldValue(table, END_DATE).contains(recipe.getEndDate()));
+            Assert.assertEquals("No field with pre run comment", recipe.getBeforeComments(), PdfTableExtractUtils.getTableFieldValue(table, PRE_RUN_COMMENT));
+            Assert.assertEquals("post run comment value", recipe.getAfterComments(), PdfTableExtractUtils.getTableFieldValue(table, POST_RUN_COMMENT));
+            Assert.assertEquals("run status value", recipe.getStatus(), PdfTableExtractUtils.getTableFieldValue(table, RUN_STATUS));
+            Assert.assertEquals("template name value", template, PdfTableExtractUtils.getTableFieldValue(table, TEMPLATE_NAME));
+        }
     }
-    
+
     /**
      * Check Pre run columns present in the report
-     * @param reportUrl Report url     * 
+     *
+     * @param reportUrl Report url     *
      * @throws IOException
      */
     public void checkPreRunColumnsInReport(String reportUrl) throws IOException {
-    	 URL url = new URL(reportUrl);
-         Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE).stream().findFirst().get();
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME)==0);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_DESCRIPTION)==1);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, SETPOINT)==2);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EGU)==3);
-         Assert.assertTrue(table.getRowCount()>0);
+        URL url = new URL(reportUrl);
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE).stream().findFirst().get();
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_DESCRIPTION) == 1);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, SETPOINT) == 2);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EGU) == 3);
+        Assert.assertTrue(table.getRowCount() > 0);
     }
-    
+
     /**
      * Check Pre run columns present in the report
-     * @param reportUrl Report url     * 
+     *
+     * @param reportUrl Report url     *
      * @throws IOException
      */
     public void checkRecipeColumnsInReport(String reportUrl) throws IOException {
-    	 URL url = new URL(reportUrl);
-         Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream().findFirst().get();
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME)==0);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER)==1);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER)==2);
-         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION)==3);
-         System.out.println("table row count"+table.getRowCount());
-         Assert.assertTrue(table.getRowCount()>0);
+        URL url = new URL(reportUrl);
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream().findFirst().get();
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME) == 0);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER) == 1);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER) == 2);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION) == 3);
+        System.out.println("table row count" + table.getRowCount());
+        Assert.assertTrue(table.getRowCount() > 0);
     }
 }

@@ -99,13 +99,10 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-
+    
   Scenario: Generate run history report and check report content
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
     And I choose corresponding recipe run
@@ -118,10 +115,7 @@ Feature: Report administration
 
   Scenario: Generate Audittrail report and verify that user information are consistent
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Audit Trail"
     And I click on generate button
@@ -139,8 +133,8 @@ Feature: Report administration
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
-    
-  Scenario: BIOCRS-5818 |Generate a consodilated report with same batch Id
+
+  Scenario: BIOCRS-5818 |Generate a consolidated report with same batch Id
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
     And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
@@ -153,13 +147,17 @@ Feature: Report administration
     Then I should see the report file presence
     And I verify consolidate summary report
 
-  Scenario: BIOCRS-5818 |Generate a consodilated report with different batch Id
+  Scenario: BIOCRS-5818 |Generate a consolidated report with different batch Id
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Consolidated"
     And I choose recipes from consolidation run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
     And I verify consolidate summary report
 
   Scenario: Verify Save As options in template page
@@ -180,10 +178,7 @@ Feature: Report administration
 
  Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
     And I choose corresponding recipe run
