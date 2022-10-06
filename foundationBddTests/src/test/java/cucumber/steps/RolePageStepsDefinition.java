@@ -21,6 +21,7 @@ public class RolePageStepsDefinition {
     public RolePageStepsDefinition(RolePage rolePage, Role role) {
         this.rolePage = rolePage;
         this.role = role;
+        this.role.getPermissions().clear();
     }
     
 	@Given("I trigger Roles mode")
