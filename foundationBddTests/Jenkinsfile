@@ -178,8 +178,10 @@ pipeline {
 
                             }
                         }
-                        commandTag+='" -DtestFailureIgnoreProp=true'
+                        commandTag+='"'
                     }
+					
+					commandTag+=' -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 
