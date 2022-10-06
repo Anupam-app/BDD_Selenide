@@ -92,6 +92,35 @@ public final class PdfTableExtractUtils {
 
         return resultTable;
     }
+    public static Table getTableFromTableTitles(InputStream inputStream, String tableTitle) throws IOException {
+
+        Table resultTable = null;
+
+        try (PDDocument document = PDDocument.load(inputStream)) {
+
+            ObjectExtractor oe = new ObjectExtractor(document);
+
+            for (int i = 1; i <= document.getNumberOfPages(); i++) {
+
+                PDFTextStripper textStripper = new PDFTextStripper();
+                textStripper.setStartPage(i);
+                textStripper.setEndPage(i);
+                String pageText = textStripper.getText(document);
+
+                if (StringUtils.containsIgnoreCase(pageText, tableTitle)) {
+                    Page page = oe.extract(i);
+
+                    if (page != null) {
+                        resultTable = getTablesFromPage(page).stream().findFirst().orElse(null);
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return resultTable;
+    }
 
     /**
      * Get the page number (first found) where table is located using table header (search horizontally then vertically)
@@ -238,7 +267,7 @@ public final class PdfTableExtractUtils {
         return tableList;
     }
 
-    private static Table searchTable(List<Table> tableList, String tableHeader) {
+    public static Table searchTable(List<Table> tableList, String tableHeader) {
 
         for (Table table : tableList) {
 
