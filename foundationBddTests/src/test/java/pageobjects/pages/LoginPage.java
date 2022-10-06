@@ -36,6 +36,7 @@ public class LoginPage {
     }
 
     public void pushLogin() {
+    	commonWaiter(submitButton,visible);
         submitButton.click();
     }
 
@@ -82,6 +83,7 @@ public class LoginPage {
     }
 
     public void iLogout() {
+        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 }

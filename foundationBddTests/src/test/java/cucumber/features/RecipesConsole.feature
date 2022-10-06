@@ -4,11 +4,13 @@ Feature: Recipe console
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
+  @SMOKE
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
     Then I see the system on hold
 
+  @SMOKE
   Scenario: Recipe execution
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"

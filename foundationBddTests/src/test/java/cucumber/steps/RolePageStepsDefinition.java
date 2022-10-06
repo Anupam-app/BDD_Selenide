@@ -21,6 +21,7 @@ public class RolePageStepsDefinition {
     public RolePageStepsDefinition(RolePage rolePage, Role role) {
         this.rolePage = rolePage;
         this.role = role;
+        this.role.getPermissions().clear();
     }
     
 	@Given("I trigger Roles mode")
@@ -55,7 +56,7 @@ public class RolePageStepsDefinition {
 		Collections.sort(permissions);
 		ArrayList<String> expectedPermissions=new ArrayList<>(role.getPermissions());
 		Collections.sort(expectedPermissions);
-		Assert.assertEquals(permissions,expectedPermissions);
+		Assert.assertEquals(expectedPermissions,permissions);
 	}
 
 	@When("I search the role")

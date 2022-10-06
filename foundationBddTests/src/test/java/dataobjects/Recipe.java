@@ -17,13 +17,10 @@ public class Recipe {
     String afterComments;
     RecipeAction recipeAction;
     String recipeImportedName;
-    String runId2;
-    String productId2;
-    String batchId2;
-    String runId3;
     String startDate;
     String endDate;
     String machineName;
-   
+    String status;
+
 }
 

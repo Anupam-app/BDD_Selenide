@@ -1,8 +1,7 @@
 @COMMON
 Feature: Report administration
 
-
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     Then I see Runs, Templates, Reports tabs are displayed
@@ -14,7 +13,7 @@ Feature: Report administration
     |Process Type 	|
     |Status 		|
 	
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report template mode
@@ -27,7 +26,7 @@ Feature: Report administration
     |Last Modified On  |	
 
 
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report mode
@@ -40,28 +39,28 @@ Feature: Report administration
     |Report Type	|	
     |E-Sign.Status	|
     |Signed By		|
-     
+
+  @SMOKE
   Scenario: Generate and sign Audittrail report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-    
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    Then I dont see the presence of generate button 
+    Then I dont see the presence of generate button
 
+  @SMOKE
   Scenario: Generate and sign a recipe run history report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Run History"
     And I choose recipe run "recipe4sec220211129030358"
@@ -73,8 +72,9 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
 
+  @SMOKE
   Scenario: Generate and sign a consolidated report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Consolidated"
     And I choose recipe run "recipe4sec220211129030358" for consolidation
@@ -86,8 +86,9 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
 
+  @SMOKE
   Scenario: Generate and sign a custom report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
@@ -98,13 +99,10 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-
+    
   Scenario: Generate run history report and check report content
-  	Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
     And I choose corresponding recipe run
@@ -117,10 +115,7 @@ Feature: Report administration
 
   Scenario: Generate Audittrail report and verify that user information are consistent
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Audit Trail"
     And I click on generate button
@@ -138,42 +133,58 @@ Feature: Report administration
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
-    
-  Scenario: BIOCRS-5818 |Generate a consodilated report with same batch Id
+
+  Scenario: BIOCRS-5818 |Generate a consolidated report with same batch Id
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 15 seconds
-    And I wait the end of the execution of the recipe
-    And I clear the recipe
-    And I load recipe "testRecipeToExecute"
-    And I start and wait second recipe execution with "same" batchID during 15 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
     When I goto report management page
     And I select report from dropdown "Consolidated"
-    And I choose "same" BatchID from Consolidation run
+    And I choose recipes from consolidation run
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify "same" consolidate summary report
-    
-  @test  
-  Scenario: BIOCRS-5818 |Generate a consodilated report with different batch Id
-   Given I am logged in as "Bio4CAdmin" user
-   And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-   And I start and wait recipe execution during 15 seconds
-    And I wait the end of the execution of the recipe
-    And I clear the recipe
-   And I load recipe "testRecipeToExecute"
-   And I start and wait second recipe execution with "different" batchID during 15 seconds
-   And I wait the end of the execution of the recipe
+    And I verify consolidate summary report
+
+  Scenario: BIOCRS-5818 |Generate a consolidated report with different batch Id
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Consolidated"
-    And I choose "different" BatchID from Consolidation run
+    And I choose recipes from consolidation run
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify "different" consolidate summary report
+    And I verify consolidate summary report
+
+  Scenario: Verify Save As options in template page
+    Given I am logged in as "Bio4CAdmin" user
+    And I goto report management page
+    And I trigger report template mode
+    When I create random report template
+    And I select report include "Audit Trail"
+    And I select report include "Run Summary"
+    Then I save the report template
+    And I search the report template
+    And I select the report template
+    Then I see "Save As" button enable and save As the report template
+    And I see SaveTemplate popup window
+    When I modify the Existing template
+    Then I see "Report template created" successfully message
+    And I search modified the template
+
+ Scenario: Verify Create Custom Template
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    When I goto report management page
+    And I select report from dropdown "Run History"
+    And I choose corresponding recipe run
+    And I choose template "testReportTemplate"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify run summary report report
