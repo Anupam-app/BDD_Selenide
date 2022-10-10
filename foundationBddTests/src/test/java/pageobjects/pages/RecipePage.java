@@ -208,10 +208,7 @@ public class RecipePage {
 
 
     public void exportRecipe(String recipeName) {
-        //$(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).waitUntil(visible, 15000l).click();
-    	//$(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).shouldBe(visible);
-        commonWaiter($(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))), Condition.visible).click();
-        Selenide.sleep(20000);
+        $(By.xpath(String.format(XPATH_EDIT_EXPORT_ICON, recipeName))).waitUntil(visible, 5000l).click();
         commonWaiter(openButton, Condition.visible).click();
     }
 
@@ -224,7 +221,6 @@ public class RecipePage {
         notificationTexts.shouldHave(
                 CollectionCondition.anyMatch("User notification should contain this notification"
                         , n -> n.getText().equals(notification)));
-        //notificationTexts.shouldHave(CollectionCondition.exactTexts(notification));
     }
 
     public void notificationMessageExport(String recipeName) {
@@ -238,8 +234,10 @@ public class RecipePage {
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
         SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
-        $(By.className("rename-recipe-import-input")).clear();
-        recipeInputSave.setValue(RandomStringUtils.randomAlphabetic(10));
+        recipeInputSave.click();
+        SelenideHelper.commonWaiter(recipeInputSave,visible).clear();
+        var value=RandomStringUtils.randomAlphabetic(10);
+        recipeInputSave.setValue(value);
         saveButton.click();
         browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
