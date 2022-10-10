@@ -27,6 +27,7 @@ Background:
     |Last Modified By  |
     |Last Modified On  |	
 
+
   Scenario: BIOCRS-5238/5239/5241 | Report Management Dashboard -  Reports Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
@@ -42,6 +43,7 @@ Background:
     |Signed By		|
 
   @SMOKE
+
   Scenario: BIOCRS-5106/592 Generate and sign Audittrail report
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -55,6 +57,7 @@ Background:
     Then I should see the report signed
     And I should see the report file presence
 	And I check audit trial report content
+
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user

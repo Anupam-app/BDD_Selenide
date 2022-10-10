@@ -62,7 +62,7 @@ Feature: Apply Filter Reports
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
     
- @wip  
+
   Scenario: Verify filter run reports functionality in Report Management Based on status
     Given I goto report management page
     When  I filter on icon and select run status as "Completed"
@@ -146,7 +146,6 @@ Feature: Apply Filter Reports
     And  I filter on icon and select run status as "Operation"
     Then  I should see consolidated status as "Operation"
 	
-	
   Scenario Outline: Verify sort template functionality in ascending order
 	Given I goto report management page
  	And I trigger report template mode
@@ -159,5 +158,6 @@ Feature: Apply Filter Reports
     |Last Modified On	| true        	| 
     |Last Modified By 	| true	        |
     |Last Modified On	| false         | 
+
  	  
  	  

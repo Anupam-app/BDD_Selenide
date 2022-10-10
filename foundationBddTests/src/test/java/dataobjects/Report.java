@@ -45,6 +45,7 @@ public class Report {
 	private final String EVENT_COLUMN_NAME = "Event Time";
 	private final String AUDIT_TABLE_HEADER = "Event Time|Application Name|Record|User|Comment|Attribute|Current Value|Previous Value";
 
+
     @Setter
     @Getter
     String name;
@@ -112,7 +113,9 @@ public class Report {
      * @param reportUrl Report url
      * @throws IOException
      */
+
     public void checkUserInformation(String reportUrl, String user) throws IOException {
+
 
         URL url = new URL(reportUrl);
 
@@ -148,6 +151,7 @@ public class Report {
             }
         }
     }
+
 	
 	/**
      * Check Event Time information

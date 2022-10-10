@@ -105,6 +105,7 @@ public class ReportsPageStepsDefinition {
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
         this.report.setReportName(template);
+
     }
 	
 	@Then("I check audit trial report content")
@@ -113,6 +114,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
         this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+
     }
 
     @When("I dont see the presence of generate button")
