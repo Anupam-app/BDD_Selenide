@@ -3,7 +3,6 @@ package cucumber.steps;
 
 import io.cucumber.datatable.DataTable;
 import com.codeborne.selenide.Selenide;
->>>>>>> a337921ad0b881f05b61d8ca9272e87bffe98617
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -85,7 +84,6 @@ public class ReportsFilterStepsDefinition {
 	public void iSelectReportCreatedByUserStatus(String user) {
 		reportPage.selectCreatedBy(user);
 	}
-
 
 	@When("I select report user from dropdown signed by {string}")
 	public void iSelectReportSignedByUserStatus(String user) {

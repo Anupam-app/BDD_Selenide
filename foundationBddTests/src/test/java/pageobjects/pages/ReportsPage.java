@@ -363,11 +363,11 @@ public class ReportsPage {
         return name;
     }
     
-    public void createTrends(){
+    public void createTrends() {		
     	trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
 		trendsSaveButton.click();  
 		trendsCancelButton.click();
-    	}
+    }
 
     public void exists(String name) {
         $(By.xpath(String.format(XPATH_REPORT_NAME, name))).shouldBe(visible);
@@ -392,21 +392,17 @@ public class ReportsPage {
     	$(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))).click();
     }
     
-    public void create5Trends(){
-    	for (int j=0; j<5; j++) {
-    		
+    public void create5Trends() {
+    	for (int j=0; j<5; j++) {    		
     		for(int i=1; i<6; i++) {
     			commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))),visible);
     			$(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))).click();
-    	}
-
+			}
     		trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
     		trendsSaveButton.click();
     		trendsAddButton.click();
-    	
     	}
-    }
-    
+    } 
         
     public void verifySixthChartNotAllowed() {
     	trendsAddButton.click();
@@ -431,8 +427,7 @@ public class ReportsPage {
     	else if(reportInclude.contains("Trends")){
     		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
     		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-    		//trendsAddButton.click();
-    		
+    		   		
     	}
     	else {
     		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
