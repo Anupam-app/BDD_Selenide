@@ -40,7 +40,7 @@ Feature: Report administration
     |Report Type	|	
     |E-Sign.Status	|
     |Signed By		|
- @acc    
+   
   Scenario: BIOCRS-5106/592 | Generate and sign Audittrail report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -50,10 +50,9 @@ Feature: Report administration
     And I click on generate button
     And I goto report management page
     And I trigger report mode
-    #And I esign the report
-    #Then I should see the report signed
+    And I esign the report
+    Then I should see the report signed
     And I should see the report file presence
-    And I verify the report is printable
     And I check audit trial report content
     
 
@@ -89,6 +88,7 @@ Feature: Report administration
     Then I should see the report signed
     And I should see the report file presence
 
+ @acc 
   Scenario: Generate and sign a custom report
   	Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -96,6 +96,14 @@ Feature: Report administration
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
     And I select report include "Alarms"
+    When I select report include "Trends"
+    And I select below parameters 
+		|Parameters  |
+		|PD1 PV      |
+		|PI101 PV    |
+		|PI102 PV    |
+		|PI103 PV    |
+		|TMP1 PV     |
     And I click on generate button
     And I goto report management page
     And I trigger report mode

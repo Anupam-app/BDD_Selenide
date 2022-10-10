@@ -2,6 +2,8 @@ package cucumber.steps;
 
 import java.text.ParseException;
 
+import com.codeborne.selenide.Selenide;
+
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -44,6 +46,17 @@ public class ReportsFilterStepsDefinition {
     @Then("I see Audit logs are displayed for date range and {string}")
     public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
         reportPage.checkTableContainsUserAndDateRange(userid);
+    }
+    
+    @When("I select template sort by {string} in {string}")
+    public void iSelectSortTemplate(String columnName, String sortMode) {
+		reportPage.sortList(columnName,Boolean.parseBoolean(sortMode));
+    }
+    
+    @Then("{string} list should be sorted in {string} order")
+    public void templatesShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+		reportPage.checkSortedElement(columnName,Boolean.parseBoolean(sortMode));
+		Selenide.sleep(6000);
     }
     
     @When("I click on filter icon and select report type {string}")

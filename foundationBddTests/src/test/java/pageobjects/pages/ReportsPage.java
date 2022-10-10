@@ -12,7 +12,9 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.collections.*;
@@ -30,14 +32,21 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 
 import pageobjects.utility.SelenideHelper;
+import pageobjects.utility.SortHelper;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.select.Evaluator.IndexGreaterThan;
 import org.junit.Assert;
 import dataobjects.ReportTemplate;
+import io.cucumber.java.en.When;
 
 public class ReportsPage {
-
+	
+	private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
+	private final String XPATH_ORDER_ICON = "//span[@class='%s']";
+	private final String XPATH_TEMPLATE_COLUMNS = "//table[@id='templateListTable']//td[%s]";
+	private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
     private final String REPORT_TEMPLATE_STATUS_WITH_TEXT = "(//*[@id='template_status']//li)[text()='%s']";
     private final String PDF_VIEWER_IFRAME = "//iframe[@id='ReportViewIFrame']";
     private final String XPATH_ACTIVE_TEMPLATE_STATUS = "(//*[@class='active-label'])";
@@ -108,7 +117,11 @@ public class ReportsPage {
     private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
     private final SelenideElement XPATH_ERRORNOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification = "Failed to create report template because %s already exists. Use a different name.";
-
+    Function<Integer, List<String>> getTemplateColumns = (index) -> {
+        var templates = $$(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS, index))).texts();
+        templates.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return templates;
+    };
     
     public void goToReports() {
         reportsManagementPage.click();
@@ -295,16 +308,26 @@ public class ReportsPage {
     }
     
     public void printReport() {
-    	//WebElement parentShadowElement = driver.findElement(By.cssSelector("[page='home']"));
-    	//Map<String, Object> params = new HashMap<>();
-    	//params.put("parentElement", pdfViwer);
-    	//params.put("innerSelector", "div#tabContainer shop-tabs shop-tab:nth-child(1) a");
-    	//clickElementShadowDOM(((RemoteWebDriver)driver), params);
-    	//Selenide.executeJavaScript("arguments[0].shadowRoot.getElementById('toolbar').shadowRoot.getElementById('toolbar').shadowRoot.getElementById('leftContent').click()",pdfViwer);
-    	Selenide.sleep(6000);
     	SelenideElement printButton= (Selenide.executeJavaScript("return document.querySelector('#viewer').shadowRoot.querySelector('#toolbar').shadowRoot.querySelector('#print').shadowRoot.querySelector('#icon > iron-icon').shadowRoot.querySelector('svg')"));
         Selenide.executeJavaScript("arguments[0].click();",  printButton);
-        Selenide.sleep(6000);
+    }
+    
+    public void sortList(String columnName, boolean descending) {
+        SelenideElement sortAction = getTemplateColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+    
+    public SelenideElement getTemplateColumnHeader(String columnName) {
+        return $(By.xpath(String.format(XPATH_TEMPLATE_COLUMN_HEADER, columnName)));
+    }
+    
+    public void checkSortedElement(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);
+    }
+    public List<String> getTemplateColumnHeaders() {
+        return $$(By.xpath(XPATH_TEMPLATE_TABLE + "//th")).texts();
     }
     
     public void selectParams(String parameter) throws InterruptedException {

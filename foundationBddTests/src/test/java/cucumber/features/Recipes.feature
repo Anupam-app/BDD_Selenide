@@ -21,6 +21,22 @@ Feature: Recipe management
     And I edit recipe "testDraftRecipeToChangeStatus"
     When I approve recipe
     Then Recipe should be approved
+    
+  Scenario: BIOCRS-5060-UATC_CRS_Recipe Obsolete Workflow
+    Given I go to recipe page
+    And I edit recipe "testDraftRecipeToChangeStatus"
+    When I approve-inactive recipe
+    Then Recipe should be approved-inactive
+    And I verify autit trial logs
+    
+  Scenario: BIOCRS-5060-UATC_CRS_Recipe Reject Workflow
+    Given I go to recipe page
+    And I edit recipe "testDraftRecipeToChangeStatus"
+    When I tech-review recipe
+    And Recipe should be tech review
+    And I draft recipe
+    And Recipe should be draft
+    And I verify autit trial logs
 
   Scenario: Recipe creation
     Given I go to recipe page

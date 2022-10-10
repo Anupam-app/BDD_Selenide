@@ -10,6 +10,20 @@ Feature: Apply Filter Reports
     And I select user in dropdown "Bio4CAdmin"
     And I select date range as "Last 7 Days"
     Then I see Audit logs are displayed for date range and "bio4cadmin"
+ 
+  
+  Scenario Outline: Verify sort template functionality in ascending order
+ 		Given I goto report management page
+ 		And I trigger report template mode
+ 		When  I select template sort by "<columns>" in "<descending>"
+ 		Then "<columns>" list should be sorted in "<descending>" order
+			  Examples:
+      				  |columns      							| descending    |
+      				  |Last Modified By 	        | false         |
+     				  	|Last Modified On				    | true        	| 
+     				  	|Last Modified By 	        | true	        |
+     				  	|Last Modified On				    | false         | 
+      				  
 
 
   Scenario: Verify search functionality in the templates page

@@ -37,7 +37,7 @@ public class SortHelper {
         } else {
             expectedList.sort(String.CASE_INSENSITIVE_ORDER);
         }
-
         Assert.assertEquals(expectedList, displayedList);
+
     }
 }
