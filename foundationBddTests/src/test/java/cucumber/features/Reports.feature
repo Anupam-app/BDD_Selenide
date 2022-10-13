@@ -1,8 +1,9 @@
 @COMMON
 Feature: Report administration
 
+Background:
 
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     Then I see Runs, Templates, Reports tabs are displayed
@@ -14,7 +15,7 @@ Feature: Report administration
     |Process Type 	|
     |Status 		|
 	
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report template mode
@@ -27,7 +28,7 @@ Feature: Report administration
     |Last Modified On  |	
 
 
-	Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
+  Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Reports Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report mode
@@ -43,10 +44,9 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign Audittrail report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
@@ -62,7 +62,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a recipe run history report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Run History"
     And I choose recipe run "recipe4sec220211129030358"
@@ -76,7 +76,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a consolidated report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Consolidated"
     And I choose recipe run "recipe4sec220211129030358" for consolidation
@@ -90,7 +90,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a custom report
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
@@ -103,7 +103,7 @@ Feature: Report administration
     And I should see the report file presence
 
   Scenario: Generate run history report and check report content
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 15 seconds
@@ -141,3 +141,35 @@ Feature: Report administration
     And I trigger report mode
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
+
+  Scenario: Verify Save As options in template page
+    Given I am logged in as "Bio4CAdmin" user
+    And I goto report management page
+    And I trigger report template mode
+    When I create random report template
+    And I select report include "Audit Trail"
+    And I select report include "Run Summary"
+    Then I save the report template
+    And I search the report template
+    And I select the report template
+    Then I see "Save As" button enable and save As the report template
+    And I see SaveTemplate popup window
+    When I modify the Existing template
+    Then I see "Report template created" successfully message
+    And I search modified the template
+
+ Scenario: Verify Create Custom Template
+    Given I am logged in as "Bio4CAdmin" user
+    And I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    And I wait the end of the execution of the recipe
+    When I goto report management page
+    And I select report from dropdown "Run History"
+    And I choose corresponding recipe run
+    And I choose template "testReportTemplate"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify run summary report report

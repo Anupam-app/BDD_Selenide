@@ -5,6 +5,7 @@ Feature: User login
     Given I open portal
 
   @SMOKE
+  @LOGIN
   Scenario: User login
     Given I open login page
     When I enter "bio4cadmin" as username and "MerckApp1@" as password
@@ -66,3 +67,6 @@ Feature: User login
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate" 
+    
+   
+   

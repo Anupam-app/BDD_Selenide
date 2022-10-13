@@ -14,6 +14,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
 
@@ -24,14 +25,17 @@ public class ReportsPageStepsDefinition {
     private final ReportTemplate reportTemplate;
     private final User user;
     private final Recipe recipe;
+    private final LoginPage loginPage;
 
-    public ReportsPageStepsDefinition(ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+    public ReportsPageStepsDefinition(LoginPage loginPage,ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
             Recipe recipe) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
         this.recipe = recipe;
+        this.loginPage = loginPage;
+        
     }
 
     @Given("I goto report management page")
@@ -100,6 +104,7 @@ public class ReportsPageStepsDefinition {
     @When("I choose template {string}")
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
+        this.report.setReportName(template);
     }
 
     @When("I dont see the presence of generate button")
@@ -293,4 +298,76 @@ public class ReportsPageStepsDefinition {
     public void iVerifyTemplateIsEditable() {
     	reportPage.approvedTemplateValidation();
     }
+    
+    @Given("I select the report template")
+    public void i_select_report_template() throws InterruptedException {
+    	reportPage.openReportTemplate(this.reportTemplate.getName());
+       //Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+    }
+    @When("I save As the report template")
+    public void i_save_as_the_report_template() {
+    	reportPage.iSaveAs();        
+    }
+    
+    @Then("I see SaveTemplate popup window")
+    public void i_see_save_template_popup_window() {
+        reportPage.ivalidateWindow();
+    }
+    
+    @When("I modify the Existing template")
+    public void i_modify_the_existing_template() throws InterruptedException {
+    	this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
+        this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
+    	reportPage.iRename(this.reportTemplate.getSaveAsName());    
+    }
+
+    @When("I change the templete status Approved to Inactive")
+    public void i_change_template_status_approved_to_inactive() {
+        this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
+        reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
+    }
+    
+    @Then("I see {string} button enable and save As the report template")
+    public void i_see_button_enable_and_save_as_the_report_template(String string) {
+        reportPage.iValidation();
+        reportPage.iSaveAs();
+    }
+    
+    @And("I save report template")
+    public void i_save_report_template() {
+    	reportPage.isave();
+    }
+    
+    @Then("I see {string} successfully message")
+    public void i_see_successfully_message(String message) {
+    	reportPage.iCheckNotifactionMsg(message);
+    }
+
+    @When("I search modified the template")
+    public void i_search_modified_template() throws InterruptedException {
+        reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
+    }
+    
+    @And("I see report template status Draft in template page")
+    public void i_see_report_template_status_draft_template_page() {
+    	reportPage.iValidationdraft();
+    }
+    
+    @Then("I verify run summary report report")
+    public void i_verify_run_summary_report() throws Exception {    	
+    	this.report.checkEventTable(reportPage.getPdfUrl());    	
+        this.report.checkFiledIds(reportPage.getPdfUrl(),this.recipe.getMachineName(),this.recipe.getBatchId(),this.recipe.getProductId(),this.recipe.getRecipeName(),
+        		this.recipe.getBeforeComments(),this.recipe.getAfterComments(),
+        		this.recipe.getStartDate(),this.recipe.getEndDate(),this.report.getReportName());
+        this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
+        this.report.checkRecipeColumnsInReport(reportPage.getPdfUrl());
+    }
+    @When("I enter {string} as username and {string} password")
+    public void i_Enter_Username_Password(String username1,String password1) {
+    	loginPage.setUser(username1);
+        loginPage.setPassword(password1);
+    }
+    
+
+    
 }

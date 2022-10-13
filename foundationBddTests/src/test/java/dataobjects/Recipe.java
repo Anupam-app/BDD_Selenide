@@ -17,4 +17,7 @@ public class Recipe {
     String afterComments;
     RecipeAction recipeAction;
     String recipeImportedName;
+    String startDate;
+    String endDate;
+    String machineName;
 }

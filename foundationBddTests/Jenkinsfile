@@ -145,6 +145,18 @@ pipeline {
                 }
             }
         }
+        stage('Test able to login') {
+            steps {
+                script {
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3',
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN" -DtestFailureIgnoreProp=false',
+                        resolverId: "MAVEN_RESOLVER"
+                    )
+                }
+            }
+        }
         stage('Test all bdd tests') {
 			steps {
                 script {
@@ -154,18 +166,22 @@ pipeline {
                         commandTag=' -Dcucumber.filter.tags="@'+env.MODE+'"'
                     }
                     else{
+                        commandTag = ' -Dcucumber.filter.tags="@COMMON or @'+env.PDP
                         if(env.PDP != 'CRS'){
                             def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
                             if(response.status==200){
                                def jsonResponse = readJSON text: response.content
-                               commandTag = ' -Dcucumber.filter.tags="@COMMON or @'+env.PDP
+
                                jsonResponse.features.each{val->
                                     commandTag+=' or @'+val
                                 }
-                               commandTag+='"'
+
                             }
                         }
+                        commandTag+='"'
                     }
+					
+					commandTag+=' -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 

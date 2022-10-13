@@ -63,15 +63,16 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
 	}
 
-    public String getLastStatusText() {
-		SelenideHelper.commonWaiter(lastStatusText, visible);
-        return lastStatusText.getText();
-    }
-    
-    public String getLastBackupName() {
+	public String getLastStatusText() {
+		if(lastStatusText.isDisplayed()){
+			return lastStatusText.getText();
+		}
+		return "";
+	}
+	public String getLastBackupName() {
 		SelenideHelper.commonWaiter(lastScheduledBackUpName, visible);
-        return lastScheduledBackUpName.getText();
-    }
+		return lastScheduledBackUpName.getText();
+	}
 
 	private void chooseBackupPath() {
 		downArrow.click();
@@ -126,7 +127,7 @@ public class BackupPage {
 		while (timeWaited < timeToWait) {
 			goToBackupMode();
 			goToHistory();
-			if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+			if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
 				break;
 
 			}else {
@@ -143,7 +144,7 @@ public class BackupPage {
 			goToBackupMode();
 			goToHistory();
 			if(name.equals(getLastBackupName())) {
-				if (status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+				if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
 					break;
 				} 
 			}else {

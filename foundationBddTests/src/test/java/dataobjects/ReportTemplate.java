@@ -11,4 +11,8 @@ public class ReportTemplate {
     @Setter
     @Getter
     String status;
+
+    @Setter
+    @Getter
+    String SaveAsName;
 }
