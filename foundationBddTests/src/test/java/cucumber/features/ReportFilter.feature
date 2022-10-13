@@ -3,7 +3,7 @@ Feature: Apply Filter Reports
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
-  
+
   Scenario: Verify audit Trail search based on user and date range
     Given I goto report management page
     When I select report from dropdown "Audit Trail"
@@ -61,7 +61,6 @@ Feature: Apply Filter Reports
     Given I goto report management page
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
-    
 
   Scenario: Verify filter run reports functionality in Report Management Based on status
     Given I goto report management page
