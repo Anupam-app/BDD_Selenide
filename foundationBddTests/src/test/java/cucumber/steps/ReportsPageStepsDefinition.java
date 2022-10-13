@@ -1,7 +1,8 @@
 package cucumber.steps;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
@@ -198,14 +199,11 @@ public class ReportsPageStepsDefinition {
     public void iSelectReportInclude(String reportInclude) {
         reportPage.includeReport(reportInclude);
     }
-    
-    @When("I select below parameters")
-    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
-    	List<List<String>> list = table.asLists(String.class);
-        for (int i=1; i<list.size(); i++) {
-        reportPage.selectParams(list.get(i).get(0));
-        }
-    }
+   
+    @When("I choose {string} trends {string}")
+	public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
+    	reportPage.selectParameters(noOfParams,parameters);
+	}
     
     @And ("I create five trends chart")
     public void iCreate5TrendsCharts() {

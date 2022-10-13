@@ -11,6 +11,8 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,8 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.conditions.Attribute;
 import com.codeborne.selenide.conditions.Disabled;
 import com.codeborne.selenide.conditions.Enabled;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigParseOptions;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
@@ -386,12 +390,6 @@ public class ReportsPage {
         absentReportText.should(not(visible));
     }
     
-    public void selectParams(String parameter) throws InterruptedException {
-    	
-    	commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))),visible);
-    	$(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))).click();
-    }
-    
     public void create5Trends() {
     	for (int j=0; j<5; j++) {    		
     		for(int i=1; i<6; i++) {
@@ -403,12 +401,28 @@ public class ReportsPage {
     		trendsAddButton.click();
     	}
     } 
+    
+    public void selectParameters(String noOfParams, String parameters ) {
+		int count=Integer.parseInt(noOfParams);
+		List <String> list = new ArrayList <String>();
+		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
+	    var params = config.getConfigList("Params.list");
+		for (var param : params) {
+			list.add(param.getString("value"));
+        }
+		if (trendsAddButton.exists()) {
+    		trendsAddButton.click();
+    	}
+		for (int i=0; i<count; i++) {
+			commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))),visible);
+	    	$(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))).click();
+        }
+	}
         
     public void verifySixthChartNotAllowed() {
     	trendsAddButton.click();
     	Assert.assertFalse(trendsAddButton.isEnabled());
     	trendsCancelButton.click();
-    	
     }
     
     public void isGeneratedNotificationWhenMoreThanSixParams(String message) {   	
@@ -425,6 +439,7 @@ public class ReportsPage {
     		
     	}
     	else if(reportInclude.contains("Trends")){
+    		
     		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
     		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
     		   		

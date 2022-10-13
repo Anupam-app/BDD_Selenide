@@ -13,21 +13,24 @@ Background:
     And I search the report template
     And I put the report template in review
     And I save the report template
-  
-	Scenario: BIOCRS-5240| Select more than 5 trends parameters
+ 
+	Scenario Outline: BIOCRS-5240| Select more than 5 trends parameters
     Given I search the report template
     And I edit the report template
     When I select report include "Trends"
-    And I select below parameters 
-		|Parameters  |
-		|PD1 PV      |
-		|PI101 PV    |
-		|PI102 PV    |
-		|PI103 PV    |
-		|TMP1 PV     |
-		|TPH1 PV     |
-   Then I verify the error message "Maximum of 5 sensors allowed"
-   
+    And I choose "6" trends "<parameters>" 
+    Then I verify the error message "Maximum of 5 sensors allowed"
+    
+   	@CRS
+    Examples:
+      |parameters                    |
+      |parameters/crs/trendsParams   | 
+                                            
+    @IVI
+    Examples:
+      |parameters                    |
+      |parameters/ivi/trendsParams   |
+   	
  #TODO fix the application or the scenario to make it work on headless mode
   #Scenario: BIOCRS-5240| More than 5 trends chart not allowed in report template
     #Given I search the report template
