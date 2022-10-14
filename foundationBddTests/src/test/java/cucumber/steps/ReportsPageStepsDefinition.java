@@ -106,6 +106,14 @@ public class ReportsPageStepsDefinition {
         reportPage.chooseReportTemplate(template);
         this.report.setReportName(template);
     }
+	
+	@Then("I check audit trial report content")
+    public void iCheckAuditTrialReportContent() throws Exception {
+
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
+        this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+    }
 
     @When("I dont see the presence of generate button")
     public void iDontSeeGenerateButton() {
@@ -157,7 +165,7 @@ public class ReportsPageStepsDefinition {
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
-        this.report.checkUserInformation(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
     }
 
     @When("I search report {string}")
@@ -199,8 +207,14 @@ public class ReportsPageStepsDefinition {
     
     @And ("I create five trends chart")
     public void iCreate5TrendsCharts() {
+        reportPage.create5Trends();
+    }
+    
+    @And ("I save trends")
+    public void iCreateTrendsCharts() {
         reportPage.createTrends();
     }
+    
     @Then ("I verify that sixth chart is not allowed")
     public void iSixthTrendsChartNotAllowed() {
         reportPage.verifySixthChartNotAllowed();
