@@ -78,7 +78,7 @@ Feature: Trends Management
       |parameters                    |
       |parameters/ivi/trendsParams   |
 
-         
+       
   Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Trends Parameters List
     When I select the "Default" collection
     And I select star icons for "<Param1>","<Param2>" parameters

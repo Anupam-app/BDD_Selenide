@@ -90,7 +90,10 @@ public class TrendsPage {
 	private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']/span"));
 	private SelenideElement starredNullParameters = $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));    
 	private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
-
+	private String checkboxDefaultCollection = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[@title='%s']/input";
+	private ElementsCollection staricon1 = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/span[2]"));
+	private SelenideElement loadingIcon = $(By.xpath("//div[contains(@class,'loading')]"));
+	
 	public void goToTrends() {
 		trends.click();
 		commonWaiter(trends,visible);
@@ -207,12 +210,13 @@ public class TrendsPage {
 
 	public void selectMultipleCheckbox(String tag1,String tag2) throws Exception {
 		$(By.xpath(String.format(collection_radiobutton,"Default"))).click();
-		for(SelenideElement alltags: leddgerParametersCheckBox){
-			String tagsname = alltags.getAttribute("value");
-			if(tagsname.equals(tag1)||tagsname.equals(tag2)){		
-				alltags.click();
-			}
-		}
+		$(By.xpath(String.format(checkboxDefaultCollection,tag1))).click();
+		$(By.xpath(String.format(checkboxDefaultCollection,tag2))).click();
+		/*
+		 * for(SelenideElement alltags: leddgerParametersCheckBox){ String tagsname =
+		 * alltags.getAttribute("value");
+		 * if(tagsname.equals(tag1)||tagsname.equals(tag2)){ alltags.click(); } }
+		 */
 	}	
 
 	public void trendsPanelValidation(String options) {
@@ -242,6 +246,7 @@ public class TrendsPage {
 	}
 
 	public void validateGraph() {
+		commonWaiter(loadingIcon, not(visible));
 		commonWaiter(validateGraph, visible);
 
 	}
@@ -301,7 +306,7 @@ public class TrendsPage {
 		{
 			acceptedParams.add($(By.xpath(String.format(tagLabel, i))).getText());
 		}
-
+		System.out.println(acceptedParams);
 		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
 	    var params = config.getConfigList("Params.list");
 	    int paramsSize = params.size();
@@ -312,6 +317,7 @@ public class TrendsPage {
 			Collections.sort(acceptedParams);
 			Collections.sort(expectedParams);
 			Assert.assertEquals(acceptedParams,expectedParams );
+			
 		}
 		
 	}
@@ -328,6 +334,7 @@ public class TrendsPage {
 	public void iselectstaricon(String star1,String star2 ) throws InterruptedException{
 		for(SelenideElement star_Options:staricon) {
 			String tagsname = star_Options.parent().getAttribute("title");
+			System.out.println("----"+tagsname+"----");
 			if(tagsname.equals(star1)||tagsname.equals(star2)){
 				star_Options.click();
 				Thread.sleep(5000);
@@ -398,12 +405,14 @@ public class TrendsPage {
 	public void graphTime() throws ParseException {
 		String startTime = graphStartTime.getText();
 		String lastTime  = graphLastTime.getText();
-		
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+		System.out.println("----"+startTime+"---");
+		System.out.println("----"+lastTime+"---");
+		SimpleDateFormat format = new SimpleDateFormat("MMM d,yyyy,HH:mm:ss aa");
 		Date date1 = format.parse(startTime);
-		System.out.print(date1);
+		
+		System.out.print(date1.getTime());
 		Date date2 = format.parse(lastTime);
-		System.out.print(date2);
+		System.out.print(date2.getTime());
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
         System.out.print("Time difference:"+difference);
         Assert.assertTrue(difference<=60);

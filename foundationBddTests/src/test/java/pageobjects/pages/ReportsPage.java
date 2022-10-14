@@ -138,7 +138,10 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
-	Function<Integer, List<String>> getReportColumns = (index) -> {
+    private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
+    private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
+	
+    Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
@@ -558,6 +561,7 @@ public class ReportsPage {
 
 	public boolean verifyRunStatus(String status) {
 		boolean isTrue = false;
+		commonWaiter(filterSelection, visible);
 		if (!statusColumn.isDisplayed()) {
 			isTrue = noDatamsg.isDisplayed();
 		} else {
@@ -844,11 +848,17 @@ public class ReportsPage {
 	}
 	public boolean verifyConsolidatedStatus(String status) {
 		boolean isTrue = false;
+		commonWaiter(filterSelection, visible);
 		if (!consolidateColumn.isDisplayed()) {
 			isTrue = noDatamsg.isDisplayed();
 		} else {
 			isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
 		}
 		return isTrue;
+	}
+	
+	public void reportRequestNotificationVisibility()
+	{
+		commonWaiter(requestNotification, not(visible));
 	}
 }

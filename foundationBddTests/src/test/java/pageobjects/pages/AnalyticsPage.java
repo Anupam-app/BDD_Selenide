@@ -53,6 +53,8 @@ public class AnalyticsPage {
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
     private final String XPATH_PARAMETER_CHECKBOX = "//*[contains(@title,'%s')]";
+    
+    private final SelenideElement dataTableRow = $(By.xpath("//table[@id='aggregated-data-tab-table']/tbody/tr[1]"));
 
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
@@ -68,6 +70,7 @@ public class AnalyticsPage {
 
     public void selectAggregate(String aggregateName) {
         $(By.xpath(String.format(aggregateNameText, aggregateName))).click();
+        commonWaiter(dataTableRow, visible);
     }
 
     public void lineGraph(String xparameterName) {
