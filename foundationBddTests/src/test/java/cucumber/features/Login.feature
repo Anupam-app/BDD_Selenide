@@ -59,8 +59,8 @@ Feature: User login
 
     Examples:
       | login                  | tempPassword     | newPassword |
-      | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
-      | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
+      | testUsrFirstLog        | Ot8[o[Zo{0       | !2345Zxcv1  |
+      | testUsrAfterResetPwd   | IN0Ax^t;:6       | !2345Zxcv1  |
 
   Scenario: User login Unauthorized
     Given I open login page
