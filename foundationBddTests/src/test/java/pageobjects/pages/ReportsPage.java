@@ -61,7 +61,6 @@ public class ReportsPage {
     private final SelenideElement templateTab = $(By.xpath("//a[contains(text(),'Templates')]"));
     private final SelenideElement reportTab = $(By.xpath("//a[contains(text(),'Reports')]"));
 
-
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectUserDropdownRunPage = $(By.xpath("//span[contains(text(),'Select User')]/following-sibling::*"));
     private final SelenideElement selectDateDropdownRunPage = $(By.xpath("//*[@id='calendar']"));
@@ -208,7 +207,8 @@ public class ReportsPage {
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
-        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).click();
+        var optionDropDown = $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname)));
+        SelenideHelper.commonWaiter(optionDropDown, visible).click();
     }
 
     public void selectUser(String user) {
@@ -851,4 +851,8 @@ public class ReportsPage {
 		}
 		return isTrue;
 	}
+
+    public void verifyRunMode() {
+       commonWaiter(runTab,not(visible));
+    }
 }

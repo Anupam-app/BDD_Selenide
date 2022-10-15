@@ -107,9 +107,9 @@ public class ReportsPageStepsDefinition {
         this.report.setReportName(template);
     }
 
-    @When("I dont see the presence of generate button")
+    @When("I don't see the presence of run mode")
     public void iDontSeeGenerateButton() {
-        reportPage.verifyGenerateButton();
+        reportPage.verifyRunMode();
     }
     
     @Then("I click on generate button")

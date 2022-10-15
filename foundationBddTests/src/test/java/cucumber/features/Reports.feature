@@ -57,8 +57,7 @@ Background:
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
     Given I am logged in as "reportUnauthUser" user
     And I goto report management page
-    When I select report from dropdown "Audit Trail"
-    Then I dont see the presence of generate button
+    Then I don't see the presence of run mode
 
   @SMOKE
   Scenario: Generate and sign a recipe run history report
