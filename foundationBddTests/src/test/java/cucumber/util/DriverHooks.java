@@ -22,10 +22,8 @@ public class DriverHooks {
 
     @After(order = 100)
     public void tearDown(Scenario scenario) {
-        if (scenario.isFailed()) {
-            byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-            scenario.attach(screenshot, "image/png", "name");
-        }
+        byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
+        scenario.attach(screenshot, "image/png", "name");
         WebDriverUtils.tearDown(scenario);
     }
 }

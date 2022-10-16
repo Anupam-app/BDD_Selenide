@@ -158,6 +158,18 @@ pipeline {
                 }
             }
         }
+        stage('Test able to login') {
+            steps {
+                script {
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3',
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN" -DtestFailureIgnoreProp=false',
+                        resolverId: "MAVEN_RESOLVER"
+                    )
+                }
+            }
+        }
         stage('Test all bdd tests') {
 			steps {
                 script {
@@ -181,6 +193,8 @@ pipeline {
                         }
                         commandTag+='"'
                     }
+					
+					commandTag+=' -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 
@@ -190,6 +204,19 @@ pipeline {
                         goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
                         resolverId: "MAVEN_RESOLVER"
                     )
+				}
+			}
+		}
+		stage('Get version of the softwares') {
+			steps {
+                script {
+					def versionResponse = httpRequest(url:'https://' + env.CIPHostName + '/api/v1/version/application', ignoreSslErrors: true)
+					if(versionResponse.status==200){
+					   def jsonVersionResponse = readJSON text: versionResponse.content
+						
+					   env.SystemITVersion=jsonVersionResponse.system
+					   env.FoundationITVersion=jsonVersionResponse.foundation
+					}
 				}
 			}
 		}
@@ -216,7 +243,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
-                body: '''environment:${CIPHostName} link:${BUILD_URL}allure/''',
+                body: '''${SCRIPT, template="bddtests-allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',
                 subject: '$DEFAULT_SUBJECT',

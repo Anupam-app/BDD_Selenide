@@ -5,6 +5,7 @@ Feature: User login
     Given I open portal
 
   @SMOKE
+  @LOGIN
   Scenario: User login
     Given I open login page
     When I enter "bio4cadmin" as username and "MerckApp1@" as password
@@ -58,8 +59,8 @@ Feature: User login
 
     Examples:
       | login                  | tempPassword     | newPassword |
-      | testUsrFirstLog        | T8Ul4ie~V)       | !2345Zxcv1  |
-      | testUsrAfterResetPwd   | juZZ63~2#x       | !2345Zxcv1  |
+      | testUsrFirstLog        | Ot8[o[Zo{0       | !2345Zxcv1  |
+      | testUsrAfterResetPwd   | IN0Ax^t;:6       | !2345Zxcv1  |
 
 
   Scenario: User login for user disabled
@@ -67,3 +68,6 @@ Feature: User login
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate" 
+    
+   
+   
