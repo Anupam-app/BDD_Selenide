@@ -230,7 +230,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
-                body: '''${SCRIPT, template="allure-report.groovy"}''',
+                body: '''${SCRIPT, template="bddtests-allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',
                 subject: '$DEFAULT_SUBJECT',
