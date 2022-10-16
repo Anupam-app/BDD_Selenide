@@ -201,8 +201,8 @@ pipeline {
 					if(versionResponse.status==200){
 					   def jsonVersionResponse = readJSON text: versionResponse.content
 						
-					   env.SystemITVersion=jsonVersionResponse.system
-					   env.FoundationITVersion=jsonVersionResponse.foundation
+					   SystemITVersion=jsonVersionResponse.system
+					   FoundationITVersion=jsonVersionResponse.foundation
 					}
 				}
 			}
