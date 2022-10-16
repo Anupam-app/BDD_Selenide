@@ -217,7 +217,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
-                body: '''environment:${CIPHostName} link:${BUILD_URL}allure/''',
+                body: '''${SCRIPT, template="allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',
                 subject: '$DEFAULT_SUBJECT',
