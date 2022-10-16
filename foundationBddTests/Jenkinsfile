@@ -194,6 +194,19 @@ pipeline {
 				}
 			}
 		}
+		stage('Get version of the softwares') {
+			steps {
+                script {
+					def versionResponse = httpRequest(url:'https://' + env.CIPHostName + '/api/v1/version/application', ignoreSslErrors: true)
+					if(versionResponse.status==200){
+					   def jsonVersionResponse = readJSON text: versionResponse.content
+						
+					   env.SystemITVersion=jsonVersionResponse.system
+					   env.FoundationITVersion=jsonVersionResponse.foundation
+					}
+				}
+			}
+		}
 		stage("Generate Allure Reports") {
 			steps {
 				script {	
