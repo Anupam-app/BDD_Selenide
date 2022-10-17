@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
+
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
@@ -24,7 +26,6 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 
 public class TrendsPage {
-
 	private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
 	private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
 	private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
@@ -37,6 +38,7 @@ public class TrendsPage {
 	
     private SelenideElement graphStartTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
     private SelenideElement graphLastTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
+    private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
 	private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
 	private SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
 	private SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
@@ -44,7 +46,7 @@ public class TrendsPage {
 	private SelenideElement starred_Text = $(By.xpath("//label[text() ='Starred']"));
 	private SelenideElement default_Text = $(By.xpath("//label[text() ='Default']"));
 	private SelenideElement listOfCollection_Text = $(By.xpath("//label[text() ='List of collections']"));
-	private SelenideElement saveAsCollections_Text = $(By.xpath("//button/span[text()='Save as Collection']"));
+	private SelenideElement saveAsCollections_Text = $(By.xpath("//*[text()='Save as Collection']"));
 
 	private SelenideElement footerValidation = $(By.xpath("//div[@class = 'chart-footer']"));
 	private SelenideElement saveAsCollection =$(By.xpath("//button[@type='button'][@class='ant-btn ant-btn-primary btn-save-as-collection']"));
@@ -54,8 +56,8 @@ public class TrendsPage {
 	private SelenideElement stacked = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Stacked']"));
 	private SelenideElement selectInterval = $(By.xpath("//span[text()='Select interval']"));
 	private SelenideElement live = $(By.xpath("//*[contains(@id,'Live')]"));
-	private SelenideElement entireRun = $(By.xpath("//button[@id='Entire run'][@class='ant-btn btn-entire-batch']"));
-	private SelenideElement startdate = $(By.xpath("//div[(@class=\"ant-picker-input ant-picker-input-active\")]"));
+	private SelenideElement entireRun = $(By.xpath("//button[@id='Entire run']"));
+	private SelenideElement startdate = $(By.xpath("//div[(@class='ant-picker-input ant-picker-input-active')]"));
 	private SelenideElement end_date = $(By.xpath("//*[(@placeholder='End datetime')]"));
 	private SelenideElement donwload = $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
 
@@ -77,9 +79,9 @@ public class TrendsPage {
 	private SelenideElement DefaultArrow = $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
 	private SelenideElement ArrowOfListOfCollection = $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
 	private SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
-	private SelenideElement deleteCollectionButton =$(By.xpath("//button[@type='button']/span[text()='Delete']"));
+	private SelenideElement deleteCollectionButton =$(By.xpath("//button[@type='button' and contains(text(),'Delete')]"));
 	private String limitedStaricon = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[i]/span[2]";
-	private String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
+	private String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in rpm)']";
 
 	private SelenideElement trends_Collapse_Arrow = $(By.xpath("//span[@class ='icon-arrow']"));
 	private SelenideElement trends_Expand_Arrow = $(By.xpath("//span[@class ='icon-arrow-expand']"));
@@ -87,13 +89,14 @@ public class TrendsPage {
 	private SelenideElement graphValue = $(By.xpath("//*[contains(@class,'highcharts-legend-box')]"));
 	private SelenideElement saveTrendsCollection = $(By.xpath("//span[text()='Save as Collection']"));
 	private SelenideElement collectionName = $(By.xpath("//input[(@class='collection-name')]"));
-	private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']/span"));
+	private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']"));
 	private SelenideElement starredNullParameters = $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));    
 	private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 	private String checkboxDefaultCollection = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[@title='%s']/input";
 	private ElementsCollection staricon1 = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/span[2]"));
 	private SelenideElement loadingIcon = $(By.xpath("//div[contains(@class,'loading')]"));
-	
+	private SelenideElement chartBorder = $(By.xpath("//*[@class='highcharts-plot-border']"));
+			
 	public void goToTrends() {
 		trends.click();
 		commonWaiter(trends,visible);
@@ -260,35 +263,38 @@ public class TrendsPage {
 		case "Overlay":
 			overlay.isDisplayed();
 			break;
-		case"Staked":
+		case "Staked":
 			stacked.isEnabled();
 			break;
 		case "Entire run":
 			entireRun.shouldBe(visible);
 			break;
-		case"selectInterval":
+		case "selectInterval":
 			selectInterval.isDisplayed();
 			break;
-		case"Live":
+		case "Live":
 			live.isEnabled();
 			break;
-		case"start date":
+		case "start date":
 			startdate.isDisplayed();
 			break;
-		case"end date":
+		case "end date":
 			end_date.isDisplayed();
 			break;
-		case"download":
+		case "download":
 			donwload.shouldBe(visible);
 			break;
 		default:
 		}
 	}
 	public void collectionName(String name) {
-		saveTrendsCollection.click();
+		saveAsCollections_Text.click();
 		collectionName.click();
 		collectionName.sendKeys(name);
 		collectionCreate.click();
+		Selenide.sleep(2000);
+		DefaultArrow.click();
+		commonWaiter(ArrowOfListOfCollection, visible);
 		ArrowOfListOfCollection.click();
 		$(By.xpath(String.format(collectionNameRadioButton,name))).click();
 
@@ -379,10 +385,10 @@ public class TrendsPage {
 
 	public void ledggerParameterOnChartArea(String param1, String param2) {
 		
-        
+        commonWaiter(chartBorder, visible);
 		commonWaiter($(By.xpath(String.format(ledggerParam,param1))),Condition.visible);
 		
-		Selenide.sleep(5000);
+		Selenide.sleep(2000);
 		commonWaiter($(By.xpath(String.format(ledggerParam,param2))),Condition.visible);
          
 		validateGraph();
@@ -403,20 +409,24 @@ public class TrendsPage {
 	}
 	
 	public void graphTime() throws ParseException {
-		String startTime = graphStartTime.getText();
-		String lastTime  = graphLastTime.getText();
-		System.out.println("----"+startTime+"---");
-		System.out.println("----"+lastTime+"---");
-		SimpleDateFormat format = new SimpleDateFormat("MMM d,yyyy,HH:mm:ss aa");
-		Date date1 = format.parse(startTime);
+		String startTime = graphStartTime.getText().replaceAll("\\s", "");
+		String lastTime  = null;
+		if(!((graphLastTime.getText().replaceAll("\\s", "")).length()==20))
+		{
+			lastTime = graphLastSecondTime.getText().replaceAll("\\s", "");
+		}
+		else
+		{
+			lastTime = graphLastTime.getText().replaceAll("\\s", "");
+		}
 		
-		System.out.print(date1.getTime());
+		SimpleDateFormat format = new SimpleDateFormat("MMMd,yyyy,HH:mm:ssaa");
+		Date date1 = format.parse(startTime);
 		Date date2 = format.parse(lastTime);
-		System.out.print(date2.getTime());
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
-        System.out.print("Time difference:"+difference);
-        Assert.assertTrue(difference<=60);
-        Assert.assertTrue(difference>=50);
+		System.out.print("Time difference:"+difference);
+		Assert.assertTrue(difference<=60);
+		Assert.assertTrue(difference>=50);
 	}
 
 }
