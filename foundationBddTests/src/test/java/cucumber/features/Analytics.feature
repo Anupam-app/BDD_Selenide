@@ -4,7 +4,7 @@ Feature: Analytics creation
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute" and run it during 15 seconds
     When I create an analytics aggregate
-    And I use the recipe for this analytics aggregate with interval "Weekly"
+    And I use the recipe for this analytics aggregate with interval "Second"
     And I choose "<Param1>" analytics parameter with unit "<Unit1>" as "x" axis
     And I choose "<Param2>" analytics parameter with unit "<Unit2>" as "y" axis
     And I choose "<Param3>" analytics parameter with unit "<Unit3>" as "y" axis
