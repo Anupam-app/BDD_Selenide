@@ -8,9 +8,12 @@ import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.junit.Assert;
 import technology.tabula.Table;
-import utils.pdf.PdfTableExtractUtils;
+import utils.PdfTableExtractUtils;
+import utils.TimezoneUtils;
 
 public class Report {
+
+    private static final String REPORT_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
@@ -79,12 +82,11 @@ public class Report {
     @Getter
     List<Recipe> recipes;
 
-
     /**
      * Check run id matches expected run id in the report
      *
-     * @param reportUrl     Report url
-     * @param expectedRunId Expected run id
+     * @param reportUrl
+     * @param recipes
      * @throws IOException
      */
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
@@ -308,8 +310,12 @@ public class Report {
         Assert.assertEquals("No field with id ", recipe.runId, PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD_CONSOLIDATED));
         Assert.assertEquals("recipename id value ", recipe.recipeName, PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
 
-        Assert.assertEquals("No field with start date", recipe.startDate, PdfTableExtractUtils.getTableFieldValue(table, START_DATE));
-        Assert.assertEquals("No field with end date", recipe.endDate, PdfTableExtractUtils.getTableFieldValue(table, END_DATE));
+        TimezoneUtils.compareDateFromLocalToDistantServer("Start date not expected", recipe.startDate,
+                PdfTableExtractUtils.getTableFieldValue(table, START_DATE), REPORT_DATE_FORMAT);
+
+        TimezoneUtils.compareDateFromLocalToDistantServer("End date not expected", recipe.endDate,
+                PdfTableExtractUtils.getTableFieldValue(table, END_DATE), REPORT_DATE_FORMAT);
+
         Assert.assertEquals("No field with pre run comment", recipe.beforeComments, PdfTableExtractUtils.getTableFieldValue(table, PRE_RUN_COMMENT));
 
         Assert.assertEquals("post run comment value", recipe.afterComments, PdfTableExtractUtils.getTableFieldValue(table, POST_RUN_COMMENT));
@@ -326,10 +332,12 @@ public class Report {
         var consolidatedReportSummary = runSummaryTables.get(0);
 
         var startDateFromReport = PdfTableExtractUtils.getTableFieldValue(consolidatedReportSummary, START_DATE);
-        Assert.assertEquals(recipes.stream().findFirst().get().startDate, startDateFromReport);
+        TimezoneUtils.compareDateFromLocalToDistantServer("Start date not expected",
+                recipes.stream().findFirst().get().startDate, startDateFromReport, REPORT_DATE_FORMAT);
 
         var endDateFromReport = PdfTableExtractUtils.getTableFieldValue(consolidatedReportSummary, END_DATE);
-        Assert.assertEquals(recipes.get(recipes.size() - 1).endDate, endDateFromReport);
+        TimezoneUtils.compareDateFromLocalToDistantServer("End date not expected",
+                recipes.get(recipes.size()-1).endDate, endDateFromReport, REPORT_DATE_FORMAT);
 
         var productIdsFromReport = PdfTableExtractUtils.getTableFieldValue(consolidatedReportSummary, PRODUCT_ID_SUMMARY);
         recipes.forEach(recipe -> {

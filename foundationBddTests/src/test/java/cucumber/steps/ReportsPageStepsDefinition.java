@@ -294,10 +294,29 @@ public class ReportsPageStepsDefinition {
         this.report.validateConsolidateRunSummary(reportPage.getPdfUrl(), report.getRecipes());
     }
 
+    @When("I wait for recipes in runs")
+    public void iWaitForRecipesInRuns() throws InterruptedException {
+        long tMax = 30000;
+        long delay = 500;
+        boolean waiting = true;
+        while (waiting) {
+            tMax -= delay;
+            if (tMax < 0) {
+                break;
+            }
+            Thread.sleep(delay);
+            iTriggerReportMode();
+            reportPage.gotoRunTab();
+            iSelectReportFromDropdown("Consolidated");
+            waiting = !report.getRecipes().stream().allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
+        }
+    }
+
     @When("I choose recipes from consolidation run")
     public void iChooseRecipeRunForConsolidation() {
         report.getRecipes().forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
+
 
     @Given("I select the report template")
     public void i_select_report_template() {

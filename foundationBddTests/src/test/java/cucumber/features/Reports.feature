@@ -139,6 +139,7 @@ Feature: Report administration
     And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
     And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
     When I goto report management page
+    And I wait for recipes in runs
     And I select report from dropdown "Consolidated"
     And I choose recipes from consolidation run
     And I click on generate button
@@ -152,6 +153,7 @@ Feature: Report administration
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
+    And I wait for recipes in runs
     And I select report from dropdown "Consolidated"
     And I choose recipes from consolidation run
     And I click on generate button

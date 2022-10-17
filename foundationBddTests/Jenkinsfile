@@ -82,6 +82,25 @@ pipeline {
                 }				
             }
         }
+        stage ('Copy config files') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
+                {
+                    powershell '''
+                        $user = $env:user
+                        $password = $env:password
+                        $sourcePath="$env:WORKSPACE\\foundationBddTests\\config\\offset-timezone.properties"
+
+                        $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+                        $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
+
+                        $Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
+
+                        Copy-Item -Path "$env:targetResourcesPath\\executablescripts\\common\\offset-timezone.properties" -Destination "$sourcePath" -ToSession $Session -Recurse -force
+                    '''
+                }
+            }
+        }
         stage ('Change consul portal configuration to be seen as local server') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])

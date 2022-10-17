@@ -424,8 +424,11 @@ public class ReportsPage {
 	}
 
 	public void selectForConsolidationRun(String run) {
-		
 		commonWaiter($(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))), visible).click();
+	}
+
+	public boolean isRunDisplayed(String run) {
+		return $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).isDisplayed();
 	}
 
 	public void selectTemplateStatus(String templateStatus) {
