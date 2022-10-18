@@ -96,7 +96,7 @@ pipeline {
 
                         $Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
 
-                        Copy-Item -Path "$env:targetResourcesPath\\executablescripts\\common\\offset-timezone.properties" -Destination "$sourcePath" -ToSession $Session -Recurse -force
+                        Copy-Item -FromSession $Session -Recurse -force "$env:targetResourcesPath\\executablescripts\\common\\offset-timezone.properties" -Destination "$sourcePath"
                     '''
                 }
             }
