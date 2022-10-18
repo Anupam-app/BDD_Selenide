@@ -1,8 +1,4 @@
-#
-#"offset.timezone.total.seconds=" + $timezoneDiff | Out-File 'offset-timezone.properties' -Encoding Utf8
-
-
-$FilePath = (Get-Location).tostring() + "/offset-timezone.properties"
+$FilePath = $PSScriptRoot.tostring() + "/offset-timezone.properties"
 $timezoneDiff=([datetime]::Now-[datetime]::Now.ToUniversalTime()).TotalSeconds
 $FileContent = "offset.timezone.total.seconds=" + $timezoneDiff
 
