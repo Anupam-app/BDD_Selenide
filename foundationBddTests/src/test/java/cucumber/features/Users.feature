@@ -1,12 +1,11 @@
 @COMMON
 Feature: User management
-
-  Background:
-    Given I am logged in as "Bio4CAdmin" user
+   
 
   @SMOKE
   Scenario: Create new user
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I create a random username
     And I select role "Operator"
     And I enter random firstname
@@ -20,7 +19,8 @@ Feature: User management
     Then The username is equal to the expected one
     
   Scenario Outline: Create new user with existing username
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I enter username "<Username>"
     And I select role "Operator"
     And I enter random firstname
@@ -36,7 +36,8 @@ Feature: User management
       | testUsrFirstLog  |
 
   Scenario: User modification
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I search "testUser" user
     And I edit the user
     And I change the employee id with a random string
@@ -45,7 +46,8 @@ Feature: User management
     Then the employee id is the expected one
 
   Scenario: BIOCRS-586 | User disable
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I search "testUserEnabled" user
     And I edit the user
     And I disable the user
@@ -65,7 +67,8 @@ Feature: User management
     Then I see the error message "Unauthorized access, Failed to authenticate"
 
   Scenario: BIOCRS-586 | User enable
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I search "testUserDisabled" user
     And I edit the user
     And I enable the user
@@ -91,7 +94,8 @@ Feature: User management
     Then I cant edit the user  
 
   Scenario: Verify editable fields in user
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
     And I select role "Operator"
@@ -105,7 +109,8 @@ Feature: User management
     And I check the audit trail report  
     
   Scenario: Reset the password
-    Given I go to user page
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
     When I search "testUserToResetPwd" user
     And I edit the user
     And I click on reset password
