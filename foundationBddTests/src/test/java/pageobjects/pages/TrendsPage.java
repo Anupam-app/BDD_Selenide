@@ -215,11 +215,6 @@ public class TrendsPage {
 		$(By.xpath(String.format(collection_radiobutton,"Default"))).click();
 		$(By.xpath(String.format(checkboxDefaultCollection,tag1))).click();
 		$(By.xpath(String.format(checkboxDefaultCollection,tag2))).click();
-		/*
-		 * for(SelenideElement alltags: leddgerParametersCheckBox){ String tagsname =
-		 * alltags.getAttribute("value");
-		 * if(tagsname.equals(tag1)||tagsname.equals(tag2)){ alltags.click(); } }
-		 */
 	}	
 
 	public void trendsPanelValidation(String options) {

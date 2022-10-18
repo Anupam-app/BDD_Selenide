@@ -74,7 +74,6 @@ public class BackupStepsDefinition {
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
-        //backupPage.waitForScheduledBackupFinished();
     	backupPage.waitForScheduledBackupFinished(backupsetting.getBackupName());
     }
 
