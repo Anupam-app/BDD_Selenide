@@ -62,6 +62,7 @@ public class UserPage {
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
+    private String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
     
@@ -70,9 +71,23 @@ public class UserPage {
         userSearchTextBox.setValue(search);
         userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
+    
+    public void UserLocked(String user) {
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(230, 30, 80, 1)");
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).getAttribute("class")),"rowLockedUser");
+    }
+    public void UserUnLocked(String user) {
+    	cancelButton.click();
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(33, 37, 41, 1)");
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user)+"/td")).getAttribute("class")),"customusername");
+    }
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
+    }
+    
+    public void cannotEdit(String user) {
+        Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
     }
 
     public void userExists(String user) {
@@ -102,6 +117,10 @@ public class UserPage {
 
     public void goTo() {
         idManagementPageLinkText.click();
+    }
+    
+    public void cancel() {
+        cancelButton.click();
     }
 
     public boolean isUserDisabled() {
@@ -191,6 +210,11 @@ public class UserPage {
 
     public void isGeneratedNotificationWhenPasswordReset() {
         commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+    }
+    
+    public void isGeneratedNotificationWhenUserModified(String user) {
+        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+        XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: "+user+" modified in server"));
     }
     
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {

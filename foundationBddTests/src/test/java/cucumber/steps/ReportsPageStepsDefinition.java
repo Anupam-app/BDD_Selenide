@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import static com.codeborne.selenide.Selenide.switchTo;
+
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -17,6 +19,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
 
@@ -158,6 +161,27 @@ public class ReportsPageStepsDefinition {
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
         this.report.checkUserInformation(reportPage.getPdfUrl());
+    }
+    
+    @Then("I generate the {string} Report for {string} user")
+    public void iGenerateTheAuditTrailReport(String report, String user) throws Exception {
+    	reportPage.goToReports();
+        reportPage.switchToFrame();
+        this.reportTemplate.setName(report);
+        reportPage.selectReport(report);
+        reportPage.selectUserOnRunPage(user);
+    }
+    
+    @Then("I see the {string} user disabled in report")
+    public void iVerifyThatUserIsDisabled(String user) throws Exception {
+        this.report.checkUserIsDisabled(reportPage.getPdfUrl(),user);
+        switchTo().parentFrame();
+    }
+    
+    @Then("I see the {string} user enabled in report")
+    public void iVerifyThatUserIsEnabled(String user) throws Exception {
+        this.report.checkUserIsEnabled(reportPage.getPdfUrl(),user);
+        switchTo().parentFrame();
     }
 
     @When("I search report {string}")

@@ -44,16 +44,27 @@ Feature: User management
     And I edit the user
     Then the employee id is the expected one
 
-  Scenario: User disable
+  Scenario: BIOCRS-586 | User disable
     Given I go to user page
     When I search "testUserEnabled" user
     And I edit the user
     And I disable the user
     And I save my user changes
     And I edit the user
-    Then the user is disabled
+    And the user is disabled
+    And I generate the "Audit Trail" Report for "Bio4CAdmin" user
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    And I should see the report file presence
+	And I see the "testUserEnabled" user disabled in report
+    And I logout
+    And I open login page
+    And I enter "testUserEnabled" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I see the error message "Unauthorized access, Failed to authenticate"
 
-  Scenario: User enable
+  Scenario: BIOCRS-586 | User enable
     Given I go to user page
     When I search "testUserDisabled" user
     And I edit the user
@@ -61,6 +72,23 @@ Feature: User management
     And I save my user changes
     And I edit the user
     And the user is enabled
+    And I generate the "Audit Trail" Report for "Bio4CAdmin" user
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    And I should see the report file presence
+	And I see the "testUserDisabled" user enabled in report
+    And I logout
+    And I open login page
+    And I enter "testUserDisabled" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I am logged in
+   
+  Scenario: BIOCRS-586 | Unauthorized user cant edit the user
+    Given I am logged in as "reportUnauthUser" user
+    And I go to user page
+    When I search "testUserToEditFields" user
+    Then I cant edit the user  
 
   Scenario: Verify editable fields in user
     Given I go to user page
@@ -74,7 +102,7 @@ Feature: User management
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
-    And I check the audit trail report
+    And I check the audit trail report  
     
   Scenario: Reset the password
     Given I go to user page
