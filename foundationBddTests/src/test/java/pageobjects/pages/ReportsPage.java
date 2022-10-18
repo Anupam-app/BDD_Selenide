@@ -8,6 +8,8 @@ import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -774,15 +776,18 @@ public class ReportsPage {
 		case "Today":
 		case "Yesterday":
 			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+			Date selectedDate = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue);
 			if (startDateRep.isDisplayed()) {
 				sortList("Date Generated", false);
-				String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+				String startDateRow1 = startDateRep.getText();
+				Date selectedAsendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow1);
+				DateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+				String ascDateAfterFormat = formatDate.format(selectedAsendingDate);
 				sortList("Date Generated", true);
-				startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+				startDateRow1 = startDateRep.getText();
+				Date selectedDesendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow1);
+				String selectedDSCDateAfterFormat = formatDate.format(selectedDesendingDate);
+				if (ascDateAfterFormat.equals(dateValue) && selectedDSCDateAfterFormat.equals(dateValue)) {
 					isTrue = true;
 				}
 			} else if (noDatamsg.isDisplayed()) {
@@ -796,19 +801,24 @@ public class ReportsPage {
 		case "Custom Range":
 			commonWaiter(dateColumn, visible);
 			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+			Date selectedDate1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue1);
 			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+			Date selectedDate2 = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue2);
 			if (startDateRep.isDisplayed()) {
 				sortList("Date Generated", false);
-				String startDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+				String startDateRow = startDateRep.getText();
+				Date selectedAsendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow);
 				sortList("Date Generated", true);
-				String endDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-						&& (selectedDesendingDate.equals(selectedDate2)
-								|| selectedDesendingDate.before(selectedDate2))) {
+				DateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+				String ascdate = formatDate.format(selectedAsendingDate);
+				Date ascDateFormatted = new SimpleDateFormat("dd/MM/yyyy").parse(ascdate);
+				String endDateRow = startDateRep.getText();
+				Date selectedDesendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(endDateRow);
+				String descDate = formatDate.format(selectedDesendingDate);
+				Date descDateFormatted = new SimpleDateFormat("dd/MM/yyyy").parse(descDate);
+				if ((ascDateFormatted.equals(selectedDate1) || ascDateFormatted.after(selectedDate1))
+						&& (descDateFormatted.equals(selectedDate2)
+								|| descDateFormatted.before(selectedDate2))) {
 					isTrue = true;
 				}
 			} else if (noDatamsg.isDisplayed()) {
