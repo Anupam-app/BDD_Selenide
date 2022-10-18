@@ -2,8 +2,9 @@ package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
@@ -108,6 +109,16 @@ public class ReportsPageStepsDefinition {
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
         this.report.setReportName(template);
+
+    }
+	
+	@Then("I check audit trial report content")
+    public void iCheckAuditTrialReportContent() throws Exception {
+
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
+        this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+
     }
 
     @When("I dont see the presence of generate button")
@@ -160,7 +171,7 @@ public class ReportsPageStepsDefinition {
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
-        this.report.checkUserInformation(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(),this.user.getName());
     }
     
     @Then("I generate the {string} Report for {string} user")
@@ -212,19 +223,22 @@ public class ReportsPageStepsDefinition {
     public void iSelectReportInclude(String reportInclude) {
         reportPage.includeReport(reportInclude);
     }
-    
-    @When("I select below parameters")
-    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
-    	List<List<String>> list = table.asLists(String.class);
-        for (int i=1; i<list.size(); i++) {
-        reportPage.selectParams(list.get(i).get(0));
-        }
-    }
+   
+    @When("I choose {string} trends {string}")
+	public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
+    	reportPage.selectParameters(noOfParams,parameters);
+	}
     
     @And ("I create five trends chart")
     public void iCreate5TrendsCharts() {
+        reportPage.create5Trends();
+    }
+    
+    @And ("I save trends")
+    public void iCreateTrendsCharts() {
         reportPage.createTrends();
     }
+    
     @Then ("I verify that sixth chart is not allowed")
     public void iSixthTrendsChartNotAllowed() {
         reportPage.verifySixthChartNotAllowed();
