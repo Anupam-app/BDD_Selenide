@@ -1,7 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
@@ -33,7 +33,7 @@ public class BackupPage {
 	private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
 	private String XPATH_HEADER = "//div[@class='header-title']";
 	
-	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
+	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[6]"));
 	private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 	private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
 	private SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
@@ -60,7 +60,7 @@ public class BackupPage {
 		//chooseBackupPath(); //removed in IVI
 		backupNowButton.click();
 		confirmButton.click();
-		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
+		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
 	}
 
 	public String getLastStatusText() {
@@ -70,7 +70,7 @@ public class BackupPage {
 		return "";
 	}
 	public String getLastBackupName() {
-		SelenideHelper.commonWaiter(lastScheduledBackUpName, visible);
+		//SelenideHelper.commonWaiter(lastScheduledBackUpName, visible);
 		return lastScheduledBackUpName.getText();
 	}
 
@@ -113,8 +113,8 @@ public class BackupPage {
 	}
 
 	public void waitForEndOfBackup() {
-		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "Backup of Server complete")))
-		.waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
+		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "On-demand backup job executed")))
+		.waitUntil(Condition.visible, BACKUP_IMMEDIATE_TIME_TO_WAIT);
 	}
 
 	public void goToBackupMode() {
