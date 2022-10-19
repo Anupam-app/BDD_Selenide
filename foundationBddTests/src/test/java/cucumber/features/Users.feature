@@ -2,7 +2,7 @@
 Feature: User management
    
 
-  @SMOKE @wip
+  @SMOKE
   Scenario: Create new user
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -17,7 +17,7 @@ Feature: User management
     And I search the user
     And I edit the user
     Then The username is equal to the expected one
-  @wip  
+   
   Scenario Outline: Create new user with existing username
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
