@@ -1,12 +1,14 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import dataobjects.BackupStatus;
+import dataobjects.Backupsetting;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,6 +23,8 @@ import pageobjects.utility.TimeHelper;
 
 public class BackupPage {
 
+	private Backupsetting backupsetting;
+	
 	private final int BACKUP_FINISH_TIME_TO_WAIT = 7 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_SCHEDULED_TIME_TO_WAIT = 4 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_IMMEDIATE_TIME_TO_WAIT = TimeHelper.ONE_MINUTE;
@@ -29,7 +33,7 @@ public class BackupPage {
 	private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
 	private String XPATH_HEADER = "//div[@class='header-title']";
 	
-	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
+	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[6]"));
 	private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 	private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
 	private SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
@@ -44,16 +48,19 @@ public class BackupPage {
 	private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
 	private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
 	private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
+	private SelenideElement confirmationModal = $(By.xpath("//div[@class='modal-msg-block']"));
+	private SelenideElement okButton = $(By.xpath("//button[@class='btn-ok']"));
+	private SelenideElement lastScheduledBackUpName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
 
 	public void goToBackupPage() {
 		backupPageLinkText.click();
 	}
 
 	public void triggerBackup() {
-		chooseBackupPath();
+		//chooseBackupPath(); //removed in IVI
 		backupNowButton.click();
 		confirmButton.click();
-		SelenideHelper.commonWaiter(spinnerComponent.spinnerIcon, visible);
+		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
 	}
 
 	public String getLastStatusText() {
@@ -61,6 +68,10 @@ public class BackupPage {
 			return lastStatusText.getText();
 		}
 		return "";
+	}
+	public String getLastBackupName() {
+		//SelenideHelper.commonWaiter(lastScheduledBackUpName, visible);
+		return lastScheduledBackUpName.getText();
 	}
 
 	private void chooseBackupPath() {
@@ -70,7 +81,7 @@ public class BackupPage {
 	}
 
 	public void scheduleBackup(String name) {
-		chooseBackupPath();
+		//chooseBackupPath(); // removed in IVI
 
 		dailyBackup.click();
 		dateInput.click();
@@ -83,7 +94,7 @@ public class BackupPage {
 		Date date = new Date();
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
-		int minuteToWait = 1;
+		int minuteToWait = 2;
 		c.add(Calendar.MINUTE, minuteToWait);
 		Date currentDatePlusOne = c.getTime();
 		String d = dateFormat.format(currentDatePlusOne);
@@ -94,6 +105,7 @@ public class BackupPage {
 		SelenideHelper.commonWaiter(scheduleTextBox, visible);
 		scheduleTextBox.setValue(name);
 		scheduleOkButton.click();
+		confirmationPopUpAccept();
 	}
 
 	public void goToHistory() {
@@ -101,8 +113,8 @@ public class BackupPage {
 	}
 
 	public void waitForEndOfBackup() {
-		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "Backup of Server complete")))
-		.waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
+		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "On-demand backup job executed")))
+		.waitUntil(Condition.visible, BACKUP_IMMEDIATE_TIME_TO_WAIT);
 	}
 
 	public void goToBackupMode() {
@@ -117,10 +129,29 @@ public class BackupPage {
 			goToHistory();
 			if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
 				break;
-			} else {
+
+			}else {
 				timeWaited += deltaTime;
 				Selenide.sleep(deltaTime);
 			}
+
+		}
+	}
+	private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait,String name) {
+		int timeWaited = 0;
+		int deltaTime = 15 * 1000;//every 15 seconds
+		while (timeWaited < timeToWait) {
+			goToBackupMode();
+			goToHistory();
+			if(name.equals(getLastBackupName())) {
+				if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+					break;
+				} 
+			}else {
+				timeWaited += deltaTime;
+				Selenide.sleep(deltaTime);
+			}
+
 		}
 	}
 
@@ -144,4 +175,16 @@ public class BackupPage {
 		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
 		waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
 	}
+	
+	public void confirmationPopUpAccept()
+	{
+		SelenideHelper.commonWaiter(confirmationModal, visible);
+		okButton.click();
+	}
+	
+	public void waitForScheduledBackupFinished(String name) {
+		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT, name);
+	}
+	
+	
 }

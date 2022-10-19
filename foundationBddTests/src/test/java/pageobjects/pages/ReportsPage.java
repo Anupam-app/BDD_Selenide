@@ -8,6 +8,8 @@ import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -137,7 +139,10 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
-	Function<Integer, List<String>> getReportColumns = (index) -> {
+    private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
+    private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
+	
+    Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
@@ -558,6 +563,7 @@ public class ReportsPage {
 
 	public boolean verifyRunStatus(String status) {
 		boolean isTrue = false;
+		commonWaiter(filterSelection, visible);
 		if (!statusColumn.isDisplayed()) {
 			isTrue = noDatamsg.isDisplayed();
 		} else {
@@ -770,15 +776,18 @@ public class ReportsPage {
 		case "Today":
 		case "Yesterday":
 			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+			Date selectedDate = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue);
 			if (startDateRep.isDisplayed()) {
 				sortList("Date Generated", false);
-				String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+				String startDateRow1 = startDateRep.getText();
+				Date selectedAsendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow1);
+				DateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+				String ascDateAfterFormat = formatDate.format(selectedAsendingDate);
 				sortList("Date Generated", true);
-				startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+				startDateRow1 = startDateRep.getText();
+				Date selectedDesendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow1);
+				String selectedDSCDateAfterFormat = formatDate.format(selectedDesendingDate);
+				if (ascDateAfterFormat.equals(dateValue) && selectedDSCDateAfterFormat.equals(dateValue)) {
 					isTrue = true;
 				}
 			} else if (noDatamsg.isDisplayed()) {
@@ -792,19 +801,24 @@ public class ReportsPage {
 		case "Custom Range":
 			commonWaiter(dateColumn, visible);
 			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+			Date selectedDate1 = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue1);
 			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+			Date selectedDate2 = new SimpleDateFormat("dd/MM/yyyy").parse(dateValue2);
 			if (startDateRep.isDisplayed()) {
 				sortList("Date Generated", false);
-				String startDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+				String startDateRow = startDateRep.getText();
+				Date selectedAsendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(startDateRow);
 				sortList("Date Generated", true);
-				String endDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-						&& (selectedDesendingDate.equals(selectedDate2)
-								|| selectedDesendingDate.before(selectedDate2))) {
+				DateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+				String ascdate = formatDate.format(selectedAsendingDate);
+				Date ascDateFormatted = new SimpleDateFormat("dd/MM/yyyy").parse(ascdate);
+				String endDateRow = startDateRep.getText();
+				Date selectedDesendingDate = new SimpleDateFormat("MMM d, yyyy, HH:mm:ss aa").parse(endDateRow);
+				String descDate = formatDate.format(selectedDesendingDate);
+				Date descDateFormatted = new SimpleDateFormat("dd/MM/yyyy").parse(descDate);
+				if ((ascDateFormatted.equals(selectedDate1) || ascDateFormatted.after(selectedDate1))
+						&& (descDateFormatted.equals(selectedDate2)
+								|| descDateFormatted.before(selectedDate2))) {
 					isTrue = true;
 				}
 			} else if (noDatamsg.isDisplayed()) {
@@ -844,12 +858,18 @@ public class ReportsPage {
 	}
 	public boolean verifyConsolidatedStatus(String status) {
 		boolean isTrue = false;
+		commonWaiter(filterSelection, visible);
 		if (!consolidateColumn.isDisplayed()) {
 			isTrue = noDatamsg.isDisplayed();
 		} else {
 			isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
 		}
 		return isTrue;
+	}
+	
+	public void reportRequestNotificationVisibility()
+	{
+		commonWaiter(requestNotification, not(visible));
 	}
 
     public void verifyRunMode() {

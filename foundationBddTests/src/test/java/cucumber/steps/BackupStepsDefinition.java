@@ -74,7 +74,7 @@ public class BackupStepsDefinition {
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
-        backupPage.waitForScheduledBackupFinished();
+    	backupPage.waitForScheduledBackupFinished(backupsetting.getBackupName());
     }
 
 
@@ -92,6 +92,11 @@ public class BackupStepsDefinition {
 
     @Then("I see the notification message {string}")
     public void iVerifyNotificationMessage(String message) {
+        backupPage.notificationMessage(message);
+    }
+    @Then("I see the notification message")
+    public void iSeeErrorMessagedisplayed() {
+        var message = String.format("Failed to schedule backup. %s already exists", backupsetting.getBackupName());
         backupPage.notificationMessage(message);
     }
 }

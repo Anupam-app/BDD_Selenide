@@ -3,22 +3,22 @@ Feature: Trends Management
   Background:
     Given I am logged in as "bio4cAdmin" user
     And I navigate to trends page
-
+    
   Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-3
     When I choose "<Param1>","<Param2>" parameters as default collection
     Then I see the Live graph is display
     And  I see the availability of below footer
-      |options			   |
+      |options			      |
       |Save as Collection |
       |Staked             |
       |Overlay            |
       |Live               |
       |Entire run         |
       |Current run        |
-      |start date		   |
-      |end date		   |
-      |download		   |
-      |selectInterval	   |
+      |start date		      |
+      |end date		        |
+      |download		        |
+      |selectInterval	    |
 
     @CRS
     Examples:
@@ -78,7 +78,7 @@ Feature: Trends Management
       |parameters                    |
       |parameters/ivi/trendsParams   |
 
-         
+       
   Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Starred Trends Parameters List
     When I select the "Default" collection
     And I select star icons for "<Param1>","<Param2>" parameters

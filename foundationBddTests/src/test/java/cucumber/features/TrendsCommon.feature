@@ -4,7 +4,7 @@ Feature: Trends Management
   Background:
     Given I am logged in as "bio4cAdmin" user
     And I navigate to trends page
-       
+    
   Scenario: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Page
     When I am on Trends Panel
     Then I see availability of Trends panel and chart area message "You currently have no selections to display."

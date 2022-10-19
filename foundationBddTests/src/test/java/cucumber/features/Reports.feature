@@ -161,7 +161,7 @@ Background:
     Given I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
+    And I start and wait recipe execution during 15 seconds
     And I wait the end of the execution of the recipe
     When I goto report management page
     And I select report from dropdown "Run History"

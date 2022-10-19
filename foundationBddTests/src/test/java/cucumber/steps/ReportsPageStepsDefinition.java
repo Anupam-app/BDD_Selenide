@@ -1,6 +1,10 @@
 package cucumber.steps;
 
 import cucumber.util.I18nUtils;
+
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.visible;
+
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -14,6 +18,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pageobjects.components.SpinnerComponent;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
@@ -26,7 +31,8 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final Recipe recipe;
     private final LoginPage loginPage;
-
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+    
     public ReportsPageStepsDefinition(LoginPage loginPage,ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
             Recipe recipe) {
         this.reportPage = reportPage;
@@ -116,6 +122,7 @@ public class ReportsPageStepsDefinition {
     public void iClickOnGenerateButton() {
         reportPage.generateReport();
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
+        reportPage.reportRequestNotificationVisibility();
     }
 
     @When("I click on view button")
