@@ -71,6 +71,11 @@ public class UserPageStepsDefinition {
         userPage.saveMyChanges();
         userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
     }
+    
+    @When("I save the new user")
+    public void iSaveNewUser() {
+        userPage.saveMyChanges();
+    }
 
     @When("I disable the user")
     public void iDissableTheUser() {

@@ -2,7 +2,7 @@
 Feature: User management
    
 
-  @SMOKE
+  @SMOKE @wip
   Scenario: Create new user
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -13,11 +13,11 @@ Feature: User management
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
-    And I save my user changes
+    And I save the new user
     And I search the user
     And I edit the user
     Then The username is equal to the expected one
-    
+  @wip  
   Scenario Outline: Create new user with existing username
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -28,7 +28,7 @@ Feature: User management
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
-    And I save my user changes
+    And I save the new user
     Then I see error message is displayed for "<Username>"
 
     Examples:
