@@ -2,9 +2,11 @@ package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 
+import dataobjects.Login;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.extern.java.Log;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
@@ -30,16 +32,17 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final Recipe recipe;
     private final LoginPage loginPage;
+    private final Login login;
 
-    public ReportsPageStepsDefinition(LoginPage loginPage,ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-            Recipe recipe) {
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+                                      Recipe recipe, Login login) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
         this.recipe = recipe;
         this.loginPage = loginPage;
-        
+        this.login = login;
     }
 
     @Given("I goto report management page")
@@ -147,7 +150,7 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
         reportPage.gotoRunTab();
         reportPage.gotoReportsTab();
-        reportPage.checkSigned(this.report.getName(), this.user.getUserName());
+        reportPage.checkSigned(this.report.getName(), this.login.getLogin());
     }
 
     @Then("I see the report")
@@ -184,8 +187,8 @@ public class ReportsPageStepsDefinition {
     }
     
     @Then("I see the {string} user disabled in report")
-    public void iVerifyThatUserIsDisabled(String user) throws Exception {
-        this.report.checkUserIsDisabled(reportPage.getPdfUrl(),user);
+    public void iVerifyThatUserIsDisabled(String userName) throws Exception {
+        this.report.checkUserIsDisabled(reportPage.getPdfUrl(),userName,this.login.getLogin());
         switchTo().parentFrame();
     }
     
@@ -203,7 +206,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I esign the report")
     public void iEsignReports() {
-        reportPage.esignReports(this.report.getName(), this.user.getPassword());
+        reportPage.esignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
 
@@ -275,7 +278,7 @@ public class ReportsPageStepsDefinition {
     @Then("I approve the report template")
     public void iApproveTheReportTemplate() {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
-        reportPage.approveTemplate(this.reportTemplate.getName(), this.user.getPassword(),
+        reportPage.approveTemplate(this.reportTemplate.getName(), this.login.getPassword(),
                 this.reportTemplate.getStatus());
     }
 
