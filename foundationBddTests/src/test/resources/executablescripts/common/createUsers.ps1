@@ -8,7 +8,7 @@ NET USER "testUserEnabled" /DELETE
 NET USER "testUserEnabled" "EN9Ed5&wP}" /ADD
 
 NET USER "testUserDisabled" /DELETE
-NET USER "testUserDisabled" "qI50x#J^n*" /ADD
+NET USER "testUserDisabled" "MerckApp1@" /ADD
 
 NET USER "testUserToEditFields" /DELETE
 NET USER "testUserToEditFields" "M)^40kMb8^" /ADD

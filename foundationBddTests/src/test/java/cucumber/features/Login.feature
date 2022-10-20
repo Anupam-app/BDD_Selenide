@@ -12,7 +12,7 @@ Feature: User login
     And I push the login button
     Then I am logged in
   
-	Scenario: Account Lock on 5 unsuccessful attempts
+	Scenario: BIOCRS-5151 | Account Lock on 5 unsuccessful attempts
     Given I open login page
     When I login to application with wrong password
       | username| password   | message                                                   |
@@ -23,15 +23,17 @@ Feature: User login
       | Acclock | MerckApp2@ | Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator.|    
     Then I am not logged in
     And I should see the message "Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator."
-  
-  Scenario: Account unlock for locked account
+
+  Scenario: BIOCRS-5151 | Account unlock for locked account
     Given I open login page
     And I am logged in as "Bio4CAdmin" user
     And I go to user page
     And I search "Acclock" user
+    And I see the user is locked
     And I edit the user
     And I click on reset password
     Then I see password reset message is displayed
+    And I see the user is unlocked
   
   Scenario Outline: Login errors
     Given I open login page
