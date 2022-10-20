@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import static com.codeborne.selenide.Selenide.switchTo;
+import dataobjects.Login;
 import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
@@ -24,13 +26,17 @@ public class ReportsPageStepsDefinition {
     private final ReportTemplate reportTemplate;
     private final User user;
     private final LoginPage loginPage;
+    private final Login login;
 
-    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
+
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
+                                      Recipe recipe, Login login) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
         this.loginPage = loginPage;
+        this.login = login;
     }
 
     @Given("I goto report management page")
@@ -137,7 +143,7 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
         reportPage.gotoRunTab();
         reportPage.gotoReportsTab();
-        reportPage.checkSigned(this.report.getName(), this.user.getUserName());
+        reportPage.checkSigned(this.report.getName(), this.login.getLogin());
     }
 
     @Then("I see the report")
@@ -159,8 +165,28 @@ public class ReportsPageStepsDefinition {
 
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
-
         this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
+    }
+
+    @Then("I generate the {string} Report for {string} user")
+    public void iGenerateTheAuditTrailReport(String report, String user) throws Exception {
+        reportPage.goToReports();
+        reportPage.switchToFrame();
+        this.reportTemplate.setName(report);
+        reportPage.selectReport(report);
+        reportPage.selectUserOnRunPage(user);
+    }
+
+    @Then("I see the {string} user disabled in report")
+    public void iVerifyThatUserIsDisabled(String userName) throws Exception {
+        this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, true, this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the {string} user enabled in report")
+    public void iVerifyThatUserIsEnabled(String userName) throws Exception {
+        this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, false, this.login.getLogin());
+        switchTo().parentFrame();
     }
 
     @When("I search report {string}")
@@ -171,7 +197,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I esign the report")
     public void iEsignReports() {
-        reportPage.esignReports(this.report.getName(), this.user.getPassword());
+        reportPage.esignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
 
@@ -251,7 +277,7 @@ public class ReportsPageStepsDefinition {
     @Then("I approve the report template")
     public void iApproveTheReportTemplate() {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
-        reportPage.approveTemplate(this.reportTemplate.getName(), this.user.getPassword(),
+        reportPage.approveTemplate(this.reportTemplate.getName(), this.login.getPassword(),
                 this.reportTemplate.getStatus());
     }
 
@@ -334,9 +360,8 @@ public class ReportsPageStepsDefinition {
         report.getRecipes().forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
 
-
     @Given("I select the report template")
-    public void i_select_report_template() {
+    public void i_select_report_template() throws InterruptedException {
         reportPage.openReportTemplate(this.reportTemplate.getName());
     }
 
@@ -402,6 +427,4 @@ public class ReportsPageStepsDefinition {
         loginPage.setUser(username);
         loginPage.setPassword(password);
     }
-
-
 }

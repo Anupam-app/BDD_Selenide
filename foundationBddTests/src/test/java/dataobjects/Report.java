@@ -1,11 +1,9 @@
 package dataobjects;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static com.codeborne.selenide.Selenide.$;
-import java.net.URL;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -89,13 +87,7 @@ public class Report {
     @Getter
     List<Recipe> recipes;
 
-    /**
-     * Check run id matches expected run id in the report
-     *
-     * @param reportUrl
-     * @param recipes
-     * @throws IOException
-     */
+
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
 
         URL url = new URL(reportUrl);
@@ -122,18 +114,18 @@ public class Report {
         URL url = new URL(reportUrl);
 
         Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), EVENT_TABLE_HEADER);
-
         if (table != null) {
             Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
         }
     }
-	
-	/**
+
+    /**
      * Check audit table in the report
+     *
      * @param reportUrl Report url
      * @throws IOException
      */
-	public void checkAuditTable(String reportUrl) throws Exception {
+    public void checkAuditTable(String reportUrl) throws Exception {
 
         URL url = new URL(reportUrl);
 
@@ -181,25 +173,26 @@ public class Report {
                         }
 
                         // check user format
-                        Assert.assertTrue(String.format("User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                            userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
-						Assert.assertTrue(userColumnValue.contains(user));
-
+                        Assert.assertTrue(String.format(
+                                "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                        Assert.assertTrue(userColumnValue.contains(user));
                     }
                 }
             }
         }
     }
 
-	
-	/**
+
+    /**
      * Check Event Time information
      * - No internal user like OMIUser
+     *
      * @param reportUrl Report url
      * @throws IOException
      */
-	 
-	public void checkEventTimeInformation(String reportUrl) throws Exception {
+
+    public void checkEventTimeInformation(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -207,37 +200,73 @@ public class Report {
             int eventColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, EVENT_COLUMN_NAME);
             if (eventColumnIndex == 0) {
                 // start from 1 to skip the header row
-            	
+
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
-                	SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
+                    SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
                     String eventColumnValue1 = reportTable.getRows().get(i).get(eventColumnIndex).getText(false);
                     if (!StringUtils.isEmpty(eventColumnValue1)) {
                         // check date range within last 7 days
-                    	try {
-                    		String eventColumnValue=eventColumnValue1.substring(0, 11);
-                    		Date currentdate = new Date();
-                        	Date eventDateTime = formatter.parse(eventColumnValue);
-                        	int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
-                        	        / (1000 * 60 * 60 * 24) );
-                        	
-                        	if (diffInDays <= 7) {                    		
-                        		Assert.assertTrue(true);
-                        	}
-                        	else {
-                        		Assert.assertTrue(false);
-                        	}
-                    	}
-                    	catch(Exception ignore) {}
-                    	
+                        try {
+                            String eventColumnValue = eventColumnValue1.substring(0, 11);
+                            Date currentdate = new Date();
+                            Date eventDateTime = formatter.parse(eventColumnValue);
+                            int diffInDays = (int) ((currentdate.getTime() - eventDateTime.getTime())
+                                    / (1000 * 60 * 60 * 24));
+
+                            if (diffInDays <= 7) {
+                                Assert.assertTrue(true);
+                            } else {
+                                Assert.assertTrue(false);
+                            }
+                        } catch (Exception ignore) {
                         }
+
+                    }
                 }
             }
         }
     }
-    
+
+    public void checkUserIsEnabledOrDisabled(String reportUrl, String userName, boolean targetEnable, String userNameLoggedIn) throws IOException {
+
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (Table reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                // start from 1 to skip the header row
+                String appNameColumnValue = reportTable.getRows().get(1).get(1).getText(false);
+                String recordColumnValue = reportTable.getRows().get(1).get(2).getText(false);
+                String userColumnValue = reportTable.getRows().get(1).get(userColumnIndex).getText(false);
+                String attributeColumnValue = reportTable.getRows().get(1).get(5).getText(false);
+                String currValueColumnValue = reportTable.getRows().get(1).get(6).getText(false);
+                String preValueColumnValue = reportTable.getRows().get(1).get(7).getText(false);
+                if (!StringUtils.isEmpty(userColumnValue)) {
+                    // check user is not an internal user
+                    if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
+                            INTERNAL_USER)) {
+                        Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                    }
+
+                    // check user format
+                    Assert.assertTrue(String.format(
+                            "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                            userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+
+                    Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                    Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
+                    Assert.assertTrue(currValueColumnValue.contains(Boolean.toString(!targetEnable)));
+                    Assert.assertTrue(preValueColumnValue.contains(Boolean.toString(targetEnable)));
+                    Assert.assertTrue(recordColumnValue.contains(userName));
+                    Assert.assertTrue(attributeColumnValue.contains("enabled"));
+                }
+            }
+            break;
+        }
+    }
 
     public void consolidatedValidateReportSummary(Table table, String startDate, String endDate, String batchId, String productId, String runID) throws Exception {
-
         boolean flag = false;
 
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);

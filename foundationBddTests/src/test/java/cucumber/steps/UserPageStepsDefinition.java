@@ -24,6 +24,16 @@ public class UserPageStepsDefinition {
         this.user.setUserName(user);
         userPage.setSearch(user);
     }
+    
+    @When("I see the user is locked")
+    public void iSeeUserLocked() {
+        userPage.UserLocked(this.user.getUserName());
+    }
+    
+    @When("I see the user is unlocked")
+    public void iSeeUserUnLocked() {
+        userPage.UserUnLocked(this.user.getUserName());
+    }
 
     @When("I search the user")
     public void iSearchTheUser() {
@@ -44,6 +54,11 @@ public class UserPageStepsDefinition {
     public void iModifyUser() {
         userPage.edit(user.getUserName());
     }
+    
+    @When("I cant edit the user")
+    public void iCannotModifyUser() {
+        userPage.cannotEdit(user.getUserName());
+    }
 
     @When("I change the employee id with a random string")
     public void iChangeTheEmployeeIdWithARandomString() {
@@ -53,6 +68,12 @@ public class UserPageStepsDefinition {
 
     @When("I save my user changes")
     public void iSaveMyChanges() {
+        userPage.saveMyChanges();
+        userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
+    }
+    
+    @When("I save the new user")
+    public void iSaveNewUser() {
         userPage.saveMyChanges();
     }
 
@@ -64,6 +85,7 @@ public class UserPageStepsDefinition {
     @Then("the user is disabled")
     public void theUserIsDisabled() {
         Assert.assertTrue(userPage.isUserDisabled());
+        userPage.cancel();
     }
 
     @Then("I enable the user")
@@ -74,6 +96,7 @@ public class UserPageStepsDefinition {
     @Then("the user is enabled")
     public void theUserIsEnabled() {
         Assert.assertTrue(userPage.isUserEnabled());
+        userPage.cancel();
     }
 
     @Then("the employee id is equal to the string input")

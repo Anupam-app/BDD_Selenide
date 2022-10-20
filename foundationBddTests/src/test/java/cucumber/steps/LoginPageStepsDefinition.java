@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import dataobjects.Login;
 import java.util.List;
 
 import dataobjects.User;
@@ -17,14 +18,14 @@ public class LoginPageStepsDefinition {
     private final LoginPage loginPage;
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
-    private final User user;
+    private final Login login;
     private final UserPage userPage;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user, UserPage userPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
-        this.user = user;
+        this.login = login;
         this.userPage = userPage;
     }
 
@@ -79,10 +80,10 @@ public class LoginPageStepsDefinition {
         homepage.open();
         loginPage.waitPnidLoading();
         loginPage.openLogin();
-        user.setUserName(username);
-        user.setPassword("MerckApp1@");
-        loginPage.setUser(user.getUserName());
-        loginPage.setPassword(user.getPassword());
+        login.setLogin(username);
+        login.setPassword("MerckApp1@");
+        loginPage.setUser(login.getLogin());
+        loginPage.setPassword(login.getPassword());
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
         recipeConsolePage.cleanLastRecipeDisplay();
@@ -97,7 +98,7 @@ public class LoginPageStepsDefinition {
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
-        iEnterUsernameAndPassword(user.getUserName(), user.getPassword());
+        iEnterUsernameAndPassword(login.getLogin(), login.getPassword());
         iPushTheLoginButton();
     }
 
