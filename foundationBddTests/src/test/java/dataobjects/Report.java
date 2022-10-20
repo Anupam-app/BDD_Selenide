@@ -1,11 +1,9 @@
 package dataobjects;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import static com.codeborne.selenide.Selenide.$;
-import java.net.URL;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -199,15 +197,7 @@ public class Report {
         }
     }
 
-    /**
-     * Check user is Disabled
-     * - Expected format : UserLogin(Firstname Lastname)
-     * - No internal user like OMIUser
-     *
-     * @param reportUrl Report url User
-     * @throws IOException
-     */
-    public void checkUserIsDisabled(String reportUrl, String userName, String userNameLoggedIn) throws IOException {
+    public void checkUserIsEnabledOrDisabled(String reportUrl, String userName, boolean targetEnable, String userNameLoggedIn) throws IOException {
 
         URL url = new URL(reportUrl);
         // get all tables of the report
@@ -236,8 +226,8 @@ public class Report {
 
                     Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
                     Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
-                    Assert.assertTrue(currValueColumnValue.contains("false"));
-                    Assert.assertTrue(preValueColumnValue.contains("true"));
+                    Assert.assertTrue(currValueColumnValue.contains(Boolean.toString(!targetEnable)));
+                    Assert.assertTrue(preValueColumnValue.contains(Boolean.toString(targetEnable)));
                     Assert.assertTrue(recordColumnValue.contains(userName));
                     Assert.assertTrue(attributeColumnValue.contains("enabled"));
                 }
@@ -245,54 +235,6 @@ public class Report {
             break;
         }
     }
-
-    /**
-     * Check user is Enabled
-     * - Expected format : UserLogin(Firstname Lastname)
-     * - No internal user like OMIUser
-     *
-     * @param reportUrl Report url User
-     * @throws IOException
-     */
-    public void checkUserIsEnabled(String reportUrl, String user) throws IOException {
-
-        URL url = new URL(reportUrl);
-
-        // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
-            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
-            if (userColumnIndex > 0) {
-                // start from 1 to skip the header row
-                String appNameColumnValue = reportTable.getRows().get(1).get(1).getText(false);
-                String recordColumnValue = reportTable.getRows().get(1).get(2).getText(false);
-                String userColumnValue = reportTable.getRows().get(1).get(userColumnIndex).getText(false);
-                String attributeColumnValue = reportTable.getRows().get(1).get(5).getText(false);
-                String currValueColumnValue = reportTable.getRows().get(1).get(6).getText(false);
-                String preValueColumnValue = reportTable.getRows().get(1).get(7).getText(false);
-                if (!StringUtils.isEmpty(userColumnValue)) {
-                    // check user is not an internal user
-                    if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
-                            INTERNAL_USER)) {
-                        Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
-                    }
-                    // check user format
-                    Assert.assertTrue(String.format(
-                            "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                            userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
-
-                    Assert.assertTrue(userColumnValue.contains("Bio4CAdmin"));
-                    Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
-                    Assert.assertTrue(currValueColumnValue.contains("true"));
-                    Assert.assertTrue(preValueColumnValue.contains("false"));
-                    Assert.assertTrue(recordColumnValue.contains(user));
-                    Assert.assertTrue(attributeColumnValue.contains("enabled"));
-                }
-            }
-            break;
-        }
-    }
-
 
     /**
      * Check filed ids are not null in the report
