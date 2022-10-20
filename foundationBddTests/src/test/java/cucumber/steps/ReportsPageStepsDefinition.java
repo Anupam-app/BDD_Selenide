@@ -1,11 +1,5 @@
 package cucumber.steps;
 
-import java.io.IOException;
-import java.util.List;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-
 import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
@@ -16,6 +10,10 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.IOException;
+import java.util.List;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 
@@ -27,8 +25,7 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
 
-    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-                                      Recipe recipe) {
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user) {
         this.reportPage = reportPage;
         this.reportTemplate = reportTemplate;
         this.user = user;
@@ -61,9 +58,9 @@ public class ReportsPageStepsDefinition {
     }
 
     @Given("I select report from dropdown {string}")
-    public void iSelectReportFromDropdown(String report) {
-        this.reportTemplate.setName(report);
-        reportPage.selectReport(report);
+    public void iSelectReportFromDropdown(String reportName) {
+        this.reportTemplate.setName(reportName);
+        reportPage.selectReport(reportName);
     }
 
     @Given("I select user from dropdown {string}")
@@ -102,6 +99,16 @@ public class ReportsPageStepsDefinition {
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
         this.report.setReportName(template);
+
+    }
+
+    @Then("I check audit trial report content")
+    public void iCheckAuditTrialReportContent() throws Exception {
+
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
+        this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+
     }
 
     @When("I dont see the presence of generate button")
@@ -153,7 +160,7 @@ public class ReportsPageStepsDefinition {
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
 
-        this.report.checkUserInformation(reportPage.getPdfUrl());
+        this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
     }
 
     @When("I search report {string}")
@@ -193,8 +200,18 @@ public class ReportsPageStepsDefinition {
         }
     }
 
+    @When("I choose {string} trends {string}")
+    public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
+        reportPage.selectParameters(noOfParams, parameters);
+    }
+
     @And("I create five trends chart")
     public void iCreate5TrendsCharts() {
+        reportPage.create5Trends();
+    }
+
+    @And("I save trends")
+    public void iCreateTrendsCharts() {
         reportPage.createTrends();
     }
 

@@ -197,8 +197,10 @@ pipeline {
 
                             }
                         }
-                        commandTag+='" -DtestFailureIgnoreProp=true'
+                        commandTag+='"'
                     }
+					
+					commandTag+=' -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 
@@ -208,6 +210,19 @@ pipeline {
                         goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
                         resolverId: "MAVEN_RESOLVER"
                     )
+				}
+			}
+		}
+		stage('Get version of the softwares') {
+			steps {
+                script {
+					def versionResponse = httpRequest(url:'https://' + env.CIPHostName + '/api/v1/version/application', ignoreSslErrors: true)
+					if(versionResponse.status==200){
+					   def jsonVersionResponse = readJSON text: versionResponse.content
+						
+					   env.SystemITVersion=jsonVersionResponse.system
+					   env.FoundationITVersion=jsonVersionResponse.foundation
+					}
 				}
 			}
 		}
@@ -234,7 +249,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
-                body: '''environment:${CIPHostName} link:${BUILD_URL}allure/''',
+                body: '''${SCRIPT, template="bddtests-allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',
                 subject: '$DEFAULT_SUBJECT',
