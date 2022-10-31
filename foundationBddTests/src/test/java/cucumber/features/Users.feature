@@ -35,15 +35,17 @@ Feature: User management
       | Username         |              
       | testUsrFirstLog  |
 
-  Scenario: User modification
+  Scenario: BIOCRS-5370 | User modification
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     When I search "testUser" user
     And I edit the user
     And I change the employee id with a random string
+    And I select role "Operator"
     And I save my user changes
     And I edit the user
     Then the employee id is the expected one
+    And the role is "Operator"
 
   Scenario: BIOCRS-586 | User disable
   	Given I am logged in as "Bio4cService" user
@@ -93,20 +95,21 @@ Feature: User management
     When I search "testUserToEditFields" user
     Then I cant edit the user  
 
-  Scenario: Verify editable fields in user
+  Scenario: BIOCRS-4364 | Verify editable fields in user
   	Given I am logged in as "Bio4CAdmin" user
-    And I go to user page
+  	And I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
     And I select role "Operator"
     And I enter random employeeID
-    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter email "alexiss.thiebaut@merckgroup.com"
     And I enter random department
-    And I enter mobile number "0123456789"
+    And I enter mobile number "339879567"
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
-    And I check the audit trail report  
+    And I check the audit trail report 
+    And I see the "testUserToEditFields" user modified in report
     
   Scenario: Reset the password
   	Given I am logged in as "Bio4CAdmin" user

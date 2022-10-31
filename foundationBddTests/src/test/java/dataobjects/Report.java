@@ -235,6 +235,22 @@ public class Report {
             break;
         }
     }
+    
+    public void checkModifiedUser(String reportUrl, String userName, String userNameLoggedIn,String [][] list) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (Table reportTable : reportTables) {
+        	for (int x=0;x<4;x++) {
+                for(int y=0; y<list.length;y++) {
+                	if((list[y][0].equals(reportTable.getRows().get(x+2).get(0).getText(false)))) {
+                    	Assert.assertTrue(list[y][1].equals(reportTable.getRows().get(x+2).get(1).getText(false)));
+                    	}
+                 }
+      		}
+            break;
+        }
+    }
 
     /**
      * Check filed ids are not null in the report

@@ -1,10 +1,20 @@
 package cucumber.steps;
 
 import dataobjects.User;
+import dataobjects.Login;
+import dataobjects.Report;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import pageobjects.pages.ReportsPage;
+
+import static com.codeborne.selenide.Selenide.switchTo;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.UserPage;
@@ -13,10 +23,16 @@ public class UserPageStepsDefinition {
 
     private final UserPage userPage;
     private final User user;
+    private final Report report;
+    private final ReportsPage reportPage;
+    private final Login login;
 
-    public UserPageStepsDefinition(UserPage userPage, User user) {
+    public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, Report report, User user, Login login) {
         this.userPage = userPage;
         this.user = user;
+        this.report = report;
+        this.reportPage = reportPage;
+        this.login = login;
     }
 
     @Given("I search {string} user")
@@ -117,6 +133,11 @@ public class UserPageStepsDefinition {
         this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
         userPage.createNewUser(this.user.getUserName());
     }
+	
+	@And("default users are not editable")
+    public void verifyEditing() {
+        userPage.usersNotEditable();
+    }
 
     @When("I select role {string}")
     public void iSelectRole(String user) {
@@ -128,14 +149,12 @@ public class UserPageStepsDefinition {
     public void iEnterRandomFirstName() {
         this.user.setFirstName(RandomStringUtils.randomAlphabetic(10));
         userPage.enterFirstName(this.user.getFirstName());
-
     }
 
     @When("I enter random lastname")
     public void iEnterRandomLastName() {
         this.user.setLastName(RandomStringUtils.randomAlphabetic(10));
         userPage.enterLastName(this.user.getLastName());
-
     }
 
     @When("I enter random employeeID")
@@ -177,6 +196,11 @@ public class UserPageStepsDefinition {
     public void theEmployeeIdIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
+    
+    @Then("the role is {string}")
+    public void theRoleIsEqualToTheExpectedOne(String role) {
+        Assert.assertEquals(userPage.getRoleNameFromForm(), role);
+    }
 
     @Then("I see user details are changed")
     public void verifyUserDetails() {
@@ -188,6 +212,13 @@ public class UserPageStepsDefinition {
         Assert.assertEquals(user.getMobNum(), userPage.getMobNumFromForm());
         Assert.assertEquals(user.getDeptName(), userPage.getDeptNameFromForm());
         userPage.cancelUser();
+    }
+    
+    @Then("I see the {string} user modified in report")
+    public void iVerifyThatUserIsModified(String userName) throws Exception {
+    	String [][] list = {{"department",(user.getDeptName())},{"phoneNumber",user.getMobNum()},{"role",user.getRoleName()},{"employeeID",user.getEmployeeId()},{"email",user.getEmailId()}};
+        this.report.checkModifiedUser(reportPage.getPdfUrl(), userName, this.login.getLogin(), list);
+        switchTo().parentFrame();
     }
 
     @When("I click on reset password")
