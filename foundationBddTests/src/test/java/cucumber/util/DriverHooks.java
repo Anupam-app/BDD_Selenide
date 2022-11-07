@@ -14,9 +14,10 @@ public class DriverHooks {
     @Before
     public void before(Scenario scenario) {
         var driverVersion = System.getenv("DRIVER_VERSION");
+        var browserVersion = System.getenv("BROWSER_VERSION");
 
         if(driverVersion != null){
-            WebDriverManager.chromedriver().driverVersion(driverVersion).setup();
+            WebDriverManager.chromedriver().driverVersion(driverVersion).browserVersion(browserVersion).setup();
         }else {
             WebDriverManager.chromedriver().setup();
         }
