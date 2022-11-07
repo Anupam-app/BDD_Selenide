@@ -5,7 +5,6 @@ import com.xceptance.neodymium.util.WebDriverUtils;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import io.cucumber.java.en.Given;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -14,7 +13,14 @@ public class DriverHooks {
 
     @Before
     public void before(Scenario scenario) {
-        WebDriverManager.chromedriver().setup();
+        var driverVersion = System.getenv("DRIVER_VERSION");
+
+        if(driverVersion != null){
+            WebDriverManager.chromedriver().driverVersion(driverVersion).setup();
+        }else {
+            WebDriverManager.chromedriver().setup();
+        }
+
         WebDriverUtils.setUp("Chrome");
 
         TrustAllCertificates.install();
