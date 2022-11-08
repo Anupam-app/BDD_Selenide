@@ -248,6 +248,7 @@ public class UserPage {
     }
 
     public String getActiveIconTitle() {
+    	commonWaiter(activeIcon, visible);
         return activeIcon.getText();
     }
 
