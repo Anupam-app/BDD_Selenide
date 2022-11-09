@@ -17,8 +17,8 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
 
 public class RecipePage {
-    private final String XPATH_STEP = "//*[contains(@data-contextmenu,'step%s')]";
-
+    private final String XPATH_STEP = "//div[@class='search-box-wrapper' and contains(@data-contextmenu,'step%s')]";
+    private final String XPATH_DELETEBUTTON = "//*[@data-contextmenu='phase%s']//input[@class='deleteButton']";
     private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
     private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[contains(text(),'%s')]]/td/div[contains(@class, 'export-icon')]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
@@ -51,14 +51,14 @@ public class RecipePage {
 
     private final SelenideElement openButton = $(By.className("open-recipe-btn"));
     private final SelenideElement plusButton = $(By.className("icon-plus"));
-    private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'add-step-button')]"));
+    private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'home-screen-icon-block icon-plus')]"));
     private final By deletePhaseButton = By.className("deleteButton");
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement deleteButton = $(By.xpath("//*[contains(@class, 'delete-step-button')]"));
 
-    private final SelenideElement XPATH_WARNNOTIFICATION_TEXT = $(By.xpath("//*[@class='editor-dialog']/div/div[1]"));
+    private final SelenideElement XPATH_WARNNOTIFICATION_TEXT = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
 
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
 
@@ -83,7 +83,9 @@ public class RecipePage {
     private final SelenideElement saveEditorButton = $(By.xpath("//button[contains(@class,'save-button')]"));
     private final SelenideElement importMenuButton = $(By.xpath("//button[contains(@class,'import-button')]"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(@class,'import-button-text')]"));
-
+    
+    private final SelenideElement phase1_Label = $(By.xpath("//label[contains(text(),'Phase 1')]"));
+    
     Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
 
     public void goTo() {
@@ -189,8 +191,9 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipe() {
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_STEP, 5))), visible).click();
-        deleteButton.click();
+        commonWaiter(phase1_Label, visible).click();
+    	commonWaiter($(By.xpath(String.format(XPATH_DELETEBUTTON, 2))), visible).click();
+    	commonWaiter(okButton, visible).click();
     }
 
     public void approveRecipe(String password) {

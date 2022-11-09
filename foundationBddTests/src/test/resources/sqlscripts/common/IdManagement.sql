@@ -98,11 +98,11 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 3)
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 56)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 1)
 GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 3)
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 57)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO

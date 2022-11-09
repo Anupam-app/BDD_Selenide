@@ -5,6 +5,8 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -507,7 +509,7 @@ public class ReportsPage {
     }
 
     public void selectCreatedBy(String user) {
-        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created by"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))),visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 
@@ -890,6 +892,7 @@ public class ReportsPage {
 
     public boolean verifyConsolidatedStatus(String status) {
         boolean isTrue = false;
+        commonWaiter(filterSelection, visible);
         if (!consolidateColumn.isDisplayed()) {
             isTrue = noDatamsg.isDisplayed();
         } else {
