@@ -5,6 +5,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -236,18 +238,24 @@ public class Report {
         }
     }
     
-    public void checkModifiedUser(String reportUrl, String userName, String userNameLoggedIn,String [][] list) throws IOException {
+    public void checkModifiedUser(String reportUrl, String userName, String userNameLoggedIn,Map<String,String> list) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
         for (Table reportTable : reportTables) {
-        	for (int x=0;x<4;x++) {
-                for(int y=0; y<list.length;y++) {
-                	if((list[y][0].equals(reportTable.getRows().get(x+2).get(0).getText(false)))) {
-                    	Assert.assertTrue(list[y][1].equals(reportTable.getRows().get(x+2).get(1).getText(false)));
-                    	}
+        	for(Map.Entry m:list.entrySet()){  
+        		//check first row
+        		if((reportTable.getRows().get(1).get(5).getText(false)).equals(m.getKey())) {
+                	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(1).get(6).getText(false)));
+            	}
+        		//check from 2nd row till 5th row in PDF table
+        		for (int rowno=2;rowno<6;rowno++) {
+        			//check first row in PDF table
+        			if((reportTable.getRows().get(rowno).get(0).getText(false)).equals(m.getKey())) {
+                    	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(rowno).get(1).getText(false)));
+                    }
                  }
-      		}
+        	}
             break;
         }
     }

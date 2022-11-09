@@ -197,6 +197,7 @@ public class UserPage {
     }
 
     public String getRoleNameFromForm() {
+    	commonWaiter(roleNameTextbox, visible);
         return roleNameTextbox.getText();
     }
 
@@ -255,7 +256,9 @@ public class UserPage {
     }
 
     public SelenideElement getUserColumnHeader(String columnName) {
-        return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+    	System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
+    	return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+        
     }
 
     public List<String> getAllUserColumnHeaders() {

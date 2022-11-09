@@ -13,7 +13,9 @@ import static com.codeborne.selenide.Selenide.switchTo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -216,7 +218,12 @@ public class UserPageStepsDefinition {
     
     @Then("I see the {string} user modified in report")
     public void iVerifyThatUserIsModified(String userName) throws Exception {
-    	String [][] list = {{"department",(user.getDeptName())},{"phoneNumber",user.getMobNum()},{"role",user.getRoleName()},{"employeeID",user.getEmployeeId()},{"email",user.getEmailId()}};
+    	Map<String,String> list=new HashMap<String,String>();  
+    	  list.put("department",user.getDeptName());  
+    	  list.put("phoneNumber",user.getMobNum());  
+    	  list.put("role",user.getRoleName());  
+    	  list.put("employeeID",user.getEmployeeId()); 
+    	  list.put("email",user.getEmailId()); 
         this.report.checkModifiedUser(reportPage.getPdfUrl(), userName, this.login.getLogin(), list);
         switchTo().parentFrame();
     }

@@ -18,12 +18,12 @@ public class SortHelper {
     public static void sortList(SelenideElement sortAction, SelenideElement ascendingIcon, SelenideElement descendingIcon, boolean descending) {
         Selenide.executeJavaScript("arguments[0].click()", sortAction);
         if (!descendingIcon.isDisplayed() && descending) {
-            Selenide.executeJavaScript("arguments[0].click()", ascendingIcon);
+            ascendingIcon.click();
             descendingIcon.shouldBe(visible);
         }
 
         if (!ascendingIcon.isDisplayed() && !descending) {
-            Selenide.executeJavaScript("arguments[0].click()", descendingIcon);
+            descendingIcon.click();
             ascendingIcon.shouldBe(visible);
         }
     }
