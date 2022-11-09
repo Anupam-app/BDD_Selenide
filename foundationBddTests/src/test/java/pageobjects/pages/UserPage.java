@@ -197,6 +197,7 @@ public class UserPage {
     }
 
     public String getRoleNameFromForm() {
+      	commonWaiter(roleNameTextbox, visible);
         return roleNameTextbox.getText();
     }
 
