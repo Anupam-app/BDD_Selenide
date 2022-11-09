@@ -5,6 +5,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -232,6 +234,27 @@ public class Report {
                     Assert.assertTrue(attributeColumnValue.contains("enabled"));
                 }
             }
+            break;
+        }
+    }
+    
+    public void checkModifiedUser(String reportUrl, String userName, String userNameLoggedIn,Map<String,String> list) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (Table reportTable : reportTables) {
+        	for(Map.Entry m:list.entrySet()){  
+        		//check first row
+        		if((reportTable.getRows().get(1).get(5).getText(false)).equals(m.getKey())) {
+                	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(1).get(6).getText(false)));
+            	}
+        		//check from 2nd row till 5th row in PDF table
+        		for (int rowno=2;rowno<6;rowno++) {
+        			if((reportTable.getRows().get(rowno).get(0).getText(false)).equals(m.getKey())) {
+                    	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(rowno).get(1).getText(false)));
+                    }
+                 }
+        	}
             break;
         }
     }

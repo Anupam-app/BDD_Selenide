@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Role;
 import dataobjects.RoleAction;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -35,6 +36,22 @@ public class RolePageStepsDefinition {
 		this.role.setRoleAction(RoleAction.ADDED);
 		rolePage.createNewrole(this.role.getRoleName());
 	}
+	
+	@When("I select role sort by {string} in {string}")
+    public void iSelectSortBy(String columnName, String sortMode) {
+		rolePage.sortList(columnName,Boolean.parseBoolean(sortMode));
+    }
+	
+	@Then("{string} from role should be displayed in sorted order {string}")
+    public void roleDetailsShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+		rolePage.checkSortedElement(columnName,Boolean.parseBoolean(sortMode));
+    }
+	
+	@Given("I search {string} role")
+    public void iSearchRole(String role) {
+        this.role.setRoleName(role);
+        rolePage.searchRole(this.role.getRoleName());
+    }
 
 	@When("I assign permission {string}")
 	public void iAssignPermission(String role) {
@@ -42,8 +59,6 @@ public class RolePageStepsDefinition {
 		rolePage.clickOnPermission(role);
 	}
 	
-	
-
 	@When("I see notification")
 	public void iSeeNotification() {
     	rolePage.notification(this.role.getRoleAction());

@@ -14,13 +14,13 @@ Feature: Apply Filter Users
       | userPref |
       | Recipes  |
 
-  Scenario: Verify search functionality in User Management
+  Scenario: BIOCRS-5493- Verify search functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
     And I search "testUser" user
     Then the user "testUser" exists
 
-  Scenario Outline: Verify filter enabled functionality in User Management
+  Scenario Outline: BIOCRS-5493- Verify filter enabled functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
     And I click on filter icon and select status "<status>"
@@ -31,8 +31,13 @@ Feature: Apply Filter Users
       |userName         | status   |
       |testUser         | Enabled  |
       |testUserDisabledFilter  | Disabled |
-
-   Scenario Outline: Verify order sort functionality in User Management
+	
+  Scenario: BIOCRS-5493- Verify userManagement Layout
+    Given I am logged in as "Bio4cAdmin" user
+    When I go to user page
+    And default users are not editable
+	
+  Scenario Outline: BIOCRS-5493- Verify order sort functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
     And I select user sort by "<columnName>" in "<descending>"
@@ -40,5 +45,11 @@ Feature: Apply Filter Users
 
     Examples:
       | columnName  | descending |
-      | Username    | true       |
-      | Username    | false      |
+      |Username     | true       |
+      |Username     | false      |
+	  |First Name	| true	 	 |
+      |First Name	| false		 |
+      |Last Name	| true       |
+      |Last Name	| false		 |
+      |Role			| true       |
+      |Role			| false		 |
