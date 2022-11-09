@@ -250,7 +250,6 @@ public class Report {
             	}
         		//check from 2nd row till 5th row in PDF table
         		for (int rowno=2;rowno<6;rowno++) {
-        			//check first row in PDF table
         			if((reportTable.getRows().get(rowno).get(0).getText(false)).equals(m.getKey())) {
                     	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(rowno).get(1).getText(false)));
                     }
