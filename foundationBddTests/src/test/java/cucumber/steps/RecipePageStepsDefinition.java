@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Login;
 import dataobjects.Recipe;
 import dataobjects.User;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -10,17 +11,23 @@ import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.UserPage;
 
+import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
+
+import java.util.List;
 
 public class RecipePageStepsDefinition {
 
     private RecipePage recipePage;
+    private final UserPage userPage;
     private Recipe recipe;
     private Login login;
 
-    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe,Login login) {
+    public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe,Login login) {
         this.recipePage = recipePage;
+        this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
     }
@@ -60,6 +67,33 @@ public class RecipePageStepsDefinition {
     public void iCreateARandomPhase() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
         recipePage.addPhase(this.recipe.getPhaseName());
+    }
+    
+    @When("I go to other module without saving recipe")
+    public void igoToOtherModule() {
+    	switchTo().parentFrame();
+    	userPage.goTo();
+    }
+    
+    @When("I come back to Recipe page")
+    public void iGoToRecipeAndEdit() {
+    	recipePage.goTo();
+        goToIFrame();
+        recipePage.goToEditMode();
+    }
+    
+    @When("I can create a recipe")
+    public void iCreateRecipe() {
+    	this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.addPhase(this.recipe.getPhaseName());
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+        
+    }
+    
+    @When("I choose {string} from file menu")
+    public void iChooseOption(String option) {
+    	recipePage.chooseOption(option);
     }
 
     @And("I save the recipe")
@@ -120,6 +154,19 @@ public class RecipePageStepsDefinition {
         this.recipe.setRecipeName(recipe);
         recipePage.editRecipe(recipe);
     }
+    
+    @And("I see list of recipes are displayed")
+    public void iSeeListOfRecipes() throws InterruptedException {
+        recipePage.verifyList();
+    }
+    
+    @And("below {string} column is displayed")
+    public void verifyColumn(String tab, DataTable table) {
+        List<List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            recipePage.verifyColoumn(list.get(i).get(0), tab, i);
+        }
+    }
 
     @When("I delete phase to recipe")
     public void iDeletePhaseToRecipe() {
@@ -136,10 +183,33 @@ public class RecipePageStepsDefinition {
     public void iApproveRecipe() {
         recipePage.approveRecipe(login.getPassword());
     }
+    
+    @When("I make recipe inactive")
+    public void iInactiveRecipe() {
+        recipePage.inactiveRecipe(login.getPassword());
+    }
+    
+    @When("I make recipe Draft-Rejected")
+    public void iRejectRecipe() {
+        recipePage.rejectTechReviewRecipe();
+    }
 
     @Then("Recipe should be approved")
     public void recipeShouldBeApproved() {
         Assert.assertEquals("Approved-Active",this.recipePage.getStatus());
+        switchTo().parentFrame();
+    }
+    
+    @Then("Recipe should be inactive")
+    public void recipeShouldBeInactive() {
+        Assert.assertEquals("Approved-InActive",this.recipePage.getStatus());
+        switchTo().parentFrame();
+    }
+    
+    @Then("Recipe should be Draft-Rejected")
+    public void recipeShouldBeDraft() {
+        Assert.assertEquals("Draft",this.recipePage.getStatus());
+        switchTo().parentFrame();
     }
 
     @When("I click on export recipe {string}")
@@ -157,6 +227,11 @@ public class RecipePageStepsDefinition {
     public void iClickOnImport(String recipeName) {
     	recipePage.importRecipe(recipeName);
     	recipe.setRecipeImportedName(recipePage.getGeneratedName());
+    }
+    
+    @When("I click on print {string}")
+    public void iClickOnPrint(String recipeName) throws Exception {
+    	recipePage.printRecipe(recipeName);
     }
 
     @Then("I should see the recipe imported in user notifications")

@@ -17,7 +17,7 @@ Feature: Recipe console
     And I start and wait recipe execution during 10 seconds
     Then Recipe should be executed
 
-  Scenario: Recipe operational control workflow
+  Scenario: BIOCRS-660 | Recipe operational control workflow
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
     And I start recipe execution

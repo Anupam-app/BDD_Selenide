@@ -186,6 +186,12 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, true, this.login.getLogin());
         switchTo().parentFrame();
     }
+    
+    @Then("I see the {string} is changed to {string} in report")
+    public void iverifyRecipeStatus(String recipeName, String status) throws Exception {
+        this.report.checkRecipeStatus(reportPage.getPdfUrl(), recipeName, status, this.login.getLogin());
+        switchTo().parentFrame();
+    }
 
     @Then("I see the {string} user enabled in report")
     public void iVerifyThatUserIsEnabled(String userName) throws Exception {
