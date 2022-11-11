@@ -1,47 +1,27 @@
 package pageobjects.pages;
 
-import static com.codeborne.selenide.Condition.not;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Condition.disabled;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.switchTo;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
-
-
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
-import java.text.ParseException;
 import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.collections.*;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.conditions.Attribute;
-import com.codeborne.selenide.conditions.Disabled;
-import com.codeborne.selenide.conditions.Enabled;
-import com.typesafe.config.ConfigFactory;
-import com.typesafe.config.ConfigParseOptions;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-import com.codeborne.selenide.collections.SizeGreaterThan;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-
-import pageobjects.utility.SelenideHelper;
-import pageobjects.utility.SortHelper;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.jsoup.select.Evaluator.IndexGreaterThan;
-import org.junit.Assert;
-import dataobjects.ReportTemplate;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigParseOptions;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.SortHelper;
 
 
 public class ReportsPage {

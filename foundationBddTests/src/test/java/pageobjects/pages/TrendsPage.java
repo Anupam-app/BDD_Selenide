@@ -380,13 +380,11 @@ public class TrendsPage {
 		
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		Date date1 = format.parse(startTime);
-		System.out.print(date1);
 		Date date2 = format.parse(lastTime);
-		System.out.print(date2);
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
         System.out.print("Time difference:"+difference);
         Assert.assertTrue(difference<=60);
-        Assert.assertTrue(difference>=50);
+        Assert.assertTrue(difference>=45);
 	}
 
 }

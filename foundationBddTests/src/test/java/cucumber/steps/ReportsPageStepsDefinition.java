@@ -198,7 +198,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, false, this.login.getLogin());
         switchTo().parentFrame();
     }
-
+    
     @When("I search report {string}")
     public void iSearchReports(String report) {
         this.report.setName(report);

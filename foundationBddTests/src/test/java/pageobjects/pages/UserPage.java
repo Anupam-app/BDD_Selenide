@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -32,8 +33,7 @@ public class UserPage {
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    //alarm_info_msg alert alert-info fade show
-    //alarm_info_msg alert alert-info fade show
+    private ElementsCollection userslist = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
     private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
@@ -88,6 +88,19 @@ public class UserPage {
     
     public void cannotEdit(String user) {
         Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+    }
+	
+	public void usersNotEditable() {
+    	var users= $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
+    	for(var user:users) {
+    		if(user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
+    			Assert.assertEquals("Edit icon is enabled for system users",($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")),"edit-icon disabled");
+    		}
+    		else {
+    			Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+    		}
+    		
+    	}
     }
 
     public void userExists(String user) {
@@ -184,6 +197,7 @@ public class UserPage {
     }
 
     public String getRoleNameFromForm() {
+      	commonWaiter(roleNameTextbox, visible);
         return roleNameTextbox.getText();
     }
 
@@ -242,7 +256,9 @@ public class UserPage {
     }
 
     public SelenideElement getUserColumnHeader(String columnName) {
-        return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+    	System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
+    	return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+        
     }
 
     public List<String> getAllUserColumnHeaders() {
