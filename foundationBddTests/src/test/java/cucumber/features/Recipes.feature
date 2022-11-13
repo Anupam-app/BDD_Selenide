@@ -124,5 +124,5 @@ Feature: Recipe management
  
   Scenario: BIOCRS-1594 | Recipe print
     Given I go to recipe page
-    When I edit recipe "Recipe2"
-    Then I click on print "Recipe2"
+    When I edit recipe "testRecipeToExecute"
+    Then I print recipe "testRecipeToExecute"

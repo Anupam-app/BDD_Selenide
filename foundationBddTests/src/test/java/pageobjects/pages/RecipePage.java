@@ -322,37 +322,7 @@ public class RecipePage {
     
     public void printRecipe(String recipeName) throws AWTException {
         $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']")).click();
-        //Alert printDialog = switchTo().alert();
-        //printDialog.dismiss();
-       // WebDriverRunner.getWebDriver().switchTo().window(WebDriverRunner.getWebDriver().getWindowHandles().toArray()[0].toString());
-        //$(By.tagName("body")).sendKeys(Keys.TAB);
-       // $(By.tagName("body")).sendKeys(Keys.ENTER);
-        Selenide.sleep(2000);
-        Alert printDialog = switchTo().alert();
-        printDialog.dismiss();
-        switchTo().frame(0);
-        Robot r = new Robot();
-        r.keyPress(KeyEvent.VK_ESCAPE);
-        r.keyRelease(KeyEvent.VK_ESCAPE);
-        
-        //Set<String> windowHandles = WebDriverRunner.getWebDriver().getWindowHandles();
-        //System.out.println(windowHandles);
-        //if (!windowHandles.isEmpty()) {
-        	//WebDriverRunner.getWebDriver().switchTo().window((String) windowHandles.toArray()[windowHandles.size() - 1]);
-        //}
-        //Now work with the dialog as with an ordinary page:  
-        //$(By.className("cancel-button")).click();
-        Selenide.sleep(5000);
-        /*
-		 * $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
-		 * importButton.click(); SelenideElement recipeInputSave =
-		 * $(By.className("rename-recipe-import-input")); recipeInputSave.click();
-		 * SelenideHelper.commonWaiter(recipeInputSave,visible).clear(); var
-		 * value=RandomStringUtils.randomAlphabetic(10);
-		 * recipeInputSave.setValue(value); saveButton.click();
-		 * browserLinkText.waitUntil(Condition.visible, 5000l).click();
-		 */
+        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']")).shouldBe(visible);
     }
 
     public void lookAtTheUserNotification() {

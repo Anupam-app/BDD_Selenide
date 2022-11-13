@@ -229,7 +229,7 @@ public class RecipePageStepsDefinition {
     	recipe.setRecipeImportedName(recipePage.getGeneratedName());
     }
     
-    @When("I click on print {string}")
+    @When("I print recipe {string}")
     public void iClickOnPrint(String recipeName) throws Exception {
     	recipePage.printRecipe(recipeName);
     }
