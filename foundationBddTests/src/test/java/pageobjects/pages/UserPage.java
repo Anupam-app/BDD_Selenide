@@ -65,7 +65,7 @@ public class UserPage {
     private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
     private SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private SelenideElement enableUserButton = $(By.id("btn_enabl"));
-    private SelenideElement createUserPlusButton = $(By.xpath("//div[@class='Adduserplus']"));
+    private SelenideElement createUserPlusButton = $(By.xpath("//div[contains(@class,'Adduserplus')]"));
     private SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
     private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
