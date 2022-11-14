@@ -205,8 +205,7 @@ public class ReportsPage {
         	$(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
         	break;  
     	}
-    	}
-    
+    }
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
@@ -315,8 +314,6 @@ public class ReportsPage {
     
     public void editReportOrTemplate(String templateName) {
     	openReportTemplate(templateName);
-
-        
     }
 
     public String getStatus() {
@@ -426,7 +423,7 @@ public class ReportsPage {
     	else {
     		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
     	}
-         }
+    }
 
     public void saveReportTemplate() {
         saveTemplateButton.click();
