@@ -160,6 +160,10 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
+                    if(env.PREPARE_ENVIRONMENT_ONLY != null && env.PREPARE_ENVIRONMENT_ONLY == 'YES'){
+                        return
+                    }
+
                     def commandTag = '';
 
                     if(env.MODE != null && env.MODE != ''){
