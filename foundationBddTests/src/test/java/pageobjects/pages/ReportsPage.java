@@ -512,9 +512,11 @@ public class ReportsPage {
         		for (int i=1;i<7;i++) {
         	        Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value,row, i))).getText().isBlank());
         	    }
-        	break;}
+        	break;
+        	}
         }
-        }
+    }
+    
     public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
     	Thread.sleep(5000);
         for (int i=1;i<=(auditListTable.size());i++) {
@@ -534,13 +536,8 @@ public class ReportsPage {
         	}
         	
         }
-        }   
+    }   
     
-    public void checkTableDates() {
-        for (int i=1;i<=auditListTable.size();i++) {
-        	}
-        }
-
     public void checkTableContainsTemplate(String templateName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);
     }
