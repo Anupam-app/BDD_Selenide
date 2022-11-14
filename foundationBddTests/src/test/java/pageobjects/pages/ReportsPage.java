@@ -49,7 +49,7 @@ public class ReportsPage {
     private final String XPATH_TemplateColumnName = "//*[@id=\"templateListTable\"]/thead/tr/th[%d]";
     private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
     private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
-    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr[%d]/td[%d]";
     private final String XPATH_UserColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[4]";
     private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
     private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
@@ -203,7 +203,6 @@ public class ReportsPage {
         	break;  
         case "reports": 
         	$(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
-        	Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, columnIndex))).getText().isBlank()); 
         	break;  
     	}
     	}
@@ -508,9 +507,13 @@ public class ReportsPage {
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-        for (int i=1;i<7;i++) {
-        Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
-            }
+        for(int row=1;row<=reportListTable.size();row++) {
+        	if($(By.xpath(String.format(XPATH_ReportColumnName_Value,row, 1))).getText().equalsIgnoreCase(reportName)) {
+        		for (int i=1;i<7;i++) {
+        	        Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value,row, i))).getText().isBlank());
+        	    }
+        	break;}
+        }
         }
     public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
     	Thread.sleep(5000);
