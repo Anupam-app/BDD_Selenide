@@ -90,7 +90,7 @@ Feature: Recipe console
     Then I validate the date formats and enter comments
     And I wait for 1 min for the post run window to auto closed
     And I validate the Start button is displayed and disabled
-    And I Process restart 
+    And I Process restart
     And I validate the Start button is displayed and enabled 
     
     
