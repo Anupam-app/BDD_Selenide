@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import dataobjects.Login;
 import dataobjects.Recipe;
 import dataobjects.User;
 import io.cucumber.java.en.And;
@@ -16,12 +17,12 @@ public class RecipePageStepsDefinition {
 
     private RecipePage recipePage;
     private Recipe recipe;
-    private User user;
+    private Login login;
 
-    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe,User user) {
+    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe,Login login) {
         this.recipePage = recipePage;
         this.recipe = recipe;
-        this.user = user;
+        this.login = login;
     }
 
     @Given("I go to recipe page")
@@ -65,6 +66,17 @@ public class RecipePageStepsDefinition {
     public void iSaveTheRecipe() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
         recipePage.saveRecipe(this.recipe.getRecipeName());
+    }
+    
+    @And("I save the recipe with name {string}")
+    public void iSaveTheRecipeExistingName(String recipeName) {
+        this.recipe.setRecipeName(recipeName);
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+    }
+    
+    @Then("I see warning message is displayed {string}")
+    public void iSeeWarningMessagedisplayed(String message) {
+    	recipePage.isGeneratedNotificationWhenCreateExistingRecipe(message);
     }
 
     @And("I see my changes in recipe")
@@ -122,7 +134,7 @@ public class RecipePageStepsDefinition {
 
     @When("I approve recipe")
     public void iApproveRecipe() {
-        recipePage.approveRecipe(user.getPassword());
+        recipePage.approveRecipe(login.getPassword());
     }
 
     @Then("Recipe should be approved")

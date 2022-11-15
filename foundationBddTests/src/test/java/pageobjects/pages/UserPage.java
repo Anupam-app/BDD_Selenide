@@ -1,8 +1,10 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
@@ -12,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -30,9 +33,9 @@ public class UserPage {
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    //alarm_info_msg alert alert-info fade show
-    //alarm_info_msg alert alert-info fade show
+    private ElementsCollection userslist = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
     private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
@@ -59,17 +62,45 @@ public class UserPage {
     private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
     private SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
+    private String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
+    
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
         userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
+    
+    public void UserLocked(String user) {
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(230, 30, 80, 1)");
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).getAttribute("class")),"rowLockedUser");
+    }
+    public void UserUnLocked(String user) {
+    	cancelButton.click();
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(33, 37, 41, 1)");
+    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user)+"/td")).getAttribute("class")),"customusername");
+    }
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
+    }
+    
+    public void cannotEdit(String user) {
+        Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+    }
+	
+	public void usersNotEditable() {
+    	var users= $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
+    	for(var user:users) {
+    		if(user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
+    			Assert.assertEquals("Edit icon is enabled for system users",($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")),"edit-icon disabled");
+    		}
+    		else {
+    			Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+    		}
+    		
+    	}
     }
 
     public void userExists(String user) {
@@ -82,7 +113,7 @@ public class UserPage {
 
     public void saveMyChanges() {
         saveButton.click();
-        confirmationButton.click();
+        commonWaiter(confirmationButton, visible).click();
     }
 
     public String getEmployeeIdFromForm() {
@@ -99,6 +130,10 @@ public class UserPage {
 
     public void goTo() {
         idManagementPageLinkText.click();
+    }
+    
+    public void cancel() {
+        cancelButton.click();
     }
 
     public boolean isUserDisabled() {
@@ -162,6 +197,7 @@ public class UserPage {
     }
 
     public String getRoleNameFromForm() {
+      	commonWaiter(roleNameTextbox, visible);
         return roleNameTextbox.getText();
     }
 
@@ -189,6 +225,17 @@ public class UserPage {
     public void isGeneratedNotificationWhenPasswordReset() {
         commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
     }
+    
+    public void isGeneratedNotificationWhenUserModified(String user) {
+        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+        XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: "+user+" modified in server"));
+    }
+    
+    public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT,visible);
+        XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
+        
+    }
 
     public void cancelUser() {
         userNameTextBox.click();
@@ -209,7 +256,9 @@ public class UserPage {
     }
 
     public SelenideElement getUserColumnHeader(String columnName) {
-        return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+    	System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
+    	return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+        
     }
 
     public List<String> getAllUserColumnHeaders() {
@@ -229,7 +278,6 @@ public class UserPage {
         SelenideHelper.commonWaiter(selectOption, visible).click();
         commonWaiter($(By.xpath(String.format("//li[text()='%s']", defaultOptionName))), visible).click();
         SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
     }
 
     public String getActiveIconTitle() {

@@ -1,17 +1,12 @@
 @COMMON
 Feature: Analytics creation
 
-  Background: 
-    Given the browser "Chrome" is open
-    And I am logged in as "bio4cadmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-
-  Scenario: aggregate creation
-    Given I go to analytics
+  @SMOKE
+  Scenario: Aggregate creation
+    Given I am logged in as "bio4cadmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I create an analytics aggregate
-    And I use the recipe for this analytics aggregate with interval "Weekly"
+    And I use the recipe for this analytics aggregate with interval "Second"
     And I choose "PI101 PV" analytics parameter with unit "psi" as "x" axis
     And I choose "PI102 PV" analytics parameter with unit "psi" as "y" axis
     And I choose "PI103 PV" analytics parameter with unit "psi" as "y" axis

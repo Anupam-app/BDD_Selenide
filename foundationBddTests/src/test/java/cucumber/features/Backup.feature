@@ -2,9 +2,9 @@
 Feature: Backup creation
 
   Background:
-    Given the browser "Chrome" is open
-    And I am logged in as "bio4cservice" user
-    
+    Given I am logged in as "bio4cadmin" user
+
+  @SMOKE
   Scenario: Create Backup
     Given I goto backup page
     When I trigger a immediate backup
@@ -18,7 +18,11 @@ Feature: Backup creation
   Scenario: Schedule backup
     Given I goto backup page
     When I schedule backup
+    And I see the notification message "Backup job scheduled"
     And I go to backup history
     Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
-    Then I verify backup history details
+    And I verify backup history details
+    And I go to backup mode
+    When I schedule backup with existing name
+    Then I see the notification message "Unable to schedule backup job"

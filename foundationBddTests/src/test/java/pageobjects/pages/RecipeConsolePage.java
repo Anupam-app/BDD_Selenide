@@ -3,12 +3,17 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+
+import dataobjects.Recipe;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+
+import java.util.Timer;
 
 public class RecipeConsolePage {
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
@@ -37,9 +42,19 @@ public class RecipeConsolePage {
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
 
+    private final SelenideElement runIdTextbox = $(By.xpath("//input[@name='runId']"));
     private final SelenideElement productIdTextbox = $(By.xpath("//input[@name='productId']"));
     private final SelenideElement batchIdTextbox = $(By.xpath("(//*[contains(@class,'autocompletediv')]//input)[1]"));
-
+    private final SelenideElement startDate = $(By.xpath("//span[@id='startDate_Id']"));
+    private final SelenideElement endDate = $(By.xpath("//span[@id='endDate_Id']"));
+    private final SelenideElement machineName=$(By.xpath("//span[@id='machine_Id']/label"));
+  
+    private Recipe recipe;
+    
+    public RecipeConsolePage(Recipe recipe) {
+      
+        this.recipe = recipe;
+    }
     public void holdAndRestart() {
         if (restartButton.isDisplayed()) {
             restartSystem();
@@ -76,19 +91,36 @@ public class RecipeConsolePage {
         loadButton.click();
     }
 
-    public void startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments, int seconds) {
+    public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments,
+    		int seconds) {
+
+        String runId;
+
         runIcon.waitUntil(Condition.visible, 20000l);
         runIcon.click();
+        runId = runIdTextbox.getValue();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(beforeComments);
+        preRunCommentsText.sendKeys(beforeComments);        
         okButton.click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
-        preRunCommentsText.sendKeys(afterComments);
+        SelenideHelper.commonWaiter(startDate, visible);
+        String startDate1 = startDate.getText();
+        String endDate1 = endDate.getText();
+        String[] dateParts = startDate1.split(" ");
+        String[] dateparts1 = endDate1.split(" ");
+        preRunCommentsText.sendKeys(afterComments);        
+        this.recipe.setStartDate(dateParts[0]);
+        this.recipe.setEndDate(dateparts1[0]);
+        this.recipe.setBeforeComments(beforeComments);
+        this.recipe.setAfterComments(afterComments);
+        this.recipe.setMachineName(machineName.getText());
         okButton.click();
+
+        return runId;
     }
 
     public void startRecipe(String productId, String batchId, String beforeComments) {

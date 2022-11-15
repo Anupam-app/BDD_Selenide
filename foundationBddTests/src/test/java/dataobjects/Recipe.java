@@ -3,40 +3,21 @@ package dataobjects;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
+@Getter
 public class Recipe {
-    @Setter
-    @Getter
+
     String recipeName;
-
-    @Setter
-    @Getter
     String phaseName;
-
-    @Setter
-    @Getter
     String recipeNode;
-
-    @Setter
-    @Getter
+    String runId;
     String productId;
-
-    @Setter
-    @Getter
     String batchId;
-
-    @Setter
-    @Getter
     String beforeComments;
-
-    @Setter
-    @Getter
     String afterComments;
-    
-    @Setter
-    @Getter
     RecipeAction recipeAction;
-
-    @Setter
-    @Getter
     String recipeImportedName;
+    String startDate;
+    String endDate;
+    String machineName;
 }

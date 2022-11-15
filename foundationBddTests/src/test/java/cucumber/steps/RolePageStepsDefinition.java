@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Role;
 import dataobjects.RoleAction;
 import io.cucumber.java.en.Given;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -21,6 +22,7 @@ public class RolePageStepsDefinition {
     public RolePageStepsDefinition(RolePage rolePage, Role role) {
         this.rolePage = rolePage;
         this.role = role;
+        this.role.getPermissions().clear();
     }
     
 	@Given("I trigger Roles mode")
@@ -34,16 +36,32 @@ public class RolePageStepsDefinition {
 		this.role.setRoleAction(RoleAction.ADDED);
 		rolePage.createNewrole(this.role.getRoleName());
 	}
+	
+	@When("I select role sort by {string} in {string}")
+    public void iSelectSortBy(String columnName, String sortMode) {
+		rolePage.sortList(columnName,Boolean.parseBoolean(sortMode));
+    }
+	
+	@Then("{string} from role should be displayed in sorted order {string}")
+    public void roleDetailsShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+		rolePage.checkSortedElement(columnName,Boolean.parseBoolean(sortMode));
+    }
+	
+	@Given("I search {string} role")
+    public void iSearchRole(String role) {
+        this.role.setRoleName(role);
+        rolePage.searchRole(this.role.getRoleName());
+    }
 
 	@When("I assign permission {string}")
 	public void iAssignPermission(String role) {
 		this.role.getPermissions().add(role);
 		rolePage.clickOnPermission(role);
 	}
-
-	@When("I click on save button")
-	public void iSaveRole() {
-    	rolePage.saveRole(this.role.getRoleAction());
+	
+	@When("I see notification")
+	public void iSeeNotification() {
+    	rolePage.notification(this.role.getRoleAction());
 	}
 
 	@Then("I verify role details")
@@ -53,7 +71,7 @@ public class RolePageStepsDefinition {
 		Collections.sort(permissions);
 		ArrayList<String> expectedPermissions=new ArrayList<>(role.getPermissions());
 		Collections.sort(expectedPermissions);
-		Assert.assertEquals(permissions,expectedPermissions);
+		Assert.assertEquals(expectedPermissions,permissions);
 	}
 
 	@When("I search the role")
@@ -100,4 +118,20 @@ public class RolePageStepsDefinition {
 	public void iDoNotSeeRolesMode() {
 		rolePage.NoRolesTab();
 	}
+	@Then( "I see the error message of role {string}")
+    public void iSeetheErrorMessage(String message) {
+        rolePage.checkMessage(message);
+    }
+	@Then("I create role {string}")
+	public void iCreateRole(String name) {
+		this.role.setRoleName(name);
+		this.role.setRoleAction(RoleAction.ERROR);
+		rolePage.createNewrole(this.role.getRoleName());	
+		
+	}
+	@When("I click on save button")
+	public void iSaveRole() {
+    	rolePage.saveButton();
+	}
+
 }

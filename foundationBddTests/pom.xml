@@ -21,6 +21,9 @@
 		<neodymium.version>4.1.0</neodymium.version>
 		<lombok.version>1.18.12</lombok.version>
 		<webdrivermanager.version>5.0.2</webdrivermanager.version>
+		<tabula.version>1.0.5</tabula.version>
+		<pdfbox.version>2.0.25</pdfbox.version>
+		<commons.lang3.version>3.12.0</commons.lang3.version>
 	</properties>
 
 	<build>
@@ -46,7 +49,7 @@
 					<includes>
 						<include>cucumber/tests/RunAllFeaturesTest.java</include>
 					</includes>
-					<testFailureIgnore>true</testFailureIgnore>
+					<testFailureIgnore>${testFailureIgnoreProp}</testFailureIgnore>
 					<argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
 					<systemPropertyVariables>
 						<allure.results.directory>${project.build.directory}/allure-results</allure.results.directory>
@@ -107,6 +110,26 @@
 			<artifactId>webdrivermanager</artifactId>
 			<version>${webdrivermanager.version}</version>
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>technology.tabula</groupId>
+			<artifactId>tabula</artifactId>
+			<version>${tabula.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>pdfbox-tools</artifactId>
+			<version>${pdfbox.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>${commons.lang3.version}</version>
+        </dependency>
+        <dependency>
+			<groupId>com.typesafe</groupId>
+			<artifactId>config</artifactId>
+			<version>1.4.2</version>
 		</dependency>
 	</dependencies>
 
