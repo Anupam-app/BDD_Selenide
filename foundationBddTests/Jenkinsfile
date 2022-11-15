@@ -167,7 +167,7 @@ pipeline {
                     def commandTag = '';
 
                     if(env.Mode != null && env.Mode != ''){
-                        commandTag=' -Dcucumber.filter.tags="@'+env.Mode+'and @'+env.PDP
+                        commandTag=' -Dcucumber.filter.tags="@'+env.Mode+' and @'+env.PDP
                     }
                     else{
                         commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
