@@ -1,6 +1,5 @@
 package pageobjects.pages;
 
-
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
@@ -8,8 +7,11 @@ import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+import com.typesafe.config.ConfigFactory;
+import com.typesafe.config.ConfigParseOptions;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
@@ -55,6 +57,10 @@ public class ReportsPage {
     private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
     private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
     private final String XPATH_TRENDS_PARAMS = "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
+
+	private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
+	private final String XPATH_TEMPLATE_COLUMNS = "//table[@id='templateListTable']//td[%s]";
+	private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[contains(text(),'Runs')]"));
@@ -137,7 +143,11 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
-	Function<Integer, List<String>> getReportColumns = (index) -> {
+    private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
+    private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
+    private SelenideElement date;
+	
+    Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
@@ -154,11 +164,16 @@ public class ReportsPage {
            users.removeIf(e -> StringUtils.isEmpty(e.trim()));
            return users;
        };
-	private SelenideElement date;
-	
-    
+	   
+	Function<Integer, List<String>> getTemplateColumns = (index) -> {
+        var templates = $$(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS, index))).texts();
+        templates.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return templates;
+    };
+
+
     public void goToReports() {
-    	commonWaiter(reportsManagementPage,visible);
+        commonWaiter(reportsManagementPage,visible);
         reportsManagementPage.click();
     }
 
@@ -167,7 +182,7 @@ public class ReportsPage {
     }
 
     public void verifyList(String tab) throws InterruptedException {
-        switch (tab) {
+        switch (tab){
             case "runs":
                 $$(foundationRunListTable).shouldHave(CollectionCondition.size($$(foundationRunListTable).size()));
                 break;
@@ -188,7 +203,7 @@ public class ReportsPage {
     }
 
     public void verifyColoumn(String columnName, String tab, int columnIndex) {
-        switch (tab) {
+        switch (tab){
             case "runs":
                 $(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
                 Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, columnIndex))).getText().isBlank());
@@ -207,8 +222,25 @@ public class ReportsPage {
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
-        var optionDropDown = $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname)));
-        SelenideHelper.commonWaiter(optionDropDown, visible).click();
+        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).click();
+    }
+
+    public void sortListTemplate(String columnName, boolean descending) {
+        SelenideElement sortAction = getTemplateColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+
+    public SelenideElement getTemplateColumnHeader(String columnName) {
+        return $(By.xpath(String.format(XPATH_TEMPLATE_COLUMN_HEADER, columnName)));
+    }
+
+    public void checkSortedElementTemplate(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);
+    }
+    public List<String> getTemplateColumnHeaders() {
+        return $$(By.xpath(XPATH_TEMPLATE_TABLE + "//th")).texts();
     }
 
     public void selectUser(String user) {
@@ -262,6 +294,7 @@ public class ReportsPage {
     public void createTemplate(String templateName) {
         createButton.click();
         templateNameTextBox.setValue(templateName);
+
     }
 
     public void approveTemplate(String templateName, String password, String status) {
@@ -325,12 +358,18 @@ public class ReportsPage {
         return name;
     }
 
+    public void createTrends() {
+        trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
+        trendsSaveButton.click();
+        trendsCancelButton.click();
+    }
+
     public void exists(String name) {
         $(By.xpath(String.format(XPATH_REPORT_NAME, name))).shouldBe(visible);
     }
 
-    public void checkSigned(String reportName) {
-        var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName)));
+    public void checkSigned(String reportName, String username) {
+        var reportSigned = $(By.xpath(String.format(XPATH_SIGNED_REPORT, reportName, username)));
         reportSigned.shouldBe(visible);
     }
 
@@ -342,24 +381,32 @@ public class ReportsPage {
         absentReportText.should(not(visible));
     }
 
-    public void selectParams(String parameter) throws InterruptedException {
-
-        commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))), visible);
-        $(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))).click();
-    }
-
-    public void createTrends() {
-        for (int j = 0; j < 5; j++) {
-
-            for (int i = 1; i < 6; i++) {
-                commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_") + i)))), visible);
-                $(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_") + i)))).click();
+    public void create5Trends() {
+        for (int j=0; j<5; j++) {
+            for(int i=1; i<6; i++) {
+                commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))),visible);
+                $(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))).click();
             }
-
             trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
             trendsSaveButton.click();
             trendsAddButton.click();
+        }
+    }
 
+    public void selectParameters(String noOfParams, String parameters ) {
+        int count=Integer.parseInt(noOfParams);
+        List <String> list = new ArrayList <String>();
+        var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
+        var params = config.getConfigList("Params.list");
+        for (var param : params) {
+            list.add(param.getString("value"));
+        }
+        if (trendsAddButton.exists()) {
+            trendsAddButton.click();
+        }
+        for (int i=0; i<count; i++) {
+            commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))),visible);
+            $(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))).click();
         }
     }
 
@@ -367,28 +414,28 @@ public class ReportsPage {
         trendsAddButton.click();
         Assert.assertFalse(trendsAddButton.isEnabled());
         trendsCancelButton.click();
-
     }
-
 
     public void isGeneratedNotificationWhenMoreThanSixParams(String message) {
         XPATH_ERRORNOTIFICATION.shouldHave(text(message));
     }
 
     public void includeReport(String reportInclude) {
-        if (reportInclude == "Alarms") {
+        if(reportInclude=="Alarms") {
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
             saveAlarmButton.click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
 
-        } else if (reportInclude.contains("Trends")) {
+        }
+        else if(reportInclude.contains("Trends")){
+
             SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-            trendsAddButton.click();
 
-        } else {
+        }
+        else {
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
         }
     }
@@ -408,7 +455,7 @@ public class ReportsPage {
         SelenideHelper.fluentWaiter().until((webDriver) -> {
             boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
 
-            if (!isRunVisible) {
+            if(!isRunVisible) {
                 WebDriverRunner.getWebDriver().switchTo().parentFrame();
                 goToReports();
                 switchToFrame();
@@ -439,26 +486,26 @@ public class ReportsPage {
     public void selectTemplateStatus(String templateStatus) {
         commonWaiter(filterIcon, visible);
         filterIcon.click();
-        $(By.xpath(String.format("//span[contains(text(),'%s')]", templateStatus))).click();
+        $(By.xpath(String.format("//span[text()='%s']", templateStatus))).click();
         applyFilterButton.click();
     }
 
     public void selectReportType(String reportType) {
         commonWaiter(filterIcon, visible);
         filterIcon.click();
-        $(By.xpath(String.format("//span[contains(text(),'%s')]", reportType))).click();
+        $(By.xpath(String.format("//span[text()='%s']", reportType))).click();
         applyFilterButton.click();
     }
 
     public void selectRunStatus(String runReportStatus) {
         commonWaiter(filterIcon, visible);
         filterIcon.click();
-        $(By.xpath(String.format("//span[contains(text(),'%s')]", runReportStatus))).click();
+        $(By.xpath(String.format("//span[text()='%s']", runReportStatus))).click();
         applyFilterButton.click();
     }
 
     public void selectCreatedBy(String user) {
-        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))), visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))),visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 
@@ -472,25 +519,25 @@ public class ReportsPage {
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-        for (int i = 1; i < 7; i++) {
+        for (int i=1;i<7;i++) {
             Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
         }
     }
-
-    public void checkTableContainsUser(String userid) throws InterruptedException, ParseException {
+    public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
         Thread.sleep(5000);
-        for (int i = 1; i <= (auditListTable.size()); i++) {
+        for (int i=1;i<=(auditListTable.size());i++) {
             Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
             Date currentdate = new Date();
             String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
             Date eventDateTime = formatter.parse(eventDate);
-            int diffInDays = (int) ((currentdate.getTime() - eventDateTime.getTime())
-                    / (1000 * 60 * 60 * 24));
+            int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
+                    / (1000 * 60 * 60 * 24) );
             if (diffInDays <= 7) {
 
                 Assert.assertTrue(true);
-            } else {
+            }
+            else {
                 Assert.assertTrue(false);
             }
 
@@ -498,7 +545,7 @@ public class ReportsPage {
     }
 
     public void checkTableDates() {
-        for (int i = 1; i <= auditListTable.size(); i++) {
+        for (int i=1;i<=auditListTable.size();i++) {
         }
     }
 
@@ -510,11 +557,6 @@ public class ReportsPage {
         commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Signed By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
-
-
-    public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
-	}
 
     public String getPdfUrl() {
         return $(By.xpath(PDF_VIEWER_IFRAME)).getAttribute("src");
@@ -543,316 +585,328 @@ public class ReportsPage {
         }
     }
 
-	public void selectrunStatus(String status) {
-		commonWaiter(filterIcon, visible);
-		filterIcon.click();
-		if (clearAllFilters.isDisplayed()) {
-			clearAllFilters.click();
-		}
-		arrowIcon.click();
-		if (!$(By.xpath(String.format("//span[text()='%s']", status))).isSelected()) {
-			$(By.xpath(String.format("//span[text()='%s']", status))).click();
-		}
-		applyFilterButton.click();
-	}
+    public void selectrunStatus(String status) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        if (clearAllFilters.isDisplayed()) {
+            clearAllFilters.click();
+        }
+        arrowIcon.click();
+        if (!$(By.xpath(String.format("//span[text()='%s']", status))).isSelected()) {
+            $(By.xpath(String.format("//span[text()='%s']", status))).click();
+        }
+        applyFilterButton.click();
+    }
 
-	public boolean verifyRunStatus(String status) {
-		boolean isTrue = false;
-		if (!statusColumn.isDisplayed()) {
-			isTrue = noDatamsg.isDisplayed();
-		} else {
-			isTrue = statusColumn.getText().equalsIgnoreCase(status);
-		}
-		return isTrue;
-	}
+    public boolean verifyRunStatus(String status) {
+        boolean isTrue = false;
+        if (!(commonWaiter(statusColumn, visible).isDisplayed())) {
+            isTrue = noDatamsg.isDisplayed();
+        } else {
+            isTrue = statusColumn.getText().equalsIgnoreCase(status);
+        }
+        return isTrue;
+    }
 
-	public void selectDate(String daterange) {
+    public void selectDate(String daterange) {
 
-		ElementsCollection options = dateRange;
-		options.shouldBe(CollectionCondition.size(7));
-		for (SelenideElement d : options) {
-			for (int i = 0; i < options.size(); i++) {
-				date.click();
-				options.get(i).click();
-			}
-		}
-	}
+        ElementsCollection options = dateRange;
+        options.shouldBe(CollectionCondition.size(7));
+        for (SelenideElement d : options) {
+            for (int i = 0; i < options.size(); i++) {
+                date.click();
+                options.get(i).click();
+            }
+        }
+    }
 
-	public void selectDateRange(String option) throws InterruptedException {
-		commonWaiter(dateColumn, visible);
-		dateColumn.click();
-		ElementsCollection options = dateOptions;
-		for (SelenideElement element : options) {
-			if (element.getText().equalsIgnoreCase(option)) {
-				element.click();
-				break;
-			}
-		}
+    public void selectDateRange(String option) throws InterruptedException {
+        commonWaiter(dateColumn, visible);
+        dateColumn.click();
+        ElementsCollection options = dateOptions;
+        for (SelenideElement element : options) {
+            if (element.getText().equalsIgnoreCase(option)) {
+                element.click();
+                break;
+            }
+        }
 
-		if (option.equalsIgnoreCase("Custom Range")) {
-			commonWaiter(previousMonth, visible);
-			previousMonth.click();
-			commonWaiter(previousMonth, visible);
-			int index = getRandomNumber(0, availableDates.size() / 2);
-			availableDates.get(index).click();
-			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
-			availableDates.get(index).click();
-			
-		}
+        if (option.equalsIgnoreCase("Custom Range")) {
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            commonWaiter(previousMonth, visible);
+            int index = getRandomNumber(0, availableDates.size() / 2);
+            availableDates.get(index).click();
+            index = getRandomNumber(availableDates.size() / 2, availableDates.size());
+            availableDates.get(index).click();
 
-	}
+        }
 
-	public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
-		boolean isTrue = false;
-		switch (dateRange) {
-		case "Today":
-		case "Yesterday":
-			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
-			if (startDate.isDisplayed()) {
-				sortList("Start Date", false);
-				String startDateRow1 = startDate.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				sortList("Start Date", true);
-				startDateRow1 = startDate.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		case "Last 7 Days":
-		case "Last 30 Days":
-		case "This Month":
-		case "Last Month":
-		case "Custom Range":
-			commonWaiter(dateColumn, visible);
-			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
-			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
-			if (startDate.isDisplayed()) {
-				sortList("Start Date", false);
-				String startDateRow = startDate.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
-				sortList("Start Date", true);
-				String endDateRow = startDate.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-						&& (selectedDesendingDate.equals(selectedDate2)
-								|| selectedDesendingDate.before(selectedDate2))) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		}
-		return isTrue;
-	}
+    }
 
-	public SelenideElement getReportColumnHeader(String columnName) {
-		return $(By.xpath(String.format(XPATH_COLUMN_HEADER, columnName)));
-	}
+    public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+                if (startDate.isDisplayed()) {
+                    sortList("Start Date", false);
+                    String startDateRow1 = startDate.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    sortList("Start Date", true);
+                    startDateRow1 = startDate.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+                String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+                Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+                if (startDate.isDisplayed()) {
+                    sortList("Start Date", false);
+                    String startDateRow = startDate.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+                    sortList("Start Date", true);
+                    String endDateRow = startDate.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
+                    if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
+                            && (selectedDesendingDate.equals(selectedDate2)
+                            || selectedDesendingDate.before(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
+    }
 
-	public List<String> getAllReportsColumnHeaders() {
-		return $$(By.xpath(XPATH_USER_TABLE + "//th")).texts();
-	}
+    public SelenideElement getReportColumnHeader(String columnName) {
+        return $(By.xpath(String.format(XPATH_COLUMN_HEADER, columnName)));
+    }
 
-	public void sortList(String columnName, boolean descending) {
-		SelenideElement sortAction = getReportColumnHeader(columnName);
-		var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
-		var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
-		SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
-	}
+    public List<String> getAllReportsColumnHeaders() {
+        return $$(By.xpath(XPATH_USER_TABLE + "//th")).texts();
+    }
 
-	public void checkSortedElement(String columnName, boolean descending) {
-		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns);
-	}
-	
-	
-	public int getRandomNumber(int min, int max) {
-		return (int) ((Math.random() * (max - min)) + min);
-	}
+    public void sortList(String columnName, boolean descending) {
+        SelenideElement sortAction = getReportColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+
+    public void checkSortedElement(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns);
+    }
+
+
+    public int getRandomNumber(int min, int max) {
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 
     public void iValidation() {
-    	if (saveAs_btn.isEnabled()) {
-    		saveAs_btn.shouldBe(visible);
-    	}
+        if (saveAs_btn.isEnabled()) {
+            saveAs_btn.shouldBe(visible);
+        }
     }
-    
-	public void iSaveAs() {
-		saveAs_btn.click();
-	}
-	
-	public void ivalidateWindow() {
-		saveTemplateTxt.shouldBe(visible);
-	}
-	
-	public void iRename(String templateName) throws InterruptedException {
-		saveTemplateAs.click();
-		saveTemplateAs.clear();
-		saveTemplateAs.setValue(templateName);
-		isave();
-	}
-	
-	public void isave() {
-		saveBtn.click();
-	}
-	
-	public void putReportTemplateToinactive(String templateName, String status) {
+
+    public void iSaveAs() {
+        saveAs_btn.click();
+    }
+
+    public void ivalidateWindow() {
+        saveTemplateTxt.shouldBe(visible);
+    }
+
+    public void iRename(String templateName) throws InterruptedException {
+        saveTemplateAs.click();
+        saveTemplateAs.clear();
+        saveTemplateAs.setValue(templateName);
+        isave();
+    }
+
+    public void isave() {
+        saveBtn.click();
+    }
+
+    public void putReportTemplateToinactive(String templateName, String status) {
         openReportTemplate(templateName);
         reportTemplateStatusIcon.click();
         changeStatus(status);
         saveReportTemplate();
     }
-	
-	public void iCheckNotifactionMsg(String status) {
+
+    public void iCheckNotifactionMsg(String status) {
         SelenideHelper.commonWaiter(notificationMsg,visible);
-	}
-	
-	public void iSearchrepo(String templateName) {
-		SelenideHelper.commonWaiter(reportSearch, visible).setValue(templateName);
+    }
+
+    public void iSearchrepo(String templateName) {
+        SelenideHelper.commonWaiter(reportSearch, visible).setValue(templateName);
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
-	}
-	
-	public boolean iValidationdraft() {
-		boolean isTrue = false;
-		if (!column_temp.isDisplayed()) {
-			column_temp.shouldNotBe(visible);
-		} else {
-			column_temp.shouldBe(visible);
-		}
-		return isTrue;
-	}
-	
-	public void selectDateRprt(String daterange) {
+    }
 
-		ElementsCollection options = dateRange;
-		options.shouldBe(CollectionCondition.size(7));
-		for (SelenideElement d : options) {
-			for (int i = 0; i < options.size(); i++) {
-				date.click();
-				options.get(i).click();
-			}
-		}
-	}
+    public boolean iValidationdraft() {
+        boolean isTrue = false;
+        if (!column_temp.isDisplayed()) {
+            column_temp.shouldNotBe(visible);
+        } else {
+            column_temp.shouldBe(visible);
+        }
+        return isTrue;
+    }
 
-	public void selectDateRangeRprt(String option) throws InterruptedException {
-		commonWaiter(dateColumn, visible);
-		dateColumn.click();
-		ElementsCollection options = dateOptionsRprt;
-		for (SelenideElement element : options) {
-			if (element.getText().equalsIgnoreCase(option)) {
-				element.click();
-				break;
-			}
-		}
+    public void selectDateRprt(String daterange) {
 
-		if (option.equalsIgnoreCase("Custom Range")) {
-			commonWaiter(previousMonth, visible);
-			previousMonth.click();
-			commonWaiter(previousMonth, visible);
-			int index = getRandomNumber(0, availableDates.size() / 2);
-			availableDates.get(index).click();
-			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
-			availableDates.get(index).click();
-			
-		}
+        ElementsCollection options = dateRange;
+        options.shouldBe(CollectionCondition.size(7));
+        for (SelenideElement d : options) {
+            for (int i = 0; i < options.size(); i++) {
+                date.click();
+                options.get(i).click();
+            }
+        }
+    }
 
-	}
+    public void selectDateRangeRprt(String option) throws InterruptedException {
+        commonWaiter(dateColumn, visible);
+        dateColumn.click();
+        ElementsCollection options = dateOptionsRprt;
+        for (SelenideElement element : options) {
+            if (element.getText().equalsIgnoreCase(option)) {
+                element.click();
+                break;
+            }
+        }
 
-	public boolean verifyDateRangesRprt(String dateRange) throws ParseException, InterruptedException {
-		boolean isTrue = false;
-		switch (dateRange) {
-		case "Today":
-		case "Yesterday":
-			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
-			if (startDateRep.isDisplayed()) {
-				sortList("Date Generated", false);
-				String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				sortList("Date Generated", true);
-				startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		case "Last 7 Days":
-		case "Last 30 Days":
-		case "This Month":
-		case "Last Month":
-		case "Custom Range":
-			commonWaiter(dateColumn, visible);
-			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
-			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
-			if (startDateRep.isDisplayed()) {
-				sortList("Date Generated", false);
-				String startDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
-				sortList("Date Generated", true);
-				String endDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-						&& (selectedDesendingDate.equals(selectedDate2)
-								|| selectedDesendingDate.before(selectedDate2))) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		}
-		return isTrue;
-	}
+        if (option.equalsIgnoreCase("Custom Range")) {
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            commonWaiter(previousMonth, visible);
+            int index = getRandomNumber(0, availableDates.size() / 2);
+            availableDates.get(index).click();
+            index = getRandomNumber(availableDates.size() / 2, availableDates.size());
+            availableDates.get(index).click();
 
-	public void checkSortedElements(String columnName, boolean descending) {
-		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
-	}
-	
-	public void checkSortedElementConsolidate(String columnName, boolean descending) {
-		SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns);
-	}
-	public void sortListConsolidated(String columnName, boolean descending) {
-		SelenideElement sortAction = getReportColumnHeader(columnName);
-		var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order")));
-		var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order dropup")));
-		SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
-	}
-	
-	public void selectConsolidatedStatus(String consolidatedreportstatus) {
-		commonWaiter(filterIcon, visible);
-		filterIcon.click();
-		processType.shouldBe(visible);
-		status.shouldBe(visible);
-		if (clearAllFilters.isDisplayed()) {
-			clearAllFilters.click();
-		}
-		if (!$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).isSelected()) {
-			$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).click();
-		}
-		applyFilterButton.click();
-	}
-	public boolean verifyConsolidatedStatus(String status) {
-		boolean isTrue = false;
-		if (!consolidateColumn.isDisplayed()) {
-			isTrue = noDatamsg.isDisplayed();
-		} else {
-			isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
-		}
-		return isTrue;
-	}
+        }
+
+    }
+
+    public boolean verifyDateRangesRprt(String dateRange) throws ParseException, InterruptedException {
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+                if (startDateRep.isDisplayed()) {
+                    sortList("Date Generated", false);
+                    String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    sortList("Date Generated", true);
+                    startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+                String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+                Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+                if (startDateRep.isDisplayed()) {
+                    sortList("Date Generated", false);
+                    String startDateRow = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+                    sortList("Date Generated", true);
+                    String endDateRow = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
+                    if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
+                            && (selectedDesendingDate.equals(selectedDate2)
+                            || selectedDesendingDate.before(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
+    }
+
+    public void checkSortedElements(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
+    }
+
+    public void checkSortedElementConsolidate(String columnName, boolean descending) {
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns);
+    }
+
+    public void sortListConsolidated(String columnName, boolean descending) {
+        SelenideElement sortAction = getReportColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+
+    public void selectConsolidatedStatus(String consolidatedreportstatus) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        processType.shouldBe(visible);
+        status.shouldBe(visible);
+        if (clearAllFilters.isDisplayed()) {
+            clearAllFilters.click();
+        }
+        if (!$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).isSelected()) {
+            $(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).click();
+        }
+        applyFilterButton.click();
+    }
+
+    public boolean verifyConsolidatedStatus(String status) {
+        boolean isTrue = false;
+        commonWaiter(filterSelection, visible);
+        if (!consolidateColumn.isDisplayed()) {
+            isTrue = noDatamsg.isDisplayed();
+        } else {
+            isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
+        }
+        return isTrue;
+    }
+
+    public void reportRequestNotificationVisibility()
+    {
+        commonWaiter(requestNotification, not(visible));
+    }
 
     public void verifyRunMode() {
-       commonWaiter(runTab,not(visible));
+        commonWaiter(runTab,not(visible));
+    }
+
+    public void seeContent(String expectedText) {
+        commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
     }
 }

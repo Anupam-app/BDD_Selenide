@@ -19,4 +19,4 @@ Feature: Analytics creation
     @IVI
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
-      | P001 - Speed PV | psi   | P002 - Speed PV | psi   | P003 - Speed PV| psi   |
+      | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV| rpm   |

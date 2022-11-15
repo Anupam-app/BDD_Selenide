@@ -1,18 +1,15 @@
 package cucumber.steps;
 
-import java.util.List;
-
-import dataobjects.User;
+import dataobjects.Login;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.Objects;
+import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
-import pageobjects.pages.UserProfilePage;
 import pageobjects.pages.RecipeConsolePage;
-import pageobjects.pages.UserPage;
+import pageobjects.pages.UserProfilePage;
 import pageobjects.utility.ContextHelper;
 
 public class LoginPageStepsDefinition {
@@ -20,17 +17,15 @@ public class LoginPageStepsDefinition {
     private final LoginPage loginPage;
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
-    private final User user;
     private final UserProfilePage userProfilePage;
-    private final UserPage userPage;
+    private final Login login;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user, UserProfilePage userProfilePage, UserPage userPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserProfilePage userProfilePage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
-        this.user = user;
-		this.userProfilePage = userProfilePage;
-        this.userPage = userPage;
+        this.login = login;
+        this.userProfilePage = userProfilePage;
     }
 
     @Given("I open login page")
@@ -49,7 +44,7 @@ public class LoginPageStepsDefinition {
     @When("I push the login button")
     public void iPushTheLoginButton() {
         loginPage.pushLogin();
-        
+
     }
 
     @Then("I am logged in")
@@ -75,9 +70,9 @@ public class LoginPageStepsDefinition {
         for (int i = 1; i < list.size(); i++) {
             loginPage.setUser(list.get(i).get(0));
             loginPage.setPassword(list.get(i).get(1));
-        	loginPage.pushLogin();
-        	loginPage.checkLoggedIn(false);
-        	loginPage.checkMessage(list.get(i).get(2));
+            loginPage.pushLogin();
+            loginPage.checkLoggedIn(false);
+            loginPage.checkMessage(list.get(i).get(2));
         }
     }
 
@@ -87,19 +82,19 @@ public class LoginPageStepsDefinition {
         //TODO to be refactored?
         if (ContextHelper.isOrchestrator()) {
             homepage.open();
-            user.setUserName(username);
-            user.setPassword("MerckApp1@");
-            loginPage.setUser(user.getUserName());
-            loginPage.setPassword(user.getPassword());
+            login.setLogin(username);
+            login.setPassword("MerckApp1@");
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
         } else {
             homepage.open();
             loginPage.waitPnidLoading();
             loginPage.openLogin();
-            user.setUserName(username);
-            user.setPassword("MerckApp1@");
-            loginPage.setUser(user.getUserName());
-            loginPage.setPassword(user.getPassword());
+            login.setLogin(username);
+            login.setPassword("MerckApp1@");
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
             loginPage.waitControlOnPnid();
             recipeConsolePage.cleanLastRecipeDisplay();
@@ -115,7 +110,7 @@ public class LoginPageStepsDefinition {
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
-        iEnterUsernameAndPassword(user.getUserName(), user.getPassword());
+        iEnterUsernameAndPassword(login.getLogin(), login.getPassword());
         iPushTheLoginButton();
     }
 

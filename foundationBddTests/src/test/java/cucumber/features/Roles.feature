@@ -9,12 +9,12 @@ Feature: Role administration
     And the role "testRoleToRemovePermission" exists
     And the role "testRoleToAssign" exists
     And I trigger Users mode
-  
+
   Scenario: Adding role and permissions
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"
-    And I assign permission "Actuator controls"
+    And I assign permission "View User"
     And I click on save button
     And I see notification
     And I search the role
@@ -41,11 +41,10 @@ Feature: Role administration
     And I edit the user
     Then I verify user details
     
-
   Scenario: Same role name cannot be created
     Given I trigger Roles mode
     When I create role "testRoleToRemovePermission"
     And I assign permission "Basic navigation"
-    And I assign permission "Actuator controls"
+    And I assign permission "View User"
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
