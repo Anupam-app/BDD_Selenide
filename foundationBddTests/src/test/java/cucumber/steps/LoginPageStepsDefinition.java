@@ -1,34 +1,30 @@
 package cucumber.steps;
 
-import java.util.List;
-
-import dataobjects.User;
+import dataobjects.Login;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
-import pageobjects.pages.UserProfilePage;
 import pageobjects.pages.RecipeConsolePage;
-import pageobjects.pages.UserPage;
+import pageobjects.pages.UserProfilePage;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
-    private final User user;
     private final UserProfilePage userProfilePage;
-    private final UserPage userPage;
+    private final Login login;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, User user, UserProfilePage userProfilePage, UserPage userPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserProfilePage userProfilePage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
-        this.user = user;
-		this.userProfilePage = userProfilePage;
-        this.userPage = userPage;
+        this.login = login;
+        this.userProfilePage = userProfilePage;
     }
 
     @Given("I open login page")
@@ -37,17 +33,15 @@ public class LoginPageStepsDefinition {
     }
 
     @When("I enter {string} as username and {string} as password")
-    public void iEnterUsernameAndPassword(String username,String password)
-    {
+    public void iEnterUsernameAndPassword(String username, String password) {
         loginPage.setUser(username);
         loginPage.setPassword(password);
     }
 
     @When("I push the login button")
-    public void iPushTheLoginButton()
-    {
+    public void iPushTheLoginButton() {
         loginPage.pushLogin();
-        
+
     }
 
     @Then("I am logged in")
@@ -64,33 +58,31 @@ public class LoginPageStepsDefinition {
     public void iShouldSeeThisMessage(String message) {
         loginPage.checkMessage(message);
     }
-    
 
-    
+
     @When("^I login to application with wrong password$")
     public void iShouldSeeLoginMessage(DataTable table) {
-    	List<List<String>> list = table.asLists(String.class);
-        
-        for (int i=1; i<list.size(); i++) {
-        	loginPage.setUser(list.get(i).get(0));
+        List<List<String>> list = table.asLists(String.class);
+
+        for (int i = 1; i < list.size(); i++) {
+            loginPage.setUser(list.get(i).get(0));
             loginPage.setPassword(list.get(i).get(1));
-        	loginPage.pushLogin();
-        	loginPage.checkLoggedIn(false);
-        	loginPage.checkMessage(list.get(i).get(2));
+            loginPage.pushLogin();
+            loginPage.checkLoggedIn(false);
+            loginPage.checkMessage(list.get(i).get(2));
         }
     }
-        
-  
+
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {
         homepage.open();
         loginPage.waitPnidLoading();
         loginPage.openLogin();
-        user.setUserName(username);
-        user.setPassword("MerckApp1@");
-        loginPage.setUser(user.getUserName());
-        loginPage.setPassword(user.getPassword());
+        login.setLogin(username);
+        login.setPassword("MerckApp1@");
+        loginPage.setUser(login.getLogin());
+        loginPage.setPassword(login.getPassword());
         loginPage.pushLogin();
         loginPage.waitControlOnPnid();
         recipeConsolePage.cleanLastRecipeDisplay();
@@ -101,11 +93,11 @@ public class LoginPageStepsDefinition {
         loginPage.setNewpassword(password);
         loginPage.setConfirmpassword(password);
     }
-    
+
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
-        iEnterUsernameAndPassword(user.getUserName(),user.getPassword());
+        iEnterUsernameAndPassword(login.getLogin(), login.getPassword());
         iPushTheLoginButton();
     }
 
@@ -113,8 +105,8 @@ public class LoginPageStepsDefinition {
     public void iLogout() {
         loginPage.iLogout();
     }
-     
-    @Then( "I see the error message {string}")
+
+    @Then("I see the error message {string}")
     public void iSeetheErrorMessage(String message) {
         loginPage.checkMessage(message);
     }

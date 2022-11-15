@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
-
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
@@ -419,9 +417,9 @@ public class TrendsPage {
 		Date date1 = format.parse(startTime);
 		Date date2 = format.parse(lastTime);
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
-		System.out.print("Time difference:"+difference);
-		Assert.assertTrue(difference<=60);
-		Assert.assertTrue(difference>=50);
+        System.out.print("Time difference:"+difference);
+        Assert.assertTrue(difference<=60);
+        Assert.assertTrue(difference>=45);
 	}
 
 }

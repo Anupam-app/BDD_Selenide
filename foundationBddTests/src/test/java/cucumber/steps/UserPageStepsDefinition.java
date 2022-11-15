@@ -1,13 +1,19 @@
 package cucumber.steps;
 
+import static com.codeborne.selenide.Selenide.switchTo;
 import cucumber.util.I18nUtils;
+import dataobjects.Login;
+import dataobjects.Report;
 import dataobjects.User;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
 
@@ -15,16 +21,32 @@ public class UserPageStepsDefinition {
 
     private final UserPage userPage;
     private final User user;
+    private final Report report;
+    private final ReportsPage reportPage;
+    private final Login login;
 
-    public UserPageStepsDefinition(UserPage userPage, User user) {
+    public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, Report report, User user, Login login) {
         this.userPage = userPage;
         this.user = user;
+        this.report = report;
+        this.reportPage = reportPage;
+        this.login = login;
     }
 
     @Given("I search {string} user")
     public void iSearchUser(String user) {
         this.user.setUserName(user);
         userPage.setSearch(user);
+    }
+    
+    @When("I see the user is locked")
+    public void iSeeUserLocked() {
+        userPage.UserLocked(this.user.getUserName());
+    }
+    
+    @When("I see the user is unlocked")
+    public void iSeeUserUnLocked() {
+        userPage.UserUnLocked(this.user.getUserName());
     }
 
     @When("I search the user")
@@ -46,6 +68,11 @@ public class UserPageStepsDefinition {
     public void iModifyUser() {
         userPage.edit(user.getUserName());
     }
+    
+    @When("I cant edit the user")
+    public void iCannotModifyUser() {
+        userPage.cannotEdit(user.getUserName());
+    }
 
     @When("I change the employee id with a random string")
     public void iChangeTheEmployeeIdWithARandomString() {
@@ -57,7 +84,12 @@ public class UserPageStepsDefinition {
     public void iSaveMyChanges() {
         userPage.saveMyChanges();
         userPage.waitForUserCreationNotification(user.getUserName());
-
+        userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
+    }
+    
+    @When("I save the new user")
+    public void iSaveNewUser() {
+        userPage.saveMyChanges();
     }
 
     @When("I disable the user")
@@ -68,6 +100,7 @@ public class UserPageStepsDefinition {
     @Then("the user is disabled")
     public void theUserIsDisabled() {
         Assert.assertTrue(userPage.isUserDisabled());
+        userPage.cancel();
     }
 
     @Then("I enable the user")
@@ -78,6 +111,7 @@ public class UserPageStepsDefinition {
     @Then("the user is enabled")
     public void theUserIsEnabled() {
         Assert.assertTrue(userPage.isUserEnabled());
+        userPage.cancel();
     }
 
     @Then("the employee id is equal to the string input")
@@ -98,6 +132,11 @@ public class UserPageStepsDefinition {
         this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
         userPage.createNewUser(this.user.getUserName());
     }
+	
+	@And("default users are not editable")
+    public void verifyEditing() {
+        userPage.usersNotEditable();
+    }
 
     @When("I select role {string}")
     public void iSelectRole(String user) {
@@ -109,14 +148,12 @@ public class UserPageStepsDefinition {
     public void iEnterRandomFirstName() {
         this.user.setFirstName(RandomStringUtils.randomAlphabetic(10));
         userPage.enterFirstName(this.user.getFirstName());
-
     }
 
     @When("I enter random lastname")
     public void iEnterRandomLastName() {
         this.user.setLastName(RandomStringUtils.randomAlphabetic(10));
         userPage.enterLastName(this.user.getLastName());
-
     }
 
     @When("I enter random employeeID")
@@ -158,6 +195,11 @@ public class UserPageStepsDefinition {
     public void theEmployeeIdIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
+    
+    @Then("the role is {string}")
+    public void theRoleIsEqualToTheExpectedOne(String role) {
+        Assert.assertEquals(userPage.getRoleNameFromForm(), role);
+    }
 
     @Then("I see user details are changed")
     public void verifyUserDetails() {
@@ -169,6 +211,18 @@ public class UserPageStepsDefinition {
         Assert.assertEquals(user.getMobNum(), userPage.getMobNumFromForm());
         Assert.assertEquals(user.getDeptName(), userPage.getDeptNameFromForm());
         userPage.cancelUser();
+    }
+    
+    @Then("I see the {string} user modified in report")
+    public void iVerifyThatUserIsModified(String userName) throws Exception {
+    	Map<String,String> list=new HashMap<String,String>();  
+    	  list.put("department",user.getDeptName());  
+    	  list.put("phoneNumber",user.getMobNum());  
+    	  list.put("role",user.getRoleName());  
+    	  list.put("employeeID",user.getEmployeeId()); 
+    	  list.put("email",user.getEmailId()); 
+        this.report.checkModifiedUser(reportPage.getPdfUrl(), userName, this.login.getLogin(), list);
+        switchTo().parentFrame();
     }
 
     @When("I click on reset password")

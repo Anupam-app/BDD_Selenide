@@ -44,7 +44,7 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user], [salt], [iv]) VALUES (24, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'crzSXCuuCu', N'true', 0x020000001C635811CD2D5098884C5F67E76023CF2F2AE091A35842FE1951066723F21BC2EB9B17E53A9EA61856D4E90809863E34D336378230FA8D2B90CCBA540573DA3897883594A5D96C6766B9836AA39DCBF65B6C5F9457FA85E179CB52D0D7C20906, N'PENMCEhrEi', NULL, N'fIqklJQHtS', N'0123456789', N'RUJLXOVYAz', 1, 0, 0, NULL, 0, N'6B2mrQNwGpfQVCVz0WFF9g==', N'MesNzA9xENR8gVm/S5Bm7A==')
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (18, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', 0x02000000B932F9236786215DFE9938AAE6F25E106267862E58E64F45F11D49C70B931016ED680B063A12EA8CE2B12D6D139DC3ED0FEFB9D1B29906ABD82083332B10840F6F759A4C0DD118A34C08CB980B766C1FE85A55B5AB40384EDED3B10B848D145E, N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user], [salt], [iv], [password_expiry_date]) VALUES (18, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', 0x02000000626FB4C10ABF90AA4461FC84AB6BABB8B1FADB9869ED2395577373BC3F022E25D13AD6B5C5A4F2FE04E257C781E4CBD4EF23795815BC7793F7E9D5294B456C8DCDFD4F3C90003AB2B758478DAA5ABCAEDABDFCF3B1C36FE2F5B287960D8A4F5E, N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0, N'a9GxMBSiBNT2JZbX5e3ZRA==', N'EIUcBkOiX+2toB0rxvNqAA==', NULL)
 GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
@@ -108,6 +108,10 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (6, 56)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 83)
 GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 56)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 62)
+GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 58)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 64)
@@ -116,13 +120,9 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 69)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 70)
 GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 73)
-GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 83)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 85)
-GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 86)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 117)
 GO

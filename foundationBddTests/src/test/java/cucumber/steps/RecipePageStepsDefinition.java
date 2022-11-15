@@ -1,9 +1,8 @@
 package cucumber.steps;
 
 import cucumber.util.I18nUtils;
+import dataobjects.Login;
 import dataobjects.Recipe;
-import dataobjects.User;
-import io.cucumber.java.PendingException;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -19,12 +18,12 @@ public class RecipePageStepsDefinition {
 
     private RecipePage recipePage;
     private Recipe recipe;
-    private User user;
+    private Login login;
 
-    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe,User user) {
+    public RecipePageStepsDefinition(RecipePage recipePage, Recipe recipe,Login login) {
         this.recipePage = recipePage;
         this.recipe = recipe;
-        this.user = user;
+        this.login = login;
     }
 
     @Given("I go to recipe page")
@@ -142,7 +141,7 @@ public class RecipePageStepsDefinition {
 
     @When("I approve recipe")
     public void iApproveRecipe() {
-        recipePage.approveRecipe(user.getPassword());
+        recipePage.approveRecipe(login.getPassword());
     }
 
     @Then("Recipe should be approved")
