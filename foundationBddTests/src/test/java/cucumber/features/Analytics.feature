@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Analytics creation
 
   @SMOKE

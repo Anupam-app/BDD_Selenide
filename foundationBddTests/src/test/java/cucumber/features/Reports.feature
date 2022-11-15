@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Report administration
 
 Background:
