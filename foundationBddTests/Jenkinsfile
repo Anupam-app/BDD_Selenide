@@ -164,13 +164,12 @@ pipeline {
                         return
                     }
 
-                    def commandTag = '';
+                    def commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
 
                     if(env.Mode != null && env.Mode != ''){
-                        commandTag=' -Dcucumber.filter.tags="@'+env.Mode+' and @'+env.PDP
+                        commandTag+=' and @'+env.Mode
                     }
                     else{
-                        commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
                         if(env.PDP != 'CRS'){
                             def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
                             if(response.status==200){
@@ -178,14 +177,11 @@ pipeline {
 
                                jsonResponse.features.each{val->
                                     commandTag+=' or @'+val
-                                }
-
+                               }
                             }
                         }
-                        commandTag+='"'
                     }
-					
-					commandTag+=' -DtestFailureIgnoreProp=true'
+					commandTag+='" -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 
