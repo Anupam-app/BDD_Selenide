@@ -1,28 +1,26 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.*;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import pageobjects.utility.SelenideHelper;
-import pageobjects.utility.SortHelper;
-
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.*;
+import com.codeborne.selenide.SelenideElement;
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
-
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.*;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.SortHelper;
 
 public class RecipePage {
     private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
@@ -40,7 +38,7 @@ public class RecipePage {
 
     private final String NOTIFICATION_TEXT_IMPORT = "The recipe %s was successfully imported!";
     private final String NOTIFICATION_TEXT_EXPORT = "The recipe %s was successfully exported!";
-    
+
     private final String XPATH_RecipeColumnName = "//*[@id='recipeListTable']/thead/tr/th[%d]";
     private final String XPATH_RecipeColumnName_Value = "//*[@id='recipeListTable']/tbody/tr[%d]/td[%d]";
 
@@ -87,17 +85,17 @@ public class RecipePage {
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
-    private final SelenideElement dateColumn=$(By.xpath("//input[@name='dateRange']"));
-	private final SelenideElement datePopup=$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
-	private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-	private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
-	private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
-	private final SelenideElement startDateDesendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-	private final SelenideElement startDateAsendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
-	private final SelenideElement startDateRep=$(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
-	private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
-	private ElementsCollection availableDates=$$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
-	Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
+    private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
+    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
+    private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
+    private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
+    private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
+    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
+    private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
+    private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
+    private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
+    Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
 
     public void goTo() {
         recipePageLinkText.click();
@@ -116,18 +114,18 @@ public class RecipePage {
     public void goToBrowserMode() {
         browserLinkText.click();
     }
-    
-    public void verifyList() throws InterruptedException { 
-        	$$(recipeListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
+
+    public void verifyList() throws InterruptedException {
+        $$(recipeListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
     }
-    
+
     public void verifyColoumn(String columnName, String tab, int columnIndex) {
-    		$(By.xpath(String.format(XPATH_RecipeColumnName, columnIndex))).shouldHave(text(columnName));
-    		for(int i=1; i<=recipeListTable.size();i++) {
-    			Assert.assertFalse($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i ,columnIndex))).getText().isBlank()); 
-    		}
-    		
-    	}
+        $(By.xpath(String.format(XPATH_RecipeColumnName, columnIndex))).shouldHave(text(columnName));
+        for (int i = 1; i <= recipeListTable.size(); i++) {
+            Assert.assertFalse($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, columnIndex))).getText().isBlank());
+        }
+
+    }
 
     public void edit(String recipeName) {
         commonWaiter($(By.xpath(String.format(xpathEditPage, recipeName))), Condition.visible).click();
@@ -151,13 +149,13 @@ public class RecipePage {
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
-    
+
     public void addStep() {
-    	SelenideElement searchTextBox = $(By.className("search-txt-box"));
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
         switchTo().parentFrame();
-        
+
     }
 
     public void saveRecipe(String recipeName) {
@@ -168,11 +166,11 @@ public class RecipePage {
         recipeInputSave.setValue(recipeName);
         $(By.className("btn_primary")).click();
     }
-    
-    public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {   	
-        commonWaiter(XPATH_WARNNOTIFICATION_TEXT,visible);
+
+    public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
+        commonWaiter(XPATH_WARNNOTIFICATION_TEXT, visible);
         XPATH_WARNNOTIFICATION_TEXT.shouldHave(text(message));
-        $(By.xpath("//*[@class='btn-primary']")).click();         
+        $(By.xpath("//*[@class='btn-primary']")).click();
     }
 
     public void saveModifiedRecipe() {
@@ -244,7 +242,7 @@ public class RecipePage {
         browserLinkText.click();
         editorLinkText.click();
     }
-    
+
     public void inactiveRecipe(String password) {
         statusDraft.click();
         selectInReview.click();
@@ -259,7 +257,7 @@ public class RecipePage {
         browserLinkText.click();
         editorLinkText.click();
     }
-    
+
     public void rejectTechReviewRecipe() {
         statusDraft.click();
         selectTechReview.click();
@@ -275,7 +273,6 @@ public class RecipePage {
     public String getStatus() {
         return statusApproved.getText();
     }
-
 
 
     public void exportRecipe(String recipeName) {
@@ -306,20 +303,20 @@ public class RecipePage {
         importButton.click();
         SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
         recipeInputSave.click();
-        SelenideHelper.commonWaiter(recipeInputSave,visible).clear();
-        var value=RandomStringUtils.randomAlphabetic(10);
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
+        var value = RandomStringUtils.randomAlphabetic(10);
         recipeInputSave.setValue(value);
         saveButton.click();
         browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
-    
+
     public void chooseOption(String option) {
         $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
         $(By.xpath(String.format(chooseOption, option))).click();
         Selenide.sleep(5000);
 
     }
-    
+
     public void printRecipe(String recipeName) throws AWTException {
         $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
         $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']")).shouldBe(visible);
@@ -369,110 +366,110 @@ public class RecipePage {
         var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
         SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
     }
-    
-    public void selectRecipeStatusImported(String status,String imported) {
-		commonWaiter(filterIcon, visible);
-		filterIcon.click();
-		commonWaiter($(By.xpath(String.format(upIcon, 1))), visible);
+
+    public void selectRecipeStatusImported(String status, String imported) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        commonWaiter($(By.xpath(String.format(upIcon, 1))), visible);
         $(By.xpath(String.format("//span[text()='%s']", status))).click();
         arrowIcon.click();
         commonWaiter($(By.xpath(String.format(upIcon, 2))), visible);
         $(By.xpath(String.format("//span[text()='%s']", imported))).click();
-        if(imported.equalsIgnoreCase("Yes")) {
-        	arrowIcon.click();
-        	$(By.xpath(String.format("//div[text()='Import Status']/following::span[text()='%s']", status))).click();
+        if (imported.equalsIgnoreCase("Yes")) {
+            arrowIcon.click();
+            $(By.xpath(String.format("//div[text()='Import Status']/following::span[text()='%s']", status))).click();
         }
-		applyFilterButton.click();
-	}
-    
-    public void verifyRecipeStatusImported(String status,String imported) {
-    	for(int i=1; i<=recipeListTable.size();i++) {
-    		Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value,i, 3))).getText().equals(imported) || filterError.getText().equals("No recipes matching with the applied filter.") );
-        	Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value,i, 7))).getText().equals(status)|| filterError.getText().equals("No recipes matching with the applied filter.") );
-        	if(imported=="Yes") {
-        		Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value,i, 4))).getText().equals(status)|| filterError.getText().equals("No recipes matching with the applied filter.") );
+        applyFilterButton.click();
+    }
+
+    public void verifyRecipeStatusImported(String status, String imported) {
+        for (int i = 1; i <= recipeListTable.size(); i++) {
+            Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, 3))).getText().equals(imported) || filterError.getText().equals("No recipes matching with the applied filter."));
+            Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, 7))).getText().equals(status) || filterError.getText().equals("No recipes matching with the applied filter."));
+            if (imported == "Yes") {
+                Assert.assertTrue($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, 4))).getText().equals(status) || filterError.getText().equals("No recipes matching with the applied filter."));
             }
-    	}
-	}
-    
+        }
+    }
+
     public void selectDateRange(String option) throws InterruptedException {
-		commonWaiter(dateColumn, visible);
-		dateColumn.click();
-		ElementsCollection options = dateOptionsRprt;
-		for (SelenideElement element : options) {
-			if (element.getText().equalsIgnoreCase(option)) {
-				element.click();
-				break;
-			}
-		}
+        commonWaiter(dateColumn, visible);
+        dateColumn.click();
+        ElementsCollection options = dateOptionsRprt;
+        for (SelenideElement element : options) {
+            if (element.getText().equalsIgnoreCase(option)) {
+                element.click();
+                break;
+            }
+        }
 
-		if (option.equalsIgnoreCase("Custom Range")) {
-			commonWaiter(previousMonth, visible);
-			previousMonth.click();
-			commonWaiter(previousMonth, visible);
-			int index = getRandomNumber(0, availableDates.size() / 2);
-			availableDates.get(index).click();
-			index = getRandomNumber(availableDates.size() / 2, availableDates.size());
-			availableDates.get(index).click();
-			
-		}
+        if (option.equalsIgnoreCase("Custom Range")) {
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            commonWaiter(previousMonth, visible);
+            int index = getRandomNumber(0, availableDates.size() / 2);
+            availableDates.get(index).click();
+            index = getRandomNumber(availableDates.size() / 2, availableDates.size());
+            availableDates.get(index).click();
 
-	}
-    
+        }
+
+    }
+
     public int getRandomNumber(int min, int max) {
-		return (int) ((Math.random() * (max - min)) + min);
-	}
+        return (int) ((Math.random() * (max - min)) + min);
+    }
 
-	public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
-		boolean isTrue = false;
-		switch (dateRange) {
-		case "Today":
-		case "Yesterday":
-			String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
-			if (startDateRep.isDisplayed()) {
-				sortList("Last Modified On", false);
-				String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				sortList("Last Modified On", true);
-				startDateRow1 = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-				if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		case "Last 7 Days":
-		case "Last 30 Days":
-		case "This Month":
-		case "Last Month":
-		case "Custom Range":
-			commonWaiter(dateColumn, visible);
-			String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-			Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
-			String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-			Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
-			if (startDateRep.isDisplayed()) {
-				sortList("Last Modified On", false);
-				String startDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
-				sortList("Last Modified On", true);
-				String endDateRow = startDateRep.getText().split(" ")[0].trim();
-				Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-				if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-						&& (selectedDesendingDate.equals(selectedDate2)
-								|| selectedDesendingDate.before(selectedDate2))) {
-					isTrue = true;
-				}
-			} else if (noDatamsg.isDisplayed()) {
-				isTrue = true;
-			}
-			break;
-		}
-		return isTrue;
-	}
+    public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+                if (startDateRep.isDisplayed()) {
+                    sortList("Last Modified On", false);
+                    String startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    sortList("Last Modified On", true);
+                    startDateRow1 = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+                Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
+                String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+                Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+                if (startDateRep.isDisplayed()) {
+                    sortList("Last Modified On", false);
+                    String startDateRow = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+                    sortList("Last Modified On", true);
+                    String endDateRow = startDateRep.getText().split(" ")[0].trim();
+                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
+                    if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
+                            && (selectedDesendingDate.equals(selectedDate2)
+                            || selectedDesendingDate.before(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
+    }
 
 
     public void checkSortedElement(String columnName, boolean descending) {
