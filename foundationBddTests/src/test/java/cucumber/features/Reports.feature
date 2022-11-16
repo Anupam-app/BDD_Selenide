@@ -1,8 +1,6 @@
 @COMMON
 Feature: Report administration
 
-Background:
-
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
 	Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
@@ -92,12 +90,23 @@ Background:
     Then I should see the report signed
     And I should see the report file presence
 
+  @SMOKE
+  Scenario: Generate and sign a custom report
+    Given I am logged in as "Bio4CAdmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select report include "Audit Trail"
+    And I select report include "Run Summary"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    And I esign the report
+    Then I should see the report signed
+    And I should see the report file presence
+    
   Scenario: Generate run history report and check report content
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
     And I choose corresponding recipe run
@@ -110,10 +119,7 @@ Background:
 
   Scenario: Generate Audittrail report and verify that user information are consistent
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Audit Trail"
 	And I select user in dropdown "Bio4CAdmin"
@@ -133,6 +139,34 @@ Background:
     And I esign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
 
+  Scenario: BIOCRS-5818 |Generate a consolidated report with same batch Id
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds with batch id "testBatchId" and product id "testProductId"
+    When I goto report management page
+    And I wait for recipes in runs
+    And I select report from dropdown "Consolidated"
+    And I choose recipes from consolidation run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify consolidate summary report
+
+  Scenario: BIOCRS-5818 |Generate a consolidated report with different batch Id
+    Given I am logged in as "Bio4CAdmin" user
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    When I goto report management page
+    And I wait for recipes in runs
+    And I select report from dropdown "Consolidated"
+    And I choose recipes from consolidation run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify consolidate summary report
+
   Scenario: Verify Save As options in template page
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -151,10 +185,7 @@ Background:
 
  Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
     And I choose corresponding recipe run
