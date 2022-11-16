@@ -22,3 +22,4 @@ public class Recipe {
     String machineName;
     String status;
 }
+
