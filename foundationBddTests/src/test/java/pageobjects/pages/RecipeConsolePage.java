@@ -4,6 +4,7 @@ import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.Wait;
 import com.codeborne.selenide.SelenideElement;
 import dataobjects.Recipe;
 import org.openqa.selenium.By;
@@ -28,7 +29,7 @@ public class RecipeConsolePage {
     private final SelenideElement resumeIcon = $(By.xpath("//img[contains(@src,'RESUME')]"));
     private final SelenideElement jumpStepIcon = $(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
     private final SelenideElement inputStepNumber = $(By.xpath("//input[@id='standard-number']"));
-    private final SelenideElement errorMessage = $(By.xpath("//h6[contains(@class,'MuiTypography-subtitle1') and contains(text(),'invalid step number enter')]"));
+    private final SelenideElement errorRecipeStepMessage = $(By.xpath("(//*[contains(@class,'MuiTypography-subtitle1')])[6]"));
 
     private final SelenideElement restartButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "RESTART")));
     private final SelenideElement yesButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes")));

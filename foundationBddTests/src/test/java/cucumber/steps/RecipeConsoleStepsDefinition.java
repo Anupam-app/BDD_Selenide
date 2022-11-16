@@ -24,7 +24,7 @@ public class RecipeConsoleStepsDefinition {
     public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
-        this.report=report;
+        this.report = report;
         this.report.setRecipes(this.recipes);
     }
 
@@ -85,7 +85,7 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
     }
 
-    private void generateRecipeValues(String batchId,String productId) {
+    private void generateRecipeValues(String batchId, String productId) {
         if (StringUtils.isNotEmpty(productId)) {
             this.currentRecipe.setProductId(productId);
         } else {
@@ -116,17 +116,17 @@ public class RecipeConsoleStepsDefinition {
     public void iClickOnPauseButton() {
         recipeConsolePage.clickPauseButton();
     }
-    
+
     @Then("control should be on resume button")
     public void ctrlOnResumeButton() {
         Assert.assertTrue(recipeConsolePage.verifyResumeButton());
     }
-    
+
     @Then("control should be on pause button")
     public void ctrlOnPauseButton() {
         Assert.assertTrue(recipeConsolePage.verifyPauseButton());
     }
-    
+
     @Then("control should be on rerun button")
     public void ctrlOnrerunButton() {
         Assert.assertTrue(recipeConsolePage.verifyReRunButton());
@@ -160,12 +160,12 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I should see the recipe run {string}")
     public void iVerifyRecipeAbort(String status) {
-    	if(status.equalsIgnoreCase("Aborted")) {
-        Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
-        recipeConsolePage.clickOnOk();
+        if (status.equalsIgnoreCase("Aborted")) {
+            Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
+            recipeConsolePage.clickOnOk();
         } else if (status.equalsIgnoreCase("Completed")) {
-        Assert.assertEquals("Completed", this.recipeConsolePage.getExecutionStatusText());
-    	}
+            Assert.assertEquals("Completed", this.recipeConsolePage.getExecutionStatusText());
+        }
     }
 
     @And("I clear the recipe")
@@ -173,51 +173,59 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.clearRecipe();
     }
 
-    @Then("I should see Error message")
-    public void errorMessageOfJumpStep() throws InterruptedException {
-    	recipeConsolePage.jumpStepErrorMessage();
+    @Then("I should see error message about recipe step")
+    public void errorMessageOfJumpStep() {
+        recipeConsolePage.jumpRecipeStepErrorMessage();
     }
+
     @Then("I jump to Step no and verify step execution")
     public void stepJumpAndStepVerifyExecution(DataTable table) {
-    	List<String> list = table.asList(String.class);
-    	for (int i = 1; i < list.size(); i++) {
-    	recipeConsolePage.verifyStep(list.get(i));
-    	
-    	}	
+        List<String> list = table.asList(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            recipeConsolePage.verifyStep(list.get(i));
+        }
     }
+
     @And("I verify Manual Operation tab is {string}")
     public void manualOperation(String status) {
-    	recipeConsolePage.manualOperation(status);
+        recipeConsolePage.manualOperation(status);
     }
+
     @And("I verify recipe execution is paused")
     public void pauseButton() {
-    	recipeConsolePage.clickResumeButton();
+        recipeConsolePage.clickResumeButton();
     }
+
     @Then("recipe execution is resumed")
     public void validationRecipeExecution() {
-    	recipeConsolePage.pauseButton();
+        recipeConsolePage.pauseButton();
     }
+
     @When("I re-run the recipe")
     public void reRunRecipe() {
-    	recipeConsolePage.reRun();
+        recipeConsolePage.reRun();
     }
-   @When("I Process hold the system")
-   public void processHold() {
-	   recipeConsolePage.holdSystem();	
-	   
-   }
-   @Then("I verify Recipe Run tab is {string}")
-   public void recipeRun(String status) {
-	   recipeConsolePage.recipeRun(status);
-   }
-   @And("I restart the Process hold")
-   public void restartProcess() {
-	   recipeConsolePage.restartSystem();
-   }
-   @When("I select {string} tab")
-   public void recipeOperation(String status) {
-	   if(status.equalsIgnoreCase("Manual operation")) {
-		   
-	   }
-   }
+
+    @When("I Process hold the system")
+    public void processHold() {
+        recipeConsolePage.holdSystem();
+
+    }
+
+    @Then("I verify Recipe Run tab is {string}")
+    public void recipeRun(String status) {
+        recipeConsolePage.recipeRun(status);
+    }
+
+    @And("I restart the Process hold")
+    public void restartProcess() {
+        recipeConsolePage.restartSystem();
+    }
+
+    @When("I select {string} tab")
+    public void recipeOperation(String status) {
+        if (status.equalsIgnoreCase("Manual operation")) {
+
+        }
+    }
 }
