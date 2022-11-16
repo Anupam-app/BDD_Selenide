@@ -16,7 +16,14 @@ public class DriverHooks {
 
     @Before
     public void before(Scenario scenario) throws IOException {
-        WebDriverManager.chromedriver().setup();
+        var driverVersion = System.getenv("DRIVER_VERSION");
+        var browserVersion = System.getenv("BROWSER_VERSION");
+
+        if(driverVersion != null){
+            WebDriverManager.chromedriver().driverVersion(driverVersion).browserVersion(browserVersion).setup();
+        }else {
+            WebDriverManager.chromedriver().setup();
+        }
         WebDriverUtils.setUp("Chrome");
         TimezoneUtils.setTimezoneDiffInSecondsFromProperties();
         TrustAllCertificates.install();

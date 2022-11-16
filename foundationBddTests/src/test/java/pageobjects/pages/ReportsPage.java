@@ -4,7 +4,6 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -50,7 +49,7 @@ public class ReportsPage {
     private final String XPATH_TemplateColumnName = "//*[@id=\"templateListTable\"]/thead/tr/th[%d]";
     private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
     private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
-    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr[%d]/td[%d]";
     private final String XPATH_UserColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[4]";
     private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
     private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
@@ -191,25 +190,23 @@ public class ReportsPage {
     }
 
     public void verifyColoumn(String columnName, String tab, int columnIndex) {
-        switch (tab) {
-            case "runs":
-                $(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, columnIndex))).getText().isBlank());
-                break;
-            case "templates":
-                $(By.xpath(String.format(XPATH_TemplateColumnName, columnIndex))).shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_TemplateColumnName_Value, columnIndex))).getText().isBlank());
-                break;
-            case "reports":
-                $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, columnIndex))).getText().isBlank());
-                break;
-        }
+
+    	switch (tab){
+    	case "runs": 
+    		$(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
+    		Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, columnIndex))).getText().isBlank()); 
+    		break;  
+        case "templates": 
+        	$(By.xpath(String.format(XPATH_TemplateColumnName, columnIndex))).shouldHave(text(columnName));
+        	Assert.assertFalse($(By.xpath(String.format(XPATH_TemplateColumnName_Value, columnIndex))).getText().isBlank()); 
+        	break;  
+        case "reports": 
+        	$(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
+        	break;  
+    	}
     }
 
-
     public void selectReport(String reportname) {
-        Selenide.sleep(5000);
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
         $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).click();
     }
@@ -316,8 +313,7 @@ public class ReportsPage {
     }
 
     public void editReportOrTemplate(String templateName) {
-        openReportTemplate(templateName);
-
+    	openReportTemplate(templateName);
 
     }
 
@@ -398,21 +394,23 @@ public class ReportsPage {
     }
 
     public void includeReport(String reportInclude) {
-        if (reportInclude == "Alarms") {
-            $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
-            saveAlarmButton.click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
-
-        } else if (reportInclude.contains("Trends")) {
-            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
-            $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-            trendsAddButton.click();
-
-        } else {
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
-        }
+    	if(reportInclude=="Alarms") {
+    		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();    		
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+    		saveAlarmButton.click();
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
+    		
+    	}
+    	else if(reportInclude.contains("Trends")){
+    		
+    		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
+    		$(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
+    		   		
+    	}
+    	else {
+    		$(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
+    	}
     }
 
     public void saveReportTemplate() {
@@ -526,25 +524,36 @@ public class ReportsPage {
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-        for (int i = 1; i < 7; i++) {
-            Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
+        for(int row=1;row<=reportListTable.size();row++) {
+        	if($(By.xpath(String.format(XPATH_ReportColumnName_Value,row, 1))).getText().equalsIgnoreCase(reportName)) {
+        		for (int i=1;i<7;i++) {
+        	        Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value,row, i))).getText().isBlank());
+        	    }
+        	break;
+        	}
         }
     }
-
+    
     public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
-        Thread.sleep(5000);
-        for (int i = 1; i <= (auditListTable.size()); i++) {
-            Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
-            SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
-            Date currentdate = new Date();
-            String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
-            Date eventDateTime = formatter.parse(eventDate);
-            int diffInDays = (int) ((currentdate.getTime() - eventDateTime.getTime())
-                    / (1000 * 60 * 60 * 24));
-            Assert.assertTrue(diffInDays <= 7);
+    	Thread.sleep(5000);
+        for (int i=1;i<=(auditListTable.size());i++) {
+        	Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
+        	SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
+        	Date currentdate = new Date();
+        	String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
+        	Date eventDateTime = formatter.parse(eventDate);
+        	int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
+        	        / (1000 * 60 * 60 * 24) );
+        	if (diffInDays <= 7) {
+        		
+        		Assert.assertTrue(true);
+        	}
+        	else {
+        		Assert.assertTrue(false);
+        	}
+        	
         }
-    }
-
+    }   
     public void checkTableContainsTemplate(String templateName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);
     }

@@ -21,6 +21,5 @@ public class Recipe {
     String endDate;
     String machineName;
     String status;
-
 }
 
