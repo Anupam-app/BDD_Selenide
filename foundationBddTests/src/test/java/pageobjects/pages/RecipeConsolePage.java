@@ -64,13 +64,12 @@ public class RecipeConsolePage {
     private final SelenideElement clearRecipeButton = $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
     
 
-    private Recipe recipe;
+private Recipe recipe;
     
     public RecipeConsolePage(Recipe recipe) {
       
         this.recipe = recipe;
     }
-
     public void holdAndRestart() {
         if (restartButton.isDisplayed()) {
             restartSystem();
@@ -90,9 +89,7 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        if(expandIcon.isDisplayed()){
-            expandIcon.click();
-        }
+        expandIcon.click();
     }
 
     public void loadRecipe(String recipeName) {
@@ -108,35 +105,6 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
     }
-
-    public String startAndWaitRecipe(Recipe recipe, int seconds) {
-
-        String runId;
-        String[] dateParts = null;
-        String[] dateparts1 = null;
-
-        runIcon.waitUntil(Condition.visible, 20000l);
-        runIcon.click();
-        runId = runIdTextbox.getValue();
-        productIdTextbox.setValue(recipe.getProductId());
-        batchIdTextbox.click();
-        batchIdTextbox.sendKeys(recipe.getBatchId());
-        batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(recipe.getBeforeComments());
-        okButton.click();
-        abortIcon.waitUntil(Condition.visible, 5000l);
-        abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
-        SelenideHelper.commonWaiter(startDate, visible);
-        recipe.setStartDate(startDate.getText());
-        recipe.setEndDate(endDate.getText());
-        recipe.setMachineName(machineName.getText());
-        recipe.setStatus(executionStatusText.getText());
-        preRunCommentsText.sendKeys(recipe.getAfterComments());
-        okButton.click();
-
-        return runId;
-    }
-
 
     public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments,
     		int seconds) {
@@ -166,7 +134,7 @@ public class RecipeConsolePage {
         this.recipe.setAfterComments(afterComments);
         this.recipe.setMachineName(machineName.getText());
         okButton.click();
-        
+
         return runId;
     }
 
@@ -182,16 +150,15 @@ public class RecipeConsolePage {
     }
 
     public void isExecuted() {
-        rerunIcon.waitUntil(Condition.visible, 20000l);
+        rerunIcon.waitUntil(Condition.visible, 5000l);
     }
 
     public void clickPauseButton() {
-        pauseIcon.waitUntil(visible, 50001).click();
+        pauseIcon.click();
     }
 
     public void clickResumeButton() {
         resumeIcon.waitUntil(Condition.visible, 5000l).click();
-        
     }
 
     public void clickOnJumpToStep(String stepNumber) {
@@ -200,7 +167,7 @@ public class RecipeConsolePage {
         inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
-        okStepButton.waitUntil(Condition.visible, 4000l).click(); 
+        okStepButton.waitUntil(Condition.visible, 4000l).click();
     }
 
     public void clickOnAbortButton(String afterComments) {
