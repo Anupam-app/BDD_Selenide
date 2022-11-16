@@ -13,6 +13,11 @@ In order to be able to build all the modules, the following software have to be 
 * Eclipse maven in the marketplace if not installed
 * Eclipse install new software Lombok: https://projectlombok.org/setup/eclipse
 
+## Set timezone properties
+
+Launch this script in the CIP: src\test\resources\executablescripts\common\setTimezoneProperties.ps1
+It will generate an offset-timezone.properties file just next to the ps1 file
+Replace the file in config/offset-timezone.properties with the new file
 
 ##### Launch tests
 

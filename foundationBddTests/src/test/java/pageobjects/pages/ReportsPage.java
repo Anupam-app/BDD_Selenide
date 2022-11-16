@@ -441,7 +441,7 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
     }
 
-    public void selectRunWithWaiting(String reportTemplateName, String run) throws InterruptedException {
+    public void selectRunWithWaiting(String reportTemplateName, String run) {
 
         // after finished a recipe, it takes some times to have the run in page
         // polling report run page
@@ -906,5 +906,14 @@ public class ReportsPage {
 
     public void seeContent(String expectedText) {
         commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
+    }
+
+    public void selectParams(String parameter) {
+        commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))), visible);
+        $(By.xpath(String.format(XPATH_TRENDS_PARAMS, parameter))).click();
+    }
+
+    public boolean isRunDisplayed(String run) {
+        return $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).isDisplayed();
     }
 }
