@@ -106,7 +106,7 @@ public class ReportsFilterStepsDefinition {
 		List<String> options = datatable.asList();
 		for (String datarange : options) {
 			reportPage.selectDateRange(datarange);
-			//Assert.assertTrue(reportPage.verifyDateRanges(datarange));
+			Assert.assertTrue(reportPage.verifyDateRanges(datarange));
 		}
 	}
 
@@ -165,8 +165,8 @@ public class ReportsFilterStepsDefinition {
 	public void iVerifyConsilidatedColumnsSorted(DataTable datatable) {
 		List<String> options = datatable.asList();
 		for (String columnName : options) {
-			reportPage.sortListConsolidated(columnName, true);			
-			reportPage.checkSortedElementConsolidate(columnName, true);			
+			reportPage.sortListConsolidated(columnName, false);			
+			reportPage.checkSortedElementConsolidate(columnName,false);			
 		}
 	}
 	@Then("I should see consolidated status as {string}")

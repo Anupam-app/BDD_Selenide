@@ -5,6 +5,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
@@ -228,7 +230,6 @@ public class Report {
     }
 
     public void checkUserIsEnabledOrDisabled(String reportUrl, String userName, boolean targetEnable, String userNameLoggedIn) throws IOException {
-
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -248,12 +249,10 @@ public class Report {
                             INTERNAL_USER)) {
                         Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
                     }
-
                     // check user format
                     Assert.assertTrue(String.format(
                             "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
                             userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
-
                     Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
                     Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
                     Assert.assertTrue(currValueColumnValue.contains(Boolean.toString(!targetEnable)));
@@ -262,6 +261,75 @@ public class Report {
                     Assert.assertTrue(attributeColumnValue.contains("enabled"));
                 }
             }
+            break;
+        }
+    }
+	
+	public void checkModifiedUser(String reportUrl, String userName, String userNameLoggedIn,Map<String,String> list) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (Table reportTable : reportTables) {
+        	for(Map.Entry m:list.entrySet()){  
+        		//check first row
+        		if((reportTable.getRows().get(1).get(5).getText(false)).equals(m.getKey())) {
+                	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(1).get(6).getText(false)));
+            	}
+        		//check from 2nd row till 5th row in PDF table
+        		for (int rowno=2;rowno<6;rowno++) {
+        			if((reportTable.getRows().get(rowno).get(0).getText(false)).equals(m.getKey())) {
+                    	Assert.assertTrue(m.getValue().equals(reportTable.getRows().get(rowno).get(1).getText(false)));
+                    }
+                 }
+        	}
+            break;
+        }
+    }
+    
+
+    public void checkRecipeStatus(String reportUrl, String recipeName, String status, String userNameLoggedIn) throws IOException {
+
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (Table reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                // start from 1 to skip the header row
+            	for (int i=1;i<3;i++) {
+            		String appNameColumnValue = reportTable.getRows().get(i).get(1).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(2).getText(false);
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String attributeColumnValue = reportTable.getRows().get(i).get(5).getText(false);
+                    String currValueColumnValue = reportTable.getRows().get(i).get(6).getText(false);
+                    String preValueColumnValue = reportTable.getRows().get(i).get(7).getText(false);
+                    if (!StringUtils.isEmpty(userColumnValue)) {
+                        // check user is not an internal user
+                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
+                                INTERNAL_USER)) {
+                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                        }
+                        // check user format
+                        Assert.assertTrue(String.format(
+                                "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                        
+                        Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                        Assert.assertTrue(appNameColumnValue.contains("RecipeManagement"));
+                        Assert.assertTrue(recordColumnValue.contains(recipeName));
+                        Assert.assertTrue(attributeColumnValue.contains("status"));
+                        if (i==1) {
+                        	Assert.assertTrue(currValueColumnValue.contains(status));
+                            Assert.assertTrue(List.of("In-Review", "Tech-Review").contains(preValueColumnValue));
+                        }
+                        else {
+                        	Assert.assertTrue(preValueColumnValue.contains("Draft"));
+                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW").contains(currValueColumnValue));
+                        }
+                    }
+            	}
+            }
+
             break;
         }
     }

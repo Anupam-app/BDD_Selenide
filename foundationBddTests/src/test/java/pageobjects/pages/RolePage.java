@@ -4,13 +4,17 @@ package pageobjects.pages;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import dataobjects.RoleAction;
 import org.openqa.selenium.By;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
-
+import pageobjects.utility.SortHelper;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -38,6 +42,13 @@ public class RolePage {
     private SelenideElement selectRoleDropdown = $(By.id("role"));
     
     private final SelenideElement roleNotificationBar = $(By.xpath("//*[@class = 'roleModalNotificationBar error-bar']"));
+	private SelenideElement sortIcon = $(By.xpath("//div[@class='sortNone']"));
+    private final String XPATH_SORTICON= "//div[text()='%s']/child::div[@class='sortNone']";
+    private String roleTableColumnclassValue=null;
+	private final String XPATH_ROLE_COLUMN_HEADER = "//div[@class='roleTableHeader']/div[text()='%s']";
+    private final String XPATH_ORDER_ICON = "//div[@class='%s']";
+	private final String XPATH_ROLE_TABLE = "//div[@class='roleTableHeader']";
+    private final String XPATH_ROLE_COLUMNS = "//div[contains(@class,'%s')]";
     private final String NOTIFICATION_TEXT="Successfully %s role.";
     private final String PERMISSION_TEXT = "//span[text()='%s']";
     
@@ -55,6 +66,31 @@ public class RolePage {
     public void createNewrole(String roleName) {
         createRoleButton.click();
         SelenideHelper.commonWaiter(inputRoleName, Condition.visible).setValue(roleName);
+    }
+	
+	public void sortList(String columnName, boolean descending) {
+        SelenideElement sortAction = getRoleColumnHeader(columnName);
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "sortDesc")));
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "sortAsc")));
+        $(By.xpath(String.format(XPATH_SORTICON, columnName))).click();
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+    
+    public void checkSortedElement(String columnName, boolean descending) {
+    	var index = getAllRoleColumnHeaders().indexOf(columnName);
+    	if(index==0){roleTableColumnclassValue="roleTableColumnOne";}
+    	else if (index==1) {roleTableColumnclassValue="roleTableColumnTwo";}
+    	List<String> getRoles = $$(By.xpath(String.format(XPATH_ROLE_COLUMNS, roleTableColumnclassValue))).texts();
+    	getRoles.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        SortHelper.checkSortedRolesElement(columnName, descending, getRoles);
+    }
+    
+    public List<String> getAllRoleColumnHeaders() {
+        return $$(By.xpath(XPATH_ROLE_TABLE + "/div")).texts();
+    }
+    
+    public SelenideElement getRoleColumnHeader(String columnName) {
+        return $(By.xpath(String.format(XPATH_ROLE_COLUMN_HEADER, columnName)));
     }
 
     public void notification(RoleAction roleAction) {
