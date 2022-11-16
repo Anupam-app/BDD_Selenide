@@ -28,7 +28,7 @@ Feature: Recipe console
     And I click on jump step "2"
     And I click on abort button
     Then I should see the recipe run aborted
-<<<<<<< HEAD
+
 	
  #ToDo  
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step 
@@ -95,9 +95,6 @@ Feature: Recipe console
     And I validate the Start button is displayed and disabled
     And I Process restart
     And I validate the Start button is displayed and enabled 
-    
-    
-    
-=======
     And control should be on rerun button
->>>>>>> 5f5528d97ab5a65a6fd6ee5cf1a3e4f0b3ce85b9
+
+
