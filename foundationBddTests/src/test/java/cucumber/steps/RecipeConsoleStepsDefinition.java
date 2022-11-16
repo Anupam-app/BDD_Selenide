@@ -104,12 +104,12 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("Recipe should be executed")
     public void recipeExecuted() {
-        recipeConsolePage.isExecuted();
+        recipeConsolePage.isExecuted(2);
     }
 
-    @And("I wait the end of the execution of the recipe")
-    public void iWaitTheEndOfTheExecutionOfTheRecipe() throws InterruptedException {
-        recipeConsolePage.isExecuted();
+    @And("I wait the end of the execution of the recipe during {int} seconds")
+    public void iWaitTheEndOfTheExecutionOfTheRecipe(int seconds) {
+        recipeConsolePage.isExecuted(seconds);
     }
 
     @When("I click on pause button")
@@ -163,8 +163,7 @@ public class RecipeConsoleStepsDefinition {
     	if(status.equalsIgnoreCase("Aborted")) {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
         recipeConsolePage.clickOnOk();
-    	}
-    	else if(status.equalsIgnoreCase("Completed")) {
+        } else if (status.equalsIgnoreCase("Completed")) {
         Assert.assertEquals("Completed", this.recipeConsolePage.getExecutionStatusText());
     	}
     }

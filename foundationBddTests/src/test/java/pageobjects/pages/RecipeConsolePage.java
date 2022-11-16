@@ -173,8 +173,8 @@ public class RecipeConsolePage {
         okButton.click();
     }
 
-    public void isExecuted() {
-        rerunIcon.waitUntil(Condition.visible, 5000l);
+    public void isExecuted(int seconds) {
+        rerunIcon.waitUntil(Condition.visible, seconds * 1000l);
     }
 
     public void clickPauseButton() {
@@ -238,23 +238,17 @@ public class RecipeConsolePage {
         SelenideHelper.commonWaiter(clearRecipeButton, visible).click();
     }
 
-    public void jumpStepErrorMessage() throws InterruptedException {
-        Selenide.sleep(1000);
-        SelenideHelper.commonWaiter(errorMessage, visible).wait(1000);
-        System.out.println(errorMessage.getText());
-
-
+    public void jumpRecipeStepErrorMessage() {
+        SelenideHelper.commonWaiter(errorRecipeStepMessage, ownText("invalid step number enter"));
     }
 
     public void verifyStep(String stepNumber) {
         clickOnJumpToStep(stepNumber);
         var reviewStatus = $(By.xpath(String.format(stepNo, stepNumber)));
         SelenideHelper.commonWaiter(reviewStatus, visible);
-
     }
 
     public void manualOperation(String status) {
-
         if (status.equalsIgnoreCase("enabled")) {
             manualOperationButton.waitUntil(visible, 50001).click();
             manualOperationSelected.shouldBe(visible);
