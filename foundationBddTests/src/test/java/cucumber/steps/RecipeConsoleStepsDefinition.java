@@ -2,11 +2,15 @@ package cucumber.steps;
 
 import cucumber.util.I18nUtils;
 import dataobjects.Recipe;
+import dataobjects.Report;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.utility.SelenideHelper;
@@ -14,11 +18,15 @@ import pageobjects.utility.SelenideHelper;
 public class RecipeConsoleStepsDefinition {
 
     private RecipeConsolePage recipeConsolePage;
-    private Recipe recipe;
+    private Recipe currentRecipe;
+    private List<Recipe> recipes;
+    private Report report;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Recipe recipe) {
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report) {
         this.recipeConsolePage = recipeConsolePage;
-        this.recipe = recipe;
+        this.recipes = new ArrayList<>();
+        this.report = report;
+        this.report.setRecipes(this.recipes);
     }
 
     @Given("I expand recipe console in pnid")
@@ -28,7 +36,8 @@ public class RecipeConsoleStepsDefinition {
 
     @Given("I load recipe {string}")
     public void iLoadRecipe(String recipe) {
-        this.recipe.setRecipeName(recipe);
+        this.currentRecipe = new Recipe();
+        this.currentRecipe.setRecipeName(recipe);
         recipeConsolePage.loadRecipe(recipe);
     }
 
@@ -37,24 +46,26 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.holdAndRestart();
     }
 
-    @When("I start and wait recipe execution during {int} seconds")
-    public void iStartAndWaitRecipeExecution(int seconds) {
-        generateRandomRecipeValues();
-        String runId = recipeConsolePage.startAndWaitRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments(), this.recipe.getAfterComments(), seconds);
-        recipe.setRunId(runId);
-    }
-
-    @When("I load recipe {string} and run it during {int} seconds if not done before")
-    public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
-        iGotoRecipeConsole();
-        if (!recipeConsolePage.isRunBefore(recipe)) {
-            iLoadRecipeAndIStartIt(recipe, seconds);
-        }
-    }
-
     private void iLoadRecipeAndIStartIt(String recipe, int seconds) {
         iLoadRecipe(recipe);
         iStartAndWaitRecipeExecution(seconds);
+    }
+
+    private void iLoadRecipeAndIStartIt(String recipe, int seconds, String batchId, String productId) {
+        iLoadRecipe(recipe);
+        iStartAndWaitRecipeExecution(seconds, batchId, productId);
+    }
+
+    @When("I start and wait recipe execution during {int} seconds")
+    public void iStartAndWaitRecipeExecution(int seconds) {
+        iStartAndWaitRecipeExecution(seconds, null, null);
+    }
+
+    public void iStartAndWaitRecipeExecution(int seconds, String batchId, String productId) {
+        generateRecipeValues(batchId, productId);
+        String runId = recipeConsolePage.startAndWaitRecipe(this.currentRecipe, seconds);
+        currentRecipe.setRunId(runId);
+        recipes.add(currentRecipe);
     }
 
     @When("I load recipe {string} and run it during {int} seconds")
@@ -63,17 +74,33 @@ public class RecipeConsoleStepsDefinition {
         iLoadRecipeAndIStartIt(recipe, seconds);
     }
 
-    @When("I start recipe execution")
-    public void iStartRecipeExecution() {
-        generateRandomRecipeValues();
-        recipeConsolePage.startRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments());
+    @When("I load recipe {string} and run it during {int} seconds with batch id {string} and product id {string}")
+    public void iStartAndWaitRecipeExecution(String recipe, int seconds, String batchId, String productId) {
+        iGotoRecipeConsole();
+        iLoadRecipeAndIStartIt(recipe, seconds, batchId, productId);
     }
 
-    private void generateRandomRecipeValues() {
-        this.recipe.setProductId(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
-        this.recipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+    @When("I start recipe execution")
+    public void iStartRecipeExecution() {
+        generateRecipeValues(null, null);
+        recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+    }
+
+    private void generateRecipeValues(String batchId, String productId) {
+        if (StringUtils.isNotEmpty(productId)) {
+            this.currentRecipe.setProductId(productId);
+        } else {
+            this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(10));
+        }
+
+        if (StringUtils.isNotEmpty(batchId)) {
+            this.currentRecipe.setBatchId(batchId);
+        } else {
+            this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
+        }
+
+        this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+        this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
     }
 
     @Then("Recipe should be executed")
@@ -91,6 +118,21 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.clickPauseButton();
     }
 
+    @Then("control should be on resume button")
+    public void ctrlOnResumeButton() {
+        Assert.assertTrue(recipeConsolePage.verifyResumeButton());
+    }
+
+    @Then("control should be on pause button")
+    public void ctrlOnPauseButton() {
+        Assert.assertTrue(recipeConsolePage.verifyPauseButton());
+    }
+
+    @Then("control should be on rerun button")
+    public void ctrlOnrerunButton() {
+        Assert.assertTrue(recipeConsolePage.verifyReRunButton());
+    }
+
     @When("I click on resume button")
     public void iClickOnResumeButton() {
         recipeConsolePage.clickResumeButton();
@@ -103,7 +145,7 @@ public class RecipeConsoleStepsDefinition {
 
     @When("I click on abort button")
     public void iClickOnAbortButton() {
-        recipeConsolePage.clickOnAbortButton(this.recipe.getAfterComments());
+        recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
     }
 
     @Then("I see the system on hold")
@@ -119,10 +161,15 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I see expected texts from recipe console")
     public void iSeeExpectedTextsFromRecipeConsole() {
-        var expectedRestartText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
-        var expectedHoldText= I18nUtils.getValueFromKey("portal.recipeConsole.button.processHold");
-        var restartOrHoldContent=recipeConsolePage.seeRestartOrHoldContent();
+        var expectedRestartText = I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
+        var expectedHoldText = I18nUtils.getValueFromKey("portal.recipeConsole.button.processHold");
+        var restartOrHoldContent = recipeConsolePage.seeRestartOrHoldContent();
         Assert.assertTrue(restartOrHoldContent.equals(expectedRestartText) || restartOrHoldContent.equals(expectedHoldText));
         SelenideHelper.goParentFrame();
+    }
+
+    @And("I clear the recipe")
+    public void clearRecipePanel() {
+        recipeConsolePage.clearRecipe();
     }
 }

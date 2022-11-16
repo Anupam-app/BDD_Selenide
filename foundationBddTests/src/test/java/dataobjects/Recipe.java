@@ -20,4 +20,6 @@ public class Recipe {
     String startDate;
     String endDate;
     String machineName;
+    String status;
 }
+

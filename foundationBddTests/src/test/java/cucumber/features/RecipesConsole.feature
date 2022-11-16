@@ -15,12 +15,15 @@ Feature: Recipe console
     And I start and wait recipe execution during 12 seconds
     Then Recipe should be executed
 
-  Scenario: Recipe operational control workflow
+  Scenario: BIOCRS-660 | Recipe operational control workflow
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on pause button
+    Then control should be on resume button
     And I click on resume button
+    Then control should be on pause button
     And I click on jump step "2"
     And I click on abort button
     Then I should see the recipe run aborted
+    And control should be on rerun button
