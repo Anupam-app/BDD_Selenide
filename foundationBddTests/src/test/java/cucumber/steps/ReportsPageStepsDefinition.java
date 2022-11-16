@@ -63,7 +63,7 @@ public class ReportsPageStepsDefinition {
     public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            reportPage.verifyColoumn(list.get(i).get(0), tab, i);
+            reportPage.verifyColumn(list.get(i).get(0), tab, i);
         }
     }
 
@@ -187,6 +187,12 @@ public class ReportsPageStepsDefinition {
     @Then("I see the {string} user disabled in report")
     public void iVerifyThatUserIsDisabled(String userName) throws Exception {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, true, this.login.getLogin());
+        switchTo().parentFrame();
+    }
+    
+    @Then("I see the {string} is changed to {string} in report")
+    public void iverifyRecipeStatus(String recipeName, String status) throws Exception {
+        this.report.checkRecipeStatus(reportPage.getPdfUrl(), recipeName, status, this.login.getLogin());
         switchTo().parentFrame();
     }
 

@@ -153,6 +153,18 @@ public class RecipeConsolePage {
     public void clickResumeButton() {
         resumeIcon.waitUntil(Condition.visible, 5000l).click();
     }
+    
+    public boolean verifyResumeButton() {
+        return(resumeIcon.waitUntil(Condition.visible,50001).isDisplayed());
+    }
+    
+    public boolean verifyPauseButton() {
+        return(pauseIcon.waitUntil(Condition.visible,50001).isDisplayed());
+    }
+    
+    public boolean verifyReRunButton() {
+        return(rerunIcon.waitUntil(Condition.visible,50001).isDisplayed());
+    }
 
     public void clickOnJumpToStep(String stepNumber) {
         Selenide.sleep(2000);

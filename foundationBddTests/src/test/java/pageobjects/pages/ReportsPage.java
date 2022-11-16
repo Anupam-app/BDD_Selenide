@@ -52,15 +52,15 @@ public class ReportsPage {
     private final String XPATH_TemplateColumnName = "//*[@id=\"templateListTable\"]/thead/tr/th[%d]";
     private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
     private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
-    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr/td[%d]";
+    private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr[%d]/td[%d]";
     private final String XPATH_UserColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[4]";
     private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
     private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
     private final String XPATH_TRENDS_PARAMS = "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
 
-	private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
-	private final String XPATH_TEMPLATE_COLUMNS = "//table[@id='templateListTable']//td[%s]";
-	private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
+    private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
+    private final String XPATH_TEMPLATE_COLUMNS = "//table[@id='templateListTable']//td[%s]";
+    private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
 
     private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
     private final SelenideElement runTab = $(By.xpath("//a[contains(text(),'Runs')]"));
@@ -98,16 +98,16 @@ public class ReportsPage {
     private SelenideElement applyFilterButton = $(By.xpath("//span[contains(text(),'Apply Filters')]"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
 
-   
+
     private final SelenideElement saveAs_btn = $(By.xpath("//*[text()='Save As']"));
-    private final SelenideElement saveTemplateAs= $(By.xpath("//div[@class='input-wrapper']/input"));
-    private final SelenideElement saveTemplateTxt= $(By.xpath("//div[text()='Save Template As']"));
+    private final SelenideElement saveTemplateAs = $(By.xpath("//div[@class='input-wrapper']/input"));
+    private final SelenideElement saveTemplateTxt = $(By.xpath("//div[text()='Save Template As']"));
     private final SelenideElement saveBtn = $(By.xpath("//button[text()='Save']"));
     private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
 
-   
+
     private SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
     private SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
     private SelenideElement trendsSaveButton = $(By.xpath("//*[@id='done_btn']"));
@@ -119,53 +119,53 @@ public class ReportsPage {
     private final SelenideElement XPATH_ERRORNOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification = "Failed to create report template because %s already exists. Use a different name.";
 
-	private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
-	private ElementsCollection dateRange = $$(By.xpath("//div[(@class='ranges')]//li[i]"));
-	private final SelenideElement dateColumn=$(By.xpath("//input[@name='dateRange']"));
-	private final SelenideElement datePopup=$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
-	private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-	private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
-	private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
-	private final SelenideElement startDateDesendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-	private final SelenideElement startDateAsendingArrow=$(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
-	private final SelenideElement startDateRep=$(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
-	private final SelenideElement statusColumn=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
-	private final SelenideElement consolidateColumn=$(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));
-	private final SelenideElement startDate=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
-	private final SelenideElement clearAllFilters=$(By.xpath("//div[text()='Clear All']"));
-	private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
-	private ElementsCollection availableDates=$$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
-	private final SelenideElement processType = $(By.xpath("//div[text()='Process Types']"));
-	private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
-	private final String XPATH_ORDER_ICON = "//span[@class='%s']";
+    private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
+    private ElementsCollection dateRange = $$(By.xpath("//div[(@class='ranges')]//li[i]"));
+    private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
+    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
+    private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
+    private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
+    private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
+    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
+    private final SelenideElement startDateRep = $(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
+    private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
+    private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));
+    private final SelenideElement startDate = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
+    private final SelenideElement clearAllFilters = $(By.xpath("//div[text()='Clear All']"));
+    private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
+    private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
+    private final SelenideElement processType = $(By.xpath("//div[text()='Process Types']"));
+    private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
+    private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final String XPATH_USER_TABLE = "//table[@id='foundationRunListTable']";
-	private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
+    private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
     private SelenideElement date;
-	
+
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    
-	Function<Integer, List<String>> getReportsColumns = (index) -> {
+
+    Function<Integer, List<String>> getReportsColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORTS_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
-    
-   	Function<Integer, List<String>> consolidatedColumns = (index) -> {
-           var users = $$(By.xpath(String.format(XAPATH_CONSOLIDATED_COLUMNS, index))).texts();
-           users.removeIf(e -> StringUtils.isEmpty(e.trim()));
-           return users;
-       };
-	   
-	Function<Integer, List<String>> getTemplateColumns = (index) -> {
+
+    Function<Integer, List<String>> consolidatedColumns = (index) -> {
+        var users = $$(By.xpath(String.format(XAPATH_CONSOLIDATED_COLUMNS, index))).texts();
+        users.removeIf(e -> StringUtils.isEmpty(e.trim()));
+        return users;
+    };
+
+    Function<Integer, List<String>> getTemplateColumns = (index) -> {
         var templates = $$(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS, index))).texts();
         templates.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return templates;
@@ -173,7 +173,7 @@ public class ReportsPage {
 
 
     public void goToReports() {
-        commonWaiter(reportsManagementPage,visible);
+        commonWaiter(reportsManagementPage, visible);
         reportsManagementPage.click();
     }
 
@@ -182,7 +182,7 @@ public class ReportsPage {
     }
 
     public void verifyList(String tab) throws InterruptedException {
-        switch (tab){
+        switch (tab) {
             case "runs":
                 $$(foundationRunListTable).shouldHave(CollectionCondition.size($$(foundationRunListTable).size()));
                 break;
@@ -202,8 +202,8 @@ public class ReportsPage {
         reportTab.shouldBe(visible);
     }
 
-    public void verifyColoumn(String columnName, String tab, int columnIndex) {
-        switch (tab){
+    public void verifyColumn(String columnName, String tab, int columnIndex) {
+        switch (tab) {
             case "runs":
                 $(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
                 Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, columnIndex))).getText().isBlank());
@@ -218,7 +218,6 @@ public class ReportsPage {
                 break;
         }
     }
-
 
     public void selectReport(String reportname) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
@@ -239,6 +238,7 @@ public class ReportsPage {
     public void checkSortedElementTemplate(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);
     }
+
     public List<String> getTemplateColumnHeaders() {
         return $$(By.xpath(XPATH_TEMPLATE_TABLE + "//th")).texts();
     }
@@ -327,8 +327,6 @@ public class ReportsPage {
 
     public void editReportOrTemplate(String templateName) {
         openReportTemplate(templateName);
-
-
     }
 
     public String getStatus() {
@@ -382,10 +380,10 @@ public class ReportsPage {
     }
 
     public void create5Trends() {
-        for (int j=0; j<5; j++) {
-            for(int i=1; i<6; i++) {
-                commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))),visible);
-                $(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_")+i)))).click();
+        for (int j = 0; j < 5; j++) {
+            for (int i = 1; i < 6; i++) {
+                commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_") + i)))), visible);
+                $(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_") + i)))).click();
             }
             trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
             trendsSaveButton.click();
@@ -393,10 +391,10 @@ public class ReportsPage {
         }
     }
 
-    public void selectParameters(String noOfParams, String parameters ) {
-        int count=Integer.parseInt(noOfParams);
-        List <String> list = new ArrayList <String>();
-        var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
+    public void selectParameters(String noOfParams, String parameters) {
+        int count = Integer.parseInt(noOfParams);
+        List<String> list = new ArrayList<String>();
+        var config = ConfigFactory.parseResourcesAnySyntax(parameters, ConfigParseOptions.defaults());
         var params = config.getConfigList("Params.list");
         for (var param : params) {
             list.add(param.getString("value"));
@@ -404,8 +402,8 @@ public class ReportsPage {
         if (trendsAddButton.exists()) {
             trendsAddButton.click();
         }
-        for (int i=0; i<count; i++) {
-            commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))),visible);
+        for (int i = 0; i < count; i++) {
+            commonWaiter($(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))), visible);
             $(By.xpath(String.format(XPATH_TRENDS_PARAMS, list.get(i)))).click();
         }
     }
@@ -421,21 +419,16 @@ public class ReportsPage {
     }
 
     public void includeReport(String reportInclude) {
-        if(reportInclude=="Alarms") {
+        if (reportInclude == "Alarms") {
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
             saveAlarmButton.click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
-
-        }
-        else if(reportInclude.contains("Trends")){
-
+        } else if (reportInclude.contains("Trends")) {
             SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-
-        }
-        else {
+        } else {
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
         }
     }
@@ -455,7 +448,7 @@ public class ReportsPage {
         SelenideHelper.fluentWaiter().until((webDriver) -> {
             boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
 
-            if(!isRunVisible) {
+            if (!isRunVisible) {
                 WebDriverRunner.getWebDriver().switchTo().parentFrame();
                 goToReports();
                 switchToFrame();
@@ -505,7 +498,7 @@ public class ReportsPage {
     }
 
     public void selectCreatedBy(String user) {
-        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))),visible).click();
+        commonWaiter($(By.xpath(String.format(XPATH_DROPDOWN, "Created By"))), visible).click();
         commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 
@@ -519,35 +512,41 @@ public class ReportsPage {
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-        for (int i=1;i<7;i++) {
-            Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, i))).getText().isBlank());
+
+        for (int row = 1; row <= reportListTable.size(); row++) {
+            if ($(By.xpath(String.format(XPATH_ReportColumnName_Value, row, 1))).getText().equalsIgnoreCase(reportName)) {
+                for (int i = 1; i < 7; i++) {
+                    Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, row, i))).getText().isBlank());
+                }
+                break;
+            }
         }
     }
+
     public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
         Thread.sleep(5000);
-        for (int i=1;i<=(auditListTable.size());i++) {
+        for (int i = 1; i <= (auditListTable.size()); i++) {
             Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
             SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
             Date currentdate = new Date();
             String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
             Date eventDateTime = formatter.parse(eventDate);
-            int diffInDays = (int)( (currentdate.getTime() - eventDateTime.getTime())
-                    / (1000 * 60 * 60 * 24) );
+            int diffInDays = (int) ((currentdate.getTime() - eventDateTime.getTime())
+                    / (1000 * 60 * 60 * 24));
             if (diffInDays <= 7) {
 
                 Assert.assertTrue(true);
-            }
-            else {
+            } else {
                 Assert.assertTrue(false);
             }
-
         }
     }
 
     public void checkTableDates() {
-        for (int i=1;i<=auditListTable.size();i++) {
+        for (int i = 1; i <= auditListTable.size(); i++) {
         }
     }
+
 
     public void checkTableContainsTemplate(String templateName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);
@@ -752,7 +751,7 @@ public class ReportsPage {
     }
 
     public void iCheckNotifactionMsg(String status) {
-        SelenideHelper.commonWaiter(notificationMsg,visible);
+        SelenideHelper.commonWaiter(notificationMsg, visible);
     }
 
     public void iSearchrepo(String templateName) {
@@ -897,13 +896,12 @@ public class ReportsPage {
         return isTrue;
     }
 
-    public void reportRequestNotificationVisibility()
-    {
+    public void reportRequestNotificationVisibility() {
         commonWaiter(requestNotification, not(visible));
     }
 
     public void verifyRunMode() {
-        commonWaiter(runTab,not(visible));
+        commonWaiter(runTab, not(visible));
     }
 
     public void seeContent(String expectedText) {

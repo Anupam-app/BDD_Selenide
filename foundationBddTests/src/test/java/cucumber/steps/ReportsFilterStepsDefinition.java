@@ -106,7 +106,7 @@ public class ReportsFilterStepsDefinition {
 		List<String> options = datatable.asList();
 		for (String datarange : options) {
 			reportPage.selectDateRange(datarange);
-			//Assert.assertTrue(reportPage.verifyDateRanges(datarange));
+			Assert.assertTrue(reportPage.verifyDateRanges(datarange));
 		}
 	}
 

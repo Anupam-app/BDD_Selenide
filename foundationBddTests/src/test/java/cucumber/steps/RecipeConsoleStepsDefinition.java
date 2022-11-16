@@ -90,6 +90,21 @@ public class RecipeConsoleStepsDefinition {
     public void iClickOnPauseButton() {
         recipeConsolePage.clickPauseButton();
     }
+    
+    @Then("control should be on resume button")
+    public void ctrlOnResumeButton() {
+        Assert.assertTrue(recipeConsolePage.verifyResumeButton());
+    }
+    
+    @Then("control should be on pause button")
+    public void ctrlOnPauseButton() {
+        Assert.assertTrue(recipeConsolePage.verifyPauseButton());
+    }
+    
+    @Then("control should be on rerun button")
+    public void ctrlOnrerunButton() {
+        Assert.assertTrue(recipeConsolePage.verifyReRunButton());
+    }
 
     @When("I click on resume button")
     public void iClickOnResumeButton() {
