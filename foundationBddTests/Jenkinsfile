@@ -123,7 +123,7 @@ pipeline {
                             $IpTargetGenerated,
                             $IpTargetProvidedByTheClient
                         )
-                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" | Select -ExpandProperty Content
+                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" | Select -ExpandProperty Content
                         $convertedJson = ConvertFrom-Json -InputObject $content
                         $convertedJsonDecode64 = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($convertedJson.value))
 
@@ -150,7 +150,7 @@ pipeline {
                         }
                     }
 
-                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget $env:IpTargetClient
+                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget,$env:IpTargetClient
                     '''
                 }
             }
