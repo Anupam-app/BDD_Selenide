@@ -134,7 +134,7 @@ pipeline {
                             $needToChangeConsulAndRestartPortalAndPlc=$true
                         }
 
-                        if($IpTargetProvidedByTheClient -and !($convertedJsonDecode64 -like "*$IpTargetProvidedByTheClient*")){
+                        if(!($convertedJsonDecode64 -like "*$IpTargetProvidedByTheClient*")){
                             $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetProvidedByTheClient")
                             $needToChangeConsulAndRestartPortalAndPlc=$true
                         }
