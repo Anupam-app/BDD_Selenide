@@ -1,3 +1,4 @@
+@CRS
 Feature: Settings Modification
 
   Background:

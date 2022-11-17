@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Report administration
 
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
