@@ -214,7 +214,7 @@ public class ReportsPage {
                 break;
             case "reports":
                 $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, columnIndex))).getText().isBlank());
+                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value,1, columnIndex))).getText().isBlank());
                 break;
         }
     }
