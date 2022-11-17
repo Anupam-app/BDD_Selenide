@@ -106,12 +106,6 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
                 {
                     powershell '''
-                    if(!($env:CIPHostName.ToUpper() -like 'ONEBIOP*' -or $env:CIPHostName.ToUpper() -like 'STLBIOP*'))
-                    {
-                        echo 'SKIP change consul portal'
-                        return
-                    }
-
                     $hostname = hostname.exe
                     $ipTarget= Resolve-DNSName $hostname -type A | Select -ExpandProperty IPAddress
 
