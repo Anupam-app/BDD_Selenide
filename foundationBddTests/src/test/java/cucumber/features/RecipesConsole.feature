@@ -5,6 +5,7 @@ Feature: Recipe console
     Given I am logged in as "Bio4CAdmin" user
 
   @SMOKE
+  @PLC
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
