@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI @ORCHESTRATOR
 Feature: User management
    
 

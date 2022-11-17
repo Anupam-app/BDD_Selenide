@@ -41,3 +41,14 @@ This can be deactivated for debug purpose in config/browser.properties file: bro
 
 For local development you can consult after mvn command launched foundationBddTests\target\cucumber-report.html with chrome browser
 
+##### Jenkins Parameters
+
+* CIPHostName : hostname to launch the bdd tests
+* EmailTo : email to send the test report
+* TargetResourcesPath : folder on the CIP where to store the scripts
+* CredentialsId : credentials used to connect to the CIP with remote session
+* PDP : PDP used
+* IpTargetClient : ip of the client using the application to pretend as local user
+* Mode : only launch the tag chosen in mode, example: SMOKE, it adds the PDP condition automatically (optional)
+* PrepareEnvironmentOnly : only launch dataset insertion and prepare the env for tests automation but do not launch the tests (optional)
+

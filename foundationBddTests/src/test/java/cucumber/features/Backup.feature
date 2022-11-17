@@ -1,4 +1,4 @@
-@COMMON @check
+@CRS @IVI @ORCHESTRATOR
 Feature: Backup creation
 
   Background:

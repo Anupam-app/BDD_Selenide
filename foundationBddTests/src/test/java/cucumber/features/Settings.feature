@@ -1,3 +1,4 @@
+@CRS
 Feature: Settings Modification
 
   @CONFIG_SETTING_SYSTEM_COMPONENTS

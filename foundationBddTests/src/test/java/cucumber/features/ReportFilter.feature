@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Apply Filter Reports
 
   Background:
