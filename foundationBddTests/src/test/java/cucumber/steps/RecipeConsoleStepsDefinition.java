@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import cucumber.util.I18nUtils;
+import dataobjects.Analytics;
 import dataobjects.Recipe;
 import dataobjects.Report;
 import io.cucumber.java.en.And;
@@ -21,12 +22,15 @@ public class RecipeConsoleStepsDefinition {
     private Recipe currentRecipe;
     private List<Recipe> recipes;
     private Report report;
+    private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report) {
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
+        this.analytics = analytics;
         this.report.setRecipes(this.recipes);
+        this.analytics.setRecipes(this.recipes);
     }
 
     @Given("I expand recipe console in pnid")
@@ -171,5 +175,13 @@ public class RecipeConsoleStepsDefinition {
     @And("I clear the recipe")
     public void clearRecipePanel() {
         recipeConsolePage.clearRecipe();
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds if not done before")
+    public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        if (!recipeConsolePage.isRunBefore(recipe)) {
+            iLoadRecipeAndIStartIt(recipe, seconds);
+        }
     }
 }

@@ -1,8 +1,13 @@
 package cucumber.steps;
 
-import cucumber.util.I18nUtils;
+import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
-import dataobjects.*;
+import cucumber.util.I18nUtils;
+import dataobjects.Analytics;
+import dataobjects.AnalyticsInterval;
+import dataobjects.AnalyticsMode;
+import dataobjects.AnalyticsParameter;
+import dataobjects.Recipe;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -12,18 +17,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import pageobjects.pages.AnalyticsPage;
 import pageobjects.utility.SelenideHelper;
-import com.typesafe.config.ConfigFactory;
 
 public class AnalyticsPageStepsDefinition {
 
     private AnalyticsPage analyticsPage;
     private Analytics analytics;
-    private Recipe recipe;
 
     public AnalyticsPageStepsDefinition(AnalyticsPage analyticsPage, Analytics analytics, Recipe recipe) {
         this.analyticsPage = analyticsPage;
         this.analytics = analytics;
-        this.recipe = recipe;
     }
 
     @Given("I go to analytics")
@@ -136,7 +138,7 @@ public class AnalyticsPageStepsDefinition {
 
     @And("I use the recipe for this analytics aggregate with interval {string}")
     public void iUseTheRecipeForThisAnalyticsAggregate(String interval) {
-        analyticsPage.createAggregate(recipe, interval);
+        analyticsPage.createAggregate(analytics.getRecipes().stream().findFirst().get(), interval);
     }
 
     @And("I create analytics aggregate {string} with {string} if not done before")
@@ -151,7 +153,9 @@ public class AnalyticsPageStepsDefinition {
             makeAnalyticsParameter(param.getString("value"), param.getString("unit"), param.getString("axis"));
         }
 
-        if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
+        var recipeOptional = analytics.getRecipes().stream().findFirst();
+
+        if (recipeOptional.isPresent() && StringUtils.isNotEmpty(recipeOptional.get().getRecipeName())) {
             analyticsPage.deleteIfExists(analytics.getName());
             createAnalytics();
             iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);
@@ -165,7 +169,7 @@ public class AnalyticsPageStepsDefinition {
 
     @Then("I see expected texts from analytics module")
     public void iSeeExpectedTextsFromAnalyticsModule() {
-        var expectedText= I18nUtils.getValueFromKey("analytics.label.aggregates");
+        var expectedText = I18nUtils.getValueFromKey("analytics.label.aggregates");
         analyticsPage.seeContent(expectedText);
         SelenideHelper.goParentFrame();
     }
