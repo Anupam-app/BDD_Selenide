@@ -11,7 +11,7 @@ Feature: Analytics creation
     And I validate the analytics creation
     Then I see my changes in analytics aggregate
 
-    @CRS
+    @CRS @SMOKE
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
       | PI101 PV        | psi   | PI102 PV        | psi   | PI103 PV       | psi   |
