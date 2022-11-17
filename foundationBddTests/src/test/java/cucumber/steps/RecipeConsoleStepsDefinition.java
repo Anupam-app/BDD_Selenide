@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import dataobjects.Analytics;
 import dataobjects.Recipe;
 import dataobjects.Report;
 import io.cucumber.java.en.And;
@@ -19,12 +20,15 @@ public class RecipeConsoleStepsDefinition {
     private Recipe currentRecipe;
     private List<Recipe> recipes;
     private Report report;
+    private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report) {
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
-        this.report=report;
+        this.report = report;
+        this.analytics = analytics;
         this.report.setRecipes(this.recipes);
+        this.analytics.setRecipes(this.recipes);
     }
 
     @Given("I expand recipe console in pnid")
@@ -84,7 +88,7 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
     }
 
-    private void generateRecipeValues(String batchId,String productId) {
+    private void generateRecipeValues(String batchId, String productId) {
         if (StringUtils.isNotEmpty(productId)) {
             this.currentRecipe.setProductId(productId);
         } else {
@@ -115,17 +119,17 @@ public class RecipeConsoleStepsDefinition {
     public void iClickOnPauseButton() {
         recipeConsolePage.clickPauseButton();
     }
-    
+
     @Then("control should be on resume button")
     public void ctrlOnResumeButton() {
         Assert.assertTrue(recipeConsolePage.verifyResumeButton());
     }
-    
+
     @Then("control should be on pause button")
     public void ctrlOnPauseButton() {
         Assert.assertTrue(recipeConsolePage.verifyPauseButton());
     }
-    
+
     @Then("control should be on rerun button")
     public void ctrlOnrerunButton() {
         Assert.assertTrue(recipeConsolePage.verifyReRunButton());
@@ -160,5 +164,13 @@ public class RecipeConsoleStepsDefinition {
     @And("I clear the recipe")
     public void clearRecipePanel() {
         recipeConsolePage.clearRecipe();
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds if not done before")
+    public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        if (!recipeConsolePage.isRunBefore(recipe)) {
+            iLoadRecipeAndIStartIt(recipe, seconds);
+        }
     }
 }
