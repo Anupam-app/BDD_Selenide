@@ -143,7 +143,7 @@ pipeline {
                             echo $contentReplaced
                             $headers = @{}
                             $headers["Content-Type"] = "application/json"
-                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
+                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
                             sc.exe start "CODESYS Control Win V3 - x64"
                             Stop-Service bio4c-portal
                             Start-Service bio4c-portal
