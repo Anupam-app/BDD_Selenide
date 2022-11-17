@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import dataobjects.Analytics;
 import dataobjects.Recipe;
 import dataobjects.Report;
 import io.cucumber.datatable.DataTable;
@@ -20,12 +21,15 @@ public class RecipeConsoleStepsDefinition {
     private Recipe currentRecipe;
     private List<Recipe> recipes;
     private Report report;
+    private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report) {
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
+        this.analytics = analytics;
         this.report.setRecipes(this.recipes);
+        this.analytics.setRecipes(this.recipes);
     }
 
     @Given("I expand recipe console in pnid")
@@ -225,6 +229,16 @@ public class RecipeConsoleStepsDefinition {
     @When("I select {string} tab")
     public void recipeOperation(String status) {
         if (status.equalsIgnoreCase("Manual operation")) {
+
+
+        }
+    }
+
+    @When("I load recipe {string} and run it during {int} seconds if not done before")
+    public void iStartAndWaitRecipeExecutionIfNotRunBefore (String recipe,int seconds){
+        iGotoRecipeConsole();
+        if (!recipeConsolePage.isRunBefore(recipe)) {
+            iLoadRecipeAndIStartIt(recipe, seconds);
 
         }
     }
