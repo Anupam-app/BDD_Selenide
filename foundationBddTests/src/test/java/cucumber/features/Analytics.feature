@@ -1,5 +1,6 @@
 Feature: Analytics creation
 
+  @SMOKE
   Scenario Outline: Aggregate creation
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute" and run it during 15 seconds
@@ -11,12 +12,12 @@ Feature: Analytics creation
     And I validate the analytics creation
     Then I see my changes in analytics aggregate
 
-    @CRS @SMOKE
+    @CRS
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
       | PI101 PV        | psi   | PI102 PV        | psi   | PI103 PV       | psi   |
 
-    @IVI @SMOKE
+    @IVI
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
       | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV| rpm   |
