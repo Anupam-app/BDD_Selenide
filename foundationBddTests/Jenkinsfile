@@ -30,7 +30,7 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand('cmd /C if exist '+env.targetResourcesPath+' rd /q /s '+env.targetResourcesPath)
+						invokeCommand('cmd /C if exist '+env.TargetResourcesPath+' rd /q /s '+env.TargetResourcesPath)
 					]
 				)
             }
@@ -50,7 +50,7 @@ pipeline {
 
 						$Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
 						
-						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force						
+						Copy-Item -Path "$sourcePath" -Destination "$env:TargetResourcesPath" -ToSession $Session -Recurse -force
 						'''
 					}
 				}
@@ -62,8 +62,8 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/common'),
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/'+env.PDP)
+						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/common'),
+						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/'+env.PDP)
 					]
 				)
             }
@@ -75,8 +75,8 @@ pipeline {
 						hostName: "${env.CIPHostName}",
 						credentialsId: "${env.CredentialsId}",
 						winRMOperations: [
-							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/common'),
-							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/'+env.PDP),
+							invokeCommand(env.TargetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.TargetResourcesPath+'/executablescripts/common'),
+							invokeCommand(env.TargetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.TargetResourcesPath+'/executablescripts/'+env.PDP),
 						]
 					)
                 }				
@@ -179,13 +179,16 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
-                    def commandTag = '';
+                    if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
+                        return
+                    }
 
-                    if(env.MODE != null && env.MODE != ''){
-                        commandTag=' -Dcucumber.filter.tags="@'+env.MODE+'"'
+                    def commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
+
+                    if(env.Mode != null && env.Mode != ''){
+                        commandTag+=' and @'+env.Mode
                     }
                     else{
-                        commandTag = ' -Dcucumber.filter.tags="@COMMON or @'+env.PDP
                         if(env.PDP != 'CRS'){
                             def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
                             if(response.status==200){
@@ -193,14 +196,11 @@ pipeline {
 
                                jsonResponse.features.each{val->
                                     commandTag+=' or @'+val
-                                }
-
+                               }
                             }
                         }
-                        commandTag+='"'
                     }
-					
-					commandTag+=' -DtestFailureIgnoreProp=true'
+					commandTag+='" -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 

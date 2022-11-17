@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Analytics graph
 
   Scenario Outline: Plot Graph
