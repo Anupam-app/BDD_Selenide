@@ -123,7 +123,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I click on generate button")
-    public void iClickOnGenerateButton() {
+    public void iClickOnGenerateButton() throws InterruptedException {
         reportPage.generateReport();
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
     }
@@ -202,7 +202,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I esign the report")
-    public void iEsignReports() {
+    public void iEsignReports() throws InterruptedException {
         reportPage.esignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
@@ -244,7 +244,7 @@ public class ReportsPageStepsDefinition {
 
     @And("I save trends")
     public void iCreateTrendsCharts() {
-        reportPage.createTrends();
+        reportPage.saveTrends();
     }
 
     @Then("I verify that sixth chart is not allowed")
@@ -294,7 +294,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I generate audit trail report")
-    public void iGenerateAuditTrailReport() {
+    public void iGenerateAuditTrailReport() throws InterruptedException {
         iGotoReportManagementPage();
         iSelectReportFromDropdown("Audit Trail");
         iClickOnGenerateButton();
