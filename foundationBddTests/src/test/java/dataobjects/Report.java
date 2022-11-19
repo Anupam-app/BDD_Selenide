@@ -578,13 +578,13 @@ public class Report {
         var recipeDateFromReport = PdfTableExtractUtils.getTableFieldValue(table, dateColumnFromReport);
         Assert.assertNotNull(message + " is null", recipeDateFromReport);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REPORT_DATE_FORMAT).localizedBy(Locale.ENGLISH);
-        LocalDateTime dateTimeLocal = LocalDateTime.parse(recipeDateFromReport, formatter);
-
         DateTimeFormatter formatterRecipe = DateTimeFormatter.ofPattern(RECIPE_DATE_FORMAT).localizedBy(Locale.ENGLISH);
-        LocalDateTime dateFromRecipe = LocalDateTime.parse(recipeDate, formatterRecipe);
+        LocalDateTime localRecipeDate = LocalDateTime.parse(recipeDate, formatterRecipe);
 
-        TimezoneUtils.compareDateFromLocalToDistantServer(message + "and recipe date from report are not the same", dateTimeLocal, dateFromRecipe);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REPORT_DATE_FORMAT).localizedBy(Locale.ENGLISH);
+        LocalDateTime serverRecipeDateFromReport = LocalDateTime.parse(recipeDateFromReport, formatter);
+
+        TimezoneUtils.compareDateFromLocalToDistantServer(message + " and recipe date from report are not the same", localRecipeDate, serverRecipeDateFromReport);
     }
 
     /**
