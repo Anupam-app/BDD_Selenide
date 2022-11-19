@@ -3,8 +3,11 @@ package dataobjects;
 import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import lombok.Getter;
@@ -18,6 +21,7 @@ import utils.TimezoneUtils;
 public class Report {
 
     private static final String REPORT_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
+    private static final String RECIPE_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
@@ -165,8 +169,9 @@ public class Report {
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
 
                     String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(userColumnIndex-1).getText(false);
 
-                    if (!StringUtils.isEmpty(userColumnValue)) {
+                    if (!StringUtils.isEmpty(userColumnValue) && !StringUtils.isEmpty(recordColumnValue)) {
 
                         // check user is not an internal user
                         if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue),
@@ -175,9 +180,8 @@ public class Report {
                         }
 
                         // check user format
-                        Assert.assertTrue(String.format(
-                                "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                        Assert.assertTrue(
+                                String.format("User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
                         Assert.assertTrue(userColumnValue.contains(user));
                     }
                 }
@@ -550,19 +554,37 @@ public class Report {
         Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
         for (var recipe : recipes) {
-            // get field value and check is not null
-            Assert.assertNotNull("No field with id " + recipe.getMachineName(), PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));
-            Assert.assertEquals("Unexpected batch id value", recipe.getBatchId(), PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
-            Assert.assertEquals("Unexpected productId id value ", recipe.getProductId(), PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
-            Assert.assertEquals("recipename id value ", recipe.getRecipeName(), PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
-            String sdate = PdfTableExtractUtils.getTableFieldValue(table, START_DATE);
-            Assert.assertTrue("No field with start date", PdfTableExtractUtils.getTableFieldValue(table, START_DATE).contains(recipe.getStartDate()));
-            Assert.assertTrue("No field with end date", PdfTableExtractUtils.getTableFieldValue(table, END_DATE).contains(recipe.getEndDate()));
-            Assert.assertEquals("No field with pre run comment", recipe.getBeforeComments(), PdfTableExtractUtils.getTableFieldValue(table, PRE_RUN_COMMENT));
-            Assert.assertEquals("post run comment value", recipe.getAfterComments(), PdfTableExtractUtils.getTableFieldValue(table, POST_RUN_COMMENT));
-            Assert.assertEquals("run status value", recipe.getStatus(), PdfTableExtractUtils.getTableFieldValue(table, RUN_STATUS));
-            Assert.assertEquals("template name value", template, PdfTableExtractUtils.getTableFieldValue(table, TEMPLATE_NAME));
+            validateRecipeInReport(template, table, recipe);
         }
+    }
+
+    private void validateRecipeInReport(String template, Table table, Recipe recipe) {
+        // get field value and check is not null
+        Assert.assertNotNull("No field with id " + recipe.getMachineName(), PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));
+        Assert.assertEquals("Unexpected batch id value", recipe.getBatchId(), PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
+        Assert.assertEquals("Unexpected productId id value ", recipe.getProductId(), PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
+        Assert.assertEquals("Recipename id value ", recipe.getRecipeName(), PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
+
+        validateRecipeDate("Recipe start date", table, START_DATE, recipe.getStartDate());
+        validateRecipeDate("Recipe end date", table, END_DATE, recipe.getEndDate());
+
+        Assert.assertEquals("No field with pre run comment", recipe.getBeforeComments(), PdfTableExtractUtils.getTableFieldValue(table, PRE_RUN_COMMENT));
+        Assert.assertEquals("Post run comment value", recipe.getAfterComments(), PdfTableExtractUtils.getTableFieldValue(table, POST_RUN_COMMENT));
+        Assert.assertEquals("Run status value", recipe.getStatus(), PdfTableExtractUtils.getTableFieldValue(table, RUN_STATUS));
+        Assert.assertEquals("Template name value", template, PdfTableExtractUtils.getTableFieldValue(table, TEMPLATE_NAME));
+    }
+
+    private void validateRecipeDate(String message, Table table, String dateColumnFromReport, String recipeDate) {
+        var recipeDateFromReport = PdfTableExtractUtils.getTableFieldValue(table, dateColumnFromReport);
+        Assert.assertNotNull(message + " is null", recipeDateFromReport);
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REPORT_DATE_FORMAT).localizedBy(Locale.ENGLISH);
+        LocalDateTime dateTimeLocal = LocalDateTime.parse(recipeDateFromReport, formatter);
+
+        DateTimeFormatter formatterRecipe = DateTimeFormatter.ofPattern(RECIPE_DATE_FORMAT).localizedBy(Locale.ENGLISH);
+        LocalDateTime dateFromRecipe = LocalDateTime.parse(recipeDate, formatterRecipe);
+
+        TimezoneUtils.compareDateFromLocalToDistantServer(message + "and recipe date from report are not the same", dateTimeLocal, dateFromRecipe);
     }
 
     /**

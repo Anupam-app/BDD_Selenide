@@ -89,20 +89,6 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-
-  @SMOKE
-  Scenario: Generate and sign a custom report
-    Given I am logged in as "Bio4CAdmin" user
-    And I goto report management page
-    When I select report from dropdown "Custom"
-    And I select report include "Audit Trail"
-    And I select report include "Run Summary"
-    And I click on generate button
-    And I goto report management page
-    And I trigger report mode
-    And I esign the report
-    Then I should see the report signed
-    And I should see the report file presence
     
   Scenario: Generate run history report and check report content
     Given I am logged in as "Bio4CAdmin" user
