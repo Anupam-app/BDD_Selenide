@@ -8,6 +8,10 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 import java.awt.AWTException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,6 +22,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
+
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
@@ -145,26 +152,13 @@ public class RecipePage {
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
-		
-		  searchTextBox.sendKeys(Keys.LEFT_SHIFT+"up");
-		  searchTextBox.sendKeys("active"); searchTextBox.sendKeys(Keys.ENTER);
-		 
-        //String s = Keys.chord(Keys.ALT, Keys.ENTER);
-        //searchTextBox.sendKeys(s);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
-        
         searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
-        searchTextBox.sendKeys("set auto mode");
-        searchTextBox.sendKeys(Keys.ENTER);
-        //searchTextBox.sendKeys(s);
-        searchTextBox.sendKeys("enable");
-        searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
-        
     }
 
     public void addStep() {
