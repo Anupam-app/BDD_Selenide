@@ -1,20 +1,15 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.ClickOptions;
 import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import dataobjects.Recipe;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import pageobjects.components.SpinnerComponent;
-import pageobjects.utility.SelenideHelper;
-
-import java.util.List;
-
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import com.codeborne.selenide.SelenideElement;
+import dataobjects.Recipe;
+import java.util.List;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
@@ -28,8 +23,8 @@ public class AnalyticsPage {
     private final SelenideElement createAggregateButton = $(By.id("create-aggregate"));
     private final SelenideElement validateAggregateButton = $(By.id("create-aggregate-button"));
     private final SelenideElement deleteButton = $(By.id("delete-aggregate-button"));
-    private final SelenideElement applyRelationalSettingsButton = $(By.xpath("//*[@id = 'relational-apply'][@class != 'ant-btn relational-apply-button-disabled']"));
-    private final SelenideElement applyRegressionSettingsButton = $(By.xpath("//*[@id = 'regression-apply'][@class != 'ant-btn regression-apply-button-disabled']"));
+    private final SelenideElement applyRelationalSettingsButton = $(By.xpath("//*[@id = 'relational-apply'][@class = 'ant-btn relational-apply-button']"));
+    private final SelenideElement applyRegressionSettingsButton = $(By.xpath("//*[@id = 'regression-apply'][@class = 'ant-btn regression-apply-button']"));
 
     private final SelenideElement clickOnData = $(By.xpath("//span[text()='Data']"));
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
@@ -72,6 +67,8 @@ public class AnalyticsPage {
 
     public void selectYAxisParameter(String parameter) {
         $(By.xpath(String.format(yparameterNameText, parameter))).click();
+        SelenideHelper.fluentWaiter().until((webDriver) ->
+                webDriver.findElement(By.xpath(String.format(xparameterNameText, parameter))).getAttribute("class").contains("disabled"));
     }
 
     public void verifyParameters() {

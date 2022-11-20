@@ -20,8 +20,8 @@ import utils.TimezoneUtils;
 
 public class Report {
 
-    private static final String REPORT_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
-    private static final String RECIPE_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
+    public static final String REPORT_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
+    public static final String RECIPE_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
