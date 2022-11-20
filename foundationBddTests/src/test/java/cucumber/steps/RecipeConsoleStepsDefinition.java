@@ -22,14 +22,13 @@ public class RecipeConsoleStepsDefinition {
 
     private RecipeConsolePage recipeConsolePage;
     private Recipe recipe;
-    private final Report report;
-    private final ReportsPage reportPage;
+    private Report report;
+    private ReportsPage reportPage;
 	private Recipe currentRecipe;
     private List<Recipe> recipes;
-    private Report report;
     private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(ReportsPage reportPage, Report report,RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe recipe) {
+    public RecipeConsoleStepsDefinition(ReportsPage reportPage, Report report,RecipeConsolePage recipeConsolePage, Analytics analytics, Recipe recipe) {
         this.recipeConsolePage = recipeConsolePage;
 		this.recipe = recipe;
         this.report = report;
