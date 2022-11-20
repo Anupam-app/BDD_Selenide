@@ -13,6 +13,11 @@ In order to be able to build all the modules, the following software have to be 
 * Eclipse maven in the marketplace if not installed
 * Eclipse install new software Lombok: https://projectlombok.org/setup/eclipse
 
+## Set timezone properties
+
+Launch this script in the CIP: src\test\resources\executablescripts\common\setTimezoneProperties.ps1
+It will generate an offset-timezone.properties file just next to the ps1 file
+Replace the file in config/offset-timezone.properties with the new file
 
 ##### Launch tests
 
@@ -35,4 +40,15 @@ This can be deactivated for debug purpose in config/browser.properties file: bro
 ##### Consult report
 
 For local development you can consult after mvn command launched foundationBddTests\target\cucumber-report.html with chrome browser
+
+##### Jenkins Parameters
+
+* CIPHostName : hostname to launch the bdd tests
+* EmailTo : email to send the test report
+* TargetResourcesPath : folder on the CIP where to store the scripts
+* CredentialsId : credentials used to connect to the CIP with remote session
+* PDP : PDP used
+* IpTargetClient : ip of the client using the application to pretend as local user
+* Mode : only launch the tag chosen in mode, example: SMOKE, it adds the PDP condition automatically (optional)
+* PrepareEnvironmentOnly : only launch dataset insertion and prepare the env for tests automation but do not launch the tests (optional)
 

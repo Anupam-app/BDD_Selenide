@@ -12,6 +12,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -24,9 +25,9 @@ public class ReportsPageStepsDefinition {
     private final ReportsPage reportPage;
     private final ReportTemplate reportTemplate;
     private final User user;
-    private final Recipe recipe;
     private final LoginPage loginPage;
     private final Login login;
+
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
                                       Recipe recipe, Login login) {
@@ -34,7 +35,6 @@ public class ReportsPageStepsDefinition {
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.report = report;
-        this.recipe = recipe;
         this.loginPage = loginPage;
         this.login = login;
     }
@@ -48,13 +48,11 @@ public class ReportsPageStepsDefinition {
     @Then("I see Runs, Templates, Reports tabs are displayed")
     public void iSeeTabs() {
         reportPage.verifyTabs();
-
     }
 
     @And("I see list of {string} are displayed")
     public void iSeeListOfRuns(String tab) throws InterruptedException {
         reportPage.verifyList(tab);
-
     }
 
     @And("below {string} columns are displayed")
@@ -66,9 +64,9 @@ public class ReportsPageStepsDefinition {
     }
 
     @Given("I select report from dropdown {string}")
-    public void iSelectReportFromDropdown(String report) {
-        this.reportTemplate.setName(report);
-        reportPage.selectReport(report);
+    public void iSelectReportFromDropdown(String reportName) {
+        this.reportTemplate.setName(reportName);
+        reportPage.selectReport(reportName);
     }
 
     @Given("I select user from dropdown {string}")
@@ -94,8 +92,8 @@ public class ReportsPageStepsDefinition {
     }
 
     @And("I choose corresponding recipe run")
-    public void iChooseCorrespondingRecipeRun() throws InterruptedException {
-        reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId());
+    public void iChooseCorrespondingRecipeRun() {
+        report.getRecipes().forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -125,7 +123,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I click on generate button")
-    public void iClickOnGenerateButton() {
+    public void iClickOnGenerateButton() throws InterruptedException {
         reportPage.generateReport();
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
     }
@@ -161,14 +159,12 @@ public class ReportsPageStepsDefinition {
 
     @Then("I check report content")
     public void iCheckReportContent() throws Exception {
-
         this.report.checkEventTable(reportPage.getPdfUrl());
-        this.report.checkRunId(reportPage.getPdfUrl(), this.recipe.getRunId());
+        this.report.checkRunId(reportPage.getPdfUrl(), report.getRecipes());
     }
 
     @Then("I verify that user information are consistent")
     public void iVerifyThatUserInformationAreConsistent() throws Exception {
-
         this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
     }
 
@@ -206,7 +202,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I esign the report")
-    public void iEsignReports() {
+    public void iEsignReports() throws InterruptedException {
         reportPage.esignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
@@ -228,6 +224,14 @@ public class ReportsPageStepsDefinition {
         reportPage.includeReport(reportInclude);
     }
 
+    @When("I select below parameters")
+    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
+        List<List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            reportPage.selectParams(list.get(i).get(0));
+        }
+    }
+
     @When("I choose {string} trends {string}")
     public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
         reportPage.selectParameters(noOfParams, parameters);
@@ -240,7 +244,7 @@ public class ReportsPageStepsDefinition {
 
     @And("I save trends")
     public void iCreateTrendsCharts() {
-        reportPage.createTrends();
+        reportPage.saveTrends();
     }
 
     @Then("I verify that sixth chart is not allowed")
@@ -290,7 +294,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I generate audit trail report")
-    public void iGenerateAuditTrailReport() {
+    public void iGenerateAuditTrailReport() throws InterruptedException {
         iGotoReportManagementPage();
         iSelectReportFromDropdown("Audit Trail");
         iClickOnGenerateButton();
@@ -334,10 +338,37 @@ public class ReportsPageStepsDefinition {
         reportPage.approvedTemplateValidation();
     }
 
+    @Then("I verify consolidate summary report")
+    public void iVerifyConsolidateSummaryReport() throws Exception {
+        this.report.validateConsolidateRunSummary(reportPage.getPdfUrl(), report.getRecipes());
+    }
+
+    @When("I wait for recipes in runs")
+    public void iWaitForRecipesInRuns() throws InterruptedException {
+        long tMax = 30000;
+        long delay = 500;
+        boolean waiting = true;
+        while (waiting) {
+            tMax -= delay;
+            if (tMax < 0) {
+                break;
+            }
+            Thread.sleep(delay);
+            iTriggerReportMode();
+            reportPage.gotoRunTab();
+            iSelectReportFromDropdown("Consolidated");
+            waiting = !report.getRecipes().stream().allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
+        }
+    }
+
+    @When("I choose recipes from consolidation run")
+    public void iChooseRecipeRunForConsolidation() {
+        report.getRecipes().forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
+    }
+
     @Given("I select the report template")
     public void i_select_report_template() throws InterruptedException {
         reportPage.openReportTemplate(this.reportTemplate.getName());
-        //Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
     }
 
     @When("I save As the report template")
@@ -390,20 +421,16 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify run summary report report")
-    public void i_verify_run_summary_report() throws Exception {
+    public void i_verify_run_summary_report() throws IOException {
         this.report.checkEventTable(reportPage.getPdfUrl());
-        this.report.checkFiledIds(reportPage.getPdfUrl(), this.recipe.getMachineName(), this.recipe.getBatchId(), this.recipe.getProductId(), this.recipe.getRecipeName(),
-                this.recipe.getBeforeComments(), this.recipe.getAfterComments(),
-                this.recipe.getStartDate(), this.recipe.getEndDate(), this.report.getReportName());
+        this.report.checkFiledIds(reportPage.getPdfUrl(), report.getRecipes(), report.getReportName());
         this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
         this.report.checkRecipeColumnsInReport(reportPage.getPdfUrl());
     }
 
     @When("I enter {string} as username and {string} password")
-    public void i_Enter_Username_Password(String username1, String password1) {
-        loginPage.setUser(username1);
-        loginPage.setPassword(password1);
+    public void i_Enter_Username_Password(String username, String password) {
+        loginPage.setUser(username);
+        loginPage.setPassword(password);
     }
-
-
 }

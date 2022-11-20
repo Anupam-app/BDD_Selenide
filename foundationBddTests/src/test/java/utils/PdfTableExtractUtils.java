@@ -1,10 +1,11 @@
-package utils.pdf;
+package utils;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -57,13 +58,40 @@ public final class PdfTableExtractUtils {
     }
 
     /**
-     * Get table (first found) from table section title
+     * Get tables from table section title
      * 
      * @param inputStream PDF File as stream
      * @param tableTitle Table section title
      * @return Table
      */
-    public static Table getTableFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+    public static List<Table> getTablesFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+
+        List<Table> resultTable = new ArrayList<>();
+
+        try (PDDocument document = PDDocument.load(inputStream)) {
+
+            ObjectExtractor oe = new ObjectExtractor(document);
+
+            for (int i = 0; i <= document.getNumberOfPages(); i++) {
+
+                PDFTextStripper textStripper = new PDFTextStripper();
+                textStripper.setStartPage(i);
+                textStripper.setEndPage(i);
+                String pageText = textStripper.getText(document);
+
+                if (StringUtils.containsIgnoreCase(pageText, tableTitle)) {
+                    Page page = oe.extract(i);
+
+                    if (page != null) {
+                        resultTable.addAll(new ArrayList<>(getTablesFromPage(page)));
+                    }
+                }
+            }
+        }
+
+        return resultTable;
+    }
+    public static Table getTableFromTableTitles(InputStream inputStream, String tableTitle) throws IOException {
 
         Table resultTable = null;
 
@@ -238,7 +266,7 @@ public final class PdfTableExtractUtils {
         return tableList;
     }
 
-    private static Table searchTable(List<Table> tableList, String tableHeader) {
+    public static Table searchTable(List<Table> tableList, String tableHeader) {
 
         for (Table table : tableList) {
 

@@ -61,7 +61,6 @@ public class LoginPageStepsDefinition {
         loginPage.checkMessage(message);
     }
 
-
     @When("^I login to application with wrong password$")
     public void iShouldSeeLoginMessage(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
@@ -75,7 +74,6 @@ public class LoginPageStepsDefinition {
 
         }
     }
-
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {

@@ -19,6 +19,8 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import java.util.*;
 import java.util.Date;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+
 
 import java.util.Timer;
 
@@ -64,13 +66,17 @@ public class RecipeConsolePage {
     private final SelenideElement startDate = $(By.xpath("//span[@id='startDate_Id']"));
     private final SelenideElement endDate = $(By.xpath("//span[@id='endDate_Id']"));
     private final SelenideElement machineName=$(By.xpath("//span[@id='machine_Id']/label"));
-  
+
+    private final SelenideElement clearRecipeButton = $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
+    
+
     private Recipe recipe;
     
     public RecipeConsolePage(Recipe recipe) {
       
         this.recipe = recipe;
     }
+
     public void holdAndRestart() {
         if (restartButton.isDisplayed()) {
             restartSystem();
@@ -95,6 +101,10 @@ public class RecipeConsolePage {
     
     public void collapseRecipeConsole() {
     	SelenideHelper.commonWaiter(collapseIcon, visible).click();
+        if(expandIcon.isDisplayed()){
+            expandIcon.click();
+        }
+
     }
 
     public void loadRecipe(String recipeName) {
@@ -136,6 +146,35 @@ public class RecipeConsolePage {
     	
     }
 
+    public String startAndWaitRecipe(Recipe recipe, int seconds) {
+
+        String runId;
+        String[] dateParts = null;
+        String[] dateparts1 = null;
+
+        runIcon.waitUntil(Condition.visible, 20000l);
+        runIcon.click();
+        runId = runIdTextbox.getValue();
+        productIdTextbox.setValue(recipe.getProductId());
+        batchIdTextbox.click();
+        batchIdTextbox.sendKeys(recipe.getBatchId());
+        batchIdTextbox.sendKeys(Keys.ENTER);
+        preRunCommentsText.sendKeys(recipe.getBeforeComments());
+        okButton.click();
+        abortIcon.waitUntil(Condition.visible, 5000l);
+        abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
+        SelenideHelper.commonWaiter(startDate, visible);
+        recipe.setStartDate(startDate.getText());
+        recipe.setEndDate(endDate.getText());
+        recipe.setMachineName(machineName.getText());
+        recipe.setStatus(executionStatusText.getText());
+        preRunCommentsText.sendKeys(recipe.getAfterComments());
+        okButton.click();
+
+        return runId;
+    }
+
+
     public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments,
     		int seconds) {
 
@@ -164,7 +203,7 @@ public class RecipeConsolePage {
         this.recipe.setAfterComments(afterComments);
         this.recipe.setMachineName(machineName.getText());
         okButton.click();
-
+        
         return runId;
     }
 
@@ -268,4 +307,9 @@ public class RecipeConsolePage {
         }
         holdSystem();
     }
+
+	public void clearRecipe() {
+		SelenideHelper.commonWaiter(clearRecipeButton, visible).click();
+	}
+
 }
