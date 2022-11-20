@@ -339,15 +339,15 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
 
-    public String waitAndGetGeneratedNameFromNotificationWhenFileGenerated() {
+    public String waitAndGetGeneratedNameFromNotificationWhenFileGenerated() throws InterruptedException {
         return waitAndGetGeneratedNameFromNotification("Report file generated");
     }
 
-    public String waitAndGetGeneratedNameFromNotificationWhenFileSigned() {
+    public String waitAndGetGeneratedNameFromNotificationWhenFileSigned() throws InterruptedException {
         return waitAndGetGeneratedNameFromNotification("Report file signed");
     }
 
-    private String waitAndGetGeneratedNameFromNotification(String text) {
+    private String waitAndGetGeneratedNameFromNotification(String text) throws InterruptedException {
         switchTo().parentFrame();
         SelenideElement notificationText = $(By.xpath(String.format(XPATH_NOTIFICATION_TEXT, text)));
         waitForReportGeneration(notificationText, visible);
@@ -371,12 +371,19 @@ public class ReportsPage {
         reportSigned.shouldBe(visible);
     }
 
-    public void waitForReportGeneration(SelenideElement element, Condition condition) {
+    public void waitForReportGeneration(SelenideElement element, Condition condition) throws InterruptedException {
         element.waitUntil(condition, 3 * 60 * 1000l, 500l);
+        Thread.sleep(1000);
     }
 
     public void checkReportPdfInPage() {
         absentReportText.should(not(visible));
+    }
+
+    public void saveTrends() {
+        trendsName.waitUntil(visible, 10000).setValue(RandomStringUtils.randomAlphabetic(10));
+        trendsSaveButton.click();
+        trendsCancelButton.click();
     }
 
     public void create5Trends() {
