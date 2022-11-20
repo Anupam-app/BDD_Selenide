@@ -143,11 +143,28 @@ public class RecipePage {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
-        searchTextBox.sendKeys("start");
+        searchTextBox.sendKeys("setpoint");
+        searchTextBox.sendKeys(Keys.ENTER);
+		
+		  searchTextBox.sendKeys(Keys.LEFT_SHIFT+"up");
+		  searchTextBox.sendKeys("active"); searchTextBox.sendKeys(Keys.ENTER);
+		 
+        //String s = Keys.chord(Keys.ALT, Keys.ENTER);
+        //searchTextBox.sendKeys(s);
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
+        
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
+        searchTextBox.sendKeys("set auto mode");
+        searchTextBox.sendKeys(Keys.ENTER);
+        //searchTextBox.sendKeys(s);
+        searchTextBox.sendKeys("enable");
         searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
+        
     }
 
     public void addStep() {

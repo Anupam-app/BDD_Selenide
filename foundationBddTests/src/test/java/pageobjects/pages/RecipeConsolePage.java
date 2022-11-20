@@ -3,17 +3,25 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import static com.codeborne.selenide.Condition.*;
 
 import dataobjects.Recipe;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
 
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import java.util.*;
+import java.util.Date;
 
 import java.util.Timer;
+
 
 public class RecipeConsolePage {
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
@@ -26,7 +34,15 @@ public class RecipeConsolePage {
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
     private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss9']"));
+    private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
+    private final SelenideElement manualOperations = $(By.xpath("//span[text()='MANUAL OPERATION']"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
+    private final SelenideElement startIcon = $(By.xpath("//img[contains(@src,'START')]"));
+    private final SelenideElement batchId = $(By.xpath("//p[text()='BATCH ID']"));
+    private final SelenideElement runID = $(By.xpath("//p[text()='RUN ID']"));
+    private final SelenideElement timerText = $(By.xpath("//p[text()='DHMS']"));
+    private final SelenideElement timerValue = $(By.xpath("//div[text()='00:00:00:00']"));
+    private final SelenideElement pauseTimerValue = $(By.xpath("//p[contains(text(),'0:00')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
     private final SelenideElement pauseIcon = $(By.xpath("//img[contains(@src,'Group')]"));
@@ -63,7 +79,7 @@ public class RecipeConsolePage {
         restartSystem();
     }
 
-    private void restartSystem() {
+    public void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible).click();
         SelenideHelper.commonWaiter(yesButton, visible).click();
     }
@@ -74,7 +90,11 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        expandIcon.click();
+    	SelenideHelper.commonWaiter(expandIcon, visible).click();
+    }
+    
+    public void collapseRecipeConsole() {
+    	SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
     public void loadRecipe(String recipeName) {
@@ -89,6 +109,31 @@ public class RecipeConsolePage {
         loadButton.waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
+    }
+    
+    public void verifyRecipeRunOptions() {
+    	if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+        if (clearRecipeText.isDisplayed()) {
+            clearRecipeText.click();
+        }
+    	loadRecipeText.shouldBe(visible);
+    	holdButton.shouldBe(visible);
+    }
+    
+    public void gotoManualOperations() {
+    	SelenideHelper.commonWaiter(manualOperations, visible).click();
+    }
+    
+    public void verifyManualRunOptions() {
+    	startIcon.shouldBe(visible);
+    	batchId.shouldBe(visible);
+    	runID.shouldBe(visible);
+    	timerText.shouldBe(visible);
+    	timerValue.shouldBe(visible);
+    	
     }
 
     public String startAndWaitRecipe(String productId, String batchId, String beforeComments, String afterComments,
@@ -139,7 +184,7 @@ public class RecipeConsolePage {
     }
 
     public void clickPauseButton() {
-        pauseIcon.click();
+        pauseIcon.waitUntil(Condition.visible, 5000l).click();
     }
 
     public void clickResumeButton() {
@@ -174,7 +219,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
-        SelenideHelper.commonWaiter(holdButton, visible);
+        SelenideHelper.commonWaiter(restartButton, visible);
     }
 
     public String getExecutionStatusText() {
@@ -193,5 +238,34 @@ public class RecipeConsolePage {
 
     public boolean isRunBefore(String recipeName) {
         return $(By.xpath(String.format(XPATH_RECIPE_LOADED_BEFORE, recipeName, recipeName))).isDisplayed();
+    }
+	
+	public void clearPanelAndRunDisabled() {
+    	runIcon.shouldNotBe(selected);
+    	clearRecipeText.shouldNotBe(selected);
+    }
+	
+	public void recipeisPaused() throws ParseException {
+    	resumeIcon.shouldNotBe(selected);
+    	SimpleDateFormat formatter = new SimpleDateFormat("DD:HH:MM:SS");
+    	String timeStart = pauseTimerValue.getText();
+    	Selenide.sleep(2000);
+    	String timeEnd   = pauseTimerValue.getText();
+    	Date startTime=  formatter.parse(timeStart);
+    	Date endTime = formatter.parse(timeEnd);
+    	long timeDifference = (endTime).getTime() - (startTime).getTime(); 
+    	if (timeDifference>0) {
+    		Assert.assertTrue(true);
+    	}
+    	else{
+    		Assert.assertTrue(false);
+    	}
+    }
+	
+	public void hold() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+        }
+        holdSystem();
     }
 }
