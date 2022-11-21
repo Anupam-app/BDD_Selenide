@@ -9,11 +9,15 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
+import dataobjects.Report;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Function;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -22,7 +26,6 @@ import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
-
 
 public class ReportsPage {
 
@@ -53,14 +56,14 @@ public class ReportsPage {
 	private final String XPATH_TemplateColumnName_Value = "//*[@id=\"templateListTable\"]/tbody/tr/td[%d]";
 	private final String XPATH_ReportColumnName = "//*[@id=\"reportListTable\"]/thead/tr/th[%d]";
 	private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr[%d]/td[%d]";
-	private final String XPATH_UserColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[4]";
-	private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
 	private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
 	private final String XPATH_TRENDS_PARAMS = "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
 
 	private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
-	private final String XPATH_TEMPLATE_COLUMNS = "//table[@id='templateListTable']//td[%s]";
 	private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
+	private final String XPATH_TEMPLATE_COLUMNS = XPATH_TEMPLATE_TABLE + "//td[%s]";
+	private final String XPATH_UserColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[4]";
+	private final String XPATH_DateColumnName_Value = "//*[@id=\"auditListTable\"]/tbody/tr[%d]/td[1]";
 
 	private final SelenideElement reportsManagementPage = $(By.id("ReportManagement"));
 	private final SelenideElement runTab = $(By.xpath("//a[contains(text(),'Runs')]"));
@@ -202,6 +205,7 @@ public class ReportsPage {
 		reportTab.shouldBe(visible);
 	}
 
+
 	public void verifyColumn(String columnName, String tab, int columnIndex) {
 		switch (tab) {
 		case "runs":
@@ -250,7 +254,7 @@ public class ReportsPage {
 
 	public void selectUserOnRunPage(String user) {
 		SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
-		$(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).click();
+		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
 	}
 
 	public void selectDateFilterOnRunPage(String dateFilter) {
@@ -519,7 +523,6 @@ public class ReportsPage {
 
 	public void checkTableContainsReport(String reportName) {
 		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
-
 		for (int row = 1; row <= reportListTable.size(); row++) {
 			if ($(By.xpath(String.format(XPATH_ReportColumnName_Value, row, 1))).getText().equalsIgnoreCase(reportName)) {
 				for (int i = 1; i < 7; i++) {
@@ -530,30 +533,27 @@ public class ReportsPage {
 		}
 	}
 
-	public void checkTableContainsUserAndDateRange(String userid) throws InterruptedException, ParseException {
-		SelenideHelper.commonWaiter(auditListTable.get(1), visible);
-		for (int i = 1; i <= (auditListTable.size()); i++) {
-			Assert.assertTrue($(By.xpath(String.format(XPATH_UserColumnName_Value, i))).getText().toLowerCase().contains(userid));
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
-			Date currentdate = new Date();
-			String eventDate = ($(By.xpath(String.format(XPATH_DateColumnName_Value, i))).getText().replaceAll("\\s.*", ""));
-			Date eventDateTime = formatter.parse(eventDate);
-			int diffInDays = (int) ((currentdate.getTime() - eventDateTime.getTime())
-					/ (1000 * 60 * 60 * 24));
-			if (diffInDays <= 7) {
+	public void checkTableContainsUserAndDateRange(int days, String userid, int results) {
+		SelenideHelper.fluentWaiter().until((webDriver) -> auditListTable.size() > 0);
+		Assert.assertTrue("auditListTable should contains values", auditListTable.size() > 0);
+		var dateInPast = LocalDateTime.now().plusDays(-days);
+		var formatter = DateTimeFormatter.ofPattern(Report.RECIPE_DATE_FORMAT).localizedBy(Locale.US);
 
-				Assert.assertTrue(true);
-			} else {
-				Assert.assertTrue(false);
-			}
+		//limit the results to avoid test to take to much time
+		for (int i = 0; i < auditListTable.size() && i < results; i++) {
+			validateAuditTrail(userid, dateInPast, formatter, i + 1);
+			validateAuditTrail(userid, dateInPast, formatter, auditListTable.size() - i);
 		}
 	}
 
-	public void checkTableDates() {
-		for (int i = 1; i <= auditListTable.size(); i++) {
-		}
+	private void validateAuditTrail(String userid, LocalDateTime dateInPast, DateTimeFormatter formatter, int iterator) {
+		String user = $(By.xpath(String.format(XPATH_UserColumnName_Value, iterator))).getText();
+		String eventDate = $(By.xpath(String.format(XPATH_DateColumnName_Value, iterator))).getText();
+		Assert.assertTrue(user.toLowerCase().contains(userid));
+		LocalDateTime eventDateTime = LocalDateTime.parse(eventDate, formatter);
+		Assert.assertTrue(String.format("eventDateTime:%s is not in the expected range", eventDateTime),
+				eventDateTime.compareTo(dateInPast) >= 0);
 	}
-
 
 	public void checkTableContainsTemplate(String templateName) {
 		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_COLUMNS_BY_TEXT, templateName))), visible);
