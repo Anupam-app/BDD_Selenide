@@ -33,10 +33,10 @@ public class TrendsPage {
 	private ElementsCollection defaultCollectionParams = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
 	private ElementsCollection staricon = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/span[2]"));
 	private ElementsCollection grapgAreaElement = $$(By.xpath("//*[@class='highcharts-graph']"));
-	
-    private SelenideElement graphStartTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
-    private SelenideElement graphLastTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
-    private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
+
+	private SelenideElement graphStartTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
+	private SelenideElement graphLastTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
+	private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
 	private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
 	private SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
 	private SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
@@ -94,21 +94,21 @@ public class TrendsPage {
 	private ElementsCollection staricon1 = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/span[2]"));
 	private SelenideElement loadingIcon = $(By.xpath("//div[contains(@class,'loading')]"));
 	private SelenideElement chartBorder = $(By.xpath("//*[@class='highcharts-plot-border']"));
-			
+
 	public void goToTrends() {
 		trends.click();
 		commonWaiter(trends,visible);
 	}
 
-    public void seeContent(String expectedText) {
-        SelenideHelper.commonWaiter(starredLabel, Condition.visible)
-                .shouldHave(Condition.text(expectedText));
-    }
+	public void seeContent(String expectedText) {
+		SelenideHelper.commonWaiter(starredLabel, Condition.visible)
+		.shouldHave(Condition.text(expectedText));
+	}
 
-    public List<String> getDeviceShapeElementNotLoaded() {
-        SelenideHelper.commonWaiter(defaultButton, Condition.visible).click();
-        return I18nUtils.getElementsNotI18N(deviceShapeElements);
-    }
+	public List<String> getDeviceShapeElementNotLoaded() {
+		SelenideHelper.commonWaiter(defaultButton, Condition.visible).click();
+		return I18nUtils.getElementsNotI18N(deviceShapeElements);
+	}
 
 	public void switchToFrame() {
 		goToIFrame();
@@ -129,7 +129,7 @@ public class TrendsPage {
 		footerValidation.shouldNotBe(visible);
 		Assert.assertFalse(false);
 	}
-	
+
 	public void arrowCollapse(String name) {
 
 		switch (name) {
@@ -148,7 +148,7 @@ public class TrendsPage {
 		default:
 		}
 	}
-	
+
 	public void arrowCollapseValidation(String name) {
 		switch (name) {
 		case "Trends_Area_Panel":
@@ -166,7 +166,7 @@ public class TrendsPage {
 		default:
 		}
 	}
-	
+
 	public void arrowExpand(String name) {
 
 		switch (name) {
@@ -185,7 +185,7 @@ public class TrendsPage {
 		default:
 		}
 	}
-	
+
 	public void arrowExpandValidation(String name) {
 
 		switch (name) {
@@ -248,7 +248,7 @@ public class TrendsPage {
 	}
 
 	public void footerValidation(String options) {
-		
+
 		switch(options){
 		case "Save as Collection":
 			saveAsCollections_Text.shouldBe(visible);
@@ -307,18 +307,18 @@ public class TrendsPage {
 		}
 		System.out.println(acceptedParams);
 		var config = ConfigFactory.parseResourcesAnySyntax(parameters,ConfigParseOptions.defaults());
-	    var params = config.getConfigList("Params.list");
-	    int paramsSize = params.size();
+		var params = config.getConfigList("Params.list");
+		int paramsSize = params.size();
 		for (var param : params) {
 			expectedParams.add(param.getString("value"));
-        }
+		}
 		if((count==paramsSize) && (count!=0 && paramsSize!=0)) {
 			Collections.sort(acceptedParams);
 			Collections.sort(expectedParams);
 			Assert.assertEquals(acceptedParams,expectedParams );
-			
+
 		}
-		
+
 	}
 
 	public void starredButton() {
@@ -377,30 +377,30 @@ public class TrendsPage {
 	}
 
 	public void ledggerParameterOnChartArea(String param1, String param2) {
-		
-        commonWaiter(chartBorder, visible);
+
+		commonWaiter(chartBorder, visible);
 		commonWaiter($(By.xpath(String.format(ledggerParam,param1))),Condition.visible);
-		
+
 		Selenide.sleep(2000);
 		commonWaiter($(By.xpath(String.format(ledggerParam,param2))),Condition.visible);
-         
+
 		validateGraph();
-		
-		
+
+
 
 	}	
-	
+
 	public void noParametes_starred() {
 		starredNullParameters.waitWhile(not(visible), 20);
-		
+
 		starredNullParameters.shouldNotBe(visible);
 	}
-	
+
 	public void deleteCollection() {
 		deleteCollection.click();
 		deleteCollectionButton.click();;
 	}
-	
+
 	public void graphTime() throws ParseException {
 		String startTime = graphStartTime.getText().replaceAll("\\s", "");
 		String lastTime  = null;
@@ -412,14 +412,14 @@ public class TrendsPage {
 		{
 			lastTime = graphLastTime.getText().replaceAll("\\s", "");
 		}
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("MMMd,yyyy,HH:mm:ssaa");
 		Date date1 = format.parse(startTime);
 		Date date2 = format.parse(lastTime);
 		long difference = ((date2.getTime() - date1.getTime()))/(60 * 1000) % 60;
-        System.out.print("Time difference:"+difference);
-        Assert.assertTrue(difference<=60);
-        Assert.assertTrue(difference>=45);
+		System.out.print("Time difference:"+difference);
+		Assert.assertTrue(difference<=60);
+		Assert.assertTrue(difference>=45);
 	}
 
 }

@@ -54,16 +54,16 @@ public class ReportsFilterStepsDefinition {
 	public void isearchRunReport(String recipeRunName) {
 		reportPage.searchReportOrTemplate(recipeRunName);
 	}
-	
+
 	@When("I select template sort by {string} in {string}")
-    public void iSelectSortTemplate(String columnName, String sortMode) {
+	public void iSelectSortTemplate(String columnName, String sortMode) {
 		reportPage.sortListTemplate(columnName,Boolean.parseBoolean(sortMode));
-    }
-    
-    @Then("{string} list should be sorted in {string} order")
-    public void templatesShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+	}
+
+	@Then("{string} list should be sorted in {string} order")
+	public void templatesShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
 		reportPage.checkSortedElementTemplate(columnName,Boolean.parseBoolean(sortMode));
-    }
+	}
 
 	@Then("I should see recipe run {string}")
 	public void iSeeRunReport(String recipeRunName) {
@@ -119,11 +119,11 @@ public class ReportsFilterStepsDefinition {
 		}
 	}
 
-    @Then("I see Audit logs are displayed for date range and {string}")
-    public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
-        reportPage.checkTableContainsUserAndDateRange(userid);
-    }
-    
+	@Then("I see Audit logs are displayed for date range and {string}")
+	public void iVerifyAuditLogsUser(String userid) throws InterruptedException, ParseException {
+		reportPage.checkTableContainsUserAndDateRange(userid);
+	}
+
 
 	@Then("^Report columns should be sorted in descending order$")
 	public void report_columns_sorted_in_desc_order(DataTable datatable) {
@@ -133,15 +133,15 @@ public class ReportsFilterStepsDefinition {
 			reportPage.checkSortedElement(columnName, true);
 		}
 	}
-	
+
 	@Then("^I should see recipe report list displayed based on date range dropdown$")
 	public void iviewrecipereportlistdaterange(DataTable datatable)
-		throws ParseException, InterruptedException {
-			List<String> options = datatable.asList();
-			for (String datarange : options) {
-				reportPage.selectDateRangeRprt(datarange);
-				reportPage.verifyDateRangesRprt(datarange);
-			}
+			throws ParseException, InterruptedException {
+		List<String> options = datatable.asList();
+		for (String datarange : options) {
+			reportPage.selectDateRangeRprt(datarange);
+			reportPage.verifyDateRangesRprt(datarange);
+		}
 	}
 	@Then("^Reports columns should be sorted in ascending order$")
 	public void reports_columns_sorted_ascending_order(DataTable datatable) {
@@ -151,7 +151,7 @@ public class ReportsFilterStepsDefinition {
 			reportPage.checkSortedElements(columnName, false);
 		}
 	}
-	
+
 	@Then("^Reports columns should be sorted in descending order$")
 	public void reports_columns_sorted_descending_order(DataTable datatable) {
 		List<String> options = datatable.asList();

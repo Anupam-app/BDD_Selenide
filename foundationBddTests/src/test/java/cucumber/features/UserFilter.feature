@@ -44,12 +44,12 @@ Feature: Apply Filter Users
     Then "<columnName>" from user should be displayed in sorted order "<descending>"
 
     Examples:
-      | columnName  | descending |
+      |columnName   | descending |
       |Username     | true       |
       |Username     | false      |
-	  |First Name	| true	 	 |
-      |First Name	| false		 |
-      |Last Name	| true       |
-      |Last Name	| false		 |
-      |Role			| true       |
-      |Role			| false		 |
+	  	|First Name		| true	 	 	 |
+      |First Name		| false		   |
+      |Last Name		| true       |
+      |Last Name		| false		   |
+      |Role					| true       |
+      |Role					| false		   |

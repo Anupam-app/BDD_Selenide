@@ -20,26 +20,26 @@ public class TrendsPageStepsDefinition {
 		this.trendsPage = trendsPage;
 	}
 
-    @Given("I go to trends")
-    public void iGotoAlarm() {
-        trendsPage.goToTrends();
-        SelenideHelper.goToIFrame();
-    }
+	@Given("I go to trends")
+	public void iGotoAlarm() {
+		trendsPage.goToTrends();
+		SelenideHelper.goToIFrame();
+	}
 
-    @Then("I see expected texts from trend module")
-    public void iSeeTextsFromTrendModule() {
-        var expectedText = I18nUtils.getValueFromKey("trends.collection.starred");
-        trendsPage.seeContent(expectedText);
-        SelenideHelper.goParentFrame();
-    }
+	@Then("I see expected texts from trend module")
+	public void iSeeTextsFromTrendModule() {
+		var expectedText = I18nUtils.getValueFromKey("trends.collection.starred");
+		trendsPage.seeContent(expectedText);
+		SelenideHelper.goParentFrame();
+	}
 
-    @Then("I see expected texts from trend module parameters")
-    public void iSeeTextsFromTrendModuleParameters() {
-        var deviceShapeElementNotTranslated = trendsPage.getDeviceShapeElementNotLoaded();
-        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
-                deviceShapeElementNotTranslated.isEmpty());
-        SelenideHelper.goParentFrame();
-    }
+	@Then("I see expected texts from trend module parameters")
+	public void iSeeTextsFromTrendModuleParameters() {
+		var deviceShapeElementNotTranslated = trendsPage.getDeviceShapeElementNotLoaded();
+		Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+				deviceShapeElementNotTranslated.isEmpty());
+		SelenideHelper.goParentFrame();
+	}
 
 	@Given("I navigate to trends page")
 	public void i_navigate_to_trends_page() {
@@ -152,7 +152,7 @@ public class TrendsPageStepsDefinition {
 	@When("I select star icons for {string},{string} parameters")
 	public void i_select_star_icons_for_parameters(String param1, String param2) throws InterruptedException, ParseException {
 		trendsPage.iselectstaricon(param1,param2);
-		
+
 	}
 	@When("I unselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {

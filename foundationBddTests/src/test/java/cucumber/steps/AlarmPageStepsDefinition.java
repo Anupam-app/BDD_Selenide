@@ -8,22 +8,22 @@ import pageobjects.utility.SelenideHelper;
 
 public class AlarmPageStepsDefinition {
 
-    private AlarmPage alarmPage;
+	private AlarmPage alarmPage;
 
-    public AlarmPageStepsDefinition(AlarmPage alarmPage) {
-        this.alarmPage = alarmPage;
-    }
+	public AlarmPageStepsDefinition(AlarmPage alarmPage) {
+		this.alarmPage = alarmPage;
+	}
 
-    @Given("I go to alarm")
-    public void iGotoAlarm() {
-        alarmPage.goToAlarm();
-        SelenideHelper.goToIFrame();
-    }
+	@Given("I go to alarm")
+	public void iGotoAlarm() {
+		alarmPage.goToAlarm();
+		SelenideHelper.goToIFrame();
+	}
 
-    @Then("I see expected texts from alarm module")
-    public void iSeeTextsFromAlarmModule() {
-        var expectedText= I18nUtils.getValueFromKey("alarm.alarmList.emptyList.errorMessage");
-        alarmPage.seeContent(expectedText);
-        SelenideHelper.goParentFrame();
-    }
+	@Then("I see expected texts from alarm module")
+	public void iSeeTextsFromAlarmModule() {
+		var expectedText= I18nUtils.getValueFromKey("alarm.alarmList.emptyList.errorMessage");
+		alarmPage.seeContent(expectedText);
+		SelenideHelper.goParentFrame();
+	}
 }

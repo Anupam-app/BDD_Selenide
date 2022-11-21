@@ -15,16 +15,16 @@ import java.util.Collections;
 import java.util.List;
 
 public class RolePageStepsDefinition {
-	
-    private final RolePage rolePage;
-    private final Role role;
 
-    public RolePageStepsDefinition(RolePage rolePage, Role role) {
-        this.rolePage = rolePage;
-        this.role = role;
-        this.role.getPermissions().clear();
-    }
-    
+	private final RolePage rolePage;
+	private final Role role;
+
+	public RolePageStepsDefinition(RolePage rolePage, Role role) {
+		this.rolePage = rolePage;
+		this.role = role;
+		this.role.getPermissions().clear();
+	}
+
 	@Given("I trigger Roles mode")
 	public void iTriggerRolesMode() {
 		rolePage.gotoRolesTab();
@@ -36,32 +36,32 @@ public class RolePageStepsDefinition {
 		this.role.setRoleAction(RoleAction.ADDED);
 		rolePage.createNewrole(this.role.getRoleName());
 	}
-	
+
 	@When("I select role sort by {string} in {string}")
-    public void iSelectSortBy(String columnName, String sortMode) {
+	public void iSelectSortBy(String columnName, String sortMode) {
 		rolePage.sortList(columnName,Boolean.parseBoolean(sortMode));
-    }
-	
+	}
+
 	@Then("{string} from role should be displayed in sorted order {string}")
-    public void roleDetailsShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
+	public void roleDetailsShouldBeDisplayedInSortedOrder(String columnName,String sortMode) {
 		rolePage.checkSortedElement(columnName,Boolean.parseBoolean(sortMode));
-    }
-	
+	}
+
 	@Given("I search {string} role")
-    public void iSearchRole(String role) {
-        this.role.setRoleName(role);
-        rolePage.searchRole(this.role.getRoleName());
-    }
+	public void iSearchRole(String role) {
+		this.role.setRoleName(role);
+		rolePage.searchRole(this.role.getRoleName());
+	}
 
 	@When("I assign permission {string}")
 	public void iAssignPermission(String role) {
 		this.role.getPermissions().add(role);
 		rolePage.clickOnPermission(role);
 	}
-	
+
 	@When("I see notification")
 	public void iSeeNotification() {
-    	rolePage.notification(this.role.getRoleAction());
+		rolePage.notification(this.role.getRoleAction());
 	}
 
 	@Then("I verify role details")
@@ -87,7 +87,7 @@ public class RolePageStepsDefinition {
 	@When("I edit role {string}")
 	public void iModifyRole(String role) {
 		this.role.setRoleAction(RoleAction.UPDATED);
-    	this.role.setRoleName(role);
+		this.role.setRoleName(role);
 		rolePage.modifyRole(role);
 		rolePage.getPermissionList().forEach(p->this.role.getPermissions().add(p));
 	}
@@ -100,7 +100,7 @@ public class RolePageStepsDefinition {
 	@When("I remove permission {string}")
 	public void iRemovePermissions(String role) {
 		this.role.getPermissions().remove(role);
-    	rolePage.clickOnPermission(role);
+		rolePage.clickOnPermission(role);
 	}
 
 	@When("I assign {string} to user")
@@ -112,26 +112,26 @@ public class RolePageStepsDefinition {
 	public void theRoleExists(String role) {
 		rolePage.searchRole(role);
 		rolePage.roleExists(role);
-    }
+	}
 
 	@Then("I do not see Roles mode")
 	public void iDoNotSeeRolesMode() {
 		rolePage.NoRolesTab();
 	}
 	@Then( "I see the error message of role {string}")
-    public void iSeetheErrorMessage(String message) {
-        rolePage.checkMessage(message);
-    }
+	public void iSeetheErrorMessage(String message) {
+		rolePage.checkMessage(message);
+	}
 	@Then("I create role {string}")
 	public void iCreateRole(String name) {
 		this.role.setRoleName(name);
 		this.role.setRoleAction(RoleAction.ERROR);
 		rolePage.createNewrole(this.role.getRoleName());	
-		
+
 	}
 	@When("I click on save button")
 	public void iSaveRole() {
-    	rolePage.saveButton();
+		rolePage.saveButton();
 	}
 
 }
