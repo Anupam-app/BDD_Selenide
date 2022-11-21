@@ -27,8 +27,9 @@ public class AnalyticsPage {
     private final SelenideElement validateAggregateButton = $(By.id("create-aggregate-button"));
     private final SelenideElement deleteButton = $(By.id("delete-aggregate-button"));
     private final SelenideElement cancelButton = $(By.xpath("//span[@class='cancel-aggregate']"));
-    private final SelenideElement applyRelationalSettingsButton = $(By.xpath("//*[@id = 'relational-apply'][@class != 'ant-btn relational-apply-button-disabled']"));
-    private final SelenideElement applyRegressionSettingsButton = $(By.xpath("//*[@id = 'regression-apply'][@class != 'ant-btn regression-apply-button-disabled']"));
+
+    private final SelenideElement applyRelationalSettingsButton = $(By.xpath("//*[@id = 'relational-apply'][@class = 'ant-btn relational-apply-button']"));
+    private final SelenideElement applyRegressionSettingsButton = $(By.xpath("//*[@id = 'regression-apply'][@class = 'ant-btn regression-apply-button']"));
 
     private final SelenideElement clickOnData = $(By.xpath("//span[text()='Data']"));
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
@@ -53,7 +54,7 @@ public class AnalyticsPage {
     private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
     private final String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
     private final String XPATH_PARAMETER_CHECKBOX = "//*[contains(@title,'%s')]";
-    
+
     private final SelenideElement dataTableRow = $(By.xpath("//table[@id='aggregated-data-tab-table']/tbody/tr[1]"));
 
     private final int INDEX_BATCH_ID = 1;
@@ -80,6 +81,8 @@ public class AnalyticsPage {
 
     public void selectYAxisParameter(String parameter) {
         $(By.xpath(String.format(yparameterNameText, parameter))).click();
+        SelenideHelper.fluentWaiter().until((webDriver) ->
+                webDriver.findElement(By.xpath(String.format(xparameterNameText, parameter))).getAttribute("class").contains("disabled"));
     }
 
     public void verifyParameters() {
@@ -190,8 +193,8 @@ public class AnalyticsPage {
     }
 
     public List<String> getDeviceShapeElementNotLoaded() {
-        commonWaiter(createAggregateButton,visible).click();
-        var cancelButtonVisible=commonWaiter(cancelButton,visible);
+        commonWaiter(createAggregateButton, visible).click();
+        var cancelButtonVisible = commonWaiter(cancelButton, visible);
         var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
         cancelButtonVisible.click();
         return elementNotTranslated;
