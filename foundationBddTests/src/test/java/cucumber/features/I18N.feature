@@ -15,7 +15,7 @@ Feature: I18N on all modules
     And I go to main
     And I expand recipe console in pnid
     And I see expected texts from recipe console
-    And I go to trends
+    And I navigate to trends page
     And I see expected texts from trend module
     And I go to analytics
     And I see expected texts from analytics module
