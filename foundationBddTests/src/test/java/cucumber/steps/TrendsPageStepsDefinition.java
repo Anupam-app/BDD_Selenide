@@ -24,14 +24,8 @@ public class TrendsPageStepsDefinition {
 		trendsPage.switchToFrame();
 	}
 
-	@When("I am on Trends Panel")
-	public void i_am_on_trends_panel() {
-		trendsPage.trendsHeaderValidation();
-	}
-
 	@Then("I see availability of Trends panel and chart area message {string}")
 	public void i_see_availability_of_trends_panel_and_chart_area(String message) {
-		trendsPage.trendsHeaderValidation();
 		trendsPage.chartAreaGraph(message);
 	}
 
@@ -49,17 +43,16 @@ public class TrendsPageStepsDefinition {
 	@Then("I see the {string} collapsed")
 	public void i_see_the_trends_area_panel_collapsed(String name) {
 		trendsPage.trendsPanelValidation(name);
+		trendsPage.arrowCollapseValidation(name);
 	}
 
 	@When("I expand {string}")
 	public void i_expand_trends_area_panel(String name) {
-
 		trendsPage.arrowExpand(name);
 	}
 
 	@Then("I see the {string} expanded")
 	public void i_see_the_trends_area_panel_expanded(String name) {
-
 		trendsPage.arrowExpandValidation(name);
 	}
 
@@ -127,9 +120,10 @@ public class TrendsPageStepsDefinition {
 	}
 
 	@When("I select star icons for {string},{string} parameters")
-	public void i_select_star_icons_for_parameters(String param1, String param2) throws InterruptedException, ParseException {
-		trendsPage.iselectstaricon(param1,param2);
-		
+	public void i_select_star_icons_for_parameters(String param1, String param2){
+		trendsPage.iSelectStarIcon(param1);
+		trendsPage.iSelectStarIcon(param2);
+
 	}
 	@When("I unselect the star icons for {string},{string} parameters")
 	public void i_uselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
