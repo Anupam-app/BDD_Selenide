@@ -4,7 +4,6 @@ package pageobjects.pages;
 import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import com.codeborne.selenide.SelenideElement;
@@ -18,7 +17,6 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
@@ -68,12 +66,17 @@ public class TrendsPage {
 
     private SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));
     private SelenideElement trendsExpandArrow = $(By.xpath("//span[@class ='icon-arrow-expand']"));
-    private SelenideElement trendsCollapse = $(By.xpath("//div[@class ='collapsed-sidebar-wrapper']"));
-    private SelenideElement graphValue = $(By.xpath("//*[contains(@class,'highcharts-legend-box')]"));
     private SelenideElement saveTrendsCollection = $(By.xpath("//span[text()='Save as Collection']"));
     private SelenideElement collectionName = $(By.xpath("//input[(@class='collection-name')]"));
     private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']/span"));
     private SelenideElement starredNullParameters = $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));
+
+    private SelenideElement starredCollapseArrow =$(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement starredExpandArrow =$(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
+
+    private SelenideElement defaultCollapseArrow =$(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement defaultExpandArrow =$(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
+
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 
     public void goToTrends() {
@@ -92,7 +95,6 @@ public class TrendsPage {
 
     public void noFooterAvailable() {
         footerValidation.shouldNotBe(visible);
-        Assert.assertFalse(false);
     }
 
     public void arrowCollapse(String name) {
@@ -101,10 +103,14 @@ public class TrendsPage {
                 trendsCollapseArrow.click();
                 break;
             case "Starred_Collection":
-                StarredArrow.click();
+                if(starredExpandArrow.isDisplayed()){
+                    StarredArrow.click();
+                }
                 break;
             case "Default_Collection":
-                DefaultArrow.click();
+                if(defaultExpandArrow.isDisplayed()){
+                    DefaultArrow.click();
+                }
                 break;
             case "List of Collection ":
                 ArrowOfListOfCollection.click();
@@ -116,16 +122,16 @@ public class TrendsPage {
     public void arrowCollapseValidation(String name) {
         switch (name) {
             case "Trends_Area_Panel":
-                trendsCollapseArrow.shouldNot(visible);
+                trendsCollapseArrow.shouldNotBe(visible);
                 break;
             case "Starred_Collection":
-                StarredArrow.isDisplayed();
+                starredCollapseArrow.should(visible);
                 break;
             case "Default_Collection":
-                DefaultArrow.isDisplayed();
+                defaultCollapseArrow.should(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.isDisplayed();
+                ArrowOfListOfCollection.should(visible);
                 break;
             default:
         }
@@ -156,10 +162,10 @@ public class TrendsPage {
                 trendsExpandArrow.shouldNotBe(visible);
                 break;
             case "Starred_Collection":
-                StarredArrow.shouldBe(visible);
+                starredExpandArrow.shouldBe(visible);
                 break;
             case "Default_Collection":
-                DefaultArrow.shouldBe(visible);
+                defaultExpandArrow.shouldBe(visible);
                 break;
             case "List of Collection ":
                 ArrowOfListOfCollection.shouldBe(visible);
@@ -296,20 +302,11 @@ public class TrendsPage {
         commonWaiter(paramElement, not(visible));
     }
 
-    public void ledggerParameterOnChartArea(String param1, String param2) {
-
-
-        commonWaiter($(By.xpath(String.format(ledggerParam, param1))), Condition.visible);
-
-        Selenide.sleep(5000);
-        commonWaiter($(By.xpath(String.format(ledggerParam, param2))), Condition.visible);
-
-        validateGraph();
-
-
+    public void ledgerParameterOnChartArea(String param) {
+        commonWaiter($(By.xpath(String.format(ledggerParam, param))), Condition.visible);
     }
 
-    public void noParametes_starred() {
+    public void noParametersStarred() {
         starredNullParameters.waitWhile(not(visible), 20);
         starredNullParameters.shouldNotBe(visible);
     }
