@@ -72,7 +72,7 @@ public class AnalyticsPageStepsDefinition {
     @When("I apply the analytics settings")
     public void iApplyTheAnalyticsSettings() throws InterruptedException {
         //wait before apply, if it is too fast to apply is not done
-        Thread.sleep(500);
+        Thread.sleep(1000);
         switch (analytics.getAnalyticsMode()) {
             case REGRESSION:
                 analyticsPage.regressionApplySettings();
