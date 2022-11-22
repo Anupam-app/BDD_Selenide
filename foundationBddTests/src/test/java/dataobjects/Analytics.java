@@ -1,5 +1,6 @@
 package dataobjects;
 
+import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -22,4 +23,8 @@ public class Analytics {
     @Setter
     @Getter
     AnalyticsMode analyticsMode;
+
+    @Setter
+    @Getter
+    List<Recipe> recipes;
 }

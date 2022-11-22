@@ -1,7 +1,11 @@
 package cucumber.steps;
 
 
-import dataobjects.*;
+import dataobjects.Analytics;
+import dataobjects.AnalyticsInterval;
+import dataobjects.AnalyticsMode;
+import dataobjects.AnalyticsParameter;
+import dataobjects.Recipe;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,12 +18,10 @@ public class AnalyticsPageStepsDefinition {
 
     private AnalyticsPage analyticsPage;
     private Analytics analytics;
-    private Recipe recipe;
 
     public AnalyticsPageStepsDefinition(AnalyticsPage analyticsPage, Analytics analytics, Recipe recipe) {
         this.analyticsPage = analyticsPage;
         this.analytics = analytics;
-        this.recipe = recipe;
     }
 
     @Given("I go to analytics")
@@ -132,7 +134,7 @@ public class AnalyticsPageStepsDefinition {
 
     @And("I use the recipe for this analytics aggregate with interval {string}")
     public void iUseTheRecipeForThisAnalyticsAggregate(String interval) {
-        analyticsPage.createAggregate(recipe, interval);
+        analyticsPage.createAggregate(analytics.getRecipes().stream().findFirst().get(), interval);
     }
 
     @And("I create analytics aggregate {string} if not done before")
@@ -142,7 +144,10 @@ public class AnalyticsPageStepsDefinition {
         makeAnalyticsParameter("PI101 PV", "psi", "x");
         makeAnalyticsParameter("PI102 PV", "psi", "y");
         makeAnalyticsParameter("PI103 PV", "psi", "y");
-        if (StringUtils.isNotEmpty(recipe.getRecipeName())) {
+
+        var recipeOptional = analytics.getRecipes().stream().findFirst();
+
+        if (recipeOptional.isPresent() && StringUtils.isNotEmpty(recipeOptional.get().getRecipeName())) {
             analyticsPage.deleteIfExists(analytics.getName());
             createAnalytics();
             iUseTheRecipeForThisAnalyticsAggregate(AnalyticsInterval.SECOND);

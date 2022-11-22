@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI @ORCHESTRATOR
 Feature: Role administration
  
   Background:

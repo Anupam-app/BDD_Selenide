@@ -1,6 +1,5 @@
-@COMMON
+@CRS @IVI @ORCHESTRATOR
 Feature: User management
-   
 
   @SMOKE
   Scenario: Create new user

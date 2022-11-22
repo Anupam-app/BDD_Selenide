@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Recipe management
 
   Background:
