@@ -39,6 +39,7 @@ public class RecipeConsoleStepsDefinition {
         this.report.setRecipes(this.recipes);
         this.analytics.setRecipes(this.recipes);
     }
+    
 
     @Given("I expand recipe console in pnid")
     public void iGotoRecipeConsole() {
@@ -154,6 +155,7 @@ public class RecipeConsoleStepsDefinition {
 
         this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+        
     }
 
     @Then("Recipe should be executed")
@@ -193,7 +195,8 @@ public class RecipeConsoleStepsDefinition {
     
     @When("I check audit trial logs")
     public void icheckAudiTrialLogs() {
-        reportPage.checkRecipeCTRLOperationLogs(this.recipe.getBatchId(),this.recipe.getRecipeName());
+    	System.out.println(currentRecipe.getBatchId()+currentRecipe.getRecipeName());
+        reportPage.checkRecipeCTRLOperationLogs(currentRecipe.getBatchId(),currentRecipe.getRecipeName());
     }
 
     @When("I click on jump step {string}")

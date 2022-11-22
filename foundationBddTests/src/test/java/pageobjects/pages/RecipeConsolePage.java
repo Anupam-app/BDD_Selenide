@@ -101,10 +101,6 @@ public class RecipeConsolePage {
     
     public void collapseRecipeConsole() {
     	SelenideHelper.commonWaiter(collapseIcon, visible).click();
-        if(expandIcon.isDisplayed()){
-            expandIcon.click();
-        }
-
     }
 
     public void loadRecipe(String recipeName) {

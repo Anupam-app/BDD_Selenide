@@ -607,10 +607,10 @@ public class ReportsPage {
 
     public boolean verifyRunStatus(String status) {
         boolean isTrue = false;
-        if (!statusColumn.isDisplayed()) {
+        if (!(commonWaiter(statusColumn, appear).isDisplayed())) {
             isTrue = noDatamsg.isDisplayed();
         } else {
-            isTrue = statusColumn.getText().equalsIgnoreCase(status);
+            isTrue = commonWaiter(statusColumn, appear).getText().equalsIgnoreCase(status);
         }
         return isTrue;
     }
