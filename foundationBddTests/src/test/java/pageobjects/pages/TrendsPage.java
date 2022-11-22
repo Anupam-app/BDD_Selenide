@@ -377,7 +377,6 @@ public class TrendsPage {
 	public void graphTime() throws ParseException {
 		String startTime = graphStartTime.getText();
 		String lastTime  = graphLastTime.getText();
-		
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm");
 		Date date1 = format.parse(startTime);
 		Date date2 = format.parse(lastTime);
