@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.util.List;
+import org.junit.Assert;
 import pageobjects.pages.TrendsPage;
 import pageobjects.utility.SelenideHelper;
 
@@ -143,6 +144,14 @@ public class TrendsPageStepsDefinition {
     public void iSeeTextsFromTrendModule() {
         var expectedText = I18nUtils.getValueFromKey("trends.collection.starred");
         trendsPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
+    }
+
+    @Then("I see expected texts from trend module parameters")
+    public void iSeeTextsFromTrendModuleParameters() {
+        var deviceShapeElementNotTranslated = trendsPage.getDeviceShapeElementNotLoaded();
+        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+                deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
 }

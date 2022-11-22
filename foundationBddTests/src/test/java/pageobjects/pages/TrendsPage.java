@@ -9,6 +9,7 @@ import static com.codeborne.selenide.Selenide.$$;
 import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
+import cucumber.util.I18nUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -83,6 +84,9 @@ public class TrendsPage {
 	private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
 	private String checkboxDefaultCollection = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[@title='%s']/input";
 	private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
+
+    private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
+    private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
 
 	public void goToTrends() {
 		trends.click();
@@ -341,6 +345,11 @@ public class TrendsPage {
 	public void seeContent(String expectedText) {
 		SelenideHelper.commonWaiter(starredLabel, Condition.visible)
 				.shouldHave(Condition.text(expectedText));
+	}
+
+	public List<String> getDeviceShapeElementNotLoaded() {
+		SelenideHelper.commonWaiter(defaultButton, Condition.visible).click();
+		return I18nUtils.getElementsNotI18N(deviceShapeElements);
 	}
 }
 
