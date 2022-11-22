@@ -7,11 +7,16 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.utility.SelenideHelper;
 
 public class RecipeConsoleStepsDefinition {
 
@@ -121,6 +126,7 @@ public class RecipeConsoleStepsDefinition {
     @When("I click on abort button")
     public void iClickOnAbortButton() {
         recipeConsolePage.clickOnAbortButton(this.recipe.getAfterComments());
+        recipeConsolePage.clickOnOk();
     }
 
     @Then("I see the system on hold")
@@ -135,13 +141,14 @@ public class RecipeConsoleStepsDefinition {
     }
 
     @Then("I should see the recipe run {string}")
-    public void iVerifyRecipeAbort(String status) {
+    public void iVerifyRecipeAbort(String status) throws InterruptedException {
     	if(status.equalsIgnoreCase("Aborted")) {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
         recipeConsolePage.clickOnOk();
     	}
     	else if(status.equalsIgnoreCase("Completed")) {
         Assert.assertEquals("Completed", this.recipeConsolePage.getExecutionStatusText());
+        recipeConsolePage.clickOnOk();
     	}
     }
 
@@ -152,6 +159,7 @@ public class RecipeConsoleStepsDefinition {
     @Then("I should see Error message")
     public void errorMessageOfJumpStep() throws InterruptedException {
     	recipeConsolePage.jumpStepErrorMessage();
+    	recipeConsolePage.clickOnAbortButton(this.recipe.getAfterComments());
     }
     @Then("I jump to Step no and verify step execution")
     public void stepJumpAndStepVerifyExecution(DataTable table) {
@@ -165,17 +173,16 @@ public class RecipeConsoleStepsDefinition {
     public void manualOperation(String status) {
     	recipeConsolePage.manualOperation(status);
     }
-    @And("I verify recipe execution is paused")
+    @And("I pause recipe and verify recipe paused")
     public void pauseButton() {
-    	recipeConsolePage.clickResumeButton();
-    }
-    @Then("recipe execution is resumed")
-    public void validationRecipeExecution() {
-    	recipeConsolePage.pauseButton();
+    	recipeConsolePage.clickPauseButton();
+    	ctrlOnResumeButton();
     }
     @When("I re-run the recipe")
     public void reRunRecipe() {
     	recipeConsolePage.reRun();
+    	generateRandomRecipeValues();
+    	recipeConsolePage.startRerunRecipe(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments());
     }
    @When("I Process hold the system")
    public void processHold() {
@@ -193,7 +200,51 @@ public class RecipeConsoleStepsDefinition {
    @When("I select {string} tab")
    public void recipeOperation(String status) {
 	   if(status.equalsIgnoreCase("Manual operation")) {
-		   
+		   if(true) {
+			   recipeConsolePage.manualOperation("enabled");
+		   }
 	   }
    }
+   @When("I resume and verify recipe execution is resumed")
+   public void resumeStatus() {
+	   recipeConsolePage.clickResumeButton();
+	   ctrlOnPauseButton();   
+   }
+   //we enchance the code on merging (Run, Rerun & Start)
+   @And("I start Manual run")
+   public void manualRun() {
+	   generateRandomRecipeValues();
+   	   recipeConsolePage.manualRunStart(this.recipe.getProductId(), this.recipe.getBatchId(), this.recipe.getBeforeComments());
+   } 
+   @Then("I validate the timer and stop button and run details")
+   public void validateRun_Timer_Stop() {
+	   recipeConsolePage.validationOfRunDetails();
+	   Assert.assertTrue(recipeConsolePage.verifyStopButton());
+	   recipeConsolePage.timeValidation();
+	   }
+   @Then("I should see Process restart button")
+   public void restartButton() {
+	   Assert.assertTrue(recipeConsolePage.verifyRestart());
+   }
+   @And("I validate the timer is incrementing")
+   public void timerIncrementCheck(){
+	   recipeConsolePage.incrementTimer();
+   }
+   @When("I Stop the RUN")
+   public void stopRun() {
+	   recipeConsolePage.stopButton();
+   }
+   @Then("I validate the date formats in Post run window and enter comments")
+   public void validatePostRun() {
+	   recipeConsolePage.verifyPostRunDate();
+   }
+   @And("I wait for 1 min for the post run window to auto closed")
+   public void verifyAutoClosePostRun() {
+	   recipeConsolePage.autoClosePostRun();
+   }
+   @And("I validate the Start button is {string} and {string}")
+   public void afterPostRunAutoClose(String status1, String status2) {
+	   recipeConsolePage.validateStartButtonNotSelect(status1,status2);
+   }
+
 }
