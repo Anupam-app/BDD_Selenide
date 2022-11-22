@@ -12,79 +12,79 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class LoginPage {
 
-    private final SelenideElement userIdTextBox = $(By.id("userId"));
-    private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
-    private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
-    private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
+	private final SelenideElement userIdTextBox = $(By.id("userId"));
+	private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
+	private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
+	private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
-    private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
-    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
-    private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
+	private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
+	private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
+	private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
-    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
-    private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-    private final String pnidLoginTestId = "pnid_login_info";
-    private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-    
-    
-    public void setUser(String user) {
-        userIdTextBox.setValue(user);
-    }
+	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+	private final String pnidLoginTestId = "pnid_login_info";
+	private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
 
-    public void setPassword(String password) {
-        userPasswordTextBox.setValue(password);
-    }
 
-    public void pushLogin() {
-    	commonWaiter(submitButton,visible);
-        submitButton.click();
-    }
+	public void setUser(String user) {
+		userIdTextBox.setValue(user);
+	}
 
-    public void openLogin() {
-        commonWaiter(loginButton,visible).click();
-    }
+	public void setPassword(String password) {
+		userPasswordTextBox.setValue(password);
+	}
 
-    public void checkLoggedIn(boolean loggedInd) {
-        SelenideElement element = userProfileIcon;
+	public void pushLogin() {
+		commonWaiter(submitButton,visible);
+		submitButton.click();
+	}
 
-        if (loggedInd) {
-            element.should(be(visible));
-        } else {
-            element.shouldNot(be(visible));
-        }
-    }
+	public void openLogin() {
+		commonWaiter(loginButton,visible).click();
+	}
 
-    public void checkMessage(String message) {
-        commonWaiter(userLoginAlertText, visible);
-        userLoginAlertText.shouldHave(text(message));
-    }
+	public void checkLoggedIn(boolean loggedInd) {
+		SelenideElement element = userProfileIcon;
 
-    public void waitControlOnPnid() {
-        var message = Neodymium.localizedText("portal.pnid.info.screen_controlling");
-        waitPnidMessage(message);
-    }
+		if (loggedInd) {
+			element.should(be(visible));
+		} else {
+			element.shouldNot(be(visible));
+		}
+	}
 
-    public void waitPnidLoading() {
-        waitPnidMessage("Main screen is view only");
-    }
+	public void checkMessage(String message) {
+		commonWaiter(userLoginAlertText, visible);
+		userLoginAlertText.shouldHave(text(message));
+	}
 
-    public void waitPnidMessage(String message) {
-        commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
-        commonWaiter(loadingIcon, not(visible));
-    }
+	public void waitControlOnPnid() {
+		var message = Neodymium.localizedText("portal.pnid.info.screen_controlling");
+		waitPnidMessage(message);
+	}
 
-    public void setNewpassword(String newpassword) {
-        commonWaiter(newPasswordTextbox, visible);
-        newPasswordTextbox.setValue(newpassword);
-    }
+	public void waitPnidLoading() {
+		waitPnidMessage("Main screen is view only");
+	}
 
-    public void setConfirmpassword(String newpassword) {
-        confirmPasswordTextbox.setValue(newpassword);
-        submitButton.click();
-    }
+	public void waitPnidMessage(String message) {
+		commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
+		commonWaiter(loadingIcon, not(visible));
+	}
 
-    public void iLogout() {
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
-        SelenideHelper.commonWaiter(logOutButton, visible).click();
-    }
+	public void setNewpassword(String newpassword) {
+		commonWaiter(newPasswordTextbox, visible);
+		newPasswordTextbox.setValue(newpassword);
+	}
+
+	public void setConfirmpassword(String newpassword) {
+		confirmPasswordTextbox.setValue(newpassword);
+		submitButton.click();
+	}
+
+	public void iLogout() {
+		SelenideHelper.commonWaiter(userProfileIcon, visible).click();
+		SelenideHelper.commonWaiter(logOutButton, visible).click();
+	}
 }

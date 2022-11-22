@@ -10,49 +10,49 @@ import pageobjects.utility.SelenideHelper;
 
 public class UserProfilePageStepsDefinition {
 
-    private UserProfilePage userProfilePage;
+	private UserProfilePage userProfilePage;
 
-    public UserProfilePageStepsDefinition(UserProfilePage userProfilePage) {
-        this.userProfilePage = userProfilePage;
-    }
+	public UserProfilePageStepsDefinition(UserProfilePage userProfilePage) {
+		this.userProfilePage = userProfilePage;
+	}
 
-    @Given("I go to user profile")
-    public void iGoToUserProfile() {
-        SelenideHelper.goParentFrame();
-        userProfilePage.goToUserProfile();
-    }
+	@Given("I go to user profile")
+	public void iGoToUserProfile() {
+		SelenideHelper.goParentFrame();
+		userProfilePage.goToUserProfile();
+	}
 
-    @Given("I go to user preferences")
-    public void iGoToUserPreferences() {
-        userProfilePage.goToUserPreferences();
-    }
+	@Given("I go to user preferences")
+	public void iGoToUserPreferences() {
+		userProfilePage.goToUserPreferences();
+	}
 
-    @When("I change default language to {string}")
-    public void iGoToUserPreferences(String language) {
-        userProfilePage.seeSelectedLanguage();
-        I18nUtils.changeLanguage(language);
-        var languageName = I18nUtils.getLanguageName();
-        userProfilePage.changeDefaultLanguage(languageName);
-    }
+	@When("I change default language to {string}")
+	public void iGoToUserPreferences(String language) {
+		userProfilePage.seeSelectedLanguage();
+		I18nUtils.changeLanguage(language);
+		var languageName = I18nUtils.getLanguageName();
+		userProfilePage.changeDefaultLanguage(languageName);
+	}
 
-    @When("I save user preferences")
-    public void iSaveUserPreferences() {
-        userProfilePage.saveUserPreferences();
-    }
+	@When("I save user preferences")
+	public void iSaveUserPreferences() {
+		userProfilePage.saveUserPreferences();
+	}
 
-    @Then("I see expected texts in user profile")
-    public void iSeeExpectedTextsOnScreenKeyBoard() {
-        userProfilePage.goToUserProfile();
-        var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
-        userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
-        userProfilePage.closeUserProfile();
-    }
+	@Then("I see expected texts in user profile")
+	public void iSeeExpectedTextsOnScreenKeyBoard() {
+		userProfilePage.goToUserProfile();
+		var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
+		userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
+		userProfilePage.closeUserProfile();
+	}
 
-    @Then("I reset my language to {string}")
-    public void iResetMyLanguageTo(String language) {
-        iGoToUserProfile();
-        iGoToUserPreferences();
-        iGoToUserPreferences(language);
-        iSaveUserPreferences();
-    }
+	@Then("I reset my language to {string}")
+	public void iResetMyLanguageTo(String language) {
+		iGoToUserProfile();
+		iGoToUserPreferences();
+		iGoToUserPreferences(language);
+		iSaveUserPreferences();
+	}
 }

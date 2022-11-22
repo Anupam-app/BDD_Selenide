@@ -24,7 +24,7 @@ import pageobjects.utility.TimeHelper;
 public class BackupPage {
 
 	private Backupsetting backupsetting;
-	
+
 	private final int BACKUP_FINISH_TIME_TO_WAIT = 7 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_SCHEDULED_TIME_TO_WAIT = 4 * TimeHelper.ONE_MINUTE;
 	private final int BACKUP_IMMEDIATE_TIME_TO_WAIT = TimeHelper.ONE_MINUTE;
@@ -32,7 +32,7 @@ public class BackupPage {
 	private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 	private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
 	private String XPATH_HEADER = "//div[@class='header-title']";
-	
+
 	private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[6]"));
 	private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 	private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
@@ -159,9 +159,9 @@ public class BackupPage {
 		waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_SCHEDULED_TIME_TO_WAIT);
 	}
 
-    public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
-    }
+	public void seeContent(String expectedText) {
+		commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+	}
 
 	public void waitForScheduledBackupFinished() {
 		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT);
@@ -175,16 +175,16 @@ public class BackupPage {
 		$(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
 		waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
 	}
-	
+
 	public void confirmationPopUpAccept()
 	{
 		SelenideHelper.commonWaiter(confirmationModal, visible);
 		okButton.click();
 	}
-	
+
 	public void waitForScheduledBackupFinished(String name) {
 		waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT, name);
 	}
-	
-	
+
+
 }

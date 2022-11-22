@@ -29,10 +29,10 @@ Feature: Report administration Based on PDP
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
-	And I select report include "Alarms"
-	And I select report include "Trends"
+	  And I select report include "Alarms"
+		And I select report include "Trends"
     And I choose "5" trends "<parameters>" 
-	And I save trends
+		And I save trends
     And I click on generate button
     And I goto report management page
     And I trigger report mode

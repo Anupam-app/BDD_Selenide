@@ -52,7 +52,6 @@ Background:
     And I verify the report template
     Then I verify template is not editable
 
-
   Scenario: Verify template status approved to Inactive
     Given I search the report template
     When I approve the report template

@@ -10,19 +10,19 @@ import static com.codeborne.selenide.Selenide.$;
 
 public class HomePage {
 
-    private final SelenideElement PNIDLinkText = $(By.id("PNID"));
-    private final SelenideElement defaultSessionButton = $(By.xpath("//ul[@class='list-group']/button[1]"));
+	private final SelenideElement PNIDLinkText = $(By.id("PNID"));
+	private final SelenideElement defaultSessionButton = $(By.xpath("//ul[@class='list-group']/button[1]"));
 
-    public void open() {
-        Selenide.open(Neodymium.configuration().url());
-        WebDriverRunner.getWebDriver().manage().window().fullscreen();
+	public void open() {
+		Selenide.open(Neodymium.configuration().url());
+		WebDriverRunner.getWebDriver().manage().window().fullscreen();
 
-        if(defaultSessionButton.isDisplayed()){
-            defaultSessionButton.click();
-        }
-    }
+		if(defaultSessionButton.isDisplayed()){
+			defaultSessionButton.click();
+		}
+	}
 
-    public void goToMain() {
-        PNIDLinkText.click();
-    }
+	public void goToMain() {
+		PNIDLinkText.click();
+	}
 }
