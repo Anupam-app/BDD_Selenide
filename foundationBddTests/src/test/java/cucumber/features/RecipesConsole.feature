@@ -1,10 +1,11 @@
-@COMMON
+@CRS @IVI
 Feature: Recipe console
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
   @SMOKE
+  @PLC
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
@@ -29,22 +30,23 @@ Feature: Recipe console
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
-	
-  Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step 
+
+  Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on jump step "10"
-    Then I should see Error message
-  
-  Scenario: BIOCRS-2687|4050: Verify Jump to Step Functionality | Forward-Reverse step
+    Then I should see error message about recipe step
+
+  Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
     When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute1minTest"
+    And I load recipe "testRecipeFlows"
     And I start recipe execution
     Then I jump to Step no and verify step execution
-         |Step no|
-         |5      |
-         |3      |
+      | Step no |
+      | 3       |
+      | 2       |
+    And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
     
   Scenario: BIOCRS-4047|4050|5480: Verify state of Manual Operation tab when Recipe execution is in progress
@@ -57,6 +59,9 @@ Feature: Recipe console
     Then I verify Manual Operation tab is "disabled"
     And I pause recipe and verify recipe paused
     And I verify Manual Operation tab is "disabled"
+    When I click on resume button
+    Then recipe execution is resumed
+    And I verify Manual Operation tab is "disabled"
     When I resume and verify recipe execution is resumed
     Then I verify Manual Operation tab is "disabled"
     And I should see the recipe run "Completed"
@@ -66,7 +71,7 @@ Feature: Recipe console
     Then I verify Manual Operation tab is "disabled"
     And I click on abort button 
     And I verify Manual Operation tab is "enabled"
-  
+
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
@@ -77,7 +82,6 @@ Feature: Recipe console
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
     
-  @test 
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -93,5 +97,3 @@ Feature: Recipe console
     And I restart the Process hold
     And I validate the Start button is "displayed" and "enabled" 
     
-
-
