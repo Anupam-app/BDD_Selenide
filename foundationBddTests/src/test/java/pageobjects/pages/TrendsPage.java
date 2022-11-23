@@ -335,7 +335,8 @@ public class TrendsPage {
         Date lastTime = format.parse(lastTimeString);
 
         long difference = ((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
-        Assert.assertTrue(difference >= 45);
+        Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
+                difference, lastTimeString, startTimeString), difference >= 45);
     }
 
     public void seeContent(String expectedText) {
