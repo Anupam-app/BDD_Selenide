@@ -26,6 +26,10 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class TrendsPage {
     private String XPATH_STARRED_ICON = "//label[contains(text(),'%s')]/parent::*//span[@class='starred-icon']";
+    private String XPATH_GENERIC_ICON = "//label[contains(text(),'%s')]/parent::*//span[contains(@class,'icon')]";
+
+    private SelenideElement StarredIcon = $(By.xpath(String.format(XPATH_GENERIC_ICON, "Starred")));
+    private SelenideElement DefaultIcon = $(By.xpath(String.format(XPATH_GENERIC_ICON, "Default")));
 
     private ElementsCollection leddgerParametersCheckBox = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));
     private ElementsCollection defaultCollectionParams = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
@@ -60,8 +64,6 @@ public class TrendsPage {
     private String listOfStarredstaricons = "//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]";
     private String collectionNameRadioButton = "//input[@type = 'radio' and @id ='option1' and @value ='%s' ]";
 
-    private SelenideElement StarredArrow = $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement DefaultArrow = $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
     private SelenideElement ArrowOfListOfCollection = $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
     private SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
     private SelenideElement deleteCollectionButton = $(By.xpath("//button[@type='button' and contains(text(),'Delete')]"));
@@ -82,7 +84,7 @@ public class TrendsPage {
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 
     private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
-    private String checkboxDefaultCollection = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[@title='%s']/input";
+    private String checkboxDefaultCollection = "//li[@title='%s']//input";
     private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
 
     private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
@@ -112,13 +114,17 @@ public class TrendsPage {
                 trendsCollapseArrow.click();
                 break;
             case "Starred_Collection":
-                if (!starredCollapseArrow.isDisplayed()) {
-                    StarredArrow.click();
+                //go from expand to collapse
+                SelenideHelper.commonWaiter(StarredIcon, visible);
+                if (starredExpandArrow.isDisplayed()) {
+                    starredExpandArrow.click();
                 }
                 break;
             case "Default_Collection":
-                if (!SelenideHelper.commonWaiter(defaultCollapseArrow, visible).isDisplayed()) {
-                    DefaultArrow.click();
+                //go from expand to collapse
+                SelenideHelper.commonWaiter(StarredIcon, visible);
+                if (defaultExpandArrow.isDisplayed()) {
+                    defaultExpandArrow.click();
                 }
                 break;
             case "List of Collection ":
@@ -153,10 +159,14 @@ public class TrendsPage {
                 trendsExpandArrow.click();
                 break;
             case "Starred_Collection":
-                StarredArrow.click();
+                if (SelenideHelper.commonWaiter(starredCollapseArrow, visible).isDisplayed()) {
+                    starredCollapseArrow.click();
+                }
                 break;
             case "Default_Collection":
-                DefaultArrow.click();
+                if (SelenideHelper.commonWaiter(defaultCollapseArrow, visible).isDisplayed()) {
+                    defaultCollapseArrow.click();
+                }
                 break;
             case "List of Collection ":
                 ArrowOfListOfCollection.click();
