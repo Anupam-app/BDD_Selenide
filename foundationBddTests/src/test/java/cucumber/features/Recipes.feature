@@ -33,14 +33,14 @@ Feature: Recipe management
 	When I go to recipe page
     Then  I see list of recipes are displayed
     And below "recipe" column is displayed
-    |columns			|
-    |Recipe Name		|
-	|System Family		|
-	|Imported 			|
-	|Import Status		|
-	|Created By			|
-	|Last Modified On	|
-	|UOP Status			|
+    |columns			    |
+    |Recipe Name		  |
+	  |System Family		|
+	  |Imported 			  |
+	  |Import Status		|
+	  |Created By			  |
+	  |Last Modified On	|
+	  |UOP Status			  |
  	
   Scenario: BIOCRS-5060| Recipe Obselete
     Given I go to recipe page

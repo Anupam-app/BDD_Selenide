@@ -1,4 +1,4 @@
-@CRS @IVI
+ @CRS @IVI
 Feature: Recipe console
 
   Background:
@@ -82,6 +82,7 @@ Feature: Recipe console
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
     
+    @test
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab

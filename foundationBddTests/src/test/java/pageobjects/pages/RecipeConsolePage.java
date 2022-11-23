@@ -364,10 +364,20 @@ public class RecipeConsolePage {
 	   closeButtonOfStop.click();
    }
    public void verifyPostRunDate() {
-	   DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+//	   DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	   String startDate1 = startDate.getText();
-	   String date1= dateFormat.format(startDate1);
-       Assert.assertEquals(startDate1, date1);
+       SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HHmmss");
+       //To make strict date format validation    formatter.setLenient(false);
+       Date parsedDate = null;
+       try {
+           parsedDate = formatter.parse(startDate1);
+           System.out.println("++validated DATE TIME ++"+formatter.format(parsedDate));
+
+       } catch (ParseException ex) {
+           //Handle exception
+    	   ex.printStackTrace();
+       }
+      
 	   postRunCommentsText.sendKeys("completed");   
    }
    public void autoClosePostRun() {

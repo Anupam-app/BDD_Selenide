@@ -185,7 +185,7 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.clearRecipe();
     }
     
-    @Then("I should see Error message")
+    @Then("I should see error message about recipe step")
     public void errorMessageOfJumpStep() throws InterruptedException {
     	recipeConsolePage.jumpStepErrorMessage();
     	recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
@@ -218,7 +218,7 @@ public class RecipeConsoleStepsDefinition {
     @When("I re-run the recipe")
     public void reRunRecipe() {
     	recipeConsolePage.reRun();
-    	generateRecipeValues(null,null);
+    	generateRecipeValues("","");
     	recipeConsolePage.startRerunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
     }
    @When("I Process hold the system")
