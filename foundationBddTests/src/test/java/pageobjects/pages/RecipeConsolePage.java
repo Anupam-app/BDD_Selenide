@@ -113,10 +113,10 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(recipe.getBatchId());
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(recipe.getBeforeComments());
-		okButton.click();
+		commonWaiter(okButton,visible).click();
 		abortIcon.waitUntil(Condition.visible, 5000l);
 		abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
-		SelenideHelper.commonWaiter(startDate, visible);
+		commonWaiter(startDate, visible);
 		recipe.setStartDate(startDate.getText());
 		recipe.setEndDate(endDate.getText());
 		recipe.setMachineName(machineName.getText());
@@ -144,7 +144,7 @@ public class RecipeConsolePage {
 		okButton.click();
 		abortIcon.waitUntil(Condition.visible, 5000l);
 		abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
-		SelenideHelper.commonWaiter(startDate, visible);
+		commonWaiter(startDate, visible);
 		String startDate1 = startDate.getText();
 		String endDate1 = endDate.getText();
 		String[] dateParts = startDate1.split(" ");
