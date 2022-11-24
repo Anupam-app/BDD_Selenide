@@ -27,16 +27,19 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
     private final Login login;
+    private final Recipe currentRecipe;
 
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-                                      Recipe recipe, Login login) {
-        this.reportPage = reportPage;
+                                      Recipe currentRecipe, Login login) {
+    	this.loginPage = loginPage;
+    	this.reportPage = reportPage;
+    	this.report = report;
         this.reportTemplate = reportTemplate;
         this.user = user;
-        this.report = report;
-        this.loginPage = loginPage;
+        this.currentRecipe=currentRecipe;
         this.login = login;
+        
     }
 
     @Given("I goto report management page")
@@ -149,6 +152,12 @@ public class ReportsPageStepsDefinition {
     @Then("I see the report")
     public void reportIsGenerated() {
         reportPage.exists(this.report.getName());
+    }
+    
+    @When("I check audit trial logs")
+    public void icheckAudiTrialLogs() {
+    	System.out.println(currentRecipe.getBatchId());
+        reportPage.checkRecipeCTRLOperationLogs(currentRecipe.getBatchId(),currentRecipe.getRecipeName());
     }
 
     @When("I should see the report file presence")

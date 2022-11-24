@@ -20,24 +20,22 @@ import pageobjects.pages.UserPage;
 
 public class RecipeConsoleStepsDefinition {
 
-    private RecipeConsolePage recipeConsolePage;
-    private Recipe recipe;
-    private Report report;
-    private ReportsPage reportPage;
-	private Recipe currentRecipe;
+	private RecipeConsolePage recipeConsolePage;
+    private Recipe currentRecipe;
     private List<Recipe> recipes;
+    private Report report;
     private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(ReportsPage reportPage, Report report,RecipeConsolePage recipeConsolePage, Analytics analytics, Recipe recipe) {
+
+
+   public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
         this.recipeConsolePage = recipeConsolePage;
-		this.recipe = recipe;
-        this.report = report;
-        this.reportPage = reportPage;
         this.recipes = new ArrayList<>();
         this.report = report;
         this.analytics = analytics;
         this.report.setRecipes(this.recipes);
         this.analytics.setRecipes(this.recipes);
+        this.currentRecipe = currentRecipe;
     }
     
 
@@ -155,6 +153,7 @@ public class RecipeConsoleStepsDefinition {
 
         this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+        this.report.setBatchId(currentRecipe.getBatchId());
         
     }
 
@@ -193,12 +192,6 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.clickResumeButton();
     }
     
-    @When("I check audit trial logs")
-    public void icheckAudiTrialLogs() {
-    	System.out.println(currentRecipe.getBatchId()+currentRecipe.getRecipeName());
-        reportPage.checkRecipeCTRLOperationLogs(currentRecipe.getBatchId(),currentRecipe.getRecipeName());
-    }
-
     @When("I click on jump step {string}")
     public void iClickOnJumpToStep(String stepNumber) {
         recipeConsolePage.clickOnJumpToStep(stepNumber);

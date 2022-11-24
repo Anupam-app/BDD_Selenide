@@ -92,6 +92,10 @@ public class Report {
     @Setter
     @Getter
     List<Recipe> recipes;
+    
+    @Setter
+    @Getter
+    String batchId;
 
 
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
