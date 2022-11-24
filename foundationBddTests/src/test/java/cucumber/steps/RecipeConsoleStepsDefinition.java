@@ -195,7 +195,6 @@ public class RecipeConsoleStepsDefinition {
     
     @When("I check audit trial logs")
     public void icheckAudiTrialLogs() {
-    	System.out.println(currentRecipe.getBatchId()+currentRecipe.getRecipeName());
         reportPage.checkRecipeCTRLOperationLogs(currentRecipe.getBatchId(),currentRecipe.getRecipeName());
     }
 
