@@ -233,7 +233,7 @@ public class RecipePage {
 	public void editRecipe(String recipeName) {
 		recipeSearchTextBox.setValue(recipeName);
 		recipeSearchTextBox.sendKeys(Keys.ENTER);
-		$(By.xpath(String.format(xpathEditPage, recipeName))).click();
+		commonWaiter($(By.xpath(String.format(xpathEditPage, recipeName))),visible).click();
 		openButton.waitUntil(Condition.visible, 5000l);
 		openButton.click();
 	}
