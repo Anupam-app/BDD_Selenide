@@ -16,6 +16,7 @@ import pageobjects.pages.UserPage;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
+import java.awt.AWTException;
 import java.util.List;
 
 public class RecipePageStepsDefinition {
@@ -242,5 +243,17 @@ public class RecipePageStepsDefinition {
     @Then("I look at the user notification")
     public void iLookAtTheUserNotification() {
         recipePage.lookAtTheUserNotification();
+    }
+    @When("I add new action step using Keyboard event")
+    public void addStepKeyboard() throws AWTException {
+    	recipePage.keyboardActionRecipe();
+    }
+    @Then("I should see blank step added")
+    public void verifyBlankStep() {
+    	Assert.assertTrue(recipePage.placeholder());
+    }
+    @And("I add action to the step")
+    public void actionAddedInStep() {
+    	recipePage.addActionStep();
     }
 }

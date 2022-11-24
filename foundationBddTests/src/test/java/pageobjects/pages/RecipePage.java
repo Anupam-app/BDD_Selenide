@@ -9,6 +9,8 @@ import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -18,6 +20,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.interactions.Action;
+
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
@@ -96,7 +100,11 @@ public class RecipePage {
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
     Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
-
+    private final SelenideElement recipeBlock = $(By.xpath("//div[@class='recipe-data-block']"));
+    private final SelenideElement stepPlaceholder = $(By.xpath("//input[@placeholder='Search instruments and actions...']"));
+    private final  String rootStep = "//div[@class='search-node']/p[@class='search-txt']/span/span[contains(text(),'%s')]";
+    
+    
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -470,10 +478,26 @@ public class RecipePage {
         }
         return isTrue;
     }
-
-
+    
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
         switchTo().parentFrame();
+    }
+    
+    public void keyboardActionRecipe() throws AWTException {
+    	commonWaiter(editorLinkText, visible);
+    	Robot robot= new Robot();
+        robot.keyPress(KeyEvent.VK_ALT);
+        robot.keyPress(KeyEvent.VK_ENTER);
+        robot.keyRelease(KeyEvent.VK_ALT);
+        robot.keyRelease(KeyEvent.VK_ENTER);
+    }
+    public boolean placeholder() {
+    	return(stepPlaceholder.waitUntil(Condition.visible,50001).isDisplayed());
+    }
+    public void addActionStep() {
+    	stepPlaceholder.click();
+    	$(By.xpath(String.format(rootStep, "Setpoint"))).click();
+    	
     }
 }

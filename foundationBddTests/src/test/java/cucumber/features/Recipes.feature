@@ -126,3 +126,25 @@ Feature: Recipe management
     Given I go to recipe page
     When I edit recipe "testRecipeToExecute"
     Then I print recipe "testRecipeToExecute"
+ 
+  Scenario: BIOFOUND-3768| Create step using Keyboard event
+    Given I go to recipe page
+    When I trigger edit mode
+    When I add new action step using Keyboard event
+    Then I should see blank step added
+    And I add action to the step
+  @WIP  
+  Scenario: BIOFOUND-3768| Create step using Action browser
+    And I select action from action browser
+    And I should see action step added
+    When I add new step with message prompt
+    Then I should see message input text field displayed
+   @WIP 
+  Scenario: BIOFOUND-3768| Create new phase 
+    And I create a new phase in recipe
+    And I add new step with phase action
+    And I add recipe action from phase library
+    And I add criteria to phase using keyboard (shift+ up arrow twice)
+    Then I save the recipe with new name
+    And I close and reopen the recipe
+    And I should see recipe opened in editor
