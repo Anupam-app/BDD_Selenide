@@ -27,19 +27,17 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
     private final Login login;
-    private final Recipe currentRecipe;
 
 
-    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-                                      Recipe currentRecipe, Login login) {
-    	this.loginPage = loginPage;
-    	this.reportPage = reportPage;
-    	this.report = report;
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
+                                      ReportTemplate reportTemplate, User user, Login login) {
+        this.loginPage = loginPage;
+        this.reportPage = reportPage;
+        this.report = report;
         this.reportTemplate = reportTemplate;
         this.user = user;
-        this.currentRecipe=currentRecipe;
         this.login = login;
-        
+
     }
 
     @Given("I goto report management page")
@@ -153,11 +151,12 @@ public class ReportsPageStepsDefinition {
     public void reportIsGenerated() {
         reportPage.exists(this.report.getName());
     }
-    
+
     @When("I check audit trial logs")
-    public void icheckAudiTrialLogs() {
-    	System.out.println(currentRecipe.getBatchId());
-        reportPage.checkRecipeCTRLOperationLogs(currentRecipe.getBatchId(),currentRecipe.getRecipeName());
+    public void iCheckAudiTrialLogs() {
+        report.getRecipes()
+                .forEach(recipe->reportPage
+                        .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
     @When("I should see the report file presence")
@@ -191,7 +190,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, true, this.login.getLogin());
         switchTo().parentFrame();
     }
-    
+
     @Then("I see the {string} is changed to {string} in report")
     public void iverifyRecipeStatus(String recipeName, String status) throws Exception {
         this.report.checkRecipeStatus(reportPage.getPdfUrl(), recipeName, status, this.login.getLogin());
@@ -203,7 +202,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, false, this.login.getLogin());
         switchTo().parentFrame();
     }
-    
+
     @When("I search report {string}")
     public void iSearchReports(String report) {
         this.report.setName(report);
