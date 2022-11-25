@@ -225,7 +225,7 @@ public class ReportsPage {
 
 	public void selectReport(String reportname) {
 		SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
-		$(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).click();
+		SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))), visible).click();
 	}
 
 	public void sortListTemplate(String columnName, boolean descending) {
