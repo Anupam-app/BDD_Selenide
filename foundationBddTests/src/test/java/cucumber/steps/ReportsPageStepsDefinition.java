@@ -154,9 +154,7 @@ public class ReportsPageStepsDefinition {
 	
 	@When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
-        report.getRecipes()
-                .forEach(recipe -> reportPage
-                        .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+        report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
 	@When("I should see the report file presence")

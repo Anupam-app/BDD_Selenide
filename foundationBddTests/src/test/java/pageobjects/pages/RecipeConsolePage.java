@@ -34,6 +34,7 @@ public class RecipeConsolePage {
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
     private final String XPATH_CTRL_ICONS = "//img[contains(@src,'%s')]";
     private final String XPATH_TEXTS = "//p[text()='%s']";
+    private final String XPATH_RESTART_OR_HOLD_BUTTON = "//span[@class='MuiButton-label']";
     
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
@@ -267,6 +268,10 @@ public class RecipeConsolePage {
     public boolean isRunBefore(String recipeName) {
         return $(By.xpath(String.format(XPATH_RECIPE_LOADED_BEFORE, recipeName, recipeName))).isDisplayed();
     }
+    
+    public String seeRestartOrHoldContent() {
+		return commonWaiter($(By.xpath(XPATH_RESTART_OR_HOLD_BUTTON)), visible).text();
+	}
 	
 	public void clearPanelAndRunDisabled() {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).shouldNotBe(selected);

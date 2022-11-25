@@ -109,7 +109,7 @@ public class ReportsPage {
 	private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
 	private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
 	private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
-
+	private final String recipeAuditLogs ="//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
 
 	private SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
 	private SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
@@ -238,6 +238,16 @@ public class ReportsPage {
 	public SelenideElement getTemplateColumnHeader(String columnName) {
 		return $(By.xpath(String.format(XPATH_TEMPLATE_COLUMN_HEADER, columnName)));
 	}
+	
+	public void checkRecipeCTRLOperationLogs(String batchId, String recipeName) {
+    	$(By.xpath(String.format(recipeAuditLogs, "acknowledged", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "aborted", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "step jump", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "resumed", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "paused", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "restart"))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "hold"))).shouldBe(visible);
+    }
 
 	public void checkSortedElementTemplate(String columnName, boolean descending) {
 		SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);

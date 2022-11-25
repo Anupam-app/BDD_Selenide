@@ -50,10 +50,12 @@ public class RecipePage {
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement editorLinkText = $(By.xpath("//a[text()='Editor']"));
     private final SelenideElement browserLinkText = $(By.xpath("//a[text()='Browser']"));
+    private final SelenideElement recipeCriteriaSearchTextBox = $(By.className("search-txt-box"));
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement notificationText = $(By.className("notification-summary"));
-
+    private final ElementsCollection deviceShapeElements = $$(By.xpath("//div[@class='search-node']//span"));
+    
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
     private final SelenideElement filterError = $(By.xpath("//h4"));
@@ -82,10 +84,10 @@ public class RecipePage {
 
     private final SelenideElement clickOnDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final ElementsCollection notificationTexts = $$(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
-
+    private final ElementsCollection deleteButtons = $$(By.xpath("//*[@class='deleteButton']"));
     private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private final String upIcon = "(//div[@class='up-icon'])[%d]";
-
+    private final SelenideElement headerText = $(By.xpath("//div[@class='navWrapper']//h2"));
     private SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
@@ -484,5 +486,21 @@ public class RecipePage {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
         switchTo().parentFrame();
     }
+    
+    public void seeContent(String expectedText) {
+		headerText.shouldHave(text(expectedText));
+	}
+    
+    public List<String> getDeviceShapeElementNotLoaded() {
+		plusButton.waitUntil(Condition.visible, 5000l);
+		plusButton.click();
+		recipeCriteriaSearchTextBox.click();
+
+		var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
+
+		deleteButtons.forEach(deleteButton -> deleteButton.click());
+
+		return elementNotTranslated;
+	}
 
 }

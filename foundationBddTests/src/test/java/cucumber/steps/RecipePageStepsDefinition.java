@@ -252,18 +252,14 @@ public class RecipePageStepsDefinition {
 	public void iSeeExpectedTextsFromRecipeModule() {
 		var expectedText= I18nUtils.getValueFromKey("recipe.app.header.name");
 		recipePage.seeContent(expectedText);
-
 		SelenideHelper.goParentFrame();
 	}
 
 	@Then("I see expected texts from recipe module criterias")
 	public void iSeeExpectedTextsFromRecipeModuleParameters() {
 		recipePage.goToEditMode();
-
 		var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
-		Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
-				deviceShapeElementNotTranslated.isEmpty());
-
+		Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),deviceShapeElementNotTranslated.isEmpty());
 		SelenideHelper.goParentFrame();
 	}
 }
