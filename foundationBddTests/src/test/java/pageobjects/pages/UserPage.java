@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -88,6 +89,7 @@ public class UserPage {
     
     public void cannotEdit(String user) {
         Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+        $(By.xpath(String.format(xpathEditUserIcon, user))).shouldNotBe(selected);
     }
 	
 	public void usersNotEditable() {

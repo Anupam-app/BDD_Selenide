@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -16,24 +17,50 @@ import pageobjects.pages.RecipeConsolePage;
 
 public class RecipeConsoleStepsDefinition {
 
-    private RecipeConsolePage recipeConsolePage;
+	private RecipeConsolePage recipeConsolePage;
     private Recipe currentRecipe;
     private List<Recipe> recipes;
     private Report report;
     private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
+
+
+   public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
         this.analytics = analytics;
         this.report.setRecipes(this.recipes);
         this.analytics.setRecipes(this.recipes);
+        this.currentRecipe = currentRecipe;
     }
+    
 
     @Given("I expand recipe console in pnid")
     public void iGotoRecipeConsole() {
         recipeConsolePage.gotoRecipeConsole();
+    }
+    
+    @Given("I expand and collapse recipe console in pnid")
+    public void iExpandAndCollapseRecipeConsole() {
+        recipeConsolePage.gotoRecipeConsole();
+        recipeConsolePage.collapseRecipeConsole();
+        recipeConsolePage.gotoRecipeConsole();
+    }
+    
+    @Given("I verify Recipe run options")
+    public void iVerifyRecipeRunOptions() {
+        recipeConsolePage.verifyRecipeRunOptions();
+    }
+    
+    @Given("I goto manual operation tab")
+    public void iGoToManualOprtationTab() {
+        recipeConsolePage.gotoManualOperations();
+    }
+    
+    @Given("I verify manual operation options")
+    public void iVerifyManualRunOptions() {
+        recipeConsolePage.verifyManualRunOptions();
     }
 
     @Given("I load recipe {string}")
@@ -46,6 +73,26 @@ public class RecipeConsoleStepsDefinition {
     @When("I hold and restart the system")
     public void iHoldAndRestartTheSystem() {
         recipeConsolePage.holdAndRestart();
+    }
+	
+	@When("I hold the system")
+    public void iHoldTheSystem() {
+        recipeConsolePage.hold();
+    }
+	
+	@When("I restart the system")
+    public void iRestartTheSystem() {
+        recipeConsolePage.restartSystem();
+    }
+	
+	@Then("clear panel and run button is disabled")
+    public void iSeeTheClearPanelAndRunDisabled() {
+        recipeConsolePage.clearPanelAndRunDisabled();
+    }
+	
+	@Then("Recipe execution is paused")
+    public void recipeExecIsPaused() throws ParseException{
+        recipeConsolePage.recipeisPaused();
     }
 
     private void iLoadRecipeAndIStartIt(String recipe, int seconds) {
@@ -103,6 +150,7 @@ public class RecipeConsoleStepsDefinition {
 
         this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+        
     }
 
     @Then("Recipe should be executed")
@@ -139,7 +187,7 @@ public class RecipeConsoleStepsDefinition {
     public void iClickOnResumeButton() {
         recipeConsolePage.clickResumeButton();
     }
-
+    
     @When("I click on jump step {string}")
     public void iClickOnJumpToStep(String stepNumber) {
         recipeConsolePage.clickOnJumpToStep(stepNumber);
