@@ -153,7 +153,6 @@ public class RecipeConsoleStepsDefinition {
 
         this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-        this.report.setBatchId(currentRecipe.getBatchId());
         
     }
 
