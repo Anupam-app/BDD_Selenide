@@ -3,6 +3,7 @@ Feature: Recipe management
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
+
   @IVI
   Scenario: BIOCRS-5478 | Recipe modification
     Given I go to recipe page
@@ -27,20 +28,22 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
- 	@IVI
- 	Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
-	  When I go to recipe page
+
+  @IVI
+  Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
+    When I go to recipe page
     Then  I see list of recipes are displayed
     And below "recipe" column is displayed
-    |columns			    |
-    |Recipe Name		  |
-	  |System Family		|
-	  |Imported 			  |
-	  |Import Status		|
-	  |Created By			  |
-	  |Last Modified On	|
-	  |UOP Status			  |
- 	@IVI
+      | columns          |
+      | Recipe Name      |
+      | System Family    |
+      | Imported         |
+      | Import Status    |
+      | Created By       |
+      | Last Modified On |
+      | UOP Status       |
+
+  @IVI
   Scenario: BIOCRS-5060| Recipe Obselete
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
@@ -52,7 +55,8 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testRecipeDraftToInactive" is changed to "APPROVED-INACTIVE" in report
-  @IVI  
+
+  @IVI
   Scenario: BIOCRS-5060| Recipe Tech Review Rejected
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToReject"
@@ -84,12 +88,13 @@ Feature: Recipe management
     And I create a random phase
     And I choose "<option>" from file menu
     Then I see warning message is displayed "<message>"
-    
-   Examples:
-      | option    | message                                 |
-      | New 	    | Please save the recipe.                 |
-      | Import    | Please save the recipe.                 |
-      | Print	    | Only approved recipe can be printed.	|
+
+    Examples:
+      | option | message                              |
+      | New    | Please save the recipe.              |
+      | Import | Please save the recipe.              |
+      | Print  | Only approved recipe can be printed. |
+
   @IVI
   Scenario: BIOCRS-5477 | User tries to select another recipe from Browser while there is unsaved recipe
     Given I go to recipe page
@@ -107,13 +112,15 @@ Feature: Recipe management
     And I go to other module without saving recipe
     And I come back to Recipe page
     Then I can create a recipe
-  @IVI      
+
+  @IVI
   Scenario: Create new recipe with existing Recipe name
     Given I go to recipe page
     When I trigger edit mode
     And I create a random phase
     And I save the recipe with name "testRecipeToExecute"
     Then I see warning message is displayed "Recipe is locked. Please save it as new copy."
+
   @IVI
   Scenario: BIOCRS-1594 BIOCRS-5478 | Recipe export and import
     Given I go to recipe page
