@@ -93,11 +93,6 @@ public class Report {
     @Getter
     List<Recipe> recipes;
     
-    @Setter
-    @Getter
-    String batchId;
-
-
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
 
         URL url = new URL(reportUrl);
