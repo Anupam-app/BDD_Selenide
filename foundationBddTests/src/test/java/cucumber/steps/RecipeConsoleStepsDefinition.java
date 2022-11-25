@@ -8,6 +8,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -20,18 +21,21 @@ public class RecipeConsoleStepsDefinition {
 
 	private RecipeConsolePage recipeConsolePage;
 	private Recipe currentRecipe;
-	private List<Recipe> recipes;
-	private Report report;
-	private Analytics analytics;
+    private List<Recipe> recipes;
+    private Report report;
+    private Analytics analytics;
 
-	public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
-		this.recipeConsolePage = recipeConsolePage;
-		this.recipes = new ArrayList<>();
-		this.report = report;
-		this.analytics = analytics;
-		this.report.setRecipes(this.recipes);
-		this.analytics.setRecipes(this.recipes);
-	}
+
+
+   public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
+        this.recipeConsolePage = recipeConsolePage;
+        this.recipes = new ArrayList<>();
+        this.report = report;
+        this.analytics = analytics;
+        this.report.setRecipes(this.recipes);
+        this.analytics.setRecipes(this.recipes);
+        this.currentRecipe = currentRecipe;
+    }
 
 	@Given("I expand recipe console in pnid")
 	public void iGotoRecipeConsole() {
@@ -184,4 +188,47 @@ public class RecipeConsoleStepsDefinition {
 			iLoadRecipeAndIStartIt(recipe, seconds);
 		}
 	}
+	
+	@Then("Recipe execution is paused")
+    public void recipeExecIsPaused() throws ParseException{
+        recipeConsolePage.recipeisPaused();
+    }
+	
+	@When("I hold the system")
+    public void iHoldTheSystem() {
+        recipeConsolePage.hold();
+    }
+	
+	@When("I restart the system")
+    public void iRestartTheSystem() {
+        recipeConsolePage.restartSystem();
+    }
+	
+	@Then("clear panel and run button is disabled")
+    public void iSeeTheClearPanelAndRunDisabled() {
+        recipeConsolePage.clearPanelAndRunDisabled();
+    }
+	
+	@Given("I goto manual operation tab")
+    public void iGoToManualOprtationTab() {
+        recipeConsolePage.gotoManualOperations();
+    }
+    
+    @Given("I verify manual operation options")
+    public void iVerifyManualRunOptions() {
+        recipeConsolePage.verifyManualRunOptions();
+    }
+	
+	@Given("I expand and collapse recipe console in pnid")
+    public void iExpandAndCollapseRecipeConsole() {
+        recipeConsolePage.gotoRecipeConsole();
+        recipeConsolePage.collapseRecipeConsole();
+        recipeConsolePage.gotoRecipeConsole();
+    }
+    
+    @Given("I verify Recipe run options")
+    public void iVerifyRecipeRunOptions() {
+        recipeConsolePage.verifyRecipeRunOptions();
+    }
+	
 }

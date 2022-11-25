@@ -12,10 +12,14 @@ import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.be;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
 
 public class UserPage {
+
 
 	private static final String XPATH_HEADER = "//div[@class='headerTitle']";
 	private final String XPATH_USER_COLUMN_HEADER = "//th[contains(text(),'%s')]";
@@ -90,6 +94,7 @@ public class UserPage {
 
 	public void cannotEdit(String user) {
 		Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+        $(By.xpath(String.format(xpathEditUserIcon, user))).shouldNotBe(selected);
 	}
 
 	public void usersNotEditable() {

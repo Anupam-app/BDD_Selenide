@@ -605,14 +605,14 @@ public class ReportsPage {
 	}
 
 	public boolean verifyRunStatus(String status) {
-		boolean isTrue = false;
-		if (!(commonWaiter(statusColumn, visible).isDisplayed())) {
-			isTrue = noDatamsg.isDisplayed();
-		} else {
-			isTrue = statusColumn.getText().equalsIgnoreCase(status);
-		}
-		return isTrue;
-	}
+        boolean isTrue = false;
+        if (!(commonWaiter(statusColumn, appear).isDisplayed())) {
+            isTrue = noDatamsg.isDisplayed();
+        } else {
+            isTrue = commonWaiter(statusColumn, appear).getText().equalsIgnoreCase(status);
+        }
+        return isTrue;
+    }
 
 	public void selectDate(String daterange) {
 
@@ -923,4 +923,5 @@ public class ReportsPage {
 	public boolean isRunDisplayed(String run) {
 		return $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).isDisplayed();
 	}
+
 }

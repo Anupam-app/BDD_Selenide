@@ -3,7 +3,6 @@ package cucumber.steps;
 import static com.codeborne.selenide.Selenide.switchTo;
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
-import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
@@ -22,24 +21,25 @@ import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
-
+	
 	private final Report report;
-	private final ReportsPage reportPage;
-	private final ReportTemplate reportTemplate;
-	private final User user;
-	private final LoginPage loginPage;
-	private final Login login;
+    private final ReportsPage reportPage;
+    private final ReportTemplate reportTemplate;
+    private final User user;
+    private final LoginPage loginPage;
+    private final Login login;
 
 
-	public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-			Recipe recipe, Login login) {
-		this.reportPage = reportPage;
-		this.reportTemplate = reportTemplate;
-		this.user = user;
-		this.report = report;
-		this.loginPage = loginPage;
-		this.login = login;
-	}
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
+                                      ReportTemplate reportTemplate, User user, Login login) {
+        this.loginPage = loginPage;
+        this.reportPage = reportPage;
+        this.report = report;
+        this.reportTemplate = reportTemplate;
+        this.user = user;
+        this.login = login;
+
+    }
 
 	@Given("I goto report management page")
 	public void iGotoReportManagementPage() {
@@ -151,6 +151,13 @@ public class ReportsPageStepsDefinition {
 	public void reportIsGenerated() {
 		reportPage.exists(this.report.getName());
 	}
+	
+	@When("I check audit trial logs")
+    public void iCheckAudiTrialLogs() {
+        report.getRecipes()
+                .forEach(recipe -> reportPage
+                        .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+    }
 
 	@When("I should see the report file presence")
 	public void iShouldSeeTheReportFilePresence() {
@@ -441,4 +448,5 @@ public class ReportsPageStepsDefinition {
 		loginPage.setUser(username);
 		loginPage.setPassword(password);
 	}
+
 }
