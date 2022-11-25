@@ -23,7 +23,7 @@ Feature: Recipe console
     And I verify Recipe run options 
     And I goto manual operation tab
     And I verify manual operation options 
-  
+ @wip 
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
