@@ -2,7 +2,6 @@ package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 import dataobjects.Login;
-import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
@@ -155,7 +154,7 @@ public class ReportsPageStepsDefinition {
     @When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
         report.getRecipes()
-                .forEach(recipe->reportPage
+                .forEach(recipe -> reportPage
                         .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 

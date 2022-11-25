@@ -10,13 +10,10 @@ import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipeConsolePage;
-import pageobjects.pages.ReportsPage;
-import pageobjects.pages.UserPage;
 
 public class RecipeConsoleStepsDefinition {
 
