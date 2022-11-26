@@ -1,4 +1,4 @@
-@IVI @CRS
+@IVI @CRS @ORCHESTRATOR
 @SMOKE
 Feature: I18N on all modules
 
