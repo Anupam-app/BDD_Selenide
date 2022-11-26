@@ -1,4 +1,4 @@
-@CRS @IVI
+@CRS @IVI @ORCHESTRATOR
 Feature: Report Template module validations
 
 Background:
