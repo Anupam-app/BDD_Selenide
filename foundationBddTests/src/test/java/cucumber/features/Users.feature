@@ -1,6 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: User management
-   
 
   @SMOKE
   Scenario: Create new user
@@ -61,7 +60,7 @@ Feature: User management
     And I goto report management page
     And I trigger report mode
     And I should see the report file presence
-	And I see the "testUserEnabled" user disabled in report
+		And I see the "testUserEnabled" user disabled in report
     And I logout
     And I open login page
     And I enter "testUserEnabled" as username and "MerckApp1@" as password
@@ -82,7 +81,7 @@ Feature: User management
     And I goto report management page
     And I trigger report mode
     And I should see the report file presence
-	And I see the "testUserDisabled" user enabled in report
+		And I see the "testUserDisabled" user enabled in report
     And I logout
     And I open login page
     And I enter "testUserDisabled" as username and "MerckApp1@" as password

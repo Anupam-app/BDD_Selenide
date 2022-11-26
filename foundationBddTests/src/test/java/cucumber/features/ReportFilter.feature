@@ -9,7 +9,7 @@ Feature: Apply Filter Reports
     When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
     And I select date range as "Last 7 Days"
-    Then I see Audit logs are displayed for date range and "bio4cadmin"
+    Then I see Audit logs are displayed for date range 7 and "bio4cadmin" for at least 10 results
 
   Scenario: Verify search functionality in the templates page
     Given I goto report management page
@@ -78,7 +78,7 @@ Feature: Apply Filter Reports
         |Last 30 Days|
         |This Month|
         |Last Month|
-		|Custom Range|	  
+				|Custom Range|	  
 	 							
   Scenario: Verify sort run functionality all columns in ascending order
     Given I goto report management page
@@ -147,7 +147,7 @@ Feature: Apply Filter Reports
 	
 	Examples:
     |columns      		| descending    |
-    |Last Modified By 	| false         |
+    |Last Modified By | false         |
     |Last Modified On	| true        	| 
-    |Last Modified By 	| true	        |
+    |Last Modified By | true	        |
     |Last Modified On	| false         | 

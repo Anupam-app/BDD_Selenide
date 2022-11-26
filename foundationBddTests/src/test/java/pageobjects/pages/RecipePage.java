@@ -66,7 +66,7 @@ public class RecipePage {
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
-    private final SelenideElement deleteButton = $(By.xpath("//*[contains(@class, 'delete-step-button')]"));
+    private final SelenideElement deleteButton = $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));
 
     private final SelenideElement XPATH_WARNNOTIFICATION_TEXT = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
 
@@ -231,25 +231,25 @@ public class RecipePage {
     }
 
     public void editRecipe(String recipeName) {
-        recipeSearchTextBox.setValue(recipeName);
+        SelenideHelper.commonWaiter(recipeSearchTextBox,visible).setValue(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
-        $(By.xpath(String.format(xpathEditPage, recipeName))).click();
+        commonWaiter($(By.xpath(String.format(xpathEditPage, recipeName))),visible).click();
         openButton.waitUntil(Condition.visible, 5000l);
         openButton.click();
     }
 
     public void deletePhaseToRecipe() {
         commonWaiter(phase1_Label, visible).click();
-        commonWaiter($(By.xpath(String.format(XPATH_DELETEBUTTON, 2))), visible).click();
+        commonWaiter(deleteButton, visible).click();
         commonWaiter(okButton, visible).click();
     }
 
     public void approveRecipe(String password) {
-        statusDraft.click();
+        commonWaiter(statusDraft,visible).click();
         selectInReview.click();
         primaryButton.click();
         okButton.click();
-        statusInReview.click();
+        commonWaiter(statusInReview,visible).click();
         selectApprove.click();
         $(By.xpath("//button[contains(text(),'Change')]")).click();
         inputPassword.sendKeys(password);
@@ -260,11 +260,11 @@ public class RecipePage {
     }
 
     public void inactiveRecipe(String password) {
-        statusDraft.click();
+        commonWaiter(statusDraft,visible).click();
         selectInReview.click();
         primaryButton.click();
         $(By.xpath("//button[text()='Ok']")).click();
-        statusInReview.click();
+        commonWaiter(statusInReview,visible).click();
         selectInactive.click();
         $(By.xpath("//button[text()='Change']")).click();
         inputPassword.sendKeys(password);
@@ -275,10 +275,10 @@ public class RecipePage {
     }
 
     public void rejectTechReviewRecipe() {
-        statusDraft.click();
+        commonWaiter(statusDraft,visible).click();
         selectTechReview.click();
         $(By.xpath("//button[text()='Change']")).click();
-        statusInReview.click();
+        commonWaiter(statusInReview,visible).click();
         selectDraft.click();
         $(By.xpath("//button[text()='Change']")).click();
         statusApproved.waitUntil(Condition.visible, 5000l);

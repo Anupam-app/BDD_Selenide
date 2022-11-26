@@ -1,4 +1,4 @@
-@COMMON
+@IVI @CRS
 @SMOKE
 Feature: I18N on all modules
 
@@ -15,7 +15,7 @@ Feature: I18N on all modules
     And I go to main
     And I expand recipe console in pnid
     And I see expected texts from recipe console
-    And I go to trends
+    And I navigate to trends page
     And I see expected texts from trend module
     And I go to analytics
     And I see expected texts from analytics module
@@ -42,7 +42,7 @@ Feature: I18N on all modules
     Given I go to user profile
     And I go to user preferences
     When I change default language to "en-US"
-    And I go to trends
+    And I navigate to trends page
     And I see expected texts from trend module parameters
     And I go to recipe page
     And I see expected texts from recipe module criterias

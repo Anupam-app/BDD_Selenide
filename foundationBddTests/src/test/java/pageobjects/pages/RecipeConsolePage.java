@@ -1,12 +1,15 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import dataobjects.Recipe;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import pageobjects.utility.SelenideHelper;
@@ -17,6 +20,8 @@ public class RecipeConsolePage {
     private final String XPATH_RESTART_OR_HOLD_BUTTON = "//span[@class='MuiButton-label']";
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
+    private final String XPATH_CTRL_ICONS = "//img[contains(@src,'%s')]";
+    private final String XPATH_TEXTS = "//p[text()='%s']";
 
 
     private final SelenideElement loadRecipeText = $(By.xpath("//p[contains(text(),'Load Recipe')]"));
@@ -24,13 +29,17 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
-    private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss')]"));
+    private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss') and contains(@src,'Tab')]"));
+    private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
+    private final SelenideElement manualOperations = $(By.xpath("//span[text()='MANUAL OPERATION']"));
+    private final SelenideElement timerValue = $(By.xpath("//div[text()='00:00:00:00']"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
     private final SelenideElement pauseIcon = $(By.xpath("//img[contains(@src,'Group')]"));
     private final SelenideElement resumeIcon = $(By.xpath("//img[contains(@src,'RESUME')]"));
     private final SelenideElement jumpStepIcon = $(By.xpath("//img[contains(@src,'JUMP_STEP')]"));
+    private final SelenideElement pauseTimerValue = $(By.xpath("//p[contains(text(),'0:00')]"));
     private final SelenideElement inputStepNumber = $(By.xpath("//input[@id='standard-number']"));
 
     private final SelenideElement restartButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "RESTART")));
@@ -68,7 +77,7 @@ public class RecipeConsolePage {
         restartSystem();
     }
 
-    private void restartSystem() {
+    public void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible).click();
         SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
         SelenideHelper.commonWaiter(confirmButton, visible).click();
@@ -90,7 +99,7 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
-        if (clearRecipeText.isDisplayed()) {
+        if (commonWaiter(clearRecipeText, visible).isDisplayed()) {
             clearRecipeText.click();
         }
         loadRecipeText.click();
@@ -113,10 +122,10 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(recipe.getBeforeComments());
-        okButton.click();
+        commonWaiter(okButton, visible).click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
-        SelenideHelper.commonWaiter(startDate, visible);
+        commonWaiter(startDate, visible);
         recipe.setStartDate(startDate.getText());
         recipe.setEndDate(endDate.getText());
         recipe.setMachineName(machineName.getText());
@@ -144,7 +153,7 @@ public class RecipeConsolePage {
         okButton.click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
-        SelenideHelper.commonWaiter(startDate, visible);
+        commonWaiter(startDate, visible);
         String startDate1 = startDate.getText();
         String endDate1 = endDate.getText();
         String[] dateParts = startDate1.split(" ");
@@ -238,5 +247,62 @@ public class RecipeConsolePage {
 
     public void clearRecipe() {
         SelenideHelper.commonWaiter(clearRecipeButton, visible).click();
+    }
+
+    public void recipeisPaused() throws ParseException {
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldNotBe(selected);
+        SimpleDateFormat formatter = new SimpleDateFormat("DD:HH:MM:SS");
+        String timeStart = pauseTimerValue.getText();
+        Selenide.sleep(2000);
+        String timeEnd = pauseTimerValue.getText();
+        Date startTime = formatter.parse(timeStart);
+        Date endTime = formatter.parse(timeEnd);
+        long timeDifference = (endTime).getTime() - (startTime).getTime();
+        if (timeDifference > 0) {
+            Assert.assertTrue(true);
+        } else {
+            Assert.assertTrue(false);
+        }
+    }
+
+    public void hold() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+        }
+        holdSystem();
+    }
+
+    public void clearPanelAndRunDisabled() {
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).shouldNotBe(selected);
+        $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).shouldNotBe(selected);
+    }
+
+    public void gotoManualOperations() {
+        SelenideHelper.commonWaiter(manualOperations, visible).click();
+    }
+
+    public void verifyManualRunOptions() {
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "START"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "BATCH ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "RUN ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
+        timerValue.shouldBe(visible);
+
+    }
+
+    public void collapseRecipeConsole() {
+        SelenideHelper.commonWaiter(collapseIcon, visible).click();
+    }
+
+    public void verifyRecipeRunOptions() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+        }
+        $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).shouldBe(visible);
+        holdButton.shouldBe(visible);
     }
 }
