@@ -277,7 +277,7 @@ public class TrendsPage {
     }
 
     public void chooseCollection(String name) {
-        $(By.xpath(String.format(nameOfListCollection, name))).click();
+        commonWaiter($(By.xpath(String.format(nameOfListCollection, name))), visible).click();
     }
 
     public void defaultCollectionTagsValidation(String parameters) {
@@ -332,7 +332,7 @@ public class TrendsPage {
     }
 
     public void graphTime() throws ParseException {
-        String startTimeString = graphStartTime.getText().replaceAll("\\s", "");
+        String startTimeString = commonWaiter(graphStartTime, visible).getText().replaceAll("\\s", "");
 
         String lastTimeString = graphLastTime.getText();
         if (lastTimeString.length() != 20) {

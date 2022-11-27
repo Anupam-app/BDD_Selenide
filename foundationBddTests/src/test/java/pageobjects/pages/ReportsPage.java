@@ -903,14 +903,14 @@ public class ReportsPage {
     }
 
     public boolean verifyConsolidatedStatus(String status) {
-        boolean isTrue = false;
+        boolean result;
         commonWaiter(filterSelection, visible);
         if (!consolidateColumn.isDisplayed()) {
-            isTrue = noDatamsg.isDisplayed();
+            result = noDatamsg.isDisplayed();
         } else {
-            isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
+            result = consolidateColumn.getText().equalsIgnoreCase(status);
         }
-        return isTrue;
+        return result;
     }
 
     public void reportRequestNotificationVisibility() {
