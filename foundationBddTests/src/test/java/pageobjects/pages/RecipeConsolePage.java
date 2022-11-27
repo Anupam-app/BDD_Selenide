@@ -89,9 +89,13 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        if (expandIcon.isDisplayed()) {
-            expandIcon.click();
+        if (!collapseIcon.isDisplayed()) {
+            SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
+    }
+
+    public void collapseRecipeConsole() {
+        SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
     public void loadRecipe(String recipeName) {
@@ -288,10 +292,6 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
         timerValue.shouldBe(visible);
 
-    }
-
-    public void collapseRecipeConsole() {
-        SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
     public void verifyRecipeRunOptions() {
