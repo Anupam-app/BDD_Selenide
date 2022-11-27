@@ -89,7 +89,7 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        if (!collapseIcon.isDisplayed()) {
+        if (expandIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
     }
@@ -103,7 +103,7 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
-        if (commonWaiter(clearRecipeText, visible).isDisplayed()) {
+        if (clearRecipeText.isDisplayed()) {
             clearRecipeText.click();
         }
         loadRecipeText.click();
