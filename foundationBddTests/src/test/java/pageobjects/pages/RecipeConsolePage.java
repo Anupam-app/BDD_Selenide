@@ -90,8 +90,12 @@ public class RecipeConsolePage {
 
     public void gotoRecipeConsole() {
         if (expandIcon.isDisplayed()) {
-            expandIcon.click();
+            SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
+    }
+
+    public void collapseRecipeConsole() {
+        SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
     public void loadRecipe(String recipeName) {
@@ -99,7 +103,7 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
-        if (commonWaiter(clearRecipeText, visible).isDisplayed()) {
+        if (clearRecipeText.isDisplayed()) {
             clearRecipeText.click();
         }
         loadRecipeText.click();
@@ -283,15 +287,11 @@ public class RecipeConsolePage {
 
     public void verifyManualRunOptions() {
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "START"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEXTS, "BATCH ID"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEXTS, "RUN ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "Batch ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "Run ID"))).shouldBe(visible);
         $(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
         timerValue.shouldBe(visible);
 
-    }
-
-    public void collapseRecipeConsole() {
-        SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
     public void verifyRecipeRunOptions() {
