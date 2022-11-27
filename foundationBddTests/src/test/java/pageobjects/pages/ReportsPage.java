@@ -369,7 +369,7 @@ public class ReportsPage {
 
     public void waitForReportGeneration(SelenideElement element, Condition condition) throws InterruptedException {
         element.waitUntil(condition, 3 * 60 * 1000l, 500l);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
     }
 
     public void checkReportPdfInPage() {

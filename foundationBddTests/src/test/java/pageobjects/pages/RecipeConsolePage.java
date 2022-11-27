@@ -86,7 +86,9 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-    	SelenideHelper.commonWaiter(expandIcon, visible).click();
+        if(!collapseIcon.isDisplayed()){
+            SelenideHelper.commonWaiter(expandIcon, visible).click();
+        }
     }
     
     public void collapseRecipeConsole() {
