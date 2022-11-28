@@ -554,77 +554,9 @@ public class RecipePage {
     	String actual = $(By.xpath(String.format(editorRecipeName,recipeName ))).getText();
     	Assert.assertEquals(actual, recipeName);
     }
-    
-    public void iChnageStatus(String value) {
-    	SelenideHelper.commonWaiter(draft, visible).click();
-    	$(By.xpath(String.format("//span[text()='%s']",value))).click();
-    	SelenideHelper.commonWaiter(chnage, visible).click();
-    	
-    }
-    public boolean iVerifytechReview(String staus) {
-    	boolean isResult = false;
-    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
-    		selectTechReview.shouldBe(visible);
-    		
-			isResult=true;}
-		else {
-			selectTechReview.shouldNotBe(visible);
-			isResult=false;
-			
-		}
-    		
-    	return isResult;
-    }
-    public void ichangestatustoDraft(String value) {
-    	statusDraft.click();
-    	selectTechReview.click();
-    //$(By.xpath(String.format("//span[text()='Draft']",visible))).click();
-    	 //selectTechReview.click();
-    	//$(By.xpath(String.format("//span[text()='%s']",value))).click();
-    	SelenideHelper.commonWaiter(chnage, visible).click();
-    }
-    
-    public boolean iVerifyDraftStatus(String Name) {
-    	boolean isResult = false;
-    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
-    		$(By.xpath(String.format("//span[text()='%s']",Name))).shouldBe(visible);
-    		
-			isResult=true;}
-		else {
-			$(By.xpath(String.format("//span[text()='%s']",Name))).shouldNotBe(visible);
-			isResult=false;
-			
-		}
-    		
-    	return isResult;
-    }
-
-    
-    public void iChangeDrafttoInreview(String Name) {
-    	statusDraft.click();
-        selectInReview.click();
-        primaryButton.click();
-        $(By.xpath("//button[text()='Ok']")).click();
-        
-        
-    	
-    }
-    public boolean iVerifyInreviewStatus(String Name) {
-    	boolean isResult = false;
-    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
-    		$(By.xpath(String.format("//span[text()='%s']",Name))).shouldBe(visible);
-    		
-			isResult=true;}
-		else {
-			$(By.xpath(String.format("//span[text()='%s']",Name))).shouldNotBe(visible);
-			isResult=false;
-			
-		}
-    		
-    	return isResult;
-    }
     public void warningMessage(String message) {
-    	$(By.xpath("//div/label[text()='Approved-InActive']")).click();
+    	Selenide.sleep(1000);
+    	$(By.xpath("//label[text()='Approved-InActive']")).click();
     	String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
     	Assert.assertEquals(actual,message);  
     	$(By.xpath("//button[@class='btn-secondary']")).click();

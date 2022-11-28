@@ -42,12 +42,13 @@ Feature: Recipe management
 	  |Created By			  |
 	  |Last Modified On	|
 	  |UOP Status			  |
- 	
-  Scenario: BIOCRS-5060| Recipe Obselete
+ 
+  Scenario: BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
     Then Recipe should be inactive
+    And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I click on generate button
     And I goto report management page
@@ -142,7 +143,7 @@ Feature: Recipe management
     And I should see "action" step added
     When I add new step with message prompt
     Then I should see message input text field displayed
-  @test
+
   Scenario: BIOFOUND-3768| Create new phase 
     Given I go to recipe page
     When I trigger edit mode
@@ -153,29 +154,4 @@ Feature: Recipe management
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
-    
-  Scenario:BIOFOUND-12567 |Recipe management_Audit trail events for successful recipe status change and report generation
-    Given I go to recipe page
-    When I trigger edit mode
-    And I create a new phase in recipe
-    And I add action to the step
-    And I save the recipe
-    And I change status to "Tech-Review" 
-    Then I verify the recipe status is "Tech-Review"
-    And I change status Tech-Review to "Draft"
-    And I verify the recipe status is "Draft"
-    And I change status draft to "In-review"
-    And I verify the recipe status draft to "In-review"
-    And I change status to "Approve-Active"
-    And I verify the recipe status is "Approve-Active"
-    And I change status to "Approve-Inactive"
-    And I verify the recipe status is "Approve-Inactive"
-    And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
-    When I goto report management page
-    And I select report from dropdown "Audit Trail"
-	  And I select user in dropdown "Bio4CAdmin"
-    And I click on generate button
-    And I goto report management page
-    And I trigger report mode
-    Then I should see the report file presence
-    And I verify the recipe event details in report
+

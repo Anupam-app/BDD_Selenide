@@ -207,7 +207,7 @@ public class RecipePageStepsDefinition {
 	@Then("Recipe should be inactive")
 	public void recipeShouldBeInactive() {
 		Assert.assertEquals("Approved-InActive",this.recipePage.getStatus());
-		switchTo().parentFrame();
+		
 	}
 
 	@Then("Recipe should be Draft-Rejected")
@@ -293,33 +293,10 @@ public class RecipePageStepsDefinition {
 	public void verifyRecipeInEditor() {
 		recipePage. verifyRecipeEditor(this.recipePage.getRecipeName());
 	}
-	@And("I change status to {string}")
-	public void iChangeStatus(String value) {
-		recipePage.ichangestatustoDraft(value);
-	}
-	
-	@And("I verify the recipe status is {string}")
-	public void iVerifyTheRecipe(String status) {
-		recipePage.iVerifytechReview(status);
-	}
-	@And("I change status Tech-Review to {string}")
-	public void iVerifyTechReviewToDraft(String Name) {
-		recipePage.ichangestatustoDraft(Name);
-		recipePage.iVerifyDraftStatus(Name);
-	}
-	
-	@And("I change status draft to {string}")
-	public void iChangeStatusDraftToInReview(String Name) {
-		recipePage.iChangeDrafttoInreview(Name);
-	}
-	
-	@And("I verify the recipe status draft to {string}")
-	public void iVerifyRecipeStatusDraftToInreview(String Name) {
-       recipePage.iVerifyInreviewStatus(Name);
-	}
 	@And("I try change recipe status and see warning pop up dialog box {string}")
 	public void recipeWarningMessage(String message) {
 		recipePage.warningMessage(message);
+		switchTo().parentFrame();
 	}
 	
 }
