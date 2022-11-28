@@ -2,7 +2,6 @@ package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 import dataobjects.Login;
-import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
@@ -29,15 +28,14 @@ public class ReportsPageStepsDefinition {
     private final Login login;
   
 
-    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
-                                      Recipe recipe, Login login) {
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
+                                      ReportTemplate reportTemplate, User user, Login login) {
+        this.loginPage = loginPage;
         this.reportPage = reportPage;
+        this.report = report;
         this.reportTemplate = reportTemplate;
         this.user = user;
-        this.report = report;
-        this.loginPage = loginPage;
         this.login = login;
-       
     }
 
     @Given("I goto report management page")
@@ -151,6 +149,13 @@ public class ReportsPageStepsDefinition {
         reportPage.exists(this.report.getName());
     }
 
+    @When("I check audit trial logs")
+    public void iCheckAudiTrialLogs() {
+        report.getRecipes()
+                .forEach(recipe -> reportPage
+                        .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+    }
+
     @When("I should see the report file presence")
     public void iShouldSeeTheReportFilePresence() {
         reportPage.viewReports(this.report.getName());
@@ -182,7 +187,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, true, this.login.getLogin());
         switchTo().parentFrame();
     }
-    
+
     @Then("I see the {string} is changed to {string} in report")
     public void iverifyRecipeStatus(String recipeName, String status) throws Exception {
         this.report.checkRecipeStatus(reportPage.getPdfUrl(), recipeName, status, this.login.getLogin());
@@ -194,7 +199,7 @@ public class ReportsPageStepsDefinition {
         this.report.checkUserIsEnabledOrDisabled(reportPage.getPdfUrl(), userName, false, this.login.getLogin());
         switchTo().parentFrame();
     }
-    
+
     @When("I search report {string}")
     public void iSearchReports(String report) {
         this.report.setName(report);

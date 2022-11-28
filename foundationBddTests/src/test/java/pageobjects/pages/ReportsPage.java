@@ -133,6 +133,7 @@ public class ReportsPage {
     private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
+    private final String recipeAuditLogs ="//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -236,6 +237,16 @@ public class ReportsPage {
 
     public void verifyGenerateButton() {
         Assert.assertFalse(reportGenerateButton.is(visible));
+    }
+    
+    public void checkRecipeCTRLOperationLogs(String batchId, String recipeName) {
+    	$(By.xpath(String.format(recipeAuditLogs, "acknowledged", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "aborted", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "step jump", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "resumed", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "paused", recipeName, batchId))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "restart"))).shouldBe(visible);
+    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "hold"))).shouldBe(visible);
     }
 
     public void gotoReportsTab() {
@@ -358,7 +369,7 @@ public class ReportsPage {
 
     public void waitForReportGeneration(SelenideElement element, Condition condition) throws InterruptedException {
         element.waitUntil(condition, 3 * 60 * 1000l, 500l);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
     }
 
     public void checkReportPdfInPage() {
@@ -599,10 +610,10 @@ public class ReportsPage {
 
     public boolean verifyRunStatus(String status) {
         boolean isTrue = false;
-        if (!statusColumn.isDisplayed()) {
+        if (!(commonWaiter(statusColumn, appear).isDisplayed())) {
             isTrue = noDatamsg.isDisplayed();
         } else {
-            isTrue = statusColumn.getText().equalsIgnoreCase(status);
+            isTrue = commonWaiter(statusColumn, appear).getText().equalsIgnoreCase(status);
         }
         return isTrue;
     }

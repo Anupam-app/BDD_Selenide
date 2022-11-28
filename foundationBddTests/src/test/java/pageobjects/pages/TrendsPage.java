@@ -317,16 +317,15 @@ public class TrendsPage {
     }
 
     public void graphTime() throws ParseException {
-        String startTime = graphStartTime.getText();
-        String lastTime = graphLastTime.getText();
+        String startTimeString = graphStartTime.getText();
+        String lastTimeString = graphLastTime.getText();
 
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-        Date date1 = format.parse(startTime);
-        Date date2 = format.parse(lastTime);
-        long difference = ((date2.getTime() - date1.getTime())) / (60 * 1000) % 60;
-        System.out.print("Time difference:" + difference);
-        Assert.assertTrue(difference <= 60);
-        Assert.assertTrue(difference >= 45);
+        Date startTime = format.parse(startTimeString);
+        Date lastTime = format.parse(lastTimeString);
+        long difference = ((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
+        Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
+                difference, lastTimeString, startTimeString), difference >= 45);
     }
 
 }

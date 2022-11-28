@@ -9,7 +9,6 @@ import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
-
 import java.awt.AWTException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -164,8 +163,12 @@ public class RecipePage {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
-        searchTextBox.sendKeys("start");
+        searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL +"v");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);

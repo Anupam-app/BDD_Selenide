@@ -92,8 +92,7 @@ public class Report {
     @Setter
     @Getter
     List<Recipe> recipes;
-
-
+    
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
 
         URL url = new URL(reportUrl);
