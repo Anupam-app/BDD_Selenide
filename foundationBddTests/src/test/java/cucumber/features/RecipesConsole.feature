@@ -48,8 +48,8 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-    
-  Scenario: BIOCRS-4047|4050|5480: Verify state of Manual Operation tab when Recipe execution is in progress
+   
+  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
     #Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
@@ -57,10 +57,7 @@ Feature: Recipe console
     And I verify Recipe Run tab is "enabled"
     When I start recipe execution
     Then I verify Manual Operation tab is "disabled"
-    And I pause recipe and verify recipe paused
-    And I verify Manual Operation tab is "disabled"
-    When I click on resume button
-    Then recipe execution is resumed
+    And I pause recipe and verify recipe paused and jump icon is disabled
     And I verify Manual Operation tab is "disabled"
     When I resume and verify recipe execution is resumed
     Then I verify Manual Operation tab is "disabled"
@@ -82,7 +79,7 @@ Feature: Recipe console
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
     
-    @test
+ 
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -94,7 +91,7 @@ Feature: Recipe console
     When I Stop the RUN 
     Then I validate the date formats in Post run window and enter comments
     And I wait for 1 min for the post run window to auto closed
-    And I validate the Start button is "displayed" and "disabled"
+    And I validate the Start button is "disabled"
     And I restart the Process hold
-    And I validate the Start button is "displayed" and "enabled" 
+    And I validate the Start button is "enabled" 
     

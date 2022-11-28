@@ -27,7 +27,7 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
     private final Login login;
-
+  
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report, ReportTemplate reportTemplate, User user,
                                       Recipe recipe, Login login) {
@@ -37,6 +37,7 @@ public class ReportsPageStepsDefinition {
         this.report = report;
         this.loginPage = loginPage;
         this.login = login;
+       
     }
 
     @Given("I goto report management page")
@@ -134,6 +135,7 @@ public class ReportsPageStepsDefinition {
     @When("I trigger report mode")
     public void iTriggerReportMode() {
         reportPage.gotoReportsTab();
+       
     }
 
     @Then("I should see the report signed")

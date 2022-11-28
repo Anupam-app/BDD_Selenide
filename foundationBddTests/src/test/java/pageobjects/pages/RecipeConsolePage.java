@@ -75,14 +75,18 @@ public class RecipeConsolePage {
     private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[3]"));
     private final SelenideElement timeValidate = $(By.xpath("//div[@id='timerCycle']")); 
     private final SelenideElement secondValidate = $(By.xpath("//div[@id='timerCycle']//span[4]"));
+    private final SelenideElement minuteValidate = $(By.xpath("//div[@id='timerCycle']//span[3]"));
     private final SelenideElement closeButtonOfStop = $(By.xpath("//span[contains(text(),'Yes')]"));
     private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
+  
 
     private Recipe recipe;
+    private Recipe currentRecipe ;
     
-    public RecipeConsolePage(Recipe recipe) {
+    public RecipeConsolePage(Recipe recipe, Recipe currentRecipe) {
 
         this.recipe = recipe;
+        this.currentRecipe = currentRecipe;
     }
 
     public void holdAndRestart() {
@@ -205,7 +209,7 @@ public class RecipeConsolePage {
     }
 
     public void clickResumeButton() {
-        resumeIcon.waitUntil(Condition.visible, 5000l).click();
+        resumeIcon.click();
     }
 
     public boolean verifyResumeButton() {
@@ -321,10 +325,10 @@ public class RecipeConsolePage {
 	   }
 	   commonWaiter(manualStartButton, appear);
 	   manualStartButton.click();
-	   this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
-	   manualOperationName.sendKeys(this.recipe.getMachineName());
-	   this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
-	   runIdTextbox.sendKeys(this.recipe.getRunId());
+	   this.currentRecipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
+	   manualOperationName.sendKeys(this.currentRecipe.getMachineName());
+	   this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(5));
+	   runIdTextbox.sendKeys(this.currentRecipe.getRunId());
 	   productIdTextbox.setValue(productId);
        batchIdTextbox.click();
        batchIdTextbox.sendKeys(batchId);
@@ -338,11 +342,11 @@ public class RecipeConsolePage {
    public void validationOfRunDetails() {
 	 commonWaiter(manualStopButton,appear); 
 	 String actualRunId = matchId.getText();
-	 Assert.assertEquals(actualRunId.toLowerCase(), this.recipe.getMachineName().toLowerCase());
+	 Assert.assertEquals(actualRunId.toLowerCase(), this.currentRecipe.getMachineName().toLowerCase());
 	 String actualBatchId = batchId.getText();
-	 Assert.assertEquals(actualBatchId.toLowerCase(), this.recipe.getBatchId().toLowerCase());
+	 Assert.assertEquals(actualBatchId.toLowerCase(), this.currentRecipe.getBatchId().toLowerCase());
 	 String actualProductId = runId.getText();
-	 Assert.assertEquals(actualProductId.toLowerCase(), this.recipe.getRunId().toLowerCase());
+	 Assert.assertEquals(actualProductId.toLowerCase(), this.currentRecipe.getRunId().toLowerCase());
    }
    public void timeValidation() {
 	  Assert.assertTrue(timeValidate.isDisplayed());
@@ -353,45 +357,36 @@ public class RecipeConsolePage {
    }
    public void incrementTimer(){
 	  int fristTime = Integer.parseInt(secondValidate.getText());
-	   Selenide.sleep(2000);
-	   int secondTime = Integer.parseInt(secondValidate.getText());
-	   int differ = secondTime - fristTime;
-		Assert.assertTrue(differ<=2);
-		Assert.assertTrue(differ>1);
+	  int minFirstTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
+	  Selenide.sleep(2000);
+	  int secondTime = Integer.parseInt(secondValidate.getText());
+	  int minSecondTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
+	  int differ = ( minSecondTime*60 + secondTime) - (minFirstTime*60+fristTime);
+	   Assert.assertTrue(differ>=2);
+		
    }
    public void stopButton() {
 	   manualStopButton.click();
 	   closeButtonOfStop.click();
    }
-   public void verifyPostRunDate() {
-//	   DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+   public void verifyPostRunDate() throws ParseException {
 	   String startDate1 = startDate.getText();
-       SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HHmmss");
-       //To make strict date format validation    formatter.setLenient(false);
-       Date parsedDate = null;
-       try {
-           parsedDate = formatter.parse(startDate1);
-           System.out.println("++validated DATE TIME ++"+formatter.format(parsedDate));
-
-       } catch (ParseException ex) {
-           //Handle exception
-    	   ex.printStackTrace();
-       }
-      
+       Assert.assertTrue(startDate1.matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})"))); 
 	   postRunCommentsText.sendKeys("completed");   
    }
    public void autoClosePostRun() {
 	   postRunWindow.waitUntil(Condition.disappear,600001).shouldNot(visible);
    }
-   public void validateStartButtonNotSelect(String status1,String status2) {
-	   
-	   if(status1.equalsIgnoreCase("displayed")&& status2.equalsIgnoreCase("disabled") ) {
-	   manualStartButton.exists();
-	   manualStartButton.shouldNot(selected);
+   public void validateStartButtonNotSelect(String status) {
+	   SelenideHelper.commonWaiter(manualStartButton, visible);
+	   if(status.equalsIgnoreCase("disabled") ) {
+	   manualStartButton.shouldNotBe(selected);
 	   }
-	   else if(status1.equalsIgnoreCase("displayed")&& status2.equalsIgnoreCase("enabled")) {
-		   manualStartButton.exists();
-		   manualStartButton.shouldBe(selected);
+	   else if(status.equalsIgnoreCase("enabled")) {
+		   manualStartButton.shouldBe(visible);
 	   }
+   }
+   public void verifyJumpStep() {
+	   jumpStepIcon.shouldNotBe(selected);
    }
 }

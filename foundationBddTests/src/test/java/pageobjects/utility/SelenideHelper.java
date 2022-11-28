@@ -6,9 +6,12 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import java.time.Duration;
+import java.util.Optional;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 
@@ -32,4 +35,10 @@ public class SelenideHelper {
     public static void goToIFrame(){
         switchTo().frame("CrossDomainiframeId");
     }
+    public static String removeLastCharOptional(String s) {
+        return Optional.ofNullable(s)
+          .filter(str -> str.length() != 0)
+          .map(str -> str.substring(0, str.length() - 1))
+          .orElse(s);
+        }
 }

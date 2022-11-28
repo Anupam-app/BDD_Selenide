@@ -8,9 +8,9 @@ import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+
 import java.awt.AWTException;
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,13 +20,16 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.interactions.Action;
+import org.openqa.selenium.interactions.Actions;
 
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
 
 public class RecipePage {
+	
+	Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
+	
     private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
     private final String XPATH_EDIT_EXPORT_ICON = "//tr[td[text()='%s']]/td/div[contains(@class, 'export-icon')]";
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
@@ -102,9 +105,19 @@ public class RecipePage {
     Function<Integer, List<String>> getRecipeColumns = (index) -> $$(By.xpath(String.format(XPATH_RECIPE_COLUMNS_BY_INDEX, index))).texts();
     private final SelenideElement recipeBlock = $(By.xpath("//div[@class='recipe-data-block']"));
     private final SelenideElement stepPlaceholder = $(By.xpath("//input[@placeholder='Search instruments and actions...']"));
-    private final  String rootStep = "//div[@class='search-node']/p[@class='search-txt']/span/span[contains(text(),'%s')]";
-    
-    
+    private final String stepCountPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
+    private final  String rootStep = "(//span[text()='%s']/parent::span/span)[1]";
+    private final String stepNumber = "(//div[@class='stepNumber']/label[@class='stepCount'])[%s]";
+    private final SelenideElement criteriaPlaceholder = $(By.xpath("//input[@placeholder='Search criteria...']"));
+    private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions.')]"));
+    private final String expandAction = "//p[@title='%s']";
+    private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
+    private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
+    private final SelenideElement draft = $(By.xpath("//*[text()='Draft']"));
+    private final SelenideElement chnage =$(By.xpath("//button[text()='Change']"));
+    private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
+    private final SelenideElement recipeValue=$(By.xpath("//div[@class='recipeTabs']"));
+     
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -484,20 +497,137 @@ public class RecipePage {
         switchTo().parentFrame();
     }
     
-    public void keyboardActionRecipe() throws AWTException {
-    	commonWaiter(editorLinkText, visible);
-    	Robot robot= new Robot();
-        robot.keyPress(KeyEvent.VK_ALT);
-        robot.keyPress(KeyEvent.VK_ENTER);
-        robot.keyRelease(KeyEvent.VK_ALT);
-        robot.keyRelease(KeyEvent.VK_ENTER);
+    public void keyboardActionRecipe(){
+    	commonWaiter(editorLinkText, visible);    
+        stepAction.keyDown(recipeBlock, Keys.ALT).sendKeys(Keys.ENTER).perform();
     }
-    public boolean placeholder() {
-    	return(stepPlaceholder.waitUntil(Condition.visible,50001).isDisplayed());
+    public void placeholder(String status) {
+    	if(status.equalsIgnoreCase("blank")) {
+    	stepPlaceholder.waitUntil(Condition.visible,50001).isDisplayed();
+    	}
+      	else if (status.equalsIgnoreCase("action")) {
+      	Assert.assertTrue(stepPlaceholder.getText()!="Search instruments and actions...");
+      	}
     }
     public void addActionStep() {
     	stepPlaceholder.click();
-    	$(By.xpath(String.format(rootStep, "Setpoint"))).click();
+    	stepPlaceholder.clear();
+    	stepPlaceholder.sendKeys("Setpoint");
+    	stepPlaceholder.sendKeys(Keys.ENTER);	
+    }
+    public void addStepActionBrowser() {
+    	opertionAction.waitUntil(visible, 2000).click();
+    	$(By.xpath(String.format(expandAction, "Control Loop"))).click();
+    	$(By.xpath(String.format(expandAction, "Feed Flow FI101"))).click();
+    	$(By.xpath(String.format(expandAction, "Control"))).waitUntil(visible, 1000).click();
+    	$(By.xpath(String.format(rootStep, "On"))).doubleClick();
+   }
+    public void addMessageInStep() {
+    	stepAction.keyDown(recipeBlock, Keys.ALT).sendKeys(Keys.ENTER).perform();
+    	$(By.xpath(String.format(stepNumber, "2"))).isSelected();
+        $(By.xpath(String.format(stepCountPlaceholder, "2"))).click();
+        $(By.xpath(String.format(stepCountPlaceholder, "2"))).waitUntil(visible, 1000).sendKeys("Yes/Snooze"); 
+        $(By.xpath(String.format(stepCountPlaceholder, "2"))).sendKeys(Keys.ENTER);
+    }
+    public void messageInputStepValidate() {
+    	messageStepVaidate.waitUntil(visible, 1000).isDisplayed();
+    }
+    public void addingPhaseByPlus() {
+    	 plusButton.waitUntil(Condition.visible, 5000l);
+         plusButton.click();
+    }
+    public void addCriteria() {
+    	$(By.xpath(String.format(stepNumber, "1"))).isSelected();
+    	stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
+    	criteriaPlaceholder.sendKeys("Off");
+    	criteriaPlaceholder.sendKeys(Keys.ENTER);
+    }
+    public void openRecipe(String recipeName) {
+    	 browserLinkText.click();
+         recipeSearchTextBox.sendKeys(recipeName);
+         recipeSearchTextBox.sendKeys(Keys.ENTER);
+    	$(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
+    	openButton.click();
+    }
+    public void verifyRecipeEditor(String recipeName) {
+    	commonWaiter(editorLinkText, visible).isDisplayed();
+    	String actual = $(By.xpath(String.format(editorRecipeName,recipeName ))).getText();
+    	Assert.assertEquals(actual, recipeName);
+    }
+    
+    public void iChnageStatus(String value) {
+    	SelenideHelper.commonWaiter(draft, visible).click();
+    	$(By.xpath(String.format("//span[text()='%s']",value))).click();
+    	SelenideHelper.commonWaiter(chnage, visible).click();
     	
     }
+    public boolean iVerifytechReview(String staus) {
+    	boolean isResult = false;
+    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
+    		selectTechReview.shouldBe(visible);
+    		
+			isResult=true;}
+		else {
+			selectTechReview.shouldNotBe(visible);
+			isResult=false;
+			
+		}
+    		
+    	return isResult;
+    }
+    public void ichangestatustoDraft(String value) {
+    	statusDraft.click();
+    	selectTechReview.click();
+    //$(By.xpath(String.format("//span[text()='Draft']",visible))).click();
+    	 //selectTechReview.click();
+    	//$(By.xpath(String.format("//span[text()='%s']",value))).click();
+    	SelenideHelper.commonWaiter(chnage, visible).click();
+    }
+    
+    public boolean iVerifyDraftStatus(String Name) {
+    	boolean isResult = false;
+    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
+    		$(By.xpath(String.format("//span[text()='%s']",Name))).shouldBe(visible);
+    		
+			isResult=true;}
+		else {
+			$(By.xpath(String.format("//span[text()='%s']",Name))).shouldNotBe(visible);
+			isResult=false;
+			
+		}
+    		
+    	return isResult;
+    }
+
+    
+    public void iChangeDrafttoInreview(String Name) {
+    	statusDraft.click();
+        selectInReview.click();
+        primaryButton.click();
+        $(By.xpath("//button[text()='Ok']")).click();
+        
+        
+    	
+    }
+    public boolean iVerifyInreviewStatus(String Name) {
+    	boolean isResult = false;
+    	if(recipeValue.getText().equalsIgnoreCase(recipename.getText())) {
+    		$(By.xpath(String.format("//span[text()='%s']",Name))).shouldBe(visible);
+    		
+			isResult=true;}
+		else {
+			$(By.xpath(String.format("//span[text()='%s']",Name))).shouldNotBe(visible);
+			isResult=false;
+			
+		}
+    		
+    	return isResult;
+    }
+    public void warningMessage(String message) {
+    	$(By.xpath("//div/label[text()='Approved-InActive']")).click();
+    	String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
+    	Assert.assertEquals(actual,message);  
+    	$(By.xpath("//button[@class='btn-secondary']")).click();
+    }
+    
 }

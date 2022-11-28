@@ -8,6 +8,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -27,13 +29,14 @@ public class RecipeConsoleStepsDefinition {
     private Report report;
     private Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics) {
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
         this.analytics = analytics;
         this.report.setRecipes(this.recipes);
         this.analytics.setRecipes(this.recipes);
+        this.currentRecipe = currentRecipe;
     }
 
     @Given("I expand recipe console in pnid")
@@ -132,6 +135,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("control should be on pause button")
     public void ctrlOnPauseButton() {
+    	Selenide.sleep(1000);
         Assert.assertTrue(recipeConsolePage.verifyPauseButton());
     }
 
@@ -204,10 +208,11 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.manualOperation(status);
     }
     
-    @And("I pause recipe and verify recipe paused")
+    @And("I pause recipe and verify recipe paused and jump icon is disabled")
     public void pauseButton() {
     	recipeConsolePage.clickPauseButton();
     	ctrlOnResumeButton();
+    	recipeConsolePage.verifyJumpStep();
     }
 
     @Then("recipe execution is resumed")
@@ -272,16 +277,16 @@ public class RecipeConsoleStepsDefinition {
 	   recipeConsolePage.stopButton();
    }
    @Then("I validate the date formats in Post run window and enter comments")
-   public void validatePostRun() {
+   public void validatePostRun() throws ParseException {
 	   recipeConsolePage.verifyPostRunDate();
    }
    @And("I wait for 1 min for the post run window to auto closed")
    public void verifyAutoClosePostRun() {
 	   recipeConsolePage.autoClosePostRun();
    }
-   @And("I validate the Start button is {string} and {string}")
-   public void afterPostRunAutoClose(String status1, String status2) {
-	   recipeConsolePage.validateStartButtonNotSelect(status1,status2);
+   @And("I validate the Start button is {string}")
+   public void afterPostRunAutoClose(String status) {
+	   recipeConsolePage.validateStartButtonNotSelect(status);
    }
 
     @When("I load recipe {string} and run it during {int} seconds if not done before")
