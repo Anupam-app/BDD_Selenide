@@ -127,7 +127,11 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
+<<<<<<< HEAD
         if(abortButton.isDisplayed()) {
+=======
+		if(abortButton.isDisplayed()) {
+>>>>>>> ea3d011151f774db88285e6e83ab314445daa558
         	abortButton.click();
         	clickYesButton.waitUntil(Condition.visible, 1000).click();
         	okButton.waitUntil(Condition.visible, 5001).click(); 	
