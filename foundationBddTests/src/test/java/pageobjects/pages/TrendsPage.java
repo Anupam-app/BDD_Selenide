@@ -323,7 +323,7 @@ public class TrendsPage {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
-        long difference = ((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
+        long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
         Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
                 difference, lastTimeString, startTimeString), difference >= 45);
     }
