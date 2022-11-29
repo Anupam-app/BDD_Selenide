@@ -96,6 +96,11 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
+		if(abortButton.isDisplayed()) {
+        	abortButton.click();
+        	clickYesButton.waitUntil(Condition.visible, 1000).click();
+        	okButton.waitUntil(Condition.visible, 5001).click(); 	
+        }
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
