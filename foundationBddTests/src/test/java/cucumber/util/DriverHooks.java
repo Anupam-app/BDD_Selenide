@@ -10,9 +10,12 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.IOException;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import pageobjects.utility.SelenideHelper;
 import utils.TimezoneUtils;
 
 public class DriverHooks {
+
+    public static Scenario currentScenario;
 
     @Before
     public void before(Scenario scenario) throws IOException {
@@ -27,12 +30,12 @@ public class DriverHooks {
         WebDriverUtils.setUp("Chrome");
         TimezoneUtils.setTimezoneDiffInSecondsFromProperties();
         TrustAllCertificates.install();
+        currentScenario=scenario;
     }
 
     @After(order = 100)
     public void tearDown(Scenario scenario) {
-        byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
-        scenario.attach(screenshot, "image/png", "name");
+        SelenideHelper.takePicture();
         WebDriverUtils.tearDown(scenario);
     }
 }

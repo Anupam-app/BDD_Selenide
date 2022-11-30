@@ -59,7 +59,7 @@ Feature: Recipe console
     Then control should be on resume button
     And I click on resume button
     Then control should be on pause button
-    And I click on jump step "2"
+    And I click on jump step "3"
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
