@@ -529,7 +529,7 @@ public class RecipePage {
     	stepAction.keyDown(recipeBlock, Keys.ALT).sendKeys(Keys.ENTER).perform();
     	$(By.xpath(String.format(stepNumber, "2"))).isSelected();
         $(By.xpath(String.format(stepCountPlaceholder, "2"))).click();
-        $(By.xpath(String.format(stepCountPlaceholder, "2"))).waitUntil(visible, 1000).sendKeys("Yes/Snooze"); 
+        $(By.xpath(String.format(stepCountPlaceholder, "2"))).waitUntil(visible, 1000).sendKeys("Snooze"); 
         $(By.xpath(String.format(stepCountPlaceholder, "2"))).sendKeys(Keys.ENTER);
     }
     public void messageInputStepValidate() {

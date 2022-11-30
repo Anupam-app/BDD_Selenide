@@ -116,6 +116,9 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
+        if($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+        $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+        }
     }
 
     public void collapseRecipeConsole() {
@@ -128,7 +131,6 @@ public class RecipeConsolePage {
             SelenideHelper.commonWaiter(holdButton, visible);
         }
 		if(abortButton.isDisplayed()) {
-
         	abortButton.click();
         	clickYesButton.waitUntil(Condition.visible, 1000).click();
         	okButton.waitUntil(Condition.visible, 5001).click(); 	
@@ -304,7 +306,7 @@ public class RecipeConsolePage {
 	   pauseButton.waitUntil(visible, 50001);
    }
    public void reRun() {
-	   isExecuted();
+	   $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 5000l).click();
    }
    public void processHold() {
 	   $(By.xpath(String.format(XPATH_PNID_BUTTON, "PROCESS HOLD"))).click();
