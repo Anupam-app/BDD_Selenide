@@ -17,6 +17,7 @@ Feature: Recipe management
     Then I see my changes in recipe
 
   @SMOKE 
+  
   Scenario: BIOCRS-5059 | Recipe approval
     Given I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
@@ -33,20 +34,21 @@ Feature: Recipe management
 	When I go to recipe page
     Then  I see list of recipes are displayed
     And below "recipe" column is displayed
-    |columns			|
-    |Recipe Name		|
-	|System Family		|
-	|Imported 			|
-	|Import Status		|
-	|Created By			|
-	|Last Modified On	|
-	|UOP Status			|
- 	
-  Scenario: BIOCRS-5060| Recipe Obselete
+    |columns			    |
+    |Recipe Name		  |
+	  |System Family		|
+	  |Imported 			  |
+	  |Import Status		|
+	  |Created By			  |
+	  |Last Modified On	|
+	  |UOP Status			  |
+ 
+  Scenario: BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
     Then Recipe should be inactive
+    And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I click on generate button
     And I goto report management page
@@ -126,3 +128,30 @@ Feature: Recipe management
     Given I go to recipe page
     When I edit recipe "testRecipeToExecute"
     Then I print recipe "testRecipeToExecute"
+
+  Scenario: BIOFOUND-3768| Create step using Keyboard event
+    Given I go to recipe page
+    When I trigger edit mode
+    When I add new action step using Keyboard event
+    Then I should see "blank" step added
+    And I add action to the step
+  @test 
+  Scenario: BIOFOUND-3768| Create step using Action browser
+    Given I go to recipe page
+    When I trigger edit mode
+    And I select action from action browser
+    And I should see "action" step added
+    When I add new step with message prompt
+    Then I should see message input text field displayed
+
+  Scenario: BIOFOUND-3768| Create new phase 
+    Given I go to recipe page
+    When I trigger edit mode
+    And I create a new phase in recipe
+    And I add action to the step
+   #And I add recipe action from phase library ("Already a recipe should be there in phase library")
+    And I add criteria to phase using keyboard
+    And I save the recipe with name "testRecipe"
+    And I close and reopen the recipe
+    And I should see recipe opened in editor
+
