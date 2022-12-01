@@ -62,4 +62,4 @@ Feature: Apply Filter Recipes
         |Last 30 Days|
         |This Month|
         |Last Month|
-		    |Custom Range|
+		|Custom Range|

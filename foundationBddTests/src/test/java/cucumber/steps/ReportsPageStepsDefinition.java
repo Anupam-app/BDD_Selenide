@@ -50,7 +50,6 @@ public class ReportsPageStepsDefinition {
 	public void iGotoReportManagementPage() {
 		reportPage.goToReports();
 		reportPage.switchToFrame();
-		Selenide.sleep(20000);
 	}
 
 	@Then("I see Runs, Templates, Reports tabs are displayed")
