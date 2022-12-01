@@ -15,8 +15,10 @@ public class HomePage {
     public void open() {
         Selenide.open(Neodymium.configuration().url());
         WebDriverRunner.getWebDriver().manage().window().fullscreen();
-        if(defaultSessionButton.isDisplayed()){
+          if (defaultSessionButton.isDisplayed()){
             defaultSessionButton.click();
         }
+        
     }
+    
 }
