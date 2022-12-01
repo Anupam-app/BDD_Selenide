@@ -48,9 +48,6 @@ public class LoginPage {
 
     public void openLogin() {
         commonWaiter(loginButton,visible).click();
-        if(commonWaiter(licenseText, visible).isDisplayed()) {
-        	$(By.xpath("//button[text()='Continue']")).click();
-        }
     }
 
     public void checkLoggedIn(boolean loggedInd) {
