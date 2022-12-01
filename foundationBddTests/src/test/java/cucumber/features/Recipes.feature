@@ -44,11 +44,12 @@ Feature: Recipe management
       | UOP Status       |
 
   @IVI
-  Scenario: IVI Bug IVI-5969 | BIOCRS-5060| Recipe Obselete
+  Scenario: IVI Bug IVI-5969 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
     Then Recipe should be inactive
+    And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I click on generate button
     And I goto report management page
@@ -131,9 +132,37 @@ Feature: Recipe management
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
+  
   # file menu is removed from IVI
   #To-DO: to be converted to use touch buttons
   Scenario: BIOCRS-1594 | Recipe print
     Given I go to recipe page
     When I edit recipe "testRecipeToExecute"
     Then I print recipe "testRecipeToExecute"
+
+  Scenario: BIOFOUND-3768| Create step using Keyboard event
+    Given I go to recipe page
+    When I trigger edit mode
+    When I add new action step using Keyboard event
+    Then I should see "blank" step added
+    And I add action to the step
+ 
+  Scenario: BIOFOUND-3768| Create step using Action browser
+    Given I go to recipe page
+    When I trigger edit mode
+    And I select action from action browser
+    And I should see "action" step added
+    When I add new step with message prompt
+    Then I should see message input text field displayed
+
+  Scenario: BIOFOUND-3768| Create new phase 
+    Given I go to recipe page
+    When I trigger edit mode
+    And I create a new phase in recipe
+    And I add action to the step
+   #And I add recipe action from phase library ("Already a recipe should be there in phase library")
+    And I add criteria to phase using keyboard
+    And I save the recipe with name "testRecipe"
+    And I close and reopen the recipe
+    And I should see recipe opened in editor
+
