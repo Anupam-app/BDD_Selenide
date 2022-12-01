@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -288,8 +289,52 @@ public class Report {
             break;
         }
     }
+	
+	public void checkAddedRole(String reportUrl, String roleName, String userNameLoggedIn,Set<String> permissionList) throws IOException {
+		URL url = new URL(reportUrl);
+		// get all tables of the report
+		List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+		for (Table reportTable : reportTables) {
+			int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+			if (userColumnIndex > 0) {
+				// start from 1 to skip the header row
+				for (int i=1;i<3;i++) {
+					String appNameColumnValue = reportTable.getRows().get(i).get(1).getText(false);
+					String recordColumnValue = reportTable.getRows().get(i).get(2).getText(false);
+					String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+					String attributeColumnValue = reportTable.getRows().get(1).get(5).getText(false);
+					String currValueColumnValue = reportTable.getRows().get(i).get(6).getText(false);
+					if(i==1) {
+						if (attributeColumnValue.equalsIgnoreCase("permissions")) {
+							String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+							Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+							Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
+							Assert.assertTrue(recordColumnValue.contains(roleName));
+							for(var permission:permissions) {
+								Assert.assertTrue((currValueColumnValue.replaceAll("\\s", "")).contains(permission.replaceAll("\\s", ""))); 
+							}
+						}
+						else if(attributeColumnValue.equalsIgnoreCase("roleName")){
+							Assert.assertTrue(currValueColumnValue.contains(roleName));
+						}
+					}
+					else if (i==2) {
+						if (reportTable.getRows().get(2).get(5).getText(false).equalsIgnoreCase("permissions")) {
+							String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+							for(var permission:permissions) {
+								Assert.assertTrue((reportTable.getRows().get(2).get(6).getText(false).replaceAll("\\s", "")).contains(permission.replaceAll("\\s", ""))); 
+							}
+						}
+						else if(reportTable.getRows().get(2).get(5).getText(false).equalsIgnoreCase("roleName")){
+							Assert.assertTrue(reportTable.getRows().get(2).get(6).getText(false).contains(roleName));
+						}
+					}
+				}
+			}
+			break;
+		}
+	}
     
-
     public void checkRecipeStatus(String reportUrl, String recipeName, String status, String userNameLoggedIn) throws IOException {
 
         URL url = new URL(reportUrl);

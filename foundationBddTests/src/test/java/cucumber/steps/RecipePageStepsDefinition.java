@@ -62,6 +62,16 @@ public class RecipePageStepsDefinition {
 	public void iGoToEditMode() {
 		recipePage.goToEditMode();
 	}
+	
+	@When("I select phase library")
+	public void iselectPhaseLibrary() {
+		recipePage.goToPhaseLibrary();
+	}
+	
+	@When("I verify the message {string}")
+	public void iverifyPhaseLibrarymessage(String message) {
+		recipePage.verifyPhaseMessage(message);
+	}
 
 	@Then("I go to browser mode")
 	public void iGoToBrowserMode() {

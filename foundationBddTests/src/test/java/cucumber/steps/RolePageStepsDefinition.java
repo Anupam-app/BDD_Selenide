@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import dataobjects.Login;
+import dataobjects.Report;
 import dataobjects.Role;
 import dataobjects.RoleAction;
 import io.cucumber.java.en.Given;
@@ -8,20 +10,32 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
+
+import static com.codeborne.selenide.Selenide.switchTo;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RolePageStepsDefinition {
 
 	private final RolePage rolePage;
 	private final Role role;
+	private final Report report;
+	private final ReportsPage reportPage;
+	private final Login login;
 
-	public RolePageStepsDefinition(RolePage rolePage, Role role) {
+	public RolePageStepsDefinition(RolePage rolePage, Role role, Report report,ReportsPage reportPage, Login login) {
 		this.rolePage = rolePage;
 		this.role = role;
+		this.report = report;
+		this.reportPage = reportPage;
+		this.login = login;
 		this.role.getPermissions().clear();
 	}
 
@@ -72,6 +86,13 @@ public class RolePageStepsDefinition {
 		ArrayList<String> expectedPermissions=new ArrayList<>(role.getPermissions());
 		Collections.sort(expectedPermissions);
 		Assert.assertEquals(expectedPermissions,permissions);
+		rolePage.cancelButton();
+	}
+	
+	@Then("I see the role added in report")
+	public void iVerifyThatRoleIsAdded() throws Exception {
+		this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
+		switchTo().parentFrame();
 	}
 
 	@When("I search the role")

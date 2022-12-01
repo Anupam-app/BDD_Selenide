@@ -32,6 +32,7 @@ public class RolePage {
 	private SelenideElement inputRoleName = $(By.className("roleNameInput"));
 
 	private SelenideElement saveRoleButton = $(By.id("save_Btn"));
+	private SelenideElement cancelRoleButton = $(By.className("roleBtnCancel"));
 	private SelenideElement closeButton = $(By.className("role-crossicon"));
 	private SelenideElement createRoleButton = $(By.xpath("//*[@id=\"AddBtn\"]/div[2]"));
 
@@ -166,6 +167,11 @@ public class RolePage {
 
 	public void saveButton() {
 		saveRoleButton.click();
+	}
+	
+	public void cancelButton() {
+		cancelRoleButton.click();
+		switchTo().parentFrame();
 	}
 
 	public void notificationError(String name) {

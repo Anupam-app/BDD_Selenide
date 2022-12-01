@@ -28,7 +28,8 @@ public class RecipeConsolePage {
     private final SelenideElement clearRecipeText = $(By.xpath("//p[contains(text(),'Clear Panel')]"));
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
-
+    private final SelenideElement runCommentErrorMsg = $(By.xpath("//span[(text()='Special characters are not allowed for Comments')]"));
+    
     private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss') and contains(@src,'Tab')]"));
     private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
     private final SelenideElement manualOperations = $(By.xpath("//span[text()='MANUAL OPERATION']"));
@@ -182,6 +183,11 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
         okButton.click();
+    }
+    
+    public void verifyCommentErrorMessage(String message) {
+    	$(By.xpath("//label[text()='Comments']")).click();
+    	Assert.assertTrue((commonWaiter(runCommentErrorMsg, visible)).getText().equalsIgnoreCase(message));
     }
 
     public void isExecuted() {

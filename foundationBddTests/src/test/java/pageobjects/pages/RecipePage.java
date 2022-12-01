@@ -48,6 +48,9 @@ public class RecipePage {
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor')]"));
     private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser')]"));
+    private final SelenideElement phaseLibIcon = $(By.xpath("//span[(text()='Phase Library')]"));
+    private final SelenideElement noPhaseAvailableMsg = $(By.xpath("//span[(text()='There is No Phase in Phase Library')]"));
+  
 
     private final SelenideElement recipeElementText = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement notificationText = $(By.className("notification-summary"));
@@ -129,6 +132,15 @@ public class RecipePage {
     public void goToEditMode() {
         editorLinkText.waitUntil(Condition.visible, 5000l);
         editorLinkText.click();
+    }
+    
+    public void goToPhaseLibrary() {
+        phaseLibIcon.waitUntil(Condition.visible, 5000l).click();
+        noPhaseAvailableMsg.shouldBe(visible);
+    }
+    
+    public void verifyPhaseMessage(String message) {
+        Assert.assertTrue(noPhaseAvailableMsg.getText().equalsIgnoreCase(message));
     }
 
     public void goToBrowserMode() {

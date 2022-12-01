@@ -44,6 +44,12 @@ Feature: Recipe console
     When I select report from dropdown "Audit Trail"
 	And I select user in dropdown "Bio4CAdmin"
 	And I check audit trial logs
+	
+	Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I provide special chars in pre run comments
+    Then I see the error message as "Special characters are not allowed for Comments"
 
   @SMOKE
   Scenario: Recipe execution

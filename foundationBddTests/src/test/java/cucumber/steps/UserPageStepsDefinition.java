@@ -232,7 +232,7 @@ public class UserPageStepsDefinition {
 
 	@Then("I see password reset message is displayed")
 	public void iSeePasswordResetMessagedisplayed() {
-		userPage.isGeneratedNotificationWhenPasswordReset();
+		userPage.isGeneratedNotificationWhenPasswordReset(this.user.getName());
 	}
 
 	@Then("I see error message is displayed for {string}")

@@ -9,6 +9,12 @@ Feature: Apply Filter Recipes
     When I search recipe "testRecipeToExecute"
     Then I should see recipe "testRecipeToExecute"
     
+  Scenario: Bug- IVI-5144 | Verify message in phase library when there is no phase in phase library.
+    Given I go to recipe page
+    When I trigger edit mode
+    And I select phase library
+    Then I verify the message "There is No Phase in Phase Library"
+    
   Scenario: BIOCRS-2689 BIOCRS-5030 | Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Draft"

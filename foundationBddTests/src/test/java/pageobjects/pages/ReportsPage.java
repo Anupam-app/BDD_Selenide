@@ -110,6 +110,7 @@ public class ReportsPage {
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
     private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
+    private final String userAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s')]";
 
     private SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
     private SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
@@ -308,7 +309,14 @@ public class ReportsPage {
     public void createTemplate(String templateName) {
         createButton.click();
         templateNameTextBox.setValue(templateName);
-
+    }
+    
+    public void verifyAuditLogs4UsrUpdate(String username) {
+    	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated",username ))).shouldBe(visible);
+    }
+    
+    public void verifyAuditLogs4RoleUpdate(String role) {
+    	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role ))).shouldBe(visible);
     }
 
     public void approveTemplate(String templateName, String password, String status) {

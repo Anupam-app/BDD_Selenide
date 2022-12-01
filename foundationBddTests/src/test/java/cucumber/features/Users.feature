@@ -94,7 +94,7 @@ Feature: User management
     When I search "testUserToEditFields" user
     Then I cant edit the user  
 
-  Scenario: BIOCRS-4364 | Verify editable fields in user
+  Scenario: BIOCRS-4364 | Bug IVI-5685 Verify editable fields in user
   	Given I am logged in as "Bio4CAdmin" user
   	And I go to user page
     When I search "testUserToEditFields" user
@@ -107,6 +107,7 @@ Feature: User management
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
+    And I verify audit logs for user update
     And I check the audit trail report 
     And I see the "testUserToEditFields" user modified in report
     

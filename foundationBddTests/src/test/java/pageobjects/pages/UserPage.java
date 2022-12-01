@@ -228,8 +228,9 @@ public class UserPage {
 		resetPwdButton.click();
 	}
 
-	public void isGeneratedNotificationWhenPasswordReset() {
+	public void isGeneratedNotificationWhenPasswordReset(String name) {
 		commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+		Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User Acclock password reset successfully! New password has been sent to the user's registered email address."));
 	}
 
 	public void isGeneratedNotificationWhenUserModified(String user) {
