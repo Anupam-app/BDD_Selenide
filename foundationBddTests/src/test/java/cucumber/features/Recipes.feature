@@ -17,7 +17,7 @@ Feature: Recipe management
     Then I see my changes in recipe
 
   @SMOKE  @IVI
-  Scenario: BIOCRS-5059 | Recipe approval
+  Scenario: IVI Bug IVI-5969 | BIOCRS-5059 | Recipe approval
     Given I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
     When I approve recipe
@@ -44,7 +44,7 @@ Feature: Recipe management
       | UOP Status       |
 
   @IVI
-  Scenario: BIOCRS-5060| Recipe Obselete
+  Scenario: IVI Bug IVI-5969 | BIOCRS-5060| Recipe Obselete
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
@@ -57,7 +57,7 @@ Feature: Recipe management
     And I see the "testRecipeDraftToInactive" is changed to "APPROVED-INACTIVE" in report
 
   @IVI
-  Scenario: BIOCRS-5060| Recipe Tech Review Rejected
+  Scenario: IVI Bug IVI-5969 | BIOCRS-5060| Recipe Tech Review Rejected
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToReject"
     When I make recipe Draft-Rejected
