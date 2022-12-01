@@ -21,25 +21,24 @@ import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
-	
+
 	private final Report report;
-    private final ReportsPage reportPage;
-    private final ReportTemplate reportTemplate;
-    private final User user;
-    private final LoginPage loginPage;
-    private final Login login;
+	private final ReportsPage reportPage;
+	private final ReportTemplate reportTemplate;
+	private final User user;
+	private final LoginPage loginPage;
+	private final Login login;
 
 
-    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-                                      ReportTemplate reportTemplate, User user, Login login) {
-        this.loginPage = loginPage;
-        this.reportPage = reportPage;
-        this.report = report;
-        this.reportTemplate = reportTemplate;
-        this.user = user;
-        this.login = login;
-
-    }
+	public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
+			ReportTemplate reportTemplate, User user, Login login) {
+		this.loginPage = loginPage;
+		this.reportPage = reportPage;
+		this.report = report;
+		this.reportTemplate = reportTemplate;
+		this.user = user;
+		this.login = login;
+	}
 
 	@Given("I goto report management page")
 	public void iGotoReportManagementPage() {
@@ -107,7 +106,6 @@ public class ReportsPageStepsDefinition {
 	public void iChooseTemplate(String template) {
 		reportPage.chooseReportTemplate(template);
 		this.report.setReportName(template);
-
 	}
 
 	@Then("I check audit trial report content")
@@ -128,6 +126,12 @@ public class ReportsPageStepsDefinition {
 		report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
 		reportPage.reportRequestNotificationVisibility();
 	}
+
+	/*
+	 * @When("I dont see the presence of generate button") public void
+	 * iDontSeeGenerateButton() { reportPage.verifyGenerateButton(); }
+	 */
+
 
 	@When("I click on view button")
 	public void iClickOnViewButton() {
@@ -151,11 +155,11 @@ public class ReportsPageStepsDefinition {
 	public void reportIsGenerated() {
 		reportPage.exists(this.report.getName());
 	}
-	
+
 	@When("I check audit trial logs")
-    public void iCheckAudiTrialLogs() {
-        report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
-    }
+	public void iCheckAudiTrialLogs() {
+		report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+	}
 
 	@When("I should see the report file presence")
 	public void iShouldSeeTheReportFilePresence() {

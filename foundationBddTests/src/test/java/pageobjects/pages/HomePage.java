@@ -25,4 +25,5 @@ public class HomePage {
 	public void goToMain() {
 		PNIDLinkText.click();
 	}
+
 }

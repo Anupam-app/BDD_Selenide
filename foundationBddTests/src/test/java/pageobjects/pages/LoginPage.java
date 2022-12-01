@@ -1,12 +1,18 @@
 package pageobjects.pages;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+import com.xceptance.neodymium.util.Neodymium;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
+
+import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import com.codeborne.selenide.SelenideElement;
-import com.xceptance.neodymium.util.Neodymium;
-import org.openqa.selenium.By;
-import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
@@ -25,7 +31,7 @@ public class LoginPage {
 	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
 	private final String pnidLoginTestId = "pnid_login_info";
 	private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-
+	private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
 
 	public void setUser(String user) {
 		userIdTextBox.setValue(user);
@@ -42,6 +48,9 @@ public class LoginPage {
 
 	public void openLogin() {
 		commonWaiter(loginButton,visible).click();
+		if(commonWaiter(licenseText, visible).isDisplayed()) {
+			$(By.xpath("//button[text()='Continue']")).click();
+		}
 	}
 
 	public void checkLoggedIn(boolean loggedInd) {
@@ -87,4 +96,5 @@ public class LoginPage {
 		SelenideHelper.commonWaiter(userProfileIcon, visible).click();
 		SelenideHelper.commonWaiter(logOutButton, visible).click();
 	}
+
 }
