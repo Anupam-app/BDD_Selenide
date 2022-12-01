@@ -324,7 +324,7 @@ public class RecipePage {
     }
 
     public void importRecipe(String recipeName) {
-        importMenuButton.click();
+    	SelenideHelper.commonWaiter(importMenuButton,visible).click();
         var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
         importRecipe.click();
         importButton.click();

@@ -35,7 +35,7 @@ Feature: Role administration
     And I edit the role
     Then I verify role details
 
-  Scenario: Assigning role to user
+  Scenario: IVI Bug IVI-5671| Assigning role to user
     When I search "testUserToAssignRole" user
     And I edit the user
     And I assign "testRoleToAssign" to user
