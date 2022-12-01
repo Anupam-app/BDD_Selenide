@@ -1,6 +1,9 @@
 package cucumber.steps;
 
 import dataobjects.Login;
+
+import java.util.List;
+import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -9,6 +12,7 @@ import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.pages.UserPage;
 import pageobjects.pages.UserProfilePage;
 
 public class LoginPageStepsDefinition {
@@ -19,6 +23,7 @@ public class LoginPageStepsDefinition {
 	private final UserProfilePage userProfilePage;
 	private final Login login;
 
+
 	public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserProfilePage userProfilePage) {
 		this.loginPage = loginPage;
 		this.homepage = homepage;
@@ -26,7 +31,7 @@ public class LoginPageStepsDefinition {
 		this.login = login;
 		this.userProfilePage = userProfilePage;
 	}
-
+	
 	@Given("I open login page")
 	public void iOpenLogin() {
 		loginPage.openLogin();
@@ -58,7 +63,7 @@ public class LoginPageStepsDefinition {
 	public void iShouldSeeThisMessage(String message) {
 		loginPage.checkMessage(message);
 	}
-
+	
 	@When("^I login to application with wrong password$")
 	public void iShouldSeeLoginMessage(DataTable table) {
 		List<List<String>> list = table.asLists(String.class);
