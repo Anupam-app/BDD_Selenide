@@ -48,7 +48,7 @@ Feature: Apply Filter Recipes
       |UOP Status		| true  |
       |UOP Status		| false |
     
-  Scenario: BIOCRS-2689 BIOCRS-5030 | Verify filter recipe functionality in Recipe Management Based on status
+  Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter recipe functionality in Recipe Management Based on status
     Given I go to recipe page
     When I filter based on uop status as "Approved-Active" and Imported as "Yes"
     Then  I see recipe based on uop status as "Approved-Active" and Imported as "Yes"

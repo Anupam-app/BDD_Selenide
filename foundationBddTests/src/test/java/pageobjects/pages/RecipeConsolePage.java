@@ -131,14 +131,19 @@ public class RecipeConsolePage {
     }
 
     public void loadRecipe(String recipeName) {
-        if (restartButton.isDisplayed()) {
+    	if (restartButton.isDisplayed()) {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
-        if (clearRecipeText.isDisplayed()) {
-            clearRecipeText.click();
+		if(abortIcon.isDisplayed()) {
+        	abortIcon.click();
+        	clickYesButton.waitUntil(Condition.visible, 1000).click();
+        	okButton.waitUntil(Condition.visible, 5001).click(); 	
         }
-        loadRecipeText.click();
+        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+        }
+        $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
         loadButton.waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
