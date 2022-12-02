@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Analytics;
 import dataobjects.Recipe;
 import dataobjects.Report;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,6 +15,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.utility.SelenideHelper;
 
 public class RecipeConsoleStepsDefinition {
 
@@ -209,65 +211,12 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.clickOnOk();
     }
 
-    @And("I clear the recipe")
-    public void clearRecipePanel() {
-        recipeConsolePage.clearRecipe();
-    }
-
     @When("I load recipe {string} and run it during {int} seconds if not done before")
     public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
         iGotoRecipeConsole();
         if (!recipeConsolePage.isRunBefore(recipe)) {
             iLoadRecipeAndIStartIt(recipe, seconds);
         }
-    }
-	 @When("I click on pause button")
-    public void iClickOnPauseButton() {
-        recipeConsolePage.clickPauseButton();
-    }
-
-    @Then("control should be on resume button")
-    public void ctrlOnResumeButton() {
-        Assert.assertTrue(recipeConsolePage.verifyResumeButton());
-    }
-
-    @Then("control should be on pause button")
-    public void ctrlOnPauseButton() {
-    	Selenide.sleep(1000);
-        Assert.assertTrue(recipeConsolePage.verifyPauseButton());
-    }
-
-    @Then("control should be on rerun button")
-    public void ctrlOnrerunButton() {
-        Assert.assertTrue(recipeConsolePage.verifyReRunButton());
-    }
-
-    @When("I click on resume button")
-    public void iClickOnResumeButton() {
-        recipeConsolePage.clickResumeButton();
-    }
-    
-    @When("I click on jump step {string}")
-    public void iClickOnJumpToStep(String stepNumber) {
-        recipeConsolePage.clickOnJumpToStep(stepNumber);
-    }
-
-    @When("I click on abort button")
-    public void iClickOnAbortButton() {
-        recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
-        recipeConsolePage.clickOnOk();
-
-    }
-
-    @Then("I see the system on hold")
-    public void iSeeTheSystemOnHold() {
-        recipeConsolePage.seeSystemOnHold();
-    }
-
-    @Then("I should see the recipe run aborted")
-    public void iVerifyRecipeAbort() {
-        Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
-        recipeConsolePage.clickOnOk();
     }
 
     @Then("I should see the recipe run {string}")

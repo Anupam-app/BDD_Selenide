@@ -945,5 +945,5 @@ public class ReportsPage {
     public void verifyReportsHeader() {
         reportManagementHeader.shouldBe(visible);
     }
-    }
+    
 }

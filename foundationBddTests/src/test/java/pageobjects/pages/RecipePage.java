@@ -121,19 +121,15 @@ public class RecipePage {
     private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
 	private SelenideElement recipeManagement = $(By.xpath("//div[(@id='RecipeManagement')]"));
 	private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[5]"));
-    private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
     private final SelenideElement importedArrowIcon = $(By.xpath("//div[@class='down-icon']"));
     private SelenideElement importedStatusIcon = $(By.xpath("(//div[@class='filter-box'])[3]/div[2]"));
     private final String importedCheckbox = "//input[@value='%s']";
 	private final SelenideElement importStatusIcon = $(By.xpath("//div[@class='filters-container']/div[3]/div/div[2]"));
-	 private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensleft')]/div/ul/li"));
-    private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
-    private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
     private final SelenideElement clearAll_Btn = $(By.xpath("//*[text()='Clear All']"));
     private final SelenideElement lastModifiedOn = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement importedColumnValue = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[3][text()='No']"));
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
-    private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
+
 	
 	
 	
@@ -637,11 +633,6 @@ public class RecipePage {
         SelenideHelper.commonWaiter(clearAll_Btn, visible).click();
         SelenideHelper.commonWaiter(applyFilterButton, visible).click();
     }
-
-    public int getRandomNumber(int min, int max) {
-        return (int) ((Math.random() * (max - min)) + min);
-    }
-
     public void columnHeaders(String name) {
         $(By.xpath(String.format(XPATH_RECIPE_COLUMN_HEADER, name))).should(visible);
     }

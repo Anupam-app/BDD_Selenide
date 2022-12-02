@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.User;
 import dataobjects.Login;
 import dataobjects.Report;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -11,6 +12,7 @@ import pageobjects.pages.ReportsPage;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 
+import java.awt.AWTException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -19,6 +21,9 @@ import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.UserPage;
 
 public class UserPageStepsDefinition {

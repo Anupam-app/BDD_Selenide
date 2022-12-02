@@ -21,5 +21,7 @@ public class Recipe {
     String endDate;
     String machineName;
     String status;
+    String ManualOperationName;
+    String steps;
 }
 

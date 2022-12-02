@@ -64,7 +64,7 @@ public class RecipeConsolePage {
     private final SelenideElement endDate = $(By.xpath("//span[@id='endDate_Id']"));
     private final SelenideElement machineName = $(By.xpath("//span[@id='machine_Id']/label"));
 
-    private final String stepNo = "//p[text()='%S']";
+    private final String jumpStepNo = "//p[text()='%S']";
 
     private final SelenideElement manualOperationButton = $(By.xpath("//span[contains(text(),'MANUAL OPERATION')]"));
     private final SelenideElement manualOperationSelected = $(By.xpath("//button[contains(@class, 'MuiButton-outlinedPrimary')]//span[contains(text(),'MANUAL OPERATION')]"));
@@ -107,17 +107,16 @@ public class RecipeConsolePage {
 	private final SelenideElement preRun_WindowPopop = $(By.xpath("//p[text()='Pre-Run Record']"));
 	private final SelenideElement runIdExistMsg = $(By.xpath("//span[text()='Run ID is already in use.']"));
 	private final SelenideElement manualOpareationTextbox = $(By.xpath("//input[@name='recipeName']"));
-	private final SelenideElement batchId = $(By.xpath("//p[text()='BATCH ID']/parent::div/following-sibling::div/p/label"));
 	private final SelenideElement recipeStep =$(By.xpath("//label[contains(@title,'LoopControl→FI101→Configure→Setpoint: 1.0 L/min')]"));
 	private final SelenideElement stepsNo = $(By.xpath("//p[@class='MuiTypography-root jss101 MuiTypography-body1']"));
 	private final SelenideElement mainPage =$(By.xpath("//div[@id='PNID']"));
 	private final SelenideElement processHoldDailogBox=$(By.xpath("//h6[text()='Are you sure you want to put the process on hold?']"));
 	private final SelenideElement processhold_Box=$(By.xpath("//h6[text()='Process Hold']"));
 
-	private final SelenideElement clearRecipeButton = $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
 	private ElementsCollection approvedActive = $$(By.xpath("//tbody[(@class='MuiTableBody-root jss228')]/tr/td[i]"));
+	private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
+	private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
 	
-  
     private Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
@@ -315,7 +314,7 @@ public class RecipeConsolePage {
 	}
    public void verifyStep(String stepNumber) {
 	   clickOnJumpToStep(stepNumber);
-	   var reviewStatus = $(By.xpath(String.format(stepNo,stepNumber)));
+	   var reviewStatus = $(By.xpath(String.format(jumpStepNo,stepNumber)));
 	   SelenideHelper.commonWaiter(reviewStatus, visible);
   
    }
@@ -546,9 +545,9 @@ public class RecipeConsolePage {
 	}
 
 	public void existingBachId(String productId,String beforeComments) {
-		rerunIcon.click();
-		runIcon.waitUntil(Condition.visible, 20000l);
-		runIcon.click();
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).click();
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
 		productIdTextbox.setValue(productId);
 		batchIdTextbox.click();
 		batchIdTextbox.sendKeys(Keys.ENTER);
@@ -658,14 +657,8 @@ public class RecipeConsolePage {
 			SelenideHelper.commonWaiter(start_Btn, visible).click();
 	}
 	public void run_Btn() {
-		runIcon.waitUntil(Condition.visible, 20000l);
-		runIcon.click();
-	}
-	public void validateprerunWindow() {
-
-	}
-	public void processHold() {
-		$(By.xpath(String.format(XPATH_PNID_BUTTON, "PROCESS HOLD"))).click();
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
 	}
 	public boolean iverifyDailogBox() {
 		boolean isResult=false;

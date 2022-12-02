@@ -78,7 +78,9 @@ public class TrendsPage {
     private SelenideElement defaultExpandArrow =$(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
 
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
-
+    private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
+    
+    
     public void goToTrends() {
         trends.click();
         commonWaiter(trends, visible);
@@ -327,7 +329,11 @@ public class TrendsPage {
         Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
                 difference, lastTimeString, startTimeString), difference >= 45);
     }
-
+    public void trendsHeaderValidation() {
+        commonWaiter(trendsHeaderValidation,visible);
+        trendsHeaderValidation.isDisplayed();
+        Assert.assertTrue(true);
+    }
 }
 
 
