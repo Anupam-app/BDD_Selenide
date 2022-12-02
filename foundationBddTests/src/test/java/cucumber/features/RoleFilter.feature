@@ -8,7 +8,7 @@ Feature: Apply Filter Roles
     And I trigger Roles mode
     Then the role "testRoleToAssign" exists
 
-   Scenario Outline: BIOCRS-5493- Verify order sort functionality in Role Management
+   Scenario Outline: IVI Bug IVI-5871 | BIOCRS-5493- Verify order sort functionality in Role Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
 		And I trigger Roles mode

@@ -6,6 +6,7 @@ import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
+import dataobjects.Role;
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -16,29 +17,33 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
-
+	
 	private final Report report;
-	private final ReportsPage reportPage;
-	private final ReportTemplate reportTemplate;
-	private final User user;
-	private final LoginPage loginPage;
-	private final Login login;
+    private final ReportsPage reportPage;
+    private final ReportTemplate reportTemplate;
+    private final User user;
+    private final Role role;
+    private final LoginPage loginPage;
+    private final Login login;
 
-
-	public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-			ReportTemplate reportTemplate, User user, Login login) {
-		this.loginPage = loginPage;
-		this.reportPage = reportPage;
-		this.report = report;
-		this.reportTemplate = reportTemplate;
-		this.user = user;
-		this.login = login;
-	}
+    public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
+                                      ReportTemplate reportTemplate, User user, Login login, Role role) {
+        this.loginPage = loginPage;
+        this.reportPage = reportPage;
+        this.report = report;
+        this.reportTemplate = reportTemplate;
+        this.user = user;
+        this.login = login;
+        this.role = role;
+    }
 
 	@Given("I goto report management page")
 	public void iGotoReportManagementPage() {
@@ -278,6 +283,11 @@ public class ReportsPageStepsDefinition {
 	public void iSearchTheReportTemplate() {
 		reportPage.searchReportOrTemplate(this.reportTemplate.getName());
 	}
+	
+	@When("I search the report template {string}")
+	public void iSearchTheReportTemplate(String reportTemplateName) {
+		reportPage.searchReportOrTemplate(reportTemplateName);
+	}
 
 	@When("I edit the report template")
 	public void ieditTheReportTemplate() {
@@ -308,6 +318,26 @@ public class ReportsPageStepsDefinition {
 		iGotoReportManagementPage();
 		iSelectReportFromDropdown("Audit Trail");
 		iClickOnGenerateButton();
+	}
+	
+	@When("I verify audit logs for user update")
+	public void iVerifyAuditLogsForUserUpdate() throws InterruptedException {
+		reportPage.switchToFrame();
+		reportPage.verifyAuditLogsForUserUpdate(this.user.getName());
+		switchTo().parentFrame();
+	}
+	
+	@When("I verify audit logs for role update")
+	public void iVerifyAuditLogsForRoleUpdate() throws InterruptedException {
+		reportPage.switchToFrame();
+		reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+		switchTo().parentFrame();
+	}
+	
+	@Then("I see the role added in report")
+	public void iVerifyThatRoleIsAdded() throws Exception {
+		this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
+		switchTo().parentFrame();
 	}
 
 	@When("I check the audit trail report")

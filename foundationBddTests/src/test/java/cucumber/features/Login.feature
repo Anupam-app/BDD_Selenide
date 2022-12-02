@@ -24,7 +24,7 @@ Feature: User login
     Then I am not logged in
     And I should see the message "Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator."
 
-  Scenario: BIOCRS-5151 | Account unlock for locked account
+  Scenario: BIOCRS-5151 | IVI Bug-IVI-4488 Account unlock for locked account
     Given I open login page
     And I am logged in as "Bio4CAdmin" user
     And I go to user page

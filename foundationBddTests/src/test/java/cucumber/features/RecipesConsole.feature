@@ -42,8 +42,14 @@ Feature: Recipe console
     And control should be on rerun button
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-	  And I select user in dropdown "Bio4CAdmin"
-	  And I check audit trial logs
+	And I select user in dropdown "Bio4CAdmin"
+	And I check audit trial logs
+	
+	Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I provide special chars in pre run comments
+    Then I see the error message as "Special characters are not allowed for Comments"
 
   @SMOKE
   Scenario: Recipe execution
@@ -85,7 +91,7 @@ Feature: Recipe console
    
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
-    When I load recipe "testRecipeToExecute"
+    When I load recipe "testRecipeToExecute1min"
     #Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"

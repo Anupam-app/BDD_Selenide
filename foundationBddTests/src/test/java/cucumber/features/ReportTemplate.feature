@@ -46,7 +46,7 @@ Background:
     Then I verify the password error message "Incorrect Password"
     
   Scenario: Approved Report Template Is Not Modifiable
-    Given I search the report template
+    Given I search the report template "testDraftTemplate"
     When I approve the report template
     And I search the report template
     And I verify the report template

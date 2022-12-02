@@ -17,7 +17,7 @@ Feature: User management
     And I edit the user
     Then The username is equal to the expected one
    
-  Scenario Outline: Create new user with existing username
+  Scenario Outline: IVI Bug  IVI-5793| Create new user with existing username
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     When I enter username "<Username>"
@@ -34,7 +34,7 @@ Feature: User management
       | Username         |              
       | testUsrFirstLog  |
 
-  Scenario: BIOCRS-5370 | User modification
+  Scenario: IVI Bug IVI-5671| BIOCRS-5370 | User modification
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     When I search "testUser" user
@@ -46,7 +46,7 @@ Feature: User management
     Then the employee id is the expected one
     And the role is "Operator"
 
-  Scenario: BIOCRS-586 | User disable
+  Scenario: IVI Bug IVI-5671|  BIOCRS-586 | User disable
   	Given I am logged in as "Bio4cService" user
     And I go to user page
     When I search "testUserEnabled" user
@@ -67,7 +67,7 @@ Feature: User management
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
 
-  Scenario: BIOCRS-586 | User enable
+  Scenario: IVI Bug IVI-5671| BIOCRS-586 | User enable
   	Given I am logged in as "Bio4cService" user
     And I go to user page
     When I search "testUserDisabled" user
@@ -94,7 +94,7 @@ Feature: User management
     When I search "testUserToEditFields" user
     Then I cant edit the user  
 
-  Scenario: BIOCRS-4364 | Verify editable fields in user
+  Scenario: BIOCRS-4364 | Bug IVI-5685 Verify editable fields in user
   	Given I am logged in as "Bio4CAdmin" user
   	And I go to user page
     When I search "testUserToEditFields" user
@@ -107,9 +107,10 @@ Feature: User management
     And I save my user changes
     Then I see user details are changed
     And I generate audit trail report
+    And I verify audit logs for user update
     And I check the audit trail report 
     And I see the "testUserToEditFields" user modified in report
-    
+   
   Scenario: Reset the password
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page

@@ -100,6 +100,17 @@ public class RecipeConsoleStepsDefinition {
 		generateRecipeValues(null, null);
 		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
 	}
+	
+	@When("I provide special chars in pre run comments")
+	public void iStartRecipeExecutionWithSpecialChars() {
+		generateRecipeValues(null, null);
+		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), "$%^%(&^&");
+	}
+	
+	@Then("I see the error message as {string}")
+	public void iSeeErrorMessage(String message) {
+		recipeConsolePage.verifyCommentErrorMessage(message);
+	}
 
 	private void generateRecipeValues(String batchId, String productId) {
 		if (StringUtils.isNotEmpty(productId)) {
@@ -296,8 +307,8 @@ public class RecipeConsoleStepsDefinition {
 	@When("I Process hold the system")
 	public void processHold() {
 		recipeConsolePage.holdSystem();	
-
 	}
+	
 	@Then("I verify Recipe Run tab is {string}")
 	public void recipeRun(String status) {
 		recipeConsolePage.recipeRun(status);
