@@ -84,7 +84,6 @@ public class RolePage {
 		else if (index==1) {roleTableColumnclassValue="roleTableColumnTwo";}
 		List<String> getRoles = $$(By.xpath(String.format(XPATH_ROLE_COLUMNS, roleTableColumnclassValue))).texts();
 		getRoles.removeIf(e -> StringUtils.isEmpty(e.trim()));
-		System.out.println(columnName+ descending+ getRoles);
 		SortHelper.checkSortedRolesElement(columnName, descending, getRoles);
 	}
 

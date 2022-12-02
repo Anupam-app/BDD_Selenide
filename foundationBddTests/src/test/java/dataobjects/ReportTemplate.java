@@ -6,7 +6,7 @@ import lombok.Setter;
 public class ReportTemplate {
     @Setter
     @Getter
-    String name = "testDraftTemplate";
+    String name;
 
     @Setter
     @Getter

@@ -89,12 +89,6 @@ public class RolePageStepsDefinition {
 		rolePage.cancelButton();
 	}
 	
-	@Then("I see the role added in report")
-	public void iVerifyThatRoleIsAdded() throws Exception {
-		this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
-		switchTo().parentFrame();
-	}
-
 	@When("I search the role")
 	public void iSearchTheRole() {
 		rolePage.searchRole(this.role.getRoleName());

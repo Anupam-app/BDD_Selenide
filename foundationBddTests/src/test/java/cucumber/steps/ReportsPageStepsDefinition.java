@@ -283,6 +283,11 @@ public class ReportsPageStepsDefinition {
 	public void iSearchTheReportTemplate() {
 		reportPage.searchReportOrTemplate(this.reportTemplate.getName());
 	}
+	
+	@When("I search the report template {string}")
+	public void iSearchTheReportTemplate(String reportTemplateName) {
+		reportPage.searchReportOrTemplate(reportTemplateName);
+	}
 
 	@When("I edit the report template")
 	public void ieditTheReportTemplate() {
@@ -316,16 +321,22 @@ public class ReportsPageStepsDefinition {
 	}
 	
 	@When("I verify audit logs for user update")
-	public void iVerifyAuditLogs4UsrUpdate() throws InterruptedException {
+	public void iVerifyAuditLogsForUserUpdate() throws InterruptedException {
 		reportPage.switchToFrame();
-		reportPage.verifyAuditLogs4UsrUpdate(this.user.getName());
+		reportPage.verifyAuditLogsForUserUpdate(this.user.getName());
 		switchTo().parentFrame();
 	}
 	
 	@When("I verify audit logs for role update")
-	public void iVerifyAuditLogs4RoleUpdate() throws InterruptedException {
+	public void iVerifyAuditLogsForRoleUpdate() throws InterruptedException {
 		reportPage.switchToFrame();
-		reportPage.verifyAuditLogs4RoleUpdate(this.role.getRoleName());
+		reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+		switchTo().parentFrame();
+	}
+	
+	@Then("I see the role added in report")
+	public void iVerifyThatRoleIsAdded() throws Exception {
+		this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
 		switchTo().parentFrame();
 	}
 

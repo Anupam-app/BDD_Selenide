@@ -70,12 +70,12 @@ public class RecipePageStepsDefinition {
 	}
 	
 	@When("I select phase library")
-	public void iselectPhaseLibrary() {
+	public void iSelectPhaseLibrary() {
 		recipePage.goToPhaseLibrary();
 	}
 	
 	@When("I verify the message {string}")
-	public void iverifyPhaseLibrarymessage(String message) {
+	public void iVerifyPhaseLibraryMessage(String message) {
 		recipePage.verifyPhaseMessage(message);
 	}
 

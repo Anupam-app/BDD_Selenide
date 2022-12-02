@@ -102,7 +102,7 @@ public class RecipeConsoleStepsDefinition {
 	}
 	
 	@When("I provide special chars in pre run comments")
-	public void iStartRecipeExecutionWithSPLChars() {
+	public void iStartRecipeExecutionWithSpecialChars() {
 		generateRecipeValues(null, null);
 		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), "$%^%(&^&");
 	}

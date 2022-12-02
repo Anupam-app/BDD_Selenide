@@ -311,11 +311,11 @@ public class ReportsPage {
         templateNameTextBox.setValue(templateName);
     }
     
-    public void verifyAuditLogs4UsrUpdate(String username) {
+    public void verifyAuditLogsForUserUpdate(String username) {
     	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated",username ))).shouldBe(visible);
     }
     
-    public void verifyAuditLogs4RoleUpdate(String role) {
+    public void verifyAuditLogsForRoleUpdate(String role) {
     	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role ))).shouldBe(visible);
     }
 
