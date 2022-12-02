@@ -116,7 +116,7 @@ public class RecipePage {
     private final SelenideElement chnage =$(By.xpath("//button[text()='Change']"));
     private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement recipeValue=$(By.xpath("//div[@class='recipeTabs']"));
-	
+
 	private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
 	private SelenideElement recipeManagement = $(By.xpath("//div[(@id='RecipeManagement')]"));
@@ -130,9 +130,6 @@ public class RecipePage {
     private final SelenideElement importedColumnValue = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[3][text()='No']"));
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
 
-	
-	
-	
      
     public void goTo() {
         recipePageLinkText.click();

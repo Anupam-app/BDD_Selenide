@@ -14,6 +14,7 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+import com.codeborne.selenide.Selenide;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.utility.SelenideHelper;
 
@@ -25,9 +26,8 @@ public class RecipeConsoleStepsDefinition {
     private Report report;
     private Analytics analytics;
 
-
-
    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
+
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
@@ -160,9 +160,9 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.isExecuted();
     }
 
-    @And("I wait the end of the execution of the recipe")
-    public void iWaitTheEndOfTheExecutionOfTheRecipe() throws InterruptedException {
-        recipeConsolePage.isExecuted();
+    @And("I wait the end of the execution of the recipe during {int} seconds")
+    public void iWaitTheEndOfTheExecutionOfTheRecipe(int seconds) {
+        recipeConsolePage.isExecuted(seconds);
     }
 
     @When("I click on pause button")
@@ -177,6 +177,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("control should be on pause button")
     public void ctrlOnPauseButton() {
+    	Selenide.sleep(1000);
         Assert.assertTrue(recipeConsolePage.verifyPauseButton());
     }
 
@@ -198,6 +199,8 @@ public class RecipeConsoleStepsDefinition {
     @When("I click on abort button")
     public void iClickOnAbortButton() {
         recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
+        recipeConsolePage.clickOnOk();
+
     }
 
     @Then("I see the system on hold")
@@ -210,15 +213,6 @@ public class RecipeConsoleStepsDefinition {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
         recipeConsolePage.clickOnOk();
     }
-
-    @When("I load recipe {string} and run it during {int} seconds if not done before")
-    public void iStartAndWaitRecipeExecutionIfNotRunBefore(String recipe, int seconds) {
-        iGotoRecipeConsole();
-        if (!recipeConsolePage.isRunBefore(recipe)) {
-            iLoadRecipeAndIStartIt(recipe, seconds);
-        }
-    }
-
     @Then("I should see the recipe run {string}")
     public void iVerifyRecipeAbort(String status) throws InterruptedException {
     	if(status.equalsIgnoreCase("Aborted")) {

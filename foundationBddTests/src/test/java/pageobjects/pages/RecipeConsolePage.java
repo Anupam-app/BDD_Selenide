@@ -116,7 +116,7 @@ public class RecipeConsolePage {
 	private ElementsCollection approvedActive = $$(By.xpath("//tbody[(@class='MuiTableBody-root jss228')]/tr/td[i]"));
 	private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
 	private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
-	
+
     private Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
@@ -679,3 +679,4 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(yesButton, visible).click();
 	}
 }
+

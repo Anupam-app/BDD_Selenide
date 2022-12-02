@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Login;
 import java.util.List;
 
+
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
@@ -84,7 +85,7 @@ public class LoginPageStepsDefinition {
         login.setPassword("MerckApp1@");
         loginPage.setUser(login.getLogin());
         loginPage.setPassword(login.getPassword());
-        loginPage.pushLogin();
+        loginPage.pushLogin(); 
         loginPage.waitControlOnPnid();
         recipeConsolePage.cleanLastRecipeDisplay();
     }
