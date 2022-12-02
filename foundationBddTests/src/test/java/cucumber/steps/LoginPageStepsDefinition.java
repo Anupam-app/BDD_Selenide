@@ -91,6 +91,7 @@ public class LoginPageStepsDefinition {
 
     @Given("I change password {string}")
     public void iChangePassword(String password) {
+		loginPage.setCurrentpassword(password);
         loginPage.setNewpassword(password);
         loginPage.setConfirmpassword(password);
     }
@@ -110,5 +111,34 @@ public class LoginPageStepsDefinition {
     @Then("I see the error message {string}")
     public void iSeetheErrorMessage(String message) {
         loginPage.checkMessage(message);
+    }
+	    @When("I try to change password with current password {string}")
+    public void iTryToChangePassword(String password) {
+    	loginPage.setCurrentpassword(password);
+        loginPage.setNewpassword(password);
+        loginPage.setConfirmpassword(password);
+    }
+    
+    @When("I try to change password with current password {string} {string} {string}")
+    public void iTryToChangePassword(String currentPassword,String np,String cp) {
+    	userPage.userProfileIcon();
+    	userPage.changePassword();
+    	loginPage.setCurrentpassword(currentPassword);
+        loginPage.setNewpassword(np);
+        loginPage.setConfirmpassword(cp);
+    }
+    
+    @When("^I login to application with updated password$")
+    public void iShouldSeeLoginErrorMessage(DataTable table) {
+        List<List<String>> list = table.asLists(String.class);
+
+        for (int i = 1; i < list.size(); i++) {
+            loginPage.setUser(list.get(i).get(0));
+            loginPage.setPassword(list.get(i).get(1));
+            loginPage.pushLogin();
+            loginPage.checkLoggedIn(false);
+            loginPage.checkMessage(list.get(i).get(2));
+
+        }
     }
 }

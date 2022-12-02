@@ -25,6 +25,8 @@ public class LoginPage {
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+	
+	private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     
     
     public void setUser(String user) {
@@ -74,10 +76,12 @@ public class LoginPage {
 
     public void setNewpassword(String newpassword) {
         commonWaiter(newPasswordTextbox,visible);
+		newPasswordTextbox.clear();
         newPasswordTextbox.setValue(newpassword);
     }
 
     public void setConfirmpassword(String newpassword) {
+		confirmPasswordTextbox.clear();
         confirmPasswordTextbox.setValue(newpassword);
         submitButton.click();
     }
@@ -85,5 +89,9 @@ public class LoginPage {
     public void iLogout() {
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
         SelenideHelper.commonWaiter(logOutButton, visible).click();
+    }
+	public void setCurrentpassword(String newpassword) {
+    	currentPasswordTestbox.clear();
+    	currentPasswordTestbox.setValue(newpassword);
     }
 }

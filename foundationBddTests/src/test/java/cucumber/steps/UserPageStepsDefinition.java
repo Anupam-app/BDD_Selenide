@@ -263,5 +263,127 @@ public class UserPageStepsDefinition {
     public void iCreateNewUsername() {
         userPage.createNewUser(this.user.getUserName());
     }
+		@When("I verify default user account {string} and {string}")
+	public void iVerifyDefaultUserAccount(String user1,String user2) {
+		userPage.userAccountRole(user1, user2);
+	}
+
+	@And("^I verify default roles$")
+	public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
+		List<String>roles = datatable.asList();
+		for(String names : roles) {
+			userPage.iVerifyDefaultRoles(names);
+		}
+	}
+
+	@And("I verify {string} list of {string}")
+	public void i_verify_privileges_list_of_roles(String userrole,String roles) {
+
+		if(userrole.equalsIgnoreCase("privilege")) {
+			userPage.privilegesOfroles(roles);
+		}
+		else if(userrole.equalsIgnoreCase("proceessmanager")) {
+			userPage.processManager(roles);
+		}
+	}
+	@And("^I should see view icon of perticular roles$")
+	public void iSeeViewIconOfperticularRoles(DataTable datatable) {
+		List<String> icon = datatable.asList();
+		for(String name : icon) {
+			userPage.validateViewIcon(name);
+		}
+	}
+	@When("I navigate to role icon")
+	public void i_navigate_role_icon() {
+		userPage.roleIcon();
+	}
+
+	@And("I click on edit icon corresponding custom role")
+	public void iClickOnEditIconCorrespondingCustomRole() {
+		userPage.adminIcon();
+	}
+
+	@And("I verify custom role modification details captured in audit trail")
+	public void iVerifyCustomroleModificationDetails() {
+
+	}
+
+	@And("^I unchecked role permissions$")
+	public void iRemovePermissions(DataTable datatable) {
+		List<String> uncheck = datatable.asList();
+		for(String name : uncheck) {
+			userPage.unselectrolepremission(name);
+		}            
+	}
+
+	@And("I create a random rolename")
+	public void iEnterNewCustomRoleName() {
+		this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
+		this.user.setOldUserName(userPage.getOldUserName());
+		userPage.iCreateRondomName(this.user.getUserName());
+	}
+	@And("I should see new custom role created")
+	public void iShouldSeeNewCustomRole() {
+		userPage.isearchName(this.user.getUserName());
+		userPage.verifyRoleName(this.user.getUserName());
+	}
+
+	@And("I verify a new user {string} by selecting custom role")
+	public void iCreatedNewUserRole(String rolename) {
+		userPage.iCreateNewUser(rolename);
+	}
+
+	@And("I should see role name {string} in role culumn")
+	public void iSeeCustomRoleInRoleColumn(String role) {
+		userPage.rolename(role);
+	}
+
+	@Given("I go to userprofile")
+	public void iGoToUserProfile() {
+		userPage.userProfileIcon();
+	}
+
+	@And("I change the password")
+	public void iChangeThePassword(){
+		userPage.changePassword();
+	}
+
+	@And("I should see change password window popup")
+	public void iSeeChangePasswordWindowPopup() {
+		userPage.windowPopup();
+	}    
+
+	@Given("^I verify the below Icons on left rail of Portal$")
+	public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
+		List<String> icon = datatable.asList();
+		userPage.zoomOut();
+		for(String name : icon) {
+			userPage.iVerifyApp_Modules(name);
+		}            
+	}
+
+	@Then("I see error message is displayed as {string}")
+	public void iVerifyErrorNotification(String message) {
+		userPage.errorNotification(message);
+		userPage.closeChangeUserPropertiesChangeModal();
+	}
+
+	@Then("I see password updated message is displayed for {string}")
+	public void iSeePasswordUpdatedMessagedisplayed(String username) {
+		var message = String.format("User password for %s is updated", username);
+		userPage.updateNotification(message);
+		userPage.closeChangeUserPropertiesChangeModal();
+	}
+
+	@Then("I should see {string} {string} and {string} under user profile icon")
+	public void iVerifyUserProfile(String firstName,String lastName,String role) {
+		userPage.verifyUserProfileIcon(firstName, lastName, role);
+		Selenide.sleep(2000); userPage.changePassword();userPage.closeChangeUserPropertiesChangeModal();
+	}
+	
+	@When("I click on changepassword")
+	public void iClickOnChangePswd() {
+		userPage.changePassword();
+	}
 
 }

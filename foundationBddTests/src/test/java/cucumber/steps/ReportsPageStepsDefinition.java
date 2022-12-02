@@ -438,4 +438,8 @@ public class ReportsPageStepsDefinition {
         loginPage.setUser(username);
         loginPage.setPassword(password);
     }
+	@And("I should see newly created user {string} present in report")
+    public void iSeenewlyCreatedUserPresentInReport(String user){
+        reportPage.verifyNewUser(user);
+    }
 }

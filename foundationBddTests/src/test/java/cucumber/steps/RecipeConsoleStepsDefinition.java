@@ -221,4 +221,319 @@ public class RecipeConsoleStepsDefinition {
             iLoadRecipeAndIStartIt(recipe, seconds);
         }
     }
+	 @When("I click on pause button")
+    public void iClickOnPauseButton() {
+        recipeConsolePage.clickPauseButton();
+    }
+
+    @Then("control should be on resume button")
+    public void ctrlOnResumeButton() {
+        Assert.assertTrue(recipeConsolePage.verifyResumeButton());
+    }
+
+    @Then("control should be on pause button")
+    public void ctrlOnPauseButton() {
+    	Selenide.sleep(1000);
+        Assert.assertTrue(recipeConsolePage.verifyPauseButton());
+    }
+
+    @Then("control should be on rerun button")
+    public void ctrlOnrerunButton() {
+        Assert.assertTrue(recipeConsolePage.verifyReRunButton());
+    }
+
+    @When("I click on resume button")
+    public void iClickOnResumeButton() {
+        recipeConsolePage.clickResumeButton();
+    }
+    
+    @When("I click on jump step {string}")
+    public void iClickOnJumpToStep(String stepNumber) {
+        recipeConsolePage.clickOnJumpToStep(stepNumber);
+    }
+
+    @When("I click on abort button")
+    public void iClickOnAbortButton() {
+        recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
+        recipeConsolePage.clickOnOk();
+
+    }
+
+    @Then("I see the system on hold")
+    public void iSeeTheSystemOnHold() {
+        recipeConsolePage.seeSystemOnHold();
+    }
+
+    @Then("I should see the recipe run aborted")
+    public void iVerifyRecipeAbort() {
+        Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
+        recipeConsolePage.clickOnOk();
+    }
+
+    @Then("I should see the recipe run {string}")
+    public void iVerifyRecipeAbort(String status) throws InterruptedException {
+    	if(status.equalsIgnoreCase("Aborted")) {
+        Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
+        recipeConsolePage.clickOnOk();
+    	}
+    	else if(status.equalsIgnoreCase("Completed")) {
+        Assert.assertEquals("Completed", this.recipeConsolePage.getExecutionStatusText());
+        recipeConsolePage.clickOnOk();
+    	}
+    }
+    
+    @And("I clear the recipe")
+    public void clearRecipePanel() {
+        recipeConsolePage.clearRecipe();
+    }
+    
+    @Then("I should see error message about recipe step")
+    public void errorMessageOfJumpStep() throws InterruptedException {
+    	recipeConsolePage.jumpStepErrorMessage();
+    	recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
+    }
+
+    @Then("I jump to Step no and verify step execution")
+    public void stepJumpAndStepVerifyExecution(DataTable table) {
+        List<String> list = table.asList(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            recipeConsolePage.verifyStep(list.get(i));
+        }
+    }
+
+    @And("I verify Manual Operation tab is {string}")
+    public void manualOperation(String status) {
+        recipeConsolePage.manualOperation(status);
+    }
+    
+    @And("I pause recipe and verify recipe paused and jump icon is disabled")
+    public void pauseButton() {
+    	recipeConsolePage.clickPauseButton();
+    	ctrlOnResumeButton();
+    	recipeConsolePage.verifyJumpStep();
+    }
+
+    @Then("recipe execution is resumed")
+    public void validationRecipeExecution() {
+        recipeConsolePage.pauseButton();
+    }
+
+    @When("I re-run the recipe")
+    public void reRunRecipe() {
+    	recipeConsolePage.reRun();
+    	generateRecipeValues("","");
+    	recipeConsolePage.startRerunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+    }
+   @When("I Process hold the system")
+   public void processHold() {
+	   recipeConsolePage.holdSystem();	
+	   
+   }
+   @Then("I verify Recipe Run tab is {string}")
+   public void recipeRun(String status) {
+	   recipeConsolePage.recipeRun(status);
+   }
+   @And("I restart the Process hold")
+   public void restartProcess() {
+	   recipeConsolePage.restartSystem();
+   }
+   @When("I select {string} tab")
+   public void recipeOperation(String status) {
+	   if(status.equalsIgnoreCase("Manual operation")) {
+		   if(true) {
+			   recipeConsolePage.manualOperation("enabled");
+		   }
+	   }
+   }
+   @When("I resume and verify recipe execution is resumed")
+   public void resumeStatus() {
+	   recipeConsolePage.clickResumeButton();
+	   ctrlOnPauseButton();   
+   }
+   //we enchance the code on merging (Run, Rerun & Start)
+   @And("I start Manual run")
+   public void manualRun() {
+	   generateRecipeValues(null,null);
+   	   recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+   } 
+   @Then("I validate the timer and stop button and run details")
+   public void validateRun_Timer_Stop() {
+	   recipeConsolePage.validationOfRunDetails();
+	   Assert.assertTrue(recipeConsolePage.verifyStopButton());
+	   recipeConsolePage.timeValidation();
+	   }
+   @Then("I should see Process restart button")
+   public void restartButton() {
+	   Assert.assertTrue(recipeConsolePage.verifyRestart());
+   }
+   @And("I validate the timer is incrementing")
+   public void timerIncrementCheck(){
+	   recipeConsolePage.incrementTimer();
+   }
+   @When("I Stop the RUN")
+   public void stopRun() {
+	   recipeConsolePage.stopButton();
+   }
+   @Then("I validate the date formats in Post run window and enter comments")
+   public void validatePostRun() throws ParseException {
+	   recipeConsolePage.verifyPostRunDate();
+   }
+   @And("I wait for 1 min for the post run window to auto closed")
+   public void verifyAutoClosePostRun() {
+	   recipeConsolePage.autoClosePostRun();
+   }
+   @And("I validate the Start button is {string}")
+   public void afterPostRunAutoClose(String status) {
+	   recipeConsolePage.validateStartButtonNotSelect(status);
+   }
+   @Then("I should not see unapproved recipe")
+	public void iverifyunApprovedRecipe() {
+		Assert.assertTrue(recipeConsolePage.verifyApprovedRecipe());  
+		recipeConsolePage.clickOnClose();
+	}
+	@Then("I should see recipe name and recipe steps details")
+	public void iverifyRecipeNameandRecipeSteps() {
+		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+	}
+
+	@When("I select {string} tab")
+	public void iSelectManual(String name) {
+		recipeConsolePage.iClickMaualOperation(name);
+	}
+
+	@Then("I should see start button is displayed")
+	public void iSeeStartButton() {
+		recipeConsolePage.iValidateStart();
+	}
+
+	@When("I click on start button")
+	public void iclickOnStartButton() {
+		recipeConsolePage.start_button();
+	}
+
+	@Then("I should see pre run window popup")
+	public void iseepreRunWindowPopup() {
+		recipeConsolePage.preRunWindow_Popup();
+	}
+	@When("I click ok button")
+	public void iClickOkButton() {
+		recipeConsolePage.okButton();
+	}
+
+	@Then("I should see {string} message")
+	public void iseemessage(String message) {
+		recipeConsolePage.validateHilightedMsg(message);
+	}
+	@When("I enter {string} existing value in RUNID")
+	public void iEnterExistingValueInRunId(String value) {
+		recipeConsolePage.runId(value);        
+	}
+
+	@Then("I should see message {string}")
+	public void iShouldSeeMessage(String message) {
+		recipeConsolePage.validateMsg(message);
+	}
+	@And("I Verify manual run status in recipe consol")
+	public void iVerifyRecipeRunStatus() {
+		generateRandomRecipeValues();
+		recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(),this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
+				this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
+	}
+	@When("I enter special characters {string} in comments section")
+	public void iValidateSpecialChar(String specialchar) {
+		generateRandomRecipeValues();
+		recipeConsolePage.iValidateSpecialChar_manaul(this.currentRecipe.getManualOperationName(),this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
+				this.currentRecipe.getProductId(),specialchar);
+	}
+	@When("I enter special characters {string} in run comments section")
+	public void iValidateRunRecipeComments(String specialchar) {
+		generateRandomRecipeValues();
+		recipeConsolePage.iValidateSpecialChar_run(this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
+				this.currentRecipe.getProductId(),specialchar);
+	}
+	@Then("I should not see special characters not allowed")
+	public void iShouldnotSeeSpecialCharacters() {
+		recipeConsolePage.iValidationPreRun();
+	}
+
+	@Given("I click on load recipe")
+	public void clickOnLoadRecipe() {
+		recipeConsolePage.clickOnLoadRecipe();
+	}
+
+	@Then("I should see again recipe name and recipe steps details")
+	public void iVerifyStepsInConsol() {
+		recipeConsolePage.verifyLivestepDetails(this.currentRecipe.getSteps());
+	}
+
+	@And("I go to Main screen")
+	public void gotoMainPage() {
+		SelenideHelper.goToDefault();
+		recipeConsolePage.mainPage();
+	}
+
+	@And("I run the recipe")
+	public void runRecipe(int seconds) {
+		recipeConsolePage.clickOnLoadRecipe();
+		generateRandomRecipeValues();
+		String runId = recipeConsolePage.startAndWaitRecipe(this.currentRecipe, seconds);
+		currentRecipe.setRunId(runId);
+		recipeConsolePage.isExecuted();
+
+	}
+	@And("I verify the recipe execution details in console View")
+	public void recipeDetailsInConsole() {
+		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+	}
+
+	@And("I select run recipe")
+	public void iSelectrunRecipe() {
+		recipeConsolePage.run_Btn();
+	}
+
+	@When("I expand recipe console")
+	public void iExpandRecipeConsole() {
+		recipeConsolePage.gotoRecipeConsole();
+	}
+
+	@And("I verify the recipe execution details in console View.")
+	public void iVerifyRecipeExcution() {
+		recipeConsolePage.gotoRecipeConsole();
+		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+	}
+
+	@And("I verify the Batch ID  suggestion with unique Value")
+	public void iVerifyBatchidWithUniqueValue() {
+		generateRandomRecipeValues();
+		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+		recipeConsolePage.existingBachId(this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
+	}
+
+	@When("I Select Process Hold")
+	public void iSelectedProcessHold() {
+		recipeConsolePage.processHold();
+	}
+
+	@And("I verify the Process hold Dialog box , buttons")
+	public void iVerifyProcessHoldDailogBox() {
+		recipeConsolePage.iverifyDailogBox();
+	}
+
+	@And("I validate close,No button funtionality")
+	public void iVerifyCloseAndNobuttonFunctionality() {
+		recipeConsolePage.validateNoBtn();
+	}
+
+	@And("I Select Yes button")
+	public void iSelectYesButton() {
+		recipeConsolePage.validateYesBtn();
+	}
+	private void generateRandomRecipeValues() {
+		this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
+	}
 }

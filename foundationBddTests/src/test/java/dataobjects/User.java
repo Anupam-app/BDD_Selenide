@@ -48,4 +48,8 @@ public class User {
     @Setter
     @Getter
     String defaultPage;
+	
+	@Setter
+    @Getter
+    String OldUserName;
 }

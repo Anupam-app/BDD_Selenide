@@ -243,4 +243,56 @@ public class RecipePageStepsDefinition {
     public void iLookAtTheUserNotification() {
         recipePage.lookAtTheUserNotification();
     }
+@When("I add new action step using Keyboard event")
+	public void addStepKeyboard() {
+		recipePage.keyboardActionRecipe();
+	}
+	@Then("I should see {string} step added")
+	public void verifyStep(String status) {
+
+		if(status.equalsIgnoreCase("blank")) {
+			recipePage.placeholder(status);
+		}
+		else if (status.equalsIgnoreCase("action")) {
+			recipePage.placeholder(status);
+		} 	
+	}
+	@And("I add action to the step")
+	public void actionAddedInStep() {
+		recipePage.addActionStep();
+	}
+	@And("I select action from action browser")
+	public void actionBrowser() {
+		recipePage.addStepActionBrowser();
+	}
+	@When("I add new step with message prompt")
+	public void addStepMessage() {
+		recipePage.addMessageInStep();
+	}
+	@Then("I should see message input text field displayed")
+	public void messageDisplayed() {
+		recipePage.messageInputStepValidate();   
+	}
+	@And("I create a new phase in recipe")
+	public void newPhase() {
+		recipePage.addingPhaseByPlus();
+	}
+	@And("I add criteria to phase using keyboard")
+	public void addCriteriaInPhase() {
+		recipePage.addCriteria();
+	}
+	@And("I close and reopen the recipe")
+	public void openRecipe() {
+		recipePage.openRecipe(this.recipePage.getRecipeName());
+	}
+	@And("I should see recipe opened in editor")
+	public void verifyRecipeInEditor() {
+		recipePage. verifyRecipeEditor(this.recipePage.getRecipeName());
+	}
+	@And("I try change recipe status and see warning pop up dialog box {string}")
+	public void recipeWarningMessage(String message) {
+		recipePage.warningMessage(message);
+		switchTo().parentFrame();
+	}
+	
 }

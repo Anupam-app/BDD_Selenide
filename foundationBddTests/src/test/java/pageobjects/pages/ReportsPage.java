@@ -135,6 +135,11 @@ public class ReportsPage {
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String recipeAuditLogs ="//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
+	
+	private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
+    private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
+    private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
+    private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -892,5 +897,53 @@ public class ReportsPage {
             isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
         }
         return isTrue;
+    }
+	    public void verifyNewUser(String user) {
+        SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
+        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).shouldBe(visible);
+    }
+
+    public boolean verifyAuditTrailRecord(String message, String recordRole) throws ParseException {
+        boolean result = false;
+        if (eventTime.isDisplayed()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "dd/MMM/yyyy hh:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+            long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes < 10 && comment.getText().contains(message) &&
+                    record.getText().equalsIgnoreCase(recordRole)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean verifyAuditTrail(String message) throws ParseException {
+        boolean result = false;
+        if (eventTime.isDisplayed()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "dd/MMM/yyyy hh:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+            long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes < 5 && comment.getText().equalsIgnoreCase(message)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public void switchToDefaultContent() {
+        SelenideHelper.goToDefault();
+    }
+
+    public void verifyReportsHeader() {
+        reportManagementHeader.shouldBe(visible);
+    }
     }
 }

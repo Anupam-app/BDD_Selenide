@@ -117,3 +117,108 @@ Feature: User management
     And I edit the user
     And I click on reset password
     Then I see password reset message is displayed
+
+Scenario Outline: Verify Default Users & roles  
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to user page  
+    And I verify default user account "Bio4CService" and "Administrator"
+    And I navigate to role icon
+    And I verify default roles
+     	 |Bio4C Service   |
+		   |Administrator	  |
+		   |Operator		    |
+	And I verify "<UserRole>" list of "<roles>"		
+	Then I should see view icon of perticular roles
+		   |Administrator    |
+		   |Bio4CService	   |
+			
+	Examples:
+      	|roles                           |UserRole        |
+      	|parameters/crs/privilegeslist   |privilege       |	
+       	
+  
+  
+  Scenario: BIOCRS-5145|Verify Default Role Modification
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I navigate to role icon
+    And I click on edit icon corresponding custom role
+    And I unchecked role permissions
+        |Create Recipe|
+        |Trends View  |
+    And I create a random rolename
+    Then I should see new custom role created
+    When I goto report management page
+    And I select report from dropdown "Audit Trail"
+    And I select date range as "Today"
+    When  I select template sort by "Event Time" in "false"
+    Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
+    
+    
+  Scenario: Assign custom role to new user |BIOCRS-2585|
+     Given I am logged in as "Bio4CAdmin" user
+     And I go to user page
+     When I verify a new user "NewUserRole" by selecting custom role 
+     Then I should see role name "TestRole" in role culumn
+     And I logout 
+     And I open login page
+     And I enter "NewUserRole" as username and "MerckApp1@" as password
+     And I push the login button
+     When I goto report management page
+     And I select report from dropdown "Audit Trail"
+     Then I should see newly created user "NewUserRole" present in report
+      
+   
+  Scenario Outline: Verify the system allows user to change the password
+   	 Given I am logged in as "<user>" user		
+     And I go to userprofile
+     When I click on changepassword
+     Then I should see change password window popup
+     When I try to change password with current password "<currentPassword>"
+     Then I see error message is displayed as "Cannot reuse old password."
+     When I try to change password with current password "<currentPassword>" "1234567890" "1234567890"
+     Then I see error message is displayed as "Password doesn't met the policy criteria."  
+     When I try to change password with current password "<currentPassword>" "<newPassword>" "<confirmPassword>"      
+     Then I see password updated message is displayed for "<user>"
+     And I logout      		
+    Examples:
+      |user							| currentPassword  | newPassword   | confirmPassword |first name				|last name		 		|role   |
+      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 		|
+     
+  Scenario Outline: Verify the system allows user to change the password 2   
+    		Given I open portal			
+     		And I open login page
+     		When I login to application with updated password
+      	| username| password   		  | message                                                   |
+      	| <user>  | <currentPassword> | Invalid username or password. You have 4 attempt(s) left. | 
+      	And I enter "<user>" as username and "<newPassword>" as password
+      	And I push the login button
+        Given I go to userprofile
+        Then I should see "<first name>" "<last name>" and "<user role>" under user profile icon        
+        When I goto report management page
+        When I select report from dropdown "Audit Trail"
+    		And I select user in dropdown "<user>"
+    		And I select date range as "Today"
+    		When  I select template sort by "Event Time" in "false"
+    		Then I should see change password entries in audit trail report for "<user>" 		
+        When I try to change password with current password "<newPassword>" "<currentPassword>" "<currentPassword>"      
+        Then I see password updated message is displayed for "<user>"
+        And I logout 
+    Examples:
+      |user				| currentPassword  | newPassword   | confirmPassword |first name		|last name		 |role   |
+      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 |
+      
+   
+  Scenario: BIOCRS-5377: Verify the Application Icons
+  	  Given I am logged in as "Bio4CAdmin" user     
+  	  Then I verify the below Icons on left rail of Portal
+  	            |Main          |
+  	            |Trends        |
+  	            |Analytics     |
+  	            |Alarms        |
+  	            |Recipes       |
+  	            |Reports       |
+  	            |Configuration |
+  	            |Users		   |
+  	            |Backup		   |
+  	            |Settings      |

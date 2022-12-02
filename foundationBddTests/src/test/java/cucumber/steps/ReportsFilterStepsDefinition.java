@@ -172,4 +172,24 @@ public class ReportsFilterStepsDefinition {
     public void i_hould_see_consolidated_status(String status) {
         Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
     }
+	@Then("I should see change password entries in audit trail report for {string}")
+	public void iverifyAuditTrailReport(String username) throws ParseException {
+		 var message = String.format("%s changed the account password", username);
+		Assert.assertTrue(reportPage.verifyAuditTrail(message));
+		reportPage.switchToDefaultContent();
+		
+	}
+	
+	@Then("I verify custom role modification details captured in audit trail for user {string}")
+	public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
+		 var message = String.format("%s updated Role %s", username,this.user.getOldUserName());
+		 var message1 = String.format("Role -%s",this.user.getUserName());
+		Assert.assertTrue(reportPage.verifyAuditTrailRecord(message,message1));
+		reportPage.switchToDefaultContent();		
+	}
+	
+	@Then("I verify recipe details captured in report run tab {string}")
+	public void  iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {		
+		Assert.assertTrue(reportPage.verifyrunDetails(recipeName,"Operation", "Completed"));
+	}
 }
