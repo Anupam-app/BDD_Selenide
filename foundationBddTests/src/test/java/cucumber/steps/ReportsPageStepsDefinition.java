@@ -283,11 +283,6 @@ public class ReportsPageStepsDefinition {
 	public void iSearchTheReportTemplate() {
 		reportPage.searchReportOrTemplate(this.reportTemplate.getName());
 	}
-	
-	@When("I search the report template {string}")
-	public void iSearchTheReportTemplate(String reportTemplateName) {
-		reportPage.searchReportOrTemplate(reportTemplateName);
-	}
 
 	@When("I edit the report template")
 	public void ieditTheReportTemplate() {
