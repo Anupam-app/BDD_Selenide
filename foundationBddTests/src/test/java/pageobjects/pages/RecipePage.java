@@ -9,6 +9,7 @@ import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 
+import dataobjects.Report;
 import java.awt.AWTException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -481,7 +482,8 @@ public class RecipePage {
 
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
+        SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName,
+                descending, getRecipeColumns,columnName.equals("Last Modified On"), Report.RECIPE_DATE_FORMAT);
         switchTo().parentFrame();
     }
 }

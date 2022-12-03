@@ -1,25 +1,20 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import com.codeborne.selenide.SelenideElement;
+import java.util.List;
+import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
-import pageobjects.utility.SortHelper;
-
-import java.util.List;
-import java.util.function.Function;
-
-import static com.codeborne.selenide.Condition.be;
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+import pageobjects.utility.SortHelper;
 
 public class UserPage {
 
@@ -66,43 +61,43 @@ public class UserPage {
     private String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-    
+
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
         userSearchTextBox.waitUntil(Condition.visible, 10000l);
     }
-    
+
     public void UserLocked(String user) {
-    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(230, 30, 80, 1)");
-    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).getAttribute("class")),"rowLockedUser");
+        Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")), "rgba(230, 30, 80, 1)");
+        Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).getAttribute("class")), "rowLockedUser");
     }
+
     public void UserUnLocked(String user) {
-    	cancelButton.click();
-    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")),"rgba(33, 37, 41, 1)");
-    	Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user)+"/td")).getAttribute("class")),"customusername");
+        cancelButton.click();
+        Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000l).getCssValue("color")), "rgba(33, 37, 41, 1)");
+        Assert.assertEquals(($(By.xpath(String.format(xpathUserName, user) + "/td")).getAttribute("class")), "customusername");
     }
 
     public void edit(String user) {
         $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
     }
-    
+
     public void cannotEdit(String user) {
         Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
         $(By.xpath(String.format(xpathEditUserIcon, user))).shouldNotBe(selected);
     }
-	
-	public void usersNotEditable() {
-    	var users= $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
-    	for(var user:users) {
-    		if(user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
-    			Assert.assertEquals("Edit icon is enabled for system users",($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")),"edit-icon disabled");
-    		}
-    		else {
-    			Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
-    		}
-    		
-    	}
+
+    public void usersNotEditable() {
+        var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
+        for (var user : users) {
+            if (user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
+                Assert.assertEquals("Edit icon is enabled for system users", ($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")), "edit-icon disabled");
+            } else {
+                Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+            }
+
+        }
     }
 
     public void userExists(String user) {
@@ -133,7 +128,7 @@ public class UserPage {
     public void goTo() {
         idManagementPageLinkText.click();
     }
-    
+
     public void cancel() {
         cancelButton.click();
     }
@@ -199,7 +194,7 @@ public class UserPage {
     }
 
     public String getRoleNameFromForm() {
-      	commonWaiter(roleNameTextbox, visible);
+        commonWaiter(roleNameTextbox, visible);
         return roleNameTextbox.getText();
     }
 
@@ -225,18 +220,18 @@ public class UserPage {
     }
 
     public void isGeneratedNotificationWhenPasswordReset() {
-        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
-    
+
     public void isGeneratedNotificationWhenUserModified(String user) {
-        commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
-        XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: "+user+" modified in server"));
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+        XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: " + user + " modified in server"));
     }
-    
+
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
-        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT,visible);
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT, visible);
         XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
-        
+
     }
 
     public void cancelUser() {
@@ -258,9 +253,9 @@ public class UserPage {
     }
 
     public SelenideElement getUserColumnHeader(String columnName) {
-    	System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
-    	return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
-        
+        System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
+        return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+
     }
 
     public List<String> getAllUserColumnHeaders() {
@@ -302,6 +297,6 @@ public class UserPage {
     }
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
+        SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns, false, null);
     }
 }

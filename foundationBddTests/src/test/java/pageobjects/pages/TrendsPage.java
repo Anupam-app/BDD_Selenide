@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
@@ -71,11 +72,11 @@ public class TrendsPage {
     private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']/span"));
     private SelenideElement starredNullParameters = $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));
 
-    private SelenideElement starredCollapseArrow =$(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement starredExpandArrow =$(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
+    private SelenideElement starredCollapseArrow = $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement starredExpandArrow = $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
 
-    private SelenideElement defaultCollapseArrow =$(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement defaultExpandArrow =$(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
+    private SelenideElement defaultCollapseArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement defaultExpandArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
 
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 
@@ -103,12 +104,12 @@ public class TrendsPage {
                 trendsCollapseArrow.click();
                 break;
             case "Starred_Collection":
-                if(starredExpandArrow.isDisplayed()){
+                if (starredExpandArrow.isDisplayed()) {
                     StarredArrow.click();
                 }
                 break;
             case "Default_Collection":
-                if(defaultExpandArrow.isDisplayed()){
+                if (defaultExpandArrow.isDisplayed()) {
                     DefaultArrow.click();
                 }
                 break;
@@ -175,7 +176,7 @@ public class TrendsPage {
     }
 
     public void selectRadioButton(String btn) {
-        $(By.xpath(String.format(collection_radiobutton, btn))).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(collection_radiobutton, btn))), visible).click();
     }
 
     public void selectMultipleCheckbox(String tag1, String tag2) throws Exception {
@@ -323,9 +324,13 @@ public class TrendsPage {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
-        long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
-        Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
+        long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000);
+
+        Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",
                 difference, lastTimeString, startTimeString), difference >= 45);
+
+        Assert.assertTrue(String.format("difference lower than 1 hour :%s for dates between %s and %s",
+                difference, lastTimeString, startTimeString), difference <= 60);
     }
 
 }
