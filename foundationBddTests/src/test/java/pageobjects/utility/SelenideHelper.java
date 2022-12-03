@@ -7,6 +7,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
 import java.time.Duration;
+import java.util.Optional;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.OutputType;
@@ -35,7 +37,12 @@ public class SelenideHelper {
     public static void goToIFrame() {
         switchTo().frame("CrossDomainiframeId");
     }
-
+    public static String removeLastCharOptional(String s) {
+        return Optional.ofNullable(s)
+          .filter(str -> str.length() != 0)
+          .map(str -> str.substring(0, str.length() - 1))
+          .orElse(s);
+        }
     public static void takePicture() {
         byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         DriverHooks.currentScenario.attach(screenshot, "image/png", "name");

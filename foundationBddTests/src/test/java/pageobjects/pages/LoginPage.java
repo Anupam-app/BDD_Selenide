@@ -1,8 +1,13 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
+
 import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
+
 import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
@@ -10,6 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import static com.codeborne.selenide.Selenide.switchTo;
+import org.openqa.selenium.Alert;
 
 public class LoginPage {
 
@@ -25,7 +31,7 @@ public class LoginPage {
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-    
+    private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
     
     public void setUser(String user) {
         userIdTextBox.setValue(user);
