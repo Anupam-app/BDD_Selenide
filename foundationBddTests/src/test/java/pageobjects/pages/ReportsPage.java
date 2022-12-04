@@ -136,7 +136,7 @@ public class ReportsPage {
     private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
 
-    List<String> dateColumns = List.of("Last Modified By", "Last Modified On", "Date");
+    List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
