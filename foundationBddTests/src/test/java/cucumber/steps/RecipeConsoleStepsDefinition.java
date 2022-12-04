@@ -211,7 +211,6 @@ public class RecipeConsoleStepsDefinition {
     @Then("I should see the recipe run aborted")
     public void iVerifyRecipeAbort() {
         Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
-        recipeConsolePage.clickOnOk();
     }
     @Then("I should see the recipe run {string}")
     public void iVerifyRecipeAbort(String status) throws InterruptedException {
