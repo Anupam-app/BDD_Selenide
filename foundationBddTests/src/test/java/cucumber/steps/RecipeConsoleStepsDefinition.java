@@ -205,7 +205,6 @@ public class RecipeConsoleStepsDefinition {
     @When("I click on abort button")
     public void iClickOnAbortButton() {
         recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
-        recipeConsolePage.clickOnOk();
 
     }
 
