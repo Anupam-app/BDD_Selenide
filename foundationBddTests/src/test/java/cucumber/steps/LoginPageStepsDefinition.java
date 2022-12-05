@@ -6,6 +6,7 @@ import java.util.List;
 
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -141,5 +142,11 @@ public class LoginPageStepsDefinition {
             loginPage.checkMessage(list.get(i).get(2));
 
         }
+    }
+    
+    @And("I login with {string} same user as above {string}")
+    public void iVerifyExistingrecipeWithSameCredential(String username, String password) {
+    	loginPage.setUser(username);
+        loginPage.setPassword(password);
     }
 }

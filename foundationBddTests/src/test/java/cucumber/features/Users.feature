@@ -124,13 +124,13 @@ Scenario Outline: Verify Default Users & roles
     And I verify default user account "Bio4CService" and "Administrator"
     And I navigate to role icon
     And I verify default roles
-     	 |Bio4C Service   |
-		   |Administrator	  |
-		   |Operator		    |
-	And I verify "<UserRole>" list of "<roles>"		
-	Then I should see view icon of perticular roles
-		   |Administrator    |
-		   |Bio4CService	   |
+     	|Bio4C Service  |
+			|Administrator	|
+			|Operator		    |
+	 And I verify "<UserRole>" list of "<roles>"		
+	 Then I should see view icon of perticular roles
+		   |Administrator |
+		   |Bio4CService  |
 			
 	Examples:
       	|roles                           |UserRole        |
@@ -182,36 +182,36 @@ Scenario Outline: Verify Default Users & roles
      Then I see password updated message is displayed for "<user>"
      And I logout      		
     Examples:
-      |user							| currentPassword  | newPassword   | confirmPassword |first name				|last name		 		|role   |
-      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 		|
+      |user				| currentPassword  | newPassword   | confirmPassword |first name		|last name		 |role   |
+      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 |
      
   Scenario Outline: Verify the system allows user to change the password 2   
-    		Given I open portal			
-     		And I open login page
-     		When I login to application with updated password
+     Given I open portal			
+     And I open login page
+     When I login to application with updated password
       	| username| password   		  | message                                                   |
       	| <user>  | <currentPassword> | Invalid username or password. You have 4 attempt(s) left. | 
-      	And I enter "<user>" as username and "<newPassword>" as password
-      	And I push the login button
-        Given I go to userprofile
-        Then I should see "<first name>" "<last name>" and "<user role>" under user profile icon        
-        When I goto report management page
-        When I select report from dropdown "Audit Trail"
-    		And I select user in dropdown "<user>"
-    		And I select date range as "Today"
-    		When  I select template sort by "Event Time" in "false"
-    		Then I should see change password entries in audit trail report for "<user>" 		
-        When I try to change password with current password "<newPassword>" "<currentPassword>" "<currentPassword>"      
-        Then I see password updated message is displayed for "<user>"
-        And I logout 
+     And I enter "<user>" as username and "<newPassword>" as password
+     And I push the login button
+     Given I go to userprofile
+     Then I should see "<first name>" "<last name>" and "<user role>" under user profile icon        
+     When I goto report management page
+     When I select report from dropdown "Audit Trail"
+     And I select user in dropdown "<user>"
+     And I select date range as "Today"
+     When  I select template sort by "Event Time" in "false"
+     Then I should see change password entries in audit trail report for "<user>" 		
+     When I try to change password with current password "<newPassword>" "<currentPassword>" "<currentPassword>"      
+     Then I see password updated message is displayed for "<user>"
+     And I logout 
     Examples:
       |user				| currentPassword  | newPassword   | confirmPassword |first name		|last name		 |role   |
       |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 |
       
    
   Scenario: BIOCRS-5377: Verify the Application Icons
-  	  Given I am logged in as "Bio4CAdmin" user     
-  	  Then I verify the below Icons on left rail of Portal
+  	 Given I am logged in as "Bio4CAdmin" user     
+  	 Then I verify the below Icons on left rail of Portal
   	            |Main          |
   	            |Trends        |
   	            |Analytics     |

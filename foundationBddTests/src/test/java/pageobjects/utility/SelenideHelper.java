@@ -1,8 +1,11 @@
 package pageobjects.utility;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.refresh;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
@@ -50,4 +53,8 @@ public class SelenideHelper {
 	public static void goToDefault() {
     	switchTo().defaultContent();
     }
+	public static void appRefresh() {
+		refresh();
+	}
+	
 }

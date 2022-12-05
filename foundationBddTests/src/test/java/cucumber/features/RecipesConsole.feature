@@ -64,21 +64,21 @@ Feature: Recipe console
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
-    
+  
   Scenario: Verify the Recipe Execution|BIOCRS-1593|
     When I expand recipe console in pnid
     And I click on load recipe    
     Then I should not see unapproved recipe     
     And I load recipe "testRecipeToExecute" 
     And I start and wait recipe execution during 10 seconds
-    And I wait the end of the execution of the recipe
+    #And I wait the end of the execution of the recipe
     Then I should see recipe name and recipe steps details
     When I goto report management page
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute" 
     
-    
+   
    Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -87,13 +87,13 @@ Feature: Recipe console
     Then I should see pre run window popup
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
-    When I enter "T" existing value in RUNID
+    When I enter "testRecipeToExecute_20221205044016" existing value in RUNID
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
     
-     
+     @test
    Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
@@ -101,8 +101,8 @@ Feature: Recipe console
     Then I should see pre run window popup
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
-    When I enter "T" existing value in RUNID
-    #Then I should see message "Run ID is already in use."
+    When I enter "testRecipeToExecute_20221205044016" existing value in RUNID
+    Then I should see message "Run ID is already in use."
     And I verify the Batch ID  suggestion with unique Value
     When I enter special characters "@!#$%^&*" in run comments section
     
@@ -169,4 +169,37 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled" 
+    
+    
+ Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
+   Given I expand recipe console
+   When I Select Process Hold
+   And I verify the Process hold Dialog box , buttons
+   And I validate close,No button funtionality
+   And I Select Process Hold 
+   And I Select Yes button
+   Then I should see change of Process holding to Process restart 
+   And I verify the recipe console Elements 
+   And I select Process restart 
+   And I verify the Process restart Dialog box , buttons
+   And I validate close,No button funtionality
+   And I select Process restart
+   And I Select Yes button
+   Then I should see change of Process restating to Process hold 
+   And I verify the recipe console Elements
 
+Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page  
+  Given I expand recipe console in pnid
+	When I load recipe "testRecipeToExecute" 
+	And I start and wait recipe execution during 10 seconds
+	And I verify the recipe execution details in console View
+	When I goto report management page
+	And I go to Main screen 
+	Then I verify the recipe execution details in console View
+	And I logout 
+	And I open login page
+	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I verify the recipe execution details in console View.
+	And I refresh the portal
+	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I verify the recipe execution details in console View 

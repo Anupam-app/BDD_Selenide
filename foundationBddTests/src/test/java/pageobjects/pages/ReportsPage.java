@@ -140,7 +140,10 @@ public class ReportsPage {
     private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
-
+    private final SelenideElement runColumn=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
+    private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+    
+    
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -945,5 +948,23 @@ public class ReportsPage {
     public void verifyReportsHeader() {
         reportManagementHeader.shouldBe(visible);
     }
+    
+    public boolean verifyrunDetails(String recipeName,String processType, String status ) throws ParseException {
+		boolean result = false;	
+		if (startDate.isDisplayed()) {
+			SimpleDateFormat sdf = new SimpleDateFormat(
+					"dd/MMM/yyyy hh:mm:ss");
+			String currentDateandTime = sdf.format(new Date());
+			Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+			Date eventEntriesTime=new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(startDate.getText());
+			long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+			long diffMinutes = diff / (60 * 1000) % 60;	        
+			if(diffMinutes<5 && statusColumn.getText().equalsIgnoreCase(status)&& processTypeValue.equals(processType) &&
+					runColumn.getText().contains(recipeName))
+			{result = true;}
+		}
+		return result;}
+    
+    
     
 }
