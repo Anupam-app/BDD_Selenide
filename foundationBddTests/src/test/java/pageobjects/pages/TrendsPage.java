@@ -324,6 +324,11 @@ public class TrendsPage {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm");
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
+
+        if(lastTime.getHours()==0){
+            lastTime.setHours(24);
+        }
+
         long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000);
 
         Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",
