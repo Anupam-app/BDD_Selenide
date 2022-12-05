@@ -125,6 +125,7 @@ public class RecipeConsoleStepsDefinition {
 		iLoadRecipeAndIStartIt(recipe, seconds);
 	}
 
+
 	@When("I load recipe {string} and run it during {int} seconds with batch id {string} and product id {string}")
 	public void iStartAndWaitRecipeExecution(String recipe, int seconds, String batchId, String productId) {
 		iGotoRecipeConsole();
@@ -199,8 +200,6 @@ public class RecipeConsoleStepsDefinition {
 	@When("I click on abort button")
 	public void iClickOnAbortButton() {
 		recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
-		recipeConsolePage.clickOnOk();
-
 	}
 
 	@Then("I see the system on hold")
@@ -489,13 +488,11 @@ public class RecipeConsoleStepsDefinition {
 	@Then("I should see change of Process holding to Process restart")
 	public void iSeeChangeProcessHoldingToProcessRestart() {
 		recipeConsolePage.processRestart();
-
 	}
 
 	@And("I verify the recipe console Elements")
 	public void iVerifyRecipeConsoleElements() {
 		recipeConsolePage.iVerifyRecipeConsoleElement();
-
 	}
 
 	@And("I select Process restart")
@@ -507,9 +504,9 @@ public class RecipeConsoleStepsDefinition {
 	public void iVerifyProcessRestartDailogBox() {
 		recipeConsolePage.iVerifyProcessRestartPopup();	
 	}
-	
+
 	@Then("I should see change of Process restating to Process hold")
 	public void iSeeProcessRestartingToProcessHold() {
-		
+
 	}
 }

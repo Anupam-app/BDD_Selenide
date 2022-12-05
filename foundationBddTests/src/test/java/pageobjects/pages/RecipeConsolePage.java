@@ -283,7 +283,7 @@ public class RecipeConsolePage {
 	}
 
 	public void clickOnAbortButton(String afterComments) {
-		abortButton.waitUntil(Condition.visible, 6000l).click();
+		abortButton.waitUntil(Condition.visible, 10000l).click();
 		clickYesButton.waitUntil(Condition.visible, 5000l).click();
 		SelenideHelper.commonWaiter(preRunCommentsText, visible).sendKeys(afterComments);
 	}

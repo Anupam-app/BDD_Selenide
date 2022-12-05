@@ -142,6 +142,7 @@ Feature: Recipe console
     And I re-run the recipe
     Then I verify Manual Operation tab is "disabled"
     And I click on abort button 
+    Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
 
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
