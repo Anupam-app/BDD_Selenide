@@ -135,7 +135,7 @@ Feature: Recipe management
     When I add new action step using Keyboard event
     Then I should see "blank" step added
     And I add action to the step
-  @test 
+  
   Scenario: BIOFOUND-3768| Create step using Action browser
     Given I go to recipe page
     When I trigger edit mode
