@@ -312,7 +312,7 @@ public class UserPage {
 	}
 
 	public void checkSortedElement(String columnName, boolean descending) {
-		SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
+		SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns, false, null);
 	}
 
 	public void seeContent(String expectedText) {

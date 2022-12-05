@@ -264,7 +264,10 @@ public class RecipeConsolePage {
         inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
-        okStepButton.waitUntil(Condition.visible, 4000l).click();
+        okStepButton.waitUntil(Condition.visible, 4000l, 500).click();
+        abortIcon.waitUntil(visible, 4000l, 500);
+        Selenide.sleep(2000);
+        SelenideHelper.takePicture();
     }
 
     public void clickOnAbortButton(String afterComments) {

@@ -146,10 +146,14 @@ public class ReportsPage {
     private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
+
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
     private SelenideElement date;
+
+    List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
+
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -251,7 +255,7 @@ public class ReportsPage {
     }
 
     public void checkSortedElementTemplate(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);
+        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns, dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public List<String> getTemplateColumnHeaders() {
@@ -276,10 +280,6 @@ public class ReportsPage {
     public void generateReport() {
         reportGenerateButton.waitUntil(visible, 10000l);
         reportGenerateButton.click();
-    }
-
-    public void verifyGenerateButton() {
-        Assert.assertFalse(reportGenerateButton.is(visible));
     }
 
     public void gotoReportsTab() {
@@ -310,13 +310,13 @@ public class ReportsPage {
         createButton.click();
         templateNameTextBox.setValue(templateName);
     }
-    
+
     public void verifyAuditLogsForUserUpdate(String username) {
-    	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated",username ))).shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated", username))).shouldBe(visible);
     }
-    
+
     public void verifyAuditLogsForRoleUpdate(String role) {
-    	$(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role ))).shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role))).shouldBe(visible);
     }
 
     public void approveTemplate(String templateName, String password, String status) {
@@ -735,7 +735,8 @@ public class ReportsPage {
     }
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending,
+                getReportColumns, dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
 
@@ -882,11 +883,13 @@ public class ReportsPage {
     }
 
     public void checkSortedElements(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns,
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void checkSortedElementConsolidate(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns,
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void sortListConsolidated(String columnName, boolean descending) {
