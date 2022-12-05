@@ -6,6 +6,7 @@ import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
+import dataobjects.Role;
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -16,6 +17,9 @@ import java.io.IOException;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
@@ -26,19 +30,19 @@ public class ReportsPageStepsDefinition {
     private final ReportsPage reportPage;
     private final ReportTemplate reportTemplate;
     private final User user;
+    private final Role role;
     private final LoginPage loginPage;
     private final Login login;
 
-
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-                                      ReportTemplate reportTemplate, User user, Login login) {
+                                      ReportTemplate reportTemplate, User user, Login login, Role role) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.login = login;
-
+        this.role = role;
     }
 
 	@Given("I goto report management page")
@@ -107,7 +111,6 @@ public class ReportsPageStepsDefinition {
 	public void iChooseTemplate(String template) {
 		reportPage.chooseReportTemplate(template);
 		this.report.setReportName(template);
-
 	}
 
 	@Then("I check audit trial report content")
@@ -128,6 +131,12 @@ public class ReportsPageStepsDefinition {
 		report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
 		reportPage.reportRequestNotificationVisibility();
 	}
+
+	/*
+	 * @When("I dont see the presence of generate button") public void
+	 * iDontSeeGenerateButton() { reportPage.verifyGenerateButton(); }
+	 */
+
 
 	@When("I click on view button")
 	public void iClickOnViewButton() {
@@ -151,11 +160,11 @@ public class ReportsPageStepsDefinition {
 	public void reportIsGenerated() {
 		reportPage.exists(this.report.getName());
 	}
-	
+
 	@When("I check audit trial logs")
-    public void iCheckAudiTrialLogs() {
-        report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
-    }
+	public void iCheckAudiTrialLogs() {
+		report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+	}
 
 	@When("I should see the report file presence")
 	public void iShouldSeeTheReportFilePresence() {
@@ -304,6 +313,26 @@ public class ReportsPageStepsDefinition {
 		iGotoReportManagementPage();
 		iSelectReportFromDropdown("Audit Trail");
 		iClickOnGenerateButton();
+	}
+	
+	@When("I verify audit logs for user update")
+	public void iVerifyAuditLogsForUserUpdate() throws InterruptedException {
+		reportPage.switchToFrame();
+		reportPage.verifyAuditLogsForUserUpdate(this.user.getName());
+		switchTo().parentFrame();
+	}
+	
+	@When("I verify audit logs for role update")
+	public void iVerifyAuditLogsForRoleUpdate() throws InterruptedException {
+		reportPage.switchToFrame();
+		reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+		switchTo().parentFrame();
+	}
+	
+	@Then("I see the role added in report")
+	public void iVerifyThatRoleIsAdded() throws Exception {
+		this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
+		switchTo().parentFrame();
 	}
 
 	@When("I check the audit trail report")

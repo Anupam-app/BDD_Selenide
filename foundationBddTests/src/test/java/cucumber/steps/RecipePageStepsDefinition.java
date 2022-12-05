@@ -13,9 +13,13 @@ import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
+
+import java.awt.AWTException;
+import java.util.List;
 
 public class RecipePageStepsDefinition {
 
@@ -23,12 +27,14 @@ public class RecipePageStepsDefinition {
 	private final UserPage userPage;
 	private Recipe recipe;
 	private Login login;
+	private ReportsPage reportPage;
 
-	public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe,Login login) {
+	public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe,Login login, ReportsPage reportPage) {
 		this.recipePage = recipePage;
 		this.userPage = userPage;
 		this.recipe = recipe;
 		this.login = login;
+		this.reportPage = reportPage;
 	}
 
 	@Given("I go to recipe page")
@@ -61,6 +67,16 @@ public class RecipePageStepsDefinition {
 	@When("I trigger edit mode")
 	public void iGoToEditMode() {
 		recipePage.goToEditMode();
+	}
+	
+	@When("I select phase library")
+	public void iSelectPhaseLibrary() {
+		recipePage.goToPhaseLibrary();
+	}
+	
+	@When("I verify the message {string}")
+	public void iVerifyPhaseLibraryMessage(String message) {
+		recipePage.verifyPhaseMessage(message);
 	}
 
 	@Then("I go to browser mode")
@@ -221,6 +237,12 @@ public class RecipePageStepsDefinition {
 	public void iExport() {
 		recipePage.exportRecipe(recipe.getRecipeName());
 	}
+	
+	@When("I click on export recipe {string}")
+	public void iExport(String recipeName) {
+		recipe.setRecipeName(recipeName);
+		recipePage.exportRecipe(recipe.getRecipeName());
+	}
 
 	@Then("I should see the recipe exported in user notifications")
 	public void iShouldSeeExportMessage() {
@@ -230,6 +252,11 @@ public class RecipePageStepsDefinition {
 	@When("I import the recipe")
 	public void iClickOnImport() {
 		recipePage.importRecipe(recipe.getRecipeName());
+		recipe.setRecipeImportedName(recipePage.getGeneratedName());
+	}
+	@When("I click on import {string}")
+	public void iClickOnImport(String recipeName) {
+		recipePage.importRecipe(recipeName);
 		recipe.setRecipeImportedName(recipePage.getGeneratedName());
 	}
 
@@ -262,4 +289,57 @@ public class RecipePageStepsDefinition {
 		Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),deviceShapeElementNotTranslated.isEmpty());
 		SelenideHelper.goParentFrame();
 	}
+
+	@When("I add new action step using Keyboard event")
+	public void addStepKeyboard() {
+		recipePage.keyboardActionRecipe();
+	}
+	@Then("I should see {string} step added")
+	public void verifyStep(String status) {
+
+		if(status.equalsIgnoreCase("blank")) {
+			recipePage.placeholder(status);
+		}
+		else if (status.equalsIgnoreCase("action")) {
+			recipePage.placeholder(status);
+		} 	
+	}
+	@And("I add action to the step")
+	public void actionAddedInStep() {
+		recipePage.addActionStep();
+	}
+	@And("I select action from action browser")
+	public void actionBrowser() {
+		recipePage.addStepActionBrowser();
+	}
+	@When("I add new step with message prompt")
+	public void addStepMessage() {
+		recipePage.addMessageInStep();
+	}
+	@Then("I should see message input text field displayed")
+	public void messageDisplayed() {
+		recipePage.messageInputStepValidate();   
+	}
+	@And("I create a new phase in recipe")
+	public void newPhase() {
+		recipePage.addingPhaseByPlus();
+	}
+	@And("I add criteria to phase using keyboard")
+	public void addCriteriaInPhase() {
+		recipePage.addCriteria();
+	}
+	@And("I close and reopen the recipe")
+	public void openRecipe() {
+		recipePage.openRecipe(this.recipePage.getRecipeName());
+	}
+	@And("I should see recipe opened in editor")
+	public void verifyRecipeInEditor() {
+		recipePage. verifyRecipeEditor(this.recipePage.getRecipeName());
+	}
+	@And("I try change recipe status and see warning pop up dialog box {string}")
+	public void recipeWarningMessage(String message) {
+		recipePage.warningMessage(message);
+		switchTo().parentFrame();
+	}
+
 }

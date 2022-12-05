@@ -229,6 +229,11 @@ public class UserPage {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
     }
 
+    public void isGeneratedNotificationWhenPasswordReset(String name) {
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User " + name + " password reset successfully! New password has been sent to the user's registered email address."));
+    }
+
     public void isGeneratedNotificationWhenUserModified(String user) {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
         XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: " + user + " modified in server"));
@@ -306,7 +311,7 @@ public class UserPage {
     }
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns);
+        SortHelper.checkSortedElement(getAllUserColumnHeaders(), columnName, descending, getUserColumns, false, null);
     }
 
     public void seeContent(String expectedText) {
