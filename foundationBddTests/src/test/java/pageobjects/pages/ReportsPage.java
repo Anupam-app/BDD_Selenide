@@ -133,7 +133,7 @@ public class ReportsPage {
     private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
-    private final String recipeAuditLogs ="//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
+    private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
 	
 	private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
@@ -142,8 +142,8 @@ public class ReportsPage {
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
     private final SelenideElement runColumn=$(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
-    
-    
+
+    List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
@@ -246,15 +246,15 @@ public class ReportsPage {
     public void verifyGenerateButton() {
         Assert.assertFalse(reportGenerateButton.is(visible));
     }
-    
+
     public void checkRecipeCTRLOperationLogs(String batchId, String recipeName) {
-    	$(By.xpath(String.format(recipeAuditLogs, "acknowledged", recipeName, batchId))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "aborted", recipeName, batchId))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "step jump", recipeName, batchId))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "resumed", recipeName, batchId))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "paused", recipeName, batchId))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "restart"))).shouldBe(visible);
-    	$(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "hold"))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "acknowledged", recipeName, batchId))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "aborted", recipeName, batchId))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "step jump", recipeName, batchId))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "resumed", recipeName, batchId))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "paused", recipeName, batchId))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "restart"))).shouldBe(visible);
+        $(By.xpath(String.format(recipeAuditLogs, "Bio4CAdmin", "system", "hold"))).shouldBe(visible);
     }
 
     public void gotoReportsTab() {
@@ -277,7 +277,8 @@ public class ReportsPage {
     }
 
     public void checkSortedElementTemplate(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns);
+        SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns,
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public List<String> getTemplateColumnHeaders() {
@@ -717,7 +718,8 @@ public class ReportsPage {
     }
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending,
+                getReportColumns, dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
 
@@ -864,11 +866,13 @@ public class ReportsPage {
     }
 
     public void checkSortedElements(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns,
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void checkSortedElementConsolidate(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns);
+        SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns,
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void sortListConsolidated(String columnName, boolean descending) {
