@@ -507,7 +507,7 @@ public class RecipePage {
         }
         return isTrue;
     }
-
+ 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName,
                 descending, getRecipeColumns, columnName.equals("Last Modified On"), Report.RECIPE_DATE_FORMAT);
