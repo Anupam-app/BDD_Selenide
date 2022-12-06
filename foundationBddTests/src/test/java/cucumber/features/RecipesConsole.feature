@@ -64,7 +64,7 @@ Feature: Recipe console
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
-  
+ 
   Scenario: Verify the Recipe Execution|BIOCRS-1593|
     When I expand recipe console in pnid
     And I click on load recipe    
@@ -103,7 +103,7 @@ Feature: Recipe console
     Then I should see "Mandatory field should not be empty." message
     When I enter "testRecipeToExecute_20221205044016" existing value in RUNID
     Then I should see message "Run ID is already in use."
-    And I verify the Batch ID  suggestion with unique Value
+    And I verify the Batch ID suggestion with unique Value
     When I enter special characters "@!#$%^&*" in run comments section
     
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
@@ -188,8 +188,8 @@ Feature: Recipe console
    And I Select Yes button
    Then I should see change of Process restating to Process hold 
    And I verify the recipe console Elements
-
-Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page  
+ 
+ Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page  
   Given I expand recipe console in pnid
 	When I load recipe "testRecipeToExecute" 
 	And I start and wait recipe execution during 10 seconds
@@ -204,3 +204,8 @@ Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency 
 	And I refresh the portal
 	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
 	And I verify the recipe execution details in console View 
+	
+ 
+
+
+ 	

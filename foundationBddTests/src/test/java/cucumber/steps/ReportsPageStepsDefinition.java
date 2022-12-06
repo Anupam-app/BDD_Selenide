@@ -455,6 +455,6 @@ public class ReportsPageStepsDefinition {
 	
 	@Then("I verify recipe details captured in report run tab {string}")
 	public void  iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {		
-		Assert.assertTrue(reportPage.verifyrunDetails(recipeName,"Operation", "Completed"));
+		reportPage.verifyrunDetails(recipeName,"Operation", "Completed");
 	}
 }

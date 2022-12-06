@@ -154,4 +154,3 @@ Feature: Recipe management
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
-

@@ -148,5 +148,6 @@ public class LoginPageStepsDefinition {
     public void iVerifyExistingrecipeWithSameCredential(String username, String password) {
     	loginPage.setUser(username);
         loginPage.setPassword(password);
+        loginPage.pushLogin();
     }
 }

@@ -451,14 +451,14 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I verify the recipe execution details in console View.")
 	public void iVerifyRecipeExcution() {
-		recipeConsolePage.gotoRecipeConsole();
-		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+		recipeConsolePage.expandRecipeConsole();
+		recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
 	}
 
-	@And("I verify the Batch ID  suggestion with unique Value")
-	public void iVerifyBatchidWithUniqueValue(String value) {
+	@And("I verify the Batch ID suggestion with unique Value")
+	public void iVerifyBatchidWithUniqueValue() {
 		generateRandomRecipeValues();
-		recipeConsolePage.uniqBatchId(value);
+		recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
 		//recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
 		//recipeConsolePage.existingBachId(this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
 	}

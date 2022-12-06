@@ -79,7 +79,7 @@ Feature: Apply Filter Reports
         |Last 30 Days|
         |This Month|
         |Last Month|
-		|Custom Range|
+		    |Custom Range|
 	  
 	 							
   Scenario: Verify sort run functionality all columns in ascending order
