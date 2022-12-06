@@ -77,7 +77,7 @@ public class TrendsPage {
 
     private SelenideElement defaultCollapseArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
     private SelenideElement defaultExpandArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
-
+    private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 
     public void goToTrends() {
@@ -338,6 +338,11 @@ public class TrendsPage {
                 difference, lastTimeString, startTimeString), difference <= 60);
     }
 
+    public void trendsHeaderValidation() {
+        commonWaiter(trendsHeaderValidation,visible);
+        trendsHeaderValidation.isDisplayed();
+        Assert.assertTrue(true);
+    }
 }
 
 
