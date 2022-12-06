@@ -157,12 +157,17 @@ public class RecipeConsoleStepsDefinition {
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
         
     }
+    
+    @Then("Recipe should be executed")
+    public void recipeExecuted() {
+        recipeConsolePage.isExecuted();
+    }
 
     @And("I wait the end of the execution of the recipe during {int} seconds")
     public void iWaitTheEndOfTheExecutionOfTheRecipe(int seconds) {
         recipeConsolePage.isExecuted(seconds);
     }
-
+   
     @When("I click on pause button")
     public void iClickOnPauseButton() {
         recipeConsolePage.clickPauseButton();
@@ -494,6 +499,7 @@ public class RecipeConsoleStepsDefinition {
 	@And("I refresh the portal")
 	public void iRefreshThePortal() {
 		recipeConsolePage.iRefreshPortal();
+		SelenideHelper.maximize();
 	}
 
 	@Then("I should see change of Process holding to Process restart")

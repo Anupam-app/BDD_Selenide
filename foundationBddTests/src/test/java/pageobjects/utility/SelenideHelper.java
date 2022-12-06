@@ -57,4 +57,8 @@ public class SelenideHelper {
 		refresh();
 	}
 	
+	public static void maximize() {
+		WebDriverRunner.getWebDriver().manage().window().fullscreen();
+	}
+	
 }

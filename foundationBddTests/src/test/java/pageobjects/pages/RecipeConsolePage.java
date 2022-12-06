@@ -667,8 +667,6 @@ public class RecipeConsolePage {
 		boolean isResult=false;
 		if(batchId.getText().equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed()) {
 			isResult=true;
-			System.out.println(batchId);
-			System.out.println(batch_Id);
 		}
 		return isResult;
 	}
@@ -774,7 +772,12 @@ public class RecipeConsolePage {
 	}
 
 	public void iRefreshPortal() {
-		Selenide.refresh();
+		SelenideHelper.appRefresh();
+		Selenide.sleep(2000);
+		var alert = WebDriverRunner.getWebDriver().switchTo().alert();
+		Selenide.sleep(2000);
+		alert.accept();
+		
 	}
 	public void expandRecipeConsole() {
 		SelenideHelper.commonWaiter(expandIcon, visible).click();

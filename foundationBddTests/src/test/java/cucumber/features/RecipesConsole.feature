@@ -191,8 +191,8 @@ Feature: Recipe console
  
  Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page  
   Given I expand recipe console in pnid
-	When I load recipe "testRecipeToExecute" 
-	And I start and wait recipe execution during 10 seconds
+	And I load recipe "testRecipeToExecute1min"
+  And I start recipe execution
 	And I verify the recipe execution details in console View
 	When I goto report management page
 	And I go to Main screen 
@@ -202,7 +202,9 @@ Feature: Recipe console
 	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
 	And I verify the recipe execution details in console View.
 	And I refresh the portal
+	And I open login page
 	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I expand recipe console in pnid
 	And I verify the recipe execution details in console View 
 	
  
