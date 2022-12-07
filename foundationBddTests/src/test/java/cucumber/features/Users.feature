@@ -126,7 +126,7 @@ Scenario Outline: Verify Default Users & roles
     And I verify default roles
      	|Bio4C Service  |
 			|Administrator	|
-			|Operator		    |
+#			|Operator		    |
 	 And I verify "<UserRole>" list of "<roles>"		
 	 Then I should see view icon of perticular roles
 		   |Administrator |
@@ -168,29 +168,31 @@ Scenario Outline: Verify Default Users & roles
      And I select report from dropdown "Audit Trail"
      Then I should see newly created user "NewUserRole" present in report
       
-   
-  Scenario Outline: Verify the system allows user to change the password
+  Scenario Outline: Verify the system allows user to change the password negative flow1
    	 Given I am logged in as "<user>" user		
-     And I go to userprofile
-     When I click on changepassword
-     Then I should see change password window popup
-     When I try to change password with current password "<currentPassword>"
-     Then I see error message is displayed as "Cannot reuse old password."
-     When I try to change password with current password "<currentPassword>" "1234567890" "1234567890"
-     Then I see error message is displayed as "Password doesn't met the policy criteria."  
-     When I try to change password with current password "<currentPassword>" "<newPassword>" "<confirmPassword>"      
+     When I try to change password "<currentPassword>" "<newPassword>" "<confirmPassword>"
+     Then I see error message is displayed as "<error message>"
+     And I logout      		
+    Examples:
+      |user				    | currentPassword  | newPassword   | confirmPassword | error message   |
+      |testChangePwd	| MerckApp1@       | MerckApp1@    | MerckApp1@      |	Cannot reuse old password.  |
+      |testChangePwd	| MerckApp1@       | 1234567890    | 1234567890      |	Password doesn't met the policy criteria.  |	 
+   
+    Scenario Outline: Verify the system allows user to change the password positive flow2
+   	 Given I am logged in as "<user>" user		
+     When I try to change password "<currentPassword>" "<newPassword>" "<confirmPassword>"      
      Then I see password updated message is displayed for "<user>"
      And I logout      		
     Examples:
-      |user				| currentPassword  | newPassword   | confirmPassword |first name		|last name		 |role   |
-      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 |
-     
-  Scenario Outline: Verify the system allows user to change the password 2   
+      |user				    | currentPassword  | newPassword   | confirmPassword |
+      |testChangePwd	| MerckApp1@       | MerckApp2@    | MerckApp2@      |	 
+    
+  Scenario Outline: Verify the system allows user to change the password 3   
      Given I open portal			
      And I open login page
-     When I login to application with updated password
+     When I login to application with password
       	| username| password   		  | message                                                   |
-      	| <user>  | <currentPassword> | Invalid username or password. You have 4 attempt(s) left. | 
+      	| <user>  | <old password> | Invalid username or password. You have 4 attempt(s) left. | 
      And I enter "<user>" as username and "<newPassword>" as password
      And I push the login button
      Given I go to userprofile
@@ -199,14 +201,14 @@ Scenario Outline: Verify Default Users & roles
      When I select report from dropdown "Audit Trail"
      And I select user in dropdown "<user>"
      And I select date range as "Today"
-     When  I select template sort by "Event Time" in "false"
+     When I select template sort by "Event Time" in "false"
      Then I should see change password entries in audit trail report for "<user>" 		
-     When I try to change password with current password "<newPassword>" "<currentPassword>" "<currentPassword>"      
+     When I try to change password "<newPassword>" "<confirmPassword>" "<confirmPassword>"      
      Then I see password updated message is displayed for "<user>"
      And I logout 
     Examples:
-      |user				| currentPassword  | newPassword   | confirmPassword |first name		|last name		 |role   |
-      |reportUnauthUser	| MerckApp1@       | MerckApp2@    | MerckApp2@      |reportUnauthUser	|reportUnauthUser|		 |
+      |user						| old password  	 | newPassword   | confirmPassword |first name		|last name		 |user role   |
+      |testChangePwd	| MerckApp1@       | MerckApp2@    | MerckApp1@      |changePwd			|Tester				 |			 |
       
    
   Scenario: BIOCRS-5377: Verify the Application Icons
@@ -219,6 +221,6 @@ Scenario Outline: Verify Default Users & roles
   	            |Recipes       |
   	            |Reports       |
   	            |Configuration |
-  	            |Users		   |
-  	            |Backup		   |
+  	            |Users		   	 |
+  	            |Backup		     |
   	            |Settings      |

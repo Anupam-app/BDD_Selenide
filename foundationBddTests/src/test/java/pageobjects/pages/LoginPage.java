@@ -32,6 +32,7 @@ public class LoginPage {
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));	
 	private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
+	private final SelenideElement savePasswordButton = $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
     
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -77,17 +78,27 @@ public class LoginPage {
         commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
         commonWaiter(loadingIcon, not(visible));
     }
-
+    
     public void setNewpassword(String newpassword) {
+        commonWaiter(newPasswordTextbox,visible);
+        newPasswordTextbox.setValue(newpassword);
+    }
+
+    public void setConfirmpassword(String newpassword) {
+        confirmPasswordTextbox.setValue(newpassword);
+        submitButton.click();
+    }
+
+    public void setNewpasswordUser(String newpassword) {
         commonWaiter(newPasswordTextbox,visible);
 		newPasswordTextbox.clear();
         newPasswordTextbox.setValue(newpassword);
     }
 
-    public void setConfirmpassword(String newpassword) {
+    public void setConfirmpasswordUser(String newpassword) {
 		confirmPasswordTextbox.clear();
         confirmPasswordTextbox.setValue(newpassword);
-        submitButton.click();
+        savePasswordButton.click();
     }
 
     public void iLogout() {
@@ -98,4 +109,6 @@ public class LoginPage {
     	currentPasswordTestbox.clear();
     	currentPasswordTestbox.setValue(newpassword);
     }
+	
+	
 }

@@ -93,11 +93,11 @@ public class LoginPageStepsDefinition {
 
     @Given("I change password {string}")
     public void iChangePassword(String password) {
-		loginPage.setCurrentpassword(password);
         loginPage.setNewpassword(password);
         loginPage.setConfirmpassword(password);
     }
 
+    
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
@@ -114,23 +114,23 @@ public class LoginPageStepsDefinition {
     public void iSeetheErrorMessage(String message) {
         loginPage.checkMessage(message);
     }
-	    @When("I try to change password with current password {string}")
+	@When("I try to change password {string}")
     public void iTryToChangePassword(String password) {
     	loginPage.setCurrentpassword(password);
-        loginPage.setNewpassword(password);
-        loginPage.setConfirmpassword(password);
+        loginPage.setNewpasswordUser(password);
+        loginPage.setConfirmpasswordUser(password);
     }
     
-    @When("I try to change password with current password {string} {string} {string}")
+    @When("I try to change password {string} {string} {string}")
     public void iTryToChangePassword(String currentPassword,String np,String cp) {
     	userPage.userProfileIcon();
     	userPage.changePassword();
     	loginPage.setCurrentpassword(currentPassword);
-        loginPage.setNewpassword(np);
-        loginPage.setConfirmpassword(cp);
+        loginPage.setNewpasswordUser(np);
+        loginPage.setConfirmpasswordUser(cp);
     }
     
-    @When("^I login to application with updated password$")
+    @When("^I login to application with password$")
     public void iShouldSeeLoginErrorMessage(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
 
@@ -150,4 +150,5 @@ public class LoginPageStepsDefinition {
         loginPage.setPassword(password);
         loginPage.pushLogin();
     }
+    
 }
