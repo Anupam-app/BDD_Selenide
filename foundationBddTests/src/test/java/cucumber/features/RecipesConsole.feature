@@ -23,7 +23,7 @@ Feature: Recipe console
     And I verify Recipe run options 
     And I goto manual operation tab
     And I verify manual operation options 
- @test
+
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -51,7 +51,7 @@ Feature: Recipe console
     And I provide special chars in pre run comments
     Then I see the error message as "Special characters are not allowed for Comments"
 
-  @SMOKE @test
+  @SMOKE
   Scenario: Recipe execution
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
@@ -88,7 +88,7 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-  @test
+  
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -111,7 +111,7 @@ Feature: Recipe console
     And I click on abort button 
     Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
-@test
+    
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
