@@ -118,15 +118,15 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
 
-Scenario Outline: Verify Default Users & roles  
+  Scenario Outline: Verify Default Users & roles  
   	Given I am logged in as "Bio4CAdmin" user
     And I go to user page  
     And I verify default user account "Bio4CService" and "Administrator"
     And I navigate to role icon
     And I verify default roles
      	|Bio4C Service  |
-			|Administrator	|
-#			|Operator		    |
+		|Administrator	|
+		|Operator	 	|
 	 And I verify "<UserRole>" list of "<roles>"		
 	 Then I should see view icon of perticular roles
 		   |Administrator |
@@ -135,9 +135,7 @@ Scenario Outline: Verify Default Users & roles
 	Examples:
       	|roles                           |UserRole        |
       	|parameters/crs/privilegeslist   |privilege       |	
-       	
-  
-  
+       	  
   Scenario: BIOCRS-5145|Verify Default Role Modification
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -174,9 +172,9 @@ Scenario Outline: Verify Default Users & roles
      Then I see error message is displayed as "<error message>"
      And I logout      		
     Examples:
-      |user				    | currentPassword  | newPassword   | confirmPassword | error message   |
-      |testChangePwd	| MerckApp1@       | MerckApp1@    | MerckApp1@      |	Cannot reuse old password.  |
-      |testChangePwd	| MerckApp1@       | 1234567890    | 1234567890      |	Password doesn't met the policy criteria.  |	 
+      |user				| currentPassword  | newPassword   | confirmPassword | error message   							 |
+      |testChangePwd	| MerckApp1@       | MerckApp1@    | MerckApp1@      |	Cannot reuse old password.  			 |
+      |testChangePwd	| MerckApp1@       | 1234567890    | 1234567890      |	Password doesn't met the policy criteria.|	 
    
     Scenario Outline: Verify the system allows user to change the password positive flow2
    	 Given I am logged in as "<user>" user		
@@ -184,7 +182,7 @@ Scenario Outline: Verify Default Users & roles
      Then I see password updated message is displayed for "<user>"
      And I logout      		
     Examples:
-      |user				    | currentPassword  | newPassword   | confirmPassword |
+      |user				| currentPassword  | newPassword   | confirmPassword |
       |testChangePwd	| MerckApp1@       | MerckApp2@    | MerckApp2@      |	 
     
   Scenario Outline: Verify the system allows user to change the password 3   
@@ -192,7 +190,7 @@ Scenario Outline: Verify Default Users & roles
      And I open login page
      When I login to application with password
       	| username| password   		  | message                                                   |
-      	| <user>  | <old password> | Invalid username or password. You have 4 attempt(s) left. | 
+      	| <user>  | <old password>    | Invalid username or password. You have 4 attempt(s) left. | 
      And I enter "<user>" as username and "<newPassword>" as password
      And I push the login button
      Given I go to userprofile
@@ -207,8 +205,8 @@ Scenario Outline: Verify Default Users & roles
      Then I see password updated message is displayed for "<user>"
      And I logout 
     Examples:
-      |user						| old password  	 | newPassword   | confirmPassword |first name		|last name		 |user role   |
-      |testChangePwd	| MerckApp1@       | MerckApp2@    | MerckApp1@      |changePwd			|Tester				 |			 |
+      |user				| old password  	 | newPassword   | confirmPassword |first name		|last name		 |user role   |
+      |testChangePwd	| MerckApp1@         | MerckApp2@    | MerckApp1@      |changePwd		|Tester			 |			  |
       
    
   Scenario: BIOCRS-5377: Verify the Application Icons
@@ -221,6 +219,6 @@ Scenario Outline: Verify Default Users & roles
   	            |Recipes       |
   	            |Reports       |
   	            |Configuration |
-  	            |Users		   	 |
-  	            |Backup		     |
+  	            |Users		   |
+  	            |Backup		   |
   	            |Settings      |
