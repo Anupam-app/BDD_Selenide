@@ -320,9 +320,7 @@ public class RecipeConsoleStepsDefinition {
 	@When("I select {string} tab")
 	public void recipeOperation(String status) {
 		if(status.equalsIgnoreCase("Manual operation")) {
-			if(true) {
-				recipeConsolePage.manualOperation("enabled");
-			}
+			recipeConsolePage.manualOperation("enabled");
 		}
 	}
 	@When("I resume and verify recipe execution is resumed")
@@ -367,4 +365,8 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.validateStartButtonNotSelect(status);
 	}
 
+	@And("I wait until Run button is displayed and {string}")
+	public void runButtonDisplayed(String value) {
+		recipeConsolePage.runButton(value);
+	}
 }
