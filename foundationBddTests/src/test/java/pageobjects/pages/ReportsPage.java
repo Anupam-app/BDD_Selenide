@@ -229,7 +229,11 @@ public class ReportsPage {
     }
 
     public void selectReport(String reportname) {
-        SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            SelenideHelper.commonWaiter(selectReportDropdown, visible).click();
+            return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).isDisplayed();
+        });
+
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))), visible).click();
     }
 
@@ -268,7 +272,10 @@ public class ReportsPage {
     }
 
     public void selectUserOnRunPage(String user) {
-        SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
+            return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).isDisplayed();
+        });
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible).click();
     }
 
