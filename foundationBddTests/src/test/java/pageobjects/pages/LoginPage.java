@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class LoginPage {
@@ -17,15 +16,17 @@ public class LoginPage {
     private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
 
-    private final SelenideElement submitButton = $(By.xpath("//button[contains(text(),'Login')]"));
     private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
+    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-    private final String pnidLoginTestId = "pnid_login_info";
 
-    private SelenideElement logOutButton = $(By.xpath("//button[contains(text(),'Log out')]"));
+    private final SelenideElement logOutButton = $(By.xpath("//button[contains(text(),'Log out')]"));
+
+    private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
+    private final SelenideElement PNID_LOGIN_INFO = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -36,8 +37,8 @@ public class LoginPage {
     }
 
     public void pushLogin() {
-        commonWaiter(submitButton, visible);
-        submitButton.click();
+        commonWaiter(SUBMIT_LOGIN, visible);
+        SUBMIT_LOGIN.click();
     }
 
     public void openLogin() {
@@ -69,7 +70,7 @@ public class LoginPage {
     }
 
     public void waitPnidMessage(String message) {
-        commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
+        commonWaiter(PNID_LOGIN_INFO.$(byText(message)), visible);
         commonWaiter(loadingIcon, not(visible));
     }
 
