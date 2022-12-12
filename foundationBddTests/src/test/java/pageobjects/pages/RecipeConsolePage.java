@@ -161,10 +161,6 @@ public class RecipeConsolePage {
 	}
 
 	public void loadRecipe(String recipeName) {
-		if (restartButton.isDisplayed()) {
-			restartSystem();
-			SelenideHelper.commonWaiter(holdButton, visible);
-		}
 		if(abortButton.isDisplayed()) {
 			abortButton.click();
 			clickYesButton.waitUntil(Condition.visible, 1000).click();
@@ -190,9 +186,7 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
 		loadButton.click();
 	}
-	
-	
-
+		
 	public void verifyRecipeRunOptions() {
 		if (restartButton.isDisplayed()) {
 			restartSystem();
@@ -671,6 +665,7 @@ public class RecipeConsolePage {
 			restartSystem();
 			SelenideHelper.commonWaiter(holdButton, visible);
 		}
+		
 		if (clearRecipeText.isDisplayed()) {
 			clearRecipeText.click();
 		}
