@@ -28,16 +28,13 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
     
-  Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe
+  Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe | IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name
   	Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
     And I save the recipe with name "!@#testSpecialChars?/\><%+-"
     When I approve recipe
-    Then Recipe should be approved
- 
-  Scenario: IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name   
-  	Given I am logged in as "Bio4CAdmin" user
+    And Recipe should be approved
     And I go to recipe page
     And I search the recipe "!@testSpecialChars+-"
     When I export the recipe
@@ -46,7 +43,7 @@ Feature: Recipe management
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
-
+ 
   @IVI
   Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
     Given I am logged in as "Bio4CAdmin" user
@@ -201,8 +198,8 @@ Feature: Recipe management
     Given I am logged in as "reportUnauthUser" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
-    Then I cant edit the recipe
-    And I cant change the recipe status  
+    Then I cannot edit the recipe
+    And I cannot change the recipe status  
     And touch buttons are disabled
    
   Scenario: IVI Bug IVI-5768 | Delete the phase
@@ -218,7 +215,7 @@ Feature: Recipe management
     And I go to recipe page
     When I trigger edit mode
     And I create a random phase
-    And I copy phase
+    And I copy phase in recipe
     Then I am able to paste the phase
   
   Scenario: IVI Bug IVI-5762 IVI-5761 IVI-5763| Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe

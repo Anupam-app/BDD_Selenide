@@ -93,7 +93,7 @@ public class RecipePageStepsDefinition {
 		recipePage.addPhase(this.recipe.getPhaseName());
 	}
 	
-	@When("I copy phase")
+	@When("I copy phase in recipe")
 	public void iCopyPhase() {
 		recipePage.copyPhase();
 	}
@@ -386,12 +386,12 @@ public class RecipePageStepsDefinition {
 		switchTo().parentFrame();
 	}
 	
-	@When("I cant edit the recipe")
+	@When("I cannot edit the recipe")
 	public void iCannotModifyRecipe() {
 		recipePage.cannotEditRecipe();
 	}
 	
-	@When("I cant change the recipe status")
+	@When("I cannot change the recipe status")
 	public void iCannotModifyRecipeStatus() {
 		recipePage.cannotEditRecipeStatus();
 	}

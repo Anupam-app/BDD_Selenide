@@ -49,7 +49,7 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
     And I start recipe execution
-    And I wait for sometime
+    And I wait for 4 seconds
     And I click on abort button
     And I should see the recipe run aborted
     Then control should be on rerun button

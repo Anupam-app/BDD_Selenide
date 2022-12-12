@@ -190,9 +190,9 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
 	}
 	
-	@When("I wait for sometime")
-	public void iWait() {
-		Selenide.sleep(10000);
+	@When("I wait for {int} seconds")
+	public void iWait(int seconds) {
+		Selenide.sleep(seconds*1000);
 	}
 
 	@Then("I see the system on hold")

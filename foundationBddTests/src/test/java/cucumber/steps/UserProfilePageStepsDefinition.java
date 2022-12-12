@@ -69,7 +69,6 @@ public class UserProfilePageStepsDefinition {
 		var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
 		userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
 		userProfilePage.closeUserProfile();
-		Selenide.sleep(5000);
 	}
 
 	@Then("I reset my language to {string}")

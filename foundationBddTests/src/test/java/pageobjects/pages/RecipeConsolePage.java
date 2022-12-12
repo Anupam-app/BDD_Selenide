@@ -168,22 +168,23 @@ public class RecipeConsolePage {
     }
     
     public void verifyTooltipLoadRecipePage() {
+		
     	//Check the values for RecipeName Column
     	for(int i=1;i<=recipeListTable.size();i++) {
     		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,1))).getAttribute("title").matches("^[a-zA-Z0-9]*$"));
-    		}
+    	}
     	//Check the values for status Column
     	for(int i=1;i<recipeListTable.size();i++) {
     		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,2))).getAttribute("title").equals("Approved-Active"));
-    		}
+    	}
     	//Check the values for date Column
     	for(int i=1;i<recipeListTable.size();i++) {
     		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,3))).getAttribute("title").matches(("([a-zA-Z0-9]{3})(/s)([0-9]{2}),([0-9]{4})")));
-    		}
+    	}
     	//Check the values for created By Column
     	for(int i=1;i<recipeListTable.size();i++) {
     		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,4))).getAttribute("title").equals("Bio4CAdmin"));
-    		}
+    	}
     	
     }
     
