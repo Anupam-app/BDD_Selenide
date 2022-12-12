@@ -580,13 +580,13 @@ public class RecipePage {
 	}
 
 	public void warningMessage(String message) {
-		Selenide.sleep(1000);
-		$(By.xpath("//label[text()='Approved-InActive']")).click();
-		String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
-		Assert.assertEquals(actual, message);
-		$(By.xpath("//button[@class='btn-secondary']")).click();
-	}
-
+        Selenide.sleep(1000);
+        $(By.xpath("//label[text()='Approved-InActive']")).click();
+        String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
+        Assert.assertEquals(actual, message);
+        $(By.xpath("//button[@class='btn-secondary']")).click();
+    }
+	
 	public void verifyRecipeHeader() {
 		recipeManagementHeader.shouldBe(visible);
 	}

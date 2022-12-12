@@ -365,7 +365,7 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.start_button();
 	}
 
-	@Then("I should see pre run window popup")
+	@Then("I close post run window and select re run option")
 	public void iseepreRunWindowPopup() {
 		recipeConsolePage.clickOnOk();
 		recipeConsolePage.reRun();
@@ -534,6 +534,7 @@ public class RecipeConsoleStepsDefinition {
 	
 	@And("I verify all mandatory fields has asterick mark {string}")
 	public void iVerifyAllMandatoryFieldsHasAsterickMark(String mark) {
+		recipeConsolePage.reRun();
 		recipeConsolePage.verifyAsterickMark(mark);
 	}
 	

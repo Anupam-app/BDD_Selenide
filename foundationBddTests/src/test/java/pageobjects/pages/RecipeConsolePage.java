@@ -170,6 +170,18 @@ public class RecipeConsolePage {
 			clickYesButton.waitUntil(Condition.visible, 1000).click();
 			okButton.waitUntil(Condition.visible, 5001).click(); 	
 		}
+		if(manualStopButton.isDisplayed()) {
+            manualStopButton.click();
+            closeButtonOfStop.click();
+            okButton.click();
+        }
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+        if(manualStartButton.isDisplayed()) {
+            recipeButton.click();
+        }
 		if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
 			$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
 		}
@@ -178,6 +190,8 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
 		loadButton.click();
 	}
+	
+	
 
 	public void verifyRecipeRunOptions() {
 		if (restartButton.isDisplayed()) {

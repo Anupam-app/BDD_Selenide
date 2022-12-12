@@ -94,9 +94,7 @@ Feature: Recipe console
     
    Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
     Given I expand recipe console in pnid
-  	And I load recipe "testRecipeToExecute"
-  	And I start recipe execution
-    Then I should see pre run window popup
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I verify all mandatory fields has asterick mark "*"
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
