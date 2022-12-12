@@ -29,8 +29,8 @@ public class SelenideHelper {
     public static Wait<WebDriver> fluentWaiter() {
 
         return new FluentWait<>(WebDriverRunner.getWebDriver())
-                .withTimeout(Duration.ofSeconds(60))
-                .pollingEvery(Duration.ofSeconds(5))
+                .withTimeout(Duration.ofSeconds(60 * 2))
+                .pollingEvery(Duration.ofSeconds(10))
                 .ignoring(NoSuchElementException.class);
     }
 
