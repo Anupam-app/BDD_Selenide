@@ -10,7 +10,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.I18nUtils;
 
-
 import dataobjects.Report;
 import java.awt.AWTException;
 import java.text.ParseException;
