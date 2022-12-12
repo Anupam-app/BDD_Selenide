@@ -1,18 +1,12 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.Selenide;
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import com.xceptance.neodymium.util.Neodymium;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
-
-import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.SelenideElement;
+import com.xceptance.neodymium.util.Neodymium;
+import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 

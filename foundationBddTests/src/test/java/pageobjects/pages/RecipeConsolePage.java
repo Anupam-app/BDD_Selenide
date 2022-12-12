@@ -85,9 +85,9 @@ public class RecipeConsolePage {
     private final SelenideElement clearRecipeButton = $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
     private ElementsCollection recipeStepCount = $$(By.xpath("//div[@class='MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column']/div/div[@class='MuiGrid-root MuiGrid-container']"));
 	private final SelenideElement closeJumpStep = $(By.xpath("//img[@src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAFKADAAQAAAABAAAAEwAAAAAA/SztAAABDUlEQVQ4Ea3UUQuCMBDA8UulqKeIkCCQoO//kYIIepGejSKt/oOTabqd0L3opvdrN6/N3t+QbzweT8myVNI0ZTgp6rqW16uWxWIuGZlgp9NZkiSRotjLarU0g1V1l8vlKk3TyPF4kIRMVgbGJA95yRI+Rr5zSKRMVjYF7WPk47gVglKmFR3CdJta0IqGMIwOGENjGPkzbRsGfvST83wrZXlzHy7UDaMguI/qj4Uw3vkpWRO5stGszA/G+gH8eb0PgqyQMv1gzPxYjIJ+uZS52+WmPh0E+xj9udmsTX36Aw5humdcY83fAUOY7lkMbUELZkEdyHmmR1Csz0IojgM5HDm6rNgYitP+U/51Yn8AzV4maDdMLYMAAAAASUVORK5CYII=']"));    
-	private final SelenideElement manualStartButton = $(By.xpath("//img[contains(@src,'START_btn.3c28170b.svg')]"));
+	private final SelenideElement manualStartButton = $(By.xpath("//img[contains(@src,'START_btn')]"));
 	private final SelenideElement manualOperationName = $(By.xpath("//input[@name ='recipeName']"));
-	private final SelenideElement manualStopButton = $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.0328c518.svg']"));
+	private final SelenideElement manualStopButton = $(By.xpath("//img[contains(@src,'End_btn Copy-End_btn')]"));
 	private final SelenideElement matchId = $(By.xpath("(//label[@id='trimString'])[1]"));
 	private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[2]"));
 	private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[3]"));
@@ -119,6 +119,7 @@ public class RecipeConsolePage {
         SelenideHelper.commonWaiter(restartButton, visible).click();
         SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
         SelenideHelper.commonWaiter(confirmButton, visible).click();
+        holdButton.waitUntil(visible, 10000);
     }
 
     public void gotoRecipeConsole() {
@@ -261,6 +262,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
         okButton.click();
+        Selenide.sleep(2000);
     }
     
     public void reRunRecipe(String productId, String batchId, String beforeComments) throws ParseException {
@@ -325,7 +327,10 @@ public class RecipeConsolePage {
         inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
-        okStepButton.waitUntil(Condition.visible, 4000l).click();
+        okStepButton.waitUntil(Condition.visible, 4000l, 500).click();
+        abortIcon.waitUntil(visible, 4000l, 500);
+        Selenide.sleep(2000);
+        SelenideHelper.takePicture();
     }
 
     public void clickOnAbortButton(String afterComments) {
@@ -439,6 +444,7 @@ public class RecipeConsolePage {
 			manualOperationSelected.shouldBe(visible);
 		}
 		else if(status.equalsIgnoreCase("disabled")) {
+			commonWaiter(manualOperationButton, visible);
 			manualOperationButton.shouldNotBe(selected);
 		}
 	}
@@ -474,7 +480,10 @@ public class RecipeConsolePage {
 		okButton.click();
 	}
 	public void manualRunStart(String productId, String batchId, String beforeComments) {
-
+		if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
 		if(manualStopButton.isDisplayed()) {
 			manualStopButton.click();
 			closeButtonOfStop.click();
@@ -542,6 +551,16 @@ public class RecipeConsolePage {
 		}
 		else if(status.equalsIgnoreCase("enabled")) {
 			manualStartButton.shouldBe(visible);
+		}
+	}
+	
+	public void runButton(String status) {
+		runIcon.waitUntil(visible, 10000);
+		if(status.equalsIgnoreCase("disabled") ) {
+			runIcon.shouldNotBe(selected);
+		}
+		else if(status.equalsIgnoreCase("enabled")) {
+			runIcon.shouldBe(visible);
 		}
 	}
 	

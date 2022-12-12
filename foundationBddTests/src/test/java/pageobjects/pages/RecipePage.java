@@ -9,6 +9,9 @@ import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.I18nUtils;
+
+
+import dataobjects.Report;
 import java.awt.AWTException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -146,6 +149,7 @@ public class RecipePage {
     private final SelenideElement recipeValue = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement recipeInputSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
 
+
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -202,6 +206,10 @@ public class RecipePage {
         addStepButton.click();
         searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "v");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "v");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
@@ -601,7 +609,8 @@ public class RecipePage {
     }
 
     public void checkSortedElement(String columnName, boolean descending) {
-        SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName, descending, getRecipeColumns);
+        SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName,
+                descending, getRecipeColumns, columnName.equals("Last Modified On"), Report.RECIPE_DATE_FORMAT);
         switchTo().parentFrame();
     }
 

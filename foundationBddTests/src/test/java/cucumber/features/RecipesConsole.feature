@@ -23,7 +23,7 @@ Feature: Recipe console
     And I verify Recipe run options 
     And I goto manual operation tab
     And I verify manual operation options 
- 
+
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -42,8 +42,8 @@ Feature: Recipe console
     And control should be on rerun button
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+	  And I select user in dropdown "Bio4CAdmin"
+	  And I check audit trial logs
 	
 	Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
     When I expand recipe console in pnid
@@ -98,10 +98,10 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-   
+  
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
-    When I load recipe "testRecipeToExecute1min"
+    When I load recipe "testRecipeToExecute"
     #Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
@@ -111,25 +111,30 @@ Feature: Recipe console
     And I verify Manual Operation tab is "disabled"
     When I resume and verify recipe execution is resumed
     Then I verify Manual Operation tab is "disabled"
+    #TO-DO: needs enhancement on scripting techniques
+    And I wait the end of the execution of the recipe during 12 seconds
     And I should see the recipe run "Completed"
     And I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
     And I re-run the recipe
     Then I verify Manual Operation tab is "disabled"
     And I click on abort button 
+    Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
-
+    
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
+    And I wait until Run button is displayed and "enabled"
     When I Process hold the system
+    Then I see the system on hold
     Then I verify Manual Operation tab is "disabled"
     Then I verify Recipe Run tab is "disabled"
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
     
- 
+  #TO-DO: needs fix in IVI
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab

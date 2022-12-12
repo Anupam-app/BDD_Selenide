@@ -343,9 +343,18 @@ public class TrendsPage {
         SimpleDateFormat format = new SimpleDateFormat("MMMd,yyyy,HH:mm:ssa", Locale.US);
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
-        long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000) % 60;
-        Assert.assertTrue(String.format("difference:%s for dates between %s and %s",
+
+        if(lastTime.getHours()==0){
+            lastTime.setHours(24);
+        }
+
+        long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000);
+
+        Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",
                 difference, lastTimeString, startTimeString), difference >= 45);
+
+        Assert.assertTrue(String.format("difference lower than 1 hour :%s for dates between %s and %s",
+                difference, lastTimeString, startTimeString), difference <= 60);
     }
 
     public void seeContent(String expectedText) {
