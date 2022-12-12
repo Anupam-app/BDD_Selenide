@@ -131,16 +131,25 @@ public class RecipeConsolePage {
         SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
-    public void loadRecipe(String recipeName) {
-    	if (restartButton.isDisplayed()) {
-            restartSystem();
-            SelenideHelper.commonWaiter(holdButton, visible);
-        }
+    public void loadRecipe(String recipeName) {	
 		if(abortIcon.isDisplayed()) {
         	abortIcon.click();
         	clickYesButton.waitUntil(Condition.visible, 1000).click();
         	okButton.waitUntil(Condition.visible, 5001).click(); 	
         }
+		if(manualStopButton.isDisplayed()) {
+			manualStopButton.click();
+			closeButtonOfStop.click();
+			okButton.click();
+		}
+		if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+		if(manualStartButton.isDisplayed()) {
+			recipeButton.click();
+		}
+		
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
