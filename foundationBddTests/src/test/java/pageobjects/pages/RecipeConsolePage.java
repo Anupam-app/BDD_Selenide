@@ -279,7 +279,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
-        SelenideHelper.commonWaiter(holdButton, visible);
+        SelenideHelper.commonWaiter(restartButton, visible);
     }
     public void seeSystemRestarted() {
         SelenideHelper.commonWaiter(holdButton, visible);
