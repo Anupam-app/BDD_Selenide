@@ -62,6 +62,7 @@ public class UserPage {
 	private SelenideElement departmentTextBox = $(By.id("department"));
 	private SelenideElement saveButton = $(By.id("save_Btn"));
 	private SelenideElement resetPwdButton = $(By.id("resetPass_Btn"));
+	private SelenideElement unlockAccountButton = $(By.xpath("//button[@class='user_btn btn_primary lck_btn']"));
 	private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
 	private SelenideElement disableUserButton = $(By.id("btn_disabl"));
 	private SelenideElement enableUserButton = $(By.id("btn_enabl"));
@@ -229,10 +230,19 @@ public class UserPage {
 	public void resetPassword() {
 		resetPwdButton.click();
 	}
+	
+	public void unlockAccount() {
+		unlockAccountButton.click();
+	}
 
 	public void isGeneratedNotificationWhenPasswordReset(String name) {
 		commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
 		Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User "+name+" password reset successfully! New password has been sent to the user's registered email address."));
+	}
+	
+	public void isGeneratedNotificationWhenAccountUnlock() {
+		commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+		Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("The account was successfully unlocked"));
 	}
 
 	public void isGeneratedNotificationWhenUserModified(String user) {

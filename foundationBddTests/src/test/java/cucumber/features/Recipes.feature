@@ -15,7 +15,7 @@ Feature: Recipe management
     Then I see my changes in recipe
 
   @SMOKE  @IVI
-  Scenario: IVI Bug IVI-5969 | BIOCRS-5059 | Recipe approval
+  Scenario: IVI Bug IVI-5969 IVI-4468 | BIOCRS-5059 | Recipe approval
   	Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
@@ -27,6 +27,25 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
+    
+  Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I save the recipe with name "!@#testSpecialChars?/\><%+-"
+    When I approve recipe
+    Then Recipe should be approved
+ 
+  Scenario: IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name   
+  	Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    And I search the recipe "!@testSpecialChars+-"
+    When I export the recipe
+    And I trigger edit mode
+    And I import the recipe
+    And I look at the user notification
+    Then I should see the recipe exported in user notifications
+    And I should see the recipe imported in user notifications
 
   @IVI
   Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
@@ -207,8 +226,8 @@ Feature: Recipe management
     And I go to recipe page
     When I trigger edit mode
     Then I verify phase buttons and warning messages
-  @wip  
-	Scenario: IVI Bug IVI-4443 | Save As recipe with shortcut keys
+    
+	Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
@@ -216,4 +235,5 @@ Feature: Recipe management
     And I go to browser mode
     And I search the recipe
     And I edit the recipe
-    Then I see my changes in recipe
+    And I approve recipe
+    Then Recipe should be approved

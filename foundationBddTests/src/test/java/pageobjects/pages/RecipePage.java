@@ -52,8 +52,8 @@ public class RecipePage {
 
     private final SelenideElement recipePageLinkText = $(By.id("RecipeManagement"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
-    private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor')]"));
-    private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser')]"));
+    private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor') or contains(text(),'editor')]"));
+    private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser') or contains(text(),'browser')]"));
     private final SelenideElement phaseLibIcon = $(By.xpath("//span[(text()='Phase Library')]"));
     private final SelenideElement noPhaseAvailableMsg = $(By.xpath("//span[(text()='There is No Phase in Phase Library')]"));
     private final SelenideElement searchTextBox = $(By.className("search-txt-box"));
@@ -74,7 +74,7 @@ public class RecipePage {
     private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'home-screen-icon-block icon-plus')]"));
     private final By deletePhaseButton = By.className("deleteButton");
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
-    private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save')]"));
+    private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save') or contains(text(),'save')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement deleteButton = $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));
 

@@ -7,6 +7,13 @@ Feature: Apply Filter Roles
     When I go to user page
     And I trigger Roles mode
     Then the role "testRoleToAssign" exists
+    
+  Scenario: IVI Bug IVI-5190 -  User Management | Tool tip is not displayed to view full text when role name has lengthy text
+    Given I am logged in as "Bio4cAdmin" user
+    When I go to user page
+    And I trigger Roles mode
+    Then the role "testRoleToRemovePermission" exists
+    And tooltip shows the role name as "testRoleToRemovePermission"
 
    Scenario Outline: IVI Bug IVI-5871 | BIOCRS-5493- Verify order sort functionality in Role Management
     Given I am logged in as "Bio4cAdmin" user

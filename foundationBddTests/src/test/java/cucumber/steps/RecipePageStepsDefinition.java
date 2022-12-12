@@ -12,6 +12,9 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;

@@ -348,7 +348,7 @@ public class ReportsPageStepsDefinition {
 		reportPage.seeContent(expectedText);
 		SelenideHelper.goParentFrame();
 	}
-
+	
 	@And("I create new report template with existing name")
 	public void iEnterExistingReportTemplateName() {
 		reportPage.createTemplate(this.reportTemplate.getName());

@@ -19,6 +19,7 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 public class LoginPage {
 
 	private final SelenideElement userIdTextBox = $(By.id("userId"));
+	private final SelenideElement loginPageTitle = $(By.xpath("//span[@class='headermain__header--main']"));
 	private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
 	private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
 	private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
@@ -35,6 +36,10 @@ public class LoginPage {
 
 	public void setUser(String user) {
 		userIdTextBox.setValue(user);
+	}
+	
+	public void verifyLoginPageTitle() {
+		commonWaiter(loginPageTitle,visible).shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
 	}
 
 	public void setPassword(String password) {

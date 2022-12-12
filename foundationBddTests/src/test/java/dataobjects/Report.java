@@ -368,7 +368,7 @@ public class Report {
                         Assert.assertTrue(attributeColumnValue.contains("status"));
                         if (i==1) {
                         	Assert.assertTrue(currValueColumnValue.contains(status));
-                            Assert.assertTrue(List.of("In-Review", "Tech-Review").contains(preValueColumnValue));
+                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW").contains(preValueColumnValue));
                         }
                         else {
                         	Assert.assertTrue(preValueColumnValue.contains("Draft"));

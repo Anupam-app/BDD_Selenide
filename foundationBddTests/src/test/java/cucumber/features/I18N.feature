@@ -6,7 +6,7 @@ Feature: I18N on all modules
     Given I am using language "en-US"
     And I am logged in as "testUserForI18N" user
 
-  Scenario Outline: Test i18n all modules
+  Scenario Outline: IVI Bug - IVI-4913 | Test i18n all modules
     Given I go to user profile
     And I go to user preferences
     When I change default language to "<language>"
@@ -37,7 +37,7 @@ Feature: I18N on all modules
          | language |
          | fr-FR    |
          | en-US    |
-
+	
   Scenario: Test i18n device shape
     Given I go to user profile
     And I go to user preferences
@@ -48,3 +48,17 @@ Feature: I18N on all modules
     And I see expected texts from recipe module criterias
     And I go to analytics
     And I see expected texts from analytics module parameters
+    
+  Scenario: IVI Bug - IVI-4912 | User Preference -Default Page
+    Given I go to user profile
+    And I go to user preferences
+    When I change default page to "Reports"
+    And I save user preferences
+    And I logout
+    And I open login page
+    And I enter "testUserForI18N" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I am logged in
+    And I am landed on "Report Management" page
+    And I reset to "Main" page
+    
