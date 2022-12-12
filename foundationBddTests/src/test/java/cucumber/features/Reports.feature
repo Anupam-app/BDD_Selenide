@@ -183,7 +183,7 @@ Feature: Report administration
     When I modify the Existing template
     Then I see "Report template created" successfully message
     And I search modified the template
-
+   
   Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
