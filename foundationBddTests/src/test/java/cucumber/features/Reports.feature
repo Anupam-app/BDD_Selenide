@@ -40,8 +40,8 @@ Feature: Report administration
       | E-Sign.Status  |
       | Signed By      |
 
-  @SMOKE
-  Scenario: BIOCRS-5106/592 Generate and sign Audittrail report
+  @SMOKE @wip
+  Scenario: IVI Bug IVI-5819| BIOCRS-5106/592 Generate and sign Audittrail report
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"

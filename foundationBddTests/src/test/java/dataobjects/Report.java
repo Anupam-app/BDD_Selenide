@@ -433,6 +433,22 @@ public class Report {
         Assert.assertNotNull(table.getRowCount() > 1);
 
     }
+    
+    public void checkSignturesTable(String reportUrl) throws Exception {
+        URL url = new URL(reportUrl);
+
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures")
+                .stream().findFirst().get();
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "User name") == 0);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Signature") == 1);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Date") == 2);
+
+        Assert.assertNotNull(table.getRowCount() > 1);
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "User name")).getText(false).equals("Bio4CAdmin"));
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Signature")).getText(false).equals("Administrator Bio4C"));
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Date")).getText(false).matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
+
+    }
 
     public void ConsolidatedAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
