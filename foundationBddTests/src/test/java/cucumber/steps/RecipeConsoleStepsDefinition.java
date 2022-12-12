@@ -137,7 +137,8 @@ public class RecipeConsoleStepsDefinition {
 	@When("I start recipe execution")
 	public void iStartRecipeExecution() {
 		generateRecipeValues(null, null);
-		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+		String runId=recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+		this.currentRecipe.setRunId(runId);
 	}
 
 	private void generateRecipeValues(String batchId, String productId) {
@@ -366,6 +367,8 @@ public class RecipeConsoleStepsDefinition {
 
 	@Then("I should see pre run window popup")
 	public void iseepreRunWindowPopup() {
+		recipeConsolePage.clickOnOk();
+		recipeConsolePage.reRun();
 		recipeConsolePage.preRunWindow_Popup();
 	}
 	@When("I click ok button")
@@ -377,9 +380,9 @@ public class RecipeConsoleStepsDefinition {
 	public void iseemessage(String message) {
 		recipeConsolePage.validateHilightedMsg(message);
 	}
-	@When("I enter {string} existing value in RUNID")
-	public void iEnterExistingValueInRunId(String value) {
-		recipeConsolePage.runIdManual(value);        
+	@When("I enter existing value in RUNID")
+	public void iEnterExistingValueInRunId() {
+		recipeConsolePage.runIdManual(this.currentRecipe.getRunId());        
 	}
 
 	@Then("I should see message {string}")
@@ -528,5 +531,24 @@ public class RecipeConsoleStepsDefinition {
 
 		}
 	}
-
+	
+	@And("I verify all mandatory fields has asterick mark {string}")
+	public void iVerifyAllMandatoryFieldsHasAsterickMark(String mark) {
+		recipeConsolePage.verifyAsterickMark(mark);
+	}
+	
+	@And("I start manual recipe execution")
+	public void iStartManualRecipeExecution() {
+		generateRandomRecipeValues();
+		recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(),this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
+				this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
+		recipeConsolePage.okButton();
+		recipeConsolePage.stopBtn();
+		recipeConsolePage.validateYesBtn();
+	}
+	
+	@And("I see Recipe should be executed")
+	public void iSeeRecipeShouldBeExecuted() {
+		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+	}
 }

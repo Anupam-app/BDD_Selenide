@@ -76,29 +76,31 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"     
-   
+  
    Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
-    Then I should see pre run window popup
-    When I click ok button
+    When I start manual recipe execution
+    And I click ok button
+    And I click on start button
     Then I should see "Mandatory field should not be empty." message
-    When I enter "testRecipeFlows_20221208114233" existing value in RUNID
+    When I enter existing value in RUNID
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol    
     
-   Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
-    And I select run recipe
+   Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
+    Given I expand recipe console in pnid
+  	And I load recipe "testRecipeToExecute"
+  	And I start recipe execution
     Then I should see pre run window popup
+    And I verify all mandatory fields has asterick mark "*"
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
-    When I enter "testRecipeFlows_20221208114233" existing value in RUNID
+    When I enter existing value in RUNID
     Then I should see message "Run ID is already in use."
     And I verify the Batch ID suggestion with unique Value
     When I enter special characters "@!#$%^&*" in run comments section
@@ -201,4 +203,4 @@ Feature: Recipe console
   And I login with "Bio4CAdmin" same user as above "MerckApp1@"
   And I expand recipe console in pnid
   And I verify the recipe execution details in console View 
-	
+ 

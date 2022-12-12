@@ -98,7 +98,7 @@ public class RecipeConsolePage {
 	private final SelenideElement currentStep = $(By.xpath("//label[text()='LoopControl→FI101→Configure→Auto']"));
 	private final SelenideElement nextStep =$(By.xpath("//label[text()='LoopControl→FI101→Configure→Auto']"));
 	private final SelenideElement runStatus = $(By.xpath("//div[@class='displayLabel']/parent::div/div[3]/div[2]/span/label"));
-	private final ElementsCollection redmark = $$(By.xpath("//*[contains(@class,'label1')]/span[i]"));
+	private final ElementsCollection asterickMark = $$(By.xpath("//*[contains(@class,'label1')]/span[i]"));
 	private final ElementsCollection textBox_RedClrMsg = $$(By.xpath("//span[text()='Mandatory field should not be empty.']"));
 	//private final String textBox_RedClrMsg = "//span[text()='Mandatory field should not be empty.']";
 	private final SelenideElement existingRunIdMsg =$(By.xpath("//span[text()='Run ID is already in use.']"));
@@ -120,8 +120,7 @@ public class RecipeConsolePage {
 	private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
 	private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
 	private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
-	//	private final SelenideElement no_Btn = $(By.xpath("//span[text()='No']"));
-	//	private final SelenideElement yes_Btn = $(By.xpath("//span[text()='Yes']"));
+	private final SelenideElement yes_Btn = $(By.xpath("//span[text()='Yes']"));
 
 	private Recipe recipe;
 
@@ -232,15 +231,18 @@ public class RecipeConsolePage {
 		return runId;
 	}
 
-	public void startRecipe(String productId, String batchId, String beforeComments) {
+	public String startRecipe(String productId, String batchId, String beforeComments) {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
+		String runId = runIdTextbox.getValue();
 		productIdTextbox.setValue(productId);
 		batchIdTextbox.click();
 		batchIdTextbox.sendKeys(batchId);
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(beforeComments);
 		okButton.click();
+		
+		return runId;
 	}
 
 	public void isExecuted() {
@@ -481,13 +483,11 @@ public class RecipeConsolePage {
 		}
 		holdSystem();
 	}
+	
 	public boolean verifyApprovedRecipe() {	
 		boolean isResult=false;
 		SelenideHelper.commonWaiter(status, visible);
 		ElementsCollection options = loadRecipeStatus;	
-		if(options.size()==4) {
-
-		}
 		for (SelenideElement element : options) {
 			if(element.getText().equalsIgnoreCase("Approved-Active")) {
 				isResult=true;}
@@ -539,6 +539,7 @@ public class RecipeConsolePage {
 
 	public void okButton() {
 		SelenideHelper.commonWaiter(okButton, visible).click();
+		Selenide.sleep(2000);
 	}
 	public boolean validateHilightedMsg(String message) {
 		boolean isResult=false;
@@ -612,6 +613,7 @@ public class RecipeConsolePage {
 	public void manualValidation(String ManualOperationName,String runId,String batchId,String productId,String beforeComments) {
 		manualOpareationTextbox.click();
 		manualOpareationTextbox.setValue(ManualOperationName);
+		runIdTextbox.getValue();
 		runIdTextbox.setValue(runId);
 		productIdTextbox.setValue(productId);
 		batchIdTextbox.click();
@@ -782,4 +784,25 @@ public class RecipeConsolePage {
 	public void expandRecipeConsole() {
 		SelenideHelper.commonWaiter(expandIcon, visible).click();
 	}
+	
+	public boolean verifyAsterickMark(String Mark) {	
+		boolean isResult=false;
+		ElementsCollection options = textBox_RedClrMsg;	
+		for (SelenideElement element : options) {
+			if(element.getText().equalsIgnoreCase(Mark)) {
+				isResult=true;}
+			else {
+				isResult=false;
+				break;
+			}
+		}
+		return isResult;
+	}
+	
+	public void stopBtn() {
+		SelenideHelper.commonWaiter(manualStopButton, visible).click();
+		Selenide.sleep(2000);
+	}
+	
+	
 }
