@@ -178,6 +178,10 @@ public class RecipeConsoleStepsDefinition {
 	public void iSeeTheSystemOnHold() {
 		recipeConsolePage.seeSystemOnHold();
 	}
+	@Then("I see the system is restarted")
+	public void iSeeTheSystemRestarted() {
+		recipeConsolePage.seeSystemRestarted();
+	}
 
 	@Then("I should see the recipe run aborted")
 	public void iVerifyRecipeAbort() {
