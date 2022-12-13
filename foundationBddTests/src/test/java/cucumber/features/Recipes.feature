@@ -166,6 +166,7 @@ Feature: Recipe management
     When I edit recipe "testRecipeToExecute"
     Then I print recipe "testRecipeToExecute"
 
+  @IVI
   Scenario: BIOFOUND-3768| Create step using Keyboard event
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -174,6 +175,7 @@ Feature: Recipe management
     Then I should see "blank" step added
     And I add action to the step
  
+  @IVI 
   Scenario: BIOFOUND-3768| Create step using Action browser
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -183,6 +185,7 @@ Feature: Recipe management
     When I add new step with message prompt
     Then I should see message input text field displayed
 
+  @IVI
   Scenario: BIOFOUND-3768| Create new phase 
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -194,7 +197,8 @@ Feature: Recipe management
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
-   
+  
+  @IVI  
   Scenario: IVI Bug IVI-5800 | Unauthorized user cant create/edit the recipe
     Given I am logged in as "reportUnauthUser" user
     And I go to recipe page
@@ -202,7 +206,8 @@ Feature: Recipe management
     Then I cannot edit the recipe
     And I cannot change the recipe status  
     And touch buttons are disabled
-   
+
+  @IVI   
   Scenario: IVI Bug IVI-5768 | Delete the phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -210,7 +215,8 @@ Feature: Recipe management
     And I create a random phase
     And I delete phase to recipe with shortcut key
     Then the phase is deleted
-   
+
+  @IVI   
   Scenario: IVI Bug IVI-5764 | Touch Enabled buttons for copy and paste phases
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -218,14 +224,16 @@ Feature: Recipe management
     And I create a random phase
     And I copy phase in recipe
     Then I am able to paste the phase
-  
+ 
+  @IVI 
   Scenario: IVI Bug IVI-5762 IVI-5761 IVI-5763| Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
     Then I verify phase buttons and warning messages
-    
-	Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
+
+  @IVI   
+  Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
