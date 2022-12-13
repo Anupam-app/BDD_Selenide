@@ -28,6 +28,7 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
     
+  @IVI 
   Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe | IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name
   	Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
