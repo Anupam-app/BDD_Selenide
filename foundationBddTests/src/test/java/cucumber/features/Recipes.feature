@@ -31,7 +31,7 @@ Feature: Recipe management
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
  	
  	Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
-	When I go to recipe page
+	  When I go to recipe page
     Then  I see list of recipes are displayed
     And below "recipe" column is displayed
     |columns			    |

@@ -79,7 +79,7 @@ public class RecipeConsolePage {
 	private final SelenideElement manualOperationName = $(By.xpath("//input[@name ='recipeName']"));
 	private final SelenideElement manualStopButton = $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.0328c518.svg']"));
 	private final SelenideElement matchId = $(By.xpath("(//label[@id='trimString'])[1]"));
-	private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[3]"));
+	private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[2]"));
 	private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[3]"));
 	private final SelenideElement timeValidate = $(By.xpath("//div[@id='timerCycle']")); 
 	private final SelenideElement secondValidate = $(By.xpath("//div[@id='timerCycle']//span[4]"));

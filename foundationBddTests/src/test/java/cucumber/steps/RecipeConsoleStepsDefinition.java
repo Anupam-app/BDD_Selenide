@@ -313,8 +313,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.timeValidation();
 	}
 
-
-
 	@And("I validate the timer is incrementing")
 	public void timerIncrementCheck(){
 		recipeConsolePage.incrementTimer();
@@ -332,13 +330,10 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.autoClosePostRun();
 	}
 
-
-
 	@Then("I should see Process restart button")
 	public void restartButton() {
 		Assert.assertTrue(recipeConsolePage.verifyRestart());
 	}
-
 
 	@And("I validate the Start button is {string}")
 	public void afterPostRunAutoClose(String status) {
@@ -350,6 +345,7 @@ public class RecipeConsoleStepsDefinition {
 		Assert.assertTrue(recipeConsolePage.verifyApprovedRecipe());  
 		recipeConsolePage.clickOnClose();
 	}
+	
 	@Then("I should see recipe name and recipe steps details")
 	public void iverifyRecipeNameandRecipeSteps() {
 		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
@@ -371,6 +367,7 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.reRun();
 		recipeConsolePage.preRunWindow_Popup();
 	}
+	
 	@When("I click ok button")
 	public void iClickOkButton() {
 		recipeConsolePage.okButton();
@@ -380,6 +377,7 @@ public class RecipeConsoleStepsDefinition {
 	public void iseemessage(String message) {
 		recipeConsolePage.validateHilightedMsg(message);
 	}
+	
 	@When("I enter existing value in RUNID")
 	public void iEnterExistingValueInRunId() {
 		recipeConsolePage.runIdManual(this.currentRecipe.getRunId());        
@@ -389,24 +387,28 @@ public class RecipeConsoleStepsDefinition {
 	public void iShouldSeeMessage(String message) {
 		recipeConsolePage.validateMsg(message);
 	}
+	
 	@And("I Verify manual run status in recipe consol")
 	public void iVerifyRecipeRunStatus() {
 		generateRandomRecipeValues();
 		recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(),this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
 				this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
 	}
+	
 	@When("I enter special characters {string} in comments section")
 	public void iValidateSpecialChar(String specialchar) {
 		generateRandomRecipeValues();
 		recipeConsolePage.iValidateSpecialChar_manaul(this.currentRecipe.getManualOperationName(),this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
 				this.currentRecipe.getProductId(),specialchar);
 	}
+	
 	@When("I enter special characters {string} in run comments section")
 	public void iValidateRunRecipeComments(String specialchar) {
 		generateRandomRecipeValues();
 		recipeConsolePage.iValidateSpecialChar_run(this.currentRecipe.getRunId(),this.currentRecipe.getBatchId(),
 				this.currentRecipe.getProductId(),specialchar);
 	}
+	
 	@Then("I should not see special characters not allowed")
 	public void iShouldnotSeeSpecialCharacters() {
 		recipeConsolePage.iValidationPreRun();
@@ -435,8 +437,8 @@ public class RecipeConsoleStepsDefinition {
 		String runId = recipeConsolePage.startAndWaitRecipe(this.currentRecipe, seconds);
 		currentRecipe.setRunId(runId);
 		recipeConsolePage.isExecuted();
-
 	}
+	
 	@And("I verify the recipe execution details in console View")
 	public void recipeDetailsInConsole() {
 		recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
@@ -528,7 +530,6 @@ public class RecipeConsoleStepsDefinition {
 		iGotoRecipeConsole();
 		if (!recipeConsolePage.isRunBefore(recipe)) {
 			iLoadRecipeAndIStartIt(recipe, seconds);
-
 		}
 	}
 	

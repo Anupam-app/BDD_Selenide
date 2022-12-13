@@ -136,6 +136,7 @@ public class ReportsPage {
     private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
 	
+    private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
 	private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
@@ -897,13 +898,14 @@ public class ReportsPage {
     }
 
     public boolean verifyConsolidatedStatus(String status) {
-        boolean isTrue = false;
+        boolean result;
+        commonWaiter(filterSelection, visible);
         if (!consolidateColumn.isDisplayed()) {
-            isTrue = noDatamsg.isDisplayed();
+            result = noDatamsg.isDisplayed();
         } else {
-            isTrue = consolidateColumn.getText().equalsIgnoreCase(status);
+            result = consolidateColumn.getText().equalsIgnoreCase(status);
         }
-        return isTrue;
+        return result;
     }
 	    public void verifyNewUser(String user) {
         SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
