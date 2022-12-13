@@ -9,7 +9,7 @@ Feature: Recipe console
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
-    Then I see the system on hold
+    Then I see the system is restarted
 	
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
     When I expand recipe console in pnid
@@ -126,7 +126,7 @@ Feature: Recipe console
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     And I wait until Run button is displayed and "enabled"
-    When I Process hold the system
+    When I hold the system
     Then I see the system on hold
     Then I verify Manual Operation tab is "disabled"
     Then I verify Recipe Run tab is "disabled"
@@ -137,11 +137,11 @@ Feature: Recipe console
   #TO-DO: needs fix in IVI
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
-    When I select "Manual operation" tab
-    And I start Manual run 
+    #When I select "Manual operation" tab
+    When I start Manual run 
     Then I validate the timer and stop button and run details 
-    When I Process hold the system
-    Then I should see Process restart button 
+    When I hold the system
+    Then I see the system on hold 
     And I validate the timer is incrementing
     When I Stop the RUN 
     Then I validate the date formats in Post run window and enter comments

@@ -132,16 +132,25 @@ public class RecipeConsolePage {
         SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
 
-    public void loadRecipe(String recipeName) {
-    	if (restartButton.isDisplayed()) {
-            restartSystem();
-            SelenideHelper.commonWaiter(holdButton, visible);
-        }
+    public void loadRecipe(String recipeName) {	
 		if(abortIcon.isDisplayed()) {
         	abortIcon.click();
         	clickYesButton.waitUntil(Condition.visible, 1000).click();
         	okButton.waitUntil(Condition.visible, 5001).click(); 	
         }
+		if(manualStopButton.isDisplayed()) {
+			manualStopButton.click();
+			closeButtonOfStop.click();
+			okButton.click();
+		}
+		if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+		if(manualStartButton.isDisplayed()) {
+			recipeButton.click();
+		}
+		
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
@@ -341,6 +350,9 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
+        SelenideHelper.commonWaiter(restartButton, visible);
+    }
+    public void seeSystemRestarted() {
         SelenideHelper.commonWaiter(holdButton, visible);
     }
 
@@ -490,6 +502,14 @@ public class RecipeConsolePage {
 			closeButtonOfStop.click();
 			okButton.click();
 		}
+		if(abortIcon.isDisplayed()) {
+        	abortIcon.click();
+        	clickYesButton.waitUntil(Condition.visible, 1000).click();
+        	okButton.waitUntil(Condition.visible, 5001).click(); 	
+        }
+       
+		manualOperationButton.waitUntil(visible, 50001).click();
+		manualOperationSelected.shouldBe(visible);
 		commonWaiter(manualStartButton, appear);
 		manualStartButton.click();
 		this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
@@ -526,11 +546,11 @@ public class RecipeConsolePage {
 	public void incrementTimer(){
 		int fristTime = Integer.parseInt(secondValidate.getText());
 		int minFirstTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
-		Selenide.sleep(2000);
+		Selenide.sleep(5000);
 		int secondTime = Integer.parseInt(secondValidate.getText());
 		int minSecondTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
 		int differ = ( minSecondTime*60 + secondTime) - (minFirstTime*60+fristTime);
-		Assert.assertTrue(differ>=2);
+		Assert.assertTrue(differ>=4);
 
 	}
 	public void stopButton() {
