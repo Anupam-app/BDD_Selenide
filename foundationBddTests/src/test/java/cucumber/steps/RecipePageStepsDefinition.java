@@ -12,6 +12,9 @@ import io.cucumber.java.en.When;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import com.codeborne.selenide.Selenide;
+
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
@@ -88,6 +91,21 @@ public class RecipePageStepsDefinition {
 	public void iCreateARandomPhase() {
 		this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
 		recipePage.addPhase(this.recipe.getPhaseName());
+	}
+	
+	@When("I copy phase in recipe")
+	public void iCopyPhase() {
+		recipePage.copyPhase();
+	}
+	
+	@When("I am able to paste the phase")
+	public void iPastePhase() {
+		recipePage.pastePhase(this.recipe.getPhaseName());
+	}
+	
+	@When("I verify phase buttons and warning messages")
+	public void iVerifyPhaseButtons() {
+		recipePage.verifyPhaseButtons();
 	}
 
 	@When("I go to other module without saving recipe")
@@ -193,6 +211,22 @@ public class RecipePageStepsDefinition {
 	public void iDeletePhaseToRecipe() {
 		recipePage.deletePhaseToRecipe();
 	}
+	
+	@When("I delete phase to recipe with shortcut key")
+	public void iDeletePhaseToRecipeWithShortCutKeys() {
+		recipePage.deletePhaseToRecipeWithShortCutKeys();
+	}
+	
+	@When("I perform saveAs option to save recipe")
+	public void iDoSaveAsRecipeWithShortCutKeys() {
+		this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+		recipePage.saveAsRecipeWithShortCutKeys(this.recipe.getRecipeName());
+	}
+	
+	@When("the phase is deleted")
+	public void iVerifyPhaseIsDeleted() {
+		recipePage.iSeePhaseDeleted();
+	}
 
 	@When("I add phase to recipe")
 	public void iAddPhaseToRecipe() {
@@ -294,6 +328,7 @@ public class RecipePageStepsDefinition {
 	public void addStepKeyboard() {
 		recipePage.keyboardActionRecipe();
 	}
+	
 	@Then("I should see {string} step added")
 	public void verifyStep(String status) {
 
@@ -304,10 +339,12 @@ public class RecipePageStepsDefinition {
 			recipePage.placeholder(status);
 		} 	
 	}
+	
 	@And("I add action to the step")
 	public void actionAddedInStep() {
 		recipePage.addActionStep();
 	}
+	
 	@And("I select action from action browser")
 	public void actionBrowser() {
 		recipePage.addStepActionBrowser();
@@ -316,30 +353,52 @@ public class RecipePageStepsDefinition {
 	public void addStepMessage() {
 		recipePage.addMessageInStep();
 	}
+	
+	
 	@Then("I should see message input text field displayed")
 	public void messageDisplayed() {
 		recipePage.messageInputStepValidate();   
 	}
+	
 	@And("I create a new phase in recipe")
 	public void newPhase() {
 		recipePage.addingPhaseByPlus();
 	}
+	
 	@And("I add criteria to phase using keyboard")
 	public void addCriteriaInPhase() {
 		recipePage.addCriteria();
 	}
+	
 	@And("I close and reopen the recipe")
 	public void openRecipe() {
 		recipePage.openRecipe(this.recipePage.getRecipeName());
 	}
+	
 	@And("I should see recipe opened in editor")
 	public void verifyRecipeInEditor() {
 		recipePage. verifyRecipeEditor(this.recipePage.getRecipeName());
 	}
+	
 	@And("I try change recipe status and see warning pop up dialog box {string}")
 	public void recipeWarningMessage(String message) {
 		recipePage.warningMessage(message);
 		switchTo().parentFrame();
+	}
+	
+	@When("I cannot edit the recipe")
+	public void iCannotModifyRecipe() {
+		recipePage.cannotEditRecipe();
+	}
+	
+	@When("I cannot change the recipe status")
+	public void iCannotModifyRecipeStatus() {
+		recipePage.cannotEditRecipeStatus();
+	}
+	
+	@When("touch buttons are disabled")
+	public void touchButtonsAreDisabled() {
+		recipePage.cannotClickTouchButtons();
 	}
 
 }

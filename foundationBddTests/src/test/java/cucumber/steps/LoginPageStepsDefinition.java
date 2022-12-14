@@ -53,7 +53,7 @@ public class LoginPageStepsDefinition {
 	public void iAmLoggedIn() {
 		userProfilePage.checkUserProfilePresence(true);
 	}
-
+	
 	@Then("I am not logged in")
 	public void iAmNotLoggedIn() {
 		userProfilePage.checkUserProfilePresence(false);
@@ -84,6 +84,7 @@ public class LoginPageStepsDefinition {
 		loginPage.openLogin();
 		login.setLogin(username);
 		login.setPassword("MerckApp1@");
+		loginPage.verifyLoginPageTitle();
 		loginPage.setUser(login.getLogin());
 		loginPage.setPassword(login.getPassword());
 		loginPage.pushLogin();

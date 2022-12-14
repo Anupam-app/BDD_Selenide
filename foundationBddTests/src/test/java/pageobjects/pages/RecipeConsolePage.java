@@ -38,7 +38,7 @@ public class RecipeConsolePage {
     private final String XPATH_RECIPE_LOADED_BEFORE = "//*[@id='trimString' and contains(@title,'%s') and @title!='%s']";
     private final String XPATH_CTRL_ICONS = "//img[contains(@src,'%s')]";
     private final String XPATH_TEXTS = "//p[text()='%s']";
-
+    private final String recipeListTableValues = "//tbody/tr[%d]/td[%d]/label";
 
     private final SelenideElement loadRecipeText = $(By.xpath("//p[contains(text(),'Load Recipe')]"));
     private final SelenideElement clearRecipeText = $(By.xpath("//p[contains(text(),'Clear Panel')]"));
@@ -98,6 +98,7 @@ public class RecipeConsolePage {
 	private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
 	private final SelenideElement manualOperationButton = $(By.xpath("//span[contains(text(),'MANUAL OPERATION')]"));
 	private final SelenideElement manualOperationSelected = $(By.xpath("//button[contains(@class, 'MuiButton-outlinedPrimary')]//span[contains(text(),'MANUAL OPERATION')]"));
+	private final ElementsCollection recipeListTable = $$(By.xpath("//tbody/tr"));
 	
     private Recipe recipe;
 
@@ -157,6 +158,43 @@ public class RecipeConsolePage {
         loadButton.waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
+    }
+    
+    public void openLoadRecipePage() {
+    	if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
+		if(abortIcon.isDisplayed()) {
+        	abortIcon.click();
+        	clickYesButton.waitUntil(Condition.visible, 1000).click();
+        	okButton.waitUntil(Condition.visible, 5001).click(); 	
+        }
+        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+        }
+        $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
+    }
+    
+    public void verifyTooltipLoadRecipePage() {
+		
+    	//Check the values for RecipeName Column
+    	for(int i=1;i<=recipeListTable.size();i++) {
+    		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,1))).getAttribute("title").matches("^[a-zA-Z0-9]*$"));
+    	}
+    	//Check the values for status Column
+    	for(int i=1;i<recipeListTable.size();i++) {
+    		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,2))).getAttribute("title").equals("Approved-Active"));
+    	}
+    	//Check the values for date Column
+    	for(int i=1;i<recipeListTable.size();i++) {
+    		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,3))).getAttribute("title").matches(("([a-zA-Z0-9]{3}) ([0-9]{2}),([0-9]{4})")));
+    	}
+    	//Check the values for created By Column
+    	for(int i=1;i<recipeListTable.size();i++) {
+    		Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i,4))).getAttribute("title").equals("Bio4CAdmin"));
+    	}
+    	
     }
     
     public void holdSystem() {
@@ -236,6 +274,30 @@ public class RecipeConsolePage {
         okButton.click();
         Selenide.sleep(2000);
     }
+    
+    public void reRunRecipe(String productId, String batchId, String beforeComments) throws ParseException {
+    	SimpleDateFormat formatter = new SimpleDateFormat("DD:HH:MM:SS");
+        String timeStart = pauseTimerValue.getText();
+        Date startTime = formatter.parse(timeStart);
+        rerunIcon.waitUntil(Condition.visible, 20000l);
+        rerunIcon.click();
+        productIdTextbox.setValue(productId);
+        batchIdTextbox.click();
+        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(Keys.ENTER);
+        preRunCommentsText.sendKeys(beforeComments);
+        okButton.click();
+        Selenide.sleep(3000);
+        String timeEnd = pauseTimerValue.getText();
+        Date endTime = formatter.parse(timeEnd);
+        long timeDifference = (endTime).getTime() - (startTime).getTime();
+        if (timeDifference < 0) {
+            Assert.assertTrue(true);
+        } else {
+            Assert.assertTrue(false);
+        }
+    }
+    
     
     public void verifyCommentErrorMessage(String message) {
     	$(By.xpath("//label[text()='Comments']")).click();

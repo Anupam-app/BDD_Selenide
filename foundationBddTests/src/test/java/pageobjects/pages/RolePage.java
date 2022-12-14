@@ -154,6 +154,10 @@ public class RolePage {
 	public void roleExists(String role) {
 		$(By.xpath(String.format(xpathEditRoleIcon, role))).shouldBe(Condition.visible);
 	}
+	
+	public void verifyRoleNameToolTip(String role) {
+		Assert.assertTrue($(By.xpath("//div[@class='roleTableColumnOne']")).getAttribute("title").equals(role));
+	}
 
 	public void NoRolesTab() {
 		rolesLinkText.should(Condition.not(Condition.visible));

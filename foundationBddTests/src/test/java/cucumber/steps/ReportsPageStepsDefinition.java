@@ -118,6 +118,7 @@ public class ReportsPageStepsDefinition {
 		this.report.checkAuditTable(reportPage.getPdfUrl());
 		this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
 		this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+		this.report.checkSignturesTable(reportPage.getPdfUrl());
 	}
 
 	@When("I don't see the presence of run mode")
@@ -348,7 +349,7 @@ public class ReportsPageStepsDefinition {
 		reportPage.seeContent(expectedText);
 		SelenideHelper.goParentFrame();
 	}
-
+	
 	@And("I create new report template with existing name")
 	public void iEnterExistingReportTemplateName() {
 		reportPage.createTemplate(this.reportTemplate.getName());

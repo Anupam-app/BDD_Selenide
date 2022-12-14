@@ -45,6 +45,16 @@ Feature: Recipe console
 	  And I select user in dropdown "Bio4CAdmin"
 	  And I check audit trial logs
 	
+	Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeFlows"
+    And I start recipe execution
+    And I wait for 4 seconds
+    And I click on abort button
+    And I should see the recipe run aborted
+    Then control should be on rerun button
+    And I rerun recipe execution and timer starts from zero
+	
 	Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -139,4 +149,9 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled" 
+    
+   Scenario: IVI Bug | IVI-4926 Recipe loader | Invalid text is seen as tool tip (UI issue)
+    When I expand recipe console in pnid
+    And I load recipe
+    Then I verify the details
 
