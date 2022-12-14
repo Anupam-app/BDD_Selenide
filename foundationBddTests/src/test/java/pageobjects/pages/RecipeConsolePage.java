@@ -141,7 +141,7 @@ public class RecipeConsolePage {
 		if(manualStopButton.isDisplayed()) {
 			manualStopButton.click();
 			closeButtonOfStop.click();
-			okButton.click();
+			commonWaiter(okButton, visible).click();
 		}
 		if (restartButton.isDisplayed()) {
             restartSystem();
@@ -225,7 +225,7 @@ public class RecipeConsolePage {
         recipe.setMachineName(machineName.getText());
         recipe.setStatus(executionStatusText.getText());
         preRunCommentsText.sendKeys(recipe.getAfterComments());
-        okButton.click();
+        commonWaiter(okButton, visible).click();
 
         return runId;
     }
@@ -244,7 +244,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
-        okButton.click();
+        commonWaiter(okButton, visible).click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
         commonWaiter(startDate, visible);
@@ -258,7 +258,7 @@ public class RecipeConsolePage {
         this.recipe.setBeforeComments(beforeComments);
         this.recipe.setAfterComments(afterComments);
         this.recipe.setMachineName(machineName.getText());
-        okButton.click();
+        commonWaiter(okButton, visible).click();
 
         return runId;
     }
@@ -271,7 +271,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
-        okButton.click();
+        commonWaiter(okButton, visible).click();
         Selenide.sleep(2000);
     }
     
@@ -286,7 +286,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
-        okButton.click();
+        commonWaiter(okButton, visible).click();
         Selenide.sleep(3000);
         String timeEnd = pauseTimerValue.getText();
         Date endTime = formatter.parse(timeEnd);
@@ -365,7 +365,7 @@ public class RecipeConsolePage {
     }
 
     public void cleanLastRecipeDisplay() {
-        if (okButton.isDisplayed()) {
+        if (commonWaiter(okButton, visible).isDisplayed()) {
             okButton.click();
         }
     }
@@ -490,7 +490,7 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(batchId);
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(beforeComments);
-		okButton.click();
+		commonWaiter(okButton, visible).click();
 	}
 	public void manualRunStart(String productId, String batchId, String beforeComments) {
 		if (restartButton.isDisplayed()) {
@@ -500,7 +500,7 @@ public class RecipeConsolePage {
 		if(manualStopButton.isDisplayed()) {
 			manualStopButton.click();
 			closeButtonOfStop.click();
-			okButton.click();
+			commonWaiter(okButton, visible).click();
 		}
 		if(abortIcon.isDisplayed()) {
         	abortIcon.click();
@@ -521,7 +521,7 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(batchId);
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(beforeComments);
-		okButton.click();
+		commonWaiter(okButton, visible).click();
 	}
 	public boolean verifyStopButton() {
 		return(manualStopButton.waitUntil(Condition.visible,50001).isDisplayed());
