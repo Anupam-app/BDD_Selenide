@@ -365,7 +365,7 @@ public class RecipeConsolePage {
     }
 
     public void cleanLastRecipeDisplay() {
-        if (commonWaiter(okButton, visible).isDisplayed()) {
+        if (okButton.isDisplayed()) {
             okButton.click();
         }
     }
