@@ -55,6 +55,16 @@ public class RecipeConsoleStepsDefinition {
 		this.currentRecipe.setRecipeName(recipe);
 		recipeConsolePage.loadRecipe(recipe);
 	}
+	
+	@Given("I load recipe")
+	public void iLoadRecipe() {
+		recipeConsolePage.openLoadRecipePage();
+	}
+	
+	@Then("I verify the details")
+	public void iVerifyTooltip() {
+		recipeConsolePage.verifyTooltipLoadRecipePage();
+	}
 
 	@When("I hold and restart the system")
 	public void iHoldAndRestartTheSystem() {
@@ -99,6 +109,12 @@ public class RecipeConsoleStepsDefinition {
 	public void iStartRecipeExecution() {
 		generateRecipeValues(null, null);
 		recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+	}
+	
+	@When("I rerun recipe execution and timer starts from zero")
+	public void iRerunRecipeExecution() throws ParseException {
+		generateRecipeValues(null, null);
+		recipeConsolePage.reRunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
 	}
 	
 	@When("I provide special chars in pre run comments")
@@ -173,10 +189,19 @@ public class RecipeConsoleStepsDefinition {
 	public void iClickOnAbortButton() {
 		recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
 	}
+	
+	@When("I wait for {int} seconds")
+	public void iWait(int seconds) {
+		Selenide.sleep(seconds*1000);
+	}
 
 	@Then("I see the system on hold")
 	public void iSeeTheSystemOnHold() {
 		recipeConsolePage.seeSystemOnHold();
+	}
+	@Then("I see the system is restarted")
+	public void iSeeTheSystemRestarted() {
+		recipeConsolePage.seeSystemRestarted();
 	}
 
 	@Then("I should see the recipe run aborted")
@@ -320,9 +345,7 @@ public class RecipeConsoleStepsDefinition {
 	@When("I select {string} tab")
 	public void recipeOperation(String status) {
 		if(status.equalsIgnoreCase("Manual operation")) {
-			if(true) {
-				recipeConsolePage.manualOperation("enabled");
-			}
+			recipeConsolePage.manualOperation("enabled");
 		}
 	}
 	@When("I resume and verify recipe execution is resumed")
@@ -367,4 +390,8 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.validateStartButtonNotSelect(status);
 	}
 
+	@And("I wait until Run button is displayed and {string}")
+	public void runButtonDisplayed(String value) {
+		recipeConsolePage.runButton(value);
+	}
 }

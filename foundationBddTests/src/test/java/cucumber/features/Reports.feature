@@ -41,7 +41,7 @@ Feature: Report administration
       | Signed By      |
 
   @SMOKE
-  Scenario: BIOCRS-5106/592 Generate and sign Audittrail report
+  Scenario: IVI Bug IVI-5819| BIOCRS-5106/592 Generate and sign Audittrail report
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
@@ -183,7 +183,7 @@ Feature: Report administration
     When I modify the Existing template
     Then I see "Report template created" successfully message
     And I search modified the template
-
+   
   Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds

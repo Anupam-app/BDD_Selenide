@@ -40,35 +40,36 @@ public class UserPage {
 
     private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
 
-    private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
-    private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-    private SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
-    private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Users')]"));
-    private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
-    private SelenideElement filterTagText = $(By.xpath("//div[@class='filter-criteria-tag']"));
-    private SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
-    private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
-    private SelenideElement firstNameTextBox = $(By.id("firstName"));
-    private SelenideElement lastNameTextBox = $(By.id("lastName"));
-    private SelenideElement userNameTextBox = $(By.id("userName"));
-    private SelenideElement emailIdTextBox = $(By.id("email"));
-    private SelenideElement mobileNumTextBox = $(By.id("phoneNumber"));
-    private SelenideElement departmentTextBox = $(By.id("department"));
-    private SelenideElement saveButton = $(By.id("save_Btn"));
-    private SelenideElement resetPwdButton = $(By.id("resetPass_Btn"));
-    private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
-    private SelenideElement disableUserButton = $(By.id("btn_disabl"));
-    private SelenideElement enableUserButton = $(By.id("btn_enabl"));
-    private SelenideElement createUserPlusButton = $(By.xpath("//*[contains(@class,'Adduserplus')]"));
-    private SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
-    private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
-    private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
-    private SelenideElement selectRoleFromDropdown = $(By.id("role"));
-    private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
-    private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
-    private String xpathUserName = "//tr[td[contains(.,'%s')]]";
-    private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
+	private SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
+	private SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
+	private SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
+	private SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
+	private SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Users')]"));
+	private SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
+	private SelenideElement filterTagText = $(By.xpath("//div[@class='filter-criteria-tag']"));
+	private SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
+	private SelenideElement employeeIDTextBox = $(By.id("employeeID"));
+	private SelenideElement firstNameTextBox = $(By.id("firstName"));
+	private SelenideElement lastNameTextBox = $(By.id("lastName"));
+	private SelenideElement userNameTextBox = $(By.id("userName"));
+	private SelenideElement emailIdTextBox = $(By.id("email"));
+	private SelenideElement mobileNumTextBox = $(By.id("phoneNumber"));
+	private SelenideElement departmentTextBox = $(By.id("department"));
+	private SelenideElement saveButton = $(By.id("save_Btn"));
+	private SelenideElement resetPwdButton = $(By.id("resetPass_Btn"));
+	private SelenideElement unlockAccountButton = $(By.xpath("//button[@class='user_btn btn_primary lck_btn']"));
+	private SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
+	private SelenideElement disableUserButton = $(By.id("btn_disabl"));
+	private SelenideElement enableUserButton = $(By.id("btn_enabl"));
+	private SelenideElement createUserPlusButton = $(By.xpath("//div[contains(@class,'Adduserplus')]"));
+	private SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
+	private SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
+	private SelenideElement roleNameTextbox = $(By.xpath("//span[@class='active-label']"));
+	private SelenideElement selectRoleFromDropdown = $(By.id("role"));
+	private String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
+	private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
+	private String xpathUserName = "//tr[td[contains(.,'%s')]]";
+	private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -221,18 +222,23 @@ public class UserPage {
         UsersLinkText.click();
     }
 
-    public void resetPassword() {
-        resetPwdButton.click();
-    }
+	public void resetPassword() {
+		resetPwdButton.click();
+	}
+	
+	public void unlockAccount() {
+		unlockAccountButton.click();
+	}
 
-    public void isGeneratedNotificationWhenPasswordReset() {
-        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-    }
-
-    public void isGeneratedNotificationWhenPasswordReset(String name) {
-        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User " + name + " password reset successfully! New password has been sent to the user's registered email address."));
-    }
+	public void isGeneratedNotificationWhenPasswordReset(String name) {
+		commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+		Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User "+name+" password reset successfully! New password has been sent to the user's registered email address."));
+	}
+	
+	public void isGeneratedNotificationWhenAccountUnlock() {
+		commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+		Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("The account was successfully unlocked"));
+	}
 
     public void isGeneratedNotificationWhenUserModified(String user) {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);

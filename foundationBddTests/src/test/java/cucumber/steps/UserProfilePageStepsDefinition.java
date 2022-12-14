@@ -1,6 +1,8 @@
 package cucumber.steps;
 
 
+import com.codeborne.selenide.Selenide;
+
 import cucumber.util.I18nUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -33,6 +35,27 @@ public class UserProfilePageStepsDefinition {
 		I18nUtils.changeLanguage(language);
 		var languageName = I18nUtils.getLanguageName();
 		userProfilePage.changeDefaultLanguage(languageName);
+	}
+	
+	@When("I change default page to {string}")
+	public void iChooseDefaultPage(String defaultPage) {
+		userProfilePage.changeDefaultPage(defaultPage);
+	}
+	
+	@When("I reset to {string} page")
+	public void iResetToMainPage(String defaultPage) {
+		SelenideHelper.goParentFrame();
+		userProfilePage.goToUserProfile();
+		userProfilePage.goToUserPreferences();
+		userProfilePage.changeDefaultPage(defaultPage);
+		userProfilePage.saveUserPreferences();
+	}
+	
+	@Then("I am landed on {string} page")
+	public void iAmLandedOnReportModule(String page) {
+		SelenideHelper.goToIFrame();
+		userProfilePage.seeContent(page);
+		SelenideHelper.goParentFrame();
 	}
 
 	@When("I save user preferences")

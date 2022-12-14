@@ -229,10 +229,20 @@ public class UserPageStepsDefinition {
 	public void iClickOnResetPassword() {
 		userPage.resetPassword();
 	}
+	
+	@When("I unlock the account")
+	public void iClickOnUnlockAccount() {
+		userPage.unlockAccount();
+	}
 
 	@Then("I see password reset message is displayed")
 	public void iSeePasswordResetMessagedisplayed() {
 		userPage.isGeneratedNotificationWhenPasswordReset(this.user.getUserName());
+	}
+	
+	@Then("I see account unlock message is displayed")
+	public void iSeeAccountUnlockMessagedisplayed() {
+		userPage.isGeneratedNotificationWhenAccountUnlock();
 	}
 
 	@Then("I see error message is displayed for {string}")

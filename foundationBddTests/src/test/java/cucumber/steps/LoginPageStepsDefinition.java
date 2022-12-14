@@ -45,7 +45,6 @@ public class LoginPageStepsDefinition {
     @When("I push the login button")
     public void iPushTheLoginButton() {
         loginPage.pushLogin();
-
     }
 
     @Then("I am logged in")
@@ -62,6 +61,7 @@ public class LoginPageStepsDefinition {
     public void iShouldSeeThisMessage(String message) {
         loginPage.checkMessage(message);
     }
+
 
     @When("^I login to application with wrong password$")
     public void iShouldSeeLoginMessage(DataTable table) {

@@ -368,7 +368,7 @@ public class Report {
                         Assert.assertTrue(attributeColumnValue.contains("status"));
                         if (i==1) {
                         	Assert.assertTrue(currValueColumnValue.contains(status));
-                            Assert.assertTrue(List.of("In-Review", "Tech-Review").contains(preValueColumnValue));
+                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW").contains(preValueColumnValue));
                         }
                         else {
                         	Assert.assertTrue(preValueColumnValue.contains("Draft"));
@@ -431,6 +431,22 @@ public class Report {
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, RUN_STATUS) == 4);
 
         Assert.assertNotNull(table.getRowCount() > 1);
+
+    }
+    
+    public void checkSignturesTable(String reportUrl) throws Exception {
+        URL url = new URL(reportUrl);
+
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures")
+                .stream().findFirst().get();
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "User name") == 0);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Signature") == 1);
+        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Date") == 2);
+
+        Assert.assertNotNull(table.getRowCount() > 1);
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "User name")).getText(false).equals("Bio4CAdmin"));
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Signature")).getText(false).equals("Administrator Bio4C"));
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Date")).getText(false).matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
 
     }
 

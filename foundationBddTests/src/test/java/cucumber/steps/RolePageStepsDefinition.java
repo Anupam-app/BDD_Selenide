@@ -128,6 +128,11 @@ public class RolePageStepsDefinition {
 		rolePage.searchRole(role);
 		rolePage.roleExists(role);
 	}
+	
+	@Given("tooltip shows the role name as {string}")
+	public void tooltipShowsRoleName(String role) {
+		rolePage.verifyRoleNameToolTip(role);
+	}
 
 	@Then("I do not see Roles mode")
 	public void iDoNotSeeRolesMode() {
