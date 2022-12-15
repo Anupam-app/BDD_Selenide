@@ -1,8 +1,11 @@
 package pageobjects.utility;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.refresh;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
@@ -47,4 +50,15 @@ public class SelenideHelper {
         byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         DriverHooks.currentScenario.attach(screenshot, "image/png", "name");
     }
+	public static void goToDefault() {
+    	switchTo().defaultContent();
+    }
+	public static void appRefresh() {
+		refresh();
+	}
+	
+	public static void maximize() {
+		WebDriverRunner.getWebDriver().manage().window().fullscreen();
+	}
+	
 }

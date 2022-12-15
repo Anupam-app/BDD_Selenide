@@ -172,4 +172,12 @@ public class ReportsFilterStepsDefinition {
     public void i_hould_see_consolidated_status(String status) {
         Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
     }
+
+    @Then("I should see change password entries in audit trail report for {string}")
+    public void iverifyAuditTrailReport(String username) throws ParseException {
+        var message = String.format("%s changed the account password", username);
+        Assert.assertTrue(reportPage.verifyAuditTrail(message));
+        reportPage.switchToDefaultContent();
+    }
+
 }

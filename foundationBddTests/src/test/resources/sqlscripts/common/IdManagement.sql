@@ -42,6 +42,8 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (18, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', 0x02000000B932F9236786215DFE9938AAE6F25E106267862E58E64F45F11D49C70B931016ED680B063A12EA8CE2B12D6D139DC3ED0FEFB9D1B29906ABD82083332B10840F6F759A4C0DD118A34C08CB980B766C1FE85A55B5AB40384EDED3B10B848D145E, N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0)
 GO
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [encrypt_password], [first_name], [gender], [last_name], [phoneno], [user_name], [is_temporary_password], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (19, NULL, N'', N'srikanth.gajjela@external.merckgroup.com', N'123456', N'true', 0x02000000DED4C2F9D21AD63C8EEE430DEAECF1889362E9308C2B92DE8974AB1CC3078BE01DE718A8A635B39BDBA554826710D134CE479D7DEC73C5138A2FDE7EA5179323F51491DBD84C1A5EE6223AAEF5BBDEE1979F4C9733943A634FD7E8F38F437361, N'changePwd', NULL, N'Tester', NULL, N'testChangePwd', 0, 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -89,6 +91,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (17, 8)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (18, 9)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 3)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO

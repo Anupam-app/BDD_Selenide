@@ -48,6 +48,8 @@ public class AnalyticsPage {
     private final int INDEX_PRODUCT_ID = 2;
     private final int INDEX_INTERVAL_ID = 3;
 
+    private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
+
     public void goToAnalytics() {
         analyticsPageLinkText.click();
     }
@@ -172,5 +174,9 @@ public class AnalyticsPage {
     public void regressionApplySettings() {
         applyRegressionSettingsButton.scrollTo();
         applyRegressionSettingsButton.click();
+    }
+
+    public void verifyAnalyticsHeader() {
+        analyticsHeader.shouldBe(visible);
     }
 }

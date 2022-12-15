@@ -117,6 +117,19 @@ public class RecipePage {
     private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement recipeValue = $(By.xpath("//div[@class='recipeTabs']"));
 
+    private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
+    private SelenideElement recipeManagement = $(By.xpath("//div[(@id='RecipeManagement')]"));
+    private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[5]"));
+    private final SelenideElement importedArrowIcon = $(By.xpath("//div[@class='down-icon']"));
+    private SelenideElement importedStatusIcon = $(By.xpath("(//div[@class='filter-box'])[3]/div[2]"));
+    private final String importedCheckbox = "//input[@value='%s']";
+    private final SelenideElement importStatusIcon = $(By.xpath("//div[@class='filters-container']/div[3]/div/div[2]"));
+    private final SelenideElement clearAll_Btn = $(By.xpath("//*[text()='Clear All']"));
+    private final SelenideElement lastModifiedOn = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
+    private final SelenideElement importedColumnValue = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[3][text()='No']"));
+    private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
+
     public void goTo() {
         recipePageLinkText.click();
     }
@@ -573,5 +586,10 @@ public class RecipePage {
         Assert.assertEquals(actual, message);
         $(By.xpath("//button[@class='btn-secondary']")).click();
     }
+
+    public void verifyRecipeHeader() {
+        recipeManagementHeader.shouldBe(visible);
+    }
+
 
 }

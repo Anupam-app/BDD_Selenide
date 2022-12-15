@@ -12,6 +12,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -26,7 +27,7 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
     private final Login login;
-  
+
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
                                       ReportTemplate reportTemplate, User user, Login login) {
@@ -133,7 +134,7 @@ public class ReportsPageStepsDefinition {
     @When("I trigger report mode")
     public void iTriggerReportMode() {
         reportPage.gotoReportsTab();
-       
+
     }
 
     @Then("I should see the report signed")
@@ -437,5 +438,23 @@ public class ReportsPageStepsDefinition {
     public void i_Enter_Username_Password(String username, String password) {
         loginPage.setUser(username);
         loginPage.setPassword(password);
+    }
+
+    @And("I should see newly created user {string} present in report")
+    public void iSeenewlyCreatedUserPresentInReport(String user) {
+        reportPage.verifyNewUser(user);
+    }
+
+    @Then("I verify custom role modification details captured in audit trail for user {string}")
+    public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
+        var message = String.format("%s updated Role %s", username, this.user.getOldUserName());
+        var message1 = String.format("Role -%s", this.user.getUserName());
+        Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
+        reportPage.switchToDefaultContent();
+    }
+
+    @Then("I verify recipe details captured in report run tab {string}")
+    public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
+        reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
     }
 }

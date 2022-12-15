@@ -11,7 +11,7 @@ Feature: Analytics graph
     And I apply the analytics settings
     Then Graph should be plotted
     And Values for parameter should be displayed in Data section of aggregate
-    
+
     Examples:
       | graphName   |
       | line        |
