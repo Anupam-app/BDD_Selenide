@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI
 Feature: Analytics graph
 
   Scenario Outline: Plot Graph
@@ -11,7 +11,7 @@ Feature: Analytics graph
     And I apply the analytics settings
     Then Graph should be plotted
     And Values for parameter should be displayed in Data section of aggregate
-    
+
     Examples:
       | graphName   |
       | line        |

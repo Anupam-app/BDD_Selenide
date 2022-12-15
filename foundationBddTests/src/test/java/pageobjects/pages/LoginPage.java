@@ -1,15 +1,13 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import pageobjects.utility.SelenideHelper;
 import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
+import com.codeborne.selenide.SelenideElement;
+import org.openqa.selenium.By;
+import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static com.codeborne.selenide.Selenide.switchTo;
 
 public class LoginPage {
 
@@ -25,8 +23,9 @@ public class LoginPage {
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-    
-    
+    private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
+    private final SelenideElement savePasswordButton = $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
+
     public void setUser(String user) {
         userIdTextBox.setValue(user);
     }
@@ -36,12 +35,12 @@ public class LoginPage {
     }
 
     public void pushLogin() {
-    	commonWaiter(submitButton,visible);
+        commonWaiter(submitButton, visible);
         submitButton.click();
     }
 
     public void openLogin() {
-        commonWaiter(loginButton,visible).click();
+        commonWaiter(loginButton, visible).click();
     }
 
     public void checkLoggedIn(boolean loggedInd) {
@@ -55,7 +54,7 @@ public class LoginPage {
     }
 
     public void checkMessage(String message) {
-        commonWaiter(userLoginAlertText,visible);
+        commonWaiter(userLoginAlertText, visible);
         userLoginAlertText.shouldHave(text(message));
     }
 
@@ -73,7 +72,7 @@ public class LoginPage {
     }
 
     public void setNewpassword(String newpassword) {
-        commonWaiter(newPasswordTextbox,visible);
+        commonWaiter(newPasswordTextbox, visible);
         newPasswordTextbox.setValue(newpassword);
     }
 
@@ -82,8 +81,27 @@ public class LoginPage {
         submitButton.click();
     }
 
+    public void setNewpasswordUser(String newpassword) {
+        commonWaiter(newPasswordTextbox, visible);
+        newPasswordTextbox.clear();
+        newPasswordTextbox.setValue(newpassword);
+    }
+
+    public void setConfirmpasswordUser(String newpassword) {
+        confirmPasswordTextbox.clear();
+        confirmPasswordTextbox.setValue(newpassword);
+        savePasswordButton.click();
+    }
+
     public void iLogout() {
         SelenideHelper.commonWaiter(userProfileIcon, visible).click();
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
+
+    public void setCurrentpassword(String newpassword) {
+        currentPasswordTestbox.clear();
+        currentPasswordTestbox.setValue(newpassword);
+    }
+
+
 }

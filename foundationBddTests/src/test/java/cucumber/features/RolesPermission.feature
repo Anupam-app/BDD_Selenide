@@ -1,4 +1,4 @@
-@COMMON
+@CRS @IVI @ORCHESTRATOR
 Feature: Roles Permissions Check
 
   Scenario: Verify user do not have permissions to roles

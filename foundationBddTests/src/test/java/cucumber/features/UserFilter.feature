@@ -1,6 +1,6 @@
-@COMMON
+@CRS @IVI @ORCHESTRATOR
 Feature: Apply Filter Users
-  
+
   Scenario Outline: Verify the user preferred homepage is displayed based on the User Preferences
     Given I am logged in as "testUserPref" user
     When I click on user profile icon
@@ -9,7 +9,7 @@ Feature: Apply Filter Users
     And I logout
     And I relogin
     Then I should see home page displayed with option "<userPref>"
-    
+
     Examples:
       | userPref |
       | Recipes  |
@@ -28,15 +28,15 @@ Feature: Apply Filter Users
     Then I should see the status "<status>" and user "<userName>" displayed
 
     Examples:
-      |userName         | status   |
-      |testUser         | Enabled  |
-      |testUserDisabledFilter  | Disabled |
-	
+      | userName               | status   |
+      | testUser               | Enabled  |
+      | testUserDisabledFilter | Disabled |
+
   Scenario: BIOCRS-5493- Verify userManagement Layout
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
     And default users are not editable
-	
+
   Scenario Outline: BIOCRS-5493- Verify order sort functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
@@ -44,12 +44,12 @@ Feature: Apply Filter Users
     Then "<columnName>" from user should be displayed in sorted order "<descending>"
 
     Examples:
-      | columnName  | descending |
-      |Username     | true       |
-      |Username     | false      |
-	  |First Name	| true	 	 |
-      |First Name	| false		 |
-      |Last Name	| true       |
-      |Last Name	| false		 |
-      |Role			| true       |
-      |Role			| false		 |
+      | columnName | descending |
+      | Username   | true       |
+      | Username   | false      |
+      | First Name | true       |
+      | First Name | false      |
+      | Last Name  | true       |
+      | Last Name  | false      |
+      | Role       | true       |
+      | Role       | false      |

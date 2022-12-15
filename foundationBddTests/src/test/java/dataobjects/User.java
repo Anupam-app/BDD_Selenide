@@ -1,7 +1,7 @@
 package dataobjects;
 
-import lombok.Setter;
 import lombok.Getter;
+import lombok.Setter;
 
 public class User {
 
@@ -32,20 +32,24 @@ public class User {
     @Setter
     @Getter
     String password;
-    
+
     @Setter
     @Getter
     String mobNum;
-    
+
     @Setter
     @Getter
     String deptName;
-    
+
     @Setter
     @Getter
     String name;
-    
+
     @Setter
     @Getter
     String defaultPage;
+
+    @Setter
+    @Getter
+    String OldUserName;
 }

@@ -30,7 +30,7 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand('cmd /C if exist '+env.targetResourcesPath+' rd /q /s '+env.targetResourcesPath)
+						invokeCommand('cmd /C if exist '+env.TargetResourcesPath+' rd /q /s '+env.TargetResourcesPath)
 					]
 				)
             }
@@ -50,7 +50,7 @@ pipeline {
 
 						$Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
 						
-						Copy-Item -Path "$sourcePath" -Destination "$env:targetResourcesPath" -ToSession $Session -Recurse -force						
+						Copy-Item -Path "$sourcePath" -Destination "$env:TargetResourcesPath" -ToSession $Session -Recurse -force
 						'''
 					}
 				}
@@ -62,8 +62,8 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/common'),
-						invokeCommand(env.targetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.targetResourcesPath+'/sqlscripts/'+env.PDP)
+						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/common'),
+						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/'+env.PDP)
 					]
 				)
             }
@@ -75,11 +75,30 @@ pipeline {
 						hostName: "${env.CIPHostName}",
 						credentialsId: "${env.CredentialsId}",
 						winRMOperations: [
-							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/common'),
-							invokeCommand(env.targetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.targetResourcesPath+'/executablescripts/'+env.PDP),
+							invokeCommand(env.TargetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.TargetResourcesPath+'/executablescripts/common'),
+							invokeCommand(env.TargetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.TargetResourcesPath+'/executablescripts/'+env.PDP),
 						]
 					)
                 }				
+            }
+        }
+        stage ('Copy config files') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
+                {
+                    powershell '''
+                        $user = $env:user
+                        $password = $env:password
+                        $sourcePath="$env:WORKSPACE\\foundationBddTests\\config\\offset-timezone.properties"
+
+                        $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+                        $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
+
+                        $Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
+
+                        Copy-Item -FromSession $Session -Recurse -force "$env:targetResourcesPath\\executablescripts\\common\\offset-timezone.properties" -Destination "$sourcePath"
+                    '''
+                }
             }
         }
         stage ('Change consul portal configuration to be seen as local server') {
@@ -87,13 +106,8 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
                 {
                     powershell '''
-                    if(!($env:CIPHostName.ToUpper() -like 'ONEBIOP*' -or $env:CIPHostName.ToUpper() -like 'STLBIOP*'))
-                    {
-                        echo 'SKIP change consul portal'
-                        return
-                    }
-
                     $hostname = hostname.exe
+
                     $ipTarget= Resolve-DNSName $hostname -type A | Select -ExpandProperty IPAddress
 
                     $user = $env:user
@@ -106,25 +120,37 @@ pipeline {
 
                     function changeConsulConfig {
                         Param (
-                            $IpTarget
+                            $IpTargetGenerated,
+                            $IpTargetProvidedByTheClient
                         )
-                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" | Select -ExpandProperty Content
+                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing | Select -ExpandProperty Content
                         $convertedJson = ConvertFrom-Json -InputObject $content
                         $convertedJsonDecode64 = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($convertedJson.value))
 
-                        if(!($convertedJsonDecode64 -like "*$IpTarget*")){
-                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTarget")
+                        $needToChangeConsulAndRestartPortalAndPlc=$false;
+
+                        if(!($convertedJsonDecode64 -like "*$IpTargetGenerated*")){
+                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetGenerated")
+                            $needToChangeConsulAndRestartPortalAndPlc=$true
+                        }
+
+                        if(!($convertedJsonDecode64 -like "*$IpTargetProvidedByTheClient*")){
+                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetProvidedByTheClient")
+                            $needToChangeConsulAndRestartPortalAndPlc=$true
+                        }
+
+                        if($needToChangeConsulAndRestartPortalAndPlc -eq $true){
                             echo $contentReplaced
                             $headers = @{}
                             $headers["Content-Type"] = "application/json"
-                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data?dc=foundation" -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
+                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
                             sc.exe start "CODESYS Control Win V3 - x64"
-							Stop-Service bio4c-portal
+                            Stop-Service bio4c-portal
                             Start-Service bio4c-portal
                         }
                     }
 
-                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget
+                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget,$env:IpTargetClient
                     '''
                 }
             }
@@ -145,13 +171,13 @@ pipeline {
                 }
             }
         }
-        stage('Test able to login') {
+        stage('Test able to login and interact with PLC') {
             steps {
                 script {
                     rtMavenRun(
                         tool: 'apache-maven-3.6.3',
                         pom: 'foundationBddTests/pom.xml',
-                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="@LOGIN" -DtestFailureIgnoreProp=false',
+                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + ' -Dcucumber.filter.tags="(@LOGIN or @PLC) and @' + env.PDP + '" -DtestFailureIgnoreProp=false',
                         resolverId: "MAVEN_RESOLVER"
                     )
                 }
@@ -160,13 +186,16 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
-                    def commandTag = '';
+                    if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
+                        return
+                    }
 
-                    if(env.MODE != null && env.MODE != ''){
-                        commandTag=' -Dcucumber.filter.tags="@'+env.MODE+'"'
+                    def commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
+
+                    if(env.Mode != null && env.Mode != ''){
+                        commandTag+=' and @'+env.Mode
                     }
                     else{
-                        commandTag = ' -Dcucumber.filter.tags="@COMMON or @'+env.PDP
                         if(env.PDP != 'CRS'){
                             def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
                             if(response.status==200){
@@ -174,14 +203,11 @@ pipeline {
 
                                jsonResponse.features.each{val->
                                     commandTag+=' or @'+val
-                                }
-
+                               }
                             }
                         }
-                        commandTag+='"'
                     }
-					
-					commandTag+=' -DtestFailureIgnoreProp=true'
+					commandTag+='" -DtestFailureIgnoreProp=true'
 
                     println('commandTag: '+commandTag)
 

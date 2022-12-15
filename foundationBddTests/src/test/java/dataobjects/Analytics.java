@@ -1,10 +1,10 @@
 package dataobjects;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.HashSet;
-import java.util.Set;
 
 public class Analytics {
     @Setter
@@ -22,4 +22,8 @@ public class Analytics {
     @Setter
     @Getter
     AnalyticsMode analyticsMode;
+
+    @Setter
+    @Getter
+    List<Recipe> recipes;
 }
