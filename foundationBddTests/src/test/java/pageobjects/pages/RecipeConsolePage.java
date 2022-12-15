@@ -216,6 +216,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(recipe.getBeforeComments());
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 2000l);

@@ -6,7 +6,15 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.openqa.selenium.By;
@@ -52,6 +60,14 @@ public class SelenideHelper {
     public static void takePicture() {
         byte[] screenshot = ((TakesScreenshot) WebDriverRunner.getWebDriver()).getScreenshotAs(OutputType.BYTES);
         DriverHooks.currentScenario.attach(screenshot, "image/png", "name");
+    }
+    
+    public static LocalDate dateParser(String value, String orgFormat) throws ParseException {
+    	
+    	 DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
+         LocalDate selectedDate = LocalDate.parse(value, formatter);
+        
+    	return selectedDate;
     }
 }
 

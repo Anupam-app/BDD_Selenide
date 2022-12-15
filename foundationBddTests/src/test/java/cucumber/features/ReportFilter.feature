@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Apply Filter Reports
+Feature: Reports Filter
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -138,13 +138,12 @@ Feature: Apply Filter Reports
     When I select report from dropdown "Consolidated"
     And  I filter on icon and select run status as "Operation"
     Then  I should see consolidated status as "Operation"
-
+    
   Scenario Outline: Verify sort template functionality in ascending order
     Given I goto report management page
     And I trigger report template mode
     When  I select template sort by "<columns>" in "<descending>"
     Then "<columns>" list should be sorted in "<descending>" order
-
     Examples:
       | columns          | descending |
       | Last Modified By | false      |
