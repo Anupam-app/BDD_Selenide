@@ -6,11 +6,11 @@ Feature: Settings Modification
 
   @CONFIG_SETTING_SYSTEM_COMPONENTS
   Scenario Outline: Change custom label
-    Given I goto settings page 
+    Given I goto settings page
     And I goto system components
     When I change custom label "<customLabelName>"
     Then New "<customLabelName>" is applied
-    
+
     Examples:
-         | customLabelName |
-         | Pump 21         |
+      | customLabelName |
+      | Pump 21         |

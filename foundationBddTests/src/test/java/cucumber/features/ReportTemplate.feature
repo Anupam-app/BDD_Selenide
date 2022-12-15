@@ -1,7 +1,7 @@
 @CRS @IVI
 Feature: Report Template module validations
 
-Background:
+  Background:
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     And I trigger report template mode
@@ -21,7 +21,7 @@ Background:
     #When I select report include "Trends"
     #And I create five trends chart
    	#Then I verify that sixth chart is not allowed
-  
+
   Scenario: Create Report Template and approve it
     Given I search the report template
     When I approve the report template
@@ -39,12 +39,12 @@ Background:
     And I select report include "Run Summary"
     And I save the report template
     Then I verify the template name error message
-    
+
   Scenario: Template Approval E-Sign Failure On Entering Wrong Password
     Given I search the report template
     When I try to approve the report template with wrong password "abde@39"
     Then I verify the password error message "Incorrect Password"
-    
+
   Scenario: Approved Report Template Is Not Modifiable
     Given I search the report template
     When I approve the report template

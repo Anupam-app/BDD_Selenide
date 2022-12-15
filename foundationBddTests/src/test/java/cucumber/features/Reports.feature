@@ -2,58 +2,58 @@
 Feature: Report administration
 
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
-	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     Then I see Runs, Templates, Reports tabs are displayed
     And  I see list of "runs" are displayed
     And below "runs" columns are displayed
-    |columns		|
-    |Run    		|
-    |Start Date     |
-    |Process Type 	|
-    |Status 		|
-	
+      | columns      |
+      | Run          |
+      | Start Date   |
+      | Process Type |
+      | Status       |
+
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Templates Tab
-	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report template mode
     Then  I see list of "templates" are displayed
     And below "templates" columns are displayed
-    |columns           |
-    |Template Name	   |
-    |Status            |
-    |Last Modified By  |
-    |Last Modified On  |	
+      | columns          |
+      | Template Name    |
+      | Status           |
+      | Last Modified By |
+      | Last Modified On |
 
 
   Scenario: BIOCRS-5238/5239/5241 | Report Management Dashboard -  Reports Tab
-	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
     And I trigger report mode
     Then  I see list of "reports" are displayed
     And below "reports" columns are displayed
-    |columns        |
-    |Report Name	|
-    |Date Generated |
-    |Created By  	|
-    |Report Type	|	
-    |E-Sign.Status	|
-    |Signed By		|
+      | columns        |
+      | Report Name    |
+      | Date Generated |
+      | Created By     |
+      | Report Type    |
+      | E-Sign.Status  |
+      | Signed By      |
 
   @SMOKE
   Scenario: BIOCRS-5106/592 Generate and sign Audittrail report
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I select date range as "Last 7 Days"
+    And I select user in dropdown "Bio4CAdmin"
+    And I select date range as "Last 7 Days"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-	And I check audit trial report content
+    And I check audit trial report content
 
 
   Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
@@ -89,7 +89,7 @@ Feature: Report administration
     And I esign the report
     Then I should see the report signed
     And I should see the report file presence
-    
+
   Scenario: Generate run history report and check report content
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
@@ -108,13 +108,13 @@ Feature: Report administration
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Audit Trail"
-	  And I select user in dropdown "Bio4CAdmin"
+    And I select user in dropdown "Bio4CAdmin"
     And I click on generate button
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
     And I verify that user information are consistent
- 
+
   Scenario: Report Approval E-Sign Failure On Entering Wrong Password
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
@@ -169,7 +169,7 @@ Feature: Report administration
     Then I see "Report template created" successfully message
     And I search modified the template
 
- Scenario: Verify Create Custom Template
+  Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page

@@ -1,6 +1,6 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: Role administration
- 
+
   Background:
     Given I am logged in as "bio4cadmin" user
     And I go to user page
@@ -9,7 +9,7 @@ Feature: Role administration
     And the role "testRoleToRemovePermission" exists
     And the role "testRoleToAssign" exists
     And I trigger Users mode
-  
+
   Scenario: Adding role and permissions
     Given I trigger Roles mode
     When I create random role
@@ -40,7 +40,7 @@ Feature: Role administration
     And I search the user
     And I edit the user
     Then I verify user details
-    
+
 
   Scenario: Same role name cannot be created
     Given I trigger Roles mode
