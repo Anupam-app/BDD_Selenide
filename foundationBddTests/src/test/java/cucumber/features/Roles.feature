@@ -1,6 +1,6 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: Role administration
- 
+
   Background:
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -22,7 +22,7 @@ Feature: Role administration
     Then I verify role details
     And I generate audit trail report
     And I verify audit logs for role update
-    And I check the audit trail report 
+    And I check the audit trail report
     And I see the role added in report
 
   Scenario: Modifying role and permissions
@@ -44,7 +44,7 @@ Feature: Role administration
     And I search the user
     And I edit the user
     Then I verify user details
-    
+
   Scenario: Same role name cannot be created
     Given I trigger Roles mode
     When I create role "testRoleToRemovePermission"

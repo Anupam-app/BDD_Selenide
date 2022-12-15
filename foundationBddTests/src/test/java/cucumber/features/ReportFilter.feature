@@ -138,7 +138,7 @@ Feature: Reports Filter
     When I select report from dropdown "Consolidated"
     And  I filter on icon and select run status as "Operation"
     Then  I should see consolidated status as "Operation"
-    
+
   Scenario Outline: Verify sort template functionality in ascending order
     Given I goto report management page
     And I trigger report template mode

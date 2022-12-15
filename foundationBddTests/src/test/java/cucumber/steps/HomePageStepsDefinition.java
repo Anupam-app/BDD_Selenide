@@ -5,19 +5,19 @@ import pageobjects.pages.HomePage;
 
 public class HomePageStepsDefinition {
 
-	private HomePage homePage;
+    private HomePage homePage;
 
-	public HomePageStepsDefinition(HomePage homePage) {
-		this.homePage = homePage;
-	}
+    public HomePageStepsDefinition(HomePage homePage) {
+        this.homePage = homePage;
+    }
 
-	@Given("I open portal")
-	public void iOpenPortal() {
-		homePage.open();
-	}
+    @Given("I open portal")
+    public void iOpenPortal() {
+        homePage.open();
+    }
 
-	@Given("I go to main")
-	public void iGoToMain() {
-		homePage.goToMain();
-	}
+    @Given("I go to main")
+    public void iGoToMain() {
+        homePage.goToMain();
+    }
 }

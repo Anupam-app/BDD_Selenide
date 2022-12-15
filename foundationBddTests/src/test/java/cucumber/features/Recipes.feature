@@ -3,7 +3,7 @@ Feature: Recipe management
 
   @IVI
   Scenario: BIOCRS-5478 | Recipe modification
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "testDraftRecipeToAddPhase"
     And I delete phase to recipe
@@ -16,7 +16,7 @@ Feature: Recipe management
 
   @SMOKE  @IVI
   Scenario: IVI Bug IVI-5969 IVI-4468 | BIOCRS-5059 | Recipe approval
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
     When I approve recipe
@@ -27,10 +27,10 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
-    
-  @IVI 
+
+  @IVI
   Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe | IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name
-  	Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
     And I save the recipe with name "!@#testSpecialChars?/\><%+-"
@@ -44,7 +44,7 @@ Feature: Recipe management
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
- 
+
   @IVI
   Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
     Given I am logged in as "Bio4CAdmin" user
@@ -100,9 +100,10 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
-  
+
   #File menu removed from IVI
   #To-DO: to be converted to use touch buttons
+
   Scenario Outline: BIOCRS-5477 | Unsaved Recipe Error Scenarios-1
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -126,8 +127,8 @@ Feature: Recipe management
     And I go to browser mode
     And I edit recipe "testRecipeDraftToReject"
     Then I see warning message is displayed "Please save the recipe."
-  
   # IVI - unapplied changed pop up appears unlike crs
+
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -157,9 +158,10 @@ Feature: Recipe management
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
-  
+
   # file menu is removed from IVI
   #To-DO: to be converted to use touch buttons
+
   Scenario: BIOCRS-1594 | Recipe print
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -174,8 +176,8 @@ Feature: Recipe management
     When I add new action step using Keyboard event
     Then I should see "blank" step added
     And I add action to the step
- 
-  @IVI 
+
+  @IVI
   Scenario: BIOFOUND-3768| Create step using Action browser
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -186,7 +188,7 @@ Feature: Recipe management
     Then I should see message input text field displayed
 
   @IVI
-  Scenario: BIOFOUND-3768| Create new phase 
+  Scenario: BIOFOUND-3768| Create new phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
@@ -197,17 +199,17 @@ Feature: Recipe management
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
-  
-  @IVI  
+
+  @IVI
   Scenario: IVI Bug IVI-5800 | Unauthorized user cant create/edit the recipe
     Given I am logged in as "reportUnauthUser" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
     Then I cannot edit the recipe
-    And I cannot change the recipe status  
+    And I cannot change the recipe status
     And touch buttons are disabled
 
-  @IVI   
+  @IVI
   Scenario: IVI Bug IVI-5768 | Delete the phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -216,7 +218,7 @@ Feature: Recipe management
     And I delete phase to recipe with shortcut key
     Then the phase is deleted
 
-  @IVI   
+  @IVI
   Scenario: IVI Bug IVI-5764 | Touch Enabled buttons for copy and paste phases
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -224,15 +226,15 @@ Feature: Recipe management
     And I create a random phase
     And I copy phase in recipe
     Then I am able to paste the phase
- 
-  @IVI 
+
+  @IVI
   Scenario: IVI Bug IVI-5762 IVI-5761 IVI-5763| Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
     Then I verify phase buttons and warning messages
 
-  @IVI   
+  @IVI
   Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

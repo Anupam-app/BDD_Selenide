@@ -23,7 +23,7 @@ Feature: User login
       | Acclock  | MerckApp2@ | Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator. |
     Then I am not logged in
     And I should see the message "Your account has been temporarily locked due to multiple invalid login attempts. Please try again in 1439 minutes or contact Administrator."
-	And I am logged in as "Bio4CAdmin" user
+    And I am logged in as "Bio4CAdmin" user
     And I go to user page
     And I search "Acclock" user
     And I see the user is locked
@@ -36,7 +36,7 @@ Feature: User login
     And I enter "Acclock" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
-    
+
   Scenario Outline: Login errors
     Given I open login page
     When I enter "<login>" as username and "<password>" as password

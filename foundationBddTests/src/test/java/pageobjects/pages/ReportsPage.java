@@ -5,15 +5,12 @@ import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
-
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 import dataobjects.Report;
-
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -28,7 +25,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -157,9 +153,12 @@ public class ReportsPage {
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
+    private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
+    private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+
     private SelenideElement date;
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-    
+
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
 
@@ -677,59 +676,59 @@ public class ReportsPage {
     }
 
     public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
-    	boolean isTrue = false;
-    	switch (dateRange) {
-    	case "Today":
-    	case "Yesterday":
-    		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
-    		String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-    		LocalDate selectedDate = SelenideHelper.dateParser(dateValue,"MM/d/yyyy");
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "MM/d/yyyy");
 
-    		if (startDate.isDisplayed()) {
-    			sortList("Start Date", false);
-    			Selenide.sleep(1000);
-    			String startDateRow1 = startDate.getText();
-    			LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
-    			sortList("Start Date", true);
-    			Selenide.sleep(1000);
-    			startDateRow1 = startDate.getText();
-    			LocalDate selectedDesendingDate =  SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
-    			if (selectedAsendingDate.getDayOfMonth()== selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth()==selectedDate.getDayOfMonth()) {
-    				isTrue = true;
-    			}
-    		} else if (noDatamsg.isDisplayed()) {
-    			isTrue = true;
-    		}
-    		break;
-    	case "Last 7 Days":
-    	case "Last 30 Days":
-    	case "This Month":
-    	case "Last Month":
-    	case "Custom Range":
-    		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
-    		commonWaiter(dateColumn, visible);
-    		String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-    		LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1,"MM/d/yyyy");
-    		String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-    		LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2,"MM/d/yyyy");
-    		if (startDate.isDisplayed()) {
-    			sortList("Start Date", false);
-    			String startDateRow = startDate.getText();
-    			LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow,Report.RECIPE_DATE_FORMAT);
-    			sortList("Start Date", true);
-    			String endDateRow = startDate.getText();
-    			LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow,Report.RECIPE_DATE_FORMAT);
-    			if ((selectedAsendingDate.getDayOfMonth()== selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
-    					&& (selectedDesendingDate.getDayOfMonth()== selectedDate2.getDayOfMonth()
-    					|| selectedDesendingDate.isBefore(selectedDate2))) {
-    				isTrue = true;
-    			}
-    		} else if (noDatamsg.isDisplayed()) {
-    			isTrue = true;
-    		}
-    		break;
-    	}
-    	return isTrue;
+                if (startDate.isDisplayed()) {
+                    sortList("Start Date", false);
+                    Selenide.sleep(1000);
+                    String startDateRow1 = startDate.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    sortList("Start Date", true);
+                    Selenide.sleep(1000);
+                    startDateRow1 = startDate.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "MM/d/yyyy");
+                String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "MM/d/yyyy");
+                if (startDate.isDisplayed()) {
+                    sortList("Start Date", false);
+                    String startDateRow = startDate.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    sortList("Start Date", true);
+                    String endDateRow = startDate.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
+                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                            || selectedDesendingDate.isBefore(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
     }
 
     public SelenideElement getReportColumnHeader(String columnName) {
@@ -844,59 +843,59 @@ public class ReportsPage {
     }
 
     public boolean verifyDateRangesRprt(String dateRange) throws ParseException, InterruptedException {
-    	boolean isTrue = false;
-    	switch (dateRange) {
-    	case "Today":
-    	case "Yesterday":
-    		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
-    		String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
-    		LocalDate selectedDate = SelenideHelper.dateParser(dateValue,"MM/d/yyyy");
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                String dateValue = dateColumn.getAttribute("value").split("to")[0].trim();
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "MM/d/yyyy");
 
-    		if (startDateRep.isDisplayed()) {
-    			sortList("Date Generated", false);
-    			Selenide.sleep(1000);
-    			String startDateRow1 = startDateRep.getText();
-    			LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
-    			sortList("Date Generated", true);
-    			Selenide.sleep(1000);
-    			startDateRow1 = startDateRep.getText();
-    			LocalDate selectedDesendingDate =  SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
-    			if (selectedAsendingDate.getDayOfMonth()== selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth()==selectedDate.getDayOfMonth()) {
-    				isTrue = true;
-    			}
-    		} else if (noDatamsg.isDisplayed()) {
-    			isTrue = true;
-    		}
-    		break;
-    	case "Last 7 Days":
-    	case "Last 30 Days":
-    	case "This Month":
-    	case "Last Month":
-    	case "Custom Range":
-    		commonWaiter(spinnerComponent.spinnerIcon, not(visible));
-    		commonWaiter(dateColumn, visible);
-    		String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
-    		LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1,"MM/d/yyyy");
-    		String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
-    		LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2,"MM/d/yyyy");
-    		if (startDateRep.isDisplayed()) {
-    			sortList("Date Generated", false);
-    			String startDateRow = startDateRep.getText();
-    			LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow,Report.RECIPE_DATE_FORMAT);
-    			sortList("Date Generated", true);
-    			String endDateRow = startDateRep.getText();
-    			LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow,Report.RECIPE_DATE_FORMAT);
-    			if ((selectedAsendingDate.getDayOfMonth()== selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
-    					&& (selectedDesendingDate.getDayOfMonth()== selectedDate2.getDayOfMonth()
-    					|| selectedDesendingDate.isBefore(selectedDate2))) {
-    				isTrue = true;
-    			}
-    		} else if (noDatamsg.isDisplayed()) {
-    			isTrue = true;
-    		}
-    		break;
-    	}
-    	return isTrue;
+                if (startDateRep.isDisplayed()) {
+                    sortList("Date Generated", false);
+                    Selenide.sleep(1000);
+                    String startDateRow1 = startDateRep.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    sortList("Date Generated", true);
+                    Selenide.sleep(1000);
+                    startDateRow1 = startDateRep.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = dateColumn.getAttribute("value").split("to")[0].trim();
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "MM/d/yyyy");
+                String dateValue2 = dateColumn.getAttribute("value").split("to")[1].trim();
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "MM/d/yyyy");
+                if (startDateRep.isDisplayed()) {
+                    sortList("Date Generated", false);
+                    String startDateRow = startDateRep.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    sortList("Date Generated", true);
+                    String endDateRow = startDateRep.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
+                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                            || selectedDesendingDate.isBefore(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
     }
 
     public void checkSortedElements(String columnName, boolean descending) {
@@ -962,4 +961,21 @@ public class ReportsPage {
         return $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).isDisplayed();
     }
 
+    public boolean verifyrunDetails(String recipeName, String processType, String status) throws ParseException {
+        boolean result = false;
+        if (startDate.isDisplayed()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "dd/MMM/yyyy hh:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(startDate.getText());
+            long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes < 5 && statusColumn.getText().equalsIgnoreCase(status) && processTypeValue.equals(processType) &&
+                    runColumn.getText().contains(recipeName)) {
+                result = true;
+            }
+        }
+        return result;
+    }
 }
