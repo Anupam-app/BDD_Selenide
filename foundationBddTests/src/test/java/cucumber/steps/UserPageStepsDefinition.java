@@ -1,29 +1,22 @@
 package cucumber.steps;
 
-import dataobjects.User;
+import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.switchTo;
 import dataobjects.Login;
 import dataobjects.Report;
+import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pageobjects.pages.ReportsPage;
-
-import static com.codeborne.selenide.Selenide.switchTo;
-
 import java.awt.AWTException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
-
-import com.codeborne.selenide.Selenide;
-
+import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 
 public class UserPageStepsDefinition {
@@ -47,12 +40,12 @@ public class UserPageStepsDefinition {
         this.user.setUserName(user);
         userPage.setSearch(user);
     }
-    
+
     @When("I see the user is locked")
     public void iSeeUserLocked() {
         userPage.UserLocked(this.user.getUserName());
     }
-    
+
     @When("I see the user is unlocked")
     public void iSeeUserUnLocked() {
         userPage.UserUnLocked(this.user.getUserName());
@@ -77,7 +70,7 @@ public class UserPageStepsDefinition {
     public void iModifyUser() {
         userPage.edit(user.getUserName());
     }
-    
+
     @When("I cant edit the user")
     public void iCannotModifyUser() {
         userPage.cannotEdit(user.getUserName());
@@ -94,7 +87,7 @@ public class UserPageStepsDefinition {
         userPage.saveMyChanges();
         userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
     }
-    
+
     @When("I save the new user")
     public void iSaveNewUser() {
         userPage.saveMyChanges();
@@ -140,8 +133,8 @@ public class UserPageStepsDefinition {
         this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
         userPage.createNewUser(this.user.getUserName());
     }
-	
-	@And("default users are not editable")
+
+    @And("default users are not editable")
     public void verifyEditing() {
         userPage.usersNotEditable();
     }
@@ -203,7 +196,7 @@ public class UserPageStepsDefinition {
     public void theEmployeeIdIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getEmployeeIdFromForm(), user.getEmployeeId());
     }
-    
+
     @Then("the role is {string}")
     public void theRoleIsEqualToTheExpectedOne(String role) {
         Assert.assertEquals(userPage.getRoleNameFromForm(), role);
@@ -220,15 +213,15 @@ public class UserPageStepsDefinition {
         Assert.assertEquals(user.getDeptName(), userPage.getDeptNameFromForm());
         userPage.cancelUser();
     }
-    
+
     @Then("I see the {string} user modified in report")
     public void iVerifyThatUserIsModified(String userName) throws Exception {
-    	Map<String,String> list=new HashMap<String,String>();  
-    	  list.put("department",user.getDeptName());  
-    	  list.put("phoneNumber",user.getMobNum());  
-    	  list.put("role",user.getRoleName());  
-    	  list.put("employeeID",user.getEmployeeId()); 
-    	  list.put("email",user.getEmailId()); 
+        Map<String, String> list = new HashMap<String, String>();
+        list.put("department", user.getDeptName());
+        list.put("phoneNumber", user.getMobNum());
+        list.put("role", user.getRoleName());
+        list.put("employeeID", user.getEmployeeId());
+        list.put("email", user.getEmailId());
         this.report.checkModifiedUser(reportPage.getPdfUrl(), userName, this.login.getLogin(), list);
         switchTo().parentFrame();
     }
@@ -268,127 +261,132 @@ public class UserPageStepsDefinition {
     public void iCreateNewUsername() {
         userPage.createNewUser(this.user.getUserName());
     }
-		@When("I verify default user account {string} and {string}")
-	public void iVerifyDefaultUserAccount(String user1,String user2) {
-		userPage.userAccountRole(user1, user2);
-	}
 
-	@And("^I verify default roles$")
-	public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
-		List<String>roles = datatable.asList();
-		for(String names : roles) {
-			userPage.iVerifyDefaultRoles(names);
-		}
-	}
+    @When("I verify default user account {string} and {string}")
+    public void iVerifyDefaultUserAccount(String user1, String user2) {
+        userPage.userAccountRole(user1, user2);
+    }
 
-	@And("I verify {string} list of {string}")
-	public void i_verify_privileges_list_of_roles(String userrole,String roles) {
+    @And("^I verify default roles$")
+    public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
+        List<String> roles = datatable.asList();
+        for (String names : roles) {
+            userPage.iVerifyDefaultRoles(names);
+        }
+    }
 
-		if(userrole.equalsIgnoreCase("privilege")) {
-			userPage.privilegesOfroles(roles);
-		}
-		else if(userrole.equalsIgnoreCase("proceessmanager")) {
-			userPage.processManager(roles);
-		}
-	}
-	@And("^I should see view icon of perticular roles$")
-	public void iSeeViewIconOfperticularRoles(DataTable datatable) {
-		List<String> icon = datatable.asList();
-		for(String name : icon) {
-			userPage.validateViewIcon(name);
-		}
-	}
-	@When("I navigate to role icon")
-	public void i_navigate_role_icon() {
-		userPage.roleIcon();
-	}
+    @And("I verify {string} list of {string}")
+    public void i_verify_privileges_list_of_roles(String userrole, String roles) {
 
-	@And("I click on edit icon corresponding custom role")
-	public void iClickOnEditIconCorrespondingCustomRole() {
-		userPage.adminIcon();
-	}
+        if (userrole.equalsIgnoreCase("privilege")) {
+            userPage.privilegesOfroles(roles);
+        } else if (userrole.equalsIgnoreCase("proceessmanager")) {
+            userPage.processManager(roles);
+        }
+    }
 
-	@And("I verify custom role modification details captured in audit trail")
-	public void iVerifyCustomroleModificationDetails() {
+    @And("^I should see view icon of perticular roles$")
+    public void iSeeViewIconOfperticularRoles(DataTable datatable) {
+        List<String> icon = datatable.asList();
+        for (String name : icon) {
+            userPage.validateViewIcon(name);
+        }
+    }
 
-	}
+    @When("I navigate to role icon")
+    public void i_navigate_role_icon() {
+        userPage.roleIcon();
+    }
 
-	@And("^I unchecked role permissions$")
-	public void iRemovePermissions(DataTable datatable) {
-		List<String> uncheck = datatable.asList();
-		for(String name : uncheck) {
-			userPage.unselectrolepremission(name);
-		}            
-	}
+    @And("I click on edit icon corresponding custom role")
+    public void iClickOnEditIconCorrespondingCustomRole() {
+        userPage.adminIcon();
+    }
 
-	@And("I create a random rolename")
-	public void iEnterNewCustomRoleName() {
-		this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
-		this.user.setOldUserName(userPage.getOldUserName());
-		userPage.iCreateRondomName(this.user.getUserName());
-	}
-	@And("I should see new custom role created")
-	public void iShouldSeeNewCustomRole() {
-		userPage.isearchName(this.user.getUserName());
-		userPage.verifyRoleName(this.user.getUserName());
-	}
+    @And("I verify custom role modification details captured in audit trail")
+    public void iVerifyCustomroleModificationDetails() {
 
-	@And("I verify a new user {string} by selecting custom role")
-	public void iCreatedNewUserRole(String rolename) {
-		userPage.iCreateNewUser(rolename);
-	}
+    }
 
-	@And("I should see role name {string} in role culumn")
-	public void iSeeCustomRoleInRoleColumn(String role) {
-		userPage.rolename(role);
-	}
+    @And("^I unchecked role permissions$")
+    public void iRemovePermissions(DataTable datatable) {
+        List<String> uncheck = datatable.asList();
+        for (String name : uncheck) {
+            userPage.unselectrolepremission(name);
+        }
+    }
 
-	@Given("I go to userprofile")
-	public void iGoToUserProfile() {
-		userPage.userProfileIcon();
-	}
+    @And("I create a random rolename")
+    public void iEnterNewCustomRoleName() {
+        this.user.setUserName(RandomStringUtils.randomAlphabetic(10));
+        this.user.setOldUserName(userPage.getOldUserName());
+        userPage.iCreateRondomName(this.user.getUserName());
+    }
 
-	@And("I change the password")
-	public void iChangeThePassword(){
-		userPage.changePassword();
-	}
+    @And("I should see new custom role created")
+    public void iShouldSeeNewCustomRole() {
+        userPage.isearchName(this.user.getUserName());
+        userPage.verifyRoleName(this.user.getUserName());
+    }
 
-	@And("I should see change password window popup")
-	public void iSeeChangePasswordWindowPopup() {
-		userPage.windowPopup();
-	}    
+    @And("I verify a new user {string} by selecting custom role")
+    public void iCreatedNewUserRole(String rolename) {
+        userPage.iCreateNewUser(rolename);
+    }
 
-	@Given("^I verify the below Icons on left rail of Portal$")
-	public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
-		List<String> icon = datatable.asList();
-		userPage.zoomOut();
-		for(String name : icon) {
-			userPage.iVerifyApp_Modules(name);
-		}            
-	}
+    @And("I should see role name {string} in role culumn")
+    public void iSeeCustomRoleInRoleColumn(String role) {
+        userPage.rolename(role);
+    }
 
-	@Then("I see error message is displayed as {string}")
-	public void iVerifyErrorNotification(String message) {
-		userPage.errorNotification(message);
-		userPage.closeChangeUserPropertiesChangeModal();
-	}
+    @Given("I go to userprofile")
+    public void iGoToUserProfile() {
+        userPage.userProfileIcon();
+    }
 
-	@Then("I see password updated message is displayed for {string}")
-	public void iSeePasswordUpdatedMessagedisplayed(String username) {
-		var message = String.format("User password for %s is updated", username);
-		userPage.updateNotification(message);
-		userPage.closeChangeUserPropertiesChangeModal();
-	}
+    @And("I change the password")
+    public void iChangeThePassword() {
+        userPage.changePassword();
+    }
 
-	@Then("I should see {string} {string} and {string} under user profile icon")
-	public void iVerifyUserProfile(String firstName,String lastName,String role) {
-		userPage.verifyUserProfileIcon(firstName, lastName, role);
-		Selenide.sleep(2000); userPage.changePassword();userPage.closeChangeUserPropertiesChangeModal();
-	}
-	
-	@When("I click on changepassword")
-	public void iClickOnChangePswd() {
-		userPage.changePassword();
-	}
+    @And("I should see change password window popup")
+    public void iSeeChangePasswordWindowPopup() {
+        userPage.windowPopup();
+    }
+
+    @Given("^I verify the below Icons on left rail of Portal$")
+    public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
+        List<String> icon = datatable.asList();
+        userPage.zoomOut();
+        for (String name : icon) {
+            userPage.iVerifyApp_Modules(name);
+        }
+    }
+
+    @Then("I see error message is displayed as {string}")
+    public void iVerifyErrorNotification(String message) {
+        userPage.errorNotification(message);
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @Then("I see password updated message is displayed for {string}")
+    public void iSeePasswordUpdatedMessagedisplayed(String username) {
+        var message = String.format("User password for %s is updated", username);
+        userPage.updateNotification(message);
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @Then("I should see {string} {string} and {string} under user profile icon")
+    public void iVerifyUserProfile(String firstName, String lastName, String role) {
+        userPage.verifyUserProfileIcon(firstName, lastName, role);
+        Selenide.sleep(2000);
+        userPage.changePassword();
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @When("I click on changepassword")
+    public void iClickOnChangePswd() {
+        userPage.changePassword();
+    }
 
 }

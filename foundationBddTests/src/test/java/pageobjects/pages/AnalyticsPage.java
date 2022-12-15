@@ -47,8 +47,8 @@ public class AnalyticsPage {
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
     private final int INDEX_INTERVAL_ID = 3;
-	
-	private final SelenideElement analyticsHeader=$(By.xpath("//div[text()='Analytics']"));
+
+    private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
 
     public void goToAnalytics() {
         analyticsPageLinkText.click();
@@ -175,7 +175,8 @@ public class AnalyticsPage {
         applyRegressionSettingsButton.scrollTo();
         applyRegressionSettingsButton.click();
     }
-	 public void verifyAnalyticsHeader(){    	
-    	analyticsHeader.shouldBe(visible);
+
+    public void verifyAnalyticsHeader() {
+        analyticsHeader.shouldBe(visible);
     }
 }

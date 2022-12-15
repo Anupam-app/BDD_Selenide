@@ -1,4 +1,4 @@
- @CRS @IVI
+@CRS @IVI
 Feature: Recipe console
 
   Background:
@@ -10,20 +10,20 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I hold and restart the system
     Then I see the system on hold
-	
+
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I hold the system
     Then I see the system on hold
     And clear panel and run button is disabled
-    
+
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
     When I expand and collapse recipe console in pnid
-    And I verify Recipe run options 
+    And I verify Recipe run options
     And I goto manual operation tab
-    And I verify manual operation options 
- 
+    And I verify manual operation options
+
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -42,8 +42,8 @@ Feature: Recipe console
     And control should be on rerun button
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+    And I select user in dropdown "Bio4CAdmin"
+    And I check audit trial logs
 
   @SMOKE
   Scenario: Recipe execution
@@ -67,17 +67,17 @@ Feature: Recipe console
 
   Scenario: Verify the Recipe Execution|BIOCRS-1593|
     When I expand recipe console in pnid
-    And I click on load recipe    
-    Then I should not see unapproved recipe     
-    And I load recipe "testRecipeToExecute" 
+    And I click on load recipe
+    Then I should not see unapproved recipe
+    And I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 10 seconds
     Then I should see recipe name and recipe steps details
     When I goto report management page
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
-    Then I verify recipe details captured in report run tab "testRecipeToExecute"     
-  
-   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
+    Then I verify recipe details captured in report run tab "testRecipeToExecute"
+
+  Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
@@ -90,9 +90,9 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
-    And I Verify manual run status in recipe consol    
-    
-   Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
+    And I Verify manual run status in recipe consol
+
+  Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I verify all mandatory fields has asterick mark "*"
@@ -102,14 +102,14 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     And I verify the Batch ID suggestion with unique Value
     When I enter special characters "@!#$%^&*" in run comments section
-    
+
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on jump step "10"
     Then I should see error message about recipe step
- 
+
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
@@ -120,7 +120,7 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-   
+
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -138,7 +138,7 @@ Feature: Recipe console
     And I verify Recipe Run tab is "enabled"
     And I re-run the recipe
     Then I verify Manual Operation tab is "disabled"
-    And I click on abort button 
+    And I click on abort button
     Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
 
@@ -151,54 +151,54 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-    
+
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
-    And I start Manual run 
-    Then I validate the timer and stop button and run details 
+    And I start Manual run
+    Then I validate the timer and stop button and run details
     When I Process hold the system
-    Then I should see Process restart button 
+    Then I should see Process restart button
     And I validate the timer is incrementing
-    When I Stop the RUN 
+    When I Stop the RUN
     Then I validate the date formats in Post run window and enter comments
     And I wait for 1 min for the post run window to auto closed
     And I validate the Start button is "disabled"
     And I restart the Process hold
-    And I validate the Start button is "enabled" 
-      
- Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
-   Given I expand recipe console
-   When I Select Process Hold
-   And I verify the Process hold Dialog box , buttons
-   And I validate close,No button funtionality
-   And I Select Process Hold 
-   And I Select Yes button
-   Then I should see change of Process holding to Process restart 
-   And I verify the recipe console Elements 
-   And I select Process restart 
-   And I verify the Process restart Dialog box , buttons
-   And I validate close,No button funtionality
-   And I select Process restart
-   And I Select Yes button
-   Then I should see change of Process restating to Process hold 
-   And I verify the recipe console Elements
+    And I validate the Start button is "enabled"
 
- Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page  
-  Given I expand recipe console in pnid
-  And I load recipe "testRecipeToExecute1min"
-  And I start recipe execution
-  And I verify the recipe execution details in console View
-  When I goto report management page
-  And I go to Main screen 
-  Then I verify the recipe execution details in console View
-  And I logout 
-  And I open login page
-  And I login with "Bio4CAdmin" same user as above "MerckApp1@"
-  And I verify the recipe execution details in console View.
-  And I refresh the portal
-  And I open login page
-  And I login with "Bio4CAdmin" same user as above "MerckApp1@"
-  And I expand recipe console in pnid
-  And I verify the recipe execution details in console View 
+  Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
+    Given I expand recipe console
+    When I Select Process Hold
+    And I verify the Process hold Dialog box , buttons
+    And I validate close,No button funtionality
+    And I Select Process Hold
+    And I Select Yes button
+    Then I should see change of Process holding to Process restart
+    And I verify the recipe console Elements
+    And I select Process restart
+    And I verify the Process restart Dialog box , buttons
+    And I validate close,No button funtionality
+    And I select Process restart
+    And I Select Yes button
+    Then I should see change of Process restating to Process hold
+    And I verify the recipe console Elements
+
+  Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I verify the recipe execution details in console View
+    When I goto report management page
+    And I go to Main screen
+    Then I verify the recipe execution details in console View
+    And I logout
+    And I open login page
+    And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+    And I verify the recipe execution details in console View.
+    And I refresh the portal
+    And I open login page
+    And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+    And I expand recipe console in pnid
+    And I verify the recipe execution details in console View
  

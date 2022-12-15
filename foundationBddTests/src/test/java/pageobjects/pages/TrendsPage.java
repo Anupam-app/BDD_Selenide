@@ -325,7 +325,7 @@ public class TrendsPage {
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
 
-        if(lastTime.getHours()==0){
+        if (lastTime.getHours() == 0) {
             lastTime.setHours(24);
         }
 
@@ -339,7 +339,7 @@ public class TrendsPage {
     }
 
     public void trendsHeaderValidation() {
-        commonWaiter(trendsHeaderValidation,visible);
+        commonWaiter(trendsHeaderValidation, visible);
         trendsHeaderValidation.isDisplayed();
         Assert.assertTrue(true);
     }

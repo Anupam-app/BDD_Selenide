@@ -1,15 +1,12 @@
 package cucumber.steps;
 
 import dataobjects.Login;
-import java.util.List;
-
-
-import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
@@ -86,7 +83,7 @@ public class LoginPageStepsDefinition {
         login.setPassword("MerckApp1@");
         loginPage.setUser(login.getLogin());
         loginPage.setPassword(login.getPassword());
-        loginPage.pushLogin(); 
+        loginPage.pushLogin();
         loginPage.waitControlOnPnid();
         recipeConsolePage.cleanLastRecipeDisplay();
     }
@@ -97,7 +94,7 @@ public class LoginPageStepsDefinition {
         loginPage.setConfirmpassword(password);
     }
 
-    
+
     @Then("I relogin")
     public void iReLogin() {
         iOpenLogin();
@@ -114,22 +111,23 @@ public class LoginPageStepsDefinition {
     public void iSeetheErrorMessage(String message) {
         loginPage.checkMessage(message);
     }
-	@When("I try to change password {string}")
+
+    @When("I try to change password {string}")
     public void iTryToChangePassword(String password) {
-    	loginPage.setCurrentpassword(password);
+        loginPage.setCurrentpassword(password);
         loginPage.setNewpasswordUser(password);
         loginPage.setConfirmpasswordUser(password);
     }
-    
+
     @When("I try to change password {string} {string} {string}")
-    public void iTryToChangePassword(String currentPassword,String np,String cp) {
-    	userPage.userProfileIcon();
-    	userPage.changePassword();
-    	loginPage.setCurrentpassword(currentPassword);
+    public void iTryToChangePassword(String currentPassword, String np, String cp) {
+        userPage.userProfileIcon();
+        userPage.changePassword();
+        loginPage.setCurrentpassword(currentPassword);
         loginPage.setNewpasswordUser(np);
         loginPage.setConfirmpasswordUser(cp);
     }
-    
+
     @When("^I login to application with password$")
     public void iShouldSeeLoginErrorMessage(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
@@ -143,12 +141,12 @@ public class LoginPageStepsDefinition {
 
         }
     }
-    
+
     @And("I login with {string} same user as above {string}")
     public void iVerifyExistingrecipeWithSameCredential(String username, String password) {
-    	loginPage.setUser(username);
+        loginPage.setUser(username);
         loginPage.setPassword(password);
         loginPage.pushLogin();
     }
-    
+
 }

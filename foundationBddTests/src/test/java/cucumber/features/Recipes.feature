@@ -16,8 +16,8 @@ Feature: Recipe management
     And I edit the recipe
     Then I see my changes in recipe
 
-  @SMOKE 
-  
+  @SMOKE
+
   Scenario: BIOCRS-5059 | Recipe approval
     Given I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
@@ -29,20 +29,20 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
- 	
- 	Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
-	  When I go to recipe page
+
+  Scenario: BIOCRS-5478 | Recipe Management Dashboard -  Browser Tab
+    When I go to recipe page
     Then  I see list of recipes are displayed
     And below "recipe" column is displayed
-    |columns			    |
-    |Recipe Name		  |
-	  |System Family		|
-	  |Imported 			  |
-	  |Import Status		|
-	  |Created By			  |
-	  |Last Modified On	|
-	  |UOP Status			  |
- 
+      | columns          |
+      | Recipe Name      |
+      | System Family    |
+      | Imported         |
+      | Import Status    |
+      | Created By       |
+      | Last Modified On |
+      | UOP Status       |
+
   Scenario: BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
@@ -55,7 +55,7 @@ Feature: Recipe management
     And I trigger report mode
     And I should see the report file presence
     And I see the "testRecipeDraftToInactive" is changed to "APPROVED-INACTIVE" in report
-     
+
   Scenario: BIOCRS-5060| Recipe Tech Review Rejected
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToReject"
@@ -78,20 +78,20 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
-  
+
   Scenario Outline: BIOCRS-5477 | Unsaved Recipe Error Scenarios-1
     Given I go to recipe page
     When I trigger edit mode
     And I create a random phase
     And I choose "<option>" from file menu
     Then I see warning message is displayed "<message>"
-    
-   Examples:
-      | option    | message                                 |
-      | New 	  | Please save the recipe.                 |
-      | Import    | Please save the recipe.                 |
-      | Print	  | Only approved recipe can be printed.	|
- 
+
+    Examples:
+      | option | message                              |
+      | New    | Please save the recipe.              |
+      | Import | Please save the recipe.              |
+      | Print  | Only approved recipe can be printed. |
+
   Scenario: BIOCRS-5477 | User tries to select another recipe from Browser while there is unsaved recipe
     Given I go to recipe page
     When I trigger edit mode
@@ -99,7 +99,7 @@ Feature: Recipe management
     And I go to browser mode
     And I edit recipe "testRecipeDraftToReject"
     Then I see warning message is displayed "Please save the recipe."
-    
+
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
     Given I go to recipe page
     When I trigger edit mode
@@ -107,7 +107,7 @@ Feature: Recipe management
     And I go to other module without saving recipe
     And I come back to Recipe page
     Then I can create a recipe
-        
+
   Scenario: Create new recipe with existing Recipe name
     Given I go to recipe page
     When I trigger edit mode
@@ -123,7 +123,7 @@ Feature: Recipe management
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
- 
+
   Scenario: BIOCRS-1594 | Recipe print
     Given I go to recipe page
     When I edit recipe "testRecipeToExecute"
@@ -135,7 +135,7 @@ Feature: Recipe management
     When I add new action step using Keyboard event
     Then I should see "blank" step added
     And I add action to the step
-  
+
   Scenario: BIOFOUND-3768| Create step using Action browser
     Given I go to recipe page
     When I trigger edit mode
@@ -144,7 +144,7 @@ Feature: Recipe management
     When I add new step with message prompt
     Then I should see message input text field displayed
 
-  Scenario: BIOFOUND-3768| Create new phase 
+  Scenario: BIOFOUND-3768| Create new phase
     Given I go to recipe page
     When I trigger edit mode
     And I create a new phase in recipe
