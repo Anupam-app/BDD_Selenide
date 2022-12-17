@@ -112,7 +112,6 @@ public class ReportsPage {
     private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
 
-    private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
     private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String userAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s')]";
 
@@ -135,8 +134,6 @@ public class ReportsPage {
     private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
 
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter']"));
-    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
 
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
@@ -158,6 +155,8 @@ public class ReportsPage {
     private final SelenideElement requestNotification = $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
     private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+    private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
+    private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
 
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
 
@@ -960,5 +959,27 @@ public class ReportsPage {
 
     public void verifyReportsHeader() {
         reportManagementHeader.shouldBe(visible);
+    }
+
+    public void verifyNewUser(String user) {
+        SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible).click();
+        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).shouldBe(visible);
+    }
+
+    public boolean verifyAuditTrail(String message) throws ParseException {
+        boolean result = false;
+        if (eventTime.isDisplayed()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "dd/MMM/yyyy hh:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+            long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes < 5 && comment.getText().equalsIgnoreCase(message)) {
+                result = true;
+            }
+        }
+        return result;
     }
 }

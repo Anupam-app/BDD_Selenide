@@ -27,6 +27,8 @@ public class LoginPage {
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
+    private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
+
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -93,4 +95,8 @@ public class LoginPage {
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 
+    public void setCurrentpassword(String newpassword) {
+        currentPasswordTestbox.clear();
+        currentPasswordTestbox.setValue(newpassword);
+    }
 }

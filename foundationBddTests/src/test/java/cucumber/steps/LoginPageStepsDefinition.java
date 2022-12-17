@@ -9,6 +9,7 @@ import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.pages.UserPage;
 import pageobjects.pages.UserProfilePage;
 
 public class LoginPageStepsDefinition {
@@ -18,14 +19,17 @@ public class LoginPageStepsDefinition {
     private final RecipeConsolePage recipeConsolePage;
     private final UserProfilePage userProfilePage;
     private final Login login;
+    private final UserPage userPage;
 
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserProfilePage userProfilePage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login,
+                                    UserProfilePage userProfilePage, UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
         this.login = login;
         this.userProfilePage = userProfilePage;
+        this.userPage = userPage;
     }
 
     @Given("I open login page")
@@ -109,5 +113,14 @@ public class LoginPageStepsDefinition {
     @Then("I see the error message {string}")
     public void iSeetheErrorMessage(String message) {
         loginPage.checkMessage(message);
+    }
+
+    @When("I try to change password {string} {string} {string}")
+    public void iTryToChangePassword(String currentPassword, String newPassword, String confirmPassword) {
+        userPage.userProfileIcon();
+        userPage.changePassword();
+        loginPage.setCurrentpassword(currentPassword);
+        loginPage.setNewpassword(newPassword);
+        loginPage.setConfirmpassword(confirmPassword);
     }
 }

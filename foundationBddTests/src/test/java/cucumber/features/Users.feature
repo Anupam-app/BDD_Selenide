@@ -189,7 +189,7 @@ Feature: User management
   Scenario Outline: Verify the system allows user to change the password 3
     Given I open portal
     And I open login page
-    When I login to application with password
+    When I login to application with wrong password
       | username | password       | message                                                   |
       | <user>   | <old password> | Invalid username or password. You have 4 attempt(s) left. |
     And I enter "<user>" as username and "<newPassword>" as password

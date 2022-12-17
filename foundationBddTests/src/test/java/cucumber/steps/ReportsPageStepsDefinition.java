@@ -131,12 +131,6 @@ public class ReportsPageStepsDefinition {
         reportPage.reportRequestNotificationVisibility();
     }
 
-    /*
-     * @When("I dont see the presence of generate button") public void
-     * iDontSeeGenerateButton() { reportPage.verifyGenerateButton(); }
-     */
-
-
     @When("I click on view button")
     public void iClickOnViewButton() {
         reportPage.viewReports(this.report.getName());
@@ -478,5 +472,17 @@ public class ReportsPageStepsDefinition {
     @Then("I verify recipe details captured in report run tab {string}")
     public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
         reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
+    }
+
+    @And("I should see newly created user {string} present in report")
+    public void iSeenewlyCreatedUserPresentInReport(String user) {
+        reportPage.verifyNewUser(user);
+    }
+
+    @Then("I should see change password entries in audit trail report for {string}")
+    public void iverifyAuditTrailReport(String username) throws ParseException {
+        var message = String.format("%s changed the account password", username);
+        Assert.assertTrue(reportPage.verifyAuditTrail(message));
+        SelenideHelper.goToDefault();
     }
 }
