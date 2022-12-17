@@ -72,5 +72,9 @@ public class SelenideHelper {
     public static void maximize() {
         WebDriverRunner.getWebDriver().manage().window().fullscreen();
     }
+
+    public static void goToDefault() {
+        switchTo().defaultContent();
+    }
 }
 

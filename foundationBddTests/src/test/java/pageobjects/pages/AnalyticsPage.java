@@ -17,6 +17,8 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class AnalyticsPage {
 
+    private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
+
     private final SelenideElement analyticsPageLinkText = $(By.id("Analytics"));
 
     private final SelenideElement regressionChart = $(By.xpath("//span[text()='Regressions']"));
@@ -198,5 +200,9 @@ public class AnalyticsPage {
         var elementNotTranslated = I18nUtils.getElementsNotI18N(deviceShapeElements);
         cancelButtonVisible.click();
         return elementNotTranslated;
+    }
+
+    public void verifyAnalyticsHeader() {
+        analyticsHeader.shouldBe(visible);
     }
 }

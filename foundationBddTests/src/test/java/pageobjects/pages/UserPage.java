@@ -1,10 +1,18 @@
 package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.*;
+
 import com.codeborne.selenide.ElementsCollection;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import com.codeborne.selenide.SelenideElement;
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.lang3.StringUtils;
@@ -70,6 +78,18 @@ public class UserPage {
     private SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
     private String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
+    private final String defaultRolesnames = "//div[text()='%s']";
+    private final String checkPermissions = "//label[@class='ant-checkbox-wrapper']/span/input/following-sibling::span[(contains(text(),'%s'))]";
+    private SelenideElement editIconOfOperator = $(By.xpath("//*[text()='Operator']/parent::div//div[5]/*[(@class='edit-icon')]"));
+    private final String applicationModule = "//div[contains(@class,'icontitle') and contains(text(),'%s')]";
+    private SelenideElement userHeader = $(By.xpath("//div[text()='User Management']"));
+    private final SelenideElement userProfile = $(By.xpath("//*[@id='userProfile']"));
+    private SelenideElement chnagePwd = $(By.xpath("//span[text()='Change password']"));
+    private SelenideElement chnagePwdWindow = $(By.xpath("//h5[text()='Change Password']"));
+    private SelenideElement roleStatus = $(By.xpath("//table[@id='auditListTable']/tbody/tr/td[3]"));
+    private SelenideElement closeUserPropertiesChangeModal = $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
+    private SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
+    private SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -326,5 +346,57 @@ public class UserPage {
 
     public void waitForUserCreationNotification(String userName) {
         SelenideHelper.commonWaiter(alertNotificationText, ownText(userName));
+    }
+
+    public void userProfileIcon() {
+        SelenideHelper.commonWaiter(userProfile, visible).click();
+    }
+
+    public void changePassword() {
+        SelenideHelper.commonWaiter(chnagePwd, visible).click();
+    }
+
+    public void windowPopup() {
+        chnagePwdWindow.shouldBe(visible);
+    }
+
+    public void errorNotification(String message) {
+        commonWaiter(XPATH_ERRORNOTIFICATION_TEXT, visible);
+        XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
+    }
+
+    public void updateNotification(String message) {
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+        XPATH_NOTIFICATION_TEXT.shouldHave(text(message));
+    }
+
+    public void closeChangeUserPropertiesChangeModal() {
+        SelenideHelper.commonWaiter(closeUserPropertiesChangeModal, visible).click();
+    }
+
+    public void verifyUserProfileIcon(String firstname, String lastname, String role) {
+        commonWaiter(firstName, visible);
+        firstName.shouldHave(text(firstname));
+        commonWaiter(lastName, visible);
+        lastName.shouldHave(text(lastname));
+    }
+
+    public void zoomOut() throws AWTException {
+        Robot robot = new Robot();
+        for (int i = 0; i < 5; i++) {
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            Selenide.sleep(2000);
+        }
+    }
+
+    public void clickOnAppModule(String name) {
+        commonWaiter($(By.xpath(String.format("//div[text()='%s']", name))), visible).click();
+    }
+
+    public void checkAlarmHeader() {
+        userHeader.shouldBe(visible);
     }
 }

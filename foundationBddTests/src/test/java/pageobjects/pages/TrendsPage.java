@@ -90,6 +90,8 @@ public class TrendsPage {
     private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
     private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
 
+    private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
+
     public void goToTrends() {
         trends.click();
         commonWaiter(trends, visible);
@@ -365,6 +367,12 @@ public class TrendsPage {
     public List<String> getDeviceShapeElementNotLoaded() {
         SelenideHelper.commonWaiter(defaultButton, Condition.visible).click();
         return I18nUtils.getElementsNotI18N(deviceShapeElements);
+    }
+
+    public void trendsHeaderValidation() {
+        commonWaiter(trendsHeaderValidation, visible);
+        trendsHeaderValidation.isDisplayed();
+        Assert.assertTrue(true);
     }
 }
 

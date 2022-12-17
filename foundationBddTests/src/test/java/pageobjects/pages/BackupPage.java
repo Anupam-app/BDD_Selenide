@@ -50,6 +50,9 @@ public class BackupPage {
     private SelenideElement okButton = $(By.xpath("//button[@class='btn-ok']"));
     private SelenideElement lastScheduledBackUpName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
 
+    private SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
+
+
     public void goToBackupPage() {
         backupPageLinkText.click();
     }
@@ -185,5 +188,7 @@ public class BackupPage {
         waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT, name);
     }
 
-
+    public void verifyBackupHeader() {
+        backupHeader.shouldBe(visible);
+    }
 }

@@ -1,36 +1,76 @@
 package cucumber.steps;
 
+import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.switchTo;
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.User;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import java.awt.AWTException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import pageobjects.pages.AlarmPage;
+import pageobjects.pages.AnalyticsPage;
+import pageobjects.pages.BackupPage;
+import pageobjects.pages.ConfigurationPage;
+import pageobjects.pages.LoginPage;
+import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.pages.SettingPage;
+import pageobjects.pages.TrendsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
 
 public class UserPageStepsDefinition {
 
     private final UserPage userPage;
+    private final LoginPage loginPage;
+    private final TrendsPage trendsPage;
+    private final RecipePage recipePage;
+    private final AnalyticsPage analyticsPage;
+    private final AlarmPage alarmPage;
+    private final BackupPage backupPage;
+    private final SettingPage settingPage;
+    private final ConfigurationPage configurationPage;
     private final User user;
     private final Report report;
     private final ReportsPage reportPage;
     private final Login login;
 
-    public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, Report report, User user, Login login) {
+    public UserPageStepsDefinition(ReportsPage reportPage,
+                                   UserPage userPage,
+                                   LoginPage loginPage,
+                                   RecipePage recipePage,
+                                   TrendsPage trendsPage,
+                                   AnalyticsPage analyticsPage,
+                                   AlarmPage alarmPage,
+                                   BackupPage backupPage,
+                                   SettingPage settingPage,
+                                   ConfigurationPage configurationPage,
+                                   Report report,
+                                   User user,
+                                   Login login) {
         this.userPage = userPage;
         this.user = user;
         this.report = report;
         this.reportPage = reportPage;
         this.login = login;
+        this.loginPage = loginPage;
+        this.analyticsPage = analyticsPage;
+        this.recipePage = recipePage;
+        this.trendsPage = trendsPage;
+        this.alarmPage = alarmPage;
+        this.backupPage = backupPage;
+        this.configurationPage = configurationPage;
+        this.settingPage = settingPage;
     }
 
     @Given("I search {string} user")
@@ -276,5 +316,99 @@ public class UserPageStepsDefinition {
         var expectedText = I18nUtils.getValueFromKey("user.header.title");
         userPage.seeContent(expectedText);
         SelenideHelper.goParentFrame();
+    }
+
+    @Given("I go to userprofile")
+    public void iGoToUserProfile() {
+        userPage.userProfileIcon();
+    }
+
+    @And("I change the password")
+    public void iChangeThePassword() {
+        userPage.changePassword();
+    }
+
+    @And("I should see change password window popup")
+    public void iSeeChangePasswordWindowPopup() {
+        userPage.windowPopup();
+    }
+
+    @Given("^I verify the below Icons on left rail of Portal$")
+    public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
+        List<String> icon = datatable.asList();
+        userPage.zoomOut();
+        for (String name : icon) {
+            userPage.clickOnAppModule(name);
+            switch (name) {
+                case "Main":
+                    loginPage.waitControlOnPnid();
+                    break;
+                case "Trends":
+                    SelenideHelper.goToIFrame();
+                    trendsPage.trendsHeaderValidation();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Analytics":
+                    SelenideHelper.goToIFrame();
+                    analyticsPage.verifyAnalyticsHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Alarms":
+                    SelenideHelper.goToIFrame();
+                    alarmPage.checkAlarmHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Recipes":
+                    SelenideHelper.goToIFrame();
+                    recipePage.verifyRecipeHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Reports":
+                    SelenideHelper.goToIFrame();
+                    reportPage.verifyReportsHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Configuration":
+                    SelenideHelper.goToIFrame();
+                    configurationPage.verifyConfigurationHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Users":
+                    userPage.checkAlarmHeader();
+                    break;
+                case "Backup":
+                    backupPage.verifyBackupHeader();
+                    break;
+                case "Settings":
+                    settingPage.verifySettingHeader();
+                    break;
+            }
+        }
+    }
+
+    @Then("I see error message is displayed as {string}")
+    public void iVerifyErrorNotification(String message) {
+        userPage.errorNotification(message);
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @Then("I see password updated message is displayed for {string}")
+    public void iSeePasswordUpdatedMessagedisplayed(String username) {
+        var message = String.format("User password for %s is updated", username);
+        userPage.updateNotification(message);
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @Then("I should see {string} {string} and {string} under user profile icon")
+    public void iVerifyUserProfile(String firstName, String lastName, String role) {
+        userPage.verifyUserProfileIcon(firstName, lastName, role);
+        Selenide.sleep(2000);
+        userPage.changePassword();
+        userPage.closeChangeUserPropertiesChangeModal();
+    }
+
+    @When("I click on changepassword")
+    public void iClickOnChangePswd() {
+        userPage.changePassword();
     }
 }

@@ -5,17 +5,12 @@ import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 
+@Setter
+@Getter
 public class Role {
 
-    @Setter
-    @Getter
     String roleName;
-
-    @Setter
-    @Getter
+    String oldRoleName;
     Set<String> permissions = new HashSet<>();
-
-    @Setter
-    @Getter
     RoleAction roleAction;
 }

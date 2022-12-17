@@ -4,6 +4,8 @@ import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.Role;
 import dataobjects.RoleAction;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -148,6 +150,68 @@ public class RolePageStepsDefinition {
     @When("I click on save button")
     public void iSaveRole() {
         rolePage.saveButton();
+    }
+
+    @And("^I verify default roles$")
+    public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
+        List<String> roles = datatable.asList();
+        for (String names : roles) {
+            rolePage.iVerifyDefaultRoles(names);
+        }
+    }
+
+
+    @And("I verify {string} list of {string}")
+    public void iVerifyPrivilegesListOfRoles(String userRole, String roles) {
+        if (userRole.equalsIgnoreCase("privilege")) {
+            rolePage.privilegesOfroles(roles);
+        } else if (userRole.equalsIgnoreCase("proceessmanager")) {
+            rolePage.processManager(roles);
+        }
+    }
+
+    @And("^I should see view icon of perticular roles$")
+    public void iSeeViewIconOfperticularRoles(DataTable datatable) {
+        List<String> icon = datatable.asList();
+        for (String name : icon) {
+            rolePage.validateViewIcon(name);
+        }
+    }
+
+    @And("I click on edit icon corresponding custom role")
+    public void iClickOnEditIconCorrespondingCustomRole() {
+        rolePage.adminIcon();
+    }
+
+    @And("^I unchecked role permissions$")
+    public void iRemovePermissions(DataTable datatable) {
+        List<String> uncheck = datatable.asList();
+        for (String name : uncheck) {
+            rolePage.unselectrolepremission(name);
+        }
+    }
+
+    @And("I create a random rolename")
+    public void iEnterNewCustomRoleName() {
+        this.role.setRoleName(RandomStringUtils.randomAlphabetic(10));
+        this.role.setOldRoleName(rolePage.getOldRoleName());
+        rolePage.iCreateRondomName(this.role.getRoleName());
+    }
+
+    @And("I should see new custom role created")
+    public void iShouldSeeNewCustomRole() {
+        rolePage.isearchName(this.role.getRoleName());
+        rolePage.verifyRoleName(this.role.getRoleName());
+    }
+
+    @And("I verify a new user {string} by selecting custom role")
+    public void iCreatedNewUserRole(String rolename) {
+        rolePage.iCreateNewUser(rolename);
+    }
+
+    @And("I should see role name {string} in role culumn")
+    public void iSeeCustomRoleInRoleColumn(String role) {
+        rolePage.rolename(role);
     }
 
 }

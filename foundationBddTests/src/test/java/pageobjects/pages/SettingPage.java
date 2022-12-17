@@ -26,6 +26,7 @@ public class SettingPage {
     private SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
     private SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
     private SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
+    private SelenideElement settingsHeader = $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
@@ -71,5 +72,9 @@ public class SettingPage {
 
     public void seeContent(String expectedText) {
         commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+    }
+
+    public void verifySettingHeader() {
+        settingsHeader.shouldBe(visible);
     }
 }

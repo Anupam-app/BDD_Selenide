@@ -111,6 +111,7 @@ public class ReportsPage {
     private final SelenideElement saveBtn = $(By.xpath("//button[text()='Save']"));
     private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
+
     private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
     private final String recipeAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String userAuditLogs = "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s')]";
@@ -126,15 +127,17 @@ public class ReportsPage {
     private final SelenideElement XPATH_ERRORNOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification = "Failed to create report template because %s already exists. Use a different name.";
 
+
     private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private ElementsCollection dateRange = $$(By.xpath("//div[(@class='ranges')]//li[i]"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
     private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
     private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
+
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter']"));
     private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
     private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
+
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
     private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));
@@ -156,11 +159,11 @@ public class ReportsPage {
     private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
 
-    private SelenideElement date;
+    private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
+
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
-
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -639,19 +642,7 @@ public class ReportsPage {
         return isTrue;
     }
 
-    public void selectDate(String daterange) {
-
-        ElementsCollection options = dateRange;
-        options.shouldBe(CollectionCondition.size(7));
-        for (SelenideElement d : options) {
-            for (int i = 0; i < options.size(); i++) {
-                date.click();
-                options.get(i).click();
-            }
-        }
-    }
-
-    public void selectDateRange(String option) throws InterruptedException {
+    public void selectDateRange(String option) {
         commonWaiter(dateColumn, visible);
         dateColumn.click();
         ElementsCollection options = dateOptions;
@@ -804,18 +795,6 @@ public class ReportsPage {
             column_temp.shouldBe(visible);
         }
         return isTrue;
-    }
-
-    public void selectDateRprt(String daterange) {
-
-        ElementsCollection options = dateRange;
-        options.shouldBe(CollectionCondition.size(7));
-        for (SelenideElement d : options) {
-            for (int i = 0; i < options.size(); i++) {
-                date.click();
-                options.get(i).click();
-            }
-        }
     }
 
     public void selectDateRangeRprt(String option) throws InterruptedException {
@@ -977,5 +956,9 @@ public class ReportsPage {
             }
         }
         return result;
+    }
+
+    public void verifyReportsHeader() {
+        reportManagementHeader.shouldBe(visible);
     }
 }

@@ -36,7 +36,8 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement postRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
-    private final String stepNo = "//p[text()='%S']";
+    private final SelenideElement stepNo = $(By.xpath("//p[(@class='MuiTypography-root jss1517 MuiTypography-body1')]"));
+    private final String XPATH_STEP_NO = "//p[text()='%S']";
 
     private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss') and contains(@src,'Tab')]"));
     private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
@@ -89,6 +90,7 @@ public class RecipeConsolePage {
     private final SelenideElement minuteValidate = $(By.xpath("//div[@id='timerCycle']//span[3]"));
     private final SelenideElement closeButtonOfStop = $(By.xpath("//span[contains(text(),'Yes')]"));
     private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
+
     private final SelenideElement manualOperationButton = $(By.xpath("//span[contains(text(),'MANUAL OPERATION')]"));
     private final ElementsCollection textBox_RedClrMsg = $$(By.xpath("//span[text()='Mandatory field should not be empty.']"));
     private final SelenideElement manualOperationSelected = $(By.xpath("//button[contains(@class, 'MuiButton-outlinedPrimary')]//span[contains(text(),'MANUAL OPERATION')]"));
@@ -100,6 +102,7 @@ public class RecipeConsolePage {
     private final SelenideElement processHoldDailogBox = $(By.xpath("//h6[text()='Are you sure you want to put the process on hold?']"));
     private final SelenideElement processhold_Box = $(By.xpath("//h6[text()='Process Hold']"));
     private final SelenideElement noButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "No")));
+
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
     private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
@@ -454,9 +457,8 @@ public class RecipeConsolePage {
 
     public void verifyStep(String stepNumber) {
         clickOnJumpToStep(stepNumber);
-        var reviewStatus = $(By.xpath(String.format(stepNo, stepNumber)));
+        var reviewStatus = $(By.xpath(String.format(XPATH_STEP_NO, stepNumber)));
         SelenideHelper.commonWaiter(reviewStatus, visible);
-
     }
 
     public void manualOperation(String status) {
@@ -836,5 +838,13 @@ public class RecipeConsolePage {
         Selenide.sleep(2000);
         alert.accept();
 
+    }
+
+    public boolean verifyLivestepDetails(String steps) {
+        boolean isResult = false;
+        if (stepNo.getText().equalsIgnoreCase(steps) && recipeStep.isDisplayed()) {
+            isResult = true;
+        }
+        return isResult;
     }
 }
