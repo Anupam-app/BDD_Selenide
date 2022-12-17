@@ -122,7 +122,7 @@ Feature: User management
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     And I verify default user account "Bio4CService" and "Administrator"
-    And I navigate to role icon
+    And I trigger Roles mode
     And I verify default roles
       | Bio4C Service |
       | Administrator |
@@ -139,7 +139,7 @@ Feature: User management
   Scenario: BIOCRS-5145|Verify Default Role Modification
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
-    When I navigate to role icon
+    When I trigger Roles mode
     And I click on edit icon corresponding custom role
     And I unchecked role permissions
       | Create Recipe |

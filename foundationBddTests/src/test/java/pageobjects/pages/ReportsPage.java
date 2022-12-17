@@ -68,7 +68,6 @@ public class ReportsPage {
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectUserDropdownRunPage = $(By.xpath("//span[text()='Select User']/following-sibling::*"));
     private final SelenideElement selectDateDropdownRunPage = $(By.xpath("//*[@id='calendar']"));
-    private final SelenideElement selectUserDropdown = $(By.xpath("//div[@class='user-list-drop-down']/div/div/span[2]"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
             $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
     private final ElementsCollection optionsReportTemplate = $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
@@ -108,17 +107,13 @@ public class ReportsPage {
     private final SelenideElement saveBtn = $(By.xpath("//button[text()='Save']"));
     private final SelenideElement notificationMsg = $(By.xpath("//div[@role='alert']"));
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
-    private final SelenideElement selectTemp = $(By.xpath("//tr[@class='tbl-row selected_row']/td"));
 
     private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private ElementsCollection dateRange = $$(By.xpath("//div[(@class='ranges')]//li[i]"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
     private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
     private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
-    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
     private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));

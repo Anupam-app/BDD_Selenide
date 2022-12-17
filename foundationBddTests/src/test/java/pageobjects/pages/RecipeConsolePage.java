@@ -86,30 +86,22 @@ public class RecipeConsolePage {
     private final SelenideElement previousStep1 = $(By.xpath("//label[text()='LoopControl→FI102→Configure→Setpoint: 0.0 L/min']"));
     private final SelenideElement currentStep = $(By.xpath("//label[text()='LoopControl→FI101→Configure→Auto']"));
     private final SelenideElement nextStep = $(By.xpath("//label[text()='LoopControl→FI101→Configure→Auto']"));
-    private final SelenideElement runStatus = $(By.xpath("//div[@class='displayLabel']/parent::div/div[3]/div[2]/span/label"));
-    private final ElementsCollection asterickMark = $$(By.xpath("//*[contains(@class,'label1')]/span[i]"));
     private final ElementsCollection textBox_RedClrMsg = $$(By.xpath("//span[text()='Mandatory field should not be empty.']"));
-    //private final String textBox_RedClrMsg = "//span[text()='Mandatory field should not be empty.']";
-    private final SelenideElement existingRunIdMsg = $(By.xpath("//span[text()='Run ID is already in use.']"));
     private final String manualOparation = "//span[text()='%s']";
     private final SelenideElement start_Btn = $(By.xpath("//img[contains(@src,'START')]"));
     private final SelenideElement preRun_WindowPopop = $(By.xpath("//p[text()='Pre-Run Record']"));
     private final SelenideElement runIdExistMsg = $(By.xpath("//span[text()='Run ID is already in use.']"));
     private final SelenideElement manualOpareationTextbox = $(By.xpath("//input[@name='recipeName']"));
     private final SelenideElement recipeStep = $(By.xpath("//label[contains(@title,'LoopControl→FI101→Configure→Setpoint: 1.0 L/min')]"));
-    private final SelenideElement stepsNo = $(By.xpath("//p[@class='MuiTypography-root jss101 MuiTypography-body1']"));
     private final SelenideElement mainPage = $(By.xpath("//div[@id='PNID']"));
     private final SelenideElement processHoldDailogBox = $(By.xpath("//h6[text()='Are you sure you want to put the process on hold?']"));
     private final SelenideElement processhold_Box = $(By.xpath("//h6[text()='Process Hold']"));
-    private final SelenideElement ProcessHold = $(By.xpath("//span[text()='PROCESS HOLD']"));
 
-    private ElementsCollection approvedActive = $$(By.xpath("//tbody[(@class='MuiTableBody-root jss228')]/tr/td[i]"));
     private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
     private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
     private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
-    private final SelenideElement yes_Btn = $(By.xpath("//span[text()='Yes']"));
 
     private Recipe recipe;
 

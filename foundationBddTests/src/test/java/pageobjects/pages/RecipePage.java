@@ -92,12 +92,8 @@ public class RecipePage {
     private final SelenideElement importButton = $(By.xpath("//button[contains(text(),'Import')]"));
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
     private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-    private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
-    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
@@ -112,22 +108,7 @@ public class RecipePage {
     private final String expandAction = "//p[@title='%s']";
     private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
     private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
-    private final SelenideElement draft = $(By.xpath("//*[text()='Draft']"));
-    private final SelenideElement chnage = $(By.xpath("//button[text()='Change']"));
-    private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
-    private final SelenideElement recipeValue = $(By.xpath("//div[@class='recipeTabs']"));
 
-    private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private final String XPATH_OPTION_DROPDOWN = "//option[@value='%s']/ancestor::li";
-    private SelenideElement recipeManagement = $(By.xpath("//div[(@id='RecipeManagement')]"));
-    private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[5]"));
-    private final SelenideElement importedArrowIcon = $(By.xpath("//div[@class='down-icon']"));
-    private SelenideElement importedStatusIcon = $(By.xpath("(//div[@class='filter-box'])[3]/div[2]"));
-    private final String importedCheckbox = "//input[@value='%s']";
-    private final SelenideElement importStatusIcon = $(By.xpath("//div[@class='filters-container']/div[3]/div/div[2]"));
-    private final SelenideElement clearAll_Btn = $(By.xpath("//*[text()='Clear All']"));
-    private final SelenideElement lastModifiedOn = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
-    private final SelenideElement importedColumnValue = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[3][text()='No']"));
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
 
     public void goTo() {

@@ -448,6 +448,7 @@ public class RecipeConsoleStepsDefinition {
 
     @And("I verify the recipe execution details in console View")
     public void recipeDetailsInConsole() {
+
         recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
     }
 
