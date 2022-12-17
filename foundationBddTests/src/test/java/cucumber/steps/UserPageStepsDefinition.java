@@ -16,23 +16,60 @@ import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import pageobjects.pages.AlarmPage;
+import pageobjects.pages.AnalyticsPage;
+import pageobjects.pages.BackupPage;
+import pageobjects.pages.ConfigurationPage;
+import pageobjects.pages.LoginPage;
+import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.pages.SettingPage;
+import pageobjects.pages.TrendsPage;
 import pageobjects.pages.UserPage;
+import pageobjects.utility.SelenideHelper;
 
 public class UserPageStepsDefinition {
 
     private final UserPage userPage;
+    private final LoginPage loginPage;
+    private final TrendsPage trendsPage;
+    private final RecipePage recipePage;
+    private final AnalyticsPage analyticsPage;
+    private final AlarmPage alarmPage;
+    private final BackupPage backupPage;
+    private final SettingPage settingPage;
+    private final ConfigurationPage configurationPage;
     private final User user;
     private final Report report;
     private final ReportsPage reportPage;
     private final Login login;
 
-    public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, Report report, User user, Login login) {
+    public UserPageStepsDefinition(ReportsPage reportPage,
+                                   UserPage userPage,
+                                   LoginPage loginPage,
+                                   RecipePage recipePage,
+                                   TrendsPage trendsPage,
+                                   AnalyticsPage analyticsPage,
+                                   AlarmPage alarmPage,
+                                   BackupPage backupPage,
+                                   SettingPage settingPage,
+                                   ConfigurationPage configurationPage,
+                                   Report report,
+                                   User user,
+                                   Login login) {
         this.userPage = userPage;
         this.user = user;
         this.report = report;
         this.reportPage = reportPage;
         this.login = login;
+        this.loginPage = loginPage;
+        this.analyticsPage = analyticsPage;
+        this.recipePage = recipePage;
+        this.trendsPage = trendsPage;
+        this.alarmPage = alarmPage;
+        this.backupPage = backupPage;
+        this.configurationPage = configurationPage;
+        this.settingPage = settingPage;
     }
 
     @Given("I search {string} user")
@@ -288,7 +325,51 @@ public class UserPageStepsDefinition {
         List<String> icon = datatable.asList();
         userPage.zoomOut();
         for (String name : icon) {
-            userPage.iVerifyApp_Modules(name);
+            userPage.clickOnAppModule(name);
+            switch (name) {
+                case "Main":
+                    loginPage.waitControlOnPnid();
+                    break;
+                case "Trends":
+                    SelenideHelper.goToIFrame();
+                    trendsPage.trendsHeaderValidation();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Analytics":
+                    SelenideHelper.goToIFrame();
+                    analyticsPage.verifyAnalyticsHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Alarms":
+                    SelenideHelper.goToIFrame();
+                    alarmPage.checkAlarmHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Recipes":
+                    SelenideHelper.goToIFrame();
+                    recipePage.verifyRecipeHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Reports":
+                    SelenideHelper.goToIFrame();
+                    reportPage.verifyReportsHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Configuration":
+                    SelenideHelper.goToIFrame();
+                    configurationPage.verifyConfigurationHeader();
+                    SelenideHelper.goToDefault();
+                    break;
+                case "Users":
+                    userPage.checkAlarmHeader();
+                    break;
+                case "Backup":
+                    backupPage.verifyBackupHeader();
+                    break;
+                case "Settings":
+                    settingPage.verifySettingHeader();
+                    break;
+            }
         }
     }
 

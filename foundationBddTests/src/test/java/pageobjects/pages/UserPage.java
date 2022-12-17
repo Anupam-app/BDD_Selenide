@@ -67,21 +67,11 @@ public class UserPage {
     private String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private SelenideElement cancelButton = $(By.xpath("//button/b[text()='Cancel']"));
     private SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
-
-
     private final String defaultRolesnames = "//div[text()='%s']";
-
     private final String checkPermissions = "//label[@class='ant-checkbox-wrapper']/span/input/following-sibling::span[(contains(text(),'%s'))]";
     private SelenideElement editIconOfOperator = $(By.xpath("//*[text()='Operator']/parent::div//div[5]/*[(@class='edit-icon')]"));
-
-
     private final String applicationModule = "//div[contains(@class,'icontitle') and contains(text(),'%s')]";
-    private SelenideElement mainHeader = $(By.xpath("//span[text()='You are controlling main screen']"));
-    private SelenideElement alaramHeader = $(By.xpath("//div[text()='Alarms']"));
-    private SelenideElement configurationHeader = $(By.xpath("//h4[contains(text(),'Process Control')]"));
     private SelenideElement userHeader = $(By.xpath("//div[text()='User Management']"));
-    private SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
-    private SelenideElement settingsHeader = $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
     private final SelenideElement userProfile = $(By.xpath("//*[@id='userProfile']"));
     private SelenideElement chnagePwd = $(By.xpath("//span[text()='Change password']"));
     private SelenideElement chnagePwdWindow = $(By.xpath("//h5[text()='Change Password']"));
@@ -89,21 +79,6 @@ public class UserPage {
     private SelenideElement closeUserPropertiesChangeModal = $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
     private SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
     private SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
-
-    private TrendsPage trendsPage;
-    private AnalyticsPage analyticsPage;
-    private LoginPage loginPage;
-    private RecipePage recipePage;
-    private ReportsPage reportsPage;
-
-    public UserPage(LoginPage loginPage, TrendsPage trendsPage, AnalyticsPage analyticsPage, RecipePage recipePage,
-                    ReportsPage reportsPage) {
-        this.loginPage = loginPage;
-        this.trendsPage = trendsPage;
-        this.analyticsPage = analyticsPage;
-        this.recipePage = recipePage;
-        this.reportsPage = reportsPage;
-    }
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -374,55 +349,6 @@ public class UserPage {
         $(By.xpath(String.format(applicationModule, name))).should(visible);
     }
 
-    public void iVerifyApp_Modules(String name) {
-        commonWaiter($(By.xpath(String.format("//div[text()='%s']", name))), visible).click();
-        switch (name) {
-            case "Main":
-                loginPage.waitControlOnPnid();
-                mainHeader.shouldBe(visible);
-                break;
-            case "Trends":
-                SelenideHelper.goToIFrame();
-                trendsPage.trendsHeaderValidation();
-                SelenideHelper.goToDefault();
-                break;
-            case "Analytics":
-                SelenideHelper.goToIFrame();
-                analyticsPage.verifyAnalyticsHeader();
-                SelenideHelper.goToDefault();
-                break;
-            case "Alarms":
-                SelenideHelper.goToIFrame();
-                alaramHeader.shouldBe(visible);
-                SelenideHelper.goToDefault();
-                break;
-            case "Recipes":
-                SelenideHelper.goToIFrame();
-                recipePage.verifyRecipeHeader();
-                SelenideHelper.goToDefault();
-                break;
-            case "Reports":
-                SelenideHelper.goToIFrame();
-                reportsPage.verifyReportsHeader();
-                SelenideHelper.goToDefault();
-                break;
-            case "Configuration":
-                SelenideHelper.goToIFrame();
-                configurationHeader.shouldBe(visible);
-                SelenideHelper.goToDefault();
-                break;
-            case "Users":
-                userHeader.shouldBe(visible);
-                break;
-            case "Backup":
-                backupHeader.shouldBe(visible);
-                break;
-            case "Settings":
-                settingsHeader.shouldBe(visible);
-                break;
-        }
-    }
-
     public void errorNotification(String message) {
         commonWaiter(XPATH_ERRORNOTIFICATION_TEXT, visible);
         XPATH_ERRORNOTIFICATION_TEXT.shouldHave(text(message));
@@ -453,5 +379,13 @@ public class UserPage {
             robot.keyRelease(KeyEvent.VK_CONTROL);
             Selenide.sleep(2000);
         }
+    }
+
+    public void clickOnAppModule(String name) {
+        commonWaiter($(By.xpath(String.format("//div[text()='%s']", name))), visible).click();
+    }
+
+    public void checkAlarmHeader() {
+        userHeader.shouldBe(visible);
     }
 }

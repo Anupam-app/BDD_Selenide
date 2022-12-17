@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
@@ -12,6 +13,7 @@ public class SettingPage {
     private SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
     private SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
     private SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
+    private SelenideElement settingsHeader = $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
 
     public void goToSettingsPage() {
         SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible).click();
@@ -33,5 +35,9 @@ public class SettingPage {
 
     public String getCustomLabelNameText() {
         return customLabelText.getValue();
+    }
+
+    public void verifySettingHeader() {
+        settingsHeader.shouldBe(visible);
     }
 }

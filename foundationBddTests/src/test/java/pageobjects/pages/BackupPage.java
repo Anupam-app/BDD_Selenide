@@ -40,6 +40,7 @@ public class BackupPage {
     private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
     private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
     private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
+    private SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
 
 
     public void goToBackupPage() {
@@ -136,5 +137,9 @@ public class BackupPage {
     public void notificationMessage(String message) {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).
                 waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
+    }
+
+    public void verifyBackupHeader() {
+        backupHeader.shouldBe(visible);
     }
 }
