@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Apply Filter Recipes
+Feature: Recipes Management Filters
 
   Background:
     Given I am logged in as "Bio4CAdmin" user

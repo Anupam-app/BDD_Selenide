@@ -59,6 +59,8 @@ Feature: Recipe console
     And I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
     Then I see the error message as "Special characters are not allowed for Comments"
+    And I select user in dropdown "Bio4CAdmin"
+    And I check audit trial logs
 
   @SMOKE
   Scenario: Recipe execution
@@ -79,6 +81,29 @@ Feature: Recipe console
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
+
+  Scenario: Verify the Recipe Execution|BIOCRS-1593|
+    When I expand recipe console in pnid
+    And I click on load recipe
+    Then I should not see unapproved recipe
+    And I load recipe "testRecipeToExecute"
+    And I start and wait recipe execution during 10 seconds
+    Then I should see recipe name and recipe steps details
+    When I goto report management page
+    And I select template sort by "Run" in "false"
+    And I select date range as "Today"
+    Then I verify recipe details captured in report run tab "testRecipeToExecute"
+
+  Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute" and run it during 10 seconds
+    And I verify all mandatory fields has asterick mark "*"
+    When I click ok button
+    Then I should see "Mandatory field should not be empty." message
+    When I enter existing value in RUNID
+    Then I should see message "Run ID is already in use."
+    And I verify the Batch ID suggestion with unique Value
+    When I enter special characters "@!#$%^&*" in run comments section
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
     When I expand recipe console in pnid
@@ -141,6 +166,14 @@ Feature: Recipe console
     Then I validate the timer and stop button and run details
     When I hold the system
     Then I see the system on hold
+
+  Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
+    Given I expand recipe console in pnid
+    When I select "Manual operation" tab
+    And I start Manual run
+    Then I validate the timer and stop button and run details
+    When I Process hold the system
+    Then I should see Process restart button
     And I validate the timer is incrementing
     When I Stop the RUN
     Then I validate the date formats in Post run window and enter comments
@@ -153,4 +186,56 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe
     Then I verify the details
+    And I validate the Start button is "enabled"
 
+  Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
+    Given I expand recipe console in pnid
+    When I Select Process Hold
+    And I verify the Process hold Dialog box , buttons
+    And I validate close,No button functionality
+    And I Select Process Hold
+    And I Select Yes button
+    Then I should see change of Process holding to Process restart
+    And I verify the recipe console Elements
+    And I select Process restart
+    And I verify the Process restart Dialog box , buttons
+    And I validate close,No button functionality
+    And I select Process restart
+    And I Select Yes button
+    Then I should see change of Process restating to Process hold
+    And I verify the recipe console Elements
+  
+  Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
+    Given I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I verify the recipe execution details in console View
+    When I goto report management page
+    And I go to main
+    Then I verify the recipe execution details in console View
+    And I logout
+    And I open login page
+    And I am logged in as "Bio4CAdmin" user
+    And I expand recipe console in pnid
+    And I verify the recipe execution details in console View
+    And I refresh the portal
+    And I open login page
+    And I am logged in as "Bio4CAdmin" user
+    And I expand recipe console in pnid
+    And I verify the recipe execution details in console View
+
+  Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
+    When I expand recipe console in pnid
+    And I select "MANUAL OPERATION" tab
+    Then I should see start button is displayed
+    When I click on start button
+    When I start manual recipe execution
+    And I click ok button
+    And I click on start button
+    Then I should see "Mandatory field should not be empty." message
+    When I enter existing value in RUNID
+    Then I should see message "Run ID is already in use."
+    When I enter special characters "@!#$%^&*" in comments section
+    Then I should not see special characters not allowed
+    And I Verify manual run status in recipe consol
+ 

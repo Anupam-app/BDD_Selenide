@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Apply Filter Reports
+Feature: Reports Filter
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -144,7 +144,6 @@ Feature: Apply Filter Reports
     And I trigger report template mode
     When  I select template sort by "<columns>" in "<descending>"
     Then "<columns>" list should be sorted in "<descending>" order
-
     Examples:
       | columns          | descending |
       | Last Modified By | false      |

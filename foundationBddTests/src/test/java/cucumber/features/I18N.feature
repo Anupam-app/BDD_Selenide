@@ -38,7 +38,6 @@ Feature: I18N on all modules
       | fr-FR    |
       | en-US    |
 
-
   @IVI @CRS
   Scenario: Test i18n device shape
     Given I go to user profile
@@ -80,7 +79,6 @@ Feature: I18N on all modules
       | language |
       | fr-FR    |
       | en-US    |
-
 
   Scenario: IVI Bug - IVI-4912 | User Preference -Default Page
     Given I go to user profile

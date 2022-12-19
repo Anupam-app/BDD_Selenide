@@ -27,3 +27,6 @@ NET USER "reportUnauthUser" "MerckApp1@" /ADD
 
 NET USER "NewUserRole" /DELETE
 NET USER "NewUserRole" "MerckApp1@" /ADD
+
+NET USER "testChangePwd" /DELETE
+NET USER "testChangePwd" "MerckApp1@" /ADD
