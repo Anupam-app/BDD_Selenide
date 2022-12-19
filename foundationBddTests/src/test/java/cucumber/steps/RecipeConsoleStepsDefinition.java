@@ -508,9 +508,17 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.validateYesBtn();
     }
 
+
     @And("I validate close,No button functionality")
     public void iVerifyCloseAndNobuttonFunctionality() {
         recipeConsolePage.validateNoBtn();
+    }
+
+    @And("I refresh the portal")
+    public void iRefreshThePortal() {
+        recipeConsolePage.iRefreshPortal();
+        Selenide.sleep(2000);
+        SelenideHelper.maximize();
     }
 
     @Then("I should see change of Process holding to Process restart")
@@ -550,12 +558,6 @@ public class RecipeConsoleStepsDefinition {
         this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
-    }
-
-    @And("I refresh the portal")
-    public void iRefreshThePortal() {
-        recipeConsolePage.iRefreshPortal();
-        SelenideHelper.maximize();
     }
 
     @And("I verify the Batch ID suggestion with unique Value")

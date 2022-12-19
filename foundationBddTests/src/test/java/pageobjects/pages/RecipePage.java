@@ -695,8 +695,8 @@ public class RecipePage {
     }
 
     public void warningMessage(String message) {
-        Selenide.sleep(1000);
-        $(By.xpath("//label[text()='Approved-InActive']")).click();
+    	switchTo().frame("CrossDomainiframeId");
+        commonWaiter($(By.xpath("//label[text()='Approved-InActive']")),visible).click();
         String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
         Assert.assertEquals(actual, message);
         $(By.xpath("//button[@class='btn-secondary']")).click();

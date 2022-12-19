@@ -923,10 +923,6 @@ public class ReportsPage {
         commonWaiter(requestNotification, not(visible));
     }
 
-    public void verifyRunMode() {
-        commonWaiter(runTab, not(visible));
-    }
-
     public void seeContent(String expectedText) {
         commonWaiter($(By.xpath(XPATH_NAV)), text(expectedText));
     }
@@ -1000,5 +996,9 @@ public class ReportsPage {
             }
         }
         return result;
+    }
+
+    public void verifyRunMode() {
+        commonWaiter(runTab, not(visible));
     }
 }

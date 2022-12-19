@@ -90,6 +90,7 @@ public class RecipeConsolePage {
     private final SelenideElement minuteValidate = $(By.xpath("//div[@id='timerCycle']//span[3]"));
     private final SelenideElement closeButtonOfStop = $(By.xpath("//span[contains(text(),'Yes')]"));
     private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
+    private final SelenideElement recipeRunBatchId = $(By.xpath("(//label[@id='trimString'])[3]"));
 
     private final SelenideElement manualOperationButton = $(By.xpath("//span[contains(text(),'MANUAL OPERATION')]"));
     private final ElementsCollection textBox_RedClrMsg = $$(By.xpath("//span[text()='Mandatory field should not be empty.']"));
@@ -750,11 +751,11 @@ public class RecipeConsolePage {
         }
     }
 
-    public boolean verifyAsterickMark(String mark) {
+    public boolean verifyAsterickMark(String Mark) {
         boolean isResult = false;
         ElementsCollection options = textBox_RedClrMsg;
         for (SelenideElement element : options) {
-            if (element.getText().equalsIgnoreCase(mark)) {
+            if (element.getText().equalsIgnoreCase(Mark)) {
                 isResult = true;
             } else {
                 isResult = false;

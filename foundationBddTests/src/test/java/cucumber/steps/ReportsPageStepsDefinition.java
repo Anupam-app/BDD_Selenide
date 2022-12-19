@@ -488,8 +488,8 @@ public class ReportsPageStepsDefinition {
 
     @Then("I verify custom role modification details captured in audit trail for user {string}")
     public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
-        var message = String.format("%s updated Role %s", username, this.user.getOldUserName());
-        var message1 = String.format("Role -%s", this.user.getUserName());
+        var message = String.format("%s updated Role %s", username, this.role.getOldRoleName());
+        var message1 = String.format("Role -%s", this.role.getRoleName());
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
         SelenideHelper.goToDefault();
     }
