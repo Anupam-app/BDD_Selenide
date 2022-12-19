@@ -847,4 +847,23 @@ public class RecipeConsolePage {
         }
         return isResult;
     }
+
+    public void uniqBatchId(String batchId) {
+        SelenideHelper.commonWaiter(batchIdTextbox, visible).click();
+        Selenide.sleep(2000);
+        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(Keys.ENTER);
+        //Selenide.sleep(2000);
+        okButton.click();
+    }
+
+    public void iValidateSpecialCharRun(String runId, String batchId, String productId, String value) {
+        runIdTextbox.setValue(runId);
+        productIdTextbox.setValue(productId);
+        batchIdTextbox.click();
+        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(Keys.ENTER);
+        preRunCommentsText.sendKeys(value);
+        SelenideHelper.commonWaiter(okButton, visible).click();
+    }
 }

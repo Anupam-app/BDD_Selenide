@@ -95,21 +95,6 @@ Feature: Recipe console
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
 
-  Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
-    When I expand recipe console in pnid
-    And I select "MANUAL OPERATION" tab
-    Then I should see start button is displayed
-    When I click on start button
-    When I start manual recipe execution
-    And I click ok button
-    And I click on start button
-    Then I should see "Mandatory field should not be empty." message
-    When I enter existing value in RUNID
-    Then I should see message "Run ID is already in use."
-    When I enter special characters "@!#$%^&*" in comments section
-    Then I should not see special characters not allowed
-    And I Verify manual run status in recipe consol
-
   Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
@@ -239,4 +224,19 @@ Feature: Recipe console
     And I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
+
+  Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
+    When I expand recipe console in pnid
+    And I select "MANUAL OPERATION" tab
+    Then I should see start button is displayed
+    When I click on start button
+    When I start manual recipe execution
+    And I click ok button
+    And I click on start button
+    Then I should see "Mandatory field should not be empty." message
+    When I enter existing value in RUNID
+    Then I should see message "Run ID is already in use."
+    When I enter special characters "@!#$%^&*" in comments section
+    Then I should not see special characters not allowed
+    And I Verify manual run status in recipe consol
  

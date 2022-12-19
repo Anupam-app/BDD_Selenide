@@ -557,4 +557,18 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.iRefreshPortal();
         SelenideHelper.maximize();
     }
+
+    @And("I verify the Batch ID suggestion with unique Value")
+    public void iVerifyBatchidWithUniqueValue() {
+        generateRandomRecipeValues();
+        recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
+    }
+
+    @When("I enter special characters {string} in run comments section")
+    public void iValidateRunRecipeComments(String specialchar) {
+        generateRandomRecipeValues();
+        recipeConsolePage.iValidateSpecialCharRun(this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getProductId(), specialchar);
+    }
+
 }
