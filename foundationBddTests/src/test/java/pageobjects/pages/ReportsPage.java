@@ -157,6 +157,7 @@ public class ReportsPage {
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
     private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
+    private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
 
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
 
@@ -977,6 +978,24 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 5 && comment.getText().equalsIgnoreCase(message)) {
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean verifyAuditTrailRecord(String message, String recordRole) throws ParseException {
+        boolean result = false;
+        if (eventTime.isDisplayed()) {
+            SimpleDateFormat sdf = new SimpleDateFormat(
+                    "dd/MMM/yyyy hh:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+            long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
+            long diffMinutes = diff / (60 * 1000) % 60;
+            if (diffMinutes < 10 && comment.getText().contains(message) &&
+                    record.getText().equalsIgnoreCase(recordRole)) {
                 result = true;
             }
         }
