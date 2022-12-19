@@ -166,8 +166,8 @@ public class Report {
                 // start from 1 to skip the header row
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
 
-                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText();
-                    String recordColumnValue = reportTable.getRows().get(i).get(userColumnIndex - 1).getText();
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(userColumnIndex - 1).getText(false);
 
                     if (!StringUtils.isEmpty(userColumnValue) && !StringUtils.isEmpty(recordColumnValue)) {
 
