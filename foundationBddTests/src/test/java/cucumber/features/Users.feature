@@ -135,23 +135,6 @@ Feature: User management
     Examples:
       | roles                         | UserRole  |
       | parameters/crs/privilegeslist | privilege |
-  
-  Scenario: BIOCRS-5145|Verify Default Role Modification
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to user page
-    When I trigger Roles mode
-    And I click on edit icon corresponding custom role
-    And I unchecked role permissions
-      | Create Recipe |
-      | Trends View   |
-    And I create a random rolename
-    Then I should see new custom role created
-    When I goto report management page
-    And I select report from dropdown "Audit Trail"
-    And I select date range as "Today"
-    When  I select template sort by "Event Time" in "false"
-    Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
-
 
   Scenario: Assign custom role to new user |BIOCRS-2585|
     Given I am logged in as "Bio4CAdmin" user
