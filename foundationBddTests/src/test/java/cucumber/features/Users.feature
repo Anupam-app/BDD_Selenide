@@ -45,7 +45,7 @@ Feature: User management
     And I edit the user
     Then the employee id is the expected one
     And the role is "Operator"
-
+  @test
   Scenario: BIOCRS-586 | User disable
     Given I am logged in as "Bio4cService" user
     And I go to user page
@@ -135,7 +135,7 @@ Feature: User management
     Examples:
       | roles                         | UserRole  |
       | parameters/crs/privilegeslist | privilege |
-
+  
   Scenario: BIOCRS-5145|Verify Default Role Modification
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page

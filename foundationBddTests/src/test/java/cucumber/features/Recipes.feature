@@ -42,7 +42,7 @@ Feature: Recipe management
       | Created By       |
       | Last Modified On |
       | UOP Status       |
-
+ 
   Scenario: BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"

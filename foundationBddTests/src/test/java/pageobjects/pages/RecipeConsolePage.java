@@ -75,6 +75,7 @@ public class RecipeConsolePage {
     private final SelenideElement minuteValidate = $(By.xpath("//div[@id='timerCycle']//span[3]"));
     private final SelenideElement closeButtonOfStop = $(By.xpath("//span[contains(text(),'Yes')]"));
     private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
+    private final SelenideElement recipeRunBatchId = $(By.xpath("(//label[@id='trimString'])[3]"));
 
     private final SelenideElement noButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "No")));
     private final SelenideElement closeButton = $(By.xpath("//h6[text()='Load Recipe']/parent::h6/parent::div/following-sibling::div/img"));
@@ -666,7 +667,7 @@ public class RecipeConsolePage {
 
     public boolean verifyRecipeDetails(String batch_Id) {
         boolean isResult = false;
-        if (batchId.getText().equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed()) {
+        if (recipeRunBatchId.getText().equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed()) {
             isResult = true;
         }
         return isResult;

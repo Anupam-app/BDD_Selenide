@@ -4,6 +4,8 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import static com.codeborne.selenide.Condition.*;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
+
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
@@ -918,8 +920,9 @@ public class ReportsPage {
             Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
+            System.out.println(recordRole);
             if (diffMinutes < 10 && comment.getText().contains(message) &&
-                    record.getText().equalsIgnoreCase(recordRole)) {
+                   record.getText().equalsIgnoreCase(recordRole)) {
                 result = true;
             }
         }

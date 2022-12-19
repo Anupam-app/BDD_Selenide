@@ -183,7 +183,7 @@ Feature: Recipe console
     And I Select Yes button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-
+  
   Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"

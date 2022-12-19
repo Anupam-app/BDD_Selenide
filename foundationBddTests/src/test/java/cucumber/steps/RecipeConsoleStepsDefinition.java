@@ -1,6 +1,8 @@
 package cucumber.steps;
 
 import com.codeborne.selenide.Selenide;
+
+
 import dataobjects.Analytics;
 import dataobjects.Recipe;
 import dataobjects.Report;
@@ -12,9 +14,12 @@ import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
+
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.utility.SelenideHelper;
 
@@ -506,6 +511,7 @@ public class RecipeConsoleStepsDefinition {
     @And("I refresh the portal")
     public void iRefreshThePortal() {
         recipeConsolePage.iRefreshPortal();
+        Selenide.sleep(2000);
         SelenideHelper.maximize();
     }
 

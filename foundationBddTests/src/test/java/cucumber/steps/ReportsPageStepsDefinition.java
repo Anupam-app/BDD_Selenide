@@ -5,6 +5,7 @@ import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
+import dataobjects.Role;
 import dataobjects.User;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -14,6 +15,9 @@ import io.cucumber.java.en.When;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
+
+import javax.print.attribute.SetOfIntegerSyntax;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.LoginPage;
@@ -27,16 +31,17 @@ public class ReportsPageStepsDefinition {
     private final User user;
     private final LoginPage loginPage;
     private final Login login;
-
+    private final Role role;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-                                      ReportTemplate reportTemplate, User user, Login login) {
+                                      ReportTemplate reportTemplate, User user, Login login, Role role) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
         this.reportTemplate = reportTemplate;
         this.user = user;
         this.login = login;
+        this.role = role;
     }
 
     @Given("I goto report management page")
@@ -447,8 +452,8 @@ public class ReportsPageStepsDefinition {
 
     @Then("I verify custom role modification details captured in audit trail for user {string}")
     public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
-        var message = String.format("%s updated Role %s", username, this.user.getOldUserName());
-        var message1 = String.format("Role -%s", this.user.getUserName());
+        var message = String.format("%s updated Role %s", username, this.role.getOldRoleName());
+        var message1 = String.format("Role -%s", this.role.getRoleName());
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
         reportPage.switchToDefaultContent();
     }
