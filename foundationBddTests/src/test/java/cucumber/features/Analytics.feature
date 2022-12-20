@@ -14,10 +14,10 @@ Feature: Analytics creation
 
     @CRS
     Examples:
-      | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
-      | PI101 PV        | psi   | PI102 PV        | psi   | PI103 PV       | psi   |
+      | Param1   | Unit1 | Param2   | Unit2 | Param3   | Unit3 |
+      | PI101 PV | psi   | PI102 PV | psi   | PI103 PV | psi   |
 
     @IVI
     Examples:
-      | Param1          | Unit1 | Param2          | Unit2 | Param3         | Unit3 |
-      | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV| rpm   |
+      | Param1          | Unit1 | Param2          | Unit2 | Param3          | Unit3 |
+      | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV | rpm   |

@@ -8,10 +8,10 @@ Feature: Settings Modification
     And I goto system components
     When I change custom label "<customLabelName>"
     Then New "<customLabelName>" is applied
-    
+
     Examples:
-         | customLabelName |
-         | Pump 21         |
+      | customLabelName |
+      | Pump 21         |
 
   #NOT able to stabilize this test and cause other test failure
   #@COMMON

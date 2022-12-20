@@ -4,11 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 
-
 public class Trends {
-	@Setter
+    @Setter
     @Getter
     String CollectionName;
-   
+
 
 }

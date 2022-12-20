@@ -1,7 +1,7 @@
 package dataobjects;
 
 public enum RecipeAction {
-	EXPORT,
-	IMPORT
+    EXPORT,
+    IMPORT
 }
 

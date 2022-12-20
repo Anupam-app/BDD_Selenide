@@ -60,9 +60,16 @@ public class SortHelper {
         Assert.assertEquals(expectedList, displayedList);
     }
 
+
     public static void checkSortedRolesElement(String columnName, boolean descending,
                                                List<String> getColumns) {
         List<String> displayedList = getColumns;
-        checkOrderedStringList(displayedList, descending);
+        var expectedList = new ArrayList<>(displayedList);
+        if (descending) {
+            expectedList.sort(Collections.reverseOrder(String.CASE_INSENSITIVE_ORDER));
+        } else {
+            expectedList.sort(String.CASE_INSENSITIVE_ORDER);
+        }
+        Assert.assertEquals(expectedList, displayedList);
     }
 }

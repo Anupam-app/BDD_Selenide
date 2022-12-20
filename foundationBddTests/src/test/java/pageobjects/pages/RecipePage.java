@@ -9,13 +9,10 @@ import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.I18nUtils;
-
 import dataobjects.Report;
 import java.awt.AWTException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.function.Function;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -92,9 +89,6 @@ public class RecipePage {
 
     private final By phasesList = By.className("phaseHead");
 
-    private final SelenideElement phasesListClick = $(By.className("phaseHead"));
-    private final SelenideElement phasesListClick1 = $(By.xpath("(//label[@class='phaseHead'])[1]"));
-    private final SelenideElement phasesListClick2 = $(By.xpath("((//label[@class='phaseHead'])[1]//following::span[@class='deleteBtn egu-right-block']/input)[1]"));
     private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private final SelenideElement statusDraft = $(By.xpath("//div[@class='status-tooltip']"));
     private final SelenideElement selectInReview = $(By.xpath("//span[text()='In-Review']"));
@@ -122,12 +116,8 @@ public class RecipePage {
 
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final SelenideElement datePopup = $(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright') and contains(@style,'block')]"));
     private ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-    private ElementsCollection dateOptions = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
-    private final SelenideElement startDateDesendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='order']"));
-    private final SelenideElement startDateAsendingArrow = $(By.xpath("//th[text()='Start Date']/span[@class='react-bootstrap-table-sort-order dropup']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
@@ -142,6 +132,7 @@ public class RecipePage {
     private final String expandAction = "//p[@title='%s']";
     private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
     private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
+
     private final SelenideElement draft = $(By.xpath("//*[text()='Draft']"));
     private final SelenideElement chnage = $(By.xpath("//button[text()='Change']"));
     private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
@@ -149,6 +140,9 @@ public class RecipePage {
     private final SelenideElement recipeInputSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
 
     public static final String RECIPE_DATE_FILTER_IVI = "MMM d, yyyy";
+
+    private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
+
 
     public void goTo() {
         recipePageLinkText.click();
@@ -558,23 +552,23 @@ public class RecipePage {
     }
 
     public boolean verifyDateRanges(String dateRange) throws ParseException, InterruptedException {
-       
+
         boolean isTrue = false;
         switch (dateRange) {
             case "Today":
             case "Yesterday":
                 String dateValue = dateColumn.getAttribute("value").split("To")[0].trim();
-                LocalDate selectedDate = SelenideHelper.dateParser(dateValue,RECIPE_DATE_FILTER_IVI);
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
                     Selenide.sleep(1000);
-        			String startDateRow1 = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
+                    String startDateRow1 = startDateRep.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1,Report.RECIPE_DATE_FORMAT);
-                    if (selectedAsendingDate.getDayOfMonth()== selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth()==selectedDate.getDayOfMonth()) {
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -588,23 +582,23 @@ public class RecipePage {
             case "Custom Range":
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = dateColumn.getAttribute("value").split("To")[0].trim();
-                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1,RECIPE_DATE_FILTER_IVI);
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, RECIPE_DATE_FILTER_IVI);
                 String dateValue2 = dateColumn.getAttribute("value").split("To")[1].trim();
-                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2,RECIPE_DATE_FILTER_IVI);
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
                     Selenide.sleep(1000);
                     String startDateRow = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow,Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
                     Selenide.sleep(1000);
                     String endDateRow = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow,Report.RECIPE_DATE_FORMAT);
-                    if ((selectedAsendingDate.getDayOfMonth()== selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
-        					&& (selectedDesendingDate.getDayOfMonth()== selectedDate2.getDayOfMonth()
-        					|| selectedDesendingDate.isBefore(selectedDate2))) {
-        				isTrue = true;
-        			}
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
+                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                            || selectedDesendingDate.isBefore(selectedDate2))) {
+                        isTrue = true;
+                    }
                 } else if (noDatamsg.isDisplayed()) {
                     isTrue = true;
                 }
@@ -701,8 +695,8 @@ public class RecipePage {
     }
 
     public void warningMessage(String message) {
-        Selenide.sleep(1000);
-        $(By.xpath("//label[text()='Approved-InActive']")).click();
+    	switchTo().frame("CrossDomainiframeId");
+        commonWaiter($(By.xpath("//label[text()='Approved-InActive']")),visible).click();
         String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
         Assert.assertEquals(actual, message);
         $(By.xpath("//button[@class='btn-secondary']")).click();
@@ -720,4 +714,7 @@ public class RecipePage {
         commonWaiter(insertStepBeforeButton, visible).shouldBe(selected);
     }
 
+    public void verifyRecipeHeader() {
+        recipeManagementHeader.shouldBe(visible);
+    }
 }

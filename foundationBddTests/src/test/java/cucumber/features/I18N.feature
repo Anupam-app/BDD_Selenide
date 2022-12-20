@@ -34,10 +34,10 @@ Feature: I18N on all modules
     And I reset my language to "en-US"
 
     Examples:
-         | language |
-         | fr-FR    |
-         | en-US    |
-	
+      | language |
+      | fr-FR    |
+      | en-US    |
+
   Scenario: Test i18n device shape
     Given I go to user profile
     And I go to user preferences
@@ -48,7 +48,7 @@ Feature: I18N on all modules
     And I see expected texts from recipe module criterias
     And I go to analytics
     And I see expected texts from analytics module parameters
-    
+
   Scenario: IVI Bug - IVI-4912 | User Preference -Default Page
     Given I go to user profile
     And I go to user preferences

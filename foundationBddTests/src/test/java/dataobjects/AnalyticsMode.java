@@ -1,7 +1,7 @@
 package dataobjects;
 
 public enum AnalyticsMode {
-	RELATIONAL,
-	REGRESSION
+    RELATIONAL,
+    REGRESSION
 }
 
