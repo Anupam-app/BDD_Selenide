@@ -233,7 +233,7 @@ public class ReportsPage {
                 break;
             case "reports":
                 $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex))).getText().isBlank());
+                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex))).waitUntil(visible,5000).getText().isBlank());
                 break;
         }
     }
@@ -739,7 +739,7 @@ public class ReportsPage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending,
-                getReportColumns, dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
+                getReportColumns, dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
     }
 
     public int getRandomNumber(int min, int max) {

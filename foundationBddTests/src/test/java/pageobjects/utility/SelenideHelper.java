@@ -10,6 +10,7 @@ import cucumber.util.DriverHooks;
 import java.text.ParseException;
 import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
@@ -61,6 +62,14 @@ public class SelenideHelper {
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
         LocalDate selectedDate = LocalDate.parse(value, formatter);
+
+        return selectedDate;
+    }
+    
+    public static LocalDateTime dateParserLocalDateTime(String value, String orgFormat) throws ParseException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
+        LocalDateTime selectedDate = LocalDateTime.parse(value, formatter);
 
         return selectedDate;
     }

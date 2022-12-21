@@ -181,6 +181,11 @@ public class RecipeConsolePage {
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
+        if (manualStopButton.isDisplayed()) {
+            manualStopButton.click();
+            closeButtonOfStop.click();
+            commonWaiter(okButton, visible).click();
+        }
         $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
     }
 
@@ -253,6 +258,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
@@ -280,6 +286,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         Selenide.sleep(2000);
     }
@@ -295,6 +302,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         Selenide.sleep(3000);
         String timeEnd = pauseTimerValue.getText();
@@ -538,6 +546,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
     }
 
