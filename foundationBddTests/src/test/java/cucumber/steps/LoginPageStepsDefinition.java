@@ -77,7 +77,7 @@ public class LoginPageStepsDefinition {
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {
         homepage.open();
-        loginPage.waitPnidLoading();
+    //  loginPage.waitPnidLoading();
         loginPage.openLogin();
         login.setLogin(username);
         login.setPassword("MerckApp1@");

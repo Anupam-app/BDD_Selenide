@@ -40,6 +40,7 @@ public class LoginPage {
     }
 
     public void openLogin() {
+		waitPnidLoading();
         commonWaiter(loginButton, visible).click();
     }
 
