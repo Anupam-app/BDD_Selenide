@@ -105,7 +105,6 @@ public class UserPage {
 
     public void edit(String user) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(xpathEditUserIcon, user))), visible).click();
-        $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
     }
 
     public void cannotEdit(String user) {
