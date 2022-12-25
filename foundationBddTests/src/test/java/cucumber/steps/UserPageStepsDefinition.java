@@ -411,4 +411,9 @@ public class UserPageStepsDefinition {
     public void iClickOnChangePswd() {
         userPage.changePassword();
     }
+    
+    @When("I verify default user account {string} and {string}")
+    public void iVerifyDefaultUserAccount(String user1, String user2) {
+        userPage.userAccountRole(user1, user2);
+    }
 }
