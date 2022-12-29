@@ -5,7 +5,11 @@ import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import com.xceptance.neodymium.util.Neodymium;
+
+import pageobjects.utility.SelenideHelper;
+
 import org.openqa.selenium.By;
+import static com.codeborne.selenide.Condition.*;
 
 public class HomePage {
 
@@ -22,7 +26,7 @@ public class HomePage {
     }
 
     public void goToMain() {
-        PNIDLinkText.click();
+        SelenideHelper.commonWaiter(PNIDLinkText,visible).click();
     }
 
 }

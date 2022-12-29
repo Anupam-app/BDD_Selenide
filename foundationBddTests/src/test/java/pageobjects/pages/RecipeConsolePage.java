@@ -186,6 +186,9 @@ public class RecipeConsolePage {
             closeButtonOfStop.click();
             commonWaiter(okButton, visible).click();
         }
+        if (manualStartButton.isDisplayed()) {
+            recipeButton.click();
+        }
         $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
     }
 
@@ -472,6 +475,24 @@ public class RecipeConsolePage {
 
     public void manualOperation(String status) {
 
+    	 if (restartButton.isDisplayed()) {
+             restartSystem();
+             SelenideHelper.commonWaiter(holdButton, visible);
+         }
+         if (abortIcon.isDisplayed()) {
+             abortIcon.click();
+             clickYesButton.waitUntil(Condition.visible, 1000).click();
+             okButton.waitUntil(Condition.visible, 5001).click();
+         }
+         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+         }
+         if (manualStopButton.isDisplayed()) {
+             manualStopButton.click();
+             closeButtonOfStop.click();
+             commonWaiter(okButton, visible).click();
+         }
+    	
         if (status.equalsIgnoreCase("enabled")) {
             manualOperationButton.waitUntil(visible, 50001).click();
             manualOperationSelected.shouldBe(visible);
