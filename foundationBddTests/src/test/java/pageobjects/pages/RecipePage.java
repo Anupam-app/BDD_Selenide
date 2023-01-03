@@ -198,7 +198,7 @@ public class RecipePage {
 
     public void addPhase(String phase) {
         addStepButton.click();
-        searchTextBox.sendKeys("setpoint");
+        searchTextBox.sendKeys("All Auto");
         searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "v");
@@ -716,5 +716,32 @@ public class RecipePage {
 
     public void verifyRecipeHeader() {
         recipeManagementHeader.shouldBe(visible);
+    }
+	
+	public void renamePhase(String phaseName) {
+        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible);
+    	stepAction.doubleClick($(By.xpath(String.format(phaseNameLabel, 1)))).perform();
+        commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(Keys.ENTER);
+        commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(phaseName);
+        commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(Keys.ENTER);
+    }
+    
+    public void verifyPhaseIsRenamed(String phaseName) {
+    	commonWaiter($(By.xpath("(//div[@class='phase-invocation stepNumber']/label[@class='stepCount'])[1]")),visible);
+    	$(By.xpath(String.format("//label[text()='%s']", phaseName))).shouldBe(visible);
+    }
+    
+    public void iSeeDeletedPhaseIsNotSeenInStep() {
+    	Selenide.sleep(1000);
+        $(By.xpath("//label[contains(text(),'PSH1')]")).shouldNotBe(visible);
+        $(By.xpath("//label[contains(text(),'PSH2')]")).shouldBe(visible);
+    }
+    
+    public void deletePhaseToRecipeWithCrossButton() {
+        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath("(//input[@class='deleteButton'])[3]")), visible).click();		
+        String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
+        $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
+        commonWaiter(okButton, visible).click();
     }
 }

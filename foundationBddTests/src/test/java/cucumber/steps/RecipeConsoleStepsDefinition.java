@@ -572,5 +572,21 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.iValidateSpecialCharRun(this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
                 this.currentRecipe.getProductId(), specialchar);
     }
+	
+	@Then("I verify step related valve {string} is executed")
+	public void ifElseStepExecuted(String action) {
+		recipeConsolePage.ifElseStepExecuted(action);
+	}
+	
+	@And("I wait for recipe Execution to be completed")
+	public void verifyRecipeRunComplete() {
+		recipeConsolePage.verifyRecipeRunComplete();
+		recipeConsolePage.isExecuted();
+	}
+	
+	@Then("I verify step doesnt have junk word")
+	public void ifElseStepShouldBeCorrect() {
+		recipeConsolePage.checkJunkWords();
+	}
 
 }

@@ -1001,4 +1001,26 @@ public class ReportsPage {
     public void verifyRunMode() {
         commonWaiter(runTab, not(visible));
     }
+	
+	public void selectESignStatus(String eSignStatus) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        arrowIcon.click();
+        commonWaiter($(By.xpath(String.format("//span[text()='%s']", eSignStatus))),visible).click();
+        $(By.xpath(String.format("//span[text()='%s']", "Signed"))).shouldBe(visible);
+        $(By.xpath(String.format("//span[text()='%s']", "Not Signed"))).shouldBe(visible);
+        $(By.xpath(String.format("//span[text()='%s']", "Not Required"))).shouldBe(visible);
+        applyFilterButton.click();
+    }
+    
+    public void verifyESignedStatus(String status) {
+        commonWaiter(filterSelection, visible);
+        if (!$(By.xpath(String.format("//table[@id='reportListTable']//th[5]"))).isDisplayed()) {
+            noDatamsg.isDisplayed();
+        } else {
+        	for(int i =1; i<=reportListTable.size(); i++) {
+        		Assert.assertTrue($(By.xpath(String.format("//table[@id='reportListTable']/tbody/tr[%d]/td[5]", i))).getText().equalsIgnoreCase(status));
+        	}
+        }
+    }
 }

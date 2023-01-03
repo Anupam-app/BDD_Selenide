@@ -411,4 +411,9 @@ public class UserPageStepsDefinition {
     public void iClickOnChangePswd() {
         userPage.changePassword();
     }
+	
+	@Then("I see error message is displayed {string}")
+	public void iSeeErrorMessageisdisplayed(String message) {
+		userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+	}
 }

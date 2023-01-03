@@ -25,7 +25,7 @@ import pageobjects.utility.SortHelper;
 public class RolePage {
 
     private SelenideElement rolesLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Roles')]"));
-
+	private SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='roleModalNotificationBar roleMgmtNotificationBar information-bar']"));
     private ElementsCollection permissionsText = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private SelenideElement saveText = $(By.className("roleModalNotificationBar"));
 
@@ -311,4 +311,12 @@ public class RolePage {
         newRoleName.click();
         return newRoleName.getAttribute("value");
     }
+	
+	public void deleteRole(String roleName) {
+		commonWaiter($(By.xpath("//span[text()='Delete role']")),visible).click();
+		commonWaiter($(By.xpath("//button[text()='Yes, delete']")),visible).click();
+		commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
+		XPATH_NOTIFICATION_TEXT.shouldHave(text("The role successfully obsolete."));
+		
+	}
 }

@@ -493,4 +493,15 @@ public class ReportsPageStepsDefinition {
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
         SelenideHelper.goToDefault();
     }
+	
+	@Then("I see the role deleted in report")
+	public void iVerifyThatRoleIsDeleted() throws Exception {
+		this.report.checkDeletedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin());
+		switchTo().parentFrame();
+	}
+	
+	@Then("I verify consolidate manual run summary report")
+	public void iVerifyConsolidateManualSummaryReport() throws Exception {
+		this.report.verifyConsolidateManualSummaryReport(reportPage.getPdfUrl());
+	}
 }

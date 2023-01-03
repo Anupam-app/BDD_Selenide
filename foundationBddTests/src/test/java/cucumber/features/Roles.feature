@@ -70,3 +70,17 @@ Feature: Role administration
   #  When  I select template sort by "Event Time" in "false"
   #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
   #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
+  
+  Scenario: IVI Bug | IVI-6138 | Obsolete Role
+    Given I trigger Roles mode
+    When I create random role
+    And I assign permission "Basic navigation"
+    And I assign permission "View User"
+    And I click on save button
+    And I see notification
+    And I search the role
+    And I delete the role
+    And I generate audit trail report
+    And I verify audit logs for role update
+    And I check the audit trail report 
+    And I see the role deleted in report
