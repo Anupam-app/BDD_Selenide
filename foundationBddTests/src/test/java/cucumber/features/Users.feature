@@ -218,7 +218,7 @@ Feature: User management
     And I select role "Operator"
     And I save my user changes
     Then I see error message is displayed "Please update user details" 
-  @wip  
+    
   Scenario: BIOCRS-4364 | Bug IVI-5685 Verify editable fields in user
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
