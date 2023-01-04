@@ -133,8 +133,11 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
+        if(restartButton.isDisplayed()) {
+        	restartSystem();
+        }
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();    
         }
     }
 
