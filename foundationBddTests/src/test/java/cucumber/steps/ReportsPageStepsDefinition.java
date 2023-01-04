@@ -504,4 +504,14 @@ public class ReportsPageStepsDefinition {
 	public void iVerifyConsolidateManualSummaryReport() throws Exception {
 		this.report.verifyConsolidateManualSummaryReport(reportPage.getPdfUrl());
 	}
+	
+	@And("I save Trends without name")
+    public void iCreateTrendsChartsWithoutName() {
+        reportPage.saveTrendsButton();
+    }
+	
+	@Then("I see error message displayed {string}")
+	public void iSeeErrorMessageisdisplayed(String message) {
+		reportPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+	}
 }

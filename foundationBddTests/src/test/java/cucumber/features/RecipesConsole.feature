@@ -253,4 +253,5 @@ Feature: Recipe console
    Scenario: IVI Bug IVI-6021| Recipe Management | Recipe step details for Conditions are getting appended with invalid 0.0/1.0 when loaded
     When I expand recipe console in pnid
     And I load recipe "testRecipeIfElseCriteria"
-    And I verify step doesnt have junk word
+    Then I verify step in console does not show extra words
+    

@@ -584,7 +584,7 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.isExecuted();
 	}
 	
-	@Then("I verify step doesnt have junk word")
+	@Then("I verify step in console does not show extra words")
 	public void ifElseStepShouldBeCorrect() {
 		recipeConsolePage.checkJunkWords();
 	}

@@ -255,7 +255,7 @@ Feature: Recipe management
     And I rename phase in recipe
     Then I am able to see the phase is renamed in Step
     
- 	@IVI
+  @IVI
   Scenario: IVI Bug IVI-6071 | Recipe Management | Delete phase is not working as expected when there are multiple phases in recipe
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

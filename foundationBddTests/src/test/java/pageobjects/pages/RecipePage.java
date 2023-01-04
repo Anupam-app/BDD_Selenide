@@ -733,8 +733,8 @@ public class RecipePage {
     
     public void iSeeDeletedPhaseIsNotSeenInStep() {
     	Selenide.sleep(1000);
-        $(By.xpath("//label[contains(text(),'PSH1')]")).shouldNotBe(visible);
-        $(By.xpath("//label[contains(text(),'PSH2')]")).shouldBe(visible);
+    	$(By.xpath(String.format(phasenumber_Label, "PSH1"))).shouldNotBe(visible);
+        $(By.xpath(String.format(phasenumber_Label, "PSH2"))).shouldBe(visible);
     }
     
     public void deletePhaseToRecipeWithCrossButton() {
