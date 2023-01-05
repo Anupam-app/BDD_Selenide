@@ -424,7 +424,7 @@ public class UserPageStepsDefinition {
 	
 	@When("I save my user modification changes")
     public void iSaveMyUserModificationChanges() {
-        userPage.saveMyUerChanges();
+        userPage.saveMyUserChanges();
         
     }
 	
