@@ -21,6 +21,13 @@ Feature: Report Template module validations
     #When I select report include "Trends"
     #And I create five trends chart
    	#Then I verify that sixth chart is not allowed
+   	
+  Scenario: IVI bug IVI-6148| Report Management | Incorrect message is seen when Trend name is blank while creating a new template
+    Given I search the report template
+    And I edit the report template
+    When I select report include "Trends"
+    And I save Trends without name
+   	Then I see error message displayed "Trend Name cannot be empty"
 
   Scenario: Create Report Template and approve it
     Given I search the report template

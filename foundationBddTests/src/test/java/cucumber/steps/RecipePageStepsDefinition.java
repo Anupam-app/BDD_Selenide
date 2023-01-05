@@ -395,5 +395,26 @@ public class RecipePageStepsDefinition {
     public void touchButtonsAreDisabled() {
         recipePage.cannotClickTouchButtons();
     }
+	
+	@When("I rename phase in recipe")
+	public void iRenamePhase() {
+		this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+		recipePage.renamePhase(this.recipe.getPhaseName());
+	}
+	
+	@When("I am able to see the phase is renamed in Step")
+	public void iverifyPhaseNameInStep() {
+		recipePage.verifyPhaseIsRenamed(this.recipe.getPhaseName());
+	}
+	
+	@When("the deleted phase is not shown in invocation step")
+	public void iVerifyDeletedPhaseIsNotInvokedInStep() {
+		recipePage.iSeeDeletedPhaseIsNotSeenInStep();
+	}
+	
+	@When("I delete phase to recipe with cross button")
+	public void iDeletePhaseToRecipeWithCrossButton() {
+		recipePage.deletePhaseToRecipeWithCrossButton();
+	}
 
 }

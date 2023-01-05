@@ -867,4 +867,20 @@ public class RecipeConsolePage {
         preRunCommentsText.sendKeys(value);
         SelenideHelper.commonWaiter(okButton, visible).click();
     }
+	
+	public void ifElseStepExecuted(String action) {
+		commonWaiter($(By.xpath(String.format("//label[contains(text(),'%s')]",action))), visible);
+	}
+	
+	public void checkJunkWords() {
+		Selenide.sleep(1000);
+		$(By.xpath("//p[contains(text(),'IS')]")).shouldNotBe(visible);
+	}
+	
+	public void verifyRecipeRunComplete() {
+		postRunWindow.waitUntil(Condition.appear,100001).shouldBe(visible);
+		SelenideHelper.commonWaiter(preRunCommentsText, visible).sendKeys("Ok");
+		okButton.waitUntil(Condition.visible, 5000l).click();
+	}
+	
 }

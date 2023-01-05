@@ -245,3 +245,21 @@ Feature: Recipe management
     And I edit the recipe
     And I approve recipe
     Then Recipe should be approved
+	
+  @IVI
+  Scenario: IVI Bug IVI-6064 | Recipe Management | Phase name renamed in phases section is not reflecting in step details
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I create a random phase
+    And I rename phase in recipe
+    Then I am able to see the phase is renamed in Step
+    
+  @IVI
+  Scenario: IVI Bug IVI-6071 | Recipe Management | Delete phase is not working as expected when there are multiple phases in recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "twoPhaseTestRecipe"
+    And I delete phase to recipe with cross button
+    Then the deleted phase is not shown in invocation step
+

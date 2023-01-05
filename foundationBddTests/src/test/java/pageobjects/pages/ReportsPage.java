@@ -149,6 +149,7 @@ public class ReportsPage {
     private final String XPATH_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_REPORT_COLUMNS = "//table[@id='foundationRunListTable']//td[%s]";
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
+    private final String XPATH_ESIGN_STATUS = "//span[text()='%s']";
 
     private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
@@ -160,6 +161,7 @@ public class ReportsPage {
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
 
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
+    private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='trend_name_error_text']"));
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
@@ -1000,5 +1002,36 @@ public class ReportsPage {
 
     public void verifyRunMode() {
         commonWaiter(runTab, not(visible));
+    }
+	
+	public void selectESignStatus(String eSignStatus) {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        arrowIcon.click();
+        commonWaiter($(By.xpath(String.format(XPATH_ESIGN_STATUS, eSignStatus))),visible).click();
+        $(By.xpath(String.format(XPATH_ESIGN_STATUS, "Signed"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_ESIGN_STATUS, "Not Signed"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_ESIGN_STATUS, "Not Required"))).shouldBe(visible);
+        applyFilterButton.click();
+    }
+    
+    public void verifyESignedStatus(String status) {
+        commonWaiter(filterSelection, visible);
+        if (!$(By.xpath(String.format("//table[@id='reportListTable']//th[5]"))).isDisplayed()) {
+            noDatamsg.isDisplayed();
+        } else {
+        	for(int i =1; i<=reportListTable.size(); i++) {
+        		Assert.assertTrue($(By.xpath(String.format("//table[@id='reportListTable']/tbody/tr[%d]/td[5]", i))).getText().equalsIgnoreCase(status));
+        	}
+        }
+    }
+    
+    public void saveTrendsButton() {
+    	commonWaiter(trendsAddButton, visible).click();
+    	commonWaiter(trendsSaveButton, visible).click();
+    }
+    
+    public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
+    	XPATH_ERRORNOTIFICATION_TEXT.waitUntil(visible, 5001).shouldHave(text(message));
     }
 }
