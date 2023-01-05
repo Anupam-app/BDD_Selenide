@@ -21,7 +21,7 @@ import utils.TimezoneUtils;
 public class Report {
 
     public static final String REPORT_DATE_FORMAT = "dd/MMM/yyyy HH:mm:ss";
-    public static final String RECIPE_DATE_FORMAT = "MMM dd, yyyy, h:mm:ss a";
+    public static final String RECIPE_DATE_FORMAT = "MMM d, yyyy, h:mm:ss a";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
