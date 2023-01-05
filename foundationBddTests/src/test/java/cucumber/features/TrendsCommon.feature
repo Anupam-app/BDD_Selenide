@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR @test
+@CRS @IVI @ORCHESTRATOR
 Feature: Trends Common
 
   Scenario: BIOCRS-5482 - Verify the Trends layout | Verify the Trends Page
