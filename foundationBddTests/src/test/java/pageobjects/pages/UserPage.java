@@ -405,7 +405,7 @@ public class UserPage {
         $(By.xpath(String.format(defaultRolesnames, User2))).shouldBe(visible);
     }
     
-    public void saveMyUserChanges() {
+    public void saveMyUerChanges() {
         saveButton.click();
     }
 }
