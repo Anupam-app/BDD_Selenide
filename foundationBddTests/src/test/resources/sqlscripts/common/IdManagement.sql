@@ -1,14 +1,42 @@
-USE [IdManagement]
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (4, 0x02000000E9D4ED3D169931E010E233E105AD8ED66E974A7D8D0A75162BA1A4B67C4E94F19E624B1A6D0A77837D85D1C5244A0CCB8C0F78FFD00B8A414169911C6AB284179C1E71CC0B5BDC0D291BD9A722BC14012A7D9C6726EAD1E1E0FE9DCEF8A89E48, NULL, NULL, 1, NULL)
 GO
-DELETE FROM [dbo].[role_permission] where [role_id] not in ('1','2','3','4')
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (5, 0x0200000081909D2BFBDBCB6A1ECDAD73AF56E26363E0A19DCBC2B4BC08C532D6307F56CA440EF0D1A39AC05CC62C5F484E4D706390A4C412B277DE1A43CF5E6134CD9BAC5805EFD379080D20BEA7BBE3A3FE1F239BAFA61E87B7FE6FE2840D8B575CA2B3, NULL, NULL, 1, NULL)
 GO
-DELETE FROM [dbo].[user_role] where user_id not in ('1','2')
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (6, 0x020000004B5E76FF87929309D06F8F60022A78416286680EB8303D66C9F73775A8C136D9E36150894B645ACD2D6DC293A56404AE61C6D801E1F495B40A92726F361AEF335ADF8B3784E074D0EC8464BD7861D3D45572BCA1D389CA4BBDA924D2D5DFE170, N'PMhVo+fPE6WtUJ0ppa7NxA==', N'B3vjRYbhp5o20V5U1XqdXQ==', 1, NULL)
 GO
-DELETE FROM [dbo].[role] where role_code not in ('Administrator','Bio4CService','ProcessManager','Operator')
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (7, 0x0200000028C7DEBA90CF923541E29FCF59F03D4DF297E7CF72DDAD24F1FFF0926BD2C6989371CADAE89587863949DF5E2A7D6FB1FCBC413EE4AE8EB7F678398A0CC10841AAAB5F6AF4BD265A460B93113B2951FFE7835A592C57A2583DF4A088B5FC59D6, NULL, NULL, 1, NULL)
 GO
-DELETE FROM [dbo].[user_store] where user_name not in ('Bio4cService','Bio4CAdmin')
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (8, 0x0200000028C7DEBA90CF923541E29FCF59F03D4DF297E7CF72DDAD24F1FFF0926BD2C6989371CADAE89587863949DF5E2A7D6FB1FCBC413EE4AE8EB7F678398A0CC10841AAAB5F6AF4BD265A460B93113B2951FFE7835A592C57A2583DF4A088B5FC59D7, NULL, NULL, 1, NULL)
 GO
-SET IDENTITY_INSERT [dbo].[user_store] ON
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (9, 0x02000000DDB2AAA1760530F7722508CADB55ACB701CF428669CAF8EE76C2BF31B92A498E39C34C622DA2A0558C3E862B1280E1809D2F353C8D02460B8DB5B8D003E899A2862F76D8895C5CED6B048D49FFFFD4982D7FEF2BEA1F06456493B6D064397D9B, N'7Iieeo2JXbAsZW5QQMdQ6w==', N'uFflzJ8fgBIJsuOxydALcQ==', 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (10, 0x0200000047B1B5E69FFE206AC617DF4AAFF51E6E8C170CE6494133E233EEDDFBABDE8C457F483A33F21C08DD8697EC2AC18E86353BC330345E3584C4CAEA45E1153186FF2044EB235645C527D3BC5F99A5F265B443C8F15AF1981E7D15EA76E48860F180, N'zid283lDvJZXEYwkJ8gNbw==', N'FeaHlhFmeWMMs69LNrvD4Q==', 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (11, 0x02000000F82EA4BECFFCE7D1A7E0AE3BDBBE9F1DB3E4CC11777DF946DF4514CA96A3E15923CD635AE66697BB715B67A3735F57F2C0AAC4FE5C96B338084619189A0102899809AEC6183B1FC97C226984AE3E301AF89BA66734C5657D963B2CD5EC4E4750, N'rH8AGgOyobuPCu+ZdsAE/g==', N'L5cCPMz423z4B9PEJ06g7w==', 0, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (12, 0x020000003104992C152C099F38DC1175B17756F516D9FFD7912C102ECB049002D7BDAF7C29E3D9A609C37A531A50AA23275072EDD605EF166A3736C4A51B23E4A95A81FE7CE991ECB5FFF3F46B48692E3B6A34932FA3EB64DA952F8FA3BCA70F1155BE15, N'7GigNVQ+X1k8wADKqcvy0w==', N'i+i7+TDptdyT8an4h9Dg1w==', 0, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (13, 0x02000000B45512DBEC40C25B48F71766C234E0611C1F6B0EF06A0FF48C3A959F0AB51F6E7079B1D11E39AE3C2F688250AC1B5FF69D78919FA48CBE58CB5226CC822ED683D5667987ACA65BDC6E92AB3C4128205FABEC9E5CF2075E4F1AF9B53453BB9228, NULL, NULL, 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (14, 0x02000000B45512DBEC40C25B48F71766C234E0611C1F6B0EF06A0FF48C3A959F0AB51F6E7079B1D11E39AE3C2F688250AC1B5FF69D78919FA48CBE58CB5226CC822ED683D5667987ACA65BDC6E92AB3C4128205FABEC9E5CF2075E4F1AF9B53453BB9228, NULL, NULL, 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (15, 0x0200000000B4FA143614941D58A910E3914C08FE9D9BBDEC74EB950710BE06D07D25523868C1304BAFFEA8616EBF936EA172AB8E7BD43F4EEDB3A544EE02F6DFC753A26FAE9C1E25034615ABD75383B2C3ADE290A492BC774B32E86B8A6CC50BC926E5DE, N'gYGTOx0asaTpU/XTDMEvwA==', N'ikLXJG2b7nOTlIMFuDKQlA==', 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (16, 0x020000007DCC245DD8BB35B36F5D354E0D6698BD9B5281177342C86E31364CF01C650FFA788730A23FD4B8D31AAA48C0A507CCB23F3A1CFBE7922699F538D8FDC08E88ACA440C5CED73CBE5C70A7BEF72ACE40E186DC2A6259CA2B43DCE35E148C713642, NULL, NULL, 0, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (17, 0x0200000049705B416E753FA2951939ECB343B73329985476884F3A2924B80652C971ADA1C2A5F91898F4756282A1F7550DDB00AD7C8C254C09C2AA8CAA017106F35A9F3435849672305FEDE430575FCBC6ECFE8091C228FDE9EC7598FD6EC00352FA61A1, N'PaVODEMTTm1omCtpM/7lvg==', N'f8wlzx2ZwFcdqyUQ02Xm1w==', 0, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (18, 0x02000000507CBAB959087CF6B9726B7252A69773321505EF613F644A1E22AED98A9F57E375C66641D8B173D9A16BBE202ACEEE17945DEC08F5FFCB0EDA64B8069C02054F6BDE23F9613CA340A73D877A1246E522A33A3149DF42E78A84ECEF7377467C0A, N'MCVc1t4F+WRi/t4Udui8ow==', N'2P0iN7zxGZua4AxJlZN2WA==', 0, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (19, 0x020000001C635811CD2D5098884C5F67E76023CF2F2AE091A35842FE1951066723F21BC2EB9B17E53A9EA61856D4E90809863E34D336378230FA8D2B90CCBA540573DA3897883594A5D96C6766B9836AA39DCBF65B6C5F9457FA85E179CB52D0D7C20906, N'6B2mrQNwGpfQVCVz0WFF9g==', N'MesNzA9xENR8gVm/S5Bm7A==', 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (20, 0x02000000626FB4C10ABF90AA4461FC84AB6BABB8B1FADB9869ED2395577373BC3F022E25D13AD6B5C5A4F2FE04E257C781E4CBD4EF23795815BC7793F7E9D5294B456C8DCDFD4F3C90003AB2B758478DAA5ABCAEDABDFCF3B1C36FE2F5B287960D8A4F5E, N'a9GxMBSiBNT2JZbX5e3ZRA==', N'EIUcBkOiX+2toB0rxvNqAA==', 1, NULL)
+GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (21, 0x02000000DED4C2F9D21AD63C8EEE430DEAECF1889362E9308C2B92DE8974AB1CC3078BE01DE718A8A635B39BDBA554826710D134CE479D7DEC73C5138A2FDE7EA5179323F51491DBD84C1A5EE6223AAEF5BBDEE1979F4C9733943A634FD7E8F38F437361, NULL, NULL, 0, NULL)
+GO
+SET IDENTITY_INSERT [dbo].[user_password] OFF
+GO
+SET IDENTITY_INSERT [dbo].[user_store] ON 
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (3, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'faVppoqqKR', N'true', N'testUser', NULL, N'testUser', N'0123456789', N'testUser', 0, 0, NULL, 0)
 GO
@@ -40,13 +68,13 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (17, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'reportUnauthUser', N'true', N'reportUnauthUser', NULL, N'reportUnauthUser', N'', N'reportUnauthUser', 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (19, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserForI18N', N'true', N'testUserForI18N', NULL, N'testUserForI18N', N'', N'testUserForI18N', 0, 0, NULL, 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (18, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'testUserForI18N', N'true', N'testUserForI18N', NULL, N'testUserForI18N', N'', N'testUserForI18N', 0, 0, NULL, 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (24, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'crzSXCuuCu', N'true', N'PENMCEhrEi', NULL, N'fIqklJQHtS', N'0123456789', N'RUJLXOVYAz', 0, 0, NULL, 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (19, NULL, N'', N'alexis.thiebaut@merckgroup.com', N'crzSXCuuCu', N'true', N'PENMCEhrEi', NULL, N'fIqklJQHtS', N'0123456789', N'RUJLXOVYAz', 0, 0, NULL, 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (18, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (20, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (25, NULL, N'', N'srikanth.gajjela@external.merckgroup.com', N'123456', N'true', N'changePwd', NULL, N'Tester', N'0123456789', N'testChangePwd', 0, 0, CAST(N'2022-05-22T07:42:58.3550000' AS DateTime2), 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (21, NULL, N'', N'srikanth.gajjela@external.merckgroup.com', N'123456', N'true', N'changePwd', NULL, N'Tester', NULL, N'testChangePwd', 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
 GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
