@@ -14,7 +14,7 @@ Feature: Backup creation
     And I wait the end of backup
     And I go to backup history
     Then I verify backup history details
-
+  
   Scenario: Schedule backup
     Given I goto backup page
     When I schedule backup

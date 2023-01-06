@@ -17,7 +17,7 @@ Feature: Recipe console
     And I hold the system
     Then I see the system on hold
     And clear panel and run button is disabled
-
+  
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
     When I expand and collapse recipe console in pnid
     And I verify Recipe run options
@@ -166,7 +166,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
-
+ 
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console
     When I Select Process Hold
@@ -196,7 +196,7 @@ Feature: Recipe console
     And I open login page
     And I login with "Bio4CAdmin" same user as above "MerckApp1@"
     And I verify the recipe execution details in console View.
-    And I refresh the portal
+    And I logout
     And I open login page
     And I login with "Bio4CAdmin" same user as above "MerckApp1@"
     And I expand recipe console in pnid

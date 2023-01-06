@@ -136,10 +136,12 @@ public class RecipeConsolePage {
         if(restartButton.isDisplayed()) {
         	restartSystem();
         }
+        if (!$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed())
+        	
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();    
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
-    }
+    } 
 
     public void collapseRecipeConsole() {
         SelenideHelper.commonWaiter(collapseIcon, visible).click();
@@ -732,7 +734,7 @@ public class RecipeConsolePage {
     public boolean processRestart() {
         boolean isResult = false;
         if (!processhold_Box.isDisplayed()) {
-            processRestart.shouldBe(visible);
+            SelenideHelper.commonWaiter(processRestart, visible);
             isResult = true;
         } else {
             processRestart.shouldNotBe(visible);
@@ -783,9 +785,9 @@ public class RecipeConsolePage {
     public void iRefreshPortal() {
         SelenideHelper.appRefresh();
         Selenide.sleep(2000);
-        var alert = WebDriverRunner.getWebDriver().switchTo().alert();
-        Selenide.sleep(2000);
-        alert.accept();
+//        var alert = WebDriverRunner.getWebDriver().switchTo().alert();
+//        Selenide.sleep(2000);
+//        alert.accept();
 
     }
 
