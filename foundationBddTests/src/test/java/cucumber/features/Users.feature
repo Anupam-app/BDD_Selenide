@@ -45,7 +45,7 @@ Feature: User management
     And I edit the user
     Then the employee id is the expected one
     And the role is "Operator"
-  
+    
   Scenario: BIOCRS-586 | User disable
     Given I am logged in as "Bio4cService" user
     And I go to user page

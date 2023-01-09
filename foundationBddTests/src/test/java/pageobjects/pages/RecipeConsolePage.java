@@ -133,6 +133,8 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
+        if(!restartButton.isDisplayed())
+
         if(restartButton.isDisplayed()) {
         	restartSystem();
         }
@@ -328,7 +330,10 @@ public class RecipeConsolePage {
     }
 
     public void manualOperation(String status) {
-
+    	
+        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+        }
         if (status.equalsIgnoreCase("enabled")) {
             manualOperationButton.waitUntil(visible, 50001).click();
             manualOperationSelected.shouldBe(visible);
@@ -374,7 +379,7 @@ public class RecipeConsolePage {
     }
 
     public void manualRunStart(String productId, String batchId, String beforeComments) {
-
+        
         if (manualStopButton.isDisplayed()) {
             manualStopButton.click();
             closeButtonOfStop.click();

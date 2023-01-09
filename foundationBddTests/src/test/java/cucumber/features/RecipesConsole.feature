@@ -1,4 +1,4 @@
-@CRS @IVI 
+@CRS @IVI
 Feature: Recipe console
 
   Background:
@@ -76,7 +76,7 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
-
+    
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -120,7 +120,7 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-
+  
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -141,7 +141,7 @@ Feature: Recipe console
     And I click on abort button
     Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
-
+   
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
@@ -151,7 +151,7 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-
+   
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
