@@ -674,4 +674,36 @@ public class Report {
         System.out.println("table row count" + table.getRowCount());
         Assert.assertTrue(table.getRowCount() > 0);
     }
+	
+	public void checkDeletedRole(String reportUrl, String roleName, String userNameLoggedIn) throws IOException {
+		URL url = new URL(reportUrl);
+		// get all tables of the report
+		List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+		for (Table reportTable : reportTables) {
+			int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+			if (userColumnIndex > 0) {
+				Assert.assertTrue(reportTable.getRows().get(1).get(userColumnIndex).getText(false).contains(userNameLoggedIn));
+				Assert.assertTrue(reportTable.getRows().get(1).get(1).getText(false).contains("IDManagement"));
+				Assert.assertTrue(reportTable.getRows().get(1).get(2).getText(false).contains(roleName));
+				Assert.assertTrue((reportTable.getRows().get(1).get(5).getText(false).equals("roleStatus")));
+				Assert.assertTrue((reportTable.getRows().get(1).get(4).getText(false).equals(userNameLoggedIn+" deleted role "+ roleName)));
+				Assert.assertTrue((reportTable.getRows().get(1).get(6).getText(false).equals(null)));
+				Assert.assertTrue((reportTable.getRows().get(1).get(7).getText(false).equals(null)));
+			}
+			break;
+		}
+	}
+	
+	public void verifyConsolidateManualSummaryReport(String reportUrl) throws Exception {
+        URL url = new URL(reportUrl);
+
+        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY)
+                .stream().findFirst().get();
+        Assert.assertNull("Recipe Step Summary table is found for Manual runs " + RECIPE_STEPS_SUMMARY, table);
+        List<Table> reportTables = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE);
+
+        for (Table reportTable : reportTables) {
+        	Assert.assertNull("Template name value",  PdfTableExtractUtils.getTableFieldValue(reportTable, TEMPLATE_NAME));
+        }
+    }
 }

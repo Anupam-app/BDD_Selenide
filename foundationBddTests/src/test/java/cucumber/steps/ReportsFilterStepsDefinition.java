@@ -172,4 +172,15 @@ public class ReportsFilterStepsDefinition {
     public void i_hould_see_consolidated_status(String status) {
         Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
     }
+	
+	@When("I click on filter icon and select eSignStatus {string}")
+	public void iSelectESignStatus(String status) {
+		reportPage.selectESignStatus(status);
+	}
+	
+	@Then("I should see reports with eSignStatus {string}")
+	public void i_should_see_eSigned_status(String status) {
+		reportPage.verifyESignedStatus(status);
+	}
+	
 }

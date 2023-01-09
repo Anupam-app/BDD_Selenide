@@ -213,5 +213,11 @@ public class RolePageStepsDefinition {
     public void iSeeCustomRoleInRoleColumn(String role) {
         rolePage.rolename(role);
     }
+	
+	@When("I delete the role")
+	public void iDeleteTheRole() {
+		rolePage.modifyRole(this.role.getRoleName());
+		rolePage.deleteRole(this.role.getRoleName());
+	}
 
 }

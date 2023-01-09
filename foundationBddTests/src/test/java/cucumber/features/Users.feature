@@ -1,3 +1,4 @@
+
 @CRS @IVI @ORCHESTRATOR
 Feature: User management
 
@@ -67,11 +68,14 @@ Feature: User management
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
 
-  Scenario: IVI Bug IVI-5671| BIOCRS-586 | User enable
+  Scenario: IVI Bug IVI-5671 IVI-5849| BIOCRS-586 | User enable
     Given I am logged in as "Bio4cService" user
     And I go to user page
     When I search "testUserDisabled" user
     And I edit the user
+	And I select role "Operator"
+    And I save my user changes
+    Then I see error message is displayed as "User details cannot be modified for disabled user" 
     And I enable the user
     And I save my user changes
     And I edit the user
@@ -204,3 +208,24 @@ Feature: User management
       | Users         |
       | Backup        |
       | Settings      |
+	  
+  Scenario: IVI Bug IVI-5823| User Management | Irrelevant message is displayed when custom user tries to modify his own role
+  	Given I am logged in as "testUserToEditFields" user
+    And I go to user page
+    When I search "testUserToEditFields" user
+    And I edit the user
+    And I select role "Operator"
+    And I save my user changes
+    Then I see error message is displayed "Please update user details" 
+    
+  Scenario: BIOCRS-4364 | Bug IVI-5685 Verify editable fields in user
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I search "testUserToEditFields" user
+    And I edit the user
+    And I disable the user
+    And I save my user changes
+    And I edit the user
+    And I enter random employeeID
+    And I save my user modification changes
+    Then I see error message is displayed "user details cannot be modified for disabled user"  
