@@ -187,7 +187,8 @@ Feature: Recipe console
     And I load recipe
     Then I verify the details
     And I validate the Start button is "enabled"
-
+	
+	#To-Do : IVI has 2 options for restart process - code logic has to be updated
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold

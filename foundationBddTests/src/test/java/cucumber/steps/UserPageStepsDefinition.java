@@ -427,5 +427,4 @@ public class UserPageStepsDefinition {
         userPage.saveMyUserChanges();
         
     }
-	
-}
+	}
