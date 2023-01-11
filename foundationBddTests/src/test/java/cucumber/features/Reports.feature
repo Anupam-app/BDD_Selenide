@@ -196,3 +196,15 @@ Feature: Report administration
     And I trigger report mode
     Then I should see the report file presence
     And I verify run summary report report
+
+  Scenario: IVI Bug | Report Management | Recipe Steps summary section is available in consolidated report for Manual run
+    Given I am logged in as "Bio4CAdmin" user
+    And I goto report management page
+    When I select report from dropdown "Consolidated"
+    And I choose recipe run "testManualRun1" for consolidation
+    And I choose recipe run "testManualRun2" for consolidation
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify consolidate manual run summary report

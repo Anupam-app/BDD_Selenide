@@ -239,3 +239,18 @@ Feature: Recipe console
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
  
+  Scenario: IVI Bug IVI-6029| Recipe Management | Step within ELSE condition is never shown as executed in recipe panel though condition satisfies
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeIfElseCriteria"
+    And I start recipe execution
+    And I wait for recipe Execution to be completed
+    And I verify step related valve "Close" is executed
+    And I re-run the recipe
+    And I wait for recipe Execution to be completed
+    Then I verify step related valve "Open" is executed 
+    
+   Scenario: IVI Bug IVI-6021| Recipe Management | Recipe step details for Conditions are getting appended with invalid 0.0/1.0 when loaded
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeIfElseCriteria"
+    Then I verify step in console does not show extra words
+    

@@ -395,4 +395,13 @@ public class UserPage {
     public void checkAlarmHeader() {
         userHeader.shouldBe(visible);
     }
+    
+    public void userAccountRole(String user1, String User2) {
+        $(By.xpath(String.format(defaultRolesnames, user1))).shouldBe(visible);
+        $(By.xpath(String.format(defaultRolesnames, User2))).shouldBe(visible);
+    }
+    
+    public void saveMyUserChanges() {
+        saveButton.click();
+    }
 }

@@ -269,6 +269,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
+				//Allure report template is present on stlbiopdv01bp01.global.sial.com server in D:\Jenkins\email-templates\bddtests-allure-report.groovy file
                 body: '''${SCRIPT, template="bddtests-allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',

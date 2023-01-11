@@ -150,3 +150,9 @@ Feature: Reports Filter
       | Last Modified On | true       |
       | Last Modified By | true       |
       | Last Modified On | false      |
+	  
+  Scenario: IVI Bug IVI-6034| Verify filter reports functionality in Report Management based on signed status
+    Given I goto report management page
+    And I trigger report mode
+    When I click on filter icon and select eSignStatus "Not Signed"
+    Then I should see reports with eSignStatus "Not Signed"
