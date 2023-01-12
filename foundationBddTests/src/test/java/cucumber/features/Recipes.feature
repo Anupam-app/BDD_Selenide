@@ -262,4 +262,30 @@ Feature: Recipe management
     When I edit recipe "twoPhaseTestRecipe"
     And I delete phase to recipe with cross button
     Then the deleted phase is not shown in invocation step
-
+    
+  @IVI
+  Scenario: IVI Bug IVI-6150 | Recipe Management | 'ALT+ENTER' is not working as expected when there is an existing phase
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I create a random phase
+    And I add step after step "1"
+    Then I see blank step is added
+    
+  @IVI
+  Scenario: IVI Bug IVI-6167 | Recipe Management | Unable to modify a recipe which is in approved or InReview state
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "testRecipeFlows"
+    And I add step after step "1"
+    Then I see blank step is added
+    
+  @IVI
+  Scenario: IVI Bug IVI-6153 | Recipe Editor | Text/confirmation message not displayed on recipe editor
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    Then I verify recipe tab title
+    When I create a phase
+    Then I verify notification messages "Phase Successfully Created"
+    

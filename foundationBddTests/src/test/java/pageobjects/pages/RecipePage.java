@@ -8,6 +8,7 @@ import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
+
 import cucumber.util.I18nUtils;
 import dataobjects.Report;
 import java.awt.AWTException;
@@ -86,7 +87,7 @@ public class RecipePage {
     private final String phasenumber_Label = "//label[contains(text(),'%s')]";
     private final String phaseNameLabel = "(//input[@class='phase-Name'])[%d]";
     private final String phaseMessage = "//span[(text()='%s')]";
-
+    private final String label = "//label[contains(text(),'%s')]";
     private final By phasesList = By.className("phaseHead");
 
     private SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
@@ -138,6 +139,7 @@ public class RecipePage {
     private final SelenideElement recipename = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement recipeValue = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement recipeInputSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
+    private final SelenideElement notificationMessage = $(By.xpath("//div[@class='notification-bar warning-bar']"));
 
     public static final String RECIPE_DATE_FILTER_IVI = "MMM d, yyyy";
 
@@ -743,5 +745,33 @@ public class RecipePage {
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
+    }
+    
+    public void addActionStepAfterStep(String stepNo) {
+    	commonWaiter($(By.xpath(String.format("//span[@class='target' and contains(@data-contextmenu,'step%s')]", "1"))),visible).click();
+    	stepAction.keyDown(Keys.ALT).sendKeys(Keys.ENTER).perform();
+    }
+    
+    public void iSeeBlankStep() {
+        Assert.assertTrue(($(By.xpath("(//input[@placeholder='Search instruments and actions...'])[2]"))).getAttribute("value").isBlank());
+    }
+    
+    public void verifyRecipeTab() {
+        $(By.xpath(String.format(label, "Untitled"))).shouldBe(visible);
+        $(By.xpath(String.format(label, "Unsaved"))).shouldBe(visible);
+    }
+    
+    public void createPhase(String phase) {
+        addStepButton.click();
+        searchTextBox.sendKeys("All Auto");
+        searchTextBox.sendKeys(Keys.ENTER);
+        searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
+        commonWaiter(notificationMessage, visible).shouldHave(text("Phase creation in progress. Press \"Enter\" once completed."));
+        phaseElementTextBox.sendKeys(phase);
+        phaseElementTextBox.sendKeys(Keys.ENTER);
+    }
+    
+    public void verifyNotification(String message) {
+        commonWaiter(notificationMessage, visible).shouldHave(text(message));
     }
 }

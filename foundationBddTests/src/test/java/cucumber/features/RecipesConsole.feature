@@ -255,3 +255,11 @@ Feature: Recipe console
     And I load recipe "testRecipeIfElseCriteria"
     Then I verify step in console does not show extra words
     
+   Scenario: IVI Bug IVI-6154| Recipe Loader | Expected message is not seen when user tries to start Manual Run with recipe already loaded in Recipe Run tab
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeIfElseCriteria"
+    And I select "MANUAL OPERATION" tab
+    And I click on start button
+    Then pre-run window should not be opened
+    And I see the error message is displayed as "Recipe is already loaded. Starting a manual run will clear the loaded recipe. Do you want to continue?"
+    
