@@ -129,7 +129,7 @@ public class RecipePage {
     private final String rootStep = "(//span[text()='%s']/parent::span/span)[1]";
     private final String stepNumber = "(//div[@class='stepNumber']/label[@class='stepCount'])[%s]";
     private final SelenideElement criteriaPlaceholder = $(By.xpath("//input[@placeholder='Search criteria...']"));
-    private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions.')]"));
+    private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions')]"));
     private final String expandAction = "//p[@title='%s']";
     private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
     private final String editorRecipeName = "//*[label[contains(.,'%s')]]";

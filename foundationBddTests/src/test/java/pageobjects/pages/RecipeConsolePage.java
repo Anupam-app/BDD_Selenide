@@ -28,6 +28,7 @@ public class RecipeConsolePage {
     private final String XPATH_CTRL_ICONS = "//img[contains(@src,'%s')]";
     private final String XPATH_TEXTS = "//p[text()='%s']";
     private final String recipeListTableValues = "//tbody/tr[%d]/td[%d]/label";
+    private final String processRestartMsg = "//h6[contains(text(),'%s')]";
 
     private final SelenideElement loadRecipeText = $(By.xpath("//p[contains(text(),'Load Recipe')]"));
     private final SelenideElement clearRecipeText = $(By.xpath("//p[contains(text(),'Clear Panel')]"));
@@ -105,7 +106,6 @@ public class RecipeConsolePage {
     private final SelenideElement noButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "No")));
 
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
-    private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
 
     private Recipe recipe;
@@ -181,6 +181,14 @@ public class RecipeConsolePage {
         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
+        if (manualStopButton.isDisplayed()) {
+            manualStopButton.click();
+            closeButtonOfStop.click();
+            commonWaiter(okButton, visible).click();
+        }
+        if (manualStartButton.isDisplayed()) {
+            recipeButton.click();
+        }
         $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
     }
 
@@ -253,6 +261,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         abortIcon.waitUntil(Condition.visible, 5000l);
         abortIcon.waitUntil(Condition.not(Condition.visible), seconds * 1000l);
@@ -280,6 +289,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         Selenide.sleep(2000);
     }
@@ -295,6 +305,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
         Selenide.sleep(3000);
         String timeEnd = pauseTimerValue.getText();
@@ -464,6 +475,24 @@ public class RecipeConsolePage {
 
     public void manualOperation(String status) {
 
+    	 if (restartButton.isDisplayed()) {
+             restartSystem();
+             SelenideHelper.commonWaiter(holdButton, visible);
+         }
+         if (abortIcon.isDisplayed()) {
+             abortIcon.click();
+             clickYesButton.waitUntil(Condition.visible, 1000).click();
+             okButton.waitUntil(Condition.visible, 5001).click();
+         }
+         if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
+         }
+         if (manualStopButton.isDisplayed()) {
+             manualStopButton.click();
+             closeButtonOfStop.click();
+             commonWaiter(okButton, visible).click();
+         }
+    	
         if (status.equalsIgnoreCase("enabled")) {
             manualOperationButton.waitUntil(visible, 50001).click();
             manualOperationSelected.shouldBe(visible);
@@ -538,6 +567,7 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(batchId);
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(beforeComments);
+        okButton.waitUntil(enabled, 30000);
         commonWaiter(okButton, visible).click();
     }
 
@@ -726,8 +756,13 @@ public class RecipeConsolePage {
         Selenide.sleep(2000);
     }
 
+    public void validateConfirmBtn() {
+    	SelenideHelper.commonWaiter($(By.xpath(String.format(processRestartMsg, "Resume from hold with current"))), visible).click();
+    	SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm"))), visible).click();
+    }
+    
     public void validateYesBtn() {
-        SelenideHelper.commonWaiter(yesButton, visible).click();
+    	SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Yes"))), visible).click();
     }
 
     public void iValidateSpecialCharManual(String ManualOperationName, String runId, String batchId, String productId, String value) {
@@ -778,7 +813,11 @@ public class RecipeConsolePage {
     }
 
     public void validateNoBtn() {
-        SelenideHelper.commonWaiter(noButton, visible).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "No"))), visible).click();
+    }
+    
+    public void validateCancelBtn() {
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Cancel"))), visible).click();
     }
 
     public boolean processRestart() {
@@ -812,9 +851,10 @@ public class RecipeConsolePage {
     public boolean iVerifyProcessRestartPopup() {
         boolean isResult = false;
         if (processRestartWindowPopup.isDisplayed()) {
-            processRestartMsg.shouldBe(visible);
-            SelenideHelper.commonWaiter(noButton, visible);
-            SelenideHelper.commonWaiter(yesButton, visible);
+        	$(By.xpath(String.format(processRestartMsg, "Re-establish state before alarm / hold / pause (Restart)"))).shouldBe(visible);
+        	$(By.xpath(String.format(processRestartMsg, "Resume from hold with current state (Resume)"))).shouldBe(visible);
+            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Cancel"))), visible);
+            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm"))), visible);
             isResult = true;
         }
         return isResult;

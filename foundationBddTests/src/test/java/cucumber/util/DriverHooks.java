@@ -2,6 +2,7 @@ package cucumber.util;
 
 import com.xceptance.neodymium.util.WebDriverUtils;
 import io.cucumber.java.After;
+import io.cucumber.java.AfterStep;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -27,6 +28,11 @@ public class DriverHooks {
         TimezoneUtils.setTimezoneDiffInSecondsFromProperties();
         TrustAllCertificates.install();
         currentScenario=scenario;
+    }
+
+    @AfterStep
+    public void afterStep() {
+        SelenideHelper.takePicture();
     }
 
     @After(order = 100)

@@ -507,11 +507,20 @@ public class RecipeConsoleStepsDefinition {
     public void iSelectYesButton() {
         recipeConsolePage.validateYesBtn();
     }
-
+    
+    @And("I Select confirm button")
+    public void iSelectConfirmButton() {
+        recipeConsolePage.validateConfirmBtn();
+    }
 
     @And("I validate close,No button functionality")
     public void iVerifyCloseAndNobuttonFunctionality() {
         recipeConsolePage.validateNoBtn();
+    }
+    
+    @And("I validate close,cancel button functionality")
+    public void iVerifyCloseAndCancelButtonFunctionality() {
+        recipeConsolePage.validateCancelBtn();
     }
 
     @And("I refresh the portal")

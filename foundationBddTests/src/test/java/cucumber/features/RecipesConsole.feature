@@ -188,7 +188,7 @@ Feature: Recipe console
     And I load recipe
     Then I verify the details
     And I validate the Start button is "enabled"
-
+	
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -200,9 +200,9 @@ Feature: Recipe console
     And I verify the recipe console Elements
     And I select Process restart
     And I verify the Process restart Dialog box , buttons
-    And I validate close,No button functionality
+    And I validate close,cancel button functionality
     And I select Process restart
-    And I Select Yes button
+    And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
   
