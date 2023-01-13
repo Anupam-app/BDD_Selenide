@@ -205,7 +205,6 @@ Feature: User management
       | Alarms        |
       | Recipes       |
       | Reports       |
-      | Configuration |
       | Users         |
       | Backup        |
       | Settings      |
