@@ -16,6 +16,9 @@ pipeline {
                 script {
                     notifyBitbucket(buildStatus: 'INPROGRESS')
                 }
+				// In case a shallow clone was performed, get the full history. This is needed so SonarQube can work out the blames automatically
+                bat returnStatus: true, script: 'git fetch --unshallow || echo Skipping git unshallow'
+                bat returnStatus: true, script: "git fetch --no-tags ${env.GIT_URL} +refs/heads/${env.CHANGE_TARGET}:refs/remotes/origin/${env.CHANGE_TARGET} || echo Skipping git ${env.CHANGE_TARGET}"
                 rtMavenResolver(
                     id: "MAVEN_RESOLVER",
                     serverId: "PRODArtifactory",
@@ -49,6 +52,14 @@ pipeline {
                 timeout(time: 1, unit: 'HOURS') {
                     waitForQualityGate abortPipeline: false
                 }
+            }
+        }
+    }
+	post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                notifyBitbucket(considerUnstableAsSuccess: true)
             }
         }
     }
