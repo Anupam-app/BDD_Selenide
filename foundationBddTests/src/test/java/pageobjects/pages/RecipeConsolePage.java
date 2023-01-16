@@ -44,7 +44,7 @@ public class RecipeConsolePage {
     private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
     private final SelenideElement manualOperations = $(By.xpath("//span[text()='MANUAL OPERATION']"));
     private final SelenideElement start_Btn = $(By.xpath("//img[contains(@src,'START')]"));
-    private final SelenideElement preRunWindowPopop = $(By.xpath("//p[text()='Pre-Run Record']"));
+    private final SelenideElement preRun_WindowPopop = $(By.xpath("//p[text()='Pre-Run Record']"));
     private final SelenideElement timerValue = $(By.xpath("//div[text()='00:00:00:00']"));
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
@@ -779,10 +779,10 @@ public class RecipeConsolePage {
     }
 
     public void iValidationPreRun() {
-        if (preRunWindowPopop.isDisplayed()) {
-            preRunWindowPopop.shouldBe(visible);
+        if (preRun_WindowPopop.isDisplayed()) {
+            preRun_WindowPopop.shouldBe(visible);
         } else {
-            preRunWindowPopop.shouldNotBe(visible);
+            preRun_WindowPopop.shouldNotBe(visible);
         }
     }
 
@@ -923,4 +923,13 @@ public class RecipeConsolePage {
 		okButton.waitUntil(Condition.visible, 5000l).click();
 	}
 	
+	public void preRunWindowNotVisible() {
+        preRun_WindowPopop.shouldNotBe(visible);
+    }
+	
+	public void isGeneratedNotificationWhenRecipeIsLoaded(String message) {
+        $(By.xpath(String.format("//div[contains(text(),'%s')]", message))).shouldBe(visible);
+    }
+	
 }
+
