@@ -259,7 +259,6 @@ public class RecipeConsolePage {
     }
 
     public boolean verifyResumeButton() {
-        SelenideHelper.takePicture();
         return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).waitUntil(Condition.visible, 50001).isDisplayed());
     }
 
@@ -280,7 +279,6 @@ public class RecipeConsolePage {
         okStepButton.waitUntil(Condition.visible, 4000l, 500).click();
         abortButton.waitUntil(visible, 4000l, 500);
         Selenide.sleep(2000);
-        SelenideHelper.takePicture();
     }
 
     public void seeSystemOnHold() {
