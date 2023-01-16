@@ -8,7 +8,7 @@ Feature: User login
   @LOGIN
   Scenario: User login
     Given I open login page
-    When I enter "bio4cadmin" as username and "MerckApp1@" as password
+    When I enter "bio4cadmin" as username and "Merck@dmin" as password
     And I push the login button
     Then I am logged in
 

@@ -17,7 +17,6 @@ Feature: Recipe management
     Then I see my changes in recipe
 
   @SMOKE
-
   Scenario: BIOCRS-5059 | Recipe approval
     Given I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"

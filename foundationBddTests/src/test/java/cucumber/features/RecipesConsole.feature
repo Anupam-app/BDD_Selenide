@@ -194,11 +194,11 @@ Feature: Recipe console
     Then I verify the recipe execution details in console View
     And I logout
     And I open login page
-    And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+    And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I verify the recipe execution details in console View.
     And I logout
     And I open login page
-    And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+    And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
  
