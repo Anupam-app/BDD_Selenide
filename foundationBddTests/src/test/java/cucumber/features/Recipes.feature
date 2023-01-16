@@ -36,7 +36,6 @@ Feature: Recipe management
     And I save the recipe with name "!@#testSpecialChars?/\><%+-"
     When I approve recipe
     And Recipe should be approved
-    #And I go to recipe page
     And I go to browser mode
     And I search the recipe "!@testSpecialChars+-"
     When I export the recipe
