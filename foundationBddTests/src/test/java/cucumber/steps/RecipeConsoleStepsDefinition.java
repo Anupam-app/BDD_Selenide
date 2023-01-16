@@ -597,5 +597,15 @@ public class RecipeConsoleStepsDefinition {
 	public void ifElseStepShouldBeCorrect() {
 		recipeConsolePage.checkJunkWords();
 	}
+	
+	@Then("pre-run window should not be opened")
+    public void iDoNotSeeeepreRunWindowPopup() {
+        recipeConsolePage.preRunWindowNotVisible();
+    }
+	
+	@Then("I see the error message is displayed as {string}")
+	public void iSeeErrorMessageisdisplayed(String message) {
+		recipeConsolePage.isGeneratedNotificationWhenRecipeIsLoaded(message);
+	}
 
 }

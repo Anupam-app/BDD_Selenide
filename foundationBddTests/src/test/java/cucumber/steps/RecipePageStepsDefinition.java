@@ -416,5 +416,30 @@ public class RecipePageStepsDefinition {
 	public void iDeletePhaseToRecipeWithCrossButton() {
 		recipePage.deletePhaseToRecipeWithCrossButton();
 	}
-
+	
+	@And("I add step after step {string}")
+    public void insertStepAfterStep(String stepNo) {
+        recipePage.addActionStepAfterStep(stepNo);
+    }
+	
+	@And("I see blank step is added")
+    public void iSeeBlankStep() {
+        recipePage.iSeeBlankStep();
+    }
+	
+	@And("I verify recipe tab title")
+    public void iVerifyRecipeTab() {
+        recipePage.verifyRecipeTab();
+    }
+	
+	@When("I create a phase")
+    public void iCreatePhaseToRecipe() {
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.createPhase(this.recipe.getPhaseName());
+    }
+	
+	@When("I verify notification messages {string}")
+    public void iVerifyNotification(String message) {
+        recipePage.verifyNotification(message);
+    }
 }
