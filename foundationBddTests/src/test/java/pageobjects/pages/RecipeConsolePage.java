@@ -923,4 +923,13 @@ public class RecipeConsolePage {
 		okButton.waitUntil(Condition.visible, 5000l).click();
 	}
 	
+	public void preRunWindowNotVisible() {
+        preRun_WindowPopop.shouldNotBe(visible);
+    }
+	
+	public void isGeneratedNotificationWhenRecipeIsLoaded(String message) {
+        $(By.xpath(String.format("//div[contains(text(),'%s')]", message))).shouldBe(visible);
+    }
+	
 }
+
