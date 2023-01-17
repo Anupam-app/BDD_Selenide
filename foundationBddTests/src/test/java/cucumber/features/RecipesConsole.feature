@@ -201,4 +201,130 @@ Feature: Recipe console
     And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
+    
+  @wip
+ Scenario: Verify Audit trail logs for manual run Start/Stop actions|BIOFOUND-12697|
+ 	Given I expand recipe console
+	When I select "Manual operation" tab
+	And I start Manual run 
+	And I wait for 30 sec and stop the run
+	Then I navigate to report and generate audit trail report
+	And I Verify above recipe actions are recorded in audit trail 
+	And I generate the report
+	And I verify the recipe event actions in PDF report
+ 
+ Scenario: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded|BIOFOUND-13271|
+ 	Given I expand recipe console
+	When I load recipe "testDraftRecipeToChangeStatus"
+	Then I verify the recipe name displayed on load recipe list
+# elipse are present , mouse over to see full name 
+	And I verify the recipe name is trimmed on recipe console UI
+	And I verify the recipe lengthy step is trimmed
+	And I verify mouse hover on step displays tool tip with full step details
+ 	 
+ Scenario: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal|BIOFOUND-13262|
+ 	Given I expand recipe console
+ 	When I load recipe "testRecipeToExecute"
+	Then I should see pre run window
+	When I clear and try to enter lenghty RUN ID, BatchID
+	And provide remaining mandatory data to select OK button
+	Then I should see recipe execution started succesfully
+	And I validate the recipe console UI elements
+	And I mouse hover RUNID and BatchID to validate full text displayed
+	And I Abort the recipe execution
+	And I validate the RUNID BATCHID text displayed on Post run window
+ 
+ Scenario: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution|BIOFOUND-11336|
+ 	When I expand recipe console in pnid
+	And I load recipe "testRecipeToExecute1min"
+	And I start recipe execution
+	And I logout
+	And I open login page
+	And I login with "Bio4Cservice" same user as above "MerckApp1@"
+	And I expand recipe console in pnid
+	And I click on pause button
+	And Recipe execution is paused
+	Then control should be on resume button
+	And I click on resume button
+	Then control should be on pause button
+	And I logout
+	And I open login page
+	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I expand recipe console in pnid
+	And I click on jump step "2"
+	And I click on abort button
+	Then I should see the recipe run aborted
+	And control should be on rerun button
+	And I goto report management page
+	When I select report from dropdown "Audit Trail"
+	And I select user in dropdown "Bio4CAdmin"
+	And I check audit trial logs
+ 	
+ Scenario: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution|BIOFOUND-11316|
+ 	When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I hold the system
+    Then I see the system on hold
+    And Recipe execution is paused
+    And I restart the system
+    And I click on pause button
+    Then control should be on resume button
+    And I click on resume button
+    Then control should be on pause button
+    And I click on jump step "1"
+    And I click on abort button
+    Then I should see the recipe run aborted
+    And control should be on rerun button
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
+	And I select user in dropdown "Bio4CAdmin"
+	And I check audit trial logs
+
+ Scenario: Verify Post-run modal of Manual Run Recipe execution|BIOFOUND-12603|
+ 	Given I expand recipe console
+	When I select "Manual operation" tab
+	And I start Manual run
+	And I try to stop the manual run
+	And I select No option to continue manual run execution
+	And I try to stop the manual run
+	And I select X option to continue manual run execution
+	And I try to stop the manual run
+	And I select yes option to continue manual run execution
+	Then I verify the post run window UI fields
+	And I close the post run window
+ 	
+Scenario: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and Restart|BIOFOUND-11955|
+	When I expand recipe console in pnid
+	And I hold the system
+	And I restart the system
+	And I load recipe "testRecipeToExecute1min"
+	And I start recipe execution
+	And I hold the system
+	And I restart the system
+	And I see Recipe should be executed
+	And I hold the system
+	And I restart the system
+	And I goto report management page
+	When I select report from dropdown "Audit Trail"
+	And I select user in dropdown "Bio4CAdmin"
+	And I check audit trial logs
+ @wip
+Scenario: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page|BIOFOUND-11294|
+ 	When I expand recipe console in pnid
+	And I load recipe "testRecipeToExecute1min"
+	And I start recipe execution
+	And I hold the system
+	Then Verify the recipe console extended view UI components
+	And I goto report management page
+	And I go to Main screen
+	And I expand recipe console in pnid
+	Then Verify the recipe console extended view UI components.
+	And I logout
+	And I open login page
+	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	Then Verify the recipe console extended view UI components.
+	And I restart the system
+	Then I see process hold button is displayed
+	
  
