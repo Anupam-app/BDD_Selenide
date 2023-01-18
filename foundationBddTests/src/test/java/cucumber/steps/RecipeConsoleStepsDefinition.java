@@ -591,8 +591,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.runIdManual(this.currentRecipe.getRunId());
 		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(25));
 		recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
-		//this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
-		//recipePage.saveAsModifiedRecipe(this.recipe.getRecipeName());
 	}
 
 	@And("provide remaining mandatory data to select OK button")
@@ -689,6 +687,11 @@ public class RecipeConsoleStepsDefinition {
 	public void iSeeProcessHoldButton() {
 		recipeConsolePage.iverifyDailogBox();
 	}
+		
+	@Then("Verify the recipe console extended view UI components")
+	public void iVerifyUIComponents() {
+		recipeConsolePage.iVerifyRecipeConsoleElement();
+		recipeConsolePage.checkDiable_Btns();
+	}
 	
 }
-

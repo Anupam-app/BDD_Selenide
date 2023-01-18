@@ -928,4 +928,8 @@ public class RecipeConsolePage {
 		loadButton.click();
 	}
 
+	public void checkDiable_Btns() {
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "JUMP_STEP"))).shouldNotBe(visible);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldNotBe(visible);
+	}
 }

@@ -123,8 +123,7 @@ Feature: Recipe console
   
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
-    When I load recipe "testRecipeToExecute"
-    #Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
+    When I load recipe "testRecipeToExecute"    
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
     When I start recipe execution
@@ -212,12 +211,11 @@ Feature: Recipe console
 	And I Verify above recipe actions are recorded in audit trail 
 	And I generate the report
 	And I verify the recipe event actions in PDF report
- 
+
  Scenario: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded|BIOFOUND-13271|
  	Given I expand recipe console
 	When I load recipe "testDraftRecipeToChangeStatus"
-	Then I verify the recipe name displayed on load recipe list
-# elipse are present , mouse over to see full name 
+	Then I verify the recipe name displayed on load recipe list 
 	And I verify the recipe name is trimmed on recipe console UI
 	And I verify the recipe lengthy step is trimmed
 	And I verify mouse hover on step displays tool tip with full step details
@@ -309,7 +307,7 @@ Scenario: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and R
 	When I select report from dropdown "Audit Trail"
 	And I select user in dropdown "Bio4CAdmin"
 	And I check audit trial logs
- @wip
+
 Scenario: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page|BIOFOUND-11294|
  	When I expand recipe console in pnid
 	And I load recipe "testRecipeToExecute1min"
@@ -319,12 +317,10 @@ Scenario: Verify state persistency of Recipe Console when system is on Hold and 
 	And I goto report management page
 	And I go to Main screen
 	And I expand recipe console in pnid
-	Then Verify the recipe console extended view UI components.
+	Then Verify the recipe console extended view UI components
 	And I logout
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
-	Then Verify the recipe console extended view UI components.
+	Then Verify the recipe console extended view UI components
 	And I restart the system
 	Then I see process hold button is displayed
-	
- 
