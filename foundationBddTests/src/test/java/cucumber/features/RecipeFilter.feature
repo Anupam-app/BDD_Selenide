@@ -9,6 +9,7 @@ Feature: Recipes Management Filters
     When I search recipe "testRecipeToExecute"
     Then I should see recipe "testRecipeToExecute"
 
+  @IVI-5144
   Scenario: Bug- IVI-5144 | Verify message in phase library when there is no phase in phase library.
     Given I go to recipe page
     When I trigger edit mode
