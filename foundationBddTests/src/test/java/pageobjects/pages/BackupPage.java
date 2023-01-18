@@ -15,6 +15,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import pageobjects.components.SpinnerComponent;
+import pageobjects.utility.ContextHelper;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.TimeHelper;
@@ -30,6 +31,7 @@ public class BackupPage {
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     private String XPATH_NOTIFICATION_BACKUP_END = "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
     private String XPATH_HEADER = "//div[@class='header-title']";
+    private String XPATH_ORCHESTRATOR_HEADER = "//div[contains(@class,'BackupRestore_header-title')]";
 
     private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[6]"));
     private SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
@@ -163,7 +165,11 @@ public class BackupPage {
     }
 
     public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+        if(ContextHelper.isOrchestrator()){
+            commonWaiter($(By.xpath(XPATH_ORCHESTRATOR_HEADER)), text(expectedText));
+        }else{
+            commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+        }
     }
 
     public void waitForScheduledBackupFinished() {

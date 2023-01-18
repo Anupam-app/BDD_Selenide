@@ -337,7 +337,7 @@ public class UserPage {
     }
 
     public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+        commonWaiter($(By.id("UserAccountContainer")), text(expectedText));
     }
 
     public void waitForUserCreationNotification(String userName) {
