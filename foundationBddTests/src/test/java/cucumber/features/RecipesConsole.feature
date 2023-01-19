@@ -121,27 +121,27 @@ Feature: Recipe console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-  #Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
-    #Given I expand recipe console in pnid
-    #When I load recipe "testRecipeToExecute"
-    ##Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
-    #Then I verify Manual Operation tab is "enabled"
-    #And I verify Recipe Run tab is "enabled"
-    #When I start recipe execution
-    #Then I verify Manual Operation tab is "disabled"
-    #And I pause recipe and verify recipe paused and jump icon is disabled
-    #And I verify Manual Operation tab is "disabled"
-    #When I resume and verify recipe execution is resumed
-    #Then I verify Manual Operation tab is "disabled"
-    #And I should see the recipe run "Completed"
-    #And I verify Manual Operation tab is "enabled"
-    #And I verify Recipe Run tab is "enabled"
-    #And I re-run the recipe
-    #Then I verify Manual Operation tab is "disabled"
-    #And I click on abort button
-    #Then I should see the recipe run aborted
-    #And I verify Manual Operation tab is "enabled"
-  
+  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
+    Then I verify Manual Operation tab is "enabled"
+    And I verify Recipe Run tab is "enabled"
+    When I start recipe execution
+    Then I verify Manual Operation tab is "disabled"
+    And I pause recipe and verify recipe paused and jump icon is disabled
+    And I verify Manual Operation tab is "disabled"
+    When I resume and verify recipe execution is resumed
+    Then I verify Manual Operation tab is "disabled"
+    And I wait the end of the execution of the recipe during 30 seconds
+    And I should see the recipe run "Completed"
+    And I verify Manual Operation tab is "enabled"
+    And I verify Recipe Run tab is "enabled"
+    And I re-run the recipe
+    Then I verify Manual Operation tab is "disabled"
+    And I click on abort button
+    Then I should see the recipe run aborted
+    And I verify Manual Operation tab is "enabled"
+
   Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
