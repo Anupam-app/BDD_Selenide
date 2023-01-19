@@ -171,7 +171,6 @@ public class UserPage {
 
     public void createNewUser(String userName) {
         SelenideHelper.commonWaiter(createUserPlusButton, visible).click();
-        createUserPlusButton.click();
         userNameTextBox.setValue(userName);
     }
 

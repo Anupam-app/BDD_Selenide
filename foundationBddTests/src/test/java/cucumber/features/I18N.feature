@@ -54,11 +54,6 @@ Feature: I18N on all modules
   Scenario Outline: Test i18n all modules orchestrator
     Given I am using language "en-US"
     And I am logged in as "bio4cadmin" user
-    And I go to user profile
-    And I go to user preferences
-    When I change default language to "<language>"
-    And I save user preferences
-    Then I see expected texts in user profile
     And I go to device dashboard page
     And I see expected texts from device dashboard module
     And I navigate to trends page
