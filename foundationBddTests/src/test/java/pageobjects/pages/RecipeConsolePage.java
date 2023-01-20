@@ -201,21 +201,7 @@ public class RecipeConsolePage {
     }
 
     public String startAndWaitRecipe(Recipe recipe, int seconds) {
-
-        String runId;
-        String[] dateParts = null;
-        String[] dateparts1 = null;
-
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
-        runId = runIdTextbox.getValue();
-        productIdTextbox.setValue(recipe.getProductId());
-        batchIdTextbox.click();
-        batchIdTextbox.sendKeys(recipe.getBatchId());
-        batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(recipe.getBeforeComments());
-        okButton.click();
-        abortButton.waitUntil(Condition.visible, 5000l);
+        String runId = startRecipe(recipe);
         abortButton.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
         SelenideHelper.commonWaiter(startDate, visible);
         recipe.setStartDate(startDate.getText());
@@ -224,20 +210,28 @@ public class RecipeConsolePage {
         recipe.setStatus(executionStatusText.getText());
         preRunCommentsText.sendKeys(recipe.getAfterComments());
         okButton.click();
-
         return runId;
     }
 
-    public String startRecipe(String productId, String batchId, String beforeComments) {
+    public String startRecipe(Recipe recipe) {
+        //take clear panel css class when disabled
+        var classClearRecipeButton=clearRecipeButton.getAttribute("class");
+
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
         String runId = runIdTextbox.getValue();
-        productIdTextbox.setValue(productId);
+        productIdTextbox.setValue(recipe.getProductId());
         batchIdTextbox.click();
-        batchIdTextbox.sendKeys(batchId);
+        batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(beforeComments);
+        preRunCommentsText.sendKeys(recipe.getBeforeComments());
         okButton.click();
+        abortButton.waitUntil(Condition.visible, 5000l);
+
+        //wait clean panel to be disabled via css class
+        SelenideHelper.fluentWaiter().until((webDriver) ->
+            clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
+        );
 
         return runId;
     }
@@ -252,6 +246,7 @@ public class RecipeConsolePage {
 
     public void clickPauseButton() {
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 5000l).click();
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 5000l);
     }
 
     public void clickResumeButton() {
@@ -328,10 +323,6 @@ public class RecipeConsolePage {
     }
 
     public void manualOperation(String status) {
-    	
-        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
-        }
         if (status.equalsIgnoreCase("enabled")) {
             manualOperationButton.waitUntil(visible, 50001).click();
             manualOperationSelected.shouldBe(visible);

@@ -141,7 +141,7 @@ public class RecipeConsoleStepsDefinition {
     @When("I start recipe execution")
     public void iStartRecipeExecution() {
         generateRecipeValues(null, null);
-        String runId = recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+        String runId = recipeConsolePage.startRecipe(this.currentRecipe);
         this.currentRecipe.setRunId(runId);
     }
 
