@@ -26,6 +26,7 @@ public class HomePage {
     }
 
     public void goToMain() {
+        SelenideHelper.goToDefault();
         SelenideHelper.commonWaiter(PNIDLinkText,visible).click();
     }
 

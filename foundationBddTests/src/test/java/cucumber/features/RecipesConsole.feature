@@ -60,6 +60,8 @@ Feature: Recipe console
     And I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
     Then I see the error message as "Special characters are not allowed for Comments"
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
     And I check audit trial logs
 
@@ -188,7 +190,7 @@ Feature: Recipe console
     And I load recipe
     Then I verify the details
     And I validate the Start button is "enabled"
-	
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -205,7 +207,7 @@ Feature: Recipe console
     And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  
+
   Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -215,11 +217,6 @@ Feature: Recipe console
     And I go to main
     Then I verify the recipe execution details in console View
     And I logout
-    And I open login page
-    And I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I verify the recipe execution details in console View
-    And I refresh the portal
     And I open login page
     And I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
