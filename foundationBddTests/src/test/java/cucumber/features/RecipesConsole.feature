@@ -183,12 +183,13 @@ Feature: Recipe console
     And I restart the Process hold
     And I validate the Start button is "enabled"
 
+  @IVI-4926
   Scenario: IVI Bug | IVI-4926 Recipe loader | Invalid text is seen as tool tip (UI issue)
     When I expand recipe console in pnid
     And I load recipe
     Then I verify the details
     And I validate the Start button is "enabled"
-	
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -205,7 +206,7 @@ Feature: Recipe console
     And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  
+
   Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -239,7 +240,8 @@ Feature: Recipe console
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
- 
+
+  @IVI-6029
   Scenario: IVI Bug IVI-6029| Recipe Management | Step within ELSE condition is never shown as executed in recipe panel though condition satisfies
     When I expand recipe console in pnid
     And I load recipe "testRecipeIfElseCriteria"
@@ -248,14 +250,15 @@ Feature: Recipe console
     And I verify step related valve "Close" is executed
     And I re-run the recipe
     And I wait for recipe Execution to be completed
-    Then I verify step related valve "Open" is executed 
-    
-   Scenario: IVI Bug IVI-6021| Recipe Management | Recipe step details for Conditions are getting appended with invalid 0.0/1.0 when loaded
+    Then I verify step related valve "Open" is executed
+
+  Scenario: IVI Bug IVI-6021| Recipe Management | Recipe step details for Conditions are getting appended with invalid 0.0/1.0 when loaded
     When I expand recipe console in pnid
     And I load recipe "testRecipeIfElseCriteria"
     Then I verify step in console does not show extra words
-    
-   Scenario: IVI Bug IVI-6154| Recipe Loader | Expected message is not seen when user tries to start Manual Run with recipe already loaded in Recipe Run tab
+
+  @IVI-6154
+  Scenario: IVI Bug IVI-6154| Recipe Loader | Expected message is not seen when user tries to start Manual Run with recipe already loaded in Recipe Run tab
     When I expand recipe console in pnid
     And I load recipe "testRecipeIfElseCriteria"
     And I select "MANUAL OPERATION" tab

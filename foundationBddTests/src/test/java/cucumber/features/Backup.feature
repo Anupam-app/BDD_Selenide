@@ -15,6 +15,7 @@ Feature: Backup creation
     #And I go to backup history
     #Then I verify backup history details
 
+  @IVI-6202
   Scenario: Schedule backup
     Given I goto backup page
     When I schedule backup
