@@ -570,6 +570,7 @@ public class RecipeConsoleStepsDefinition {
 	@And("I wait for {int} sec and stop the run")
 	public void iWaitAndStopManualOperation(int seconds) {
 		recipeConsolePage.startAndWaitManualOperation(seconds);
+		recipeConsolePage.clickOnOk();		
 	}
 
 	@When("I load recipe {string} and select run button")

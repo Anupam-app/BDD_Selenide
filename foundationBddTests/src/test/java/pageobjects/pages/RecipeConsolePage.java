@@ -825,6 +825,8 @@ public class RecipeConsolePage {
 	public void startAndWaitManualOperation(int seconds) {
 		SelenideHelper.commonWaiter(manualStopButton, visible).waitUntil(Condition.visible,30000);		
 		manualStopButton.click();
+		Selenide.sleep(4000);
+		validateYesBtn();
 	}
 
 	public void iProvidingData(String productId,String beforeComments) {

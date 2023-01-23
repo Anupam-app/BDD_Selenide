@@ -121,26 +121,25 @@ Feature: Recipe console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-  #Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
-    #Given I expand recipe console in pnid
-    #When I load recipe "testRecipeToExecute"
-    #Then I verify loading label and recipe download in progress# the loading message is goes off in 2sec,could not get the xpath
-    #Then I verify Manual Operation tab is "enabled"
-    #And I verify Recipe Run tab is "enabled"
-    #When I start recipe execution
-    #Then I verify Manual Operation tab is "disabled"
-    #And I pause recipe and verify recipe paused and jump icon is disabled
-    #And I verify Manual Operation tab is "disabled"
-    #When I resume and verify recipe execution is resumed
-    #Then I verify Manual Operation tab is "disabled"
-    #And I should see the recipe run "Completed"
-    #And I verify Manual Operation tab is "enabled"
-    #And I verify Recipe Run tab is "enabled"
-    #And I re-run the recipe
-    #Then I verify Manual Operation tab is "disabled"
-    #And I click on abort button
-    #Then I should see the recipe run aborted
-    #And I verify Manual Operation tab is "enabled"
+  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeToExecute"
+    Then I verify Manual Operation tab is "enabled"
+    And I verify Recipe Run tab is "enabled"
+    When I start recipe execution
+    Then I verify Manual Operation tab is "disabled"
+    And I pause recipe and verify recipe paused and jump icon is disabled
+    And I verify Manual Operation tab is "disabled"
+    When I resume and verify recipe execution is resumed
+    Then I verify Manual Operation tab is "disabled"
+    And I should see the recipe run "Completed"
+    And I verify Manual Operation tab is "enabled"
+    And I verify Recipe Run tab is "enabled"
+    And I re-run the recipe
+    Then I verify Manual Operation tab is "disabled"
+    And I click on abort button
+    Then I should see the recipe run aborted
+    And I verify Manual Operation tab is "enabled"
 
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
@@ -229,9 +228,6 @@ Feature: Recipe console
 	When I select "Manual operation" tab
 	And I start Manual run 
 	And I wait for 30 sec and stop the run
-	And I goto report management page
-	When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
 	Then I navigate to report and generate audit trail report
 	And I Verify above recipe actions are recorded in audit trail 
 	And I generate the report
@@ -285,24 +281,24 @@ Feature: Recipe console
  	
  Scenario: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution|BIOFOUND-11316|
  	When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute1min"
-    And I start recipe execution
-    And I hold the system
-    Then I see the system on hold
-    And Recipe execution is paused
-    And I restart the system
-    And I click on pause button
-    Then control should be on resume button
-    And I click on resume button
-    Then control should be on pause button
-    And I click on jump step "1"
-    And I click on abort button
-    Then I should see the recipe run aborted
-    And control should be on rerun button
-    And I goto report management page
-    When I select report from dropdown "Audit Trail"
-		And I select user in dropdown "Bio4CAdmin"
-		And I check audit trial logs
+  And I load recipe "testRecipeToExecute1min"
+  And I start recipe execution
+  And I hold the system
+  Then I see the system on hold
+  And Recipe execution is paused
+  And I restart the system
+  And I click on pause button
+  Then control should be on resume button
+  And I click on resume button
+  Then control should be on pause button
+  And I click on jump step "1"
+  And I click on abort button
+  Then I should see the recipe run aborted
+  And control should be on rerun button
+  And I goto report management page
+  When I select report from dropdown "Audit Trail"
+	And I select user in dropdown "Bio4CAdmin"
+	And I check audit trial logs
 
  Scenario: Verify Post-run modal of Manual Run Recipe execution|BIOFOUND-12603|
  	Given I expand recipe console
