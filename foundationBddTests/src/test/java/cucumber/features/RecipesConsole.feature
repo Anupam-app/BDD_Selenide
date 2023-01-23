@@ -184,6 +184,7 @@ Feature: Recipe console
     And I restart the Process hold
     And I validate the Start button is "enabled"
 
+  @IVI-4926
   Scenario: IVI Bug | IVI-4926 Recipe loader | Invalid text is seen as tool tip (UI issue)
     Given I expand recipe console in pnid
     When I load recipe
@@ -236,6 +237,7 @@ Feature: Recipe console
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
  
+  @IVI-6029
   Scenario: IVI Bug IVI-6029| Recipe Management | Step within ELSE condition is never shown as executed in recipe panel though condition satisfies
     Given I expand recipe console in pnid
     When I load recipe "testRecipeIfElseCriteria"
@@ -251,6 +253,7 @@ Feature: Recipe console
     When I load recipe "testRecipeIfElseCriteria"
     Then I verify step in console does not show extra words
     
+   @IVI-6154
    Scenario: IVI Bug IVI-6154| Recipe Loader | Expected message is not seen when user tries to start Manual Run with recipe already loaded in Recipe Run tab
     Given I expand recipe console in pnid
     When I load recipe "testRecipeIfElseCriteria"

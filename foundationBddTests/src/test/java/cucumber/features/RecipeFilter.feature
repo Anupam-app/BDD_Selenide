@@ -9,17 +9,20 @@ Feature: Recipes Management Filters
     When I search recipe "testRecipeToExecute"
     Then I should see recipe "testRecipeToExecute"
 
+  @IVI-5144
   Scenario: Bug- IVI-5144 | Verify message in phase library when there is no phase in phase library.
     Given I go to recipe page
     When I trigger edit mode
     And I select phase library
     Then I verify the message "There is No Phase in Phase Library"
 
+  @IVI-4731
   Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Draft"
     Then I should see recipe "testDraftRecipe"
 
+  @IVI-4731
   Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030| Verify created by functionality in Recipe Browser
     Given I go to recipe page
     When I select recipe created by "Bio4CAdmin"
@@ -48,6 +51,7 @@ Feature: Recipes Management Filters
       | UOP Status       | true       |
       | UOP Status       | false      |
 
+  @IVI-4731
   Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter recipe functionality in Recipe Management Based on status
     Given I go to recipe page
     When I filter based on uop status as "Approved-Active" and Imported as "Yes"

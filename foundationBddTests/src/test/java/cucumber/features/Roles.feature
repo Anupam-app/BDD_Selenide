@@ -35,6 +35,7 @@ Feature: Role administration
     And I edit the role
     Then I verify role details
 
+  @IVI-5671
   Scenario: IVI Bug IVI-5671| Assigning role to user
     When I search "testUserToAssignRole" user
     And I edit the user
@@ -70,7 +71,8 @@ Feature: Role administration
   #  When  I select template sort by "Event Time" in "false"
   #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
   #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
-  
+
+  @IVI-6138
   Scenario: IVI Bug | IVI-6138 | Obsolete Role
     Given I trigger Roles mode
     When I create random role
