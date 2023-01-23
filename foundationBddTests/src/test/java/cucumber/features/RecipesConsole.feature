@@ -151,7 +151,7 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-   
+  
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -223,7 +223,7 @@ Feature: Recipe console
  	 
  Scenario: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal|BIOFOUND-13262|
  	Given I expand recipe console
- 	When I load recipe "testRecipeToExecute"
+ 	When I load recipe "testRecipeToExecute1min"
 	Then I should see pre run window
 	When I clear and try to enter lenghty RUN ID, BatchID
 	And provide remaining mandatory data to select OK button
@@ -239,18 +239,18 @@ Feature: Recipe console
 	And I start recipe execution
 	And I logout
 	And I open login page
-	And I login with "Bio4Cservice" same user as above "MerckApp1@"
+	And I login with "Bio4Cservice" same user as above "Merck$ervice"
 	And I expand recipe console in pnid
 	And I click on pause button
-	And Recipe execution is paused
+	And I see recipe execution is paused
 	Then control should be on resume button
 	And I click on resume button
 	Then control should be on pause button
 	And I logout
 	And I open login page
-	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
 	And I expand recipe console in pnid
-	And I click on jump step "2"
+	And I click on jump step "1"
 	And I click on abort button
 	Then I should see the recipe run aborted
 	And control should be on rerun button
@@ -297,7 +297,7 @@ Scenario: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and R
 	When I expand recipe console in pnid
 	And I hold the system
 	And I restart the system
-	And I load recipe "testRecipeToExecute1min"
+	And I load the recipe "testRecipeToExecute1min"
 	And I start recipe execution
 	And I hold the system
 	And I restart the system
@@ -321,7 +321,8 @@ Scenario: Verify state persistency of Recipe Console when system is on Hold and 
 	Then Verify the recipe console extended view UI components
 	And I logout
 	And I open login page
-	And I login with "Bio4CAdmin" same user as above "MerckApp1@"
+	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
 	Then Verify the recipe console extended view UI components
 	And I restart the system
 	Then I see process hold button is displayed
+	

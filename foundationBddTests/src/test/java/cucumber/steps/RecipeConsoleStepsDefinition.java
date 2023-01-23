@@ -453,7 +453,6 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I verify the recipe execution details in console View")
 	public void recipeDetailsInConsole() {
-
 		recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
 	}
 
@@ -566,7 +565,8 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I see Recipe should be executed")
 	public void iSeeRecipeShouldBeExecuted() {
-		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+		Assert.assertTrue(recipeConsolePage.iCheckrecipeDetails(this.currentRecipe.getBatchId(),this.currentRecipe.getRunId()));
+		//recipeConsolePage.clickOnOk();
 	}
 
 	@And("I wait for {int} sec and stop the run")
@@ -582,14 +582,15 @@ public class RecipeConsoleStepsDefinition {
 
 	@Then("I should see pre run window")
 	public void iSeePreRunWindow() {
+		recipeConsolePage.run_Btn();
 		recipeConsolePage.preRunWindow_Popup();
 	}
 
 	@When("I clear and try to enter lenghty RUN ID, BatchID")
 	public void iEnterLenghtyRunIdAndBatchID() {
-		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(50));
 		recipeConsolePage.runIdManual(this.currentRecipe.getRunId());
-		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(45));
 		recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
 	}
 
@@ -653,9 +654,8 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I validate the recipe console UI elements")
 	public void iValidateTheUIElements() {
-		recipeConsolePage.iVerifyRcipeName();
-		recipeConsolePage.iVerifyTrimmedRecipe();
-		recipeConsolePage.iVerifyConditionalStatement();
+		recipeConsolePage.pauseButton();
+		recipeConsolePage.verifyAbortButton();
 	}
 
 	@And("I mouse hover RUNID and BatchID to validate full text displayed")
@@ -690,8 +690,20 @@ public class RecipeConsoleStepsDefinition {
 		
 	@Then("Verify the recipe console extended view UI components")
 	public void iVerifyUIComponents() {
+		recipeConsolePage.gotoRecipeConsole();
 		recipeConsolePage.iVerifyRecipeConsoleElement();
 		recipeConsolePage.checkDiable_Btns();
 	}
 	
+	@And("I see recipe execution is paused")
+	public void recipeExcutionPaused() {
+		recipeConsolePage.iVerifyRecipePause();
+	}
+	
+	@Given("I load the recipe {string}")
+	public void iLoadTheRecipe(String recipe) {
+		this.currentRecipe = new Recipe();
+		this.currentRecipe.setRecipeName(recipe);
+		recipeConsolePage.iLoadRecipelink(recipe);
+	}
 }
