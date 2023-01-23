@@ -526,6 +526,7 @@ public class RecipeConsolePage {
             manualOperationButton.shouldNotBe(selected);
         }
     }
+    
     public void recipeRun() {
         recipeButton.waitUntil(visible, 50001).click();
         recipeButtonSelected.shouldBe(visible);
