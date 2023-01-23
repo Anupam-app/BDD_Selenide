@@ -292,7 +292,7 @@ public class RecipeConsolePage {
 		inputStepNumber.sendKeys(stepNumber);
 		okStepButton.waitUntil(Condition.visible, 5000l, 500).click();
 		abortButton.waitUntil(visible, 4000l, 500);
-		Selenide.sleep(2000);
+		Selenide.sleep(1000);
 	}
 
 	public void seeSystemOnHold() {

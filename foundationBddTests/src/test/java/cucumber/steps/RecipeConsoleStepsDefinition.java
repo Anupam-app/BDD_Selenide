@@ -565,7 +565,6 @@ public class RecipeConsoleStepsDefinition {
 	@And("I see Recipe should be executed")
 	public void iSeeRecipeShouldBeExecuted() {
 		Assert.assertTrue(recipeConsolePage.iCheckrecipeDetails(this.currentRecipe.getBatchId(),this.currentRecipe.getRunId()));
-		//recipeConsolePage.clickOnOk();
 	}
 
 	@And("I wait for {int} sec and stop the run")

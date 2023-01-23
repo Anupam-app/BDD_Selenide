@@ -277,8 +277,8 @@ Feature: Recipe console
     And control should be on rerun button
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+		And I select user in dropdown "Bio4CAdmin"
+		And I check audit trial logs
 
  Scenario: Verify Post-run modal of Manual Run Recipe execution|BIOFOUND-12603|
  	Given I expand recipe console
