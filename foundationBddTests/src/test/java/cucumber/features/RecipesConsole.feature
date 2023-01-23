@@ -229,6 +229,9 @@ Feature: Recipe console
 	When I select "Manual operation" tab
 	And I start Manual run 
 	And I wait for 30 sec and stop the run
+	And I goto report management page
+	When I select report from dropdown "Audit Trail"
+	And I select user in dropdown "Bio4CAdmin"
 	Then I navigate to report and generate audit trail report
 	And I Verify above recipe actions are recorded in audit trail 
 	And I generate the report

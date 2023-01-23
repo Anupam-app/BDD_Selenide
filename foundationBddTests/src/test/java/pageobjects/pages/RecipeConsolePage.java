@@ -265,8 +265,6 @@ public class RecipeConsolePage {
 
 	public void clickPauseButton() {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 5000l).click();
-		Selenide.sleep(3000);
-		System.out.println("pause button clicking");
 	}
 
 	public void clickResumeButton() {
@@ -579,7 +577,6 @@ public class RecipeConsolePage {
 		System.out.println("Click on RunID");
 		Selenide.sleep(2000);
 		runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
-		System.out.println("Clear RinID");
 		runIdTextbox.sendKeys(value);
 		Selenide.sleep(2000);
 		runIdTextbox.sendKeys(Keys.ENTER);
@@ -850,8 +847,6 @@ public class RecipeConsolePage {
 
 	public void iVerifyRcipeName() {
 		recipeNameTrimmed.getCssValue("text-overflow");
-		//assert recipeNameTrimmed.getCssValue("text-overflow") == "ellipsis";
-		System.out.println(recipeNameTrimmed.getCssValue("text-overflow"));
 		stepAction.moveToElement(recipeNameTrimmed).moveToElement(recipeNameTrimmed).click().build().perform();
 		Selenide.sleep(2000);
 	}
@@ -869,7 +864,6 @@ public class RecipeConsolePage {
 
 	public void iVerifyConditionalStatement() {
 		SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
-		//assert ConditionalStatement.getCssValue("text-overflow") == "ellipsis";
 		stepAction.moveToElement(ConditionalStatement).perform();
 		Selenide.sleep(2000);
 	}
