@@ -215,7 +215,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.seeSystemOnHold();
 	}
 
-
 	@Then("I should see the recipe run {string}")
 	public void iVerifyRecipeAbort(String status) throws InterruptedException {
 		if (status.equalsIgnoreCase("Aborted")) {
@@ -687,19 +686,19 @@ public class RecipeConsoleStepsDefinition {
 	public void iSeeProcessHoldButton() {
 		recipeConsolePage.iverifyDailogBox();
 	}
-		
+
 	@Then("Verify the recipe console extended view UI components")
 	public void iVerifyUIComponents() {
 		recipeConsolePage.gotoRecipeConsole();
 		recipeConsolePage.iVerifyRecipeConsoleElement();
 		recipeConsolePage.checkDiable_Btns();
 	}
-	
+
 	@And("I see recipe execution is paused")
 	public void recipeExcutionPaused() {
 		recipeConsolePage.iVerifyRecipePause();
 	}
-	
+
 	@Given("I load the recipe {string}")
 	public void iLoadTheRecipe(String recipe) {
 		this.currentRecipe = new Recipe();

@@ -903,7 +903,7 @@ public class RecipeConsolePage {
 	}
 
 	public void iLoadRecipelink(String recipeName) {
-		
+
 		if (abortButton.isDisplayed()) {
 			abortButton.click();
 			clickYesButton.waitUntil(Condition.visible, 1000).click();
@@ -914,7 +914,7 @@ public class RecipeConsolePage {
 			closeButtonOfStop.click();
 			okButton.click();
 		}
-		
+
 		if (manualStartButton.isDisplayed()) {
 			recipeButton.click();
 		}
@@ -924,7 +924,6 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
 		loadButton.waitUntil(Condition.visible, 20000l);
 		$(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
-		//iVerifyRcipeName();
 		loadButton.click();
 	}
 
@@ -932,7 +931,7 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "JUMP_STEP"))).shouldBe(visible);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldBe(visible);
 	}
-	
+
 	public boolean iCheckrecipeDetails(String batch_Id,String runId ) {
 		boolean isResult = false;
 		if (recipeRunBatchId.getText().equalsIgnoreCase(batch_Id) && recipeRunId.getText().equalsIgnoreCase(runId)) {
@@ -940,14 +939,14 @@ public class RecipeConsolePage {
 		}
 		return isResult;
 	}
-	
+
 	public void iVerifyRecipePause() {
 		clickPauseButton();
 		Selenide.sleep(2000);
-	SelenideHelper.commonWaiter(pauseButton, disappear);
-	$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldBe(visible);
+		SelenideHelper.commonWaiter(pauseButton, disappear);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldBe(visible);
 	}
-	
+
 	public boolean verifyAbortButton() {
 		return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).waitUntil(Condition.visible, 50001).isDisplayed());
 	}

@@ -325,4 +325,3 @@ Scenario: Verify state persistency of Recipe Console when system is on Hold and 
 	Then Verify the recipe console extended view UI components
 	And I restart the system
 	Then I see process hold button is displayed
-	
