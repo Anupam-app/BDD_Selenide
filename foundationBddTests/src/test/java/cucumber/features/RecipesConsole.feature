@@ -222,7 +222,7 @@ Feature: Recipe console
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
     
-  @wip
+  @WIP
  Scenario: Verify Audit trail logs for manual run Start/Stop actions|BIOFOUND-12697|
  	Given I expand recipe console
 	When I select "Manual operation" tab
@@ -297,8 +297,8 @@ Feature: Recipe console
   And control should be on rerun button
   And I goto report management page
   When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+  And I select user in dropdown "Bio4CAdmin"
+  And I check audit trial logs
 
  Scenario: Verify Post-run modal of Manual Run Recipe execution|BIOFOUND-12603|
  	Given I expand recipe console
