@@ -22,6 +22,7 @@ import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipeConsolePage {
+
 	Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
 
 	private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
