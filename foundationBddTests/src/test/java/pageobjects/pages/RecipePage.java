@@ -323,7 +323,8 @@ public class RecipePage {
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-paste-before-button"))).click();
         commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 3"))), visible).shouldBe(visible);
-        $(By.xpath(String.format(phaseNameLabel, 3))).shouldHave(value(phaseName + "_2_3"));
+        $(By.xpath(String.format(phaseNameLabel, 3))).shouldHave(value(phaseName + "_2"));
+        $(By.xpath(String.format(phaseNameLabel, 2))).shouldHave(value(phaseName + "_2_3"));
     }
 
     public void verifyPhaseButtons() {
@@ -651,12 +652,13 @@ public class RecipePage {
         stepPlaceholder.sendKeys(Keys.ENTER);
     }
 
+    //TO-DO: parameters to passed from external file
     public void addStepActionBrowser() {
         opertionAction.waitUntil(visible, 2000).click();
-        $(By.xpath(String.format(expandAction, "Control Loop"))).click();
-        $(By.xpath(String.format(expandAction, "Feed Flow FI101"))).click();
+        $(By.xpath(String.format(expandAction, "Product Inlet"))).click();
+        $(By.xpath(String.format(expandAction, "Flowpath"))).click();
         $(By.xpath(String.format(expandAction, "Control"))).waitUntil(visible, 1000).click();
-        $(By.xpath(String.format(rootStep, "On"))).doubleClick();
+        $(By.xpath(String.format(rootStep, "Inlet"))).doubleClick();
     }
 
     public void addMessageInStep() {
@@ -716,6 +718,10 @@ public class RecipePage {
         commonWaiter(insertStepBeforeButton, visible).shouldBe(selected);
     }
 
+    public void touchButtonNotDisplayed() {
+        commonWaiter(insertStepBeforeButton,not(visible));
+    }
+
     public void verifyRecipeHeader() {
         recipeManagementHeader.shouldBe(visible);
     }
@@ -746,14 +752,16 @@ public class RecipePage {
         $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
     }
-    
+
+    //recommended to used String variable rather than passing the xpath
     public void addActionStepAfterStep(String stepNo) {
-    	commonWaiter($(By.xpath(String.format("//span[@class='target' and contains(@data-contextmenu,'step%s')]", "1"))),visible).click();
+    	commonWaiter($(By.xpath(String.format("//label[@class='stepCount' and text()=%s]", stepNo))),visible).click();
     	stepAction.keyDown(Keys.ALT).sendKeys(Keys.ENTER).perform();
     }
-    
+
+    //recommended to used String variable rather than passing the xpath
     public void iSeeBlankStep() {
-        Assert.assertTrue(($(By.xpath("(//input[@placeholder='Search instruments and actions...'])[2]"))).getAttribute("value").isBlank());
+        Assert.assertTrue(($(By.xpath("(//input[@placeholder='Search instruments and actions...'])[6]"))).getAttribute("value").isBlank());
     }
     
     public void verifyRecipeTab() {

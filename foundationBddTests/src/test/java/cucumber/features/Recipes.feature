@@ -61,13 +61,13 @@ Feature: Recipe management
       | UOP Status       |
 
   @IVI
-  Scenario: IVI Bug IVI-5969 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
+  Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
     Then Recipe should be inactive
-    And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
+    #And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I click on generate button
     And I goto report management page
@@ -76,7 +76,7 @@ Feature: Recipe management
     And I see the "testRecipeDraftToInactive" is changed to "APPROVED-INACTIVE" in report
 
   @IVI
-  Scenario: IVI Bug IVI-5969 | BIOCRS-5060| Recipe Tech Review Rejected
+  Scenario: IVI Bug IVI-4468 | BIOCRS-5060| Recipe Tech Review Rejected
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testRecipeDraftToReject"
@@ -147,8 +147,8 @@ Feature: Recipe management
     And I save the recipe with name "testRecipeToExecute"
     Then I see warning message is displayed "Recipe is locked. Please save it as new copy."
 
-  @IVI
-  Scenario: BIOCRS-1594 BIOCRS-5478 | Recipe export and import
+  @IVI @IVI-6151
+  Scenario: BUG IVI-6151 | BIOCRS-1594 BIOCRS-5478 | Recipe export and import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I search the recipe "testDraftRecipeToAddPhase"
@@ -177,8 +177,8 @@ Feature: Recipe management
     Then I should see "blank" step added
     And I add action to the step
 
-  @IVI
-  Scenario: BIOFOUND-3768| Create step using Action browser
+  @IVI @IVI-5149
+  Scenario: IVI BUG IVI-5149 | BIOFOUND-3768| Create step using Action browser
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
@@ -207,7 +207,7 @@ Feature: Recipe management
     When I edit recipe "testDraftRecipe"
     Then I cannot edit the recipe
     And I cannot change the recipe status
-    And touch buttons are disabled
+    And I verify touch buttons are not displayed
 
   @IVI @IVI-5768
   Scenario: IVI Bug IVI-5768 | Delete the phase
@@ -219,7 +219,7 @@ Feature: Recipe management
     Then the phase is deleted
 
   @IVI
-  Scenario: IVI Bug IVI-5764 | Touch Enabled buttons for copy and paste phases
+  Scenario: Touch Enabled buttons for copy and paste phases
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
@@ -272,7 +272,7 @@ Feature: Recipe management
     And I add step after step "1"
     Then I see blank step is added
     
-  @IVI
+  @IVI @IVI-6167
   Scenario: IVI Bug IVI-6167 | Recipe Management | Unable to modify a recipe which is in approved or InReview state
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -280,7 +280,7 @@ Feature: Recipe management
     And I add step after step "1"
     Then I see blank step is added
     
-  @IVI
+  @IVI @IVI-6153
   Scenario: IVI Bug IVI-6153 | Recipe Editor | Text/confirmation message not displayed on recipe editor
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

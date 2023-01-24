@@ -395,6 +395,11 @@ public class RecipePageStepsDefinition {
     public void touchButtonsAreDisabled() {
         recipePage.cannotClickTouchButtons();
     }
+
+    @And("I verify touch buttons are not displayed")
+    public void touchButtonsAreNotDisplayed() {
+        recipePage.touchButtonNotDisplayed();
+    }
 	
 	@When("I rename phase in recipe")
 	public void iRenamePhase() {
