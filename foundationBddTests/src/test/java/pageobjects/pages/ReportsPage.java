@@ -52,6 +52,7 @@ public class ReportsPage {
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN = "//span[contains(text(),'%s')]/ancestor::div[@class='custom-drop-down']";
     private final String XPATH_OPTION_DROPDOWN = "//option[contains(text(),'%s')]/ancestor::li";
+    private final String XPATH_DEVICE_OPTION_DROPDOWN = "//li[text()='%s']";
     private final String XPATH_Date_DROPDOWN = "//li[text()='%s']";
     private final String XPATH_RunsColumnName = "//*[@id=\"foundationRunListTable\"]/thead/tr/th[%d]";
     private final String XPATH_RunsColumnName_Value = "//*[@id=\"foundationRunListTable\"]/tbody/tr/td[%d]";
@@ -74,6 +75,7 @@ public class ReportsPage {
     private final SelenideElement reportTab = $(By.xpath("//a[contains(text(),'Reports')]"));
 
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private final SelenideElement selectDeviceDropdown = $(By.xpath("//div[@class='restore-custom-drop-down']//span[@class='active-label']"));
     private final SelenideElement selectUserDropdownRunPage = $(By.xpath("//span[contains(text(),'Select User')]/following-sibling::*"));
     private final SelenideElement selectDateDropdownRunPage = $(By.xpath("//*[@id='calendar']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
@@ -1040,5 +1042,13 @@ public class ReportsPage {
     
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
     	XPATH_ERRORNOTIFICATION_TEXT.waitUntil(visible, 5001).shouldHave(text(message));
+    }
+
+    public void selectDevice(String device) {
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            SelenideHelper.commonWaiter(selectDeviceDropdown, visible).click();
+            return $(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))).isDisplayed();
+        });
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))), visible).click();
     }
 }

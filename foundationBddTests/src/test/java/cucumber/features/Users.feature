@@ -13,6 +13,7 @@ Feature: User management
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
+    And I choose user language "English"
     And I save the new user
     #TODO until IVI-5671 is resolved
     #Then I check user notification is displayed

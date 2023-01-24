@@ -98,6 +98,7 @@ Feature: Report administration
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
     And I select report include "Run Summary"
+    And I select device "BEDTFF13"
     And I click on generate button
     And I goto report management page
     And I trigger report mode

@@ -86,6 +86,8 @@ public class UserPage {
     private SelenideElement closeUserPropertiesChangeModal = $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
     private SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
     private SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
+    private SelenideElement selectLanguageDropdown = $(By.xpath("//div[@id='language']//div[@class='role-dropdown-container']"));
+    private String XPATH_LANGUAGE_OPTION_DROPDOWN = "//li[contains(text(),'%s')]";
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -402,5 +404,13 @@ public class UserPage {
     
     public void saveMyUserChanges() {
         saveButton.click();
+    }
+
+    public void chooseUserLanguage(String language) {
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            SelenideHelper.commonWaiter(selectLanguageDropdown, visible).click();
+            return $(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))).isDisplayed();
+        });
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible).click();
     }
 }
