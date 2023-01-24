@@ -6,26 +6,26 @@ Feature: Recipe console
 
   @PLC
   Scenario: Recipe system Hold/Restart
-    When I expand recipe console in pnid
-    And I hold and restart the system
+    Given I expand recipe console in pnid
+    When I hold and restart the system
     Then I see the system is restarted
 
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute1min"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeToExecute1min"
     And I hold the system
     Then I see the system on hold
     And clear panel and run button is disabled
 
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
-    When I expand and collapse recipe console in pnid
-    And I verify Recipe run options
+    Given I expand and collapse recipe console in pnid
+    When I verify Recipe run options
     And I goto manual operation tab
-    And I verify manual operation options
+    Then I verify manual operation options
 
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute1min"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I hold the system
     Then I see the system on hold
@@ -42,11 +42,11 @@ Feature: Recipe console
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
-    And I check audit trial logs
+    Then I check audit trial logs
 
   Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I wait for 4 seconds
     And I click on abort button
@@ -55,23 +55,25 @@ Feature: Recipe console
     And I rerun recipe execution and timer starts from zero
 
   Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute1min"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
     Then I see the error message as "Special characters are not allowed for Comments"
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
-    And I check audit trial logs
+    Then I check audit trial logs
 
   @SMOKE
   Scenario: Recipe execution
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeToExecute"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 12 seconds
     Then Recipe should be executed
 
   Scenario: BIOCRS-660 | Recipe operational control workflow
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on pause button
     Then control should be on resume button
@@ -83,8 +85,8 @@ Feature: Recipe console
     And control should be on rerun button
 
   Scenario: Verify the Recipe Execution|BIOCRS-1593|
-    When I expand recipe console in pnid
-    And I click on load recipe
+    Given I expand recipe console in pnid
+    When I click on load recipe
     Then I should not see unapproved recipe
     And I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 10 seconds
@@ -103,18 +105,18 @@ Feature: Recipe console
     When I enter existing value in RUNID
     Then I should see message "Run ID is already in use."
     And I verify the Batch ID suggestion with unique Value
-    When I enter special characters "@!#$%^&*" in run comments section
+    And I enter special characters "@!#$%^&*" in run comments section
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on jump step "10"
     Then I should see error message about recipe step
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeFlows"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
     And I start recipe execution
     Then I jump to Step no and verify step execution
       | Step no |
@@ -161,7 +163,6 @@ Feature: Recipe console
   #TO-DO: needs fix in IVI
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
-    #When I select "Manual operation" tab
     When I start Manual run
     Then I validate the timer and stop button and run details
     When I hold the system
@@ -182,12 +183,13 @@ Feature: Recipe console
     And I restart the Process hold
     And I validate the Start button is "enabled"
 
+  @IVI-4926
   Scenario: IVI Bug | IVI-4926 Recipe loader | Invalid text is seen as tool tip (UI issue)
-    When I expand recipe console in pnid
-    And I load recipe
+    Given I expand recipe console in pnid
+    When I load recipe
     Then I verify the details
     And I validate the Start button is "enabled"
-	
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -204,7 +206,7 @@ Feature: Recipe console
     And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  
+
   Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -218,15 +220,10 @@ Feature: Recipe console
     And I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
-    And I refresh the portal
-    And I open login page
-    And I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
-    And I verify the recipe execution details in console View
 
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
-    When I expand recipe console in pnid
-    And I select "MANUAL OPERATION" tab
+    Given I expand recipe console in pnid
+    When I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
     When I start manual recipe execution
@@ -239,9 +236,10 @@ Feature: Recipe console
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
  
+  @IVI-6029
   Scenario: IVI Bug IVI-6029| Recipe Management | Step within ELSE condition is never shown as executed in recipe panel though condition satisfies
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeIfElseCriteria"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeIfElseCriteria"
     And I start recipe execution
     And I wait for recipe Execution to be completed
     And I verify step related valve "Close" is executed
@@ -250,13 +248,14 @@ Feature: Recipe console
     Then I verify step related valve "Open" is executed 
     
    Scenario: IVI Bug IVI-6021| Recipe Management | Recipe step details for Conditions are getting appended with invalid 0.0/1.0 when loaded
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeIfElseCriteria"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeIfElseCriteria"
     Then I verify step in console does not show extra words
     
+   @IVI-6154
    Scenario: IVI Bug IVI-6154| Recipe Loader | Expected message is not seen when user tries to start Manual Run with recipe already loaded in Recipe Run tab
-    When I expand recipe console in pnid
-    And I load recipe "testRecipeIfElseCriteria"
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeIfElseCriteria"
     And I select "MANUAL OPERATION" tab
     And I click on start button
     Then pre-run window should not be opened

@@ -114,7 +114,7 @@ public class RecipeConsoleStepsDefinition {
     @When("I provide special chars in pre run comments")
     public void iStartRecipeExecutionWithSpecialChars() {
         generateRecipeValues(null, null);
-        recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), "$%^%(&^&");
+        recipeConsolePage.startRecipeWithErrors(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), "$%^%(&^&");
     }
 
     @Then("I see the error message as {string}")
@@ -301,7 +301,7 @@ public class RecipeConsoleStepsDefinition {
 
     @And("I verify Manual Operation tab is {string}")
     public void manualOperation(String status) {
-        recipeConsolePage.manualOperation(status);
+        recipeConsolePage.manualOperationTab(status);
     }
 
     @And("I pause recipe and verify recipe paused and jump icon is disabled")

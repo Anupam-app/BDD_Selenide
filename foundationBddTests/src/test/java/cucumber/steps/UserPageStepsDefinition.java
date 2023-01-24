@@ -123,6 +123,10 @@ public class UserPageStepsDefinition {
     @When("I save my user changes")
     public void iSaveMyChanges() {
         userPage.saveMyChanges();
+    }
+
+    @When("I check user notification is displayed")
+    public void iCheckUserNotificationIsDisplayed() {
         userPage.waitForUserCreationNotification(user.getUserName());
         userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
     }

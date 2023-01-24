@@ -949,10 +949,10 @@ public class ReportsPage {
         boolean result = false;
         if (startDate.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(
-                    "dd/MMM/yyyy hh:mm:ss");
+                    Report.RECIPE_DATE_FORMAT);
             String currentDateandTime = sdf.format(new Date());
-            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
-            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(startDate.getText());
+            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(startDate.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 5 && statusColumn.getText().equalsIgnoreCase(status) && processTypeValue.equals(processType) &&

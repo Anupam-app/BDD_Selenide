@@ -14,7 +14,7 @@ Feature: Recipe management
     And I edit the recipe
     Then I see my changes in recipe
 
-  @SMOKE  @IVI
+  @SMOKE  @IVI @IVI-4468
   Scenario: IVI Bug IVI-5969 IVI-4468 | BIOCRS-5059 | Recipe approval
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -28,7 +28,7 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testDraftRecipeToChangeStatus" is changed to "APPROVED-ACTIVE" in report
 
-  @IVI
+  @IVI @IVI-5777 @IVI-4971
   Scenario: IVI Bug IVI-5777 | Recipe Editor | User is allowed to save and approve a blank recipe | IVI Bug IVI-4971 | Recipe Management | Unable to export a recipe which has special characters in name
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -187,7 +187,7 @@ Feature: Recipe management
     When I add new step with message prompt
     Then I should see message input text field displayed
 
-  @IVI
+  @IVI @IVI-5149
   Scenario: BIOFOUND-3768| Create new phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -209,7 +209,7 @@ Feature: Recipe management
     And I cannot change the recipe status
     And touch buttons are disabled
 
-  @IVI
+  @IVI @IVI-5768
   Scenario: IVI Bug IVI-5768 | Delete the phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -227,7 +227,7 @@ Feature: Recipe management
     And I copy phase in recipe
     Then I am able to paste the phase
 
-  @IVI
+  @IVI @IVI-5761 @IVI-5762 @IVI-5763
   Scenario: IVI Bug IVI-5762 IVI-5761 IVI-5763| Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

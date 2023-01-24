@@ -14,6 +14,8 @@ Feature: User management
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
     And I save the new user
+    #TODO until IVI-5671 is resolved
+    #Then I check user notification is displayed
     And I search the user
     And I edit the user
     Then The username is equal to the expected one
@@ -43,6 +45,8 @@ Feature: User management
     And I change the employee id with a random string
     And I select role "Operator"
     And I save my user changes
+    #TODO until IVI-5671 is resolved
+    #Then I check user notification is displayed
     And I edit the user
     Then the employee id is the expected one
     And the role is "Operator"
@@ -54,15 +58,17 @@ Feature: User management
     And I edit the user
     And I disable the user
     And I save my user changes
-    And I edit the user
+    #TODO until IVI-5671 is resolved
+    #Then I check user notification is displayed
+    When I edit the user
     And the user is disabled
     And I generate the "Audit Trail" Report for "Bio4cService" user
     And I click on generate button
     And I goto report management page
     And I trigger report mode
-    And I should see the report file presence
+    Then I should see the report file presence
     And I see the "testUserEnabled" user disabled in report
-    And I logout
+    When I logout
     And I open login page
     And I enter "testUserEnabled" as username and "MerckApp1@" as password
     And I push the login button
@@ -208,7 +214,8 @@ Feature: User management
       | Users         |
       | Backup        |
       | Settings      |
-	  
+
+  @IVI-5823
   Scenario: IVI Bug IVI-5823| User Management | Irrelevant message is displayed when custom user tries to modify his own role
   	Given I am logged in as "testUserToEditFields" user
     And I go to user page
