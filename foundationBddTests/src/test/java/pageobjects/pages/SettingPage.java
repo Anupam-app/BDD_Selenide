@@ -1,8 +1,15 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
+
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
@@ -19,11 +26,14 @@ public class SettingPage {
         SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible).click();
     }
 
-    public void goToSystemComponents() {
+        public void goToSystemComponents() {
+    	Selenide.sleep(3000);
         systemComponentText.click();
+        
     }
 
-    public void changeSettings(String customLabelName) {
+    public void changeSettings(String customLabelName) throws AWTException {
+    	zoomOut();
         $(By.id("customerShortDescription")).clear();
         inputCustomLabel.setValue(customLabelName);
         applyButton.click();
@@ -40,4 +50,14 @@ public class SettingPage {
     public void verifySettingHeader() {
         settingsHeader.shouldBe(visible);
     }
+    private void zoomOut() throws AWTException {
+        Robot robot = new Robot();
+        for (int i = 0; i < 3; i++) {
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            Selenide.sleep(2000);
+            }
+	}
 }

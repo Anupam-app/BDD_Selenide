@@ -138,9 +138,10 @@ public class RecipeConsolePage {
         if(restartButton.isDisplayed()) {
         	restartSystem();
         }
-        if (!$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed())
-        	
-        if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+        if (!$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+        
+        }	
+        else if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
     } 
