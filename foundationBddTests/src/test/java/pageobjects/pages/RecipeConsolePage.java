@@ -133,8 +133,8 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
-        if(!restartButton.isDisplayed())
-
+        if(!restartButton.isDisplayed()){
+		}
         if(restartButton.isDisplayed()) {
         	restartSystem();
         }
