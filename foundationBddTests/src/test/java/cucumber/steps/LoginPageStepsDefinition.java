@@ -34,11 +34,11 @@ public class LoginPageStepsDefinition {
     }
 
     @Given("I open login page")
-        public void iOpenLogin() {
-            if (!ContextHelper.isOrchestrator()) {
-                loginPage.openLogin();
-            }
+    public void iOpenLogin() {
+        if (!ContextHelper.isOrchestrator()) {
+            loginPage.openLogin();
         }
+    }
 
     @When("I enter {string} as username and {string} as password")
     public void iEnterUsernameAndPassword(String username, String password) {
@@ -81,7 +81,6 @@ public class LoginPageStepsDefinition {
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {
-        //TODO to be refactored?
         if (ContextHelper.isOrchestrator()) {
             homepage.open();
             login.setLogin(username);
