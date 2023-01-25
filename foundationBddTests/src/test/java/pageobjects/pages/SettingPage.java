@@ -15,7 +15,7 @@ public class SettingPage {
     private final String XPATH_LANGUAGE_TEXT = "//*[@class='system-connect-dropdown-container']//*//li[text()='%s']";
     private final String XPATH_LANGUAGE_ACTIVE_TEXT =
             "//*[@class='system-connect-dropdown-container']//*[@class='active-label' and text()='%s']";
-    private final String XPATH_HEADER = "//div[@class='setting-header-title']";
+    private final String XPATH_HEADER = "//div[contains(@class,'header')]";
 
     private SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
     private SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));

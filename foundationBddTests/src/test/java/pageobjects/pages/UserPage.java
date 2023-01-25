@@ -1,11 +1,7 @@
 package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.*;
-
 import com.codeborne.selenide.ElementsCollection;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
@@ -90,6 +86,8 @@ public class UserPage {
     private SelenideElement closeUserPropertiesChangeModal = $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
     private SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
     private SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
+    private SelenideElement selectLanguageDropdown = $(By.xpath("//div[@id='language']//div[@class='role-dropdown-container']"));
+    private String XPATH_LANGUAGE_OPTION_DROPDOWN = "//li[contains(text(),'%s')]";
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -108,7 +106,7 @@ public class UserPage {
     }
 
     public void edit(String user) {
-        $(By.xpath(String.format(xpathEditUserIcon, user))).waitUntil(visible, 5000l).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(xpathEditUserIcon, user))), visible).click();
     }
 
     public void cannotEdit(String user) {
@@ -174,7 +172,7 @@ public class UserPage {
     }
 
     public void createNewUser(String userName) {
-        createUserPlusButton.click();
+        SelenideHelper.commonWaiter(createUserPlusButton, visible).click();
         userNameTextBox.setValue(userName);
     }
 
@@ -250,16 +248,6 @@ public class UserPage {
         unlockAccountButton.click();
     }
 
-    public void isGeneratedNotificationWhenPasswordReset(String name) {
-        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User " + name + " password reset successfully! New password has been sent to the user's registered email address."));
-    }
-
-    public void isGeneratedNotificationWhenAccountUnlock() {
-        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("The account was successfully unlocked"));
-    }
-
     public void isGeneratedNotificationWhenUserModified(String user) {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
         XPATH_NOTIFICATION_TEXT.shouldHave(text("User account: " + user + " modified in server"));
@@ -292,7 +280,16 @@ public class UserPage {
     public SelenideElement getUserColumnHeader(String columnName) {
         System.out.println($(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName))));
         return $(By.xpath(String.format(XPATH_USER_COLUMN_HEADER, columnName)));
+    }
 
+    public void isGeneratedNotificationWhenPasswordReset(String name) {
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User " + name + " password reset successfully! New password has been sent to the user's registered email address."));
+    }
+
+    public void isGeneratedNotificationWhenAccountUnlock() {
+        commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
+        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("The account was successfully unlocked"));
     }
 
     public List<String> getAllUserColumnHeaders() {
@@ -341,7 +338,7 @@ public class UserPage {
     }
 
     public void seeContent(String expectedText) {
-        commonWaiter($(By.xpath(XPATH_HEADER)), text(expectedText));
+        commonWaiter($(By.id("UserAccountContainer")), text(expectedText));
     }
 
     public void waitForUserCreationNotification(String userName) {
@@ -407,5 +404,13 @@ public class UserPage {
     
     public void saveMyUserChanges() {
         saveButton.click();
+    }
+
+    public void chooseUserLanguage(String language) {
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            SelenideHelper.commonWaiter(selectLanguageDropdown, visible).click();
+            return $(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))).isDisplayed();
+        });
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible).click();
     }
 }

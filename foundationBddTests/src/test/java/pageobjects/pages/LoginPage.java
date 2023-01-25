@@ -7,7 +7,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class LoginPage {
@@ -22,10 +21,13 @@ public class LoginPage {
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
-    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
-    private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+    private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
+    private final SelenideElement PNID_LOGIN_INFO = $(SelenideHelper.byTestAttribute("pnid_login_info"));
+
+	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+	private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private final String pnidLoginTestId = "pnid_login_info";
-    private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
 
@@ -34,17 +36,17 @@ public class LoginPage {
         userIdTextBox.setValue(user);
     }
 
+    public void pushLogin() {
+        commonWaiter(SUBMIT_LOGIN, visible);
+        SUBMIT_LOGIN.click();
+    }
+
     public void verifyLoginPageTitle() {
         commonWaiter(loginPageTitle, visible).shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
     }
 
     public void setPassword(String password) {
         userPasswordTextBox.setValue(password);
-    }
-
-    public void pushLogin() {
-        commonWaiter(submitButton, visible);
-        submitButton.click();
     }
 
     public void openLogin() {
@@ -66,6 +68,11 @@ public class LoginPage {
         userLoginAlertText.shouldHave(text(message));
     }
 
+    public void waitPnidMessage(String message) {
+        commonWaiter(PNID_LOGIN_INFO.$(byText(message)), visible);
+        commonWaiter(loadingIcon, not(visible));
+    }
+
     public void waitControlOnPnid() {
         var message = Neodymium.localizedText("portal.pnid.info.screen_controlling");
         waitPnidMessage(message);
@@ -73,11 +80,6 @@ public class LoginPage {
 
     public void waitPnidLoading() {
         waitPnidMessage("Main screen is view only");
-    }
-
-    public void waitPnidMessage(String message) {
-        commonWaiter($(byTestAttribute(pnidLoginTestId)).$(byText(message)), visible);
-        commonWaiter(loadingIcon, not(visible));
     }
 
     public void setNewpassword(String newpassword) {

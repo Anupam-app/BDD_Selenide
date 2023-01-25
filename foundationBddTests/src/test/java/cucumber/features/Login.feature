@@ -66,7 +66,8 @@ Feature: User login
       | testUsrFirstLog      | Ot8[o[Zo{0   | !2345Zxcv1  |
       | testUsrAfterResetPwd | IN0Ax^t;:6   | !2345Zxcv1  |
 
-  Scenario: User login Unauthorized
+
+  Scenario: User login for user disabled
     Given I open login page
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button

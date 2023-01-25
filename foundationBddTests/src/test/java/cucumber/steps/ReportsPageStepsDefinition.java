@@ -20,6 +20,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.utility.ContextHelper;
 import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
@@ -122,6 +123,13 @@ public class ReportsPageStepsDefinition {
     @When("I don't see the presence of run mode")
     public void iDontSeeGenerateButton() {
         reportPage.verifyRunMode();
+    }
+
+    @When("I select device {string}")
+    public void iSelectDefaultDevice(String device){
+        if(ContextHelper.isOrchestrator()){
+            reportPage.selectDevice(device);
+        }
     }
 
     @Then("I click on generate button")

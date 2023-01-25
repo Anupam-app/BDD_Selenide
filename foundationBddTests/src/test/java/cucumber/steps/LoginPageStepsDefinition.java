@@ -11,6 +11,7 @@ import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.pages.UserPage;
 import pageobjects.pages.UserProfilePage;
+import pageobjects.utility.ContextHelper;
 
 public class LoginPageStepsDefinition {
 
@@ -34,7 +35,9 @@ public class LoginPageStepsDefinition {
 
     @Given("I open login page")
     public void iOpenLogin() {
-        loginPage.openLogin();
+        if (!ContextHelper.isOrchestrator()) {
+            loginPage.openLogin();
+        }
     }
 
     @When("I enter {string} as username and {string} as password")
@@ -46,7 +49,6 @@ public class LoginPageStepsDefinition {
     @When("I push the login button")
     public void iPushTheLoginButton() {
         loginPage.pushLogin();
-
     }
 
     @Then("I am logged in")
@@ -79,17 +81,25 @@ public class LoginPageStepsDefinition {
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {
-        homepage.open();
-        loginPage.waitPnidLoading();
-        loginPage.openLogin();
-        login.setLogin(username);
-        login.setPassword("MerckApp1@");
-        loginPage.verifyLoginPageTitle();
-        loginPage.setUser(login.getLogin());
-        loginPage.setPassword(login.getPassword());
-        loginPage.pushLogin();
-        loginPage.waitControlOnPnid();
-        recipeConsolePage.cleanLastRecipeDisplay();
+        if (ContextHelper.isOrchestrator()) {
+            homepage.open();
+            login.setLogin(username);
+            login.setPassword("MerckApp1@");
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
+            loginPage.pushLogin();
+        } else {
+            homepage.open();
+            loginPage.waitPnidLoading();
+            loginPage.openLogin();
+            login.setLogin(username);
+            login.setPassword("MerckApp1@");
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
+            loginPage.pushLogin();
+            loginPage.waitControlOnPnid();
+            recipeConsolePage.cleanLastRecipeDisplay();
+        }
     }
 
     @Given("I change password {string}")

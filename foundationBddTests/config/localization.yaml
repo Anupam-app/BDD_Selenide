@@ -14,6 +14,8 @@ en-US:
   report.reportNavbar.menu.reportManagement: Report Management
   trends.collection.starred: Starred
   user.header.title: User Management
+  device.dashboardHeader: Dashboard
+  recipe.dashboardHeader: Recipe Dashboard
 
 # France
 fr-FR:

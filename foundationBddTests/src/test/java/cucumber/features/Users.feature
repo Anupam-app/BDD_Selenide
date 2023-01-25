@@ -13,6 +13,7 @@ Feature: User management
     And I enter random employeeID
     And I enter email "alexis.thiebaut@merckgroup.com"
     And I enter mobile number "0123456789"
+    And I choose user language "English"
     And I save the new user
     #TODO until IVI-5671 is resolved
     #Then I check user notification is displayed
@@ -235,4 +236,18 @@ Feature: User management
     And I edit the user
     And I enter random employeeID
     And I save my user modification changes
-    Then I see error message is displayed "user details cannot be modified for disabled user"  
+    Then I see error message is displayed "user details cannot be modified for disabled user"
+
+  Scenario: IVI Bug - IVI-4912 | User Preference -Default Page
+    Given I am using language "en-US"
+    And I am logged in as "testUserForI18N" user
+    And I go to user profile
+    And I go to user preferences
+    When I change default page to "Reports"
+    And I save user preferences
+    And I logout
+    And I open login page
+    And I enter "testUserForI18N" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I am logged in
+    And I am landed on "Report Management" page

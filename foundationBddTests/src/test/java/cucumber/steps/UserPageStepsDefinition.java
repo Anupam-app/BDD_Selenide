@@ -218,6 +218,11 @@ public class UserPageStepsDefinition {
         userPage.enterMobNum(user);
     }
 
+    @When("I choose user language {string}")
+    public void iChooseUserLanguage(String language) {
+        userPage.chooseUserLanguage(language);
+    }
+
     @When("I enter email {string}")
     public void iEnterEmail(String user) {
         this.user.setEmailId(user);

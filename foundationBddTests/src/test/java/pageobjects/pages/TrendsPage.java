@@ -83,7 +83,7 @@ public class TrendsPage {
 
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
 
-    private SelenideElement starredLabel = $(By.xpath("(//button//label)[1]"));
+    private SelenideElement starredLabel = $(By.xpath("//label[contains(@title,'Starred')]"));
     private String checkboxDefaultCollection = "//li[@title='%s']//input";
     private SelenideElement graphLastSecondTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
 
@@ -360,8 +360,8 @@ public class TrendsPage {
     }
 
     public void seeContent(String expectedText) {
-        SelenideHelper.commonWaiter(starredLabel, Condition.visible)
-                .shouldHave(Condition.text(expectedText));
+        var starredElement = SelenideHelper.commonWaiter(starredLabel, Condition.visible);
+        starredElement.shouldHave(Condition.text(expectedText));
     }
 
     public List<String> getDeviceShapeElementNotLoaded() {
