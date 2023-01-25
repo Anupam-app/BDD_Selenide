@@ -1,19 +1,25 @@
 package cucumber.steps;
 
+import java.text.ParseException;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+
+import dataobjects.Trends;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.ParseException;
-import java.util.List;
 import pageobjects.pages.TrendsPage;
 
 public class TrendsPageStepsDefinition {
 
     private final TrendsPage trendsPage;
+    private final Trends trends;
 
-    public TrendsPageStepsDefinition(TrendsPage trendsPage) {
+    public TrendsPageStepsDefinition(TrendsPage trendsPage, Trends trends) {
         this.trendsPage = trendsPage;
+        this.trends = trends;
     }
 
     @Given("I navigate to trends page")
@@ -80,18 +86,25 @@ public class TrendsPageStepsDefinition {
         trendsPage.graphTime();
     }
 
-    @When("I save as trends collections called {string}")
-    public void i_save_as_trends_collections_called(String name) {
-        trendsPage.collectionName(name);
+    @When("I save as trends collections")
+    public void iSaveTrendsCollection() {
+        this.trends.setCollectionName(RandomStringUtils.randomAlphabetic(5));
+        trendsPage.collectionName(this.trends.getCollectionName());
     }
 
-    @When("I choose collection name as {string}")
-    public void i_choose_collection_name_as(String name) {
-        trendsPage.chooseCollection(name);
+    @When("I save as trends collections as in step 4")
+    public void iSaveCollectionName() {
+        trendsPage.saveCollection(this.trends.getCollectionName());
+    }
+
+    @When("I choose collection")
+    public void iChooseCollection() {
+        trendsPage.chooseCollection(this.trends.getCollectionName());
     }
 
     @When("I see the graph is plotted for selected parameters in chart area{string},{string}")
-    public void i_see_the_graph_is_plotted_for_selected_parameters_in_chart_area(String param1, String param2) throws ParseException {
+    public void i_see_the_graph_is_plotted_for_selected_parameters_in_chart_area(String param1, String param2)
+            throws ParseException {
         trendsPage.ledgerParameterOnChartArea(param1);
         trendsPage.ledgerParameterOnChartArea(param2);
         trendsPage.validateGraph();
@@ -134,8 +147,38 @@ public class TrendsPageStepsDefinition {
 
     @Then("I delete the collection name")
     public void delete_collection_name() {
-        trendsPage.deleteCollection();
+        trendsPage.deleteCollection(trends.getCollectionName());
     }
 
+    @When("I see {string},{string} parameters displayed")
+    public void iSeeParametersDisplayed(String param1, String param2) throws Exception {
+        trendsPage.iSeeParametersDisplayed(this.trends.getCollectionName(), param1, param2);
+    }
+
+    @Then("I see the error message {string} on collection name window")
+    public void iSeeErrorMessageDisplayedOnCollectionNameWindow(String message) {
+        trendsPage.isGeneratedNotificationWhenCreateExistingCollection(message, trends.getCollectionName());
+    }
+
+    @Then("I go to list of collection")
+    public void iGoToListOfCollection() {
+        trendsPage.listOfCollection(trends.getCollectionName());
+    }
+
+    @When("I remove {string} and save collections")
+    public void iRemoveParam1AndSaveCollection(String param1) {
+        this.trends.setCollectionName(RandomStringUtils.randomAlphabetic(5));
+        trendsPage.removeParam1AndSaveCollection(param1, this.trends.getCollectionName());
+    }
+
+    @When("I see {string} parameters displayed")
+    public void iSeeParameterIsDisplayed(String param2) throws Exception {
+        trendsPage.iSeeParameterDisplayed(this.trends.getCollectionName(), param2);
+    }
+
+    @When("I uncheck {string}")
+    public void iUnCheckParam(String param1) throws Exception {
+        trendsPage.unCheckParameter(this.trends.getCollectionName(), param1);
+    }
 
 }

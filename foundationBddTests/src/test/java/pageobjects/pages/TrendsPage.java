@@ -1,35 +1,50 @@
 package pageobjects.pages;
 
 
-import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.*;
-import com.codeborne.selenide.ElementsCollection;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.selected;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+import static pageobjects.utility.SelenideHelper.goToIFrame;
+
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.WebDriverRunner;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.interactions.Actions;
+
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 
 public class TrendsPage {
     private String XPATH_STARRED_ICON = "//label[contains(text(),'%s')]/parent::*//span[@class='starred-icon']";
+    private String XPATH_LISTOFCOLLECTION_PARAMS =
+            "(//input[@id='option1' and @value='%s']/parent::button/following-sibling::div//li/label)[%d]";
+    private ElementsCollection leddgerParametersCheckBox =
+            $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));
+    private ElementsCollection defaultCollectionParams =
+            $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
 
-    private ElementsCollection leddgerParametersCheckBox = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));
-    private ElementsCollection defaultCollectionParams = $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
-
-    private SelenideElement graphStartTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
-    private SelenideElement graphLastTime = $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
+    private SelenideElement graphStartTime =
+            $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
+    private SelenideElement graphLastTime =
+            $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
     private SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
     private SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
     private SelenideElement lineGraph_Text = $(By.xpath("//span[text() = 'Line Graph']"));
@@ -46,42 +61,61 @@ public class TrendsPage {
     private SelenideElement entireRun = $(By.xpath("//button[@id='Entire run'][@class='ant-btn btn-entire-batch']"));
     private SelenideElement startdate = $(By.xpath("//div[(@class=\"ant-picker-input ant-picker-input-active\")]"));
     private SelenideElement end_date = $(By.xpath("//*[(@placeholder='End datetime')]"));
-    private SelenideElement donwload = $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
+    private SelenideElement donwload =
+            $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
 
 
     private SelenideElement starred_Collection = $(By.xpath("//input[@id='option1' and @value='Starred']"));
-    private SelenideElement chartAreaGraphMessage = $(By.xpath("//*[@class = 'noselection-component' and text() = 'You currently have no selections to display.']"));
+    private SelenideElement chartAreaGraphMessage = $(By.xpath(
+            "//*[@class = 'noselection-component' and text() = 'You currently have no selections to display.']"));
     private SelenideElement validateGraph = $(By.xpath("//*[@class='highcharts-graph']"));
-    private String tagLabel = "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[%s]/label";
+    private String tagLabel =
+            "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[%s]/label";
     private String collection_radiobutton = "//input[@id='option1' and @value='%s']";
     private SelenideElement Starredbtn = $(By.xpath("//input[@id='option1' and @value='Starred']"));
-    private String listOfStarredstaricons = "//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]";
+    private String listOfStarredstaricons =
+            "//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]";
     private String collectionNameRadioButton = "//input[@type = 'radio' and @id ='option1' and @value ='%s' ]";
 
-    private SelenideElement StarredArrow = $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement DefaultArrow = $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement ArrowOfListOfCollection = $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
+    private SelenideElement StarredArrow =
+            $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
+    private SelenideElement DefaultArrow =
+            $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
+    private SelenideElement ArrowOfListOfCollection =
+            $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
     private SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
     private SelenideElement deleteCollectionButton = $(By.xpath("//button[@type='button']/span[text()='Delete']"));
     private String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
 
     private SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));
     private SelenideElement trendsExpandArrow = $(By.xpath("//span[@class ='icon-arrow-expand']"));
-    private SelenideElement saveTrendsCollection = $(By.xpath("//span[text()='Save as Collection']"));
+    private SelenideElement saveTrendsCollection = $(By.xpath("//*[text()='Save as Collection']"));
     private SelenideElement collectionName = $(By.xpath("//input[(@class='collection-name')]"));
-    private SelenideElement collectionCreate = $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']/span"));
-    private SelenideElement starredNullParameters = $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));
+    private SelenideElement collectionCreate =
+            $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']"));
+    private SelenideElement starredNullParameters =
+            $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));
 
-    private SelenideElement starredCollapseArrow = $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement starredExpandArrow = $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
+    private SelenideElement starredCollapseArrow =
+            $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement starredExpandArrow =
+            $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
 
-    private SelenideElement defaultCollapseArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement defaultExpandArrow = $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
+    private SelenideElement defaultCollapseArrow =
+            $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
+    private SelenideElement defaultExpandArrow =
+            $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
     private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
     private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
+    private SelenideElement errorText = $(By.xpath("//p[@class='error-text']"));
+    private SelenideElement closeDialogue = $(By.xpath("//span[@class='close-dialog-icon']"));
+    private String XPATH_DELETE_COLLECTION =
+            "//div[@class='coll-panel']/button/label[text()='%s']/following::span[@class='delete-collection']";
+    private String XPATH_PARAMETER_UNCHECK =
+            "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
 
     public void goToTrends() {
-        trends.click();
+        commonWaiter(trends, visible).click();
         commonWaiter(trends, visible);
     }
 
@@ -176,7 +210,8 @@ public class TrendsPage {
     }
 
     public void selectRadioButton(String btn) {
-        SelenideHelper.commonWaiter($(By.xpath(String.format(collection_radiobutton, btn))), visible).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(collection_radiobutton, btn))), visible)
+                .click();
     }
 
     public void selectMultipleCheckbox(String tag1, String tag2) throws Exception {
@@ -257,9 +292,10 @@ public class TrendsPage {
         saveTrendsCollection.click();
         collectionName.click();
         collectionName.sendKeys(name);
+        Selenide.sleep(5000);
         collectionCreate.click();
         ArrowOfListOfCollection.click();
-        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+        commonWaiter($(By.xpath(String.format(collectionNameRadioButton, name))), visible).click();
     }
 
     public void chooseCollection(String name) {
@@ -312,8 +348,8 @@ public class TrendsPage {
         starredNullParameters.shouldNotBe(visible);
     }
 
-    public void deleteCollection() {
-        deleteCollection.click();
+    public void deleteCollection(String nameOfListCollection) {
+        commonWaiter($(By.xpath(String.format(XPATH_DELETE_COLLECTION, nameOfListCollection))), visible).click();
         deleteCollectionButton.click();
     }
 
@@ -334,8 +370,8 @@ public class TrendsPage {
         Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",
                 difference, lastTimeString, startTimeString), difference >= 45);
 
-        Assert.assertTrue(String.format("difference lower than 1 hour :%s for dates between %s and %s",
-                difference, lastTimeString, startTimeString), difference <= 60);
+        Assert.assertTrue(String.format("difference lower than 1 hour :%s for dates between %s and %s", difference,
+                lastTimeString, startTimeString), difference <= 60);
     }
 
     public void trendsHeaderValidation() {
@@ -343,10 +379,76 @@ public class TrendsPage {
         trendsHeaderValidation.isDisplayed();
         Assert.assertTrue(true);
     }
+
+    public void iSeeParametersDisplayed(String collectionName, String tag1, String tag2) throws Exception {
+        $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
+        $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 2))).shouldHave(text(tag2));
+    }
+
+    public void saveCollection(String name) {
+        saveTrendsCollection.click();
+        collectionName.click();
+        collectionName.sendKeys(name);
+        collectionCreate.click();
+    }
+
+    public void isGeneratedNotificationWhenCreateExistingCollection(String message, String name) {
+        commonWaiter(errorText, visible);
+        errorText.shouldHave(text(message));
+        commonWaiter(closeDialogue, visible).click();
+        ArrowOfListOfCollection.click();
+        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+    }
+
+    public void listOfCollection(String name) {
+        ArrowOfListOfCollection.click();
+        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+    }
+
+    public void removeParam1AndSaveCollection(String param1, String name) {
+        saveTrendsCollection.click();
+        collectionName.click();
+        collectionName.sendKeys(name);
+        $(By.xpath(String.format("//li[text()='%s']/span", param1))).click();
+        collectionCreate.click();
+        ArrowOfListOfCollection.click();
+        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+    }
+
+    public void iSeeParameterDisplayed(String collectionName, String tag1) throws Exception {
+        $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
+        commonWaiter(selectInterval, visible).click();
+        commonWaiter($(By.xpath("(//div[@class='ant-select-item-option-content'])[3]")), visible).click();
+        Selenide.sleep(5000);
+        SelenideElement ele = $(By.xpath(
+                "//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-series highcharts-series-0 highcharts-line-series']"));
+        int getTopLeftY = (ele.getSize()
+                .getHeight() / 2) - ele.getSize()
+                        .getHeight();
+        int getTopLeftX = (ele.getSize()
+                .getWidth() / 2) - ele.getSize()
+                        .getWidth();
+        // System.out.println("Y" + getTopLeftY + " X" + getTopLeftX);
+        Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
+
+        for (int i = 0; i <= 10; i++) {
+            stepAction.moveToElement(ele, getTopLeftX + i, getTopLeftY)
+                    .perform();
+            System.out.println("Y" + getTopLeftY + "  X" + getTopLeftX);
+
+            String data = commonWaiter($(By.xpath(
+                    "(//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-label highcharts-tooltip-box highcharts-color-none']//*[local-name()='tspan'])[2]")),
+                    visible).getText();
+            System.out.println(data);
+            // $(By.xpath("(//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-label
+            // highcharts-tooltip-box highcharts-color-none']//*[local-name()='tspan'])[2]"))
+            // .getText();
+        }
+    }
+
+    public void unCheckParameter(String name, String param1) {
+        $(By.xpath(String.format(XPATH_PARAMETER_UNCHECK, name, param1))).click();
+    }
 }
-
-
-
-
 
 
