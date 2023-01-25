@@ -199,54 +199,58 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
-                    if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
-                        return
-                    }
+                    //credentialsId hardcoded to access JIRA tickets
+                    withCredentials([usernamePassword(credentialsId: "d18dbba9-4225-4cfb-9f87-2085fb1a0e49", usernameVariable: 'user', passwordVariable: 'password')]){
+                        if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
+                                                return
+                        }
 
-                    def commandTag = ' -Dcucumber.filter.tags="(@'+env.PDP
+                        def commandTag = ' -Dcucumber.filter.tags="(@'+env.PDP
 
-                    if(env.Mode != null && env.Mode != ''){
-                        commandTag+=' and @'+env.Mode
-                    }
-                    else{
-                        if(env.PDP != 'CRS'){
-                            def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
-                            if(response.status==200){
-                               def jsonResponse = readJSON text: response.content
+                        if(env.Mode != null && env.Mode != ''){
+                            commandTag+=' and @'+env.Mode
+                        }
+                        else{
+                            if(env.PDP != 'CRS'){
+                                def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
+                                if(response.status==200){
+                                   def jsonResponse = readJSON text: response.content
 
-                               jsonResponse.features.each{val->
-                                    commandTag+=' or @'+val
-                               }
+                                   jsonResponse.features.each{val->
+                                        commandTag+=' or @'+val
+                                   }
+                                }
                             }
                         }
+
+                        commandTag+=')'
+
+                        if(env.SkipPendingBugs != null && env.SkipPendingBugs == 'YES'){
+                            def authorizationEncoded = (user +':'+ password).bytes.encodeBase64().toString()
+                            def jiraResponse =  httpRequest customHeaders: [[maskValue: true, name: 'authorization', value: 'Basic '+ authorizationEncoded ]],
+                            url: 'https://stljirap.sial.com/rest/api/2/search?jql=labels%3DTestAutomation_Bug%20AND%20status%21%3DCLOSED', ignoreSslErrors: true
+
+                            if(jiraResponse.status==200) {
+                                def jsonResponse = readJSON text: jiraResponse.content
+
+                                jsonResponse.issues.each {
+                                    val->
+                                    commandTag+=' and not @'+val.key
+                                }
+                            }
+                        }
+
+                        commandTag+='" -DtestFailureIgnoreProp=true'
+
+                        println('commandTag: '+commandTag)
+
+                        rtMavenRun(
+                            tool: 'apache-maven-3.6.3',
+                            pom: 'foundationBddTests/pom.xml',
+                            goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
+                            resolverId: "MAVEN_RESOLVER"
+                        )
                     }
-
-					commandTag+=')'
-
-					if(env.SkipPendingBugs != null && env.SkipPendingBugs == 'YES'){
-						def jiraResponse =  httpRequest customHeaders: [[maskValue: true, name: 'authorization', value: 'Basic c3lzYWRtaW5wcjpCMHdUMWVzckMwMGw=' ]],
-						url: 'https://stljirap.sial.com/rest/api/2/search?jql=labels%3DTestAutomation_Bug%20AND%20status%21%3DCLOSED', ignoreSslErrors: true
-
-						if(jiraResponse.status==200) {
-							def jsonResponse = readJSON text: jiraResponse.content
-
-							jsonResponse.issues.each {
-								val->
-								commandTag+=' and not @'+val.key
-							}
-						}
-					}
-
-					commandTag+='" -DtestFailureIgnoreProp=true'
-
-                    println('commandTag: '+commandTag)
-
-                    rtMavenRun(
-                        tool: 'apache-maven-3.6.3',
-                        pom: 'foundationBddTests/pom.xml',
-                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
-                        resolverId: "MAVEN_RESOLVER"
-                    )
 				}
 			}
 		}
