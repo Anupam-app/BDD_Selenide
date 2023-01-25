@@ -4,6 +4,7 @@ Feature: Recipe console
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
+  @SMOKE
   @PLC
   Scenario: Recipe system Hold/Restart
     Given I expand recipe console in pnid
