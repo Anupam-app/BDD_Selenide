@@ -15,7 +15,9 @@ import java.util.Date;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
@@ -133,18 +135,10 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
-        if(!restartButton.isDisplayed()){
-		}
-        if(restartButton.isDisplayed()) {
-        	restartSystem();
+        if (restartButton.isDisplayed()) {
+            restartSystem();
         }
-        if (!$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-        
-        }	
-        else if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-            $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
-        }
-    } 
+    }
 
     public void collapseRecipeConsole() {
         SelenideHelper.commonWaiter(collapseIcon, visible).click();
@@ -216,7 +210,7 @@ public class RecipeConsolePage {
 
     public String startRecipe(Recipe recipe) {
         //take clear panel css class when disabled
-        var classClearRecipeButton=clearRecipeButton.getAttribute("class");
+        var classClearRecipeButton = clearRecipeButton.getAttribute("class");
 
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
@@ -231,7 +225,7 @@ public class RecipeConsolePage {
 
         //wait clean panel to be disabled via css class
         SelenideHelper.fluentWaiter().until((webDriver) ->
-            clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
+                clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
         );
 
         return runId;
@@ -307,7 +301,11 @@ public class RecipeConsolePage {
     }
 
     public void clearRecipe() {
-        SelenideHelper.commonWaiter(clearRecipeButton, visible).click();
+        if (clearRecipeButton.isDisplayed() && clearRecipeButton.isEnabled()) {
+            //to avoid exception if not clickable
+            JavascriptExecutor ex=(JavascriptExecutor) WebDriverRunner.getWebDriver();
+            ex.executeScript("arguments[0].click()", clearRecipeButton);
+        }
     }
 
     public void jumpStepErrorMessage() {
@@ -369,7 +367,7 @@ public class RecipeConsolePage {
     }
 
     public void manualRunStart(String productId, String batchId, String beforeComments) {
-        
+
         if (manualStopButton.isDisplayed()) {
             manualStopButton.click();
             closeButtonOfStop.click();
