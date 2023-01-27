@@ -403,9 +403,9 @@ public class UserPageStepsDefinition {
         userPage.closeChangeUserPropertiesChangeModal();
     }
 
-    @Then("I should see {string} {string} and {string} under user profile icon")
-    public void iVerifyUserProfile(String firstName, String lastName, String role) {
-        userPage.verifyUserProfileIcon(firstName, lastName, role);
+    @Then("I should see {string} {string} under user profile icon")
+    public void iVerifyUserProfile(String firstName, String lastName) {
+        userPage.verifyUserProfileIcon(firstName, lastName);
         Selenide.sleep(2000);
         userPage.changePassword();
         userPage.closeChangeUserPropertiesChangeModal();
@@ -429,6 +429,6 @@ public class UserPageStepsDefinition {
 	@When("I save my user modification changes")
     public void iSaveMyUserModificationChanges() {
         userPage.saveMyUserChanges();
-        
+
     }
 }

@@ -2,6 +2,7 @@ package cucumber.steps;
 
 import dataobjects.Login;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -122,5 +123,15 @@ public class LoginPageStepsDefinition {
         loginPage.setCurrentpassword(currentPassword);
         loginPage.setNewpassword(newPassword);
         loginPage.setConfirmpassword(confirmPassword);
+    }
+
+    @And("I logout and login as {string} and password as {string}")
+    public void logourAndLogin(String username, String password)
+    {
+        loginPage.iLogout();
+        loginPage.openLogin();
+        loginPage.setUser(username);
+        loginPage.setPassword(password);
+        loginPage.pushLogin();
     }
 }
