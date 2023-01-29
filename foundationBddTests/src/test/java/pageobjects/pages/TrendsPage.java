@@ -33,85 +33,89 @@ import pageobjects.utility.SelenideHelper;
 
 
 public class TrendsPage {
-    private String XPATH_STARRED_ICON = "//label[contains(text(),'%s')]/parent::*//span[@class='starred-icon']";
-    private String XPATH_LISTOFCOLLECTION_PARAMS =
+    private final String XPATH_STARRED_ICON = "//label[contains(text(),'%s')]/parent::*//span[@class='starred-icon']";
+    private final String XPATH_LISTOFCOLLECTION_PARAMS =
             "(//input[@id='option1' and @value='%s']/parent::button/following-sibling::div//li/label)[%d]";
-    private ElementsCollection leddgerParametersCheckBox =
+    private final ElementsCollection leddgerParametersCheckBox =
             $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li/input"));
-    private ElementsCollection defaultCollectionParams =
+    private final ElementsCollection defaultCollectionParams =
             $$(By.xpath("//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li"));
 
-    private SelenideElement graphStartTime =
+    private final SelenideElement graphStartTime =
             $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
-    private SelenideElement graphLastTime =
+    private final SelenideElement graphLastTime =
             $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
-    private SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
-    private SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
-    private SelenideElement lineGraph_Text = $(By.xpath("//span[text() = 'Line Graph']"));
-    private SelenideElement starred_Text = $(By.xpath("//label[text() ='Starred']"));
-    private SelenideElement default_Text = $(By.xpath("//label[text() ='Default']"));
-    private SelenideElement listOfCollection_Text = $(By.xpath("//label[text() ='List of collections']"));
-    private SelenideElement saveAsCollections_Text = $(By.xpath("//button/span[text()='Save as Collection']"));
+    private final SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
+    private final SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
+    private final SelenideElement lineGraph_Text = $(By.xpath("//span[text() = 'Line Graph']"));
+    private final SelenideElement starred_Text = $(By.xpath("//label[text() ='Starred']"));
+    private final SelenideElement default_Text = $(By.xpath("//label[text() ='Default']"));
+    private final SelenideElement listOfCollection_Text = $(By.xpath("//label[text() ='List of collections']"));
+    private final SelenideElement saveAsCollections_Text = $(By.xpath("//button/span[text()='Save as Collection']"));
 
-    private SelenideElement footerValidation = $(By.xpath("//div[@class = 'chart-footer']"));
-    private SelenideElement overlay = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Overlay']"));
-    private SelenideElement stacked = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Stacked']"));
-    private SelenideElement selectInterval = $(By.xpath("//span[text()='Select interval']"));
-    private SelenideElement live = $(By.xpath("//*[contains(@id,'Live')]"));
-    private SelenideElement entireRun = $(By.xpath("//button[@id='Entire run'][@class='ant-btn btn-entire-batch']"));
-    private SelenideElement startdate = $(By.xpath("//div[(@class=\"ant-picker-input ant-picker-input-active\")]"));
-    private SelenideElement end_date = $(By.xpath("//*[(@placeholder='End datetime')]"));
-    private SelenideElement donwload =
+    private final SelenideElement footerValidation = $(By.xpath("//div[@class = 'chart-footer']"));
+    private final SelenideElement overlay = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Overlay']"));
+    private final SelenideElement stacked = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Stacked']"));
+    private final SelenideElement selectInterval = $(By.xpath("//span[text()='Select interval']"));
+    private final SelenideElement live = $(By.xpath("//*[contains(@id,'Live')]"));
+    private final SelenideElement entireRun =
+            $(By.xpath("//button[@id='Entire run'][@class='ant-btn btn-entire-batch']"));
+    private final SelenideElement startdate =
+            $(By.xpath("//div[(@class=\"ant-picker-input ant-picker-input-active\")]"));
+    private final SelenideElement end_date = $(By.xpath("//*[(@placeholder='End datetime')]"));
+    private final SelenideElement donwload =
             $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
 
 
-    private SelenideElement starred_Collection = $(By.xpath("//input[@id='option1' and @value='Starred']"));
-    private SelenideElement chartAreaGraphMessage = $(By.xpath(
+    private final SelenideElement starred_Collection = $(By.xpath("//input[@id='option1' and @value='Starred']"));
+    private final SelenideElement chartAreaGraphMessage = $(By.xpath(
             "//*[@class = 'noselection-component' and text() = 'You currently have no selections to display.']"));
-    private SelenideElement validateGraph = $(By.xpath("//*[@class='highcharts-graph']"));
-    private String tagLabel =
+    private final SelenideElement validateGraph = $(By.xpath("//*[@class='highcharts-graph']"));
+    private final String tagLabel =
             "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[%s]/label";
-    private String collection_radiobutton = "//input[@id='option1' and @value='%s']";
-    private SelenideElement Starredbtn = $(By.xpath("//input[@id='option1' and @value='Starred']"));
-    private String listOfStarredstaricons =
+    private final String collection_radiobutton = "//input[@id='option1' and @value='%s']";
+    private final SelenideElement Starredbtn = $(By.xpath("//input[@id='option1' and @value='Starred']"));
+    private final String listOfStarredstaricons =
             "//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]";
-    private String collectionNameRadioButton = "//input[@type = 'radio' and @id ='option1' and @value ='%s' ]";
+    private final String collectionNameRadioButton = "//input[@type = 'radio' and @id ='option1' and @value ='%s' ]";
 
-    private SelenideElement StarredArrow =
+    private final SelenideElement StarredArrow =
             $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement DefaultArrow =
+    private final SelenideElement DefaultArrow =
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement ArrowOfListOfCollection =
+    private final SelenideElement ArrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
-    private SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
-    private SelenideElement deleteCollectionButton = $(By.xpath("//button[@type='button']/span[text()='Delete']"));
-    private String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
+    private final SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
+    private final SelenideElement deleteCollectionButton =
+            $(By.xpath("//button[@type='button']/span[text()='Delete']"));
+    private final String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
 
-    private SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));
-    private SelenideElement trendsExpandArrow = $(By.xpath("//span[@class ='icon-arrow-expand']"));
-    private SelenideElement saveTrendsCollection = $(By.xpath("//*[text()='Save as Collection']"));
-    private SelenideElement collectionName = $(By.xpath("//input[(@class='collection-name')]"));
-    private SelenideElement collectionCreate =
+    private final SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));
+    private final SelenideElement trendsExpandArrow = $(By.xpath("//span[@class ='icon-arrow-expand']"));
+    private final SelenideElement saveTrendsCollection = $(By.xpath("//*[text()='Save as Collection']"));
+    private final SelenideElement collectionName = $(By.xpath("//input[(@class='collection-name')]"));
+    private final SelenideElement collectionCreate =
             $(By.xpath("//*[@class='ant-btn ant-btn-primary btn-saveas-collection']"));
-    private SelenideElement starredNullParameters =
+    private final SelenideElement starredNullParameters =
             $(By.xpath("//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li"));
 
-    private SelenideElement starredCollapseArrow =
+    private final SelenideElement starredCollapseArrow =
             $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement starredExpandArrow =
+    private final SelenideElement starredExpandArrow =
             $(By.xpath("//label[contains(text(),'Starred')]/parent::*//span[@class ='collpase-expand-icon']"));
 
-    private SelenideElement defaultCollapseArrow =
+    private final SelenideElement defaultCollapseArrow =
             $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-arrow-icon']"));
-    private SelenideElement defaultExpandArrow =
+    private final SelenideElement defaultExpandArrow =
             $(By.xpath("//label[contains(text(),'Default')]/parent::*//span[@class ='collpase-expand-icon']"));
-    private SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
-    private String nameOfListCollection = "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
-    private SelenideElement errorText = $(By.xpath("//p[@class='error-text']"));
-    private SelenideElement closeDialogue = $(By.xpath("//span[@class='close-dialog-icon']"));
-    private String XPATH_DELETE_COLLECTION =
+    private final SelenideElement trendsHeaderValidation = $(By.xpath("//div[@class= 'header' and text() ='Trends']"));
+    private final String nameOfListCollection =
+            "//input[@name= 'selection1' and @class='trends-option' and @value ='%s']";
+    private final SelenideElement errorText = $(By.xpath("//p[@class='error-text']"));
+    private final SelenideElement closeDialogue = $(By.xpath("//span[@class='close-dialog-icon']"));
+    private final String XPATH_DELETE_COLLECTION =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::span[@class='delete-collection']";
-    private String XPATH_PARAMETER_UNCHECK =
+    private final String XPATH_PARAMETER_UNCHECK =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
 
     public void goToTrends() {
