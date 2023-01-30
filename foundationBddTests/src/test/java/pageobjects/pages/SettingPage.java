@@ -50,6 +50,7 @@ public class SettingPage {
     public void verifySettingHeader() {
         settingsHeader.shouldBe(visible);
     }
+    
     private void zoomOut() throws AWTException {
         Robot robot = new Robot();
         for (int i = 0; i < 3; i++) {
