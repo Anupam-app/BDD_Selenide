@@ -602,12 +602,12 @@ public class RecipeConsolePage {
 
     public void validationOfRunDetails() {
         commonWaiter(manualStopButton, appear);
-        String actualRunId = matchId.getText();
-        Assert.assertEquals(actualRunId.toLowerCase(), this.recipe.getMachineName().toLowerCase());
+        String actualMatchId = matchId.getText();
+        Assert.assertEquals(actualMatchId.toLowerCase(), this.recipe.getMachineName().toLowerCase());
         String actualBatchId = $(By.xpath(RECIPECONSOLE_LABEL_VALUE+"[2]")).getText();
         Assert.assertEquals(actualBatchId.toLowerCase(), this.recipe.getBatchId().toLowerCase());
-        String actualProductId = $(By.xpath(RECIPECONSOLE_LABEL_VALUE+"[3]")).getText();
-        Assert.assertEquals(actualProductId.toLowerCase(), this.recipe.getRunId().toLowerCase());
+        String actualRunId = $(By.xpath(RECIPECONSOLE_LABEL_VALUE+"[3]")).getText();
+        Assert.assertEquals(actualRunId.toLowerCase(), this.recipe.getRunId().toLowerCase());
     }
 
     public void timeValidation() {

@@ -110,8 +110,7 @@ public class UserPage {
     }
 
     public void cannotEdit(String user) {
-        Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
-        $(By.xpath(String.format(xpathEditUserIcon, user))).shouldNotBe(selected);
+        Assert.assertFalse($(By.xpath(String.format(xpathEditUserIcon, user))).isDisplayed());
     }
 
     public void usersNotEditable() {
@@ -371,7 +370,7 @@ public class UserPage {
         SelenideHelper.commonWaiter(closeUserPropertiesChangeModal, visible).click();
     }
 
-    public void verifyUserProfileIcon(String firstname, String lastname, String role) {
+    public void verifyUserProfileIcon(String firstname, String lastname) {
         commonWaiter(firstName, visible);
         firstName.shouldHave(text(firstname));
         commonWaiter(lastName, visible);

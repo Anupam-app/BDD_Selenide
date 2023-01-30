@@ -23,6 +23,7 @@ import java.util.Locale;
 import java.util.function.Function;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.util.SystemPropertiesPropertySource;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import pageobjects.components.SpinnerComponent;
@@ -978,10 +979,10 @@ public class ReportsPage {
         boolean result = false;
         if (eventTime.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(
-                    "dd/MMM/yyyy hh:mm:ss");
+                    Report.RECIPE_DATE_FORMAT);
             String currentDateandTime = sdf.format(new Date());
-            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
-            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateandTime);
+            Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(eventTime.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 5 && comment.getText().equalsIgnoreCase(message)) {

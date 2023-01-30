@@ -46,9 +46,9 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (19, 0x020000001C635811CD2D5098884C5F67E76023CF2F2AE091A35842FE1951066723F21BC2EB9B17E53A9EA61856D4E90809863E34D336378230FA8D2B90CCBA540573DA3897883594A5D96C6766B9836AA39DCBF65B6C5F9457FA85E179CB52D0D7C20906, N'6B2mrQNwGpfQVCVz0WFF9g==', N'MesNzA9xENR8gVm/S5Bm7A==', 1, NULL)
 GO
-INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (20, 0x02000000626FB4C10ABF90AA4461FC84AB6BABB8B1FADB9869ED2395577373BC3F022E25D13AD6B5C5A4F2FE04E257C781E4CBD4EF23795815BC7793F7E9D5294B456C8DCDFD4F3C90003AB2B758478DAA5ABCAEDABDFCF3B1C36FE2F5B287960D8A4F5E, N'a9GxMBSiBNT2JZbX5e3ZRA==', N'EIUcBkOiX+2toB0rxvNqAA==', 1, NULL)
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (20, 0x02000000626FB4C10ABF90AA4461FC84AB6BABB8B1FADB9869ED2395577373BC3F022E25D13AD6B5C5A4F2FE04E257C781E4CBD4EF23795815BC7793F7E9D5294B456C8DCDFD4F3C90003AB2B758478DAA5ABCAEDABDFCF3B1C36FE2F5B287960D8A4F5E, N'a9GxMBSiBNT2JZbX5e3ZRA==', N'EIUcBkOiX+2toB0rxvNqAA==', 0, NULL)
 GO
-INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (21, 0x02000000DED4C2F9D21AD63C8EEE430DEAECF1889362E9308C2B92DE8974AB1CC3078BE01DE718A8A635B39BDBA554826710D134CE479D7DEC73C5138A2FDE7EA5179323F51491DBD84C1A5EE6223AAEF5BBDEE1979F4C9733943A634FD7E8F38F437361, NULL, NULL, 0, NULL)
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (30, 0x02000000A52B3F1DD0F4135168DFDC65D8E005E5D5A61E7EDD51313A8AD605FB6ED66C0B089F95796BB14AD3CD37876A5CD70DCD52C2EF60DC10063C9177416046ECEC2469D4D82D5BC27AB366D80681A5643F715FB4A1776BF80F30E6C00A3EF77961CC, AmgolT2UL2SBZGItmyjKjQ==, 614AB6qu95E0XFL7PL5u2g==, 0, NULL)
 GO
 SET IDENTITY_INSERT [dbo].[user_password] OFF
 GO
@@ -90,7 +90,7 @@ INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enabl
 GO
 INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (20, NULL, N'Auto', N'alexis.thiebaut@merckgroup.com', N'123456', N'true', N'NewUserRole', NULL, N'NewUserRole', N'0987654321', N'NewUserRole', 0, 0, CAST(N'2022-10-19T13:03:34.5140000' AS DateTime2), 0)
 GO
-INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (21, NULL, N'', N'srikanth.gajjela@external.merckgroup.com', N'123456', N'true', N'changePwd', NULL, N'Tester', NULL, N'testChangePwd', 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
+INSERT [dbo].[user_store] ([id], [bdate], [dept], [email], [employee_id], [enable], [first_name], [gender], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (30, NULL, N'', N'sailesh.botcha@external.merckgroup.com', N'1231231', N'true', N'testPwd', NULL, N'testing', NULL, N'testPwdChange', 0, 0, Null, 0)
 GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
@@ -142,6 +142,10 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (18, 9)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 3)
 GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (20, 3)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (30, 3)
+GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 56)
@@ -171,6 +175,8 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 70)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 83)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 84)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 85)
 GO

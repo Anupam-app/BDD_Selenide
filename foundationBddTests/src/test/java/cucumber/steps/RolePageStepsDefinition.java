@@ -170,8 +170,8 @@ public class RolePageStepsDefinition {
         }
     }
 
-    @And("^I should see view icon of perticular roles$")
-    public void iSeeViewIconOfperticularRoles(DataTable datatable) {
+    @And("^I should see view icon of particular roles$")
+    public void iSeeViewIconOfParticularRoles(DataTable datatable) {
         List<String> icon = datatable.asList();
         for (String name : icon) {
             rolePage.validateViewIcon(name);
@@ -209,7 +209,7 @@ public class RolePageStepsDefinition {
         rolePage.iCreateNewUser(rolename);
     }
 
-    @And("I should see role name {string} in role culumn")
+    @And("I should see role name {string} in role Column")
     public void iSeeCustomRoleInRoleColumn(String role) {
         rolePage.rolename(role);
     }
