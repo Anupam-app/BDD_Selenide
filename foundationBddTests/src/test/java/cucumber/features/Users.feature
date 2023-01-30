@@ -132,7 +132,7 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
 
-    @IVI-4908
+  @IVI-4908
   Scenario Outline: IVI BUG IVI-4908 | Verify Default Users & roles
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
