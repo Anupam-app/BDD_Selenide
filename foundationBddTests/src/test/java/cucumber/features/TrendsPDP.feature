@@ -35,7 +35,7 @@ Feature: Trends PDP
     And I save as trends collections
     And I choose collection
     Then I see "<Param1>","<Param2>" parameters displayed
-    And I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
+    And I see the graph is plotted for selected parameters in chart area "<Param1>","<Param2>"
     And I delete the collection name
 
     @CRS
