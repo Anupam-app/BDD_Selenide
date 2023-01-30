@@ -417,7 +417,7 @@ public class TrendsPage {
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
-    public void iSeeParameterDisplayed(String collectionName, String tag1) throws Exception {
+    public void iSeeParameterDisplayed(String collectionName, String tag1) {
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
     }
 
