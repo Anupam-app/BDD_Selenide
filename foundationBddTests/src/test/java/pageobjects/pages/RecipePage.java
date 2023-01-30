@@ -140,7 +140,8 @@ public class RecipePage {
     private final SelenideElement recipeValue = $(By.xpath("//div[@class='recipeTabs']"));
     private final SelenideElement recipeInputSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement notificationMessage = $(By.xpath("//div[@class='notification-bar warning-bar']"));
-
+    private final String recipe_Step = "//label[@class='stepCount' and text()=%s]";
+    private final String searchPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
     public static final String RECIPE_DATE_FILTER_IVI = "MMM d, yyyy";
 
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
@@ -753,15 +754,13 @@ public class RecipePage {
         commonWaiter(okButton, visible).click();
     }
 
-    //recommended to used String variable rather than passing the xpath
     public void addActionStepAfterStep(String stepNo) {
-    	commonWaiter($(By.xpath(String.format("//label[@class='stepCount' and text()=%s]", stepNo))),visible).click();
+    	commonWaiter($(By.xpath(String.format(recipe_Step, stepNo))),visible).click();
     	stepAction.keyDown(Keys.ALT).sendKeys(Keys.ENTER).perform();
     }
 
-    //recommended to used String variable rather than passing the xpath
     public void iSeeBlankStep() {
-        Assert.assertTrue(($(By.xpath("(//input[@placeholder='Search instruments and actions...'])[6]"))).getAttribute("value").isBlank());
+        Assert.assertTrue(($(By.xpath(String.format(searchPlaceholder,"6")))).getAttribute("value").isBlank());
     }
     
     public void verifyRecipeTab() {

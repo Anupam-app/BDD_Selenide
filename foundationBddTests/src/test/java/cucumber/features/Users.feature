@@ -132,6 +132,7 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
 
+    @IVI-4908
   Scenario Outline: IVI BUG IVI-4908 | Verify Default Users & roles
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
@@ -185,7 +186,7 @@ Feature: User management
       | testPwdChange | MerckApp1@      | MerckApp2@  | MerckApp2@      |
 
     #TO-DO : test has dependency on above test case need to wait until IVI-6602 is fixed
-  @IVI-6602 @test
+  @IVI-6602
   Scenario Outline: Verify the system allows user to change the password 3
     Given I open portal
     And I open login page

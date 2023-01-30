@@ -113,7 +113,6 @@ public class UserPage {
 
     public void cannotEdit(String user) {
         Assert.assertFalse($(By.xpath(String.format(xpathEditUserIcon, user))).isDisplayed());
-       //$(By.xpath(String.format(xpathEditUserIcon, user))).shouldNotBe(selected);
     }
 
     public void usersNotEditable() {

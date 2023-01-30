@@ -58,13 +58,15 @@ Feature: Recipe management
       | Last Modified On |
       | UOP Status       |
 
+    @IVI-4468
   Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
     When I make recipe inactive
     Then Recipe should be inactive
-    #And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
+      #To-Do: below step will work once IVI-4468 is fixed
+      #And I try change recipe status and see warning pop up dialog box "No Status Change allowed."
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I click on generate button
     And I goto report management page
