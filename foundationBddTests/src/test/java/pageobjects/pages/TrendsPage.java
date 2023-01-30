@@ -64,15 +64,12 @@ public class TrendsPage {
     private final SelenideElement donwload =
             $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
 
-
-    private final SelenideElement starred_Collection = $(By.xpath("//input[@id='option1' and @value='Starred']"));
     private final SelenideElement chartAreaGraphMessage = $(By.xpath(
             "//*[@class = 'noselection-component' and text() = 'You currently have no selections to display.']"));
     private final SelenideElement validateGraph = $(By.xpath("//*[@class='highcharts-graph']"));
     private final String tagLabel =
             "//input[@id='option1' and @value='Default']/parent::button/following-sibling::div//li[%s]/label";
     private final String collection_radiobutton = "//input[@id='option1' and @value='%s']";
-    private final SelenideElement Starredbtn = $(By.xpath("//input[@id='option1' and @value='Starred']"));
     private final String listOfStarredstaricons =
             "//input[@id='option1' and @value='Starred']/parent::button/following-sibling::div//li[@title='%s']/span[2]";
     private final String collectionNameRadioButton = "//input[@type = 'radio' and @id ='option1' and @value ='%s' ]";
@@ -83,7 +80,6 @@ public class TrendsPage {
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement ArrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement deleteCollection = $(By.xpath("//span[@class='delete-collection']"));
     private final SelenideElement deleteCollectionButton =
             $(By.xpath("//button[@type='button']/span[text()='Delete']"));
     private final String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
@@ -216,7 +212,7 @@ public class TrendsPage {
                 .click();
     }
 
-    public void selectMultipleCheckbox(String tag1, String tag2) throws Exception {
+    public void selectMultipleCheckbox(String tag1, String tag2) {
         $(By.xpath(String.format(collection_radiobutton, "Default"))).click();
         for (SelenideElement alltags : leddgerParametersCheckBox) {
             String tagsname = alltags.getAttribute("value");
@@ -382,7 +378,7 @@ public class TrendsPage {
         Assert.assertTrue(true);
     }
 
-    public void iSeeParametersDisplayed(String collectionName, String tag1, String tag2) throws Exception {
+    public void iSeeParametersDisplayed(String collectionName, String tag1, String tag2) {
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 2))).shouldHave(text(tag2));
     }
@@ -417,7 +413,7 @@ public class TrendsPage {
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
-    public void iSeeParameterDisplayed(String collectionName, String tag1) throws Exception {
+    public void iSeeParameterDisplayed(String collectionName, String tag1) {
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
     }
 

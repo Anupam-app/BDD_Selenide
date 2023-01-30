@@ -11,7 +11,7 @@ public class AlarmPageStepsDefinition {
     }
 
     @Given("I navigate to alarms page")
-    public void i_navigate_to_alarms_page() {
+    public void iNavigateToAlarmsPage() {
         alarmPage.goToAlarms();
         alarmPage.switchToFrame();
     }

@@ -38,10 +38,9 @@ public class AlarmPage {
     }
 
     public void acknowledgeAlarm() {
-        // Selenide.sleep(5000);
         for (int i = 1; i <= alarmTable.size(); i++) {
             try {
-                if (($(By.xpath(String.format(alarmStatus, i))).isDisplayed())) {
+                if ($(By.xpath(String.format(alarmStatus, i))).isDisplayed()) {
                     commonWaiter(($(By.xpath(String.format(alarmStatus, i)))), visible).click();
                     System.out.println(acknowledgeHeader.getText());
                     commonWaiter(acknowledgeButton, visible).click();
@@ -50,10 +49,8 @@ public class AlarmPage {
                             .shouldHave(text("Administrator Bio4C"));
                 }
             } catch (NoSuchElementException e) {
-                System.out.print("Already done");
+                System.out.print("Already Acknowledged");
             }
-
-            // commonWaiter(acknowledgeAlarm, visible).click();
         }
     }
 
@@ -62,10 +59,7 @@ public class AlarmPage {
         commonWaiter(acknowledgeAlarm, visible).click();
         System.out.println(acknowledgeHeader.getText());
         commonWaiter(acknowledgeButton, visible).click();
-        /*
-         * Selenide.switchTo() .parentFrame(); if ($(By.xpath("//label[@class=\"uop-label-critical\"]")).isDisplayed())
-         * { $(By.xpath("//label[@class=\"uop-label-critical\"]")).click(); }
-         */
+
     }
 
     public void switchToFrame() {

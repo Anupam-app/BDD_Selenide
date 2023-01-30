@@ -23,44 +23,44 @@ public class TrendsPageStepsDefinition {
     }
 
     @Given("I navigate to trends page")
-    public void i_navigate_to_trends_page() {
+    public void iNavigateToTrendsPage() {
         trendsPage.goToTrends();
         trendsPage.switchToFrame();
     }
 
     @Then("I see availability of Trends panel and chart area message {string}")
-    public void i_see_availability_of_trends_panel_and_chart_area(String message) {
+    public void iSeeAvailabilityOfTrendsPanelAndChartArea(String message) {
         trendsPage.chartAreaGraph(message);
     }
 
     @Then("footer section is not displayed.")
-    public void footer_section_is_not_displayed() {
+    public void footerSectionIsNotDisplayed() {
         trendsPage.noFooterAvailable();
     }
 
     @When("I collapse {string}")
-    public void i_collapse_trends_area_panel(String name) {
+    public void iCollapseTrendsAreaPanel(String name) {
         trendsPage.arrowCollapse(name);
     }
 
     @Then("I see the {string} collapsed")
-    public void i_see_the_trends_area_panel_collapsed(String name) {
+    public void iSeeTheTrendsAreaPanelCollapsed(String name) {
         trendsPage.trendsPanelValidation(name);
         trendsPage.arrowCollapseValidation(name);
     }
 
     @When("I expand {string}")
-    public void i_expand_trends_area_panel(String name) {
+    public void iExpandTrendsAreaPanel(String name) {
         trendsPage.arrowExpand(name);
     }
 
     @Then("I see the {string} expanded")
-    public void i_see_the_trends_area_panel_expanded(String name) {
+    public void iSeeTrendsAreaPanelExpanded(String name) {
         trendsPage.arrowExpandValidation(name);
     }
 
     @Then("^I see the availability of below$")
-    public void i_see_the_availability_of_below_options(DataTable table) {
+    public void iSeeTheAvailabilityOfBelowOptions(DataTable table) {
         List<String> list = table.asList(String.class);
         for (int i = 0; i < list.size(); i++) {
             trendsPage.trendsPanelValidation(list.get(i));
@@ -68,12 +68,12 @@ public class TrendsPageStepsDefinition {
     }
 
     @When("I choose {string},{string} parameters as default collection")
-    public void i_choose_parameters_as_default_collection(String param1, String param2) throws Exception {
+    public void iChooseParametersAsDefaultCollection(String param1, String param2) {
         trendsPage.selectMultipleCheckbox(param1, param2);
     }
 
     @When("^I see the availability of below footer$")
-    public void i_see_the_availability_of_below_footer(DataTable table) {
+    public void iSeeTheAvailabilityOfBelowFooter(DataTable table) {
         List<String> list = table.asList(String.class);
         for (int i = 0; i < list.size(); i++) {
             trendsPage.footerValidation(list.get(i));
@@ -81,7 +81,7 @@ public class TrendsPageStepsDefinition {
     }
 
     @When("I see the Live graph is display")
-    public void i_see_the_live_option_displays_last_minutes_data() throws ParseException {
+    public void iSeeTheLiveOptionDisplaysLastMinutesData() throws ParseException {
         trendsPage.validateGraph();
         trendsPage.graphTime();
     }
@@ -103,7 +103,7 @@ public class TrendsPageStepsDefinition {
     }
 
     @When("I see the graph is plotted for selected parameters in chart area{string},{string}")
-    public void i_see_the_graph_is_plotted_for_selected_parameters_in_chart_area(String param1, String param2)
+    public void iSeeTheGraphIsPlottedForSelectedParametersInChartArea(String param1, String param2)
             throws ParseException {
         trendsPage.ledgerParameterOnChartArea(param1);
         trendsPage.ledgerParameterOnChartArea(param2);
@@ -113,45 +113,45 @@ public class TrendsPageStepsDefinition {
 
 
     @When("I select the {string} collection")
-    public void i_select_the_default_collection(String btn) {
+    public void iSelectTheDefaultCollection(String btn) {
         trendsPage.selectRadioButton(btn);
     }
 
     @When("I choose {string},{string} parameters")
-    public void i_choose_parameters(String param1, String param2) throws Exception {
+    public void iChooseParameters(String param1, String param2) {
         trendsPage.selectMultipleCheckbox(param1, param2);
     }
 
     @Then("I verify default list of {string}")
-    public void i_verify_default_list_of_parameters(String parameters) {
+    public void iVerifyDefaultListOfParameters(String parameters) {
         trendsPage.defaultCollectionTagsValidation(parameters);
 
     }
 
     @When("I select star icons for {string},{string} parameters")
-    public void i_select_star_icons_for_parameters(String param1, String param2) {
+    public void iSelectStarIconsForParameters(String param1, String param2) {
         trendsPage.iSelectStarIcon(param1);
         trendsPage.iSelectStarIcon(param2);
 
     }
 
     @When("I unselect the star icons for {string},{string} parameters")
-    public void i_unselect_the_star_icons_for_parameters(String param1, String param2) throws InterruptedException {
+    public void iUnselectTheStarIconsForParameters(String param1, String param2) {
         trendsPage.unSelectStarParam(param1, param2);
     }
 
     @Then("I validate no parameters are present in starred collection")
-    public void i_validate_no_parameters_are_present_in_starred_collection() {
+    public void iValidateNoParametersArePresentInStarredCollection() {
         trendsPage.noParametersStarred();
     }
 
     @Then("I delete the collection name")
-    public void delete_collection_name() {
+    public void deleteCollectionName() {
         trendsPage.deleteCollection(trends.getCollectionName());
     }
 
     @When("I see {string},{string} parameters displayed")
-    public void iSeeParametersDisplayed(String param1, String param2) throws Exception {
+    public void iSeeParametersDisplayed(String param1, String param2) {
         trendsPage.iSeeParametersDisplayed(this.trends.getCollectionName(), param1, param2);
     }
 
@@ -172,12 +172,12 @@ public class TrendsPageStepsDefinition {
     }
 
     @When("I see {string} parameters displayed")
-    public void iSeeParameterIsDisplayed(String param2) throws Exception {
+    public void iSeeParameterIsDisplayed(String param2) {
         trendsPage.iSeeParameterDisplayed(this.trends.getCollectionName(), param2);
     }
 
     @When("I uncheck {string}")
-    public void iUnCheckParam(String param1) throws Exception {
+    public void iUnCheckParam(String param1) {
         trendsPage.unCheckParameter(this.trends.getCollectionName(), param1);
     }
 

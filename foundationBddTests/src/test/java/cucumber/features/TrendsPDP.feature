@@ -48,7 +48,7 @@ Feature: Trends PDP
       | Param1 | Param2 |
       | P001   | P002   |
 
-# This will be enabled when the bug BIOCRS-9267 is fixed
+# TODO This will be enabled when the bug BIOCRS-9267 is fixed
 #  Scenario Outline: BIOCRS-1405 | Save the collection from -list of collection
 #    Given I am logged in as "bio4cAdmin" user
 #    And I navigate to trends page
@@ -132,7 +132,7 @@ Feature: Trends PDP
     And I push the login button
     And I navigate to trends page
     And I go to list of collection
-    And I delete the collection name
+    Then I delete the collection name
 
     @CRS
     Examples:
