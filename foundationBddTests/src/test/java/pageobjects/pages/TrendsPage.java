@@ -14,7 +14,6 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
@@ -27,7 +26,6 @@ import java.util.List;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.interactions.Actions;
 
 import pageobjects.utility.SelenideHelper;
 
@@ -421,33 +419,6 @@ public class TrendsPage {
 
     public void iSeeParameterDisplayed(String collectionName, String tag1) throws Exception {
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
-        commonWaiter(selectInterval, visible).click();
-        commonWaiter($(By.xpath("(//div[@class='ant-select-item-option-content'])[3]")), visible).click();
-        Selenide.sleep(5000);
-        SelenideElement ele = $(By.xpath(
-                "//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-series highcharts-series-0 highcharts-line-series']"));
-        int getTopLeftY = (ele.getSize()
-                .getHeight() / 2) - ele.getSize()
-                        .getHeight();
-        int getTopLeftX = (ele.getSize()
-                .getWidth() / 2) - ele.getSize()
-                        .getWidth();
-        // System.out.println("Y" + getTopLeftY + " X" + getTopLeftX);
-        Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
-
-        for (int i = 0; i <= 10; i++) {
-            stepAction.moveToElement(ele, getTopLeftX + i, getTopLeftY)
-                    .perform();
-            System.out.println("Y" + getTopLeftY + "  X" + getTopLeftX);
-
-            String data = commonWaiter($(By.xpath(
-                    "(//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-label highcharts-tooltip-box highcharts-color-none']//*[local-name()='tspan'])[2]")),
-                    visible).getText();
-            System.out.println(data);
-            // $(By.xpath("(//*[local-name()='svg' and @class='highcharts-root']//*[@class='highcharts-label
-            // highcharts-tooltip-box highcharts-color-none']//*[local-name()='tspan'])[2]"))
-            // .getText();
-        }
     }
 
     public void unCheckParameter(String name, String param1) {
