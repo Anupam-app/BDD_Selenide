@@ -35,7 +35,7 @@ Feature: Trends PDP
     And I save as trends collections
     And I choose collection
     Then I see "<Param1>","<Param2>" parameters displayed
-    And I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
+    And I see the graph is plotted for selected parameters in chart area "<Param1>","<Param2>"
     And I delete the collection name
 
     @CRS
@@ -149,7 +149,7 @@ Feature: Trends PDP
     And I navigate to trends page
     When I select the "Default" collection
     And I choose "<Param1>","<Param2>" parameters
-    Then I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
+    Then I see the graph is plotted for selected parameters in chart area "<Param1>","<Param2>"
 
     @CRS
     Examples:
@@ -186,7 +186,7 @@ Feature: Trends PDP
     And I select star icons for "<Param1>","<Param2>" parameters
     And I save as trends collections
     And I select the "Starred" collection
-    And I see the graph is plotted for selected parameters in chart area"<Param1>","<Param2>"
+    And I see the graph is plotted for selected parameters in chart area "<Param1>","<Param2>"
     And  I unselect the star icons for "<Param1>","<Param2>" parameters
     Then I validate no parameters are present in starred collection
 

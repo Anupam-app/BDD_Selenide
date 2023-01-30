@@ -102,7 +102,7 @@ public class TrendsPageStepsDefinition {
         trendsPage.chooseCollection(this.trends.getCollectionName());
     }
 
-    @When("I see the graph is plotted for selected parameters in chart area{string},{string}")
+    @When("I see the graph is plotted for selected parameters in chart area {string},{string}")
     public void iSeeTheGraphIsPlottedForSelectedParametersInChartArea(String param1, String param2)
             throws ParseException {
         trendsPage.ledgerParameterOnChartArea(param1);
