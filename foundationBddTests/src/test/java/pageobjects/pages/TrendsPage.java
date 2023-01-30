@@ -382,7 +382,7 @@ public class TrendsPage {
         Assert.assertTrue(true);
     }
 
-    public void iSeeParametersDisplayed(String collectionName, String tag1, String tag2) throws Exception {
+    public void iSeeParametersDisplayed(String collectionName, String tag1, String tag2) {
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 1))).shouldHave(text(tag1));
         $(By.xpath(String.format(XPATH_LISTOFCOLLECTION_PARAMS, collectionName, 2))).shouldHave(text(tag2));
     }
