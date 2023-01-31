@@ -5,7 +5,7 @@ Feature: Recipe console
     Given I am logged in as "Bio4CAdmin" user
 
   @SMOKE
-  @PLC
+  @PLC 
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
@@ -281,7 +281,7 @@ Feature: Recipe console
 	And I check audit trial logs
  	
  Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
- 	When I expand recipe console in pnid
+  When I expand recipe console in pnid
   And I load recipe "testRecipeToExecute1min"
   And I start recipe execution
   And I hold the system
@@ -352,5 +352,5 @@ Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorise
 	When I logout
 	And I open login page
 	And I login with "reportUnauthUser" same user as above "MerckApp1@"
-  Then I verify recipe console expand is disabled
+	Then I verify recipe console expand is disabled
   
