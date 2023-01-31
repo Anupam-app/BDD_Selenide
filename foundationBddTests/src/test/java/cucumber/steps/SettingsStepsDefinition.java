@@ -3,6 +3,9 @@ package cucumber.steps;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.awt.AWTException;
+
 import org.junit.Assert;
 import pageobjects.pages.SettingPage;
 
@@ -25,7 +28,7 @@ public class SettingsStepsDefinition {
     }
 
     @When("I change custom label {string}")
-    public void iChangeSettings(String customLabelName) {
+    public void iChangeSettings(String customLabelName) throws AWTException {
         settingPage.changeSettings(customLabelName);
     }
 
