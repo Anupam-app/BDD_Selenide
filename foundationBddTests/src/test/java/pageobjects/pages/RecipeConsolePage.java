@@ -15,9 +15,10 @@ import java.util.Date;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
@@ -147,17 +148,10 @@ public class RecipeConsolePage {
 		if (!collapseIcon.isDisplayed()) {
 			SelenideHelper.commonWaiter(expandIcon, visible).click();
 		}
-		if(!restartButton.isDisplayed())
-
-			if(restartButton.isDisplayed()) {
-				restartSystem();
-			}
-		if (!$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed())
-
-			if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-				$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
-			}
-	} 
+		if (restartButton.isDisplayed()) {
+			restartSystem();
+		}
+	}
 
 	public void collapseRecipeConsole() {
 		SelenideHelper.commonWaiter(collapseIcon, visible).click();
@@ -202,34 +196,8 @@ public class RecipeConsolePage {
 		holdButton.shouldBe(visible);
 	}
 
-	public void gotoManualOperations() {
-		SelenideHelper.commonWaiter(manualOperations, visible).click();
-	}
-
-	public void verifyManualRunOptions() {
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "START"))).shouldBe(visible);
-		$(By.xpath(String.format(XPATH_TEXTS, "BATCH ID"))).shouldBe(visible);
-		$(By.xpath(String.format(XPATH_TEXTS, "RUN ID"))).shouldBe(visible);
-		$(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
-		timerValue.shouldBe(visible);
-	}
-
 	public String startAndWaitRecipe(Recipe recipe, int seconds) {
-
-		String runId;
-		String[] dateParts = null;
-		String[] dateparts1 = null;
-
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
-		runId = runIdTextbox.getValue();
-		productIdTextbox.setValue(recipe.getProductId());
-		batchIdTextbox.click();
-		batchIdTextbox.sendKeys(recipe.getBatchId());
-		batchIdTextbox.sendKeys(Keys.ENTER);
-		preRunCommentsText.sendKeys(recipe.getBeforeComments());
-		okButton.click();
-		abortButton.waitUntil(Condition.visible, 5000l);
+		String runId = startRecipe(recipe);
 		abortButton.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
 		SelenideHelper.commonWaiter(startDate, visible);
 		recipe.setStartDate(startDate.getText());
@@ -238,7 +206,6 @@ public class RecipeConsolePage {
 		recipe.setStatus(executionStatusText.getText());
 		preRunCommentsText.sendKeys(recipe.getAfterComments());
 		okButton.click();
-
 		return runId;
 	}
 
@@ -267,6 +234,7 @@ public class RecipeConsolePage {
 	public void clickPauseButton() {
 		Selenide.sleep(2000);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 5000l).click();
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 5000l);
 	}
 
 	public void clickResumeButton() {
@@ -291,9 +259,9 @@ public class RecipeConsolePage {
 		inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
 		Selenide.sleep(1000);
 		inputStepNumber.sendKeys(stepNumber);
-		okStepButton.waitUntil(Condition.visible, 5000l, 500).click();
+		okStepButton.waitUntil(Condition.visible, 4000l, 500).click();
 		abortButton.waitUntil(visible, 4000l, 500);
-		Selenide.sleep(1000);
+		Selenide.sleep(2000);
 	}
 
 	public void seeSystemOnHold() {
@@ -326,7 +294,11 @@ public class RecipeConsolePage {
 	}
 
 	public void clearRecipe() {
-		SelenideHelper.commonWaiter(clearRecipeButton, visible).click();
+		if (clearRecipeButton.isDisplayed() && clearRecipeButton.isEnabled()) {
+			//to avoid exception if not clickable
+			JavascriptExecutor ex=(JavascriptExecutor) WebDriverRunner.getWebDriver();
+			ex.executeScript("arguments[0].click()", clearRecipeButton);
+		}
 	}
 
 	public void jumpStepErrorMessage() {
@@ -343,10 +315,6 @@ public class RecipeConsolePage {
 	}
 
 	public void manualOperation(String status) {
-
-		if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
-			$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
-		}
 		if (status.equalsIgnoreCase("enabled")) {
 			manualOperationButton.waitUntil(visible, 50001).click();
 			manualOperationSelected.shouldBe(visible);
@@ -410,10 +378,6 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(beforeComments);
 		okButton.click();
-	}
-
-	public boolean verifyStopButton() {
-		return (manualStopButton.waitUntil(Condition.visible, 50001).isDisplayed());
 	}
 
 	public void validationOfRunDetails() {
@@ -576,7 +540,6 @@ public class RecipeConsolePage {
 
 	public void runId(String value) {
 		SelenideHelper.commonWaiter(runIdTextbox, visible).click();
-		System.out.println("Click on RunID");
 		Selenide.sleep(2000);
 		runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 		runIdTextbox.sendKeys(value);
@@ -824,7 +787,7 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(manualStopButton, visible).click();
 		Selenide.sleep(2000);
 	}
-	
+
 	public void startAndWaitManualOperation(int seconds) {
 		SelenideHelper.commonWaiter(manualStopButton, visible).waitUntil(Condition.visible,30000);		
 		manualStopButton.click();
@@ -874,7 +837,6 @@ public class RecipeConsolePage {
 
 	}
 
-
 	public void iVerifyConditionalStatement() {
 		SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
 		stepAction.moveToElement(ConditionalStatement).perform();
@@ -917,7 +879,7 @@ public class RecipeConsolePage {
 			clickYesButton.waitUntil(Condition.visible, 1000).click();
 			okButton.waitUntil(Condition.visible, 5001).click();
 		}
-		
+
 		if (manualStopButton.isDisplayed()) {
 			manualStopButton.click();
 			closeButtonOfStop.click();
@@ -927,12 +889,12 @@ public class RecipeConsolePage {
 		if (manualStartButton.isDisplayed()) {
 			recipeButton.click();
 		}
-		
+
 		if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
 
 			$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
 		}
-		
+
 		$(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
 
 		loadButton.waitUntil(Condition.visible, 20000l);
@@ -974,7 +936,7 @@ public class RecipeConsolePage {
 		if (manualOperation_lengthychar.getText().equalsIgnoreCase(name)) {
 			manualOperation_lengthychar.shouldBe(visible);
 		}
-		
+
 		else {
 			manualOperation_lengthychar.shouldNotBe(visible);
 		}
@@ -1044,4 +1006,44 @@ public class RecipeConsolePage {
 	public void collapseRecipeConsoleNotDisplay() {
 		SelenideHelper.commonWaiter(collapseIcon, disappears);
 	}
+
+public void gotoManualOperations() {
+	SelenideHelper.commonWaiter(manualOperations, visible).click();
+}
+
+public void verifyManualRunOptions() {
+	$(By.xpath(String.format(XPATH_CTRL_ICONS, "START"))).shouldBe(visible);
+	$(By.xpath(String.format(XPATH_TEXTS, "BATCH ID"))).shouldBe(visible);
+	$(By.xpath(String.format(XPATH_TEXTS, "RUN ID"))).shouldBe(visible);
+	$(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
+	timerValue.shouldBe(visible);
+}
+
+public String startRecipe(Recipe recipe) {
+	//take clear panel css class when disabled
+	var classClearRecipeButton = clearRecipeButton.getAttribute("class");
+
+	$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
+	$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
+	String runId = runIdTextbox.getValue();
+	productIdTextbox.setValue(recipe.getProductId());
+	batchIdTextbox.click();
+	batchIdTextbox.sendKeys(recipe.getBatchId());
+	batchIdTextbox.sendKeys(Keys.ENTER);
+	preRunCommentsText.sendKeys(recipe.getBeforeComments());
+	okButton.click();
+	abortButton.waitUntil(Condition.visible, 5000l);
+
+	//wait clean panel to be disabled via css class
+	SelenideHelper.fluentWaiter().until((webDriver) ->
+	clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
+			);
+
+	return runId;
+}
+
+public boolean verifyStopButton() {
+	return (manualStopButton.waitUntil(Condition.visible, 50001).isDisplayed());
+}
+
 }

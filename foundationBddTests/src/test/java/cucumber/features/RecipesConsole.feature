@@ -79,6 +79,7 @@ Feature: Recipe console
     
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
+    And I clear the recipe
     And I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
@@ -174,6 +175,7 @@ Feature: Recipe console
   
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
+    And I clear the recipe
     When I select "Manual operation" tab
     And I start Manual run
     Then I validate the timer and stop button and run details
