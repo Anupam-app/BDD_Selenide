@@ -73,6 +73,7 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testRecipeDraftToInactive" is changed to "APPROVED-INACTIVE" in report
 
+  @IVI-4468
   Scenario: IVI Bug IVI-4468 | BIOCRS-5060| Recipe Tech Review Rejected
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -216,6 +217,7 @@ Feature: Recipe management
     And I delete phase to recipe with cross button
     Then the deleted phase is not shown in invocation step
 
+  @IVI-6150
   Scenario: IVI Bug IVI-6150 | Recipe Management | 'ALT+ENTER' is not working as expected when there is an existing phase
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

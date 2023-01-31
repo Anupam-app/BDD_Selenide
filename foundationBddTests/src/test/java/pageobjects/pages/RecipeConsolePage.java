@@ -541,6 +541,9 @@ public class RecipeConsolePage {
     }
 
     public void processHold() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+        }
         $(By.xpath(String.format(XPATH_PNID_BUTTON, "PROCESS HOLD"))).click();
     }
 
