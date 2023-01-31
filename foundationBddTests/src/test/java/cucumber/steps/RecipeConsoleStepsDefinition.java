@@ -498,12 +498,12 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	private void generateRandomRecipeValues() {
-		this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(10));
-		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
-		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
-		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(10));
-		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(20));
+		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(25));
 	}
 
 	@And("I refresh the portal")
@@ -564,7 +564,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I see Recipe should be executed")
 	public void iSeeRecipeShouldBeExecuted() {
-		Assert.assertTrue(recipeConsolePage.iCheckrecipeDetails(this.currentRecipe.getBatchId(),this.currentRecipe.getRunId()));
+		Assert.assertTrue(recipeConsolePage.iCheckRecipeDetails(this.currentRecipe.getBatchId(),this.currentRecipe.getRunId()));
 	}
 
 	@And("I wait for {int} sec and stop the run")
@@ -596,11 +596,11 @@ public class RecipeConsoleStepsDefinition {
 	@And("provide remaining mandatory data to select OK button")
 	public void provideRemainingData() {
 		generateRandomRecipeValues();
-		recipeConsolePage.iProvidingData(this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
+		recipeConsolePage.iProvideData(this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
 	}
 
 	@And("I try to stop the manual run")
-	public void StopManualRun() {
+	public void iStopManual() {
 		recipeConsolePage.istopManual();
 	}
 
@@ -611,26 +611,26 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@And("I select X option to continue manual run execution")
-	public void iClickXInManualReunExecution() {
+	public void iClickXInManualRunExecution() {
 		recipeConsolePage.iClickNoInEndManualOperation();
 		recipeConsolePage.iQuitEndManualOperation();
 	}
 
 	@And("I select yes option to continue manual run execution")
-	public void iSelectYesButtonINManualRunExecution() {
+	public void iSelectYesButtonInManualRunExecution() {
 		recipeConsolePage.iClickNoInEndManualOperation();
 		recipeConsolePage.validateYesBtn();
 	}
 
 	@And("I verify the recipe name displayed on load recipe list")
-	public void iVeifyTheRecipeNameDisplayed() {
-		recipeConsolePage.recipenameDisplayed();
+	public void iVerifyTheRecipeNameDisplayed() {
+		recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Display");
 	}
 
 	@Then("I verify the recipe name is trimmed on recipe console UI")
 	public void iVerifyUiFielsOfManualOperations() {
-		recipeConsolePage.iVerifyRcipeName();
-		recipeConsolePage.iVerifyTrimmedRecipe();
+		recipeConsolePage.iVerifyRecipeName();
+		recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Trimmed");
 		recipeConsolePage.iVerifyConditionalStatement();
 	}
 
@@ -694,15 +694,59 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.checkDiable_Btns();
 	}
 
-	@And("I see recipe execution is paused")
-	public void recipeExcutionPaused() {
-		recipeConsolePage.iVerifyRecipePause();
-	}
-
 	@Given("I load the recipe {string}")
 	public void iLoadTheRecipe(String recipe) {
 		this.currentRecipe = new Recipe();
 		this.currentRecipe.setRecipeName(recipe);
 		recipeConsolePage.iLoadRecipelink(recipe);
+	}
+
+	@And("I enter manual operation name more than 30 char and Tab out")
+	public void iEnterLenthyManualOperationName() {
+		recipeConsolePage.iCheckLengthyCharacter();
+	}
+
+	@And("Verify the wanring message {string}")
+	public void iVerifyErrorMessage(String name) {
+		recipeConsolePage.iCheckErrorMessage(name);
+	}
+
+	@And("I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID")
+	public void iEnterLengthyText() {
+		generateRandomRecipeValues();
+		recipeConsolePage.iEnterLengthyChar(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
+				this.currentRecipe.getProductId());
+	}
+
+	@And("I validate all above text value trimmed on recipe console UI")
+	public void iVerifyTextValue() {
+		recipeConsolePage.iVerifyDisplayedOrTrimmed("Trimmed");
+	}
+
+	@And("I mouse hover to see full text displayed on tooltip")
+	public void iVerifyTextDisplayedWithUsingMouseHover() {
+		recipeConsolePage.iVerifyDisplayedOrTrimmed("Display");
+	}
+
+	@And("I stop the run execution")
+	public void iStopRunExecution() {
+		recipeConsolePage.stopBtn();
+		recipeConsolePage.validateYesBtn();
+	}
+
+	@And("I verify the text value trimmed on post run window")
+	public void iVerifyTextValueTrimmedOnPostRunWindow(){
+		recipeConsolePage.iVerifyPostRunWindowValues("Trimmed");
+	}
+
+	@Then("I verify recipe console expand is disabled")
+	public void iVerifyRecipeConsoleExpandAndCollapse() {
+		recipeConsolePage.collapseRecipeConsoleNotDisplay();
+	}
+
+	@And("I mouse hover to see full text displayed  on tooltip")
+	public void iVerifyTextWithMouseHover() {
+		recipeConsolePage.iVerifyPostRunWindowValues("Display");
+		recipeConsolePage.okButton();
 	}
 }

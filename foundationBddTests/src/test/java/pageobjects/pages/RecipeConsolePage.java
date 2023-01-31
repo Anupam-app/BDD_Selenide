@@ -74,7 +74,6 @@ public class RecipeConsolePage {
 	private final SelenideElement manualStopButton = $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.0328c518.svg']"));
 	private final SelenideElement matchId = $(By.xpath("(//label[@id='trimString'])[1]"));
 	private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[3]"));
-	private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[4]"));
 	private final SelenideElement timeValidate = $(By.xpath("//div[@id='timerCycle']"));
 	private final SelenideElement secondValidate = $(By.xpath("//div[@id='timerCycle']//span[4]"));
 	private final SelenideElement minuteValidate = $(By.xpath("//div[@id='timerCycle']//span[3]"));
@@ -113,8 +112,11 @@ public class RecipeConsolePage {
 	private final SelenideElement endManualOperation = $(By.xpath("//h6[text()='End Manual Operation']"));
 	private final SelenideElement quitEndMAnualOperation = $(By.xpath("//img[contains(@src,'data:image/png;')]"));
 	private final SelenideElement recipeNameTrimmed = $(By.xpath("//label[@class='text-ellipsis'][text()='testDraftRecipeToChangeStatus']"));
-	private final SelenideElement postRun_RUNID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[1]"));
-	private final SelenideElement postRun_BATCHID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[3]"));
+	private final SelenideElement postRun_RUNID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[2]"));
+	private final SelenideElement postRun_BATCHID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[4]"));
+	private final SelenideElement postRun_PRODUCTID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[3]"));
+	private final SelenideElement postRun_MANUAL = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[1]"));
+	private final SelenideElement manualOperation_lengthychar = $(By.xpath("//span[text()='Manual Operation Name should not exceed 30 characters.']"));
 
 	private Recipe recipe;
 
@@ -264,6 +266,7 @@ public class RecipeConsolePage {
 	}
 
 	public void clickPauseButton() {
+		Selenide.sleep(2000);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 5000l).click();
 	}
 
@@ -420,7 +423,7 @@ public class RecipeConsolePage {
 		Assert.assertEquals(actualRunId.toLowerCase(), this.recipe.getMachineName().toLowerCase());
 		String actualBatchId = batchId.getText();
 		Assert.assertEquals(actualBatchId.toLowerCase(), this.recipe.getBatchId().toLowerCase());
-		String actualProductId = runId.getText();
+		String actualProductId = recipeRunId.getText();
 		Assert.assertEquals(actualProductId.toLowerCase(), this.recipe.getRunId().toLowerCase());
 	}
 
@@ -822,6 +825,7 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(manualStopButton, visible).click();
 		Selenide.sleep(2000);
 	}
+	
 	public void startAndWaitManualOperation(int seconds) {
 		SelenideHelper.commonWaiter(manualStopButton, visible).waitUntil(Condition.visible,30000);		
 		manualStopButton.click();
@@ -829,7 +833,7 @@ public class RecipeConsolePage {
 		validateYesBtn();
 	}
 
-	public void iProvidingData(String productId,String beforeComments) {
+	public void iProvideData(String productId,String beforeComments) {
 		productIdTextbox.click();
 		productIdTextbox.setValue(productId);
 		preRunCommentsText.setValue(beforeComments);
@@ -843,26 +847,34 @@ public class RecipeConsolePage {
 	public void iQuitEndManualOperation() {
 		SelenideHelper.commonWaiter(quitEndMAnualOperation, appear).click();
 	}
+
 	public void istopManual() {
 		manualStopButton.click();
 	}
 
-	public void iVerifyRcipeName() {
+	public void iVerifyRecipeName() {
 		recipeNameTrimmed.getCssValue("text-overflow");
 		stepAction.moveToElement(recipeNameTrimmed).moveToElement(recipeNameTrimmed).click().build().perform();
 		Selenide.sleep(2000);
 	}
 
-	public void recipenameDisplayed() {
+	public void iVerifyRecipeNameDisplayedOrTrimmed(String condition) {
+
 		SelenideElement recipelenthName = $(By.xpath("//label[text()='testDraftRecipeToChangeStatus']")); 
-		SelenideHelper.commonWaiter(recipelenthName, appear).isDisplayed();
+
+		if(condition.equalsIgnoreCase("Display")) {
+
+			SelenideHelper.commonWaiter(recipelenthName, appear).isDisplayed();
+
+		}
+		else if(condition.equalsIgnoreCase("Trimmed")) {
+
+			stepAction.moveToElement(recipelenthName).perform();
+			Selenide.sleep(2000);
+		}
+
 	}
 
-	public void iVerifyTrimmedRecipe() {
-		SelenideElement recipelenthName = $(By.xpath("//label[text()='testDraftRecipeToChangeStatus']"));
-		stepAction.moveToElement(recipelenthName).perform();
-		Selenide.sleep(2000);
-	}
 
 	public void iVerifyConditionalStatement() {
 		SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
@@ -893,7 +905,7 @@ public class RecipeConsolePage {
 
 	public boolean iDisplayedRunIdAndBatchId() {
 		boolean isResult = false;
-		if(postRunWindow.isDisplayed()&&postRun_RUNID.isDisplayed()&& postRun_BATCHID.isDisplayed()) {
+		if(postRunWindow.isDisplayed() && postRun_RUNID.isDisplayed() && postRun_BATCHID.isDisplayed()) {
 			isResult = true;
 		}
 		return isResult;   	
@@ -906,6 +918,7 @@ public class RecipeConsolePage {
 			clickYesButton.waitUntil(Condition.visible, 1000).click();
 			okButton.waitUntil(Condition.visible, 5001).click();
 		}
+		
 		if (manualStopButton.isDisplayed()) {
 			manualStopButton.click();
 			closeButtonOfStop.click();
@@ -915,10 +928,14 @@ public class RecipeConsolePage {
 		if (manualStartButton.isDisplayed()) {
 			recipeButton.click();
 		}
+		
 		if ($(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).isDisplayed()) {
+
 			$(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
 		}
+		
 		$(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
+
 		loadButton.waitUntil(Condition.visible, 20000l);
 		$(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
 		loadButton.click();
@@ -929,7 +946,7 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldBe(visible);
 	}
 
-	public boolean iCheckrecipeDetails(String batch_Id,String runId ) {
+	public boolean iCheckRecipeDetails(String batch_Id,String runId ) {
 		boolean isResult = false;
 		if (recipeRunBatchId.getText().equalsIgnoreCase(batch_Id) && recipeRunId.getText().equalsIgnoreCase(runId)) {
 			isResult = true;
@@ -937,14 +954,95 @@ public class RecipeConsolePage {
 		return isResult;
 	}
 
-	public void iVerifyRecipePause() {
-		clickPauseButton();
-		Selenide.sleep(2000);
-		SelenideHelper.commonWaiter(pauseButton, disappear);
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldBe(visible);
-	}
-
 	public boolean verifyAbortButton() {
 		return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).waitUntil(Condition.visible, 50001).isDisplayed());
+	}
+
+	public void iCheckLengthyCharacter() {
+		if (manualStopButton.isDisplayed()) {
+			manualStopButton.click();
+			closeButtonOfStop.click();
+			okButton.click();
+		}
+		commonWaiter(manualStartButton, appear);
+		manualStartButton.click();
+		this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(120));
+		manualOperationName.sendKeys(this.recipe.getMachineName());
+		manualOperationName.sendKeys(Keys.ENTER);
+	}
+
+	public void iCheckErrorMessage(String name) {
+		if (manualOperation_lengthychar.getText().equalsIgnoreCase(name)) {
+			manualOperation_lengthychar.shouldBe(visible);
+		}
+		
+		else {
+			manualOperation_lengthychar.shouldNotBe(visible);
+		}
+		SelenideHelper.commonWaiter(manualOperationName, visible).click();
+		manualOperationName.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+	}
+
+	public void iEnterLengthyChar(String ManualOperationName, String runId, String batchId, String productId) {
+		manualOpareationTextbox.click();
+		manualOpareationTextbox.setValue(ManualOperationName);
+		runIdTextbox.setValue(runId);
+		productIdTextbox.setValue(productId);
+		batchIdTextbox.click();
+		batchIdTextbox.sendKeys(batchId);
+		batchIdTextbox.sendKeys(Keys.ENTER);
+		SelenideHelper.commonWaiter(okButton, visible).click();
+	}
+
+	public void iVerifyDisplayedOrTrimmed(String condition) {
+		SelenideElement ManualOperationRecipe = matchId; 
+		SelenideElement RunID = recipeRunBatchId;
+		SelenideElement BatchID = $(By.xpath("(//label[@id='trimString'])[2]"));
+
+		if(condition.equalsIgnoreCase("Display")) {
+
+			SelenideHelper.commonWaiter(ManualOperationRecipe, appear).isDisplayed();
+			SelenideHelper.commonWaiter(RunID, appear).isDisplayed();
+			SelenideHelper.commonWaiter(BatchID, appear).isDisplayed();
+
+		}
+		else if(condition.equalsIgnoreCase("Trimmed")) {
+
+			stepAction.moveToElement(ManualOperationRecipe).perform();
+			Selenide.sleep(2000);
+			stepAction.moveToElement(RunID).perform();
+			Selenide.sleep(2000);
+			stepAction.moveToElement(BatchID).perform();
+			Selenide.sleep(2000);
+		}
+	}
+
+	public void iVerifyPostRunWindowValues(String condition) {
+		SelenideElement ManualOperationRecipe = postRun_MANUAL; 
+		SelenideElement RunID = postRun_RUNID;
+		SelenideElement ProductID = postRun_PRODUCTID; 
+		SelenideElement BatchID = postRun_BATCHID;
+
+		if(condition.equalsIgnoreCase("Display")) {
+			SelenideHelper.commonWaiter(ManualOperationRecipe, appear).isDisplayed();
+			SelenideHelper.commonWaiter(RunID, appear).isDisplayed();
+			SelenideHelper.commonWaiter(ProductID, appear).isDisplayed();
+			SelenideHelper.commonWaiter(BatchID, appear).isDisplayed();
+
+		}
+		else if(condition.equalsIgnoreCase("Trimmed")) {
+			stepAction.moveToElement(ManualOperationRecipe).perform();
+			Selenide.sleep(2000);
+			stepAction.moveToElement(RunID).perform();
+			Selenide.sleep(2000);
+			stepAction.moveToElement(ProductID).perform();
+			Selenide.sleep(2000);
+			stepAction.moveToElement(BatchID).perform();
+			Selenide.sleep(2000);
+		}
+	}
+
+	public void collapseRecipeConsoleNotDisplay() {
+		SelenideHelper.commonWaiter(collapseIcon, disappears);
 	}
 }
