@@ -300,6 +300,11 @@ public class RecipeConsoleStepsDefinition {
                 recipeConsolePage.manualOperation("enabled");
             }
         }
+        else if(status.equalsIgnoreCase("Recipe Run")){
+            if (true) {
+                recipeConsolePage.recipeRun("enabled");
+            }
+        }
     }
 
     @When("I resume and verify recipe execution is resumed")
@@ -567,5 +572,10 @@ public class RecipeConsoleStepsDefinition {
     @And("I see Recipe should be executed")
     public void iSeeRecipeShouldBeExecuted() {
         Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+    }
+
+    @And("I stop the manual run after waiting for {int} sec time and close the post run window")
+    public void stopManualRunAfterSec(int second){
+       recipeConsolePage.stopManualRunAfterSecond(second);
     }
 }

@@ -110,6 +110,7 @@ public class RecipePage {
     private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
 
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
+    private final SelenideElement stepDelete = $(By.xpath("//input[@value='X']"));
 
     public void goTo() {
         recipePageLinkText.click();
@@ -508,11 +509,21 @@ public class RecipePage {
         }
     }
 
-    public void addActionStep() {
-        stepPlaceholder.click();
-        stepPlaceholder.clear();
-        stepPlaceholder.sendKeys("Setpoint");
-        stepPlaceholder.sendKeys(Keys.ENTER);
+    public void addActionStep(String action) {
+
+        if(action.equalsIgnoreCase("Setpoint")){
+            stepPlaceholder.click();
+            stepPlaceholder.clear();
+            stepPlaceholder.sendKeys("Setpoint");
+            stepPlaceholder.sendKeys(Keys.ENTER);
+        }
+        else if(action.equalsIgnoreCase("Threshold")){
+            stepPlaceholder.click();
+            stepPlaceholder.clear();
+            stepPlaceholder.sendKeys("Threshold");
+            stepPlaceholder.sendKeys(Keys.ENTER);
+        }
+
     }
 
     public void addStepActionBrowser() {
@@ -572,5 +583,39 @@ public class RecipePage {
         recipeManagementHeader.shouldBe(visible);
     }
 
+    public void outOfRangeValue(){
+        $(By.xpath("//input[@type='text' and @data-label='action-value']")).clear();
+        $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys("8000");
+    }
 
+    public void outOfRangeErrorMessage(){
+        $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
+    }
+    public void inValidValueAndErrorMessage(Integer value){
+
+        commonWaiter(stepDelete,visible).click();
+        $(By.xpath("//input[@type='text' and @data-label='action-value']")).clear();
+
+        if(value>5){
+            $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
+            $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
+        }
+        else if(value>=0){
+            $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
+            $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]")).isDisplayed();
+        }
+        else if(value<=4){
+            $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
+            $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]")).isDisplayed();
+        }
+        else if(value<0){
+            $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
+            $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
+        }
+    }
+    public void verifyErrorMessageOfChangeStatus(String message){
+        statusDraft.click();
+        String actualMessage = $(By.xpath("//div[contains(text(),'Recipe has errors. Cannot change status.')]")).getText();
+        Assert.assertEquals(actualMessage,message);
+    }
 }

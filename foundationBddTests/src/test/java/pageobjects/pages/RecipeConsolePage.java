@@ -103,7 +103,8 @@ public class RecipeConsolePage {
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
     private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
-
+    private final SelenideElement manualWindowPopup = $(By.xpath("//div[text()='Recipe is already loaded']"));
+    private final SelenideElement manualWindowPopup_Btn = $(By.xpath("//button[@class='roleBtnSave']"));
     private Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
@@ -376,6 +377,7 @@ public class RecipeConsolePage {
         }
         commonWaiter(manualStartButton, appear);
         manualStartButton.click();
+
         this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
         manualOperationName.sendKeys(this.recipe.getMachineName());
         this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
@@ -807,6 +809,10 @@ public class RecipeConsolePage {
         SelenideHelper.commonWaiter(manualStopButton, visible).click();
         Selenide.sleep(2000);
     }
-
+    public void stopManualRunAfterSecond(int second){
+        manualStopButton.waitUntil(Condition.visible, second*1001);
+        closeButtonOfStop.click();
+        postRunWindow.waitUntil(Condition.disappear, 1000).shouldNot(visible);
+    }
 
 }

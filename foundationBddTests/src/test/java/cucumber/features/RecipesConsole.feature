@@ -17,7 +17,7 @@ Feature: Recipe console
     And I hold the system
     Then I see the system on hold
     And clear panel and run button is disabled
-  
+
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
     When I expand and collapse recipe console in pnid
     And I verify Recipe run options
@@ -76,7 +76,7 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
-    
+
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -113,7 +113,6 @@ Feature: Recipe console
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
-    And I start recipe execution
     Then I jump to Step no and verify step execution
       | Step no |
       | 3       |
@@ -121,7 +120,8 @@ Feature: Recipe console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
+    # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
+  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     Then I verify Manual Operation tab is "enabled"
@@ -142,7 +142,7 @@ Feature: Recipe console
     Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
 
-  Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
+  Scenario: BIOCRS-4047|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     When I Process hold the system
@@ -151,7 +151,8 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-   
+
+    # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -166,7 +167,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
- 
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console
     When I Select Process Hold
@@ -183,7 +184,7 @@ Feature: Recipe console
     And I Select Yes button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  
+
   Scenario: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -201,4 +202,5 @@ Feature: Recipe console
     And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
- 
+
+

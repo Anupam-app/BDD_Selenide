@@ -256,9 +256,9 @@ public class RecipePageStepsDefinition {
         }
     }
 
-    @And("I add action to the step")
-    public void actionAddedInStep() {
-        recipePage.addActionStep();
+    @And("I add {string} action to the step")
+    public void actionAddedInStep(String action) {
+        recipePage.addActionStep(action);
     }
 
     @And("I select action from action browser")
@@ -301,5 +301,24 @@ public class RecipePageStepsDefinition {
         recipePage.warningMessage(message);
         switchTo().parentFrame();
     }
+    @And("I try to change the setpoint value to out of range")
+    public void outRangeValuePassing(){
+        recipePage.outOfRangeValue();
+    }
 
+    @Then("I verify error message displayed")
+    public void outOfRangeErrorMessage(){
+        recipePage.outOfRangeErrorMessage();
+    }
+    @And("I Validate the error message for below input values")
+    public void inValidInputValue(DataTable table){
+        List<Integer> list = table.asList(Integer.class);
+        for (int i = 0; i < list.size(); i++) {
+            recipePage.inValidValueAndErrorMessage(list.get(i));
+        }
+    }
+    @And("I try to change status and verify error message displayed {string}")
+    public void verifyErrorMessageOfChangeStatus(String message){
+        recipePage.verifyErrorMessageOfChangeStatus(message);
+    }
 }
