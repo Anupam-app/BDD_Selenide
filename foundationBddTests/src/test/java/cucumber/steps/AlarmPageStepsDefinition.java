@@ -17,7 +17,7 @@ public class AlarmPageStepsDefinition {
     }
 
     @Given("I acknowledge the alarm")
-    public void iAcknowledgeAlarm() {
+    public void iAcknowledgeAlarm() throws InterruptedException {
         alarmPage.acknowledgeAlarm();
     }
 
