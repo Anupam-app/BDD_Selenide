@@ -685,13 +685,15 @@ public class RecipeConsoleStepsDefinition {
 	@Then("I see process hold button is displayed")
 	public void iSeeProcessHoldButton() {
 		recipeConsolePage.iverifyDailogBox();
+		recipeConsolePage.iClickOnAbortButton();
+		recipeConsolePage.clickOnOk();
 	}
 
 	@Then("Verify the recipe console extended view UI components")
 	public void iVerifyUIComponents() {
 		recipeConsolePage.gotoRecipeConsole();
 		recipeConsolePage.iVerifyRecipeConsoleElement();
-		recipeConsolePage.checkDiable_Btns();
+		recipeConsolePage.checkButton();
 	}
 
 	@Given("I load the recipe {string}")
@@ -748,5 +750,12 @@ public class RecipeConsoleStepsDefinition {
 	public void iVerifyTextWithMouseHover() {
 		recipeConsolePage.iVerifyPostRunWindowValues("Display");
 		recipeConsolePage.okButton();
+	}
+
+	@Then("Verify the recipe console extended view")
+	public void iVerifyRecipeConsoleUIInProcessRestart() {
+		recipeConsolePage.expandConsole();
+		recipeConsolePage.iVerifyRecipeConsoleElement();
+		recipeConsolePage.checkButton();
 	}
 }

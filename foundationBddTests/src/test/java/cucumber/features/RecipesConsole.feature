@@ -340,12 +340,11 @@ Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system
 	Then Verify the recipe console extended view UI components
 	And I goto report management page
 	And I go to Main screen
-	And I expand recipe console in pnid
 	Then Verify the recipe console extended view UI components
 	And I logout
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-	Then Verify the recipe console extended view UI components
+	Then Verify the recipe console extended view
 	And I restart the system
 	Then I see process hold button is displayed
 	
