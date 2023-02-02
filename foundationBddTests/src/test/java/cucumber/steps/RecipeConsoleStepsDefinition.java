@@ -484,7 +484,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I verify the Process hold Dialog box , buttons")
 	public void iVerifyProcessHoldDailogBox() {
-		recipeConsolePage.iverifyDailogBox();
+		recipeConsolePage.iVerifyDailogBox();
 	}
 
 	@And("I validate close,No button funtionality")
@@ -601,7 +601,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I try to stop the manual run")
 	public void iStopManual() {
-		recipeConsolePage.istopManual();
+		recipeConsolePage.iStopManual();
 	}
 
 	@And("I select No option to continue manual run execution")
@@ -684,7 +684,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@Then("I see process hold button is displayed")
 	public void iSeeProcessHoldButton() {
-		recipeConsolePage.iverifyDailogBox();
+		recipeConsolePage.iVerifyDailogBox();
 		recipeConsolePage.iClickOnAbortButton();
 		recipeConsolePage.clickOnOk();
 	}

@@ -79,7 +79,6 @@ Feature: Recipe console
     
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
-    And I clear the recipe
     And I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
@@ -175,7 +174,6 @@ Feature: Recipe console
   
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
-    And I clear the recipe
     When I select "Manual operation" tab
     And I start Manual run
     Then I validate the timer and stop button and run details
@@ -302,7 +300,7 @@ Feature: Recipe console
   When I select report from dropdown "Audit Trail"
   And I select user in dropdown "Bio4CAdmin"
   And I check audit trial logs
-
+@test
  Scenario: BIOFOUND-12603: Verify Post-run modal of Manual Run Recipe execution
  	Given I expand recipe console
 	When I select "Manual operation" tab
@@ -340,11 +338,12 @@ Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system
 	Then Verify the recipe console extended view UI components
 	And I goto report management page
 	And I go to Main screen
+	And I expand recipe console in pnid
 	Then Verify the recipe console extended view UI components
 	And I logout
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-	Then Verify the recipe console extended view
+	Then Verify the recipe console extended view UI components
 	And I restart the system
 	Then I see process hold button is displayed
 	

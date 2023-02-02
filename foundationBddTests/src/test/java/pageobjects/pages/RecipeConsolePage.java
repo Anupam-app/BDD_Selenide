@@ -18,10 +18,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static com.codeborne.selenide.Selenide.switchTo;
 
 public class RecipeConsolePage {
 
@@ -111,14 +109,14 @@ public class RecipeConsolePage {
 	private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
 	private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
 	private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
-	private final SelenideElement yes_Btn = $(By.xpath("//span[text()='Yes']"));
+	
 	private final SelenideElement endManualOperation = $(By.xpath("//h6[text()='End Manual Operation']"));
 	private final SelenideElement quitEndMAnualOperation = $(By.xpath("//img[contains(@src,'data:image/png;')]"));
 	private final SelenideElement recipeNameTrimmed = $(By.xpath("//label[@class='text-ellipsis'][text()='testDraftRecipeToChangeStatus']"));
-	private final SelenideElement postRun_RUNID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[2]"));
-	private final SelenideElement postRun_BATCHID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[4]"));
-	private final SelenideElement postRun_PRODUCTID = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[3]"));
-	private final SelenideElement postRun_MANUAL = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[1]"));
+	private final SelenideElement postRunId = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[2]"));
+	private final SelenideElement postRunBatchId = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[4]"));
+	private final SelenideElement postRunProductId = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[3]"));
+	private final SelenideElement postRunManual = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[1]"));
 	private final SelenideElement manualOperation_lengthychar = $(By.xpath("//span[text()='Manual Operation Name should not exceed 30 characters.']"));
 	private final SelenideElement manualWindowPopup = $(By.xpath("//div[contains(text(),'Recipe is already loaded')]"));
 	private final SelenideElement manualWindowPopup_Btn = $(By.xpath("//button[@class='roleBtnSave']"));
@@ -141,7 +139,6 @@ public class RecipeConsolePage {
 
 	public void restartSystem() {
 		SelenideHelper.commonWaiter(restartButton, visible).click();
-		Selenide.sleep(2000);
 		SelenideHelper.commonWaiter(yesButton, visible).click();
 		Selenide.sleep(2000);
 	}
@@ -703,7 +700,7 @@ public class RecipeConsolePage {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
 	}
 
-	public boolean iverifyDailogBox() {
+	public boolean iVerifyDailogBox() {
 		boolean isResult = false;
 		if (processhold_Box.isDisplayed()) {
 
@@ -824,7 +821,7 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(quitEndMAnualOperation, appear).click();
 	}
 
-	public void istopManual() {
+	public void iStopManual() {
 		manualStopButton.click();
 	}
 
@@ -835,20 +832,14 @@ public class RecipeConsolePage {
 	}
 
 	public void iVerifyRecipeNameDisplayedOrTrimmed(String condition) {
-
 		SelenideElement recipelenthName = $(By.xpath("//label[text()='testDraftRecipeToChangeStatus']")); 
-
 		if(condition.equalsIgnoreCase("Display")) {
-
 			SelenideHelper.commonWaiter(recipelenthName, appear).isDisplayed();
-
 		}
 		else if(condition.equalsIgnoreCase("Trimmed")) {
-
 			stepAction.moveToElement(recipelenthName).perform();
 			Selenide.sleep(2000);
 		}
-
 	}
 
 	public void iVerifyConditionalStatement() {
@@ -870,20 +861,12 @@ public class RecipeConsolePage {
 		boolean isResult = false;
 		if(preRun_WindowPopop.isDisplayed()) {
 			isResult = false;
-		}else
-		{
-			abortButton.isDisplayed();
-			isResult = true;
 		}
-		return isResult;   	
+		return isResult;   	 		
 	}
 
-	public boolean iDisplayedRunIdAndBatchId() {
-		boolean isResult = false;
-		if(postRunWindow.isDisplayed() && postRun_RUNID.isDisplayed() && postRun_BATCHID.isDisplayed()) {
-			isResult = true;
-		}
-		return isResult;   	
+	public boolean iDisplayedRunIdAndBatchId() {   
+		return postRunWindow.isDisplayed() && postRunId.isDisplayed() && postRunBatchId.isDisplayed();
 	}
 
 	public void iLoadRecipelink(String recipeName) {
@@ -922,11 +905,7 @@ public class RecipeConsolePage {
 	}
 
 	public boolean iCheckRecipeDetails(String batch_Id,String runId ) {
-		boolean isResult = false;
-		if (recipeRunBatchId.getText().equalsIgnoreCase(batch_Id) && recipeRunId.getText().equalsIgnoreCase(runId)) {
-			isResult = true;
-		}
-		return isResult;
+		return recipeRunBatchId.getText().equalsIgnoreCase(batch_Id) && recipeRunId.getText().equalsIgnoreCase(runId);
 	}
 
 	public boolean verifyAbortButton() {
@@ -993,10 +972,10 @@ public class RecipeConsolePage {
 	}
 
 	public void iVerifyPostRunWindowValues(String condition) {
-		SelenideElement ManualOperationRecipe = postRun_MANUAL; 
-		SelenideElement RunID = postRun_RUNID;
-		SelenideElement ProductID = postRun_PRODUCTID; 
-		SelenideElement BatchID = postRun_BATCHID;
+		SelenideElement ManualOperationRecipe = postRunManual; 
+		SelenideElement RunID = postRunId;
+		SelenideElement ProductID = postRunProductId; 
+		SelenideElement BatchID = postRunBatchId;
 
 		if(condition.equalsIgnoreCase("Display")) {
 			SelenideHelper.commonWaiter(ManualOperationRecipe, appear).isDisplayed();
@@ -1007,13 +986,9 @@ public class RecipeConsolePage {
 		}
 		else if(condition.equalsIgnoreCase("Trimmed")) {
 			stepAction.moveToElement(ManualOperationRecipe).perform();
-			Selenide.sleep(2000);
 			stepAction.moveToElement(RunID).perform();
-			Selenide.sleep(2000);
 			stepAction.moveToElement(ProductID).perform();
-			Selenide.sleep(2000);
 			stepAction.moveToElement(BatchID).perform();
-			Selenide.sleep(2000);
 		}
 	}
 
