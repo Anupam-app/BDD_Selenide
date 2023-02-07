@@ -9,7 +9,7 @@ Feature: Recipe console
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
-    Then I see the system on hold
+    Then I see the system is restarted
 
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
     When I expand recipe console in pnid
@@ -300,7 +300,7 @@ Feature: Recipe console
   When I select report from dropdown "Audit Trail"
   And I select user in dropdown "Bio4CAdmin"
   And I check audit trial logs
-@test
+
  Scenario: BIOFOUND-12603: Verify Post-run modal of Manual Run Recipe execution
  	Given I expand recipe console
 	When I select "Manual operation" tab
@@ -332,7 +332,7 @@ Scenario: BIOFOUND-11955: FT_CF_ Recipe Management_ Verify Audit Trail log for S
 
 Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page
  	Given I expand recipe console in pnid
-	When I load recipe "testRecipeToExecute1min"
+	When I load recipe "testRecipeFlows"
 	And I start recipe execution
 	And I hold the system
 	Then Verify the recipe console extended view UI components

@@ -214,6 +214,11 @@ public class RecipeConsoleStepsDefinition {
 	public void iSeeTheSystemOnHold() {
 		recipeConsolePage.seeSystemOnHold();
 	}
+	
+	@Then("I see the system is restarted")
+	public void iSeeTheSystemRestarted() {
+	    recipeConsolePage.seeSystemRestarted();
+	}
 
 	@Then("I should see the recipe run {string}")
 	public void iVerifyRecipeAbort(String status) throws InterruptedException {
@@ -684,14 +689,12 @@ public class RecipeConsoleStepsDefinition {
 
 	@Then("I see process hold button is displayed")
 	public void iSeeProcessHoldButton() {
-		recipeConsolePage.iVerifyDailogBox();
 		recipeConsolePage.iClickOnAbortButton();
 		recipeConsolePage.clickOnOk();
 	}
 
 	@Then("Verify the recipe console extended view UI components")
 	public void iVerifyUIComponents() {
-		recipeConsolePage.gotoRecipeConsole();
 		recipeConsolePage.iVerifyRecipeConsoleElement();
 		recipeConsolePage.checkButton();
 	}
