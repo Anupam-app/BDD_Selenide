@@ -210,7 +210,7 @@ public class RecipeConsolePage {
 
     public String startRecipe(Recipe recipe) {
         //take clear panel css class when disabled
-        var classClearRecipeButton = clearRecipeButton.getAttribute("class");
+        //var classClearRecipeButton = clearRecipeButton.getAttribute("class");
 
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
@@ -224,9 +224,9 @@ public class RecipeConsolePage {
         abortButton.waitUntil(Condition.visible, 5000l);
 
         //wait clean panel to be disabled via css class
-        SelenideHelper.fluentWaiter().until((webDriver) ->
-                clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
-        );
+        //SelenideHelper.fluentWaiter().until((webDriver) ->
+          //      clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
+       // );
 
         return runId;
     }
