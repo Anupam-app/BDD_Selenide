@@ -226,7 +226,7 @@ public class RecipeConsolePage {
         //wait clean panel to be disabled via css class
         //SelenideHelper.fluentWaiter().until((webDriver) ->
           //      clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
-        );
+       // );
 
         return runId;
     }
