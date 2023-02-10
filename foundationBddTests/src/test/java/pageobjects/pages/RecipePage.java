@@ -143,6 +143,7 @@ public class RecipePage {
     private final String recipe_Step = "//label[@class='stepCount' and text()=%s]";
     private final String searchPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
     public static final String RECIPE_DATE_FILTER_IVI = "MMM d, yyyy";
+    private final SelenideElement recipe_BlueNotification = $(By.xpath("//div[@class='notification-bar information-bar']"));
 
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
 
@@ -208,6 +209,7 @@ public class RecipePage {
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "v");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
+        commonWaiter(notificationMessage, visible).shouldHave(text("Phase creation in progress. Press \"Enter\" once completed."));
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
@@ -779,6 +781,6 @@ public class RecipePage {
     }
     
     public void verifyNotification(String message) {
-        commonWaiter(notificationMessage, visible).shouldHave(text(message));
+        commonWaiter(recipe_BlueNotification, visible).shouldHave(text(message));
     }
 }

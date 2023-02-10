@@ -16,13 +16,11 @@ Feature: Recipes Management Filters
     And I select phase library
     Then I verify the message "There is No Phase in Phase Library"
 
-  @IVI-4731
   Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Draft"
     Then I should see recipe "testDraftRecipe"
 
-  @IVI-4731
   Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030| Verify created by functionality in Recipe Browser
     Given I go to recipe page
     When I select recipe created by "Bio4CAdmin"
