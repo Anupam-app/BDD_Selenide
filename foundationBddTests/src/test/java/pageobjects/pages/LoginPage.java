@@ -1,13 +1,20 @@
 package pageobjects.pages;
 
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
-import com.codeborne.selenide.SelenideElement;
-import org.openqa.selenium.By;
-import pageobjects.utility.SelenideHelper;
+import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
+
+import com.codeborne.selenide.SelenideElement;
+
+import org.openqa.selenium.By;
+
+import pageobjects.utility.SelenideHelper;
 
 public class LoginPage {
 
@@ -24,7 +31,8 @@ public class LoginPage {
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
-    private final SelenideElement savePasswordButton = $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
+    private final SelenideElement savePasswordButton =
+            $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -40,7 +48,7 @@ public class LoginPage {
     }
 
     public void openLogin() {
-		waitPnidLoading();
+        waitPnidLoading();
         commonWaiter(loginButton, visible).click();
     }
 
@@ -95,8 +103,11 @@ public class LoginPage {
     }
 
     public void iLogout() {
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
-        SelenideHelper.commonWaiter(logOutButton, visible).click();
+        switchTo().parentFrame();
+        SelenideHelper.commonWaiter(userProfileIcon, visible)
+                .click();
+        SelenideHelper.commonWaiter(logOutButton, visible)
+                .click();
     }
 
     public void setCurrentpassword(String newpassword) {
