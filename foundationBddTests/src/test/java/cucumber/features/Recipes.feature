@@ -1,6 +1,7 @@
 @CRS @IVI
 Feature: Recipe management
 
+  @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -13,8 +14,8 @@ Feature: Recipe management
     And I edit the recipe
     Then I see my changes in recipe
 
-  @SMOKE @IVI-4468
-  Scenario: IVI Bug IVI-5969 IVI-4468 | BIOCRS-5059 | Recipe approval
+  @SMOKE @IVI-4468 @IVI-6688
+  Scenario: BIOCRS-5059 | Recipe approval
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testDraftRecipeToChangeStatus"
@@ -87,7 +88,7 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testRecipeDraftToReject" is changed to "DRAFT" in report
 
-  @SMOKE
+  @SMOKE @IVI-6688
   Scenario: Recipe creation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -118,7 +119,7 @@ Feature: Recipe management
     And I save the recipe with name "testRecipeToExecute"
     And I see warning message is displayed "Recipe is locked. Please save it as new copy."
 
-  @IVI-6151
+  @IVI-6151 @IVI-6688
   Scenario: BUG IVI-6151 | BIOCRS-1594 BIOCRS-5478 | Recipe export and import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

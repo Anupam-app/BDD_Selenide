@@ -747,12 +747,12 @@ public class RecipeConsolePage {
     }
 
     public void runIdManual(String value) {
-        SelenideHelper.commonWaiter(runIdTextbox, visible).click();
+        commonWaiter(runIdTextbox, visible).click();
         Selenide.sleep(2000);
         runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         runIdTextbox.sendKeys(value);
         Selenide.sleep(2000);
-        runIdTextbox.sendKeys(Keys.ENTER);
+        runIdTextbox.sendKeys(Keys.TAB);
     }
 
     public void validateMsg(String message) {
