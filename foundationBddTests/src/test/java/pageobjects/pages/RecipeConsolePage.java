@@ -134,7 +134,7 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        if (collapseIcon.isDisplayed()) {
+        if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
         if(restartButton.isDisplayed()) {
