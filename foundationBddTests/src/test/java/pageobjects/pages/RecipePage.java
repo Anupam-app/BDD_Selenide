@@ -600,7 +600,7 @@ public class RecipePage {
             $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
             $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
         }
-        else if(value>=0){
+        else if(value>0){
             $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys(String.valueOf(value));
             $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]")).isDisplayed();
         }
