@@ -114,7 +114,7 @@ public class RecipeConsolePage {
     }
 
     public void holdAndRestart() {
-        if (restartButton.isDisplayed()) {
+        if (restartButton.isDisplayed()== true) {
             restartSystem();
         }
         holdSystem();
@@ -130,10 +130,11 @@ public class RecipeConsolePage {
     public void holdSystem() {
         SelenideHelper.commonWaiter(holdButton, visible).click();
         SelenideHelper.commonWaiter(yesButton, visible).click();
+        SelenideHelper.commonWaiter(restartButton, visible);
     }
 
     public void gotoRecipeConsole() {
-        if (!collapseIcon.isDisplayed()) {
+        if (collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
         if(restartButton.isDisplayed()) {
@@ -272,7 +273,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
-        SelenideHelper.commonWaiter(restartButton, visible);
+        SelenideHelper.commonWaiter(holdButton, visible);
     }
 
     public String getExecutionStatusText() {
