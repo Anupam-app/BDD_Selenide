@@ -89,6 +89,11 @@ public class LoginPage {
 
     public void setConfirmpassword(String newpassword) {
         confirmPasswordTextbox.setValue(newpassword);
+        submitButton.click();
+    }
+
+    public void savePassword(String newpassword) {
+        confirmPasswordTextbox.setValue(newpassword);
         savePassword.click();
     }
 

@@ -249,6 +249,7 @@ Feature: User management
     And I save my user modification changes
     Then I see error message is displayed "user details cannot be modified for disabled user"
 
+  @IVI-4912
   Scenario: IVI Bug - IVI-4912 | User Preference -Default Page
     Given I am using language "en-US"
     And I am logged in as "testUserForI18N" user

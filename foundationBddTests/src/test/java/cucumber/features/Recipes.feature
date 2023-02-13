@@ -195,6 +195,7 @@ Feature: Recipe management
     When I trigger edit mode
     Then I verify phase buttons and warning messages
 
+  @IVI-6688
   Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page

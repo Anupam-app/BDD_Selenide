@@ -132,7 +132,7 @@ public class LoginPageStepsDefinition {
         userPage.changePassword();
         loginPage.setCurrentpassword(currentPassword);
         loginPage.setNewpassword(newPassword);
-        loginPage.setConfirmpassword(confirmPassword);
+        loginPage.savePassword(confirmPassword);
     }
 
     @And("I logout and login as {string} and password as {string}")
