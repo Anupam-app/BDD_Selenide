@@ -17,7 +17,7 @@ Feature: Recipe console
     And I hold the system
     Then I see the system on hold
     And clear panel and run button is disabled
-  
+
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
     When I expand and collapse recipe console in pnid
     And I verify Recipe run options

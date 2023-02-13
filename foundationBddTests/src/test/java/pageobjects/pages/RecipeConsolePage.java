@@ -124,6 +124,7 @@ public class RecipeConsolePage {
     public void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible).click();
         SelenideHelper.commonWaiter(yesButton, visible).click();
+        SelenideHelper.commonWaiter(holdButton, visible);
     }
 
     public void holdSystem() {
@@ -135,11 +136,10 @@ public class RecipeConsolePage {
         if (!collapseIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible).click();
         }
-        if (restartButton.isDisplayed()) {
+        if(restartButton.isDisplayed()) {
             restartSystem();
         }
     }
-
     public void collapseRecipeConsole() {
         SelenideHelper.commonWaiter(collapseIcon, visible).click();
     }
@@ -225,8 +225,8 @@ public class RecipeConsolePage {
 
         //wait clean panel to be disabled via css class
         //SelenideHelper.fluentWaiter().until((webDriver) ->
-          //      clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
-       // );
+        //      clearRecipeButton.getAttribute("class").equals(classClearRecipeButton)
+        // );
 
         return runId;
     }
@@ -323,7 +323,7 @@ public class RecipeConsolePage {
 
     public void manualOperation(String status) {
         if (status.equalsIgnoreCase("enabled")) {
-            manualOperationButton.waitUntil(visible, 50001).click();
+            manualOperationButton.waitUntil(visible, 100001).click();
             manualOperationSelected.shouldBe(visible);
         } else if (status.equalsIgnoreCase("disabled")) {
             manualOperationButton.shouldNotBe(selected);
