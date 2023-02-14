@@ -4,7 +4,7 @@ Feature: Backup creation
   Background:
     Given I am logged in as "bio4cadmin" user
 
-  @SMOKE
+  @SMOKE @IVI-4722
   Scenario: Create Backup
     Given I goto backup page
     When I trigger a immediate backup
@@ -15,7 +15,7 @@ Feature: Backup creation
     #And I go to backup history
     #Then I verify backup history details
 
-  @IVI-6202
+  @IVI-6202 @IVI-4722
   Scenario: Schedule backup
     Given I goto backup page
     When I schedule backup

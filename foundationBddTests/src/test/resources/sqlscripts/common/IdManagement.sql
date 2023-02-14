@@ -36,7 +36,7 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (15, 0x02000000B45512DBEC40C25B48F71766C234E0611C1F6B0EF06A0FF48C3A959F0AB51F6E7079B1D11E39AE3C2F688250AC1B5FF69D78919FA48CBE58CB5226CC822ED683D5667987ACA65BDC6E92AB3C4128205FABEC9E5CF2075E4F1AF9B53453BB9228, NULL, NULL, 1, NULL)
 GO
-INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (16, 0x0200000000B4FA143614941D58A910E3914C08FE9D9BBDEC74EB950710BE06D07D25523868C1304BAFFEA8616EBF936EA172AB8E7BD43F4EEDB3A544EE02F6DFC753A26FAE9C1E25034615ABD75383B2C3ADE290A492BC774B32E86B8A6CC50BC926E5DE, N'gYGTOx0asaTpU/XTDMEvwA==', N'ikLXJG2b7nOTlIMFuDKQlA==', 1, NULL)
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (16, 0x0200000063AECEAC52C5A65E6E2E78A15FB4E2CFF9020AA15B06F48C34E410E0ABDBFD4AF765FC49312254E0B1F4E1A38AB267E590313CE484D12D5AA177E5E8153A235505EC31DD7A4A05EC7C9A815B437780C49504E9A1BCE8903E6C9778E3F8A60BEC, N'+eUaq18BzbChW7nrLy9Hnw==', N'RXcWwTcXdXd0YZBrMXQNAQ==', 0, NULL)
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (17, 0x020000007DCC245DD8BB35B36F5D354E0D6698BD9B5281177342C86E31364CF01C650FFA788730A23FD4B8D31AAA48C0A507CCB23F3A1CFBE7922699F538D8FDC08E88ACA440C5CED73CBE5C70A7BEF72ACE40E186DC2A6259CA2B43DCE35E148C713642, NULL, NULL, 0, NULL)
 GO
@@ -78,7 +78,7 @@ INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [firs
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (15, N'', N'alexis.thiebaut@merckgroup.com', N'UserDisabled', N'false', N'UserDisabled', N'UserDisabled', N'0123456789', N'UserDisabled', 0, 0, NULL, 0)
 GO
-INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (16, N'', N'varun.mittal@external.merckgroup.com', N'Acclock', N'true', N'Acclock', N'Acclock', N'0123456789', N'Acclock', 0, 0, CAST(N'2022-10-15T08:48:14.2200000' AS DateTime2), 0)
+INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (16, N'', N'sailesh.botcha@external.merckgroup.com', N'1234567', N'true', N'Account', N'lock', N'', N'AccountLockUser', 0, 0, NULL, 0)
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (17, N'', N'alexis.thiebaut@merckgroup.com', N'Accunlock', N'true', N'Accunlock', N'Accunlock', N'0123456789', N'Accunlock', 0, 0, CAST(N'2022-05-21T07:42:58.3550000' AS DateTime2), 0)
 GO

@@ -235,9 +235,8 @@ Feature: User management
     And I save my user changes
     Then I see error message is displayed "Please update user details" 
 
-    #for any disabled user, UI does not have edit option in IVI
-  @IVI-5685
-  Scenario: BIOCRS-4364 | Bug IVI-5685 Verify editable fields in user
+  @IVI-6198
+  Scenario: BIOCRS-4364 | Verify editable fields in user
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     When I search "testUserToEditFields" user

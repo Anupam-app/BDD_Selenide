@@ -109,6 +109,8 @@ public class RecipeConsolePage {
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
 
+    private final SelenideElement manualWindowPopup = $(By.xpath("//div[@class='roleHeadline']"));
+    private final SelenideElement manualWindowPopup_Btn = $(By.xpath("//button[@class='roleBtnSave']"));
     private Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
@@ -586,6 +588,11 @@ public class RecipeConsolePage {
         manualOperationSelected.shouldBe(visible);
         commonWaiter(manualStartButton, appear);
         manualStartButton.click();
+        if(manualWindowPopup.exists())
+        {
+            Assert.assertEquals("warning pop displayed: ","Recipe is already loaded",manualWindowPopup.getText());
+            manualWindowPopup_Btn.click();
+        }
         this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
         manualOperationName.sendKeys(this.recipe.getMachineName());
         this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
@@ -670,6 +677,11 @@ public class RecipeConsolePage {
         if (restartButton.isDisplayed()) {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
+        }
+        if (abortIcon.isDisplayed()) {
+            abortIcon.click();
+            clickYesButton.waitUntil(Condition.visible, 1000).click();
+            okButton.waitUntil(Condition.visible, 5001).click();
         }
 
         if (clearRecipeText.isDisplayed()) {

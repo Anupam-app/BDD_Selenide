@@ -31,7 +31,7 @@ public class LoginPage {
     private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
-
+    private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
     public void setUser(String user) {
         userIdTextBox.setValue(user);
     }
@@ -89,7 +89,7 @@ public class LoginPage {
 
     public void setConfirmpassword(String newpassword) {
         confirmPasswordTextbox.setValue(newpassword);
-        submitButton.click();
+        tempPwd_submitButton.click();
     }
 
     public void savePassword(String newpassword) {
