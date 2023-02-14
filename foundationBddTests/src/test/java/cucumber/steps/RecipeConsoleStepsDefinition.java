@@ -215,6 +215,11 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.seeSystemOnHold();
     }
 
+    @Then("I see the system on restart")
+    public void iSeeTheSystemOnRestart() {
+        recipeConsolePage.seeSystemOnRestart();
+    }
+
 
     @Then("I should see the recipe run {string}")
     public void iVerifyRecipeAbort(String status) throws InterruptedException {
