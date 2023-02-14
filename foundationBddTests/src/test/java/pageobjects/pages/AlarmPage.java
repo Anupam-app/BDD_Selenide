@@ -40,7 +40,7 @@ public class AlarmPage {
 
     public void acknowledgeAlarm() throws InterruptedException {
         // Selenide.sleep(5000);
-        for (int j = 0; j < 60; j++) {
+        for (int j = 0; j < 1600; j++) {
 
             for (int i = 1; i <= alarmTable.size(); i++) {
                 try {
