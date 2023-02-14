@@ -19,8 +19,8 @@ NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
 NET USER "UserDisabled" /DELETE
 NET USER "UserDisabled" "MerckApp1@" /ADD
 
-NET USER "Acclock" /DELETE
-NET USER "Acclock" "MerckApp1@" /ADD
+NET USER "AccountLockUser" /DELETE
+NET USER "AccountLockUser" "MerckApp1@" /ADD
 
 NET USER "reportUnauthUser" /DELETE
 NET USER "reportUnauthUser" "MerckApp1@" /ADD
