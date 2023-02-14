@@ -10,7 +10,7 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I hold and restart the system
     Then I see the system on hold
-  @test
+
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
