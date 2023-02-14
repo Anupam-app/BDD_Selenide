@@ -273,6 +273,10 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold(){
+        holdButton.waitUntil(appear,10000);
+    }
+
+    public void seeSystemOnRestart(){
         restartButton.waitUntil(appear,10000);
     }
 
