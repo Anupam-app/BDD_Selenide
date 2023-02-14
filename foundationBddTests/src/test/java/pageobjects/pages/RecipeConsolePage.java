@@ -273,7 +273,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold(){
-        holdButton.waitUntil(appear,10000);
+        restartButton.waitUntil(appear,10000);
     }
 
     public String getExecutionStatusText() {
