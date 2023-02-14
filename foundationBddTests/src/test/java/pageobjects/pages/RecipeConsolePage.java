@@ -114,7 +114,7 @@ public class RecipeConsolePage {
     }
 
     public void holdAndRestart() {
-        if (restartButton.isDisplayed()== true) {
+        if (restartButton.isDisplayed() {
             restartSystem();
         }
         holdSystem();
