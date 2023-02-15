@@ -115,7 +115,7 @@ public class RecipePage {
     private final ElementsCollection placeholders = $$(By.xpath("//input[@placeholder='Search instruments and actions...']"));
     private final SelenideElement maxPhaseWarningMessage = $(By.xpath("//div[contains(text(),'Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed.')]"));
     private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
-    private final String phaseNameInRecipe = "//label[@class ='phaseHead' and @data-phasename='[%s]']" ;
+
 
     public void goTo() {
         recipePageLinkText.click();
@@ -649,10 +649,9 @@ public class RecipePage {
         $(By.xpath("//span[text()='abvcdf']")).doubleClick();
     }
     public void copyPastePhase(){
-        $(String.format(phaseNameInRecipe,"Phase1")).click();
 
-        $(String.format(phaseNameInRecipe,"Phase1")).sendKeys(Keys.LEFT_CONTROL + "c");
-        $(By.xpath(String.format(stepCountPlaceholder, "2"))).sendKeys(Keys.LEFT_CONTROL + "v");
-
+        $(By.xpath("//label[text()='Phase 1']")).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
     }
 }
