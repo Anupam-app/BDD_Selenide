@@ -55,13 +55,6 @@ Feature: Report administration
     And I should see the report file presence
     And I check audit trial report content
 
-    #Permission for IVI are little different than CRS as to be revisited or removed if not applicable
-  #Scenario: BIOCRS-5106 | Unauthorized user cant generate the audit trail report
-    #Given I am logged in as "reportUnauthUser" user
-    #And I goto report management page
-    #When I select report from dropdown "Audit Trail"
-    #Then I don't see the presence of generate button
-
   @SMOKE
   Scenario: Generate and sign a recipe run history report
     Given I am logged in as "Bio4CAdmin" user

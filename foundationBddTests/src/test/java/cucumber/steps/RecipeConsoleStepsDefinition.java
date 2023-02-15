@@ -358,7 +358,7 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
     }
 
-    @Then("I validate the timer and stop button and run details")
+    @Then("I validate the timer, stop button, run details")
     public void validateRun_Timer_Stop() {
         recipeConsolePage.validationOfRunDetails();
         Assert.assertTrue(recipeConsolePage.verifyStopButton());

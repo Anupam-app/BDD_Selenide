@@ -164,7 +164,7 @@ Feature: Recipe console
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I start Manual run
-    Then I validate the timer and stop button and run details
+    Then I validate the timer, stop button, run details
     When I Process hold the system
     Then I should see Process restart button
     And I validate the timer is incrementing

@@ -82,18 +82,18 @@ public class LoginPage {
         waitPnidMessage("Main screen is view only");
     }
 
-    public void setNewpassword(String newpassword) {
+    public void setNewPassword(String newPassword) {
         commonWaiter(newPasswordTextbox, visible);
-        newPasswordTextbox.setValue(newpassword);
+        newPasswordTextbox.setValue(newPassword);
     }
 
-    public void setConfirmpassword(String newpassword) {
-        confirmPasswordTextbox.setValue(newpassword);
+    public void setConfirmPassword(String newPassword) {
+        confirmPasswordTextbox.setValue(newPassword);
         tempPwd_submitButton.click();
     }
 
-    public void savePassword(String newpassword) {
-        confirmPasswordTextbox.setValue(newpassword);
+    public void savePassword(String newPassword) {
+        confirmPasswordTextbox.setValue(newPassword);
         savePassword.click();
     }
 
@@ -102,8 +102,8 @@ public class LoginPage {
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 
-    public void setCurrentpassword(String newpassword) {
+    public void setCurrentPassword(String newPassword) {
         currentPasswordTestbox.clear();
-        currentPasswordTestbox.setValue(newpassword);
+        currentPasswordTestbox.setValue(newPassword);
     }
 }

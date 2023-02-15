@@ -105,8 +105,8 @@ public class LoginPageStepsDefinition {
 
     @Given("I change password {string}")
     public void iChangePassword(String password) {
-        loginPage.setNewpassword(password);
-        loginPage.setConfirmpassword(password);
+        loginPage.setNewPassword(password);
+        loginPage.setConfirmPassword(password);
     }
 
     @Then("I relogin")
@@ -130,8 +130,8 @@ public class LoginPageStepsDefinition {
     public void iTryToChangePassword(String currentPassword, String newPassword, String confirmPassword) {
         userPage.userProfileIcon();
         userPage.changePassword();
-        loginPage.setCurrentpassword(currentPassword);
-        loginPage.setNewpassword(newPassword);
+        loginPage.setCurrentPassword(currentPassword);
+        loginPage.setNewPassword(newPassword);
         loginPage.savePassword(confirmPassword);
     }
 
