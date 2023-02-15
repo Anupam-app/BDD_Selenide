@@ -45,7 +45,7 @@ Feature: User login
     Examples:
       | login         | password   | message                                                   |
       | bio4cservice1 | MerckApp1@ | Bad credentials                                           |
-      | bio4cservice  | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left. |
+      | testUser  | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left. |
 
 
   Scenario Outline: New user login Or Connect after reset the password

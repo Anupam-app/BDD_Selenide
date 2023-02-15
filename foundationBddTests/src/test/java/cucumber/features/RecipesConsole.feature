@@ -15,7 +15,7 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I hold the system
-    Then I see the system on hold
+    Then I see the system on restart
     And clear panel and run button is disabled
 
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
@@ -29,7 +29,7 @@ Feature: Recipe console
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I hold the system
-    Then I see the system on hold
+    Then I see the system on restart
     And Recipe execution is paused
     And I restart the system
     And I click on pause button
@@ -79,6 +79,7 @@ Feature: Recipe console
 
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     When I expand recipe console in pnid
+    And I clear the recipe
     And I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
@@ -93,7 +94,7 @@ Feature: Recipe console
     And I Verify manual run status in recipe consol
 
   Scenario: Verify Pre-run modal during Recipe execution|BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071|
-    Given I expand recipe console in pnid
+    When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I verify all mandatory fields has asterick mark "*"
     When I click ok button
@@ -155,6 +156,7 @@ Feature: Recipe console
     # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
+    And I clear the recipe
     When I select "Manual operation" tab
     And I start Manual run
     Then I validate the timer and stop button and run details

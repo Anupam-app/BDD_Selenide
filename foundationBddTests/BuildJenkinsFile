@@ -1,0 +1,66 @@
+pipeline {
+    agent {
+        label 'Foundation'
+    }
+    tools {
+        maven 'apache-maven-3.6.3'
+        jdk 'java_11'
+    }
+    options {
+        timestamps()
+        buildDiscarder(logRotator(artifactNumToKeepStr: '5'))
+    }
+    stages {
+        stage('Initialize') {
+            steps {
+                script {
+                    notifyBitbucket(buildStatus: 'INPROGRESS')
+                }
+				// In case a shallow clone was performed, get the full history. This is needed so SonarQube can work out the blames automatically
+                bat returnStatus: true, script: 'git fetch --unshallow || echo Skipping git unshallow'
+                bat returnStatus: true, script: "git fetch --no-tags ${env.GIT_URL} +refs/heads/${env.CHANGE_TARGET}:refs/remotes/origin/${env.CHANGE_TARGET} || echo Skipping git ${env.CHANGE_TARGET}"
+                rtMavenResolver(
+                    id: "MAVEN_RESOLVER",
+                    serverId: "PRODArtifactory",
+                    releaseRepo: "bio4c-repository-dev",
+                    snapshotRepo: "bio4c-repository-dev"
+                )
+            }
+        }
+        stage('Code build') {
+            steps {
+                script {
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3',
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: 'clean test-compile',
+                        resolverId: "MAVEN_RESOLVER"
+                    )
+                }
+            }
+        }
+        stage('SonarQube analysis') {
+            steps {
+                withSonarQubeEnv('SonarQube Developer Edition') {
+                    rtMavenRun(
+                        tool: 'apache-maven-3.6.3', // Tool name from Jenkins configuration
+                        pom: 'foundationBddTests/pom.xml',
+                        goals: "sonar:sonar" + (env.CHANGE_ID ? " -Dsonar.pullrequest.key=${env.CHANGE_ID} -Dsonar.pullrequest.branch=${env.BRANCH_NAME} -Dsonar.pullrequest.base=${env.CHANGE_TARGET}" : ''),
+                        resolverId: "MAVEN_RESOLVER"
+                    )
+                }
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: false
+                }
+            }
+        }
+    }
+	post {
+        always {
+            script {
+                currentBuild.result = currentBuild.result ?: 'SUCCESS'
+                notifyBitbucket(considerUnstableAsSuccess: true)
+            }
+        }
+    }
+}
