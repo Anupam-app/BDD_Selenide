@@ -15,9 +15,9 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I hold the system
-    Then I see the system on hold
+    Then I see the system on restart
     And clear panel and run button is disabled
-  
+
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
     When I expand and collapse recipe console in pnid
     And I verify Recipe run options
@@ -29,7 +29,7 @@ Feature: Recipe console
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I hold the system
-    Then I see the system on hold
+    Then I see the system on restart
     And Recipe execution is paused
     And I restart the system
     And I click on pause button

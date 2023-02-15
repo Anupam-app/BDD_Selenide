@@ -42,7 +42,6 @@ public class RecipeConsoleStepsDefinition {
 		this.currentRecipe = currentRecipe;
 	}
 
-
 	@Given("I expand recipe console in pnid")
 	public void iGotoRecipeConsole() {
 		recipeConsolePage.gotoRecipeConsole();
@@ -130,18 +129,16 @@ public class RecipeConsoleStepsDefinition {
 		iLoadRecipeAndIStartIt(recipe, seconds);
 	}
 
-
 	@When("I load recipe {string} and run it during {int} seconds with batch id {string} and product id {string}")
 	public void iStartAndWaitRecipeExecution(String recipe, int seconds, String batchId, String productId) {
 		iGotoRecipeConsole();
 		iLoadRecipeAndIStartIt(recipe, seconds, batchId, productId);
 	}
 
-
 	@When("I start recipe execution")
 	public void iStartRecipeExecution() {
 		generateRecipeValues(null, null);
-		String runId = recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+		String runId = recipeConsolePage.startRecipe(this.currentRecipe);
 		this.currentRecipe.setRunId(runId);
 	}
 
@@ -160,7 +157,6 @@ public class RecipeConsoleStepsDefinition {
 
 		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
 		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
-
 	}
 
 	@Then("Recipe should be executed")
@@ -199,7 +195,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.clickResumeButton();
 	}
 
-
 	@When("I click on jump step {string}")
 	public void iClickOnJumpToStep(String stepNumber) {
 		recipeConsolePage.clickOnJumpToStep(stepNumber);
@@ -214,10 +209,15 @@ public class RecipeConsoleStepsDefinition {
 	public void iSeeTheSystemOnHold() {
 		recipeConsolePage.seeSystemOnHold();
 	}
-	
-	@Then("I see the system is restarted")
-	public void iSeeTheSystemRestarted() {
-	    recipeConsolePage.seeSystemRestarted();
+
+	//	@Then("I see the system is restarted")
+	//	public void iSeeTheSystemRestarted() {
+	//	    recipeConsolePage.seeSystemRestarted();
+	//	}
+
+	@Then("I see the system on restart")
+	public void iSeeTheSystemOnRestart() {
+		recipeConsolePage.seeSystemOnRestart();
 	}
 
 	@Then("I should see the recipe run {string}")
@@ -278,14 +278,12 @@ public class RecipeConsoleStepsDefinition {
 	@When("I Process hold the system")
 	public void processHold() {
 		recipeConsolePage.holdSystem();
-
 	}
 
 	@And("I verify Manual Operation tab is {string}")
 	public void manualOperation(String status) {
 		recipeConsolePage.manualOperation(status);
 	}
-
 
 	@Then("I verify Recipe Run tab is {string}")
 	public void recipeRun(String status) {
