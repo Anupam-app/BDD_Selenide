@@ -312,7 +312,7 @@ public class RecipePageStepsDefinition {
     }
     @And("I Validate the error message for below input values")
     public void inValidInputValue(DataTable table){
-        List<Integer> list = table.asList(Integer.class);
+        List<String> list = table.asList(String.class);
         for (int i = 0; i < list.size(); i++) {
             recipePage.inValidValueAndErrorMessage(list.get(i));
         }
@@ -320,5 +320,21 @@ public class RecipePageStepsDefinition {
     @And("I try to change status and verify error message displayed {string}")
     public void verifyErrorMessageOfChangeStatus(String message){
         recipePage.verifyErrorMessageOfChangeStatus(message);
+    }
+    @When("I create phase with shortcut key")
+    public void createPhase(){
+        recipePage.createPhaseWithShortcutKey();
+    }
+    @Then("I get a warning notifying that {string}")
+        public void maxPhaseRecipeWarningMessage(String message){
+        recipePage.maxPhaseWarningMessage(message);
+    }
+    @When("I add Phases from phase library to recipe")
+    public void  addPhaseFromLibrary(){
+        recipePage.addPhaseFromLibrary();
+    }
+    @When("I try to copy and paste the phase")
+    public void copyPastePhase(){
+         recipePage.copyPastePhase();
     }
 }

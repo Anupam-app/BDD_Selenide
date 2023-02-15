@@ -278,7 +278,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
-        SelenideHelper.commonWaiter(restartButton, visible);
+        SelenideHelper.commonWaiter(holdButton, visible);
     }
 
     public String getExecutionStatusText() {
