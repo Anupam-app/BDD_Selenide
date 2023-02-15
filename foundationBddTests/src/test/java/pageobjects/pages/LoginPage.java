@@ -31,7 +31,7 @@ public class LoginPage {
     private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
-
+    private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
     public void setUser(String user) {
         userIdTextBox.setValue(user);
     }
@@ -82,13 +82,18 @@ public class LoginPage {
         waitPnidMessage("Main screen is view only");
     }
 
-    public void setNewpassword(String newpassword) {
+    public void setNewPassword(String newPassword) {
         commonWaiter(newPasswordTextbox, visible);
-        newPasswordTextbox.setValue(newpassword);
+        newPasswordTextbox.setValue(newPassword);
     }
 
-    public void setConfirmpassword(String newpassword) {
-        confirmPasswordTextbox.setValue(newpassword);
+    public void setConfirmPassword(String newPassword) {
+        confirmPasswordTextbox.setValue(newPassword);
+        tempPwd_submitButton.click();
+    }
+
+    public void savePassword(String newPassword) {
+        confirmPasswordTextbox.setValue(newPassword);
         savePassword.click();
     }
 
@@ -97,8 +102,8 @@ public class LoginPage {
         SelenideHelper.commonWaiter(logOutButton, visible).click();
     }
 
-    public void setCurrentpassword(String newpassword) {
+    public void setCurrentPassword(String newPassword) {
         currentPasswordTestbox.clear();
-        currentPasswordTestbox.setValue(newpassword);
+        currentPasswordTestbox.setValue(newPassword);
     }
 }

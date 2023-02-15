@@ -1013,6 +1013,10 @@ public class ReportsPage {
     public void verifyRunMode() {
         commonWaiter(runTab, not(visible));
     }
+
+    public void verifyGenerateButton() {
+        Assert.assertFalse(reportGenerateButton.is(visible));
+    }
 	
 	public void selectESignStatus(String eSignStatus) {
         commonWaiter(filterIcon, visible);

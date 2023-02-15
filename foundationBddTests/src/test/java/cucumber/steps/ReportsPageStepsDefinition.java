@@ -121,8 +121,13 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I don't see the presence of run mode")
-    public void iDontSeeGenerateButton() {
+    public void iDontSeeRunLink() {
         reportPage.verifyRunMode();
+    }
+
+    @Then("I don't see the presence of generate button")
+    public void iDontSeeGenerateButton() {
+        reportPage.verifyGenerateButton();
     }
 
     @When("I select device {string}")
@@ -319,7 +324,7 @@ public class ReportsPageStepsDefinition {
     @When("I verify audit logs for user update")
     public void iVerifyAuditLogsForUserUpdate() throws InterruptedException {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForUserUpdate(this.user.getName());
+        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName());
         switchTo().parentFrame();
     }
 
