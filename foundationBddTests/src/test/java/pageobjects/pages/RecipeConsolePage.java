@@ -481,11 +481,7 @@ public class RecipeConsolePage {
 		Date startTime = formatter.parse(timeStart);
 		Date endTime = formatter.parse(timeEnd);
 		long timeDifference = (endTime).getTime() - (startTime).getTime();
-		if (timeDifference > 0) {
-			Assert.assertTrue(true);
-		} else {
-			Assert.assertTrue(false);
-		}
+		Assert.assertTrue(timeDifference > 0);
 	}
 
 	public void hold() {
@@ -840,7 +836,7 @@ public class RecipeConsolePage {
 	}
 
 	public void startAndWaitManualOperation(int seconds) {
-		SelenideHelper.commonWaiter(manualStopButton, visible).waitUntil(Condition.visible,30000);		
+		SelenideHelper.commonWaiter(manualStopButton, visible).waitUntil(Condition.visible, seconds * 3000l);		
 		manualStopButton.click();
 		Selenide.sleep(4000);
 		validateYesBtn();
@@ -854,7 +850,7 @@ public class RecipeConsolePage {
 	}
 
 	public void iClickNoInEndManualOperation() {
-		SelenideHelper.commonWaiter(endManualOperation, appear).isDisplayed();    	
+		SelenideHelper.commonWaiter(endManualOperation, appear);    	
 	}
 
 	public void iQuitEndManualOperation() {
@@ -866,7 +862,6 @@ public class RecipeConsolePage {
 	}
 
 	public void iVerifyRecipeName() {
-		recipeNameTrimmed.getCssValue("text-overflow");
 		stepAction.moveToElement(recipeNameTrimmed).moveToElement(recipeNameTrimmed).click().build().perform();
 		Selenide.sleep(2000);
 	}

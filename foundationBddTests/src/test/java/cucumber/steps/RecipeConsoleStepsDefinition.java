@@ -210,11 +210,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.seeSystemOnHold();
 	}
 
-	//	@Then("I see the system is restarted")
-	//	public void iSeeTheSystemRestarted() {
-	//	    recipeConsolePage.seeSystemRestarted();
-	//	}
-
 	@Then("I see the system on restart")
 	public void iSeeTheSystemOnRestart() {
 		recipeConsolePage.seeSystemOnRestart();
