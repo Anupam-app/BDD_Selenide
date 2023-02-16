@@ -9,7 +9,7 @@ Feature: Recipe console
   Scenario: Recipe system Hold/Restart
     When I expand recipe console in pnid
     And I hold and restart the system
-    Then I see the system on restart
+    Then I see the system on hold
 
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
     When I expand recipe console in pnid
