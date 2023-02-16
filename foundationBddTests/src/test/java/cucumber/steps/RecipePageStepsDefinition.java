@@ -301,6 +301,7 @@ public class RecipePageStepsDefinition {
         recipePage.warningMessage(message);
         switchTo().parentFrame();
     }
+
     @And("I try to change the setpoint value to out of range")
     public void outRangeValuePassing(){
         recipePage.outOfRangeValue();
@@ -314,7 +315,7 @@ public class RecipePageStepsDefinition {
     public void inValidInputValue(DataTable table){
         List<String> list = table.asList(String.class);
         for (int i = 0; i < list.size(); i++) {
-            recipePage.inValidValueAndErrorMessage(list.get(i));
+            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i));
         }
     }
     @And("I try to change status and verify error message displayed {string}")

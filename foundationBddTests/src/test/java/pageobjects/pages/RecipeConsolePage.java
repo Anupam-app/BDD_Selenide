@@ -275,7 +275,7 @@ public class RecipeConsolePage {
     }
 
     public void seeSystemOnHold() {
-        SelenideHelper.commonWaiter(holdButton, visible);
+        holdButton.waitUntil(appear, 10000);
     }
 
         public void seeSystemOnRestart () {

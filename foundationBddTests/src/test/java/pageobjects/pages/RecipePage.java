@@ -601,30 +601,32 @@ public class RecipePage {
     public void outOfRangeErrorMessage(){
         commonWaiter($(By.xpath("//div[contains(text(),'Out of Range.')]")),visible);
     }
-    public void inValidValueAndErrorMessage(String value){
+    public void inValidValueAndErrorMessageOfThreshold(String value){
 
-        $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).click();
-        $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).sendKeys(Keys.CONTROL,"a");
-        $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).sendKeys(Keys.DELETE);
+        SelenideElement secondStep = $(By.xpath("//input[@type='text' and @data-label='action-value'])[2]"));
+
+        secondStep.click();
+        secondStep.sendKeys(Keys.CONTROL,"a");
+        secondStep.sendKeys(Keys.DELETE);
 
 
         switch (value){
             case ("5"):
-                $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).setValue(value);
+                secondStep.setValue(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
                 break;
             case (".3"):
-                // $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2])")).sendKeys(String.valueOf(value));
-                $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2])")).sendKeys(value);
+
+                secondStep.sendKeys(value);
                 $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
                 break;
 
             case (".2"):
-                $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).sendKeys(value);
+                secondStep.sendKeys(value);
                 $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
                 break;
             case("-1"):
-                $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]")).sendKeys(value);
+                secondStep.sendKeys(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')][2]")).isDisplayed();
                 break;
             default:

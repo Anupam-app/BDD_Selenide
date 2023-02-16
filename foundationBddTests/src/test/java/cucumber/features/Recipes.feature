@@ -171,6 +171,7 @@ Feature: Recipe management
     And I save the recipe with name "errorRecipe"
     And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
 
+
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I go to recipe page
     And I edit recipe "maxPhaseRecipe"
