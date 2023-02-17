@@ -10,7 +10,9 @@ import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import dataobjects.Report;
-import java.awt.AWTException;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -116,6 +118,7 @@ public class RecipePage {
     private final SelenideElement maxPhaseWarningMessage = $(By.xpath("//div[contains(text(),'Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed.')]"));
     private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
 
+    String phaseName = "//label[text()='%s']";
 
     public void goTo() {
         recipePageLinkText.click();
@@ -515,24 +518,26 @@ public class RecipePage {
     }
 
     public void addActionStep(String action) {
+
         if(action.equalsIgnoreCase("Setpoint")) {
-            System.out.println(placeholders.size());
+
             for (WebElement placeholder : placeholders) {
                 if (placeholder.getAttribute("value").isEmpty()) {
                     placeholder.click();
                     placeholder.clear();
-                    placeholder.sendKeys("Setpoint");
+                    placeholder.sendKeys(action);
                     placeholder.sendKeys(Keys.ENTER);
                     break;
                 }
             }
         }
-        else if(action.equalsIgnoreCase("Threshold")){
+        else if (action.equalsIgnoreCase("Threshold")) {
             stepPlaceholder.click();
             stepPlaceholder.clear();
             stepPlaceholder.sendKeys("Threshold");
             stepPlaceholder.sendKeys(Keys.ENTER);
         }
+
     }
 
     public void addStepActionBrowser() {
@@ -601,32 +606,26 @@ public class RecipePage {
     public void outOfRangeErrorMessage(){
         commonWaiter($(By.xpath("//div[contains(text(),'Out of Range.')]")),visible);
     }
+
     public void inValidValueAndErrorMessageOfThreshold(String value){
 
-        SelenideElement secondStep = $(By.xpath("//input[@type='text' and @data-label='action-value'])[2]"));
-
-        secondStep.click();
-        secondStep.sendKeys(Keys.CONTROL,"a");
-        secondStep.sendKeys(Keys.DELETE);
-
+        SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
+        secondStep .click();
+        secondStep .sendKeys(Keys.CONTROL,"a");
+        secondStep .sendKeys(Keys.DELETE);
 
         switch (value){
             case ("5"):
-                secondStep.setValue(value);
+                secondStep .setValue(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
                 break;
-            case (".3"):
-
-                secondStep.sendKeys(value);
-                $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
-                break;
-
+            case ("3."):
             case (".2"):
-                secondStep.sendKeys(value);
+                secondStep .sendKeys(value);
                 $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
                 break;
             case("-1"):
-                secondStep.sendKeys(value);
+                secondStep .sendKeys(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')][2]")).isDisplayed();
                 break;
             default:
@@ -639,8 +638,7 @@ public class RecipePage {
     }
     public void createPhaseWithShortcutKey() {
         $(By.xpath(String.format(stepCountPlaceholder, "2"))).click();
-        $(By.xpath(String.format(stepCountPlaceholder, "2"))).sendKeys(Keys.LEFT_CONTROL + "g");
-
+        stepAction.keyDown(Keys.LEFT_CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
     }
     public void maxPhaseWarningMessage(String message){
         Assert.assertEquals("Warning message:", message, maxPhaseWarningMessage.getText());
@@ -651,9 +649,9 @@ public class RecipePage {
         $(By.xpath("//span[text()='abvcdf']")).doubleClick();
     }
     public void copyPastePhase(){
-
-        $(By.xpath("//label[text()='Phase 1']")).click();
+        $(By.xpath(String.format(phaseName, "Phase 1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
         stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
     }
+
 }

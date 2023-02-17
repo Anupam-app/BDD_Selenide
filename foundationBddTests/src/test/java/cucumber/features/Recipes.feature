@@ -153,7 +153,7 @@ Feature: Recipe management
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
-
+ @test
   Scenario:BIOFOUND-19474|FT_CF_Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I go to recipe page
     When I trigger edit mode
@@ -176,8 +176,6 @@ Feature: Recipe management
     Given I go to recipe page
     And I edit recipe "maxPhaseRecipe"
     #the maximum number of phases allowed in the recipe is 19
-    When I add new action step using Keyboard event
-    And I add "Setpoint" action to the step
     When I create phase with shortcut key
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
     When I add Phases from phase library to recipe
