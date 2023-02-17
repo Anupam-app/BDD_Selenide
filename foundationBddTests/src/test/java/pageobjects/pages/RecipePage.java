@@ -11,7 +11,6 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import dataobjects.Report;
 
-import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -518,14 +517,13 @@ public class RecipePage {
     }
 
     public void addActionStep(String action) {
-
         if(action.equalsIgnoreCase("Setpoint")) {
 
             for (WebElement placeholder : placeholders) {
                 if (placeholder.getAttribute("value").isEmpty()) {
                     placeholder.click();
                     placeholder.clear();
-                    placeholder.sendKeys(action);
+                    placeholder.sendKeys("Setpoint");
                     placeholder.sendKeys(Keys.ENTER);
                     break;
                 }
@@ -610,22 +608,22 @@ public class RecipePage {
     public void inValidValueAndErrorMessageOfThreshold(String value){
 
         SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
-        secondStep .click();
-        secondStep .sendKeys(Keys.CONTROL,"a");
-        secondStep .sendKeys(Keys.DELETE);
+        secondStep.click();
+        secondStep.sendKeys(Keys.CONTROL,"a");
+        secondStep.sendKeys(Keys.DELETE);
 
         switch (value){
             case ("5"):
-                secondStep .setValue(value);
+                secondStep.setValue(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
                 break;
             case ("3."):
             case (".2"):
-                secondStep .sendKeys(value);
+                secondStep.sendKeys(value);
                 $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
                 break;
             case("-1"):
-                secondStep .sendKeys(value);
+                secondStep.sendKeys(value);
                 $(By.xpath("//div[contains(text(),'Out of Range.')][2]")).isDisplayed();
                 break;
             default:
