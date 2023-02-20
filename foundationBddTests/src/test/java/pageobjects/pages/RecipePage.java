@@ -645,7 +645,7 @@ public class RecipePage {
     }
     public void addPhaseFromLibrary(){
         phaseLibrary.click();
-        $(By.xpath("(//span[text()='Phase123'])")).doubleClick();
+        $(By.xpath("//span[text()='Phase123']")).doubleClick();
     }
     public void copyPastePhase(){
         $(By.xpath(String.format(phaseName, "Phase 1"))).click();
