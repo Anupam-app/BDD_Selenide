@@ -110,7 +110,7 @@ Feature: Recipe console
     And I start recipe execution
     And I click on jump step "10"
     Then I should see error message about recipe step
-  @test
+
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
     When I expand recipe console in pnid
     And I load recipe "testRecipeFlows"
