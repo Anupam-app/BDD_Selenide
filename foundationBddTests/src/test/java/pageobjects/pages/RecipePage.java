@@ -558,7 +558,7 @@ public class RecipePage {
         messageStepVaidate.waitUntil(visible, 1000).isDisplayed();
     }
 
-    public void addingPhaseByPlus() {
+    public void addingStepByClickPlusIcon() {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
     }
@@ -645,7 +645,7 @@ public class RecipePage {
     }
     public void addPhaseFromLibrary(){
         phaseLibrary.click();
-        $(By.xpath("//span[text()='abvcdf']")).doubleClick();
+        $(By.xpath("(//span[text()='Phase123'])")).doubleClick();
     }
     public void copyPastePhase(){
         $(By.xpath(String.format(phaseName, "Phase 1"))).click();

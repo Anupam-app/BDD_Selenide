@@ -276,9 +276,9 @@ public class RecipePageStepsDefinition {
         recipePage.messageInputStepValidate();
     }
 
-    @And("I create a new phase in recipe")
+    @And("I create a new step in recipe")
     public void newPhase() {
-        recipePage.addingPhaseByPlus();
+        recipePage.addingStepByClickPlusIcon();
     }
 
     @And("I add criteria to phase using keyboard")
