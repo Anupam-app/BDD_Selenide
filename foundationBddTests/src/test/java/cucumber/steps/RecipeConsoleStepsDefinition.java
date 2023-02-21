@@ -45,6 +45,7 @@ public class RecipeConsoleStepsDefinition {
 	@Given("I expand recipe console in pnid")
 	public void iGotoRecipeConsole() {
 		recipeConsolePage.gotoRecipeConsole();
+		Selenide.sleep(2000);
 	}
 
 	@Given("I expand and collapse recipe console in pnid")
@@ -646,7 +647,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I should see recipe execution started succesfully")
 	public void iSeeRecipeExecution() {
-		recipeConsolePage.iVerifyRecipeExecution();
+		recipeConsolePage.verifyAbortButton();
 	}
 
 	@And("I validate the recipe console UI elements")

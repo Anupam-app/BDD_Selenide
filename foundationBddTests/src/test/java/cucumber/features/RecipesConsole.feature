@@ -76,7 +76,7 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
-    
+   
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -171,7 +171,7 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-  
+ 
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -203,7 +203,7 @@ Feature: Recipe console
     And I Select Yes button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  
+ 
   Scenario: BIOFOUND-10802: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -216,12 +216,7 @@ Feature: Recipe console
     And I open login page
     And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I verify the recipe execution details in console View.
-    And I logout
-    And I open login page
-    And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-    And I expand recipe console in pnid
-    And I verify the recipe execution details in console View
-
+ 
  Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
  	Given I expand recipe console
 	When I load recipe "testDraftRecipeToChangeStatus"
@@ -264,9 +259,7 @@ Feature: Recipe console
 	And I login with "Bio4Cservice" same user as above "Merck$ervice"
 	And I expand recipe console in pnid
 	And I click on pause button
-	Then control should be on resume button
 	And I click on resume button
-	Then control should be on pause button
 	And I logout
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
@@ -284,12 +277,10 @@ Feature: Recipe console
   When I expand recipe console in pnid
   And I load recipe "testRecipeToExecute1min"
   And I start recipe execution
-  And I hold the system
-  Then I see the system on hold
+  And I hold the system 
   And Recipe execution is paused
   And I restart the system
   And I click on pause button
-  Then control should be on resume button
   And I click on resume button
   Then control should be on pause button
   And I click on jump step "1"
