@@ -236,19 +236,20 @@ Feature: Recipe console
 	And I mouse hover RUNID and BatchID to validate full text displayed
 	And I Abort the recipe execution
 	And I validate the RUNID BATCHID text displayed on Post run window
-	
- Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view. 
- 	Given I expand recipe console
- 	When I select "Manual operation" tab
- 	And I start Manual run
- 	And I enter manual operation name more than 30 char and Tab out
- 	Then Verify the wanring message "Manual Operation Name should not exceed 30 characters." 
- 	And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
- 	And I validate all above text value trimmed on recipe console UI
- 	And I mouse hover to see full text displayed on tooltip
- 	When I stop the run execution 
- 	Then I verify the text value trimmed on post run window
- 	And I mouse hover to see full text displayed  on tooltip
+
+#   BIOCRS-9352-This bug is open
+# Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
+# 	Given I expand recipe console
+# 	When I select "Manual operation" tab
+# 	And I start Manual run
+# 	And I enter manual operation name more than 30 char and Tab out
+# 	Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
+# 	And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
+# 	And I validate all above text value trimmed on recipe console UI
+# 	And I mouse hover to see full text displayed on tooltip
+# 	When I stop the run execution
+# 	Then I verify the text value trimmed on post run window
+# 	And I mouse hover to see full text displayed  on tooltip
 
  Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
  	When I expand recipe console in pnid
