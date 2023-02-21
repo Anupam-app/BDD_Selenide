@@ -220,7 +220,6 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.seeSystemOnRestart();
     }
 
-
     @Then("I should see the recipe run {string}")
     public void iVerifyRecipeAbort(String status) throws InterruptedException {
         if (status.equalsIgnoreCase("Aborted")) {
@@ -301,9 +300,10 @@ public class RecipeConsoleStepsDefinition {
     @When("I select {string} tab")
     public void recipeOperation(String status) {
         if (status.equalsIgnoreCase("Manual operation")) {
-            if (true) {
                 recipeConsolePage.manualOperation("enabled");
-            }
+        }
+        else if(status.equalsIgnoreCase("Recipe Run")){
+                recipeConsolePage.recipeRun("enabled");
         }
     }
 
@@ -572,5 +572,10 @@ public class RecipeConsoleStepsDefinition {
     @And("I see Recipe should be executed")
     public void iSeeRecipeShouldBeExecuted() {
         Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+    }
+
+    @And("I stop the manual run after waiting for {int} sec time and close the post run window")
+    public void stopManualRunAfterSec(int second){
+       recipeConsolePage.stopManualRunAfterSecond(second);
     }
 }

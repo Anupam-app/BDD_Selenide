@@ -10,7 +10,9 @@ import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import dataobjects.Report;
-import java.awt.AWTException;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -20,6 +22,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -110,6 +113,12 @@ public class RecipePage {
     private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
 
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
+    private final SelenideElement stepDelete = $(By.xpath("//input[@value='X']"));
+    private final ElementsCollection placeholders = $$(By.xpath("//input[@placeholder='Search instruments and actions...']"));
+    private final SelenideElement maxPhaseWarningMessage = $(By.xpath("//div[contains(text(),'Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed.')]"));
+    private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
+
+    String phaseName = "//label[text()='%s']";
 
     public void goTo() {
         recipePageLinkText.click();
@@ -305,8 +314,8 @@ public class RecipePage {
 
     public void checkNotification(String notification) {
         notificationTexts.shouldHave(
-                CollectionCondition.anyMatch("User notification should contain this notification"
-                        , n -> n.getText().equals(notification)));
+            CollectionCondition.anyMatch("User notification should contain this notification"
+                , n -> n.getText().equals(notification)));
     }
 
     public void notificationMessageExport(String recipeName) {
@@ -477,8 +486,8 @@ public class RecipePage {
                     String endDateRow = startDateRep.getText().split(" ")[0].trim();
                     Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
                     if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-                            && (selectedDesendingDate.equals(selectedDate2)
-                            || selectedDesendingDate.before(selectedDate2))) {
+                        && (selectedDesendingDate.equals(selectedDate2)
+                        || selectedDesendingDate.before(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -491,7 +500,7 @@ public class RecipePage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllRecipeColumnHeaders(), columnName,
-                descending, getRecipeColumns, columnName.equals("Last Modified On"), Report.RECIPE_DATE_FORMAT);
+            descending, getRecipeColumns, columnName.equals("Last Modified On"), Report.RECIPE_DATE_FORMAT);
         switchTo().parentFrame();
     }
 
@@ -508,11 +517,26 @@ public class RecipePage {
         }
     }
 
-    public void addActionStep() {
-        stepPlaceholder.click();
-        stepPlaceholder.clear();
-        stepPlaceholder.sendKeys("Setpoint");
-        stepPlaceholder.sendKeys(Keys.ENTER);
+    public void addActionStep(String action) {
+        if(action.equalsIgnoreCase("Setpoint")) {
+
+            for (WebElement placeholder : placeholders) {
+                if (placeholder.getAttribute("value").isEmpty()) {
+                    placeholder.click();
+                    placeholder.clear();
+                    placeholder.sendKeys("Setpoint");
+                    placeholder.sendKeys(Keys.ENTER);
+                    break;
+                }
+            }
+        }
+        else if (action.equalsIgnoreCase("Threshold")) {
+            stepPlaceholder.click();
+            stepPlaceholder.clear();
+            stepPlaceholder.sendKeys("Threshold");
+            stepPlaceholder.sendKeys(Keys.ENTER);
+        }
+
     }
 
     public void addStepActionBrowser() {
@@ -534,7 +558,7 @@ public class RecipePage {
         messageStepVaidate.waitUntil(visible, 1000).isDisplayed();
     }
 
-    public void addingPhaseByPlus() {
+    public void addingStepByClickPlusIcon() {
         plusButton.waitUntil(Condition.visible, 5000l);
         plusButton.click();
     }
@@ -561,7 +585,7 @@ public class RecipePage {
     }
 
     public void warningMessage(String message) {
-    	switchTo().frame("CrossDomainiframeId");
+        switchTo().frame("CrossDomainiframeId");
         commonWaiter($(By.xpath("//label[text()='Approved-InActive']")),visible).click();
         String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
         Assert.assertEquals(actual, message);
@@ -572,5 +596,61 @@ public class RecipePage {
         recipeManagementHeader.shouldBe(visible);
     }
 
+    public void outOfRangeValue(){
+        $(By.xpath("//input[@type='text' and @data-label='action-value']")).click();
+        $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys("8000");
+
+    }
+
+    public void outOfRangeErrorMessage(){
+        commonWaiter($(By.xpath("//div[contains(text(),'Out of Range.')]")),visible);
+    }
+
+    public void inValidValueAndErrorMessageOfThreshold(String value){
+
+        SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
+        secondStep.click();
+        secondStep.sendKeys(Keys.CONTROL,"a");
+        secondStep.sendKeys(Keys.DELETE);
+
+        switch (value){
+            case ("5"):
+                secondStep.setValue(value);
+                $(By.xpath("//div[contains(text(),'Out of Range.')]")).isDisplayed();
+                break;
+            case ("3."):
+            case (".2"):
+                secondStep.sendKeys(value);
+                $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).isDisplayed();
+                break;
+            case("-1"):
+                secondStep.sendKeys(value);
+                $(By.xpath("//div[contains(text(),'Out of Range.')][2]")).isDisplayed();
+                break;
+            default:
+        }
+    }
+    public void verifyErrorMessageOfChangeStatus(String message){
+        statusDraft.click();
+        String actualMessage = $(By.xpath("//div[contains(text(),'Recipe has errors. Cannot change status.')]")).getText();
+        Assert.assertEquals(actualMessage,message);
+    }
+    public void createPhaseWithShortcutKey() {
+        $(By.xpath(String.format(stepCountPlaceholder, "2"))).click();
+        stepAction.keyDown(Keys.LEFT_CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
+    }
+    public void maxPhaseWarningMessage(String message){
+        Assert.assertEquals("Warning message:", message, maxPhaseWarningMessage.getText());
+        $(By.xpath("//button[text()='Ok']")).click();
+    }
+    public void addPhaseFromLibrary(){
+        phaseLibrary.click();
+        $(By.xpath("//span[text()='Phase123']")).doubleClick();
+    }
+    public void copyPastePhase(){
+        $(By.xpath(String.format(phaseName, "Phase 1"))).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+    }
 
 }

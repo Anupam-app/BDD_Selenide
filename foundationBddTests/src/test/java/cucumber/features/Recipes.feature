@@ -133,7 +133,7 @@ Feature: Recipe management
     When I trigger edit mode
     When I add new action step using Keyboard event
     Then I should see "blank" step added
-    And I add action to the step
+    And I add "Setpoint" action to the step
 
   Scenario: BIOFOUND-3768| Create step using Action browser
     Given I go to recipe page
@@ -146,10 +146,38 @@ Feature: Recipe management
   Scenario: BIOFOUND-3768| Create new phase
     Given I go to recipe page
     When I trigger edit mode
-    And I create a new phase in recipe
-    And I add action to the step
+    And I create a new step in recipe
+    And I add "Setpoint" action to the step
    #And I add recipe action from phase library ("Already a recipe should be there in phase library")
     And I add criteria to phase using keyboard
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
+
+  Scenario:BIOFOUND-19474|FT_CF_Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+    Given I go to recipe page
+    When I trigger edit mode
+    When I add new action step using Keyboard event
+    And I add "Threshold" action to the step
+    And I try to change the setpoint value to out of range
+    Then I verify error message displayed
+    And I add new action step using Keyboard event
+    And I add "Setpoint" action to the step
+    And I Validate the error message for below input values
+        |5   |
+        |3.  |
+        |.2  |
+        |-1  |
+    And I save the recipe with name "errorRecipe"
+    And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+
+  Scenario:BIOFOUND-27906 |Maximum Phases
+    Given I go to recipe page
+    And I edit recipe "maxPhaseRecipe"
+    #the maximum number of phases allowed in the recipe is 19
+    When I create phase with shortcut key
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+    When I add Phases from phase library to recipe
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+    When I try to copy and paste the phase
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
