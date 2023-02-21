@@ -13,7 +13,7 @@ Feature: Analytics creation
     And I validate the analytics creation
     Then I see my changes in analytics aggregate
 
-  Scenario: Aggregate creation while recipe run is in progress
+  Scenario: BIOCRS-5969 Aggregate creation while recipe run is in progress
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToVerifyAnalytics" and pause it during 10 seconds
     When I create an analytics aggregate
