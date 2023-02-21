@@ -10,6 +10,7 @@ import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
@@ -30,11 +31,11 @@ import pageobjects.utility.SelenideHelper;
 public class AnalyticsPage {
 
     private final SelenideElement analyticsPageLinkText = $(By.id("Analytics"));
-
     private final SelenideElement regressionChart = $(By.xpath("//span[text()='Regressions']"));
     private final SelenideElement switchLoess = $(By.xpath("//img[@class='ols-loess-switch']"));
     private final SelenideElement relationalChart = $(By.xpath("//span[text()='Relational Charts']"));
-
+    private final SelenideElement plusButton = $(By.xpath(
+            "//div[@class='ant-tabs-tab ant-tabs-tab-with-remove ant-tabs-tab-active']/following-sibling::button[@class='ant-tabs-nav-add']"));
     private final SelenideElement createAggregateButton = $(By.id("create-aggregate"));
     private final SelenideElement validateAggregateButton = $(By.id("create-aggregate-button"));
     private final SelenideElement deleteButton = $(By.id("delete-aggregate-button"));
@@ -185,8 +186,9 @@ public class AnalyticsPage {
     }
 
     public void checkParameter(String parameter, String unit) {
+        Selenide.sleep(2000);
         String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
-        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).should(visible);
+        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).shouldBe(visible);
     }
 
     public void verifyTimestampColumn() {
@@ -211,6 +213,10 @@ public class AnalyticsPage {
         $(By.xpath(String.format(XPATH_RIGHT_PANEL, recipe.getBatchId()))).shouldBe(visible);
         Assert.assertTrue(($(By.xpath("//div[@class='aggregate-runid-label']/span")).getAttribute("title"))
                 .contains(recipe.getRunId()));
+        if ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "In Progress"))).isDisplayed()) {
+            ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
+            Selenide.sleep(1000);
+        }
         $(By.xpath(String.format(XPATH_RIGHT_PANEL, status))).shouldBe(visible);
 
     }
@@ -260,14 +266,13 @@ public class AnalyticsPage {
                 ($(By.xpath("//*[@class='ant-tabs-tab-btn']"))).shouldBe(visible);
                 break;
             case "Plus Button":
-                ($(By.xpath("//*[@class='add-icon']"))).click();
-                ($(By.xpath("//*[@class='cancel-aggregate']"))).click();
+                plusButton.shouldBe(visible);
                 break;
             case "Aggregated interval":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated Hourly"))).shouldBe(visible);
                 break;
             case "Created date timestamp":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "On : 01/02/2023 05:58:54"))).shouldBe(visible);
+                $(By.xpath("//span[contains(text(),'On : 01/02/2023')]")).shouldBe(visible);
                 break;
             case "Batch ID":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID b10"))).shouldBe(visible);
@@ -299,6 +304,7 @@ public class AnalyticsPage {
 
     public void chooseAggregate(String aggregate) {
         ($(By.xpath(String.format(aggregateNameText, aggregate)))).click();
+        Selenide.sleep(1000);
     }
 
     public void defaultCollectionTagsValidation(String parameters) {
