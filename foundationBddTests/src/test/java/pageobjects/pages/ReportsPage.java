@@ -972,5 +972,8 @@ public class ReportsPage {
         return result;
     }
 
-
+    public void iVerifyReportPageLoaded()
+    {
+        reportSearch.waitUntil(visible,1000l,500l);
+    }
 }

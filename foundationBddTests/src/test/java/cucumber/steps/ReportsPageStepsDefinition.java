@@ -48,6 +48,7 @@ public class ReportsPageStepsDefinition {
     public void iGotoReportManagementPage() {
         reportPage.goToReports();
         reportPage.switchToFrame();
+        reportPage.iVerifyReportPageLoaded();
     }
 
     @Then("I see Runs, Templates, Reports tabs are displayed")
@@ -184,6 +185,7 @@ public class ReportsPageStepsDefinition {
         reportPage.goToReports();
         reportPage.switchToFrame();
         this.reportTemplate.setName(report);
+        reportPage.iVerifyReportPageLoaded();
         reportPage.selectReport(report);
         reportPage.selectUserOnRunPage(user);
     }
