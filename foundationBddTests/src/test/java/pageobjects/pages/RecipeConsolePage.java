@@ -221,6 +221,7 @@ public class RecipeConsolePage {
 
 	public String startRecipe(Recipe recipe) {
 		//take clear panel css class when disabled
+		clearRecipeButton.waitUntil(visible,15000l,1000l);
 		var classClearRecipeButton = clearRecipeButton.getAttribute("class");
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
