@@ -140,6 +140,7 @@ public class ReportsPage {
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
     private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+    private final SelenideElement searchTextReportManagement = $(By.id("search"));
 
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -974,6 +975,6 @@ public class ReportsPage {
 
     public void iVerifyReportPageLoaded()
     {
-        reportSearch.waitUntil(visible,1000l,500l);
+        searchTextReportManagement.waitUntil(visible,500l,500l);
     }
 }

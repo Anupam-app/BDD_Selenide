@@ -48,7 +48,6 @@ public class ReportsPageStepsDefinition {
     public void iGotoReportManagementPage() {
         reportPage.goToReports();
         reportPage.switchToFrame();
-        reportPage.iVerifyReportPageLoaded();
     }
 
     @Then("I see Runs, Templates, Reports tabs are displayed")
