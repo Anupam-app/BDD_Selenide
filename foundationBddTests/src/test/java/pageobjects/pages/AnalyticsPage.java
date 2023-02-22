@@ -51,6 +51,7 @@ public class AnalyticsPage {
 
     private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+
     public void goToAnalytics() {
         analyticsPageLinkText.click();
     }
