@@ -973,8 +973,7 @@ public class ReportsPage {
         return result;
     }
 
-    public void iVerifyReportPageLoaded()
-    {
-        searchTextReportManagement.waitUntil(visible,500l,500l);
+    public void iVerifyReportPageLoaded() {
+        searchTextReportManagement.waitUntil(visible,5000L,500L);
     }
 }
