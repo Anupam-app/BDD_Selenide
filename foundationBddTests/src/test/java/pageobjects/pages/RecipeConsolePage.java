@@ -24,6 +24,7 @@ import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipeConsolePage {
+	
 	Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
 
 	private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
@@ -36,7 +37,6 @@ public class RecipeConsolePage {
 	private final SelenideElement postRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
 	private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
 
-	//private final SelenideElement expandIcon = $(By.xpath("//img[@class='jss9']"));
 	private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
 	private final SelenideElement expandIcon = $(By.xpath("//img[contains(@class,'jss') and contains(@src,'Tab')]"));
 	private final SelenideElement manualOperations = $(By.xpath("//span[text()='MANUAL OPERATION']"));
@@ -147,11 +147,14 @@ public class RecipeConsolePage {
 	}
 
 	public void gotoRecipeConsole() {
-		if(expandIcon.isDisplayed()) {
-			SelenideHelper.commonWaiter(expandIcon, visible).click();
-		}
-	}
-
+        if (!collapseIcon.isDisplayed()) {
+            SelenideHelper.commonWaiter(expandIcon, visible).click();
+        }
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+        }
+    }
+	
 	public void collapseRecipeConsole() {
 		SelenideHelper.commonWaiter(collapseIcon, visible).click();
 	}
@@ -376,6 +379,7 @@ public class RecipeConsolePage {
 		preRunCommentsText.sendKeys(beforeComments);
 		okButton.click();
 	}
+	
 	public void manualRunStart(String productId, String batchId, String beforeComments) {
 
 		if (manualStopButton.isDisplayed()) {
@@ -433,7 +437,6 @@ public class RecipeConsolePage {
 		int minSecondTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
 		int differ = (minSecondTime * 60 + secondTime) - (minFirstTime * 60 + fristTime);
 		Assert.assertTrue(differ >= 2);
-
 	}
 
 	public void stopButton() {
@@ -574,7 +577,6 @@ public class RecipeConsolePage {
 		runIdTextbox.sendKeys(value);
 		Selenide.sleep(2000);
 		runIdTextbox.sendKeys(Keys.ENTER);
-
 	}
 
 	public void uniqBatchId(String batchId) {
@@ -632,7 +634,6 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(value);
 		SelenideHelper.commonWaiter(okButton, visible).click();
-
 	}
 
 	public void iValidateSpecialChar_run(String runId, String batchId, String productId, String value) {
@@ -664,7 +665,6 @@ public class RecipeConsolePage {
 		}
 		loadRecipeText.click();
 		loadButton.waitUntil(Condition.visible, 20000l);
-
 	}
 
 	public boolean verifyRecipeDetails(String batch_Id) {
@@ -1030,5 +1030,11 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(abortButton, visible).click();
 		clickYesButton.waitUntil(Condition.visible, 1000).click();
 	} 
+  
+    public void stopManualRunAfterSecond ( int second){
+            manualStopButton.waitUntil(Condition.visible, second * 1001);
+            closeButtonOfStop.click();
+            postRunWindow.waitUntil(Condition.disappear, 1000).shouldNot(visible);
+    }
 
-}
+ }

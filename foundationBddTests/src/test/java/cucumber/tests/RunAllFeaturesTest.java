@@ -9,5 +9,6 @@ import io.cucumber.junit.CucumberOptions;
 @RunWith(NeodymiumCucumberRunner.class)
 @CucumberOptions(features = "src/test/java/cucumber/features/", glue = "cucumber", monochrome = true,
         plugin = {"pretty", "html:target/cucumber-report.html"})
+
 public class RunAllFeaturesTest {
 }

@@ -292,13 +292,14 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@When("I select {string} tab")
-	public void recipeOperation(String status) {
-		if (status.equalsIgnoreCase("Manual operation")) {
-			if (true) {
-				recipeConsolePage.manualOperation("enabled");
-			}
-		}
-	}
+    public void recipeOperation(String status) {
+        if (status.equalsIgnoreCase("Manual operation")) {
+                recipeConsolePage.manualOperation("enabled");
+        }
+        else if(status.equalsIgnoreCase("Recipe Run")){
+                recipeConsolePage.recipeRun("enabled");
+        }
+    }
 
 	@When("I resume and verify recipe execution is resumed")
 	public void resumeStatus() {
@@ -755,4 +756,9 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.iVerifyRecipeConsoleElement();
 		recipeConsolePage.checkButton();
 	}
+	
+    @And("I stop the manual run after waiting for {int} sec time and close the post run window")
+    public void stopManualRunAfterSec(int second){
+       recipeConsolePage.stopManualRunAfterSecond(second);
+    }
 }

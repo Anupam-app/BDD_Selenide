@@ -121,7 +121,8 @@ Feature: Recipe console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
+    # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
+  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
     Then I verify Manual Operation tab is "enabled"
@@ -162,7 +163,7 @@ Feature: Recipe console
     Then I should see the recipe run aborted
     And I verify Manual Operation tab is "enabled"
 
-  Scenario: BIOCRS-4047 Verify state of Manual Operation tab when Recipe execution is in progress
+  Scenario: BIOCRS-4047|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     When I Process hold the system
@@ -171,7 +172,8 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
- 
+    
+    # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab
@@ -186,7 +188,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
- 
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console
     When I Select Process Hold
@@ -345,4 +347,8 @@ Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorise
 	And I open login page
 	And I login with "reportUnauthUser" same user as above "MerckApp1@"
 	Then I verify recipe console expand is disabled
-  
+  And I logout
+  And I open login page
+  And I login with "Bio4CAdmin" same user as above "Merck@dmin"
+  And I expand recipe console in pnid
+  And I verify the recipe execution details in console View
