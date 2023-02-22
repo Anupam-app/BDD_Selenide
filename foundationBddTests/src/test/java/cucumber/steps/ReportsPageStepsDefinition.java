@@ -184,6 +184,7 @@ public class ReportsPageStepsDefinition {
         reportPage.goToReports();
         reportPage.switchToFrame();
         this.reportTemplate.setName(report);
+        reportPage.iVerifyReportPageLoaded();
         reportPage.selectReport(report);
         reportPage.selectUserOnRunPage(user);
     }
