@@ -186,9 +186,8 @@ public class AnalyticsPage {
     }
 
     public void checkParameter(String parameter, String unit) {
-        Selenide.sleep(2000);
         String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
-        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).waitUntil(visible, 10000);
     }
 
     public void verifyTimestampColumn() {
@@ -213,12 +212,13 @@ public class AnalyticsPage {
         $(By.xpath(String.format(XPATH_RIGHT_PANEL, recipe.getBatchId()))).shouldBe(visible);
         Assert.assertTrue(($(By.xpath("//div[@class='aggregate-runid-label']/span")).getAttribute("title"))
                 .contains(recipe.getRunId()));
-        if ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "In Progress"))).isDisplayed()) {
-            ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
-            Selenide.sleep(1000);
+        if (status.equals("Completed")) {
+            while ($(By.xpath("//img[@class='aggregate-refresh']")).isDisplayed()) {
+                ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
+                Selenide.sleep(1000);
+            }
         }
         $(By.xpath(String.format(XPATH_RIGHT_PANEL, status))).shouldBe(visible);
-
     }
 
     public void deleteIfExists(String aggregateName) {
@@ -247,50 +247,50 @@ public class AnalyticsPage {
 
         switch (options) {
             case "Create an Aggregate":
-                createAggregateButton.shouldBe(visible);
+                createAggregateButton.waitUntil(visible, 5000);
                 break;
             case "expandButton":
-                expandButton.shouldBe(visible);
+                expandButton.waitUntil(visible, 5000);
                 break;
             case "My Aggregates":
-                myAggregateHeader.shouldBe(visible);
-                ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "testAggregate")))).shouldBe(visible);
+                myAggregateHeader.waitUntil(visible, 5000);
+                ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "testAggregate")))).waitUntil(visible, 5000);
                 break;
             case "Data":
-                clickOnData.shouldBe(visible);
+                clickOnData.waitUntil(visible, 5000);
                 break;
             case "Graph":
-                ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "Graph")))).shouldBe(visible);
+                ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "Graph")))).waitUntil(visible, 5000);
                 break;
             case "aggregate tab":
-                ($(By.xpath("//*[@class='ant-tabs-tab-btn']"))).shouldBe(visible);
+                ($(By.xpath("//*[@class='ant-tabs-tab-btn']"))).waitUntil(visible, 5000);
                 break;
             case "Plus Button":
-                plusButton.shouldBe(visible);
+                plusButton.waitUntil(visible, 5000);
                 break;
             case "Aggregated interval":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated Hourly"))).shouldBe(visible);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated Hourly"))).waitUntil(visible, 5000);
                 break;
             case "Created date timestamp":
-                $(By.xpath("//span[contains(text(),'On : 01/02/2023')]")).shouldBe(visible);
+                $(By.xpath("//span[contains(text(),'On : 01/02/2023')]")).waitUntil(visible, 5000);
                 break;
             case "Batch ID":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID b10"))).shouldBe(visible);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID b10"))).waitUntil(visible, 5000);
                 break;
             case "RUN ID":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Run ID recipe4sec2202..."))).shouldBe(visible);
                 break;
             case "Status":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Status Completed"))).shouldBe(visible);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Status Completed"))).waitUntil(visible, 5000);
                 break;
             case "Relational Charts with expand/collapse option":
-                relationalDropdownSelection.shouldBe(visible);
+                relationalDropdownSelection.waitUntil(visible, 5000);
                 break;
             case "Regression Charts with expand/collapse option":
-                regressionDropdownSelection.shouldBe(visible);
+                regressionDropdownSelection.waitUntil(visible, 5000);
                 break;
             case "Delete":
-                deleteIcon.shouldBe(visible);
+                deleteIcon.waitUntil(visible, 5000);
                 break;
             default:
         }
@@ -304,7 +304,6 @@ public class AnalyticsPage {
 
     public void chooseAggregate(String aggregate) {
         ($(By.xpath(String.format(aggregateNameText, aggregate)))).click();
-        Selenide.sleep(1000);
     }
 
     public void defaultCollectionTagsValidation(String parameters) {
