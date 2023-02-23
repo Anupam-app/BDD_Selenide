@@ -1,4 +1,4 @@
-@CRS @IVI @TEST
+@CRS @IVI @RecipeConsole
 Feature: Recipe console
 
   Background:
@@ -347,8 +347,8 @@ Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorise
 	And I open login page
 	And I login with "reportUnauthUser" same user as above "MerckApp1@"
 	Then I verify recipe console expand is disabled
-  And I logout
-  And I open login page
-  And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-  And I expand recipe console in pnid
-  And I verify the recipe execution details in console View
+	And I logout
+	And I open login page
+	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
+	And I expand recipe console in pnid
+	And I verify the recipe execution details in console View
