@@ -9,6 +9,7 @@ import dataobjects.Recipe;
 import java.util.List;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
@@ -49,6 +50,7 @@ public class AnalyticsPage {
     private final int INDEX_INTERVAL_ID = 3;
 
     private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToAnalytics() {
         analyticsPageLinkText.click();
@@ -60,6 +62,7 @@ public class AnalyticsPage {
 
     public void selectAggregate(String aggregateName) {
         $(By.xpath(String.format(aggregateNameText, aggregateName))).click();
+        spinnerComponent.spinnerIcon.waitUntil(not(visible),30000l,500l);
     }
 
     public void lineGraph(String xparameterName) {

@@ -24,7 +24,7 @@ import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class RecipeConsolePage {
-	
+
 	Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
 
 	private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
@@ -147,14 +147,14 @@ public class RecipeConsolePage {
 	}
 
 	public void gotoRecipeConsole() {
-        if (!collapseIcon.isDisplayed()) {
-            SelenideHelper.commonWaiter(expandIcon, visible).click();
-        }
-        if (restartButton.isDisplayed()) {
-            restartSystem();
-        }
-    }
-	
+		if (!collapseIcon.isDisplayed()) {
+			SelenideHelper.commonWaiter(expandIcon, visible).click();
+		}
+		if (restartButton.isDisplayed()) {
+			restartSystem();
+		}
+	}
+
 	public void collapseRecipeConsole() {
 		SelenideHelper.commonWaiter(collapseIcon, visible).click();
 	}
@@ -380,7 +380,7 @@ public class RecipeConsolePage {
 		preRunCommentsText.sendKeys(beforeComments);
 		okButton.click();
 	}
-	
+
 	public void manualRunStart(String productId, String batchId, String beforeComments) {
 
 		if (manualStopButton.isDisplayed()) {
@@ -391,8 +391,8 @@ public class RecipeConsolePage {
 		commonWaiter(manualStartButton, appear);
 		manualStartButton.click();
 		if(manualWindowPopup.exists()) {
-		Assert.assertEquals("warning pop displayed: ","Recipe is already loaded",manualWindowPopup.getText());
-		manualWindowPopup_Btn.click();
+			Assert.assertEquals("warning pop displayed: ","Recipe is already loaded",manualWindowPopup.getText());
+			manualWindowPopup_Btn.click();
 		}
 		this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
 		manualOperationName.sendKeys(this.recipe.getMachineName());
@@ -1031,11 +1031,10 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(abortButton, visible).click();
 		clickYesButton.waitUntil(Condition.visible, 1000).click();
 	} 
-  
-    public void stopManualRunAfterSecond ( int second){
-            manualStopButton.waitUntil(Condition.visible, second * 1001);
-            closeButtonOfStop.click();
-            postRunWindow.waitUntil(Condition.disappear, 1000).shouldNot(visible);
-    }
 
- }
+	public void stopManualRunAfterSecond ( int second){
+		manualStopButton.waitUntil(Condition.visible, second * 1001);
+		closeButtonOfStop.click();
+		postRunWindow.waitUntil(Condition.disappear, 1000).shouldNot(visible);
+	}
+}
