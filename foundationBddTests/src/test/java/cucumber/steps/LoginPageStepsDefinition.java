@@ -85,7 +85,7 @@ public class LoginPageStepsDefinition {
         if (ContextHelper.isOrchestrator()) {
             homepage.open();
             login.setLogin(username);
-            login.setPassword("MerckApp1@");
+            login.setPassword("Merck@dmin");
             loginPage.setUser(login.getLogin());
             loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
@@ -94,7 +94,7 @@ public class LoginPageStepsDefinition {
             loginPage.waitPnidLoading();
             loginPage.openLogin();
             login.setLogin(username);
-            login.setPassword("MerckApp1@");
+            login.setPassword("Merck@dmin");
             loginPage.setUser(login.getLogin());
             loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
