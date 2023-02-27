@@ -217,7 +217,7 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@Then("I should see the recipe run {string}")
-	public void iVerifyRecipeAbort(String status) throws InterruptedException {
+	public void iVerifyRecipeAbort(String status)  {
 		if (status.equalsIgnoreCase("Aborted")) {
 			Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
 			recipeConsolePage.clickOnOk();
@@ -233,7 +233,7 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@Then("I should see error message about recipe step")
-	public void errorMessageOfJumpStep() throws InterruptedException {
+	public void errorMessageOfJumpStep()  {
 		recipeConsolePage.jumpStepErrorMessage();
 		recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
 	}
@@ -332,7 +332,7 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@Then("I validate the date formats in Post run window and enter comments")
-	public void validatePostRun() throws ParseException {
+	public void validatePostRun()  {
 		recipeConsolePage.verifyPostRunDate();
 	}
 
@@ -353,13 +353,13 @@ public class RecipeConsoleStepsDefinition {
 
 	@Then("I should not see unapproved recipe")
 	public void iverifyunApprovedRecipe() {
-		Assert.assertTrue(recipeConsolePage.verifyApprovedRecipe());
+		recipeConsolePage.verifyApprovedRecipe();
 		recipeConsolePage.clickOnClose();
 	}
 
 	@Then("I should see recipe name and recipe steps details")
 	public void iverifyRecipeNameandRecipeSteps() {
-		Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
+		recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
 	}
 
 	@Then("I should see start button is displayed")
@@ -385,8 +385,8 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@Then("I should see {string} message")
-	public void iseemessage(String message) {
-		recipeConsolePage.validateHilightedMsg(message);
+	public void iSeeMessage(String message) {
+		recipeConsolePage.validateHighlightedMsg(message);
 	}
 
 	@When("I enter existing value in RUNID")
@@ -428,11 +428,6 @@ public class RecipeConsoleStepsDefinition {
 	@Given("I click on load recipe")
 	public void clickOnLoadRecipe() {
 		recipeConsolePage.clickOnLoadRecipe();
-	}
-
-	@Then("I should see again recipe name and recipe steps details")
-	public void iVerifyStepsInConsol() {
-		recipeConsolePage.verifyLivestepDetails(this.currentRecipe.getSteps());
 	}
 
 	@And("I go to Main screen")
@@ -484,7 +479,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I verify the Process hold Dialog box , buttons")
 	public void iVerifyProcessHoldDailogBox() {
-		recipeConsolePage.iVerifyDailogBox();
+		recipeConsolePage.iVerifyDialogBox();
 	}
 
 	@And("I validate close,No button funtionality")
@@ -549,7 +544,7 @@ public class RecipeConsoleStepsDefinition {
 	@And("I verify all mandatory fields has asterick mark {string}")
 	public void iVerifyAllMandatoryFieldsHasAsterickMark(String mark) {
 		recipeConsolePage.reRun();
-		recipeConsolePage.verifyAsterickMark(mark);
+		recipeConsolePage.iVerifyAstericMark(mark);
 	}
 
 	@And("I start manual recipe execution")
@@ -673,7 +668,7 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	@And("I verify the post run window UI fields")
-	public void iVerifyUIFields() throws ParseException {
+	public void iVerifyUIFields()  {
 		recipeConsolePage.verifyPostRunDate();
 	}
 

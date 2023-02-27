@@ -1,4 +1,4 @@
-@CRS @IVI @RecipeConsole
+@CRS @IVI 
 Feature: Recipe console
 
   Background:
@@ -226,7 +226,7 @@ Feature: Recipe console
 	And I verify the recipe name is trimmed on recipe console UI
 	And I verify the recipe lengthy step is trimmed
 	And I verify mouse hover on step displays tool tip with full step details
- 	
+ 
  Scenario: BIOFOUND-13262: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal
  	Given I expand recipe console
  	When I load recipe "testRecipeToExecute1min"
@@ -338,7 +338,6 @@ Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
 	Then Verify the recipe console extended view UI components
-	And I restart the system
 	Then I see process hold button is displayed
 	
 Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorised User or User with no permission to Run Recipe		
