@@ -681,7 +681,7 @@ public class RecipePage {
     }
 
     public void addCriteria() {
-        $(By.xpath(String.format(stepNumber, "1"))).isSelected();
+        commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).isSelected();
         stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
         criteriaPlaceholder.sendKeys("Off");
         criteriaPlaceholder.sendKeys(Keys.ENTER);

@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import cucumber.util.LoginUtils;
 import dataobjects.Login;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -85,7 +86,7 @@ public class LoginPageStepsDefinition {
         if (ContextHelper.isOrchestrator()) {
             homepage.open();
             login.setLogin(username);
-            login.setPassword("Merck@dmin");
+            login.setPassword(LoginUtils.getPassword(username));
             loginPage.setUser(login.getLogin());
             loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
@@ -94,7 +95,7 @@ public class LoginPageStepsDefinition {
             loginPage.waitPnidLoading();
             loginPage.openLogin();
             login.setLogin(username);
-            login.setPassword("Merck@dmin");
+            login.setPassword(LoginUtils.getPassword(username));
             loginPage.setUser(login.getLogin());
             loginPage.setPassword(login.getPassword());
             loginPage.pushLogin();
