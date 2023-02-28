@@ -189,6 +189,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
+    
 
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console
@@ -351,4 +352,4 @@ Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorise
 	And I open login page
 	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
 	And I expand recipe console in pnid
-	And I verify the recipe execution details in console View
+	And I verify the recipe execution details

@@ -756,4 +756,9 @@ public class RecipeConsoleStepsDefinition {
     public void stopManualRunAfterSec(int second){
        recipeConsolePage.stopManualRunAfterSecond(second);
     }
+    
+    @Then("I verify the recipe execution details")
+    public void iVerifyTheRecipeExecutionDetails() {
+    	recipeConsolePage.iVerifyConsoleDetails();
+    }
 }
