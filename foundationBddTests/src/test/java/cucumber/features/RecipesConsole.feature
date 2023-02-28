@@ -222,7 +222,7 @@ Feature: Recipe console
  
  Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
  	Given I expand recipe console
-	When I load recipe "testDraftRecipeToChangeStatus"
+	When I load recipe "testRecipeWithChar30NameLengt"
 	Then I verify the recipe name displayed on load recipe list 
 	And I verify the recipe name is trimmed on recipe console UI
 	And I verify the recipe lengthy step is trimmed
