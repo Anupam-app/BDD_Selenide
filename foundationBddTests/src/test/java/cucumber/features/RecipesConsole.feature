@@ -1,4 +1,4 @@
-@CRS @IVI 
+@CRS @IVI @RecipeConsole
 Feature: Recipe console
 
   Background:
