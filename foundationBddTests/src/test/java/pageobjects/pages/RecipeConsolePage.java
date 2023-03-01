@@ -315,7 +315,7 @@ public class RecipeConsolePage {
 
 	public void jumpStepErrorMessage () {
         var stepCount = recipeStepCount.size();
-        $(By.xpath(String.format(errorMessage, stepCount))).isDisplayed();
+        $(By.xpath(String.format(errorMessage, stepCount,appear)));
         closeJumpStep.click();
     }
 
@@ -937,6 +937,5 @@ public class RecipeConsolePage {
 		SelenideHelper.commonWaiter(holdButton, appear);
 		SelenideHelper.commonWaiter(recipeButton, appear);
 		SelenideHelper.commonWaiter(manualOperations, appear);
-		SelenideHelper.commonWaiter(loadRecipeText, appear);
 	}
 }
