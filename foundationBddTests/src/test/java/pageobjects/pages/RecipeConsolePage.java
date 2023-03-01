@@ -242,7 +242,7 @@ public class RecipeConsolePage {
 
 	public void clickPauseButton() {
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 4000l).click();
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 4000l);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 2000l);
 	}
 
 	public void clickResumeButton() {
@@ -538,6 +538,7 @@ public class RecipeConsolePage {
 	}
 
 	public void manualValidation(String ManualOperationName, String runId, String batchId, String productId, String beforeComments) {
+		//start_button();
 		if(manualWindowPopup.exists()) {
 			Assert.assertEquals("warning pop displayed: ","Recipe is already loaded",manualWindowPopup.getText());
 			manualWindowPopup_Btn.click();
@@ -609,10 +610,21 @@ public class RecipeConsolePage {
 			restartSystem();
 			SelenideHelper.commonWaiter(holdButton, visible);
 		}
-		if (clearRecipeText.isDisplayed()) {
-			clearRecipeText.click();
-		} else
-			SelenideHelper.commonWaiter(start_Btn, visible).click();
+		if (manualStopButton.isDisplayed()) {
+            manualStopButton.click();
+            closeButtonOfStop.click();
+            commonWaiter(okButton, visible).click();
+        }
+        if ($(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).isDisplayed()) {
+        	$(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).click();
+            clickYesButton.waitUntil(Condition.visible, 1000).click();
+            okButton.waitUntil(Condition.visible, 5001).click();
+        }
+
+        manualOperationButton.waitUntil(visible, 50001).click();
+        manualOperationSelected.shouldBe(visible);
+		commonWaiter(start_Btn, visible).click();        
+		
 	}
 
 	public void run_Btn() {

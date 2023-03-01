@@ -80,11 +80,11 @@ Feature: Recipe console
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
-    Then I should see start button is displayed
     When I click on start button
     When I start manual recipe execution
     And I click ok button
     And I click on start button
+    And I click ok button
     Then I should see "Mandatory field should not be empty." message
     When I enter existing value in RUNID
     Then I should see message "Run ID is already in use."
@@ -254,7 +254,7 @@ Feature: Recipe console
 # 	When I stop the run execution
 # 	Then I verify the text value trimmed on post run window
 # 	And I mouse hover to see full text displayed  on tooltip
-
+@test
  Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
  	When I expand recipe console in pnid
 	And I load recipe "testRecipeToExecute1min"

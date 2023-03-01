@@ -370,7 +370,7 @@ public class RecipeConsoleStepsDefinition {
 	@When("I click on start button")
 	public void iclickOnStartButton() {
 		recipeConsolePage.start_button();
-		recipeConsolePage.okButton();
+		//recipeConsolePage.okButton();
 	}
 
 	@Then("I close post run window and select re run option")
