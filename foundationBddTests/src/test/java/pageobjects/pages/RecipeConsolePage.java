@@ -108,7 +108,7 @@ public class RecipeConsolePage {
 	private final String stepIdDetails = "(//label[@id='trimString'])[%s]";
 	private final String timeDetails = "//div[@id='timerCycle']//span[%s]";
 	private SelenideElement specialCharactarErrorMsg = $(By.xpath("//span[text()='Special characters are not allowed for Comments']"));
-
+	
 	private Recipe recipe;
 
 	public RecipeConsolePage(Recipe recipe) {
@@ -241,8 +241,8 @@ public class RecipeConsolePage {
 	}
 
 	public void clickPauseButton() {
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 5000l).click();
-		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 5000l);
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 4000l).click();
+		$(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 4000l);
 	}
 
 	public void clickResumeButton() {
@@ -315,7 +315,7 @@ public class RecipeConsolePage {
 
 	public void jumpStepErrorMessage () {
         var stepCount = recipeStepCount.size();
-        $(By.xpath(String.format(errorMessage, stepCount,appear)));
+        $(By.xpath(String.format(errorMessage, stepCount))).isDisplayed();
         closeJumpStep.click();
     }
 
@@ -543,24 +543,24 @@ public class RecipeConsolePage {
 			manualWindowPopup_Btn.click();
 		}
 		manualOpareationTextbox.click();
+		manualOpareationTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 		manualOpareationTextbox.setValue(ManualOperationName);
+		runIdTextbox.click();
+		runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 		runIdTextbox.setValue(runId);
 		productIdTextbox.setValue(productId);
 		batchIdTextbox.click();
+		batchIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 		batchIdTextbox.sendKeys(batchId);
 		batchIdTextbox.sendKeys(Keys.ENTER);
+		preRunCommentsText.click();
+		preRunCommentsText.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
 		preRunCommentsText.sendKeys(beforeComments);
 	}
 
-	public void iValidateSpecialChar_manaul(String ManualOperationName, String runId, String batchId, String productId, String value) {
-		manualOpareationTextbox.click();
-		manualOpareationTextbox.setValue(ManualOperationName);
-		runIdTextbox.setValue(runId);
-		productIdTextbox.setValue(productId);
-		batchIdTextbox.click();
-		batchIdTextbox.sendKeys(batchId);
-		batchIdTextbox.sendKeys(Keys.ENTER);
-		preRunCommentsText.sendKeys(value);
+	public void iValidateSpecialChar_manaul(String spcialCharacter) {
+		preRunCommentsText.click();
+		preRunCommentsText.sendKeys(spcialCharacter);
 		SelenideHelper.commonWaiter(okButton, visible).click();
 	}
 
@@ -572,17 +572,8 @@ public class RecipeConsolePage {
 		batchIdTextbox.sendKeys(Keys.ENTER);
 		preRunCommentsText.sendKeys(value);
 		SelenideHelper.commonWaiter(okButton, visible).click();
-		specialCharactarErrorMsg.scrollIntoView(true);
-		
-		Selenide.sleep(5000);
-	}
-
-	public void iValidationPreRun() {
-		if (preRunWindowPopop.isDisplayed()) {
-			preRunWindowPopop.shouldBe(visible);
-		} else {
-			preRunWindowPopop.shouldNotBe(visible);
-		}
+		specialCharactarErrorMsg.scrollIntoView(true);		
+		Selenide.sleep(2000);
 	}
 
 	public void clickOnLoadRecipe() {
@@ -934,8 +925,14 @@ public class RecipeConsolePage {
 	}
 	
 	public void iVerifyConsoleDetails() {
-		SelenideHelper.commonWaiter(holdButton, appear);
-		SelenideHelper.commonWaiter(recipeButton, appear);
-		SelenideHelper.commonWaiter(manualOperations, appear);
+		commonWaiter(holdButton, appear);
+		commonWaiter(recipeButton, appear);
+		commonWaiter(manualOperations, appear);
+	}
+	
+	public void iVerifySpecialCharcterMsg() {
+		commonWaiter(okButton, visible).click();
+		specialCharactarErrorMsg.scrollIntoView(true);
+		commonWaiter(specialCharactarErrorMsg, appear);
 	}
 }

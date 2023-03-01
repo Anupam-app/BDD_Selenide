@@ -370,6 +370,7 @@ public class RecipeConsoleStepsDefinition {
 	@When("I click on start button")
 	public void iclickOnStartButton() {
 		recipeConsolePage.start_button();
+		recipeConsolePage.okButton();
 	}
 
 	@Then("I close post run window and select re run option")
@@ -409,8 +410,7 @@ public class RecipeConsoleStepsDefinition {
 	@When("I enter special characters {string} in comments section")
 	public void iValidateSpecialChar(String specialchar) {
 		generateRandomRecipeValues();
-		recipeConsolePage.iValidateSpecialChar_manaul(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
-				this.currentRecipe.getProductId(), specialchar);
+		recipeConsolePage.iValidateSpecialChar_manaul(specialchar);
 	}
 
 	@When("I enter special characters {string} in run comments section")
@@ -420,9 +420,9 @@ public class RecipeConsoleStepsDefinition {
 				this.currentRecipe.getProductId(), specialchar);
 	}
 
-	@Then("I should not see special characters not allowed")
+	@Then("I should see special characters not allowed")
 	public void iShouldnotSeeSpecialCharacters() {
-		recipeConsolePage.iValidationPreRun();
+		recipeConsolePage.iVerifySpecialCharcterMsg();
 	}
 
 	@Given("I click on load recipe")
@@ -493,12 +493,12 @@ public class RecipeConsoleStepsDefinition {
 	}
 
 	private void generateRandomRecipeValues() {
-		this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(25));
-		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(25));
-		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(25));
-		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(20));
-		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(25));
-		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(25));
+		this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setBeforeComments(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(10));
+		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
 	}
 
 	@And("I refresh the portal")
