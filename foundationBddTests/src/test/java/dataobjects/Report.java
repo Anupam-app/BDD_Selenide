@@ -154,32 +154,21 @@ public class Report {
      */
 
     public void checkUserInformation(String reportUrl, String user) throws IOException {
-
-
         URL url = new URL(reportUrl);
-
         // get all tables of the report
         List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-
         for (Table reportTable : reportTables) {
-
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
-
             if (userColumnIndex > 0) {
-
                 // start from 1 to skip the header row
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
-
                     String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
                     String recordColumnValue = reportTable.getRows().get(i).get(userColumnIndex - 1).getText(false);
-
                     if (!StringUtils.isEmpty(userColumnValue) && !StringUtils.isEmpty(recordColumnValue)) {
-
                         // check user is not an internal user
                         if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
                             Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
                         }
-
                         // check user format
                         Assert.assertTrue(String.format(
                                 "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
