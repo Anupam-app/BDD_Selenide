@@ -4,25 +4,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-
 import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
-
 import technology.tabula.ObjectExtractor;
 import technology.tabula.Page;
 import technology.tabula.PageIterator;
 import technology.tabula.Pair;
 import technology.tabula.Rectangle;
 import technology.tabula.RectangularTextContainer;
-import technology.tabula.Table;
 import technology.tabula.detectors.DetectionAlgorithm;
 import technology.tabula.detectors.NurminenDetectionAlgorithm;
 import technology.tabula.extractors.SpreadsheetExtractionAlgorithm;
+import utils.pdf.PdfTable;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PdfTableExtractUtils {
@@ -64,9 +61,9 @@ public final class PdfTableExtractUtils {
      * @param tableTitle Table section title
      * @return Table
      */
-    public static List<Table> getTablesFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
+    public static List<PdfTable> getTablesFromTableTitle(InputStream inputStream, String tableTitle) throws IOException {
 
-        List<Table> resultTable = new ArrayList<>();
+        List<PdfTable> resultTable = new ArrayList<>();
 
         try (PDDocument document = PDDocument.load(inputStream)) {
 
@@ -91,9 +88,9 @@ public final class PdfTableExtractUtils {
 
         return resultTable;
     }
-    public static Table getTableFromTableTitles(InputStream inputStream, String tableTitle) throws IOException {
+    public static PdfTable getTableFromTableTitles(InputStream inputStream, String tableTitle) throws IOException {
 
-        Table resultTable = null;
+        PdfTable resultTable = null;
 
         try (PDDocument document = PDDocument.load(inputStream)) {
 
@@ -142,8 +139,8 @@ public final class PdfTableExtractUtils {
             while (pageIterator.hasNext()) {
 
                 Page page = pageIterator.next();
-                List<Table> tableList = getTablesFromPage(page);
-                Table table = searchTable(tableList, tableHeader);
+                List<PdfTable> tableList = getTablesFromPage(page);
+                PdfTable table = searchTable(tableList, tableHeader);
 
                 if (table != null) {
                     pageNumber = page.getPageNumber();
@@ -163,9 +160,9 @@ public final class PdfTableExtractUtils {
      *        Time|Event Description|Old Value|New Value
      * @return Table
      */
-    public static Table getTableFromTableHeader(InputStream inputStream, String tableHeader) throws IOException {
+    public static PdfTable getTableFromTableHeader(InputStream inputStream, String tableHeader) throws IOException {
 
-        Table resultTable = null;
+        PdfTable resultTable = null;
 
         try (PDDocument document = PDDocument.load(inputStream)) {
 
@@ -175,8 +172,8 @@ public final class PdfTableExtractUtils {
             while (pageIterator.hasNext()) {
 
                 Page page = pageIterator.next();
-                List<Table> tableList = getTablesFromPage(page);
-                Table table = searchTable(tableList, tableHeader);
+                List<PdfTable> tableList = getTablesFromPage(page);
+                PdfTable table = searchTable(tableList, tableHeader);
 
                 if (table != null) {
                     resultTable = table;
@@ -195,9 +192,9 @@ public final class PdfTableExtractUtils {
      * @param pageNumber Page number
      * @return Tables
      */
-    public static List<Table> getTablesFromPageNumber(InputStream inputStream, int pageNumber) throws IOException {
+    public static List<PdfTable> getTablesFromPageNumber(InputStream inputStream, int pageNumber) throws IOException {
 
-        List<Table> tableList = new ArrayList<>();
+        List<PdfTable> tableList = new ArrayList<>();
 
         // load document
         try (PDDocument document = PDDocument.load(inputStream)) {
@@ -218,9 +215,9 @@ public final class PdfTableExtractUtils {
      * @param inputStream PDF File as Stream
      * @return Tables
      */
-    public static List<Table> getTables(InputStream inputStream) throws IOException {
+    public static List<PdfTable> getTables(InputStream inputStream) throws IOException {
 
-        List<Table> tableList = new ArrayList<>();
+        List<PdfTable> tableList = new ArrayList<>();
 
         // load document
         try (PDDocument document = PDDocument.load(inputStream)) {
@@ -243,9 +240,9 @@ public final class PdfTableExtractUtils {
      * @param page Page
      * @return Tables
      */
-    public static List<Table> getTablesFromPage(Page page) {
+    public static List<PdfTable> getTablesFromPage(Page page) {
 
-        List<Table> tableList = new ArrayList<>();
+        List<PdfTable> tableList = new ArrayList<>();
         SpreadsheetExtractionAlgorithm tableExtractor = new SpreadsheetExtractionAlgorithm();
 
         if (page != null) {
@@ -258,19 +255,21 @@ public final class PdfTableExtractUtils {
 
                 Pair<Integer, Rectangle> areaPair = new Pair<>(1, new Rectangle(guessRect.getTop(), guessRect.getLeft(),
                         guessRect.getRight() - guessRect.getLeft(), guessRect.getBottom() - guessRect.getTop()));
-                Rectangle area = areaPair.getRight();
-                tableList.addAll(tableExtractor.extract(page.getArea(area)));
+
+                tableList.addAll(
+                    tableExtractor.extract(page.getArea(areaPair.getRight())).stream().map(t -> new PdfTable(t, page)).collect(
+                        Collectors.toList()));
             }
         }
 
         return tableList;
     }
 
-    public static Table searchTable(List<Table> tableList, String tableHeader) {
+    public static PdfTable searchTable(List<PdfTable> tableList, String tableHeader) {
 
-        for (Table table : tableList) {
+        for (PdfTable table : tableList) {
 
-            Table searchTable = searchTableWithHeaderHorizontally(table, tableHeader);
+            PdfTable searchTable = searchTableWithHeaderHorizontally(table, tableHeader);
 
             if (searchTable != null) {
                 return searchTable;
@@ -287,9 +286,9 @@ public final class PdfTableExtractUtils {
         return null;
     }
 
-    private static Table searchTableWithHeaderHorizontally(Table table, String tableHeader) {
+    private static PdfTable searchTableWithHeaderHorizontally(PdfTable table, String tableHeader) {
 
-        Table correspondingTable = null;
+        PdfTable correspondingTable = null;
 
         for (List<RectangularTextContainer> row : table.getRows()) {
 
@@ -308,9 +307,9 @@ public final class PdfTableExtractUtils {
         return correspondingTable;
     }
 
-    private static Table searchTableWithHeaderVertically(Table table, String tableHeader) {
+    private static PdfTable searchTableWithHeaderVertically(PdfTable table, String tableHeader) {
 
-        Table correspondingTable = null;
+        PdfTable correspondingTable = null;
         List<List<RectangularTextContainer>> rows = table.getRows();
 
         for (int i = 0; i < table.getColCount(); i++) {
@@ -338,7 +337,7 @@ public final class PdfTableExtractUtils {
      * @param fieldName field name to search
      * @return Field value
      */
-    public static String getTableFieldValue(Table table, String fieldName) {
+    public static String getTableFieldValue(PdfTable table, String fieldName) {
 
         boolean nextCellContainsValue = false;
 
@@ -371,7 +370,7 @@ public final class PdfTableExtractUtils {
      * @param columnLabel Column label to search
      * @return Index of column
      */
-    public static int getColumnIndex(Table table, String columnLabel) {
+    public static int getColumnIndex(PdfTable table, String columnLabel) {
 
         int columnIndex = -1;
 
@@ -383,5 +382,27 @@ public final class PdfTableExtractUtils {
         }
 
         return columnIndex;
+    }
+
+    /**
+     * Extract column data
+     * @param table Source table
+     * @param columnIndex Column index to extract data
+     * @return Table with column data
+     */
+    public static PdfTable extractColumnData(PdfTable table, int columnIndex) {
+
+        SpreadsheetExtractionAlgorithm tableExtractor = new SpreadsheetExtractionAlgorithm();
+
+        // get coordinate of specified column
+        Rectangle columnCoordinate = table.getTable().getCell(0, columnIndex);
+
+        // extract only specified column
+        Pair<Integer, Rectangle> areaPair = new Pair<>(1, new Rectangle(table.getTable().getTop(), columnCoordinate.getLeft(),
+            (float) columnCoordinate.getWidth(), (float) table.getTable().getHeight()));
+
+
+        return tableExtractor.extract(table.getPage().getArea(areaPair.getRight()))
+            .stream().findFirst().map(t -> new PdfTable(t, table.getPage())).orElse(null);
     }
 }
