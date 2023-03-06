@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @REPORT
 Feature: Report administration
 
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab

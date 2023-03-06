@@ -151,19 +151,12 @@ public class Report {
      */
 
     public void checkUserInformation(String reportUrl, String user) throws IOException {
-
-
         URL url = new URL(reportUrl);
-
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-
         for (PdfTable reportTable : reportTables) {
-
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
-
             if (userColumnIndex > 0) {
-
                 // extract only user column data
                 PdfTable columnDataTable = PdfTableExtractUtils.extractColumnData(reportTable, userColumnIndex);
 
