@@ -24,6 +24,7 @@ public class Report {
     public static final String RECIPE_DATE_FORMAT = "MMM d, yyyy, h:mm:ss a";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
+    private final String USER_COLUMN_FORMAT_OT = "^[a-z0-9]*$";
     private final String USER_COLUMN_NAME = "User";
     private final String INTERNAL_USER = "OMIUser";
     private final String EVENT_TABLE_HEADER = "Event Time|Event Description|Old Value|New Value";
@@ -177,7 +178,7 @@ public class Report {
                             // check user format
                             Assert.assertTrue(String.format(
                                 "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                                userColumnValue), userNameValidation(userColumnValue));
                         }
                     }
                 }
@@ -185,6 +186,20 @@ public class Report {
         }
     }
 
+    //temporary solution  until BIOFOUND-29184 is implemented
+    public boolean userNameValidation(String userValue)
+    {
+        if(userValue.matches(USER_COLUMN_FORMAT)){
+            return true;
+        }
+        else if(userValue.matches(USER_COLUMN_FORMAT_OT)){
+            return true;
+        }
+        else{
+            return false;
+        }
+
+    }
 
     /**
      * Check Event Time information - No internal user like OMIUser

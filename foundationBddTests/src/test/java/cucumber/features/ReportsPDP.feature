@@ -1,4 +1,3 @@
-@REPORT
 Feature: Report administration Based on PDP
 
   Scenario Outline: BIOCRS-5240| Select more than 5 trends parameters
@@ -18,7 +17,7 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
@@ -46,7 +45,7 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
