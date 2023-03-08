@@ -10,16 +10,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-
-import technology.tabula.Table;
 import utils.PdfTableExtractUtils;
 import utils.TimezoneUtils;
+import utils.pdf.PdfTable;
 
 public class Report {
 
@@ -27,6 +24,7 @@ public class Report {
     public static final String RECIPE_DATE_FORMAT = "MMM d, yyyy, h:mm:ss a";
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
+    private final String USER_COLUMN_FORMAT_OT = "^[a-z0-9]*$";
     private final String USER_COLUMN_NAME = "User";
     private final String INTERNAL_USER = "OMIUser";
     private final String EVENT_TABLE_HEADER = "Event Time|Event Description|Old Value|New Value";
@@ -102,7 +100,7 @@ public class Report {
         URL url = new URL(reportUrl);
 
         // get table from table title and check is not null and contains rows
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
                 .findFirst().get();
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
         Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
@@ -123,7 +121,7 @@ public class Report {
 
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), EVENT_TABLE_HEADER);
+        PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), EVENT_TABLE_HEADER);
         if (table != null) {
             Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
         }
@@ -139,7 +137,7 @@ public class Report {
 
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), AUDIT_TABLE_HEADER);
+        PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), AUDIT_TABLE_HEADER);
 
         if (table != null) {
             Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
@@ -156,30 +154,42 @@ public class Report {
     public void checkUserInformation(String reportUrl, String user) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
-                // start from 1 to skip the header row
-                for (int i = 1; i < reportTable.getRowCount(); i++) {
-                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
-                    String recordColumnValue = reportTable.getRows().get(i).get(userColumnIndex - 1).getText(false);
-                    if (!StringUtils.isEmpty(userColumnValue) && !StringUtils.isEmpty(recordColumnValue)) {
-                        // check user is not an internal user
-                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
-                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
-                        }
-                        // check user format
-                        Assert.assertTrue(String.format(
+                // extract only user column data
+                PdfTable columnDataTable = PdfTableExtractUtils.extractColumnData(reportTable, userColumnIndex);
+
+                if(columnDataTable != null) {
+
+                    // start from 1 to skip the header row
+                    for (int i = 1; i < columnDataTable.getRowCount(); i++) {
+
+                        String userColumnValue = columnDataTable.getRows().get(i).get(0).getText(false);
+
+                        if (!StringUtils.isEmpty(userColumnValue)) {
+
+                            // check user is not an internal user
+                            if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
+                                Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                            }
+
+                            // check user format
+                            Assert.assertTrue(String.format(
                                 "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
-                        Assert.assertTrue(userColumnValue.contains(user));
+                                userColumnValue), userNameValidation(userColumnValue));
+                        }
                     }
                 }
             }
         }
     }
 
+    //temporary solution  until BIOFOUND-29184 is implemented
+    public boolean userNameValidation(String userValue) {
+        return userValue.matches(USER_COLUMN_FORMAT) || userValue.matches(USER_COLUMN_FORMAT_OT);
+    }
 
     /**
      * Check Event Time information - No internal user like OMIUser
@@ -191,8 +201,8 @@ public class Report {
     public void checkEventTimeInformation(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int eventColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, EVENT_COLUMN_NAME);
             if (eventColumnIndex == 0) {
                 // start from 1 to skip the header row
@@ -227,8 +237,8 @@ public class Report {
             String userNameLoggedIn) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
@@ -263,8 +273,8 @@ public class Report {
             throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             for (Map.Entry m : list.entrySet()) {
                 // check first row
                 if ((reportTable.getRows().get(1).get(5).getText(false)).equals(m.getKey())) {
@@ -285,8 +295,8 @@ public class Report {
             throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
@@ -332,8 +342,8 @@ public class Report {
 
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
@@ -373,7 +383,7 @@ public class Report {
         }
     }
 
-    public void consolidatedValidateReportSummary(Table table, String startDate, String endDate, String batchId,
+    public void consolidatedValidateReportSummary(PdfTable table, String startDate, String endDate, String batchId,
             String productId, String runID) throws Exception {
         boolean flag = false;
 
@@ -416,7 +426,7 @@ public class Report {
     public void InstrumentSummary(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), INSTRUMENT_SUMMARY).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), INSTRUMENT_SUMMARY).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, UNIT_OPERATION_NAME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, RECIPE_FILE_NAME) == 1);
@@ -431,7 +441,7 @@ public class Report {
     public void checkSignturesTable(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table =
+        PdfTable table =
                 PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures").stream().findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "User name") == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Signature") == 1);
@@ -450,7 +460,7 @@ public class Report {
     public void ConsolidatedAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), CONSOLIDATED_ALARMS).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), CONSOLIDATED_ALARMS).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME) == 1);
@@ -463,7 +473,7 @@ public class Report {
     public void OnUnitOperation(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), ON_UNIT_OPERATION_USERS).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), ON_UNIT_OPERATION_USERS).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, USER_NAME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME) == 1);
@@ -475,7 +485,7 @@ public class Report {
     public void AuditTrail(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table =
+        PdfTable table =
                 PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL).stream().findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, APPLICATION_NAME) == 1);
@@ -490,7 +500,7 @@ public class Report {
     public void processAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PROCESS_ALARMS).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PROCESS_ALARMS).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, TYPE) == 1);
@@ -503,7 +513,7 @@ public class Report {
     public void systemAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), SYSTEM_ALARMS).stream().findFirst()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), SYSTEM_ALARMS).stream().findFirst()
                 .get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, NAME) == 1);
@@ -516,7 +526,7 @@ public class Report {
     public void recipeStepsSummary(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
                 .findFirst().get();
         // table
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME) == 0);
@@ -525,7 +535,7 @@ public class Report {
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION) == 3);
     }
 
-    public void validateRunSummary(Table table, Recipe recipe) {
+    public void validateRunSummary(PdfTable table, Recipe recipe) {
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
         Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
@@ -561,7 +571,7 @@ public class Report {
 
     public void validateConsolidateRunSummary(String reportPdfUrl, List<Recipe> recipes) throws IOException {
         URL url = new URL(reportPdfUrl);
-        List<Table> runSummaryTables =
+        List<PdfTable> runSummaryTables =
                 PdfTableExtractUtils.getTablesFromTableTitle((url.openStream()), REPORT_SUMMARY_TITLE);
 
         Assert.assertEquals(recipes.size() + 1, runSummaryTables.size());
@@ -616,7 +626,7 @@ public class Report {
         URL url = new URL(reportUrl);
 
         // get table from table title and check is not null and contains rows
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
                 .findFirst().get();
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
         Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
@@ -626,7 +636,7 @@ public class Report {
         }
     }
 
-    private void validateRecipeInReport(String template, Table table, Recipe recipe) {
+    private void validateRecipeInReport(String template, PdfTable table, Recipe recipe) {
         // get field value and check is not null
         Assert.assertNotNull("No field with id " + recipe.getMachineName(),
                 PdfTableExtractUtils.getTableFieldValue(table, UNIT_OPERATION_NAME));
@@ -650,7 +660,7 @@ public class Report {
                 PdfTableExtractUtils.getTableFieldValue(table, TEMPLATE_NAME));
     }
 
-    private void validateRecipeDate(String message, Table table, String dateColumnFromReport, String recipeDate) {
+    private void validateRecipeDate(String message, PdfTable table, String dateColumnFromReport, String recipeDate) {
         var recipeDateFromReport = PdfTableExtractUtils.getTableFieldValue(table, dateColumnFromReport);
         Assert.assertNotNull(message + " is null", recipeDateFromReport);
 
@@ -672,7 +682,7 @@ public class Report {
      */
     public void checkPreRunColumnsInReport(String reportUrl) throws IOException {
         URL url = new URL(reportUrl);
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_DESCRIPTION) == 1);
@@ -689,7 +699,7 @@ public class Report {
      */
     public void checkRecipeColumnsInReport(String reportUrl) throws IOException {
         URL url = new URL(reportUrl);
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
                 .findFirst().get();
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME) == 0);
         Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER) == 1);
@@ -702,8 +712,8 @@ public class Report {
     public void checkDeletedRole(String reportUrl, String roleName, String userNameLoggedIn) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
-        List<Table> reportTables = PdfTableExtractUtils.getTables(url.openStream());
-        for (Table reportTable : reportTables) {
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 Assert.assertTrue(
@@ -723,12 +733,12 @@ public class Report {
     public void verifyConsolidateManualSummaryReport(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        Table table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
                 .findFirst().get();
         Assert.assertNull("Recipe Step Summary table is found for Manual runs " + RECIPE_STEPS_SUMMARY, table);
-        List<Table> reportTables = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE);
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE);
 
-        for (Table reportTable : reportTables) {
+        for (PdfTable reportTable : reportTables) {
             Assert.assertNull("Template name value",
                     PdfTableExtractUtils.getTableFieldValue(reportTable, TEMPLATE_NAME));
         }

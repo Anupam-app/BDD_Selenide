@@ -17,7 +17,7 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
@@ -45,7 +45,7 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
