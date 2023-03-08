@@ -127,12 +127,12 @@ public class RecipePage {
     private final SelenideElement stepPlaceholder = $(By.xpath("//input[@placeholder='Search instruments and actions...']"));
     private final String stepCountPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
     private final String rootStep = "(//span[text()='%s']/parent::span/span)[1]";
-    private final String stepNumber = "(//div[@class='stepNumber']/label[@class='stepCount'])[%s]";
+    private final String stepNumber = "//div[@class='stepNumber' and @data-label='step%s']";
     private final SelenideElement criteriaPlaceholder = $(By.xpath("//input[@placeholder='Search criteria...']"));
     private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions')]"));
     private final String expandAction = "//p[@title='%s']";
     private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
-    private final String editorRecipeName = "//*[label[contains(.,'%s')]]";
+    private final String editorRecipeName = "//label[contains(text(),'%s')]";
 
     private final SelenideElement draft = $(By.xpath("//*[text()='Draft']"));
     private final SelenideElement chnage = $(By.xpath("//button[text()='Change']"));
@@ -681,14 +681,14 @@ public class RecipePage {
     }
 
     public void addCriteria() {
-        commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).isSelected();
+        commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).click();
         stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
         criteriaPlaceholder.sendKeys("Off");
         criteriaPlaceholder.sendKeys(Keys.ENTER);
     }
 
     public void openRecipe(String recipeName) {
-        browserLinkText.click();
+        commonWaiter(browserLinkText,visible).click();
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();

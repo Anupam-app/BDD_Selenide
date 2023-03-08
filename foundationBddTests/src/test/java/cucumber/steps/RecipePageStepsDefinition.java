@@ -367,12 +367,12 @@ public class RecipePageStepsDefinition {
 
     @And("I close and reopen the recipe")
     public void openRecipe() {
-        recipePage.openRecipe(this.recipePage.getRecipeName());
+        recipePage.openRecipe(this.recipe.getRecipeName());
     }
 
     @And("I should see recipe opened in editor")
     public void verifyRecipeInEditor() {
-        recipePage.verifyRecipeEditor(this.recipePage.getRecipeName());
+        recipePage.verifyRecipeEditor(this.recipe.getRecipeName());
     }
 
     @And("I try change recipe status and see warning pop up dialog box {string}")
