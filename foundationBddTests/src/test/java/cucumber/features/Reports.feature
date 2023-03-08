@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @REPORT
 Feature: Report administration
 
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
@@ -24,7 +24,6 @@ Feature: Report administration
       | Status           |
       | Last Modified By |
       | Last Modified On |
-
 
   Scenario: BIOCRS-5238/5239/5241 | Report Management Dashboard -  Reports Tab
     Given I am logged in as "Bio4CAdmin" user
