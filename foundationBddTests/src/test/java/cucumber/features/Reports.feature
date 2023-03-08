@@ -25,7 +25,6 @@ Feature: Report administration
       | Last Modified By |
       | Last Modified On |
 
-
   Scenario: BIOCRS-5238/5239/5241 | Report Management Dashboard -  Reports Tab
     Given I am logged in as "Bio4CAdmin" user
     When I goto report management page
