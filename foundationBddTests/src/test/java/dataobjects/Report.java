@@ -187,7 +187,7 @@ public class Report {
     }
 
     //temporary solution  until BIOFOUND-29184 is implemented
-    public boolean userNameValidation(String userValue)
+return userValue.matches(USER_COLUMN_FORMAT) || userValue.matches(USER_COLUMN_FORMAT_OT);
     {
         if(userValue.matches(USER_COLUMN_FORMAT)){
             return true;
