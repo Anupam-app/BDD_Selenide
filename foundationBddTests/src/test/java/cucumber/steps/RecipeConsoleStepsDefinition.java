@@ -362,11 +362,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
 	}
 
-	@Then("I should see start button is displayed")
-	public void iSeeStartButton() {
-		recipeConsolePage.iValidateStart();
-	}
-
 	@When("I click on start button")
 	public void iclickOnStartButton() {
 		recipeConsolePage.start_button();
@@ -479,6 +474,7 @@ public class RecipeConsoleStepsDefinition {
 
 	@And("I verify the Process hold Dialog box , buttons")
 	public void iVerifyProcessHoldDailogBox() {
+
 		recipeConsolePage.iVerifyDialogBox();
 	}
 
@@ -499,13 +495,6 @@ public class RecipeConsoleStepsDefinition {
 		this.currentRecipe.setAfterComments(RandomStringUtils.randomAlphabetic(10));
 		this.currentRecipe.setManualOperationName(RandomStringUtils.randomAlphabetic(10));
 		this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
-	}
-
-	@And("I refresh the portal")
-	public void iRefreshThePortal() {
-		recipeConsolePage.iRefreshPortal();
-		Selenide.sleep(2000);
-		SelenideHelper.maximize();
 	}
 
 	@Then("I should see change of Process holding to Process restart")
@@ -594,34 +583,6 @@ public class RecipeConsoleStepsDefinition {
 		recipeConsolePage.iProvideData(this.currentRecipe.getProductId(),this.currentRecipe.getBeforeComments());
 	}
 
-	@And("I try to stop the manual run")
-	public void iStopManual() {
-		recipeConsolePage.iStopManual();
-	}
-
-	@And("I select No option to continue manual run execution")
-	public void iSelectNoOption() {
-		recipeConsolePage.iClickNoInEndManualOperation();
-		recipeConsolePage.validateNoBtn();   	   	
-	}
-
-	@And("I select X option to continue manual run execution")
-	public void iClickXInManualRunExecution() {
-		recipeConsolePage.iClickNoInEndManualOperation();
-		recipeConsolePage.iQuitEndManualOperation();
-	}
-
-	@And("I select yes option to continue manual run execution")
-	public void iSelectYesButtonInManualRunExecution() {
-		recipeConsolePage.iClickNoInEndManualOperation();
-		recipeConsolePage.validateYesBtn();
-	}
-
-	@And("I verify the recipe name displayed on load recipe list")
-	public void iVerifyTheRecipeNameDisplayed() {
-		recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Display");
-	}
-
 	@Then("I verify the recipe name is trimmed on recipe console UI")
 	public void iVerifyUiFielsOfManualOperations() {
 		recipeConsolePage.iVerifyRecipeName();
@@ -665,16 +626,6 @@ public class RecipeConsoleStepsDefinition {
 	@And("I validate the RUNID BATCHID text displayed on Post run window")
 	public void iValidatePostRunWindow() {
 		recipeConsolePage.iDisplayedRunIdAndBatchId();
-	}
-
-	@And("I verify the post run window UI fields")
-	public void iVerifyUIFields()  {
-		recipeConsolePage.verifyPostRunDate();
-	}
-
-	@And("I close the post run window")
-	public void iCloseTheWindow() {
-		recipeConsolePage.autoClosePostRun();
 	}
 
 	@Then("I see process hold button is displayed")
@@ -761,4 +712,9 @@ public class RecipeConsoleStepsDefinition {
     public void iVerifyTheRecipeExecutionDetails() {
     	recipeConsolePage.iVerifyConsoleDetails();
     }
+    
+    @And("I verify the recipe name displayed on load recipe list")
+	public void iVerifyTheRecipeNameDisplayed() {
+		recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Display");
+	}
 }

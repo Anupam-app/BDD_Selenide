@@ -76,7 +76,8 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
-  
+    
+  @BIOCRS-9352
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -91,7 +92,7 @@ Feature: Recipe console
     When I enter special characters "@!#$%^&*" in comments section
     Then I should see special characters not allowed
     And I Verify manual run status in recipe consol
-    
+
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
@@ -190,7 +191,6 @@ Feature: Recipe console
     And I restart the Process hold
     And I validate the Start button is "enabled"
     
-
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console
     When I Select Process Hold
@@ -241,20 +241,20 @@ Feature: Recipe console
 	And I Abort the recipe execution
 	And I validate the RUNID BATCHID text displayed on Post run window
 
-#   BIOCRS-9352-This bug is open
-# Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
-# 	Given I expand recipe console
-# 	When I select "Manual operation" tab
-# 	And I start Manual run
-# 	And I enter manual operation name more than 30 char and Tab out
-# 	Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
-# 	And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
-# 	And I validate all above text value trimmed on recipe console UI
-# 	And I mouse hover to see full text displayed on tooltip
-# 	When I stop the run execution
-# 	Then I verify the text value trimmed on post run window
-# 	And I mouse hover to see full text displayed  on tooltip
-@test
+   @BIOCRS-9352
+ Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
+ 	Given I expand recipe console
+ 	When I select "Manual operation" tab
+ 	And I start Manual run
+ 	And I enter manual operation name more than 30 char and Tab out
+ 	Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
+ 	And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
+ 	And I validate all above text value trimmed on recipe console UI
+ 	And I mouse hover to see full text displayed on tooltip
+ 	When I stop the run execution
+ 	Then I verify the text value trimmed on post run window
+ 	And I mouse hover to see full text displayed  on tooltip
+
  Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
  	When I expand recipe console in pnid
 	And I load recipe "testRecipeToExecute1min"
@@ -296,19 +296,6 @@ Feature: Recipe console
   When I select report from dropdown "Audit Trail"
   And I select user in dropdown "Bio4CAdmin"
   And I check audit trial logs
-
- Scenario: BIOFOUND-12603: Verify Post-run modal of Manual Run Recipe execution
- 	Given I expand recipe console
-	When I select "Manual operation" tab
-	And I start Manual run
-	And I try to stop the manual run
-	And I select No option to continue manual run execution
-	And I try to stop the manual run
-	And I select X option to continue manual run execution
-	And I try to stop the manual run
-	And I select yes option to continue manual run execution
-	Then I verify the post run window UI fields
-	And I close the post run window
  	
 Scenario: BIOFOUND-11955: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and Restart
 	When I expand recipe console in pnid

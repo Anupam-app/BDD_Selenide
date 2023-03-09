@@ -485,10 +485,6 @@ public class RecipeConsolePage {
 			}
 	}
 
-	public void iValidateStart() {
-		SelenideHelper.commonWaiter(start_Btn, visible);
-	}
-
 	public void preRunWindow_Popup() {
 		commonWaiter(preRunWindowPopop, visible);
 	}
@@ -736,7 +732,8 @@ public class RecipeConsolePage {
 	}
 
 	public void iClickNoInEndManualOperation() {
-		SelenideHelper.commonWaiter(endManualOperation, appear);    	
+
+		SelenideHelper.commonWaiter(endManualOperation, appear);
 	}
 
 	public void iQuitEndManualOperation() {
@@ -744,6 +741,7 @@ public class RecipeConsolePage {
 	}
 
 	public void iStopManual() {
+
 		manualStopButton.click();
 	}
 
