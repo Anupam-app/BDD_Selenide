@@ -682,11 +682,6 @@ public class RecipeConsolePage {
 	}
 	}
 
-	public void iRefreshPortal() {
-		SelenideHelper.appRefresh();
-		Selenide.sleep(2000);
-	}
-
 	public void expandRecipeConsole() {
 		SelenideHelper.commonWaiter(expandIcon, visible).click();
 	}
@@ -729,20 +724,6 @@ public class RecipeConsolePage {
 		productIdTextbox.setValue(productId);
 		preRunCommentsText.setValue(beforeComments);
 		SelenideHelper.commonWaiter(okButton, visible).click();
-	}
-
-	public void iClickNoInEndManualOperation() {
-
-		SelenideHelper.commonWaiter(endManualOperation, appear);
-	}
-
-	public void iQuitEndManualOperation() {
-		SelenideHelper.commonWaiter(quitEndMAnualOperation, appear).click();
-	}
-
-	public void iStopManual() {
-
-		manualStopButton.click();
 	}
 
 	public void iVerifyRecipeName() {
