@@ -922,6 +922,10 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             System.out.println(recordRole);
+            System.out.println(eventTime.getText());
+            System.out.println(comment.getText());
+            System.out.println(record.getText());
+            System.out.println(message);
             if (diffMinutes < 10 && comment.getText().contains(message) &&
                    record.getText().equalsIgnoreCase(recordRole)) {
                 result = true;
