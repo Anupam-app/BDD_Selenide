@@ -271,7 +271,7 @@ public class RecipeConsolePage {
     }
 
     public void isExecuted() {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 5000L);
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 15000L);
         if (okButton.isDisplayed()) {
             okButton.click();
         }

@@ -14,6 +14,7 @@ Feature: Backup creation
     Then I verify backup history details
     And I verify backup in restore tab
 
+  @BIOCRS-9281
   Scenario Outline: BIOCRS-5113 BIOCRS-5473 | Schedule backup
     Given I am logged in as "bio4cadmin" user
     And I goto backup page
