@@ -256,9 +256,9 @@ public class RecipePageStepsDefinition {
         }
     }
 
-    @And("I add action to the step")
-    public void actionAddedInStep() {
-        recipePage.addActionStep();
+    @And("I add {string} action to the step")
+    public void actionAddedInStep(String action) {
+        recipePage.addActionStep(action);
     }
 
     @And("I select action from action browser")
@@ -276,9 +276,9 @@ public class RecipePageStepsDefinition {
         recipePage.messageInputStepValidate();
     }
 
-    @And("I create a new phase in recipe")
+    @And("I create a new step in recipe")
     public void newPhase() {
-        recipePage.addingPhaseByPlus();
+        recipePage.addingStepByClickPlusIcon();
     }
 
     @And("I add criteria to phase using keyboard")
@@ -302,4 +302,40 @@ public class RecipePageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @And("I try to change the setpoint value to out of range")
+    public void outRangeValuePassing(){
+        recipePage.outOfRangeValue();
+    }
+
+    @Then("I verify error message displayed")
+    public void outOfRangeErrorMessage(){
+        recipePage.outOfRangeErrorMessage();
+    }
+    @And("I Validate the error message for below input values")
+    public void inValidInputValue(DataTable table){
+        List<String> list = table.asList(String.class);
+        for (int i = 0; i < list.size(); i++) {
+            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i));
+        }
+    }
+    @And("I try to change status and verify error message displayed {string}")
+    public void verifyErrorMessageOfChangeStatus(String message){
+        recipePage.verifyErrorMessageOfChangeStatus(message);
+    }
+    @When("I create phase with shortcut key")
+    public void createPhase(){
+        recipePage.createPhaseWithShortcutKey();
+    }
+    @Then("I get a warning notifying that {string}")
+        public void maxPhaseRecipeWarningMessage(String message){
+        recipePage.maxPhaseWarningMessage(message);
+    }
+    @When("I add Phases from phase library to recipe")
+    public void  addPhaseFromLibrary(){
+        recipePage.addPhaseFromLibrary();
+    }
+    @When("I try to copy and paste the phase")
+    public void copyPastePhase(){
+         recipePage.copyPastePhase();
+    }
 }

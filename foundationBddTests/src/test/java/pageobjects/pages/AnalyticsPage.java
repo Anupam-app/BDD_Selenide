@@ -2,6 +2,7 @@ package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.be;
 import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -26,6 +27,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import dataobjects.Recipe;
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 public class AnalyticsPage {
@@ -64,9 +66,11 @@ public class AnalyticsPage {
     private final String XPATH_RIGHT_PANEL = "//span[contains(text(),'%s')]";
 
     private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
+
     private final ElementsCollection defaultParams = $$(By.xpath("//div[@class='custom-checkbox-wrapper']"));
     private final SelenideElement expandButton = $(By.xpath("//button[@id='expand']"));
     private final SelenideElement myAggregateHeader = $(By.xpath("//span[@class='my-aggregate-header']"));
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToAnalytics() {
         analyticsPageLinkText.click();
@@ -78,6 +82,7 @@ public class AnalyticsPage {
 
     public void selectAggregate(String aggregateName) {
         $(By.xpath(String.format(aggregateNameText, aggregateName))).click();
+        spinnerComponent.spinnerIcon.waitUntil(not(visible), 30000L, 500L);
     }
 
     public void lineGraph(String xparameterName) {
