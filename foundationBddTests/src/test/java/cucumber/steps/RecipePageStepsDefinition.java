@@ -410,11 +410,6 @@ public class RecipePageStepsDefinition {
         recipePage.openRecipiList();
     }
 
-    @Given("I navigate to recipe browser")
-    public void i_navigate_to_recipe_browser() {
-        recipePage.goToBrowserMode();
-    }
-
     @Then("I should see full recipe name on mouse hover")
     public void iCheckRecipeNameWithMouseHover() {
         recipePage.setSearch(this.recipe.getRecipeName());
