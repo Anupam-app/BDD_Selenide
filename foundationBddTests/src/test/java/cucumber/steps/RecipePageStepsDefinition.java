@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
+
 import dataobjects.Login;
 import dataobjects.Recipe;
 import io.cucumber.datatable.DataTable;
@@ -8,11 +9,15 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.awt.*;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.UserPage;
+import pageobjects.utility.SelenideHelper;
+
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class RecipePageStepsDefinition {
@@ -153,15 +158,15 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I see list of recipes are displayed")
-    public void iSeeListOfRecipes() throws InterruptedException {
+    public void iSeeListOfRecipes() {
         recipePage.verifyList();
     }
 
     @And("below {string} column is displayed")
-    public void verifyColumn(String tab, DataTable table) {
+    public void verifyColumn(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i).get(0), tab, i);
+            recipePage.verifyColoumn(list.get(i).get(0), i);
         }
     }
 
@@ -227,8 +232,8 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I print recipe {string}")
-    public void iClickOnPrint(String recipeName) throws Exception {
-        recipePage.printRecipe(recipeName);
+    public void iClickOnPrint() throws Exception {
+        recipePage.printRecipe();
     }
 
     @Then("I should see the recipe imported in user notifications")
@@ -314,9 +319,8 @@ public class RecipePageStepsDefinition {
     @And("I Validate the error message for below input values")
     public void inValidInputValue(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i));
-        }
+        for (String s : list)
+            recipePage.inValidValueAndErrorMessageOfThreshold(s);
     }
     @And("I try to change status and verify error message displayed {string}")
     public void verifyErrorMessageOfChangeStatus(String message){
@@ -338,4 +342,155 @@ public class RecipePageStepsDefinition {
     public void copyPastePhase(){
          recipePage.copyPastePhase();
     }
+
+    @And("I go to Recipe editor")
+    public void iGoToRecipeEditor() {
+        recipePage.goTo();
+        goToIFrame();
+        recipePage.goToEditMode();
+    }
+
+    @And("I add few actions steps")
+    public void AddFewwSteps() {
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+    }
+
+    @Given("I navigate to recipe browser")
+    public void iNavigateToRecipeBrowser() {
+        recipePage.goToBrowserMode();
+    }
+
+    @Given("I Select and open a recipe")
+    public void iSelectAndOpenRecipe(){
+        recipePage.chooseRecipe();
+    }
+
+    @Then("I should see unsaved warning dialog box")
+    public void iShouldSeeUnsavedWarningDialogBox() {
+        recipePage.saveRecipeWarningMsg();
+    }
+
+    @And("I select OK and navigate to recipe editor")
+    public void iSelectOkAndNavigateToRecipeEditer() {
+        recipePage.okBtn();
+    }
+
+    @And("I add few more action steps")
+    public void iAddFewMoreActionSteps() {
+        recipePage.addFewSteps();
+    }
+
+    @And("I create a phase and add phase to library")
+    public void iCreatePhaseAndAddPhaseToLibibrary() throws AWTException {
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.zoomOut();
+        recipePage.addPhaseAndLibrary(this.recipe.getPhaseName());
+    }
+
+    @And("I save the recipe with 30 character name")
+    public void  iSaveTheRecipeWithcharacterName() {
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
+        recipePage.iSaveRecipeWithkeyBoardActions(this.recipe.getRecipeName());
+    }
+
+    @And("I verify the recipe name displayed on Recipe tab")
+    public void iVerifyTheRecipeNameDisplayedOnRecipeTab() {
+        recipePage.iVerifyRecipeNameInRecipeTab(this.recipe.getRecipeName());
+    }
+
+    @Then("I verify recipe status is saved")
+    public void iVerifyRecipeStatusIsSaved() {
+        recipePage.verifysaved();
+    }
+
+    @And("I add few more steps and save the recipe")
+    public void iAddingStepsAndSaveTheRecipe() {
+        recipePage.addFewSteps();
+        recipePage.openRecipiList();
+    }
+
+    @Given("I navigate to recipe browser")
+    public void i_navigate_to_recipe_browser() {
+        recipePage.goToBrowserMode();
+    }
+
+    @Then("I should see full recipe name on mouse hover")
+    public void iCheckRecipeNameWithMouseHover() {
+        recipePage.setSearch(this.recipe.getRecipeName());
+        recipePage.iCheckRecipeNameWithMouseOver();
+    }
+
+    @And("I add criteria to few steps")
+    public void iAddCriteriaToFewSteps() {
+        recipePage.addCriteria();
+    }
+
+    @And("I verify recipe status is unsaved")
+    public void iVerifyRecipeStatusUnsaved() {
+        recipePage.verifyUnsaved();
+    }
+
+    @And("I save the recipes")
+    public void iSaveRecipes() {
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(15));
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+        SelenideHelper.goToDefault();
+    }
+
+    @And("I open the recipe")
+    public void iOpenTheRecipe() {
+        recipePage.goTo();
+        goToIFrame();
+        recipePage.goToEditMode();
+    }
+
+    @Then("I verify the header is updated to SAVED")
+    public void iVerifyHeaderIsUpdatedToSaved() {
+        recipePage.verifysaved();
+    }
+
+
+    @And("I open the recipe list")
+    public void iOpenTheRecipeList() {
+        recipePage.goToBrowserMode();
+    }
+
+    @And("I should see last modifed by recipe")
+    public void iSeeLastModifedByRecipe() {
+        recipePage.setSearch(this.recipe.getRecipeName());
+        recipePage.iVerifyLatestModifiedRecipe();
+    }
+
+    @And("I change the recipe to in review")
+    public void iChangeRecipeToInReview() {
+        recipePage.DraftToInReview();
+        recipePage.okBtn();
+    }
+
+    @And("I open the recipe and add few more steps")
+    public void iOpenRecipeAndAddFewMoreSteps() {
+        recipePage.addFewSteps();
+    }
+
+    @And("I try to save the recipe")
+    public void iTryToSaveTheRecipe() {
+        recipePage.tryToSave();
+    }
+
+    @And("I should see warning popup alert with text message {string}")
+    public void iSeeWarningpopupAlertWithTextMessage(String message) {
+        recipePage.waringpopupForRecipe(message);
+    }
+
+    @And("I select OK and save as new recipe")
+    public void iSelectokAndSaveAsNewRecipe() {
+        recipePage.okBtn();
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(5));
+        recipePage.saveBtn(this.recipe.getRecipeName());
+    }
+
+
+
+
 }

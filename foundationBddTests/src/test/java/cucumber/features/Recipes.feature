@@ -181,3 +181,41 @@ Feature: Recipe management
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+
+  Scenario: BIOFOUND-10896 :FT_CF_Recipe management_Recipe save
+    Given I go to Recipe editor
+    When I add few actions steps
+    And I add criteria to few steps
+    And I verify recipe status is unsaved
+    And I navigate to recipe browser
+    And I Select and open a recipe
+    Then I should see unsaved warning dialog box
+    And I select OK and navigate to recipe editor
+    And I add few more action steps
+    And I create a phase and add phase to library
+    And I save the recipe with 30 character name
+    And I verify the recipe name displayed on Recipe tab
+    And I verify recipe status is saved
+    And I add few more steps and save the recipe
+    And I navigate to recipe browser
+    And I should see full recipe name on mouse hover
+
+  Scenario: BIOFOUND-7987: Recipe Editor Verify Save new and existing recipe
+    Given I go to Recipe editor
+    When I add few actions steps
+    And I save the recipes
+    And I logout
+    And I open login page
+    And I enter "bio4cservice" as username and "Merck@dmin" as password
+    And I push the login button
+    And I open the recipe
+    And I add few actions steps
+    And I save the recipe
+    Then I verify the header is updated to SAVED
+    And I open the recipe list
+    And I should see last modifed by recipe
+    And I change the recipe to in review
+    And I open the recipe and add few more steps
+    And I try to save the recipe
+    And I should see warning popup alert with text message "Recipe is locked. Please save it as new copy."
+    And I select OK and save as new recipe
