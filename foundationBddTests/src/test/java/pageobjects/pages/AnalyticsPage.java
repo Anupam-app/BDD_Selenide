@@ -82,6 +82,7 @@ public class AnalyticsPage {
     private final SelenideElement myAggregateHeader = $(By.xpath("//span[@class='my-aggregate-header']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     private final SelenideElement runIDText = $(By.xpath("//div[@class='aggregate-runid-label']/span"));
+    private final SelenideElement aggregateTab = $(By.xpath("//*[@class='ant-tabs-tab-btn']"));
 
     public void goToAnalytics() {
         analyticsPageLinkText.click();
@@ -207,11 +208,11 @@ public class AnalyticsPage {
     }
 
     public void verifyAggregateTab(String aggregateName) {
-        ($(By.xpath("//*[@class='ant-tabs-tab-btn']"))).shouldHave(text(aggregateName));
+        aggregateTab.shouldHave(text(aggregateName));
     }
 
     public void verifyTimestamp() {
-        ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
+        refreshIcon.click();
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         Assert.assertTrue(dateFormat.format(currentTimestamp)
@@ -273,7 +274,7 @@ public class AnalyticsPage {
                 ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "Graph")))).waitUntil(visible, 5000);
                 break;
             case "aggregate tab":
-                ($(By.xpath("//*[@class='ant-tabs-tab-btn']"))).waitUntil(visible, 5000);
+                aggregateTab.waitUntil(visible, 5000);
                 break;
             case "Plus Button":
                 plusButton.waitUntil(visible, 5000);
