@@ -71,7 +71,4 @@ Feature: User login
     Given I open login page
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
-    Then I see the error message "Unauthorized access, Failed to authenticate" 
-    
-   
-   
+    Then I see the error message "Unauthorized access, Failed to authenticate"

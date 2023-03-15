@@ -5,6 +5,7 @@ import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import pageobjects.utility.SelenideHelper;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
@@ -32,6 +33,8 @@ public class LoginPage {
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
     private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
+    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar'"));
+
     public void setUser(String user) {
         userIdTextBox.setValue(user);
     }
@@ -84,10 +87,12 @@ public class LoginPage {
 
     public void setNewPassword(String newPassword) {
         commonWaiter(newPasswordTextbox, visible);
+        newPasswordTextbox.clear();
         newPasswordTextbox.setValue(newPassword);
     }
 
     public void setConfirmPassword(String newPassword) {
+        confirmPasswordTextbox.clear();
         confirmPasswordTextbox.setValue(newPassword);
         tempPwd_submitButton.click();
     }
@@ -105,5 +110,10 @@ public class LoginPage {
     public void setCurrentPassword(String newPassword) {
         currentPasswordTestbox.clear();
         currentPasswordTestbox.setValue(newPassword);
+    }
+
+    public void verifyNotification(String value){
+        commonWaiter(tempPwd_ErrorNotification,visible);
+        Assert.assertEquals("Error text message is not as expected","value",tempPwd_ErrorNotification.getText());
     }
 }

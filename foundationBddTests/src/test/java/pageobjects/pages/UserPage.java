@@ -172,6 +172,7 @@ public class UserPage {
 
     public void createNewUser(String userName) {
         SelenideHelper.commonWaiter(createUserPlusButton, visible).click();
+
         userNameTextBox.setValue(userName);
     }
 
@@ -411,5 +412,9 @@ public class UserPage {
             return $(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))).isDisplayed();
         });
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible).click();
+    }
+
+    public boolean createUserIconPresent(){
+        return createUserPlusButton.isDisplayed();
     }
 }

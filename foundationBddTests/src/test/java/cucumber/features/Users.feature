@@ -101,9 +101,10 @@ Feature: User management
     And I push the login button
     Then I am logged in
 
-  Scenario: BIOCRS-586 | Unauthorized user cant edit the user
+  Scenario: BIOCRS-586| BIOFOUND-27775 | Unauthorized user cant edit the user
     Given I am logged in as "reportUnauthUser" user
     And I go to user page
+    And I verify create User icon "not exists"
     When I search "testUserToEditFields" user
     Then I cant edit the user
 
@@ -262,3 +263,27 @@ Feature: User management
     And I push the login button
     Then I am logged in
     And I am landed on "Report Management" page
+
+  Scenario: Verify the Error texts while setting new password
+    Given I open login page
+    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
+    And I push the login button
+    Then I provide invalid password to verify the errors
+    | newPassword | error                                     |
+    | merckapp    | Password doesn't met the policy criteria. |
+    | MERCKAPP    | Password doesn't met the policy criteria. |
+    | MerckApp    | Password doesn't met the policy criteria. |
+    | 123456789   | Password doesn't met the policy criteria. |
+    | MerckApp1   | Password doesn't met the policy criteria. |
+    | Mar1@       | Password doesn't met the policy criteria. |
+
+  Scenario Outline: Verify the Error texts while setting wrong confirm Password
+    Given I open login page
+    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
+    And I push the login button
+    Then I provide "<newPassword>", wrong "<confirmPassword>" to verify the error "<error>"
+
+  Examples:
+  | newPassword | confirmPassword | error |
+  | MerckApp1@  | MerckApp2@      | New password and confirmation password do not match. |
+
