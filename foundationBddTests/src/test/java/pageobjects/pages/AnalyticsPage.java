@@ -50,7 +50,16 @@ public class AnalyticsPage {
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
     private final SelenideElement switchToXaxis = $(By.xpath("//img[@class='x-axis-switch']"));
     private final String aggregateNameText = "//*[text()='%s']//parent::div//input";
+    private final String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
+    private final String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
     private final String xparameterNameText = "//*[text()='%s']//parent::label//span";
+    private final String XPATH_PARAMETER_CHECKBOX =
+            "//label//span[text()='%s']/ancestor::label//span[@class='ant-checkbox']";
+    private final String XPATH_TAG_LABEL = "//div[@class='custom-checkbox-wrapper'][%d]";
+    private final String timestamp =
+            (($(By.xpath("//img[@class='aggregate-refresh']/preceding-sibling::span"))).getText()).substring(5, 15);
+    private final String XPATH_PARAMETER_DISPLAY =
+            "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
     private final SelenideElement aggregateNameTextBox =
             $(By.xpath("//input[@placeholder='New aggregate name here.']"));
@@ -61,6 +70,7 @@ public class AnalyticsPage {
     private final SelenideElement timestampColumn = $(By.xpath("//span[contains(text(),'Timestamp')]"));
     private final SelenideElement regressionDropdownSelection =
             $(By.xpath("//*[@class='aggregate-regression-expand-arrow']"));
+    private final SelenideElement refreshIcon = $(By.xpath("//img[@class='aggregate-refresh']"));
     private final SelenideElement deleteIcon = $(By.xpath("//img[@class='aggregate-delete-icon']"));
 
     private final String XPATH_RIGHT_PANEL = "//span[contains(text(),'%s')]";
@@ -71,6 +81,7 @@ public class AnalyticsPage {
     private final SelenideElement expandButton = $(By.xpath("//button[@id='expand']"));
     private final SelenideElement myAggregateHeader = $(By.xpath("//span[@class='my-aggregate-header']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+    private final SelenideElement runIDText = $(By.xpath("//div[@class='aggregate-runid-label']/span"));
 
     public void goToAnalytics() {
         analyticsPageLinkText.click();
@@ -91,7 +102,6 @@ public class AnalyticsPage {
     }
 
     public void selectYAxisParameter(String parameter) {
-        String yparameterNameText = "(//*[text()='%s']//parent::label//input)[2]";
         $(By.xpath(String.format(yparameterNameText, parameter))).click();
         SelenideHelper.fluentWaiter()
                 .until((webDriver) -> webDriver.findElement(By.xpath(String.format(xparameterNameText, parameter)))
@@ -131,7 +141,6 @@ public class AnalyticsPage {
     }
 
     public void createAggregate(Recipe recipe, String analyticsInterval) {
-        String XPATH_DROPDOWN_SELECTION = "(//*[@class='ant-select-selection-item'])[%d]";
         int INDEX_BATCH_ID = 1;
         $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).click();
 
@@ -174,7 +183,6 @@ public class AnalyticsPage {
     }
 
     public void chooseParameter(String param) {
-        String XPATH_PARAMETER_CHECKBOX = "//label//span[text()='%s']/ancestor::label//span[@class='ant-checkbox']";
         $(By.xpath(String.format(XPATH_PARAMETER_CHECKBOX, param))).scrollTo()
                 .click();
     }
@@ -191,7 +199,6 @@ public class AnalyticsPage {
     }
 
     public void checkParameter(String parameter, String unit) {
-        String XPATH_PARAMETER_DISPLAY = "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
         $(By.xpath(String.format(XPATH_PARAMETER_DISPLAY, parameter, unit))).waitUntil(visible, 10000);
     }
 
@@ -205,8 +212,6 @@ public class AnalyticsPage {
 
     public void verifyTimestamp() {
         ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
-        String timestamp =
-                (($(By.xpath("//img[@class='aggregate-refresh']/preceding-sibling::span"))).getText()).substring(5, 15);
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         Assert.assertTrue(dateFormat.format(currentTimestamp)
@@ -215,11 +220,11 @@ public class AnalyticsPage {
 
     public void verifyBatchIDAndRunIDAndStatus(Recipe recipe, String status) {
         $(By.xpath(String.format(XPATH_RIGHT_PANEL, recipe.getBatchId()))).shouldBe(visible);
-        Assert.assertTrue(($(By.xpath("//div[@class='aggregate-runid-label']/span")).getAttribute("title"))
+        Assert.assertTrue(runIDText.getAttribute("title")
                 .contains(recipe.getRunId()));
         if (status.equals("Completed")) {
-            while ($(By.xpath("//img[@class='aggregate-refresh']")).isDisplayed()) {
-                ($(By.xpath("//img[@class='aggregate-refresh']"))).click();
+            while ((refreshIcon).isDisplayed()) {
+                refreshIcon.click();
                 Selenide.sleep(1000);
             }
         }
@@ -277,7 +282,7 @@ public class AnalyticsPage {
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated Hourly"))).waitUntil(visible, 5000);
                 break;
             case "Created date timestamp":
-                $(By.xpath("//span[contains(text(),'On : 01/02/2023')]")).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "On : 01/02/2023"))).waitUntil(visible, 5000);
                 break;
             case "Batch ID":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID b10"))).waitUntil(visible, 5000);
@@ -316,8 +321,7 @@ public class AnalyticsPage {
         List<String> acceptedParams = new ArrayList<String>();
         List<String> expectedParams = new ArrayList<String>();
         for (int i = 1; i <= count; i++) {
-            String tagLabel = "//div[@class='custom-checkbox-wrapper'][%d]";
-            acceptedParams.add(($(By.xpath(String.format(tagLabel, i)))).getAttribute("title"));
+            acceptedParams.add(($(By.xpath(String.format(XPATH_TAG_LABEL, i)))).getAttribute("title"));
         }
 
         var config = ConfigFactory.parseResourcesAnySyntax(parameters, ConfigParseOptions.defaults());

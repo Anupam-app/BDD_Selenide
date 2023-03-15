@@ -67,10 +67,10 @@ Feature: Backup creation
     Given I am logged in as "bio4cadmin" user
     When I goto backup page
     And I go to backup history
-    And I verify backup history tab
+    Then I verify backup history tab
 
   Scenario: BIOCRS-5473| Backup Dashboard - Restore tab
     Given I am logged in as "bio4cadmin" user
     When I goto backup page
     And I go to backup restore
-    And I verify backup restore tab
+    Then I verify backup restore tab

@@ -219,6 +219,5 @@ public class AnalyticsPageStepsDefinition {
     @Then("I verify default list of {string} in analytics")
     public void iVerifyDefaultListOfParameters(String parameters) {
         analyticsPage.defaultCollectionTagsValidation(parameters);
-
     }
 }

@@ -32,7 +32,6 @@ import pageobjects.utility.SelenideHelper;
 public class RecipeConsolePage {
 
     Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
-
     private final String XPATH_PNID_BUTTON = "//span[contains(text(),'%s')]";
     private final String XPATH_LOAD_RECIPE = "//*[@title='%s']";
     private final String XPATH_RECIPE_LOADED_BEFORE =
@@ -131,6 +130,10 @@ public class RecipeConsolePage {
     private final String timeDetails = "//div[@id='timerCycle']//span[%s]";
     private final SelenideElement specialCharactarErrorMsg =
             $(By.xpath("//span[text()='Special characters are not allowed for Comments']"));
+    private final SelenideElement ManualOperationRecipe = matchId;
+    private final SelenideElement RunID = recipeRunBatchId;
+    private final SelenideElement BatchID = $(By.xpath("(//label[@id='trimString'])[2]"));
+    private final SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
 
     private final Recipe recipe;
 
@@ -831,7 +834,6 @@ public class RecipeConsolePage {
     }
 
     public void iVerifyConditionalStatement() {
-        SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
         stepAction.moveToElement(ConditionalStatement)
                 .perform();
         Selenide.sleep(2000);
@@ -948,9 +950,7 @@ public class RecipeConsolePage {
     }
 
     public void iVerifyDisplayedOrTrimmed(String condition) {
-        SelenideElement ManualOperationRecipe = matchId;
-        SelenideElement RunID = recipeRunBatchId;
-        SelenideElement BatchID = $(By.xpath("(//label[@id='trimString'])[2]"));
+
 
         if (condition.equalsIgnoreCase("Display")) {
 
@@ -1013,10 +1013,9 @@ public class RecipeConsolePage {
     }
 
     public void iClickOnAbortButton() {
-        Selenide.sleep(2000);
-        SelenideHelper.commonWaiter(abortButton, visible)
+        abortButton.waitUntil(visible, 5000L)
                 .click();
-        clickYesButton.waitUntil(Condition.visible, 1000)
+        clickYesButton.waitUntil(Condition.visible, 1000L)
                 .click();
     }
 

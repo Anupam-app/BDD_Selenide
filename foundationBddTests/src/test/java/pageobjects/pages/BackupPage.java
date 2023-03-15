@@ -47,9 +47,8 @@ public class BackupPage {
     private final SelenideElement backupNameOnRestorePage =
             $(By.xpath("(//*[contains(@class,'restore-card')])[1]/div[2]"));
     private final SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
-    private final SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
-    private final SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
-    private final SelenideElement restoreLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Restore']"));
+
+    private final String backupSubMenu = "//*[contains(@class,'sub-menu')][text()='%s']";
     private final SelenideElement restoreButton = $(By.xpath("//button[@class='btn-restore']"));
     private final SelenideElement successButton = $(By.xpath("//button[@class='rectangle-1']"));
     private final SelenideElement failureButton = $(By.xpath("//button[@class='rectangle-2']"));
@@ -80,6 +79,10 @@ public class BackupPage {
     private final SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
     private final SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
     private final String selectDay = "//div[@class='day-dropdown']/following-sibling::ul/div/li[text()='%s']";
+    private final SelenideElement trashIcon =
+            $(By.xpath("//div[@class='scheduled-row']/div[5]/div[@class='trash-icon']"));
+
+    private final SelenideElement datePicker = $(By.xpath("//input[@name='dateRange']"));
 
     public void goToBackupPage() {
         backupPageLinkText.click();
@@ -105,7 +108,7 @@ public class BackupPage {
     }
 
     public void backupHistoryTab() {
-        $(By.xpath("//input[@name='dateRange']")).shouldBe(visible);
+        datePicker.shouldBe(visible);
         $(By.xpath(String.format(historyColumnName, "Backup Name"))).shouldBe(visible);
         $(By.xpath(String.format(historyColumnName, "Backed up by"))).shouldBe(visible);
         $(By.xpath(String.format(historyColumnName, "Backup/Restore"))).shouldBe(visible);
@@ -126,7 +129,7 @@ public class BackupPage {
     }
 
     public void backupRestoreTab() {
-        $(By.xpath("//input[@name='dateRange']")).shouldBe(visible);
+        datePicker.shouldBe(visible);
         restoreButton.waitUntil(visible, 2000);
         failureButton.waitUntil(visible, 2000);
         successButton.waitUntil(visible, 2000);
@@ -243,11 +246,11 @@ public class BackupPage {
     }
 
     public void goToHistory() {
-        historyLinkText.click();
+        $(By.xpath(String.format(backupSubMenu, "History"))).click();
     }
 
     public void goToRestore() {
-        restoreLinkText.click();
+        $(By.xpath(String.format(backupSubMenu, "Restore"))).click();
     }
 
     public void waitForEndOfBackup() {
@@ -256,7 +259,7 @@ public class BackupPage {
     }
 
     public void goToBackupMode() {
-        backupLinkText.click();
+        $(By.xpath(String.format(backupSubMenu, "Backup"))).click();
     }
 
     private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait) {
@@ -289,7 +292,7 @@ public class BackupPage {
                 ($(By.xpath(String.format(scheduledBackupDetails, 3)))).getText(), occurrence);
         Assert.assertTrue("Start Date / Time is not correct",
                 (($(By.xpath(String.format(scheduledBackupDetails, 4)))).getText()).contains(startTime));
-        $(By.xpath("//div[@class='scheduled-row']/div[5]/div[@class='trash-icon']")).shouldBe(visible);
+        trashIcon.shouldBe(visible);
     }
 
     public void waitForScheduledBackupFinished() {
