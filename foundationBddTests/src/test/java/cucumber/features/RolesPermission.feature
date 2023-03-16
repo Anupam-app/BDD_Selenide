@@ -5,3 +5,33 @@ Feature: Roles Permissions Check
     Given I am logged in as "testRoleWithoutPerms" user
     When I go to user page
     Then I do not see Roles mode
+
+  @IVI-4908
+  Scenario Outline: BIOFOUND-27757 | BIOFOUND-27757 | Verify Default Users & roles
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    And I trigger Roles mode
+    And I verify default roles
+      | Bio4C Service   |
+      | Administrator   |
+      | ProcessManager  |
+      | Operator        |
+    Then I verify default roles are disabled or enabled
+    And I verify "<UserRole>" list of "<roles>"
+    #TO-DO : skipping the test step until IVI-4908 is fixed
+    #Then I should see view icon of particular roles
+      #| Administrator |
+      #| Bio4CService  |
+    @CRS
+    Examples:
+      | roles                                        | UserRole  |
+      | parameters/crs/privilegeslist                | service   |
+      | parameters/crs/privilegeslistofAdministrator | admin     |
+
+    @IVI
+    Examples:
+      | roles                                        | UserRole        |
+      | parameters/ivi/privilegeslist                | service         |
+      | parameters/ivi/privilegeslistofAdministrator | admin           |
+      | parameters/ivi/privilegeslistProcessManager  | proceessManager |
+      | parameters/ivi/privilegeslistOperator        | operator        |

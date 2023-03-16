@@ -144,7 +144,6 @@ public class RolePageStepsDefinition {
         this.role.setRoleName(name);
         this.role.setRoleAction(RoleAction.ERROR);
         rolePage.createNewrole(this.role.getRoleName());
-
     }
 
     @When("I click on save button")
@@ -160,13 +159,16 @@ public class RolePageStepsDefinition {
         }
     }
 
-
     @And("I verify {string} list of {string}")
     public void iVerifyPrivilegesListOfRoles(String userRole, String roles) {
-        if (userRole.equalsIgnoreCase("privilege")) {
-            rolePage.privilegesOfroles(roles);
-        } else if (userRole.equalsIgnoreCase("proceessmanager")) {
-            rolePage.processManager(roles);
+        if (userRole.equalsIgnoreCase("admin")) {
+            rolePage.adminRolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("service")) {
+            rolePage.serviceRolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("proceessManager")) {
+            rolePage.processMgr_RolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("operator")) {
+            rolePage.operatorRolePermission(roles);
         }
     }
 
@@ -220,4 +222,11 @@ public class RolePageStepsDefinition {
 		rolePage.deleteRole(this.role.getRoleName());
 	}
 
+    @And("I verify default roles are disabled or enabled")
+    public void verifyDefaultRoleDisabled(){
+        Assert.assertFalse("Admin role is not disabled",rolePage.defaultRoleDisabled("Administrator"));
+        Assert.assertFalse("Service role is not disabled",rolePage.defaultRoleDisabled("Bio4CService"));
+        Assert.assertTrue("Process Manager role is not enabled",rolePage.defaultRoleDisabled("ProcessManager"));
+        Assert.assertTrue("Operator role is not enabled",rolePage.defaultRoleDisabled("Operator"));
+    }
 }

@@ -134,26 +134,10 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
 
-  @IVI-4908
-  Scenario Outline: IVI BUG IVI-4908 | Verify Default Users & roles
+  Scenario: Verify Default Users
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     And I verify default user account "Bio4CService" and "Administrator"
-    And I trigger Roles mode
-    And I verify default roles
-      | Bio4C Service |
-      | Administrator |
-      | Operator      |
-    And I verify "<UserRole>" list of "<roles>"
-    #TO-DO : skipping the test step until IVI-4908 is fixed
-    #Then I should see view icon of particular roles
-      #| Administrator |
-      #| Bio4CService  |
-
-    Examples:
-      | roles                         | UserRole  |
-      | parameters/crs/privilegeslist | privilege |
-
 
   Scenario: Assign custom role to new user |BIOCRS-2585|
     Given I am logged in as "Bio4CAdmin" user
@@ -263,27 +247,3 @@ Feature: User management
     And I push the login button
     Then I am logged in
     And I am landed on "Report Management" page
-
-  Scenario: Verify the Error texts while setting new password
-    Given I open login page
-    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
-    And I push the login button
-    Then I provide invalid password to verify the errors
-    | newPassword | error                                     |
-    | merckapp    | Password doesn't met the policy criteria. |
-    | MERCKAPP    | Password doesn't met the policy criteria. |
-    | MerckApp    | Password doesn't met the policy criteria. |
-    | 123456789   | Password doesn't met the policy criteria. |
-    | MerckApp1   | Password doesn't met the policy criteria. |
-    | Mar1@       | Password doesn't met the policy criteria. |
-
-  Scenario Outline: Verify the Error texts while setting wrong confirm Password
-    Given I open login page
-    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
-    And I push the login button
-    Then I provide "<newPassword>", wrong "<confirmPassword>" to verify the error "<error>"
-
-  Examples:
-  | newPassword | confirmPassword | error |
-  | MerckApp1@  | MerckApp2@      | New password and confirmation password do not match. |
-

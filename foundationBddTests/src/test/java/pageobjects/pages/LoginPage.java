@@ -33,7 +33,7 @@ public class LoginPage {
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
     private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
-    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar'"));
+    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -114,6 +114,6 @@ public class LoginPage {
 
     public void verifyNotification(String value){
         commonWaiter(tempPwd_ErrorNotification,visible);
-        Assert.assertEquals("Error text message is not as expected","value",tempPwd_ErrorNotification.getText());
+        Assert.assertEquals("Error text message is not as expected",value,tempPwd_ErrorNotification.getText());
     }
 }

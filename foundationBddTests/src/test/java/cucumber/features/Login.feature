@@ -72,3 +72,25 @@ Feature: User login
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
+
+  Scenario: BIOFOUND-27788 | Verify the Error texts while setting new password
+    Given I open login page
+    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
+    And I push the login button
+    Then I provide invalid password to verify the errors
+      | merckapp    | Password doesn't met the policy criteria. |
+      | MERCKAPP    | Password doesn't met the policy criteria. |
+      | MerckApp    | Password doesn't met the policy criteria. |
+      | 123456789   | Password doesn't met the policy criteria. |
+      | MerckApp1   | Password doesn't met the policy criteria. |
+      | Mar1@       | Password doesn't met the policy criteria. |
+
+  Scenario Outline: BIOFOUND-27788 | Verify the Error texts while setting wrong confirm Password
+    Given I open login page
+    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
+    And I push the login button
+    Then I provide "<newPassword>", wrong "<confirmPassword>" to verify the error "<error>"
+
+    Examples:
+      | newPassword | confirmPassword | error |
+      | MerckApp1@  | MerckApp2@      | New password and confirmation password do not match. |
