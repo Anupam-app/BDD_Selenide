@@ -140,6 +140,7 @@ public class ReportsPage {
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
     private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+    private final SelenideElement searchTextReportManagement = $(By.id("search"));
 
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -921,6 +922,10 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             System.out.println(recordRole);
+            System.out.println(eventTime.getText());
+            System.out.println(comment.getText());
+            System.out.println(record.getText());
+            System.out.println(message);
             if (diffMinutes < 10 && comment.getText().contains(message) &&
                    record.getText().equalsIgnoreCase(recordRole)) {
                 result = true;
@@ -972,5 +977,7 @@ public class ReportsPage {
         return result;
     }
 
-
+    public void iVerifyReportPageLoaded() {
+        searchTextReportManagement.waitUntil(visible,5000L,500L);
+    }
 }
