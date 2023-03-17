@@ -48,29 +48,29 @@ Feature: Trends PDP
       | Param1 | Param2 |
       | P001   | P002   |
 
-# TODO This will be enabled when the bug BIOCRS-9267 is fixed
-#  Scenario Outline: BIOCRS-1405 | Save the collection from -list of collection
-#    Given I am logged in as "bio4cAdmin" user
-#    And I navigate to trends page
-#    When I choose "<Param1>","<Param2>" parameters as default collection
-#    And I save as trends collections
-#    And I choose collection
-#    And I see "<Param1>","<Param2>" parameters displayed
-#    And I uncheck "<Param1>"
-#    And I save as trends collections
-#    And I choose collection
-#    Then I see "<Param2>" parameters displayed
-#    And I delete the collection name
-#
-#    @CRS
-#    Examples:
-#      | Param1   | Param2   |
-#      | PI101 PV | PI102 PV |
-#
-#    #@IVI
-#    #Examples:
-#     # | Param1 | Param2 |
-#     # | P001   | P002   |
+    @BIOCRS-9267
+  Scenario Outline: BIOCRS-1405 | Save the collection from -list of collection
+    Given I am logged in as "bio4cAdmin" user
+    And I navigate to trends page
+    When I choose "<Param1>","<Param2>" parameters as default collection
+    And I save as trends collections
+    And I choose collection
+    And I see "<Param1>","<Param2>" parameters displayed
+    And I uncheck "<Param1>"
+    And I save as trends collections
+    And I choose collection
+    Then I see "<Param2>" parameters displayed
+    And I delete the collection name
+
+    @CRS
+    Examples:
+      | Param1   | Param2   |
+      | PI101 PV | PI102 PV |
+
+    @IVI
+    Examples:
+      | Param1 | Param2 |
+      | P001   | P002   |
 
   Scenario Outline: BIOCRS-1405 | remove 1 parameter while saving collection
     Given I am logged in as "bio4cAdmin" user

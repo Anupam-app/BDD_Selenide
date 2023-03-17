@@ -277,7 +277,7 @@ Feature: Recipe console
 	When I select report from dropdown "Audit Trail"
 	And I select user in dropdown "Bio4CAdmin"
 	And I check audit trial logs
- 	
+
  Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
   When I expand recipe console in pnid
   And I load recipe "testRecipeToExecute1min"
