@@ -669,13 +669,10 @@ public class RecipePage {
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
         importInputTextBox.click();
-        //SelenideHelper.commonWaiter(importInputTextBox, visible).clear();
-        //SelenideHelper
         System.out.println(recipeName.concat("1"));
         importInputTextBox.sendKeys(Keys.CONTROL,"a");
         importInputTextBox.sendKeys(Keys.DELETE);
         importInputTextBox.waitUntil(visible,5000L).setValue(recipeName.concat("1"));
-        //importInputTextBox.setValue(value);
         saveButton.click();
         browserLinkText.waitUntil(Condition.visible, 5000L).click();
 
@@ -684,7 +681,7 @@ public class RecipePage {
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         var actualText = $(By.xpath(String.format(importRecipeStatusVerify,recipeName))).waitUntil(visible,5000l).getText();
-        Assert.assertEquals("Draft",actualText);
+        Assert.assertEquals("Verification of recipe status is Draft:", "Draft",actualText);
         recipeSearchTextBox.clear();
     }
 
