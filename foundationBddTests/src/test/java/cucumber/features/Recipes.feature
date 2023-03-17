@@ -4,7 +4,6 @@ Feature: Recipe management
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
-
   Scenario: BIOCRS-5478 | Recipe modification
     Given I go to recipe page
     When I edit recipe "testDraftRecipeToAddPhase"
@@ -206,7 +205,7 @@ Feature: Recipe management
     And I save the recipes
     And I logout
     And I open login page
-    And I enter "bio4cservice" as username and "Merck@dmin" as password
+    And I enter "bio4cadmin" as username and "Merck@dmin" as password
     And I push the login button
     And I open the recipe
     And I add few actions steps

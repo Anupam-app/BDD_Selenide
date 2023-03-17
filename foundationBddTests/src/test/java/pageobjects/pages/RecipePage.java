@@ -2,8 +2,6 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-
-import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.ElementsCollection;
@@ -621,11 +619,11 @@ public class RecipePage {
             case ("3."):
             case (".2"):
                 secondStep.sendKeys(value);
-                $(By.xpath("//div[contains(text(),'No value before/after decimal point.')][2]")).shouldBe(visible);
+                $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]")).shouldBe(visible);
                 break;
             case("-1"):
                 secondStep.sendKeys(value);
-                $(By.xpath("//div[contains(text(),'Out of Range.')][2]")).shouldBe(visible);
+                $(By.xpath("//div[contains(text(),'Out of Range.')]")).shouldBe(visible);
                 break;
             default:
         }
