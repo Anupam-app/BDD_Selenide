@@ -674,10 +674,10 @@ public class RecipePage {
         System.out.println(recipeName.concat("1"));
         importInputTextBox.sendKeys(Keys.CONTROL,"a");
         importInputTextBox.sendKeys(Keys.DELETE);
-        importInputTextBox.waitUntil(visible,5000l).setValue(recipeName.concat("1"));
+        importInputTextBox.waitUntil(visible,5000L).setValue(recipeName.concat("1"));
         //importInputTextBox.setValue(value);
         saveButton.click();
-        browserLinkText.waitUntil(Condition.visible, 5000l).click();
+        browserLinkText.waitUntil(Condition.visible, 5000L).click();
 
     }
     public void importedRecipeStatusIsDraft(String recipeName){
