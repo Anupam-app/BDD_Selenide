@@ -219,7 +219,7 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
         String runId = runIdTextbox.getValue();
         productIdTextbox.setValue(recipe.getProductId());
-        batchIdTextbox.click();
+        commonWaiter(batchIdTextbox,visible).click();
         batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(recipe.getBeforeComments());

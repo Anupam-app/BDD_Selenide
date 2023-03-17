@@ -27,6 +27,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 
@@ -112,6 +113,7 @@ public class TrendsPage {
     private final String XPATH_PARAMETER_UNCHECK =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
 
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     public void goToTrends() {
         commonWaiter(trends, visible).click();
         commonWaiter(trends, visible);
@@ -399,7 +401,7 @@ public class TrendsPage {
     }
 
     public void listOfCollection(String name) {
-        ArrowOfListOfCollection.click();
+        commonWaiter(ArrowOfListOfCollection,visible).click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
@@ -409,6 +411,8 @@ public class TrendsPage {
         collectionName.sendKeys(name);
         $(By.xpath(String.format("//li[text()='%s']/span", param1))).click();
         collectionCreate.click();
+        spinnerComponent.spinnerIcon.waitUntil(not(visible),20000);
+        commonWaiter(defaultExpandArrow,visible).click();
         ArrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }

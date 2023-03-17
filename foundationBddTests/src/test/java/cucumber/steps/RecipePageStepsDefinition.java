@@ -13,6 +13,9 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.UserPage;
+
+import javax.xml.crypto.Data;
+
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class RecipePageStepsDefinition {
@@ -337,5 +340,27 @@ public class RecipePageStepsDefinition {
     @When("I try to copy and paste the phase")
     public void copyPastePhase(){
          recipePage.copyPastePhase();
+    }
+
+    @And("I have exported recipes in different status")
+    public void exportRecipe(DataTable table){
+        List<String> list = table.asList(String.class);
+        for (int i = 0; i < list.size(); i++) {
+            recipePage.listOfRecipeExport(list.get(i));
+        }
+    }
+    @And("I import recipes in different status")
+    public void importRecipe(DataTable table) {
+        List<String> list = table.asList(String.class);
+        for (int i = 0; i < list.size(); i++) {
+            recipePage.listOfImportRecipe(list.get(i));
+        }
+    }
+    @Then("the UoP status of imported recipe changes to Draft")
+    public void importedRecipeStatusIsDraft(DataTable table){
+        List<String> list = table.asList(String.class);
+        for (int i = 0; i < list.size(); i++) {
+            recipePage.importedRecipeStatusIsDraft(list.get(i));
+        }
     }
 }

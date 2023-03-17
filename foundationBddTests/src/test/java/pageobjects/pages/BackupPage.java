@@ -81,7 +81,7 @@ public class BackupPage {
         Date date = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(date);
-        int minuteToWait = 1;
+        int minuteToWait = 2;
         c.add(Calendar.MINUTE, minuteToWait);
         Date currentDatePlusOne = c.getTime();
         String d = dateFormat.format(currentDatePlusOne);

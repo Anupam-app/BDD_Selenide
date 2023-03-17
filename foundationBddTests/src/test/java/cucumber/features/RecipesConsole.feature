@@ -122,6 +122,7 @@ Feature: Recipe console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
+
     # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid

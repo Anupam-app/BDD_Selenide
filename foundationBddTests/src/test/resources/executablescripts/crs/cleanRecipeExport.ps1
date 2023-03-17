@@ -1,1 +1,6 @@
 ﻿rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\testDraftRecipeToAddPhase.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\testRecipeDraftToInactive.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\testRecipeDraftToReject.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\testDraftRecipeToChangeStatus.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\recipeTechReview.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\CRS Family\CRSSubFamily\CRS\50L\recipeInReview.acercp'
