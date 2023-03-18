@@ -17,6 +17,8 @@ import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
 
+import javax.xml.crypto.Data;
+
 public class RolePageStepsDefinition {
 
     private final RolePage rolePage;
@@ -228,5 +230,38 @@ public class RolePageStepsDefinition {
         Assert.assertFalse("Service role is not disabled",rolePage.defaultRoleDisabled("Bio4CService"));
         Assert.assertTrue("Process Manager role is not enabled",rolePage.defaultRoleDisabled("ProcessManager"));
         Assert.assertTrue("Operator role is not enabled",rolePage.defaultRoleDisabled("Operator"));
+    }
+
+    @When("I modify permission")
+    public void iRemovePermission(DataTable table) {
+        List<List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            this.role.getPermissions().remove(list.get(i).get(0));
+            rolePage.clickOnPermission(list.get(i).get(0));
+            this.role.getPermissions().add(list.get(i).get(1));
+            rolePage.clickOnPermission(list.get(i).get(1));
+        }
+    }
+
+    @And("I see update role name is displayed on Role list data")
+    public void iVerifyRoleNameDisplayed(){
+        rolePage.roleNameExists(this.role.getUpdatedRoleName());
+    }
+
+    @And("I verify Role permission are updated")
+    public void modifiedRolePermission(){
+        rolePage.verifyAssignedPermission(this.role.getUpdatedRoleName(),this.role.getPermissions());
+    }
+
+    @And("I update roleName as {string}")
+    public void updateRoleName(String roleName){
+        this.role.setUpdatedRoleName(roleName);
+        rolePage.updateRoleName(roleName);
+    }
+
+    @When("I save role successfully")
+    public void saveRole() {
+        rolePage.saveButton();
+        rolePage.notification(this.role.getRoleAction());
     }
 }

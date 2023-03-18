@@ -194,8 +194,8 @@ Feature: User management
     Then I see password updated message is displayed for "<user>"
     And I logout
     Examples:
-      | user          | old password | newPassword | confirmPassword | first name | last name | user role |
-      | testPwdChange | MerckApp1@   | MerckApp2@  | MerckApp1@      | testPwd    | testing   |           |
+      | user          | old password | newPassword | confirmPassword | first name | last name |
+      | testPwdChange | MerckApp1@   | MerckApp2@  | MerckApp1@      | testPwd    | testing   |
 
   Scenario: BIOCRS-5377: Verify the Application Icons
     Given I am logged in as "Bio4CAdmin" user
@@ -247,3 +247,23 @@ Feature: User management
     And I push the login button
     Then I am logged in
     And I am landed on "Report Management" page
+
+  Scenario: BIOFOUND-27762 | Modify custom role-Privileges and Name
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I search "customRoleEdit" to validate role "editCustomRole" assigned
+    And I trigger Roles mode
+    And I search "editCustomRole" role
+    When I edit role "editCustomRole"
+    And I update roleName as "modifiedCustomRole"
+    And I modify permission
+      | removePermission | AddPermission       |
+      | Create User      | Create Role         |
+      | Basic Process    | View Present Alarm  |
+    And I save role successfully
+    And I search "modifiedCustomRole" role
+    And I see update role name is displayed on Role list data
+    Then I verify Role permission are updated
+    And I trigger Users mode
+    Then I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
+

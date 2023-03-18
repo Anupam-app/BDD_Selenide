@@ -14,6 +14,9 @@ import dataobjects.RoleAction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -38,7 +41,7 @@ public class RolePage {
     private final SelenideElement roleSearchTextBox = $(By.xpath("//input[@placeholder='Search...']"));
 
     private final String xpathEditRoleIcon = "//div[div[contains(.,'%s')]]/div/div[contains(@class, 'edit-icon')]";
-
+    private final String roleNameCheck = "//div[contains(text(),'%s')]";
     private final SelenideElement selectRoleDropdown = $(By.id("role"));
 
     private final SelenideElement roleNotificationBar = $(By.xpath("//*[@class = 'roleModalNotificationBar error-bar']"));
@@ -313,4 +316,31 @@ public class RolePage {
     public boolean defaultRoleDisabled(String value){
         return $(By.xpath(String.format(disable_Edit_Button,value))).isEnabled();
     }
+
+    public void roleNameExists(String role) {
+        $(By.xpath(String.format(roleNameCheck, role))).shouldBe(Condition.visible);
+    }
+
+    public void verifyAssignedPermission(String roleName, Set<String> set){
+        SelenideHelper.commonWaiter($(By.xpath(String.format(viewAll,roleName))), visible).click();
+        int count = rolePermissionList.size();
+        List<String> acceptedParams = new ArrayList<>();
+        for (int i = 1; i <= count; i++) {
+            acceptedParams.add($(By.xpath(String.format(tagLabel, i))).getText());
+        }
+        List<String> list = new ArrayList<>(set);
+        if ((count == set.size()) && (count != 0)) {
+            Collections.sort(acceptedParams);
+            Collections.sort(list);
+            Assert.assertEquals(acceptedParams, list);
+        }
+        SelenideHelper.commonWaiter(closeIcon, visible).click();
+    }
+
+    public void updateRoleName(String roleName){
+        commonWaiter(inputRoleName,visible).clear();
+        inputRoleName.setValue(roleName);
+        Assert.assertEquals("Role Name is not entered as expected", roleName, inputRoleName.getValue());
+    }
+
 }

@@ -88,7 +88,7 @@ public class UserPage {
     private SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
     private SelenideElement selectLanguageDropdown = $(By.xpath("//div[@id='language']//div[@class='role-dropdown-container']"));
     private String XPATH_LANGUAGE_OPTION_DROPDOWN = "//li[contains(text(),'%s')]";
-
+    private final SelenideElement roleAssigned = $(By.xpath("//table[@id='foundusertable']/tbody/tr/td[@class='rolecss']/div/div"));
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
@@ -416,5 +416,9 @@ public class UserPage {
 
     public boolean createUserIconPresent(){
         return createUserPlusButton.isDisplayed();
+    }
+
+    public void roleAssignedToUser(String role){
+        Assert.assertEquals("Role is not assigned to user ", role , roleAssigned.getText());
     }
 }

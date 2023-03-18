@@ -13,4 +13,5 @@ public class Role {
     String oldRoleName;
     Set<String> permissions = new HashSet<>();
     RoleAction roleAction;
+    String updatedRoleName;
 }
