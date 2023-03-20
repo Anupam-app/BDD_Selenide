@@ -122,6 +122,8 @@ public class RecipePage {
 
     private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
     private final SelenideElement importInputTextBox = $(By.xpath("//input[contains(@class,'rename-recipe-import-input')]"));
+    private final SelenideElement importRecipeFromEditor =  $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']"));
+    private final SelenideElement fileMenuInRecipeEditor =  $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
 
     public void goTo() {
         recipePageLinkText.click();
@@ -664,8 +666,8 @@ public class RecipePage {
 
     public void listOfImportRecipe(String recipeName){
         goToEditMode();
-        $(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']")).click();
+        fileMenuInRecipeEditor.click();
+        importRecipeFromEditor.click();
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
         importInputTextBox.click();
