@@ -213,6 +213,7 @@ public class AnalyticsPage {
 
     public void verifyTimestamp() {
         refreshIcon.click();
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         Assert.assertTrue(dateFormat.format(currentTimestamp)
