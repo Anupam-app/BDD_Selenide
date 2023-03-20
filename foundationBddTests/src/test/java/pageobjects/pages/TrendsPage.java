@@ -112,6 +112,7 @@ public class TrendsPage {
             "//div[@class='coll-panel']/button/label[text()='%s']/following::span[@class='delete-collection']";
     private final String XPATH_PARAMETER_UNCHECK =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
+    private final SelenideElement expandListOfCollection = $(By.xpath("//label[(@title='List of collections')]/following-sibling::span[@class='collpase-expand-icon']"));
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     public void goToTrends() {
@@ -294,8 +295,11 @@ public class TrendsPage {
         collectionName.sendKeys(name);
         Selenide.sleep(5000);
         collectionCreate.click();
-        ArrowOfListOfCollection.click();
-        commonWaiter($(By.xpath(String.format(collectionNameRadioButton, name))), visible).click();
+        if(!expandListOfCollection.isDisplayed()) {
+            ArrowOfListOfCollection.click();
+        }
+        $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible,5000L,1000L).click();
+
     }
 
     public void chooseCollection(String name) {

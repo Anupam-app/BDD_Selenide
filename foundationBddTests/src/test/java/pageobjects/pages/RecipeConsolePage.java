@@ -216,13 +216,15 @@ public class RecipeConsolePage {
 		var classClearRecipeButton = clearRecipeButton.getAttribute("class");
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
 		$(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
-		String runId = runIdTextbox.getValue();
-		productIdTextbox.setValue(recipe.getProductId());
-		batchIdTextbox.click();
-		batchIdTextbox.sendKeys(recipe.getBatchId());
-		batchIdTextbox.sendKeys(Keys.ENTER);
-		preRunCommentsText.sendKeys(recipe.getBeforeComments());
-		okButton.click();
+		preRunWindowPopop.waitUntil(visible,2000L);
+			String runId = runIdTextbox.getValue();
+			productIdTextbox.setValue(recipe.getProductId());
+			batchIdTextbox.click();
+			batchIdTextbox.sendKeys(recipe.getBatchId());
+			batchIdTextbox.sendKeys(Keys.ENTER);
+			preRunCommentsText.sendKeys(recipe.getBeforeComments());
+			okButton.click();
+
 		abortButton.waitUntil(Condition.visible, 5000l);
 
 		//wait clean panel to be disabled via css class
@@ -231,6 +233,7 @@ public class RecipeConsolePage {
 				);
 
 		return runId;
+
 	}
 
 	public void isExecuted() {
