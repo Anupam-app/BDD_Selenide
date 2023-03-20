@@ -62,7 +62,7 @@ Feature: Trends PDP
     Then I see "<Param2>" parameters displayed
     And I delete the collection name
 
-    @CRS @test
+    @CRS
     Examples:
       | Param1   | Param2   |
       | PI101 PV | PI102 PV |
