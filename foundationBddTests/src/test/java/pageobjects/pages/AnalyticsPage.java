@@ -56,8 +56,8 @@ public class AnalyticsPage {
     private final String XPATH_PARAMETER_CHECKBOX =
             "//label//span[text()='%s']/ancestor::label//span[@class='ant-checkbox']";
     private final String XPATH_TAG_LABEL = "//div[@class='custom-checkbox-wrapper'][%d]";
-    private final String timestamp =
-            (($(By.xpath("//img[@class='aggregate-refresh']/preceding-sibling::span"))).getText()).substring(5, 15);
+    private final SelenideElement timestamp = $(By.xpath("//img[@class='aggregate-refresh']/preceding-sibling::span"));
+    
     private final String XPATH_PARAMETER_DISPLAY =
             "//span[contains(text(),'%s')]/ancestor::div/span[contains(text(),'%s')]";
     private final SelenideElement viewGraph = $(By.xpath("//*[@class='highcharts-root']"));
@@ -217,7 +217,7 @@ public class AnalyticsPage {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         Timestamp currentTimestamp = new Timestamp(System.currentTimeMillis());
         Assert.assertTrue(dateFormat.format(currentTimestamp)
-                .contains(timestamp));
+                .contains((timestamp.getText()).substring(5, 15)));
     }
 
     public void verifyBatchIDAndRunIDAndStatus(Recipe recipe, String status) {
