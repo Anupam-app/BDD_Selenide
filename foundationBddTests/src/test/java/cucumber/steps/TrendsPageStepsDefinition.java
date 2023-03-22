@@ -180,5 +180,11 @@ public class TrendsPageStepsDefinition {
     public void iUnCheckParam(String param1) {
         trendsPage.unCheckParameter(this.trends.getCollectionName(), param1);
     }
+    @Then("I see the graph is plotted for selected parameters in chart area {string}")
+    public void iSeeTheGraphIsPlottedForSelectedParametersInChartArea(String param1)
+        throws ParseException {
+        trendsPage.ledgerParameterOnChartArea(param1);
+        trendsPage.validateGraph();
+    }
 
 }
