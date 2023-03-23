@@ -151,7 +151,7 @@ public class RecipePage {
         $$(recipeListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
     }
 
-    public void verifyColoumn(String columnName, int columnIndex) {
+    public void verifyColoumn(String columnName, String tab, int columnIndex) {
         $(By.xpath(String.format(XPATH_RecipeColumnName, columnIndex))).shouldHave(text(columnName));
         for (int i = 1; i <= recipeListTable.size(); i++) {
             Assert.assertFalse($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, columnIndex))).getText().isBlank());
@@ -318,7 +318,7 @@ public class RecipePage {
 
     }
 
-    public void printRecipe() {
+    public void printRecipe(String recipeName) {
         commonWaiter(file, visible).click();
         print.shouldBe(visible);
     }

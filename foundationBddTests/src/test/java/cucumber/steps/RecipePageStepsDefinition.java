@@ -137,10 +137,10 @@ public class RecipePageStepsDefinition {
     }
 
     @And("below {string} column is displayed")
-    public void verifyColumn(DataTable table) {
+    public void verifyColumn(String tab,DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i).get(0), i);
+            recipePage.verifyColoumn(list.get(i).get(0),tab, i);
         }
     }
 
@@ -206,8 +206,8 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I print recipe {string}")
-    public void iClickOnPrint() throws Exception {
-        recipePage.printRecipe();
+    public void iClickOnPrint(String recipeName) {
+        recipePage.printRecipe(recipeName);
     }
 
     @Then("I should see the recipe imported in user notifications")
