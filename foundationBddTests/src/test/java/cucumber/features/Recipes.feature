@@ -185,18 +185,17 @@ Feature: Recipe management
     Given I go to Recipe editor
     When I add few actions steps
     And I add criteria to few steps
-    And I verify recipe status is unsaved
-    And I navigate to recipe browser
-    And I Select and open a recipe
+    And I verify recipe status is "Unsaved"
+    And  I navigate to recipe browser, open a recipe
     Then I should see unsaved warning dialog box
     And I select OK and navigate to recipe editor
     And I add few more action steps
     And I create a phase and add phase to library
     And I save the recipe with 30 character name
     And I verify the recipe name displayed on Recipe tab
-    And I verify recipe status is saved
+    And I verify recipe name displayed along with status as "Saved"
     And I add few more steps and save the recipe
-    And I navigate to recipe browser
+    And I open the recipe list
     And I should see full recipe name on mouse hover
 
   Scenario: BIOFOUND-7987: Recipe Editor Verify Save new and existing recipe
@@ -204,13 +203,11 @@ Feature: Recipe management
     When I add few actions steps
     And I save the recipes
     And I logout
-    And I open login page
-    And I enter "bio4cadmin" as username and "Merck@dmin" as password
-    And I push the login button
+    And I login with "bio4cadmin" as username and "Merck@dmin" as password
     And I open the recipe
     And I add few actions steps
     And I save the recipe
-    Then I verify the header is updated to SAVED
+    Then I verify the header is updated to "Saved"
     And I open the recipe list
     And I should see last modifed by recipe
     And I change the recipe to in review

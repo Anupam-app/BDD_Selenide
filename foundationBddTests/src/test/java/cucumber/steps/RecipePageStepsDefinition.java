@@ -120,36 +120,10 @@ public class RecipePageStepsDefinition {
         Assert.assertEquals(this.recipePage.getPhaseName(), this.recipe.getPhaseName());
     }
 
-    @Given("I goto to editor tab in recipe page")
-    public void iNevigateToEditorTab() {
-        recipePage.naviagateToEditorTab();
-    }
-
-    @When("I create a recipe {string} with phase")
-    public void iCreateARecipe(String recipe) {
-        this.recipe.setRecipeNode(recipe);
-        recipePage.createRecipe(recipe);
-    }
-
-    @And("I save the recipe as {string}")
-    public void iSaveRecipeAs(String recipe) {
-        this.recipe.setRecipeName(recipe);
-        recipePage.saveRecipe(recipe);
-    }
-
     @Then("I save the modified recipe")
     public void iSaveModifiedRecipeAs() {
         recipePage.saveModifiedRecipe();
     }
-
-
-    @Then("I see recipe {string} is created with draft status in browser tab")
-    public void iVerifyRecipeIsCreated(String recipe) {
-        this.recipe.setRecipeName(recipe);
-        recipePage.verifyRecipe(recipe);
-        Assert.assertEquals(this.recipe.getRecipeName(), this.recipePage.getRecipeName());
-    }
-
 
     @Given("I edit recipe {string}")
     public void iEditRecipe(String recipe) {
@@ -346,7 +320,7 @@ public class RecipePageStepsDefinition {
 
     @When("I try to copy and paste the phase")
     public void copyPastePhase(){
-         recipePage.copyPastePhase();
+        recipePage.copyPastePhase();
     }
 
     @And("I go to Recipe editor")
@@ -358,18 +332,8 @@ public class RecipePageStepsDefinition {
 
     @And("I add few actions steps")
     public void AddFewwSteps() {
-        recipePage.addingPhaseByPlus();
+        recipePage.addingStepByClickPlusIcon();
         recipePage.addActionStep();
-    }
-
-    @Given("I navigate to recipe browser")
-    public void iNavigateToRecipeBrowser() {
-        recipePage.goToBrowserMode();
-    }
-
-    @Given("I Select and open a recipe")
-    public void iSelectAndOpenRecipe(){
-        recipePage.chooseRecipe();
     }
 
     @Then("I should see unsaved warning dialog box")
@@ -405,9 +369,9 @@ public class RecipePageStepsDefinition {
         recipePage.iVerifyRecipeNameInRecipeTab(this.recipe.getRecipeName());
     }
 
-    @Then("I verify recipe status is saved")
-    public void iVerifyRecipeStatusIsSaved() {
-        recipePage.verifysaved();
+    @Then("I verify recipe name displayed along with status as {string}")
+    public void iVerifyRecipeStatusIsSaved(String status) {
+        recipePage.verifyRecipeStatus(status);
     }
 
     @And("I add few more steps and save the recipe")
@@ -427,9 +391,9 @@ public class RecipePageStepsDefinition {
         recipePage.addCriteria();
     }
 
-    @And("I verify recipe status is unsaved")
-    public void iVerifyRecipeStatusUnsaved() {
-        recipePage.verifyUnsaved();
+    @And("I verify recipe status is {string}")
+    public void iVerifyRecipeStatusUnsaved(String status) {
+        recipePage.verifyRecipeStatus(status);
     }
 
     @And("I save the recipes")
@@ -446,9 +410,9 @@ public class RecipePageStepsDefinition {
         recipePage.goToEditMode();
     }
 
-    @Then("I verify the header is updated to SAVED")
-    public void iVerifyHeaderIsUpdatedToSaved() {
-        recipePage.verifysaved();
+    @Then("I verify the header is updated to {string}")
+    public void iVerifyHeaderIsUpdatedToSaved(String status) {
+        recipePage.verifyRecipeStatus(status);
     }
 
     @And("I open the recipe list")
@@ -488,6 +452,12 @@ public class RecipePageStepsDefinition {
         recipePage.okBtn();
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(5));
         recipePage.saveBtn(this.recipe.getRecipeName());
+    }
+
+    @And("I navigate to recipe browser, open a recipe")
+    public void iNavigateToRecipeBrowserAndOpenRecipe(){
+        recipePage.goToBrowserMode();
+        recipePage.chooseRecipe();
     }
 
 }
