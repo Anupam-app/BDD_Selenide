@@ -14,16 +14,14 @@ import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.UserPage;
 
-import javax.xml.crypto.Data;
-
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class RecipePageStepsDefinition {
 
-    private RecipePage recipePage;
+    private final RecipePage recipePage;
     private final UserPage userPage;
-    private Recipe recipe;
-    private Login login;
+    private final  Recipe recipe;
+    private final Login login;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login) {
         this.recipePage = recipePage;

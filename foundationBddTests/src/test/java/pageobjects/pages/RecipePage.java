@@ -652,11 +652,13 @@ public class RecipePage {
         phaseLibrary.click();
         $(By.xpath("//span[text()='Phase123']")).doubleClick();
     }
+    
     public void copyPastePhase(){
         $(By.xpath(String.format(phaseName, "Phase 1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
         stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
     }
+
     public void listOfRecipeExport(String recipeName){
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);

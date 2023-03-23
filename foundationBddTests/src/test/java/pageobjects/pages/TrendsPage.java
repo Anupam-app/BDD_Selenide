@@ -79,7 +79,7 @@ public class TrendsPage {
             $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement DefaultArrow =
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement ArrowOfListOfCollection =
+    private final SelenideElement arrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement deleteCollectionButton =
             $(By.xpath("//button[@type='button']/span[text()='Delete']"));
@@ -115,6 +115,7 @@ public class TrendsPage {
     private final SelenideElement expandListOfCollection = $(By.xpath("//label[(@title='List of collections')]/following-sibling::span[@class='collpase-expand-icon']"));
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+
     public void goToTrends() {
         commonWaiter(trends, visible).click();
         commonWaiter(trends, visible);
@@ -149,7 +150,7 @@ public class TrendsPage {
                 }
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -167,7 +168,7 @@ public class TrendsPage {
                 defaultCollapseArrow.should(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.should(visible);
+                arrowOfListOfCollection.should(visible);
                 break;
             default:
         }
@@ -186,7 +187,7 @@ public class TrendsPage {
                 DefaultArrow.click();
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -204,7 +205,7 @@ public class TrendsPage {
                 defaultExpandArrow.shouldBe(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.shouldBe(visible);
+                arrowOfListOfCollection.shouldBe(visible);
                 break;
             default:
         }
@@ -296,7 +297,7 @@ public class TrendsPage {
         Selenide.sleep(5000);
         collectionCreate.click();
         if(!expandListOfCollection.isDisplayed()) {
-            ArrowOfListOfCollection.click();
+            arrowOfListOfCollection.click();
         }
         $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible,5000L,1000L).click();
 
@@ -400,12 +401,12 @@ public class TrendsPage {
         commonWaiter(errorText, visible);
         errorText.shouldHave(text(message));
         commonWaiter(closeDialogue, visible).click();
-        ArrowOfListOfCollection.click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
     public void listOfCollection(String name) {
-        commonWaiter(ArrowOfListOfCollection,visible).click();
+        commonWaiter(arrowOfListOfCollection,visible).click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
@@ -417,7 +418,7 @@ public class TrendsPage {
         collectionCreate.click();
         spinnerComponent.spinnerIcon.waitUntil(not(visible),20000);
         commonWaiter(defaultExpandArrow,visible).click();
-        ArrowOfListOfCollection.click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
