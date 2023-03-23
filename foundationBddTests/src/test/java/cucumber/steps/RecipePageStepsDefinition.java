@@ -182,7 +182,7 @@ public class RecipePageStepsDefinition {
         recipePage.approveRecipe(login.getPassword());
     }
 
-    @When("I make recipe inactive")
+    @Then("I make recipe inactive")
     public void iInactiveRecipe() {
         recipePage.inactiveRecipe(login.getPassword());
     }

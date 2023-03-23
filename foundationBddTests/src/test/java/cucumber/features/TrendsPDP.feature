@@ -48,7 +48,7 @@ Feature: Trends PDP
       | Param1 | Param2 |
       | P001   | P002   |
 
-    @BIOCRS-9267
+  @BIOCRS-9267
   Scenario Outline: BIOCRS-1405 | Save the collection from -list of collection
     Given I am logged in as "bio4cAdmin" user
     And I navigate to trends page

@@ -204,4 +204,4 @@ Feature: Recipe management
        |recipeInReview1               |
     #And Import status shows the status before import
     And I edit recipe "testRecipeDraftToInactive1"
-    When I make recipe inactive
+    Then I make recipe inactive
