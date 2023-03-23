@@ -181,3 +181,27 @@ Feature: Recipe management
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+
+  Scenario:BIOFOUND-27810|Recipe status after import
+    Given I go to recipe page
+    And I have exported recipes in different status
+       |testRecipeDraftToInactive    |
+       |testRecipeDraftToReject      |
+       |testDraftRecipeToChangeStatus|
+       |recipeTechReview             |
+       |recipeInReview               |
+    And I import recipes in different status
+       |testRecipeDraftToInactive    |
+       |testRecipeDraftToReject      |
+       |testDraftRecipeToChangeStatus|
+       |recipeTechReview             |
+       |recipeInReview               |
+    Then the UoP status of imported recipe changes to Draft
+       |testRecipeDraftToInactive1    |
+       |testRecipeDraftToReject1      |
+       |testDraftRecipeToChangeStatus1|
+       |recipeTechReview1             |
+       |recipeInReview1               |
+    #And Import status shows the status before import
+    And I edit recipe "testRecipeDraftToInactive1"
+    Then I make recipe inactive

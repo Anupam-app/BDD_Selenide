@@ -34,7 +34,7 @@ public class BackupPage {
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     private final String scheduledBackupDetails = "//div[@class='scheduled-row']/div[%d]";
     private final String XPATH_NOTIFICATION_BACKUP_END =
-            "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
+        "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
     private final SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
 
     private final SelenideElement backupName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
@@ -45,7 +45,7 @@ public class BackupPage {
 
 
     private final SelenideElement backupNameOnRestorePage =
-            $(By.xpath("(//*[contains(@class,'restore-card')])[1]/div[2]"));
+        $(By.xpath("(//*[contains(@class,'restore-card')])[1]/div[2]"));
     private final SelenideElement backupPageLinkText = $(By.id("BackupManagement"));
 
     private final String backupSubMenu = "//*[contains(@class,'sub-menu')][text()='%s']";
@@ -60,13 +60,13 @@ public class BackupPage {
     private final SelenideElement confirmButton = $(By.xpath("//button[contains(text(),'Confirm')]"));
     private final SelenideElement scheduleOkButton = $(By.className("btn-ok"));
     private final SelenideElement dailyBackup = $(By.xpath(
-            "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[1]"));
+        "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[1]"));
 
     private final SelenideElement weeklyBackup = $(By.xpath(
-            "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[2]"));
+        "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[2]"));
 
     private final SelenideElement monthlyBackup = $(By.xpath(
-            "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[3]"));
+        "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[3]"));
     private final SelenideElement dateInput = $(By.xpath("//input[@placeholder='DD/MMM/YYYY']"));
     private final SelenideElement dateInputMonthly = $(By.xpath("(//input[@placeholder='DD/MMM/YYYY'])[2]"));
 
@@ -80,7 +80,7 @@ public class BackupPage {
     private final SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
     private final String selectDay = "//div[@class='day-dropdown']/following-sibling::ul/div/li[text()='%s']";
     private final SelenideElement trashIcon =
-            $(By.xpath("//div[@class='scheduled-row']/div[5]/div[@class='trash-icon']"));
+        $(By.xpath("//div[@class='scheduled-row']/div[5]/div[@class='trash-icon']"));
 
     private final SelenideElement datePicker = $(By.xpath("//input[@name='dateRange']"));
 
@@ -117,15 +117,15 @@ public class BackupPage {
             Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
         }
         Assert.assertEquals("User is not from the list", "Bio4CAdmin",
-                $(By.xpath(String.format(historyColumnValue, 3))).getText());
+            $(By.xpath(String.format(historyColumnValue, 3))).getText());
 
         String[] backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText()
-                .split(": ");
+            .split(": ");
         Assert.assertTrue(
-                backupDate[1].matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
+            backupDate[1].matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
         String status = $(By.xpath(String.format(historyColumnValue, 5))).getText();
         Assert.assertTrue("Backup Status is not correct", (status.equalsIgnoreCase("Running")
-                || status.equalsIgnoreCase("success") || status.equalsIgnoreCase("Aborted")));
+            || status.equalsIgnoreCase("success") || status.equalsIgnoreCase("Aborted")));
     }
 
     public void backupRestoreTab() {
@@ -160,9 +160,9 @@ public class BackupPage {
         downArrow.click();
         List<WebElement> options = backupLocation.findElements(By.tagName("li"));
         options.stream()
-                .findFirst()
-                .get()
-                .click();
+            .findFirst()
+            .get()
+            .click();
     }
 
     public void scheduleBackup(String name, String occurrence) {
@@ -173,11 +173,11 @@ public class BackupPage {
                 dateInput.click();
                 selectDate.click();
                 SelenideHelper.commonWaiter(timeInput, Condition.visible)
-                        .click();
+                    .click();
                 timeInput.sendKeys(Keys.LEFT_CONTROL + "a");
                 timeInput.sendKeys(Keys.BACK_SPACE);
                 SelenideHelper.commonWaiter(timeInput, Condition.visible)
-                        .click();
+                    .click();
                 SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
                 Date date = new Date();
                 Calendar c = Calendar.getInstance();
@@ -194,11 +194,11 @@ public class BackupPage {
                 dateInputMonthly.click();
                 selectDate.click();
                 SelenideHelper.commonWaiter(timeInputMonthly, Condition.visible)
-                        .click();
+                    .click();
                 timeInputMonthly.sendKeys(Keys.LEFT_CONTROL + "a");
                 timeInputMonthly.sendKeys(Keys.BACK_SPACE);
                 SelenideHelper.commonWaiter(timeInputMonthly, Condition.visible)
-                        .click();
+                    .click();
                 SimpleDateFormat dateFormatMonthly = new SimpleDateFormat("HH:mm");
                 Date date2 = new Date();
                 Calendar c2 = Calendar.getInstance();
@@ -214,18 +214,18 @@ public class BackupPage {
                 weeklyBackup.click();
                 weekInput.click();
                 DayOfWeek dayOfWeek = LocalDate.now()
-                        .getDayOfWeek();
+                    .getDayOfWeek();
                 String day = dayOfWeek.toString();
                 day = day.charAt(0) + day.substring(1)
-                        .toLowerCase();
+                    .toLowerCase();
                 System.out.println(day);
                 $(By.xpath(String.format(selectDay, day))).click();
                 SelenideHelper.commonWaiter(timeInputWeekly, Condition.visible)
-                        .click();
+                    .click();
                 timeInputWeekly.sendKeys(Keys.LEFT_CONTROL + "a");
                 timeInputWeekly.sendKeys(Keys.BACK_SPACE);
                 SelenideHelper.commonWaiter(timeInputWeekly, Condition.visible)
-                        .click();
+                    .click();
                 SimpleDateFormat dateFormat1 = new SimpleDateFormat("HH:mm");
                 Date date1 = new Date();
                 Calendar cal = Calendar.getInstance();
@@ -255,7 +255,7 @@ public class BackupPage {
 
     public void waitForEndOfBackup() {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, "Backup of Server complete")))
-                .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
+            .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
     }
 
     public void goToBackupMode() {
@@ -287,11 +287,11 @@ public class BackupPage {
         String startTime = (dateFormat.format(cal.getTime())).toString();
         Selenide.sleep(4000);
         Assert.assertEquals("backup name is not correct",
-                ($(By.xpath(String.format(scheduledBackupDetails, 1)))).getText(), backupName);
+            ($(By.xpath(String.format(scheduledBackupDetails, 1)))).getText(), backupName);
         Assert.assertEquals("repeat is not as expected",
-                ($(By.xpath(String.format(scheduledBackupDetails, 3)))).getText(), occurrence);
+            ($(By.xpath(String.format(scheduledBackupDetails, 3)))).getText(), occurrence);
         Assert.assertTrue("Start Date / Time is not correct",
-                (($(By.xpath(String.format(scheduledBackupDetails, 4)))).getText()).contains(startTime));
+            (($(By.xpath(String.format(scheduledBackupDetails, 4)))).getText()).contains(startTime));
         trashIcon.shouldBe(visible);
     }
 
@@ -305,7 +305,7 @@ public class BackupPage {
 
     public void notificationMessage(String message) {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).waitUntil(Condition.visible,
-                BACKUP_FINISH_TIME_TO_WAIT);
+            BACKUP_FINISH_TIME_TO_WAIT);
     }
 
     public void verifyBackupHeader() {

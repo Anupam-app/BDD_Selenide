@@ -3,6 +3,7 @@ package cucumber.steps;
 
 import java.util.List;
 
+import com.codeborne.selenide.Selenide;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -77,7 +78,7 @@ public class AnalyticsPageStepsDefinition {
     @When("I apply the analytics settings")
     public void iApplyTheAnalyticsSettings() throws InterruptedException {
         // wait before apply, if it is too fast to apply is not done
-        Thread.sleep(1000);
+        Selenide.sleep(1000L);
         switch (analytics.getAnalyticsMode()) {
             case REGRESSION:
                 analyticsPage.regressionApplySettings();

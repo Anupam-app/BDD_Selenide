@@ -27,6 +27,7 @@ import java.util.List;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 
@@ -78,7 +79,7 @@ public class TrendsPage {
             $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement DefaultArrow =
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement ArrowOfListOfCollection =
+    private final SelenideElement arrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement deleteCollectionButton =
             $(By.xpath("//button[@type='button']/span[text()='Delete']"));
@@ -111,6 +112,9 @@ public class TrendsPage {
             "//div[@class='coll-panel']/button/label[text()='%s']/following::span[@class='delete-collection']";
     private final String XPATH_PARAMETER_UNCHECK =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
+    private final SelenideElement expandListOfCollection = $(By.xpath("//label[(@title='List of collections')]/following-sibling::span[@class='collpase-expand-icon']"));
+
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToTrends() {
         commonWaiter(trends, visible).click();
@@ -146,7 +150,7 @@ public class TrendsPage {
                 }
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -164,7 +168,7 @@ public class TrendsPage {
                 defaultCollapseArrow.should(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.should(visible);
+                arrowOfListOfCollection.should(visible);
                 break;
             default:
         }
@@ -183,7 +187,7 @@ public class TrendsPage {
                 DefaultArrow.click();
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -201,7 +205,7 @@ public class TrendsPage {
                 defaultExpandArrow.shouldBe(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.shouldBe(visible);
+                arrowOfListOfCollection.shouldBe(visible);
                 break;
             default:
         }
@@ -292,8 +296,11 @@ public class TrendsPage {
         collectionName.sendKeys(name);
         Selenide.sleep(5000);
         collectionCreate.click();
-        ArrowOfListOfCollection.click();
-        commonWaiter($(By.xpath(String.format(collectionNameRadioButton, name))), visible).click();
+        if(!expandListOfCollection.isDisplayed()) {
+            arrowOfListOfCollection.click();
+        }
+        $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible,5000L,1000L).click();
+
     }
 
     public void chooseCollection(String name) {
@@ -394,12 +401,12 @@ public class TrendsPage {
         commonWaiter(errorText, visible);
         errorText.shouldHave(text(message));
         commonWaiter(closeDialogue, visible).click();
-        ArrowOfListOfCollection.click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
     public void listOfCollection(String name) {
-        ArrowOfListOfCollection.click();
+        commonWaiter(arrowOfListOfCollection,visible).click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
@@ -409,7 +416,9 @@ public class TrendsPage {
         collectionName.sendKeys(name);
         $(By.xpath(String.format("//li[text()='%s']/span", param1))).click();
         collectionCreate.click();
-        ArrowOfListOfCollection.click();
+        spinnerComponent.spinnerIcon.waitUntil(not(visible),20000);
+        commonWaiter(defaultExpandArrow,visible).click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 

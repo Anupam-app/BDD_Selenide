@@ -117,8 +117,13 @@ public class RecipePage {
     private final ElementsCollection placeholders = $$(By.xpath("//input[@placeholder='Search instruments and actions...']"));
     private final SelenideElement maxPhaseWarningMessage = $(By.xpath("//div[contains(text(),'Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed.')]"));
     private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
-
     String phaseName = "//label[text()='%s']";
+    private final SelenideElement exportIcon = $(By.xpath("//div[@class='export-icon']"));
+
+    private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
+    private final SelenideElement importInputTextBox = $(By.xpath("//input[contains(@class,'rename-recipe-import-input')]"));
+    private final SelenideElement importRecipeFromEditor =  $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']"));
+    private final SelenideElement fileMenuInRecipeEditor =  $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
 
     public void goTo() {
         recipePageLinkText.click();
@@ -647,10 +652,41 @@ public class RecipePage {
         phaseLibrary.click();
         $(By.xpath("//span[text()='Phase123']")).doubleClick();
     }
+    
     public void copyPastePhase(){
         $(By.xpath(String.format(phaseName, "Phase 1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
         stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+    }
+
+    public void listOfRecipeExport(String recipeName){
+        recipeSearchTextBox.sendKeys(recipeName);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        exportIcon.waitUntil(visible,1000l).click();
+        recipeSearchTextBox.clear();
+    }
+
+    public void listOfImportRecipe(String recipeName){
+        goToEditMode();
+        fileMenuInRecipeEditor.click();
+        importRecipeFromEditor.click();
+        $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
+        importButton.click();
+        importInputTextBox.click();
+        System.out.println(recipeName.concat("1"));
+        importInputTextBox.sendKeys(Keys.CONTROL,"a");
+        importInputTextBox.sendKeys(Keys.DELETE);
+        importInputTextBox.waitUntil(visible,5000L).setValue(recipeName.concat("1"));
+        saveButton.click();
+        browserLinkText.waitUntil(Condition.visible, 5000L).click();
+
+    }
+    public void importedRecipeStatusIsDraft(String recipeName){
+        recipeSearchTextBox.sendKeys(recipeName);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        var actualText = $(By.xpath(String.format(importRecipeStatusVerify,recipeName))).waitUntil(visible,5000l).getText();
+        Assert.assertEquals("Verification of recipe status is Draft:", "Draft",actualText);
+        recipeSearchTextBox.clear();
     }
 
 }

@@ -12,9 +12,9 @@ import pageobjects.pages.BackupPage;
 
 public class BackupStepsDefinition {
 
-    private BackupPage backupPage;
+    private final BackupPage backupPage;
 
-    private Backupsetting backupsetting;
+    private final Backupsetting backupsetting;
 
 
     public BackupStepsDefinition(BackupPage backupPage, Backupsetting backupsetting) {
