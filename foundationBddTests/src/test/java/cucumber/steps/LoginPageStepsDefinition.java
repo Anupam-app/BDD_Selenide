@@ -150,4 +150,12 @@ public class LoginPageStepsDefinition {
         loginPage.pushLogin();
     }
 
+    @When("I login with {string} as username and {string} as password")
+    public void iLoginWithValidCredential(String username, String password) {
+        loginPage.openLogin();
+        loginPage.setUser(username);
+        loginPage.setPassword(password);
+        loginPage.pushLogin();
+    }
+
 }
