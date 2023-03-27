@@ -238,7 +238,7 @@ public class ReportsPage {
     }
 
     public void generateReport() {
-        reportGenerateButton.waitUntil(visible, 10000l);
+        reportGenerateButton.waitUntil(visible, 10000L);
         reportGenerateButton.click();
     }
 

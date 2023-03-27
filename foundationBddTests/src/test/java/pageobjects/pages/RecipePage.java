@@ -128,7 +128,14 @@ public class RecipePage {
     private final SelenideElement print = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
     private final SelenideElement save = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
     private final String recipeStatus = "//label[text()='%s']";
+    private final SelenideElement exportIcon = $(By.xpath("//div[@class='export-icon']"));
 
+    private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
+    private final SelenideElement importInputTextBox = $(By.xpath("//input[contains(@class,'rename-recipe-import-input')]"));
+    private final SelenideElement importRecipeFromEditor =  $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']"));
+    private final SelenideElement fileMenuInRecipeEditor =  $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
+    private final SelenideElement saveBtn = $(By.className("btn_primary"));
+    
     public void goTo() {
         commonWaiter(recipePageLinkText,visible).click();
     }
@@ -188,11 +195,11 @@ public class RecipePage {
 
     public void saveRecipe(String recipeName) {
         commonWaiter(file,visible).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
+        commonWaiter(save,visible).click();
         SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
-        $(By.className("btn_primary")).click();
+        commonWaiter(saveBtn,visible).click();
     }
 
     public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
@@ -203,7 +210,7 @@ public class RecipePage {
 
     public void saveModifiedRecipe() {
         commonWaiter(file, visible).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
+        commonWaiter(save,visible).click();
     }
 
     public String getPhaseName() {
@@ -620,6 +627,7 @@ public class RecipePage {
         phaseLibrary.click();
         $(By.xpath("//span[text()='Phase123']")).doubleClick();
     }
+    
     public void copyPastePhase(){
         $(By.xpath(String.format(phaseName, "Phase 1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
@@ -689,7 +697,7 @@ public class RecipePage {
                 return clearSave.getValue().equals(recipeName);
             }
         );
-        $(By.className("btn_primary")).click();
+        commonWaiter(saveBtn,visible).click();
     }
 
     public void iVerifyRecipeNameInRecipeTab(String recipeName) {
@@ -727,12 +735,12 @@ public class RecipePage {
         SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
-        $(By.className("btn_primary")).click();
+        commonWaiter(saveBtn,visible).click();
     }
 
     public void tryToSave() {
         commonWaiter(file, visible).click();
-        $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']")).click();
+        commonWaiter(save,visible).click();
     }
 
 
@@ -745,4 +753,36 @@ public class RecipePage {
             commonWaiter(recipeCondition ,appear);
         }
     }
+
+    public void listOfRecipeExport(String recipeName){
+        recipeSearchTextBox.sendKeys(recipeName);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        exportIcon.waitUntil(visible,1000l).click();
+        recipeSearchTextBox.clear();
+    }
+
+    public void listOfImportRecipe(String recipeName){
+        goToEditMode();
+        fileMenuInRecipeEditor.click();
+        importRecipeFromEditor.click();
+        $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
+        importButton.click();
+        importInputTextBox.click();
+        System.out.println(recipeName.concat("1"));
+        importInputTextBox.sendKeys(Keys.CONTROL,"a");
+        importInputTextBox.sendKeys(Keys.DELETE);
+        importInputTextBox.waitUntil(visible,5000L).setValue(recipeName.concat("1"));
+        saveButton.click();
+        browserLinkText.waitUntil(Condition.visible, 5000L).click();
+
+    }
+    
+    public void importedRecipeStatusIsDraft(String recipeName){
+        recipeSearchTextBox.sendKeys(recipeName);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        var actualText = $(By.xpath(String.format(importRecipeStatusVerify,recipeName))).waitUntil(visible,5000l).getText();
+        Assert.assertEquals("Verification of recipe status is Draft:", "Draft",actualText);
+        recipeSearchTextBox.clear();
+    }
+
 }

@@ -1,4 +1,4 @@
-@CRS @IVI @RecipeConsole
+@CRS @IVI
 Feature: Recipe console
 
   Background:
@@ -122,8 +122,8 @@ Feature: Recipe console
       | 2       |
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
-    
-    # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending  
+
+    # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -277,7 +277,7 @@ Feature: Recipe console
 	When I select report from dropdown "Audit Trail"
 	And I select user in dropdown "Bio4CAdmin"
 	And I check audit trial logs
- 	
+
  Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
   When I expand recipe console in pnid
   And I load recipe "testRecipeToExecute1min"
