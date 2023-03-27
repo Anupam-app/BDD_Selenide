@@ -264,4 +264,10 @@ public class RolePageStepsDefinition {
         rolePage.saveButton();
         rolePage.notification(this.role.getRoleAction());
     }
+
+    @And("I verify role is {string}")
+    public void iEnabledDisableRole(String value){
+        rolePage.iEnableDisableRole(value);
+    }
+
 }

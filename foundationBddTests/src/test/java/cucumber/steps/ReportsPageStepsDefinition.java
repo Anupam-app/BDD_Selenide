@@ -506,6 +506,13 @@ public class ReportsPageStepsDefinition {
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
         SelenideHelper.goToDefault();
     }
+
+    @Then("I verify custom role details captured in audit trail for user {string}")
+    public void iVerifyAuditTrailReportCustomRole(String username) throws ParseException {
+        var message = String.format("%s disabled role %s", username, this.role.getRoleName());
+        Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, this.role.getRoleName()));
+        SelenideHelper.goToDefault();
+    }
 	
 	@Then("I see the role deleted in report")
 	public void iVerifyThatRoleIsDeleted() throws Exception {

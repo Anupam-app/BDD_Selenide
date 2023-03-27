@@ -167,7 +167,6 @@ public class ReportsPage {
     private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='trend_name_error_text']"));
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -996,10 +995,10 @@ public class ReportsPage {
         boolean result = false;
         if (eventTime.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(
-                    "dd/MMM/yyyy hh:mm:ss");
-            String currentDateandTime = sdf.format(new Date());
-            Date dateAndTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(currentDateandTime);
-            Date eventEntriesTime = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss").parse(eventTime.getText());
+                    Report.RECIPE_DATE_FORMAT);
+            String currentDateAndTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateAndTime);
+            Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(eventTime.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 10 && comment.getText().contains(message) &&

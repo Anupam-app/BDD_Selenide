@@ -162,4 +162,9 @@ public class LoginPageStepsDefinition {
             loginPage.setConfirmPassword(confirmPassword);
             loginPage.verifyNotification(error);
     }
+
+    @And("I verify error message {string}")
+    public void iVerifyErrorMessage(String message){
+        loginPage.errorNotification(message);
+    }
 }

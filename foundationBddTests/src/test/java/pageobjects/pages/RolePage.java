@@ -11,10 +11,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 import dataobjects.RoleAction;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -76,6 +74,11 @@ public class RolePage {
     private final SelenideElement roleName = $(By.xpath("//div[@class='roleTableColumnOne roleCardMarginOne']"));
     private final String disable_Edit_Button = "//div[contains(text(),'%s')]/following-sibling::div[5]/button";
     private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
+    private final SelenideElement disableRole = $(By.xpath("//button[contains(@class,'ant-switch')]"));
+    private String disable_Enable_Role_Notification = "The role successfully %s.";
+    private SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
+
+    UserPage userPage = new UserPage();
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -343,4 +346,20 @@ public class RolePage {
         Assert.assertEquals("Role Name is not entered as expected", roleName, inputRoleName.getValue());
     }
 
+    public void iEnableDisableRole(String value){
+        if(value.equals("enabled") && Objects.equals(disableRole.getAttribute("aria-checked"), "false")) {
+            disableRole.click();
+            updatedNotification(String.format(disable_Enable_Role_Notification, value));
+            Assert.assertEquals("Role is not enabled", "true", disableRole.getAttribute("aria-checked"));
+        }else if(value.equals("disabled") && Objects.equals(disableRole.getAttribute("aria-checked"), "true")) {
+            disableRole.click();
+            updatedNotification(String.format(disable_Enable_Role_Notification, value));
+            Assert.assertEquals("Role is not disabled", "false", disableRole.getAttribute("aria-checked"));
+        }
+    }
+
+    public void updatedNotification(String message) {
+        commonWaiter(notification_Text, visible);
+        notification_Text.shouldHave(text(message));
+    }
 }

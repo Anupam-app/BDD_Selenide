@@ -7,7 +7,7 @@ Feature: Roles Permissions Check
     Then I do not see Roles mode
 
   @IVI-4908
-  Scenario Outline: BIOFOUND-27757 | BIOFOUND-27757 | Verify Default Users & roles
+  Scenario Outline: BIOFOUND-27758 | Verify Default Users & roles
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     And I trigger Roles mode
@@ -35,3 +35,22 @@ Feature: Roles Permissions Check
       | parameters/ivi/privilegeslistofAdministrator | admin           |
       | parameters/ivi/privilegeslistProcessManager  | proceessManager |
       | parameters/ivi/privilegeslistOperator        | operator        |
+
+  Scenario: BIOFOUND-27763 | Disable Custom role
+    Given I am logged in as "Bio4CAdmin" user
+    When I go to user page
+    And I trigger Roles mode
+    And I search "CustomRoleDisable" role
+    Then I verify role is "disabled"
+    And I goto report management page
+    And I select report from dropdown "Audit Trail"
+    And I verify custom role details captured in audit trail for user "Bio4CAdmin"
+    And I logout and login as "userRoleDisable" and password as "MerckApp1@"
+    And I verify error message "Unauthorized access, Failed to authenticate"
+    And I am logged in as "Bio4CAdmin" user
+    When I go to user page
+    And I trigger Roles mode
+    And I search "CustomRoleDisable" role
+    Then I verify role is "enabled"
+    And I logout and login as "userRoleDisable" and password as "MerckApp1@"
+    And I am logged in
