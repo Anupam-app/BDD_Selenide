@@ -10,13 +10,13 @@ Feature: Roles Permissions Check
   Scenario Outline: BIOFOUND-27758 | Verify Default Users & roles
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
-    And I trigger Roles mode
-    And I verify default roles
+    When I trigger Roles mode
+    Then I verify default roles
       | Bio4C Service   |
       | Administrator   |
       | ProcessManager  |
       | Operator        |
-    Then I verify default roles are disabled or enabled
+    And I verify default roles are disabled or enabled
     And I verify "<UserRole>" list of "<roles>"
     #TO-DO : skipping the test step until IVI-4908 is fixed
     #Then I should see view icon of particular roles

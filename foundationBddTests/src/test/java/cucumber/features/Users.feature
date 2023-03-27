@@ -136,7 +136,7 @@ Feature: User management
 
   Scenario: Verify Default Users
     Given I am logged in as "Bio4CAdmin" user
-    And I go to user page
+    When I go to user page
     And I verify default user account "Bio4CService" and "Administrator"
 
   Scenario: Assign custom role to new user |BIOCRS-2585|
@@ -254,7 +254,7 @@ Feature: User management
     When I search "customRoleEdit" to validate role "editCustomRole" assigned
     And I trigger Roles mode
     And I search "editCustomRole" role
-    When I edit role "editCustomRole"
+    And I edit role "editCustomRole"
     And I update roleName as "modifiedCustomRole"
     And I modify permission
       | removePermission | AddPermission       |
@@ -262,8 +262,8 @@ Feature: User management
       | Basic Process    | View Present Alarm  |
     And I save role successfully
     And I search "modifiedCustomRole" role
-    And I see update role name is displayed on Role list data
-    Then I verify Role permission are updated
+    Then I see update role name is displayed on Role list data
+    And I verify Role permission are updated
     And I trigger Users mode
-    Then I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
+    And I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
 
