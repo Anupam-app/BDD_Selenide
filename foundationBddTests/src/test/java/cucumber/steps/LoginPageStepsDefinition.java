@@ -146,13 +146,13 @@ public class LoginPageStepsDefinition {
         loginPage.pushLogin();
     }
 
-    @And("I provide invalid password to verify the errors")
+    @And("I provide complex passwords to verify the password policy")
     public void iChangePassword(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            loginPage.setNewPassword(list.get(i).get(0));
-            loginPage.setConfirmPassword(list.get(i).get(0));
-            loginPage.verifyNotification(list.get(i).get(1));
+        for (List<String> strings : list) {
+            loginPage.setNewPassword(strings.get(0));
+            loginPage.setConfirmPassword(strings.get(0));
+            loginPage.verifyNotification(strings.get(1));
         }
     }
 

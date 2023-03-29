@@ -24,9 +24,11 @@ Feature: Roles Permissions Check
       #| Bio4CService  |
     @CRS
     Examples:
-      | roles                                        | UserRole  |
-      | parameters/crs/privilegeslist                | service   |
-      | parameters/crs/privilegeslistofAdministrator | admin     |
+      | roles                                        | UserRole       |
+      | parameters/crs/privilegeslist                | service        |
+      | parameters/crs/privilegeslistofAdministrator | admin          |
+      | parameters/crs/privilegeslistProcessManager  | proceessManager|
+      | parameters/crs/privilegeslistOperator        | operator       |
 
     @IVI
     Examples:
@@ -36,7 +38,7 @@ Feature: Roles Permissions Check
       | parameters/ivi/privilegeslistProcessManager  | proceessManager |
       | parameters/ivi/privilegeslistOperator        | operator        |
 
-  Scenario: BIOFOUND-27763 | Disable Custom role
+  Scenario: BIOFOUND-27763 | Disable Custom role and User has no privilege to login
     Given I am logged in as "Bio4CAdmin" user
     When I go to user page
     And I trigger Roles mode
@@ -44,7 +46,7 @@ Feature: Roles Permissions Check
     Then I verify role is "disabled"
     And I goto report management page
     And I select report from dropdown "Audit Trail"
-    And I verify custom role details captured in audit trail for user "Bio4CAdmin"
+    And I verify custom role disabled details captured in audit trail for user "Bio4CAdmin"
     And I logout and login as "userRoleDisable" and password as "MerckApp1@"
     And I verify error message "Unauthorized access, Failed to authenticate"
     And I am logged in as "Bio4CAdmin" user
@@ -54,3 +56,22 @@ Feature: Roles Permissions Check
     Then I verify role is "enabled"
     And I logout and login as "userRoleDisable" and password as "MerckApp1@"
     And I am logged in
+
+  Scenario: BIOFOUND-27762 | Modify custom role-Privileges and Name
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I search "customRoleEdit" to validate role "editCustomRole" assigned
+    And I trigger Roles mode
+    And I search and edit role "editCustomRole"
+    And I update roleName as "modifiedCustomRole"
+    And I modify permission
+      | removePermission | AddPermission       |
+      | Create User      | Create Role         |
+      | Basic Process    | View Present Alarm  |
+    And I save role successfully
+    Then I see modified role name is displayed on Role list data
+    And I verify Role permission are updated
+    And I trigger Users mode
+    And I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
+    And I generate audit trail report
+    And I verify custom role permissions details captured in audit trail for user

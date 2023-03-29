@@ -17,8 +17,6 @@ import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
 
-import javax.xml.crypto.Data;
-
 public class RolePageStepsDefinition {
 
     private final RolePage rolePage;
@@ -233,7 +231,7 @@ public class RolePageStepsDefinition {
     }
 
     @When("I modify permission")
-    public void iRemovePermission(DataTable table) {
+    public void iModifyPermission(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             this.role.getPermissions().remove(list.get(i).get(0));
@@ -243,8 +241,9 @@ public class RolePageStepsDefinition {
         }
     }
 
-    @And("I see update role name is displayed on Role list data")
+    @And("I see modified role name is displayed on Role list data")
     public void iVerifyRoleNameDisplayed(){
+        rolePage.searchRole(this.role.getUpdatedRoleName());
         rolePage.roleNameExists(this.role.getUpdatedRoleName());
     }
 
@@ -270,4 +269,13 @@ public class RolePageStepsDefinition {
         rolePage.iEnableDisableRole(value);
     }
 
+    @And("I search and edit role {string}")
+    public void iSearchAndEditRole(String roleName){
+        this.role.setRoleName(roleName);
+        rolePage.searchRole(this.role.getRoleName());
+        this.role.setRoleAction(RoleAction.UPDATED);
+        rolePage.modifyRole(this.role.getRoleName());
+        rolePage.getPermissionList().forEach(p -> this.role.getPermissions().add(p));
+        rolePage.getOldPermissionList().forEach(p -> this.role.getPermissions().add(p));
+    }
 }

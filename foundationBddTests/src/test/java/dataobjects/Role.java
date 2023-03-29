@@ -12,6 +12,7 @@ public class Role {
     String roleName;
     String oldRoleName;
     Set<String> permissions = new HashSet<>();
+    Set<String> oldPermissions = new HashSet<>();
     RoleAction roleAction;
     String updatedRoleName;
 }

@@ -190,7 +190,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I generate the {string} Report for {string} user")
-    public void iGenerateTheAuditTrailReport(String report, String user) throws Exception {
+    public void iGenerateTheAuditTrailReport(String report, String user) {
         reportPage.goToReports();
         reportPage.switchToFrame();
         this.reportTemplate.setName(report);
@@ -246,7 +246,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I select below parameters")
-    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
+    public void iSelectTrendsParameters(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.selectParams(list.get(i).get(0));
@@ -254,7 +254,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I choose {string} trends {string}")
-    public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
+    public void iSelectTrendsParameters(String noOfParams, String parameters) {
         reportPage.selectParameters(noOfParams, parameters);
     }
 
@@ -322,14 +322,14 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I verify audit logs for user update")
-    public void iVerifyAuditLogsForUserUpdate() throws InterruptedException {
+    public void iVerifyAuditLogsForUserUpdate() {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName());
         switchTo().parentFrame();
     }
 
     @When("I verify audit logs for role update")
-    public void iVerifyAuditLogsForRoleUpdate() throws InterruptedException {
+    public void iVerifyAuditLogsForRoleUpdate() {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
         switchTo().parentFrame();
@@ -459,7 +459,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I search modified the template")
-    public void i_search_modified_template() throws InterruptedException {
+    public void i_search_modified_template() {
         reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
     }
 
@@ -499,21 +499,29 @@ public class ReportsPageStepsDefinition {
         SelenideHelper.goToDefault();
     }
 
-    @Then("I verify custom role modification details captured in audit trail for user {string}")
+    @Then("I verify custom role updated details captured in audit trail for user {string}")
     public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
-        var message = String.format("%s updated Role %s", username, this.role.getOldRoleName());
-        var message1 = String.format("Role -%s", this.role.getRoleName());
+        var message = String.format("%s updated Role %s", username, this.role.getRoleName());
+        var message1 = String.format("Role -%s", this.role.getUpdatedRoleName());
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
         SelenideHelper.goToDefault();
     }
 
-    @Then("I verify custom role details captured in audit trail for user {string}")
+    @Then("I verify custom role disabled details captured in audit trail for user {string}")
     public void iVerifyAuditTrailReportCustomRole(String username) throws ParseException {
         var message = String.format("%s disabled role %s", username, this.role.getRoleName());
         Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, this.role.getRoleName()));
         SelenideHelper.goToDefault();
     }
-	
+
+    @Then("I verify custom role permissions details captured in audit trail for user")
+    public void iVerifyAuditTrailReportRolePermissions() throws IOException {
+        //reportPage.switchToFrame();
+        iVerifyTheAuditTrailReport();
+        this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(), this.role.getOldPermissions());
+        SelenideHelper.goToDefault();
+    }
+
 	@Then("I see the role deleted in report")
 	public void iVerifyThatRoleIsDeleted() throws Exception {
 		this.report.checkDeletedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin());

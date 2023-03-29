@@ -248,22 +248,3 @@ Feature: User management
     Then I am logged in
     And I am landed on "Report Management" page
 
-  Scenario: BIOFOUND-27762 | Modify custom role-Privileges and Name
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to user page
-    When I search "customRoleEdit" to validate role "editCustomRole" assigned
-    And I trigger Roles mode
-    And I search "editCustomRole" role
-    And I edit role "editCustomRole"
-    And I update roleName as "modifiedCustomRole"
-    And I modify permission
-      | removePermission | AddPermission       |
-      | Create User      | Create Role         |
-      | Basic Process    | View Present Alarm  |
-    And I save role successfully
-    And I search "modifiedCustomRole" role
-    Then I see update role name is displayed on Role list data
-    And I verify Role permission are updated
-    And I trigger Users mode
-    And I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
-

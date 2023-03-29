@@ -69,11 +69,10 @@ Feature: Role administration
   #  And I select report from dropdown "Audit Trail"
   #  And I select date range as "Today"
   #  When  I select template sort by "Event Time" in "false"
-  #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
-  #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
+  #  Then I verify custom role updated details captured in audit trail for user "Bio4CAdmin"
+  #  Then I verify custom role updated details captured in audit trail for user "Bio4CAdmin"
 
-  @IVI-6138
-  Scenario: IVI Bug | IVI-6138 | Obsolete Role
+  Scenario: Obsolete Role
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"

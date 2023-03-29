@@ -13,7 +13,6 @@ import com.typesafe.config.ConfigParseOptions;
 import dataobjects.RoleAction;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -77,8 +76,6 @@ public class RolePage {
     private final SelenideElement disableRole = $(By.xpath("//button[contains(@class,'ant-switch')]"));
     private String disable_Enable_Role_Notification = "The role successfully %s.";
     private SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
-
-    UserPage userPage = new UserPage();
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -173,6 +170,12 @@ public class RolePage {
     }
 
     public List<String> getPermissionList() {
+        return permissionsText
+                .shouldHave(CollectionCondition.allMatch("textNotEmpty", e -> !e.getText().isEmpty()))
+                .texts();
+    }
+
+    public List<String> getOldPermissionList() {
         return permissionsText
                 .shouldHave(CollectionCondition.allMatch("textNotEmpty", e -> !e.getText().isEmpty()))
                 .texts();
