@@ -54,32 +54,14 @@ Feature: Role administration
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
 
-  #TODO fix this scenario with a specific role
-  #Scenario: BIOCRS-5145|Verify Default Role Modification
-  #  Given I am logged in as "Bio4CAdmin" user
-  #  And I go to user page
-  #  When I trigger Roles mode
-  #  And I click on edit icon corresponding custom role
-  #  And I unchecked role permissions
-  #    | Create Recipe |
-  #    | Trends View   |
-  #  And I create a random rolename
-  #  Then I should see new custom role created
-  #  When I goto report management page
-  #  And I select report from dropdown "Audit Trail"
-  #  And I select date range as "Today"
-  #  When  I select template sort by "Event Time" in "false"
-  #  Then I verify custom role updated details captured in audit trail for user "Bio4CAdmin"
-  #  Then I verify custom role updated details captured in audit trail for user "Bio4CAdmin"
-
   Scenario: Obsolete Role
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"
     And I assign permission "View User"
     And I click on save button
-    Then I see notification
-    When I search the role
+    And I see notification
+    And I search the role
     And I delete the role
     And I generate audit trail report
     Then I verify audit logs for role update

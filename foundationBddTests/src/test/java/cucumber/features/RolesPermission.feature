@@ -57,7 +57,7 @@ Feature: Roles Permissions Check
     And I logout and login as "userRoleDisable" and password as "MerckApp1@"
     And I am logged in
 
-  Scenario: BIOFOUND-27762 | Modify custom role-Privileges and Name
+  Scenario: BIOCRS-5145 | BIOFOUND-27762 | Modify custom role-Privileges and Name
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
     When I search "customRoleEdit" to validate role "editCustomRole" assigned

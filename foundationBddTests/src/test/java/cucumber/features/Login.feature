@@ -77,7 +77,7 @@ Feature: User login
     Given I open login page
     When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
     And I push the login button
-    Then I provide complex passwords to verify the password policy
+    Then I provide less complex passwords to verify the password policy
       | merckapp    | Password doesn't met the policy criteria. |
       | MERCKAPP    | Password doesn't met the policy criteria. |
       | MerckApp    | Password doesn't met the policy criteria. |

@@ -146,7 +146,7 @@ public class LoginPageStepsDefinition {
         loginPage.pushLogin();
     }
 
-    @And("I provide complex passwords to verify the password policy")
+    @And("I provide less complex passwords to verify the password policy")
     public void iChangePassword(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (List<String> strings : list) {
