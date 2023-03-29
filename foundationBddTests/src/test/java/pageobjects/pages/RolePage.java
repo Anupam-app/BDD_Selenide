@@ -338,7 +338,7 @@ public class RolePage {
         if ((count == set.size()) && (count != 0)) {
             Collections.sort(acceptedParams);
             Collections.sort(list);
-            Assert.assertEquals(acceptedParams, list);
+            Assert.assertEquals(list,acceptedParams);
         }
         SelenideHelper.commonWaiter(closeIcon, visible).click();
     }

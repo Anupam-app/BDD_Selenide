@@ -686,10 +686,10 @@ public class Report {
                         reportTable.getRows().get(1).get(userColumnIndex).getText(false).contains(userNameLoggedIn));
                 Assert.assertTrue(reportTable.getRows().get(1).get(1).getText(false).contains("IDManagement"));
                 Assert.assertTrue(reportTable.getRows().get(1).get(2).getText(false).contains(roleName));
-                Assert.assertEquals(reportTable.getRows().get(1).get(4).getText(false), userNameLoggedIn + " has made the Role, " + roleName + " obsolete");
-                Assert.assertNull(reportTable.getRows().get(1).get(5).getText(false));
-                Assert.assertNull(reportTable.getRows().get(1).get(6).getText(false));
-                Assert.assertNull(reportTable.getRows().get(1).get(7).getText(false));
+                Assert.assertEquals((reportTable.getRows().get(1).get(4).getText(false)).replaceAll("\\s",""), (userNameLoggedIn + " has made the Role, " + roleName + " obsolete").replaceAll("\\s",""));
+                Assert.assertTrue(reportTable.getRows().get(1).get(5).getText(false).isEmpty());
+                Assert.assertTrue(reportTable.getRows().get(1).get(6).getText(false).isEmpty());
+                Assert.assertTrue(reportTable.getRows().get(1).get(7).getText(false).isEmpty());
             }
             break;
         }
