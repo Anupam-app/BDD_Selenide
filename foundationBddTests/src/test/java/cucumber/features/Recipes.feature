@@ -1,4 +1,4 @@
-@CRS @IVI @Recipe
+@CRS @IVI
 Feature: Recipe management
 
   Background:
@@ -147,7 +147,6 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a new step in recipe
     And I add "Setpoint" action to the step
-   #And I add recipe action from phase library ("Already a recipe should be there in phase library")
     And I add criteria to phase using keyboard
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
@@ -173,7 +172,6 @@ Feature: Recipe management
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I go to recipe page
     And I edit recipe "maxPhaseRecipe"
-    #the maximum number of phases allowed in the recipe is 19
     When I create phase with shortcut key
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
     When I add Phases from phase library to recipe
@@ -181,7 +179,7 @@ Feature: Recipe management
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
-Scenario:BIOFOUND-27810|Recipe status after import
+  Scenario:BIOFOUND-27810|Recipe status after import
     Given I go to recipe page
     And I have exported recipes in different status
        |testRecipeDraftToInactive    |
@@ -201,7 +199,6 @@ Scenario:BIOFOUND-27810|Recipe status after import
        |testDraftRecipeToChangeStatus1|
        |recipeTechReview1             |
        |recipeInReview1               |
-    #And Import status shows the status before import
     And I edit recipe "testRecipeDraftToInactive1"
     Then I make recipe inactive
     
@@ -227,13 +224,13 @@ Scenario:BIOFOUND-27810|Recipe status after import
     When I add few actions steps
     And I save the recipes
     And I logout
-    And I login with "bio4cadmin" as username and "Merck@dmin" as password
+    And I login with "Bio4cservice" as username and "Merck$ervice" as password
     And I open the recipe
     And I add few actions steps
     And I save the recipe
     Then I verify the header is updated to "Saved"
     And I open the recipe list
-    And I should see last modifed by recipe
+    And I should see last modified recipe name
     And I change the recipe to in review
     And I open the recipe and add few more steps
     And I try to save the recipe

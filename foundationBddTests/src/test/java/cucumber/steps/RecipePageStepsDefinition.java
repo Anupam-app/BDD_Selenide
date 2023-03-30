@@ -331,7 +331,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I add few actions steps")
-    public void AddFewwSteps() {
+    public void AddFewSteps() {
         recipePage.addingStepByClickPlusIcon();
         recipePage.addActionStep();
     }
@@ -375,7 +375,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I add few more steps and save the recipe")
-    public void iAddingStepsAndSaveTheRecipe() {
+    public void iAddStepsAndSaveTheRecipe() {
         recipePage.addFewSteps();
         recipePage.openRecipiList();
     }
@@ -420,8 +420,8 @@ public class RecipePageStepsDefinition {
         recipePage.goToBrowserMode();
     }
 
-    @And("I should see last modifed by recipe")
-    public void iSeeLastModifedByRecipe() {
+    @And("I should see last modified recipe name")
+    public void iSeeLastModifiedRecipeName() {
         recipePage.setSearch(this.recipe.getRecipeName());
         recipePage.iVerifyLatestModifiedRecipe();
     }
@@ -448,7 +448,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select OK and save as new recipe")
-    public void iSelectokAndSaveAsNewRecipe() {
+    public void iSelectOkAndSaveAsNewRecipe() {
         recipePage.okBtn();
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(5));
         recipePage.saveBtn(this.recipe.getRecipeName());
@@ -463,24 +463,24 @@ public class RecipePageStepsDefinition {
     @And("I have exported recipes in different status")
     public void exportRecipe(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.listOfRecipeExport(list.get(i));
+        for (String s : list) {
+            recipePage.listOfRecipeExport(s);
         }
     }
     
     @And("I import recipes in different status")
     public void importRecipe(DataTable table) {
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.listOfImportRecipe(list.get(i));
+        for (String s : list) {
+            recipePage.listOfImportRecipe(s);
         }
     }
     
     @Then("the UoP status of imported recipe changes to Draft")
     public void importedRecipeStatusIsDraft(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.importedRecipeStatusIsDraft(list.get(i));
+        for (String s : list) {
+            recipePage.importedRecipeStatusIsDraft(s);
         }
     }
 

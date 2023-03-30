@@ -124,6 +124,7 @@ Feature: Recipe console
     And Recipe should be executed
 
     # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
+  @BIOCRS-9352
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -176,6 +177,7 @@ Feature: Recipe console
     Then I verify Recipe Run tab is "enabled"
     
     # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
+  @BIOCRS-9352
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "Manual operation" tab

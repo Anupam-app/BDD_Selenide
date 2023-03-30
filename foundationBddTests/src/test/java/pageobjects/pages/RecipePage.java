@@ -129,13 +129,14 @@ public class RecipePage {
     private final SelenideElement save = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
     private final String recipeStatus = "//label[text()='%s']";
     private final SelenideElement exportIcon = $(By.xpath("//div[@class='export-icon']"));
-
     private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
     private final SelenideElement importInputTextBox = $(By.xpath("//input[contains(@class,'rename-recipe-import-input')]"));
     private final SelenideElement importRecipeFromEditor =  $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']"));
     private final SelenideElement fileMenuInRecipeEditor =  $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
     private final SelenideElement saveBtn = $(By.className("btn_primary"));
-    
+    private final SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
+    private final SelenideElement outOFRange = $(By.xpath("//div[contains(text(),'Out of Range.')]"));
+    private final SelenideElement thresholdErrorMessage = $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]"));
     public void goTo() {
         commonWaiter(recipePageLinkText,visible).click();
     }
@@ -218,7 +219,6 @@ public class RecipePage {
     }
 
     public String getRecipeName() {
-
         return recipeElementText.getText();
     }
 
@@ -493,7 +493,7 @@ public class RecipePage {
         if (status.equalsIgnoreCase("blank")) {
             stepPlaceholder.waitUntil(Condition.visible, 50001);
         } else if (status.equalsIgnoreCase("action")) {
-            Assert.assertNotSame("Search instruments and actions...", stepPlaceholder.getText());
+            Assert.assertNotSame("Verification of actions","Search instruments and actions...", stepPlaceholder.getText());
         }
     }
 
@@ -583,12 +583,10 @@ public class RecipePage {
     }
 
     public void outOfRangeErrorMessage(){
-        commonWaiter($(By.xpath("//div[contains(text(),'Out of Range.')]")),visible);
+        outOFRange.shouldBe(visible);
     }
 
     public void inValidValueAndErrorMessageOfThreshold(String value){
-
-        SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
         secondStep.click();
         secondStep.sendKeys(Keys.CONTROL,"a");
         secondStep.sendKeys(Keys.DELETE);
@@ -596,16 +594,16 @@ public class RecipePage {
         switch (value){
             case ("5"):
                 secondStep.setValue(value);
-                $(By.xpath("//div[contains(text(),'Out of Range.')]")).shouldBe(visible);
+                outOFRange.shouldBe(visible);
                 break;
             case ("3."):
             case (".2"):
                 secondStep.sendKeys(value);
-                $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]")).shouldBe(visible);
+                thresholdErrorMessage.shouldBe(visible);
                 break;
             case("-1"):
                 secondStep.sendKeys(value);
-                $(By.xpath("//div[contains(text(),'Out of Range.')]")).shouldBe(visible);
+                outOFRange.shouldBe(visible);
                 break;
             default:
         }
@@ -679,7 +677,6 @@ public class RecipePage {
         SelenideHelper.commonWaiter(phase1, visible).click();
         Selenide.sleep(2000);
         stepAction.contextClick(phase1).perform();
-        Selenide.sleep(4000);
         stepAction.moveToElement(phaseLibrary).click().perform();
     }
 
@@ -723,7 +720,6 @@ public class RecipePage {
         statusDraft.click();
         selectInReview.click();
         $(By.xpath("//button[@class='btn-primary']")).click();
-
     }
 
     public void waringpopupForRecipe(String message) {
@@ -774,7 +770,6 @@ public class RecipePage {
         importInputTextBox.waitUntil(visible,5000L).setValue(recipeName.concat("1"));
         saveButton.click();
         browserLinkText.waitUntil(Condition.visible, 5000L).click();
-
     }
     
     public void importedRecipeStatusIsDraft(String recipeName){
