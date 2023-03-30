@@ -127,7 +127,7 @@ public class RecipePage {
     private final SelenideElement stepPlaceholder = $(By.xpath("//input[@placeholder='Search instruments and actions...']"));
     private final String stepCountPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
     private final String rootStep = "(//span[text()='%s']/parent::span/span)[1]";
-    private final String stepNumber = "(//div[@class='stepNumber']/label[@class='stepCount'])[%s]";
+    private final String stepNumber = "//div[@class='stepNumber' and @data-label='step%s']";
     private final SelenideElement criteriaPlaceholder = $(By.xpath("//input[@placeholder='Search criteria...']"));
     private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions')]"));
     private final String expandAction = "//p[@title='%s']";
@@ -683,7 +683,7 @@ public class RecipePage {
     public void addCriteria() {
         commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).isSelected();
         stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
-        criteriaPlaceholder.sendKeys("Off");
+        criteriaPlaceholder.sendKeys("Running");
         criteriaPlaceholder.sendKeys(Keys.ENTER);
     }
 
