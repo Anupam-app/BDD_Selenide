@@ -224,7 +224,7 @@ Feature: Recipe management
     When I add few actions steps
     And I save the recipes
     And I logout
-    And I login with "Bio4cservice" as username and "Merck$ervice" as password
+    And I am logged in as "BIO4CSERVICE" user
     And I open the recipe
     And I add few actions steps
     And I save the recipe
