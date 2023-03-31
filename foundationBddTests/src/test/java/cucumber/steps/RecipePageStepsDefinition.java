@@ -77,13 +77,6 @@ public class RecipePageStepsDefinition {
         userPage.goTo();
     }
 
-    @When("I come back to Recipe page")
-    public void iGoToRecipeAndEdit() {
-        recipePage.goTo();
-        goToIFrame();
-        recipePage.goToEditMode();
-    }
-
     @When("I can create a recipe")
     public void iCreateRecipe() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
@@ -206,7 +199,7 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I print recipe {string}")
-    public void iClickOnPrint(String recipeName) {
+    public void iPrintRecipe(String recipeName) {
         recipePage.printRecipe(recipeName);
     }
 
@@ -294,8 +287,7 @@ public class RecipePageStepsDefinition {
     @And("I Validate the error message for below input values")
     public void inValidInputValue(DataTable table){
         List<String> list = table.asList(String.class);
-        for (String s : list)
-            recipePage.inValidValueAndErrorMessageOfThreshold(s);
+        list.forEach(recipePage::inValidValueAndErrorMessageOfThreshold);
     }
 
     @And("I try to change status and verify error message displayed {string}")
@@ -304,34 +296,34 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I create phase with shortcut key")
-    public void createPhase(){
+    public void iCreatePhaseWithShortcutKey(){
         recipePage.createPhaseWithShortcutKey();
     }
 
     @Then("I get a warning notifying that {string}")
-        public void maxPhaseRecipeWarningMessage(String message){
+        public void iGetAWarningNotifyingThat(String message){
         recipePage.maxPhaseWarningMessage(message);
     }
 
     @When("I add Phases from phase library to recipe")
-    public void  addPhaseFromLibrary(){
+    public void  iAddPhaseFromPhaseLibraryToRecipe(){
         recipePage.addPhaseFromLibrary();
     }
 
     @When("I try to copy and paste the phase")
-    public void copyPastePhase(){
+    public void iTryToCopyAndPasteThePhase(){
         recipePage.copyPastePhase();
     }
 
     @And("I go to Recipe editor")
-    public void iGoToRecipeEditor() {
+    public void theRecipeEditorPageIsOpen() {
         recipePage.goTo();
         goToIFrame();
         recipePage.goToEditMode();
     }
 
     @And("I add few actions steps")
-    public void AddFewSteps() {
+    public void iAddFewActionsSteps() {
         recipePage.addingStepByClickPlusIcon();
         recipePage.addActionStep();
     }
@@ -369,8 +361,8 @@ public class RecipePageStepsDefinition {
         recipePage.iVerifyRecipeNameInRecipeTab(this.recipe.getRecipeName());
     }
 
-    @Then("I verify recipe name displayed along with status as {string}")
-    public void iVerifyRecipeStatusIsSaved(String status) {
+    @Then("I verify recipe status as {string}")
+    public void iVerifyRecipeStatus(String status) {
         recipePage.verifyRecipeStatus(status);
     }
 
@@ -386,38 +378,11 @@ public class RecipePageStepsDefinition {
         recipePage.iCheckRecipeNameWithMouseOver();
     }
 
-    @And("I add criteria to few steps")
-    public void iAddCriteriaToFewSteps() {
-        recipePage.addCriteria();
-    }
-
-    @And("I verify recipe status is {string}")
-    public void iVerifyRecipeStatusUnsaved(String status) {
-        recipePage.verifyRecipeStatus(status);
-    }
-
     @And("I save the recipes")
     public void iSaveRecipes() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(15));
         recipePage.saveRecipe(this.recipe.getRecipeName());
         SelenideHelper.goToDefault();
-    }
-
-    @And("I open the recipe")
-    public void iOpenTheRecipe() {
-        recipePage.goTo();
-        goToIFrame();
-        recipePage.goToEditMode();
-    }
-
-    @Then("I verify the header is updated to {string}")
-    public void iVerifyHeaderIsUpdatedToSaved(String status) {
-        recipePage.verifyRecipeStatus(status);
-    }
-
-    @And("I open the recipe list")
-    public void iOpenTheRecipeList() {
-        recipePage.goToBrowserMode();
     }
 
     @And("I should see last modified recipe name")
@@ -463,25 +428,19 @@ public class RecipePageStepsDefinition {
     @And("I have exported recipes in different status")
     public void exportRecipe(DataTable table){
         List<String> list = table.asList(String.class);
-        for (String s : list) {
-            recipePage.listOfRecipeExport(s);
+        list.forEach(recipePage::listOfRecipeExport);
         }
-    }
     
     @And("I import recipes in different status")
     public void importRecipe(DataTable table) {
         List<String> list = table.asList(String.class);
-        for (String s : list) {
-            recipePage.listOfImportRecipe(s);
-        }
+        list.forEach(recipePage::listOfImportRecipe);
     }
     
     @Then("the UoP status of imported recipe changes to Draft")
     public void importedRecipeStatusIsDraft(DataTable table){
         List<String> list = table.asList(String.class);
-        for (String s : list) {
-            recipePage.importedRecipeStatusIsDraft(s);
-        }
+        list.forEach(recipePage::importedRecipeStatusIsDraft);
     }
 
 }

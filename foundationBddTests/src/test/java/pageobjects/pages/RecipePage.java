@@ -5,6 +5,7 @@ import com.codeborne.selenide.Condition;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
@@ -13,7 +14,8 @@ import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import dataobjects.Report;
 
-import java.awt.*;
+import java.awt.Robot;
+import java.awt.AWTException;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -124,9 +126,9 @@ public class RecipePage {
     private SelenideElement clearSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private SelenideElement latestRecipeName = $(By.xpath("(//table[@class='table']/tbody/tr/td)[1]"));
     private final String wariningMessage = "//div[text()='Recipe is locked. Please save it as new copy.']";
-    private final SelenideElement file = $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
-    private final SelenideElement print = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
-    private final SelenideElement save = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
+    private final SelenideElement recipeFile = $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
+    private final SelenideElement printRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
+    private final SelenideElement saveRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
     private final String recipeStatus = "//label[text()='%s']";
     private final SelenideElement exportIcon = $(By.xpath("//div[@class='export-icon']"));
     private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
@@ -137,6 +139,7 @@ public class RecipePage {
     private final SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
     private final SelenideElement outOFRange = $(By.xpath("//div[contains(text(),'Out of Range.')]"));
     private final SelenideElement thresholdErrorMessage = $(By.xpath("//div[contains(text(),'No value before/after decimal point.')]"));
+
     public void goTo() {
         commonWaiter(recipePageLinkText,visible).click();
     }
@@ -195,8 +198,8 @@ public class RecipePage {
     }
 
     public void saveRecipe(String recipeName) {
-        commonWaiter(file,visible).click();
-        commonWaiter(save,visible).click();
+        commonWaiter(recipeFile,visible).click();
+        commonWaiter(saveRecipe,visible).click();
         SelenideElement recipeInputSave = $(By.className("selected-recipe-input"));
         $(By.className("selected-recipe-input")).clear();
         recipeInputSave.setValue(recipeName);
@@ -210,8 +213,8 @@ public class RecipePage {
     }
 
     public void saveModifiedRecipe() {
-        commonWaiter(file, visible).click();
-        commonWaiter(save,visible).click();
+        commonWaiter(recipeFile, visible).click();
+        commonWaiter(saveRecipe,visible).click();
     }
 
     public String getPhaseName() {
@@ -305,7 +308,7 @@ public class RecipePage {
     }
 
     public void importRecipe(String recipeName) {
-        commonWaiter(file, visible).click();
+        commonWaiter(recipeFile, visible).click();
         $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']")).click();
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
         importButton.click();
@@ -319,15 +322,15 @@ public class RecipePage {
     }
 
     public void chooseOption(String option) {
-        commonWaiter(file, visible).click();
+        commonWaiter(recipeFile, visible).click();
         $(By.xpath(String.format(chooseOption, option))).click();
         Selenide.sleep(5000);
 
     }
 
     public void printRecipe(String recipeName) {
-        commonWaiter(file, visible).click();
-        print.shouldBe(visible);
+        commonWaiter(recipeFile, visible).click();
+        printRecipe.shouldBe(visible);
     }
 
     public void lookAtTheUserNotification() {
@@ -493,8 +496,9 @@ public class RecipePage {
         if (status.equalsIgnoreCase("blank")) {
             stepPlaceholder.waitUntil(Condition.visible, 50001);
         } else if (status.equalsIgnoreCase("action")) {
-            Assert.assertNotSame("Verification of actions","Search instruments and actions...", stepPlaceholder.getText());
+            stepPlaceholder.shouldNotHave(text("Search instruments and actions..."));
         }
+
     }
 
     public void addActionStep(String action) {
@@ -702,8 +706,8 @@ public class RecipePage {
     }
 
     public void openRecipiList() {
-        commonWaiter(file, visible).click();
-        commonWaiter(save, visible).click();
+        commonWaiter(recipeFile, visible).click();
+        commonWaiter(saveRecipe, visible).click();
     }
 
     public void iCheckRecipeNameWithMouseOver() {
@@ -711,7 +715,7 @@ public class RecipePage {
     }
 
     public void iVerifyLatestModifiedRecipe() {
-        Assert.assertEquals(latestRecipeName.getText(), recipeSearchTextBox.getAttribute("value"));
+        latestRecipeName.shouldBe(Condition.attribute(recipeSearchTextBox.getAttribute("value")));
     }
 
     public void DraftToInReview() {
@@ -723,8 +727,7 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-        String actual = $(By.xpath(wariningMessage)).getText();
-        Assert.assertEquals(actual, message);
+        $(By.xpath(wariningMessage)).shouldHave(text(message));
     }
 
     public void saveBtn(String recipeName) {
@@ -735,19 +738,14 @@ public class RecipePage {
     }
 
     public void tryToSave() {
-        commonWaiter(file, visible).click();
-        commonWaiter(save,visible).click();
+        commonWaiter(recipeFile, visible).click();
+        commonWaiter(saveRecipe,visible).click();
     }
 
 
     public void verifyRecipeStatus(String condition){
         SelenideElement recipeCondition  = commonWaiter($(By.xpath(String.format(recipeStatus,condition))),visible);
-        if (condition.equalsIgnoreCase("Saved")){
-            commonWaiter(recipeCondition ,appear);
-        }
-        else if(condition.equalsIgnoreCase("Unsaved")){
-            commonWaiter(recipeCondition ,appear);
-        }
+        commonWaiter(recipeCondition ,appear);
     }
 
     public void listOfRecipeExport(String recipeName){
