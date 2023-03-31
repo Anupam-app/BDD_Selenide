@@ -169,7 +169,7 @@ public class RolePageStepsDefinition {
             rolePage.adminRolePermission(roles);
         } else if (userRole.equalsIgnoreCase("service")) {
             rolePage.serviceRolePermission(roles);
-        } else if (userRole.equalsIgnoreCase("proceessManager")) {
+        } else if (userRole.equalsIgnoreCase("processManager")) {
             rolePage.processMgr_RolePermission(roles);
         } else if (userRole.equalsIgnoreCase("operator")) {
             rolePage.operatorRolePermission(roles);
