@@ -95,14 +95,14 @@ public class UserPage {
     }
 
     public void UserLocked(String user) {
-        Assert.assertEquals("rgba(230, 30, 80, 1)", ($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000L).getCssValue("color")));
-        Assert.assertEquals("rowLockedUser", ($(By.xpath(String.format(xpathUserName, user))).getAttribute("class")));
+        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible).shouldHave(cssValue("color","rgba(230, 30, 80, 1)"));
+        $(By.xpath(String.format(xpathUserName, user))).shouldHave(attribute("class","rowLockedUser"));
     }
 
     public void UserUnLocked(String user) {
         cancelButton.click();
-        Assert.assertEquals("rgba(33, 37, 41, 1)", ($(By.xpath(String.format(xpathUserName, user))).waitUntil(visible, 5000L).getCssValue("color")));
-        Assert.assertEquals("customusername", ($(By.xpath(String.format(xpathUserName, user) + "/td")).getAttribute("class")));
+        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible).shouldHave(cssValue("color","rgba(33, 37, 41, 1)"));
+        $(By.xpath(String.format(xpathUserName, user) + "/td")).shouldHave(attribute("class","customusername"));
     }
 
     public void edit(String user) {
@@ -110,16 +110,16 @@ public class UserPage {
     }
 
     public void cannotEdit(String user) {
-        Assert.assertFalse($(By.xpath(String.format(xpathEditUserIcon, user))).isDisplayed());
+        $(By.xpath(String.format(xpathEditUserIcon, user))).should(not(appear));
     }
 
     public void usersNotEditable() {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
         for (var user : users) {
             if (user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
-                Assert.assertEquals("Edit icon is enabled for system users", "edit-icon disabled", ($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")));
+                $(By.xpath(String.format(xpathEditUserIcon, user))).shouldHave(attribute("class","edit-icon disabled"));
             } else {
-                Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).isEnabled());
+                $(By.xpath(String.format(xpathEditUserIcon, user))).shouldBe(enabled);
             }
 
         }
@@ -413,11 +413,15 @@ public class UserPage {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible).click();
     }
 
-    public boolean createUserIconPresent(){
-        return createUserPlusButton.isDisplayed();
+    public void createUserIconPresent(String value){
+        if(value.equalsIgnoreCase("not exists")) {
+            createUserPlusButton.should(not(appear));
+        } else if (value.equalsIgnoreCase("exists")){
+            createUserPlusButton.should(appear);
+        }
     }
 
     public void roleAssignedToUser(String role){
-        Assert.assertEquals("Role is not assigned to user ", role , roleAssigned.getText());
+        roleAssigned.shouldHave(text(role));
     }
 }

@@ -16,6 +16,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
+import pageobjects.pages.UserPage;
 
 public class RolePageStepsDefinition {
 
@@ -24,13 +25,15 @@ public class RolePageStepsDefinition {
     private final Report report;
     private final ReportsPage reportPage;
     private final Login login;
+    private final UserPage userPage;
 
-    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login) {
+    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login, UserPage userPage) {
         this.rolePage = rolePage;
         this.role = role;
         this.report = report;
         this.reportPage = reportPage;
         this.login = login;
+        this.userPage = userPage;
         this.role.getPermissions().clear();
     }
 
@@ -56,10 +59,11 @@ public class RolePageStepsDefinition {
         rolePage.checkSortedElement(columnName, Boolean.parseBoolean(sortMode));
     }
 
-    @Given("I search {string} role")
-    public void iSearchRole(String role) {
+    @Given("I verify {string} role is {string}")
+    public void iSearchRole(String role, String value) {
         this.role.setRoleName(role);
         rolePage.searchRole(this.role.getRoleName());
+        rolePage.iEnableDisableRole(value,role);
     }
 
     @When("I assign permission {string}")
@@ -151,8 +155,8 @@ public class RolePageStepsDefinition {
         rolePage.saveButton();
     }
 
-    @And("^I verify default roles$")
-    public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
+    @And("^I verify default roles are disabled or enabled$")
+    public void iVerifyDefaultRoles(DataTable datatable) {
         List<String> roles = datatable.asList();
         for (String names : roles) {
             rolePage.iVerifyDefaultRoles(names);
@@ -222,14 +226,6 @@ public class RolePageStepsDefinition {
 		rolePage.deleteRole(this.role.getRoleName());
 	}
 
-    @And("I verify default roles are disabled or enabled")
-    public void verifyDefaultRoleDisabled(){
-        Assert.assertFalse("Admin role is not disabled",rolePage.defaultRoleDisabled("Administrator"));
-        Assert.assertFalse("Service role is not disabled",rolePage.defaultRoleDisabled("Bio4CService"));
-        Assert.assertTrue("Process Manager role is not enabled",rolePage.defaultRoleDisabled("ProcessManager"));
-        Assert.assertTrue("Operator role is not enabled",rolePage.defaultRoleDisabled("Operator"));
-    }
-
     @When("I modify permission")
     public void iModifyPermission(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
@@ -264,11 +260,6 @@ public class RolePageStepsDefinition {
         rolePage.notification(this.role.getRoleAction());
     }
 
-    @And("I verify role is {string}")
-    public void iEnabledDisableRole(String value){
-        rolePage.iEnableDisableRole(value);
-    }
-
     @And("I search and edit role {string}")
     public void iSearchAndEditRole(String roleName){
         this.role.setRoleName(roleName);
@@ -277,5 +268,11 @@ public class RolePageStepsDefinition {
         rolePage.modifyRole(this.role.getRoleName());
         rolePage.getPermissionList().forEach(p -> this.role.getPermissions().add(p));
         rolePage.getOldPermissionList().forEach(p -> this.role.getPermissions().add(p));
+    }
+
+    @And("I trigger roles mode")
+    public void iTriggerUserRolesMode() {
+        userPage.goTo();
+        rolePage.gotoRolesTab();
     }
 }

@@ -438,16 +438,12 @@ public class UserPageStepsDefinition {
 
     @And ("I verify create User icon {string}")
     public void createUserIconPresence(String value){
-        if(value.equalsIgnoreCase("not exists")) {
-            Assert.assertFalse("User Icon is Present", userPage.createUserIconPresent());
-        } else if (value.equalsIgnoreCase("exists")){
-            Assert.assertTrue("User creation icon is not present",userPage.createUserIconPresent());
-        }
+        userPage.createUserIconPresent(value);
     }
 
     @And("I see {string} role assigned to user")
     public void verifyRoleAssigned(String role){
-       userPage.roleAssignedToUser(role);
+        userPage.roleAssignedToUser(role);
     }
 
     @Given("I search {string} to validate role {string} assigned")

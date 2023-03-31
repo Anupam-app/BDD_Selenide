@@ -71,7 +71,7 @@ Feature: User management
     Then I should see the report file presence
     And I see the "testUserEnabled" user disabled in report
     When I logout
-    And I open login page
+    And login page is open
     And I enter "testUserEnabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
@@ -96,7 +96,7 @@ Feature: User management
     And I should see the report file presence
     And I see the "testUserDisabled" user enabled in report
     And I logout
-    And I open login page
+    And login page is open
     And I enter "testUserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
@@ -175,7 +175,7 @@ Feature: User management
   @IVI-6602
   Scenario Outline: Verify the system allows user to change the password 3
     Given I open portal
-    And I open login page
+    And login page is open
     When I login to application with wrong password
       | username | password       | message                                                   |
       | <user>   | <old password> | Invalid username or password. You have 4 attempt(s) left. |
@@ -242,7 +242,7 @@ Feature: User management
     When I change default page to "Reports"
     And I save user preferences
     And I logout
-    And I open login page
+    And login page is open
     And I enter "testUserForI18N" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in

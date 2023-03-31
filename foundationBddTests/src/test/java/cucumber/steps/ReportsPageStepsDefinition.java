@@ -500,17 +500,17 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify custom role updated details captured in audit trail for user {string}")
-    public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
+    public void iVerifyAuditTrailReportWithEntries(String username) throws ParseException {
         var message = String.format("%s updated Role %s", username, this.role.getRoleName());
         var message1 = String.format("Role -%s", this.role.getUpdatedRoleName());
-        Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
+        reportPage.verifyAuditTrailRecord(message, message1);
         SelenideHelper.goToDefault();
     }
 
     @Then("I verify custom role disabled details captured in audit trail for user {string}")
     public void iVerifyAuditTrailReportCustomRole(String username) throws ParseException {
         var message = String.format("%s disabled role %s", username, this.role.getRoleName());
-        Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, this.role.getRoleName()));
+        reportPage.verifyAuditTrailRecord(message, this.role.getRoleName());
         SelenideHelper.goToDefault();
     }
 

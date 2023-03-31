@@ -115,7 +115,7 @@ public class LoginPage {
 
     public void verifyNotification(String value){
         commonWaiter(tempPwd_ErrorNotification,visible);
-        Assert.assertEquals("Error text message is not as expected",value,tempPwd_ErrorNotification.getText());
+        tempPwd_ErrorNotification.shouldHave(text(value));
     }
 
     public void errorNotification(String message) {

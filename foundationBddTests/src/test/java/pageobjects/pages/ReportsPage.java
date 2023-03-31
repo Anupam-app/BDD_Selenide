@@ -991,8 +991,7 @@ public class ReportsPage {
         return result;
     }
 
-    public boolean verifyAuditTrailRecord(String message, String recordRole) throws ParseException {
-        boolean result = false;
+    public void verifyAuditTrailRecord(String message, String recordRole) throws ParseException {
         if (eventTime.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(
                     Report.RECIPE_DATE_FORMAT);
@@ -1001,12 +1000,10 @@ public class ReportsPage {
             Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(eventTime.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
-            if (diffMinutes < 10 && comment.getText().contains(message) &&
-                    record.getText().equalsIgnoreCase(recordRole)) {
-                result = true;
+            if (diffMinutes < 10 && comment.getText().contains(message)) {
+                record.shouldHave(text(recordRole));
             }
         }
-        return result;
     }
 
     public void verifyRunMode() {

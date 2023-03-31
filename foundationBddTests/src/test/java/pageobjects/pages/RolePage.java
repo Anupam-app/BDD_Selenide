@@ -3,24 +3,28 @@ package pageobjects.pages;
 
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
 import com.codeborne.selenide.ElementsCollection;
-import static com.codeborne.selenide.Selenide.*;
 import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 import dataobjects.RoleAction;
-
-import java.util.*;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
+
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Selenide.*;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.Collections;
+import java.util.Objects;
 
 public class RolePage {
 
@@ -70,12 +74,11 @@ public class RolePage {
     private final SelenideElement searchbox = $(By.xpath("//input[(@class='Usersearchbox')]"));
     private final SelenideElement newUserRole = $(By.xpath("//td[text()='NewUserRole' and @class='customusername']"));
     private final SelenideElement newUserRoleName = $(By.xpath("//td[text()='NewUserRole' and @class='customusername']/parent::tr/td/div/div[text()='TestRole']"));
-    private final SelenideElement roleName = $(By.xpath("//div[@class='roleTableColumnOne roleCardMarginOne']"));
-    private final String disable_Edit_Button = "//div[contains(text(),'%s')]/following-sibling::div[5]/button";
+    private final SelenideElement roleNameText = $(By.xpath("//div[@class='roleTableColumnOne roleCardMarginOne']"));
+    private final String disableEditButton = "//div[contains(text(),'%s')]/following-sibling::div[5]/button";
     private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
-    private final SelenideElement disableRole = $(By.xpath("//button[contains(@class,'ant-switch')]"));
-    private String disable_Enable_Role_Notification = "The role successfully %s.";
-    private SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
+    private String DISABLE_ENABLE_ROLE_NOTIFICATION = "The role successfully %s.";
+    private final SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -87,7 +90,7 @@ public class RolePage {
 
     public void createNewrole(String roleName) {
         createRoleButton.click();
-        SelenideHelper.commonWaiter(inputRoleName, Condition.visible).setValue(roleName);
+        SelenideHelper.commonWaiter(inputRoleName, visible).setValue(roleName);
     }
 
     public void sortList(String columnName, boolean descending) {
@@ -135,7 +138,7 @@ public class RolePage {
 
         }
 
-        saveText.shouldHave(Condition.text(expectedNotificationText));
+        saveText.shouldHave(text(expectedNotificationText));
 
         closeButton.click();
     }
@@ -182,7 +185,7 @@ public class RolePage {
     }
 
     public void roleExists(String role) {
-        $(By.xpath(String.format(xpathEditRoleIcon, role))).shouldBe(Condition.visible);
+        $(By.xpath(String.format(xpathEditRoleIcon, role))).shouldBe(visible);
     }
 
     public void verifyRoleNameToolTip(String role) {
@@ -190,7 +193,7 @@ public class RolePage {
     }
 
     public void NoRolesTab() {
-        rolesLinkText.should(Condition.not(Condition.visible));
+        rolesLinkText.should(Condition.not(visible));
     }
 
     public void checkMessage(String message) {
@@ -214,18 +217,23 @@ public class RolePage {
     }
 
     public void iVerifyDefaultRoles(String name) {
+        SelenideElement enableDisableButton = $(By.xpath(String.format(disableEditButton, name)));
         switch (name) {
-            case "Bio4C Service":
+            case "Bio4CService":
                 bio4cservices.shouldBe(visible);
+                enableDisableButton.shouldNotBe(enabled);
                 break;
             case "Administrator":
                 administrator.shouldBe(visible);
+                enableDisableButton.shouldNotBe(enabled);
                 break;
             case "ProcessManager":
                 processManager.shouldBe(visible);
+                enableDisableButton.shouldBe(enabled);
                 break;
             case "Operator":
                 operator.shouldBe(visible);
+                enableDisableButton.shouldBe(enabled);
                 break;
             default:
         }
@@ -303,7 +311,7 @@ public class RolePage {
     }
 
     public void verifyRoleName(String name) {
-        roleName.shouldHave(text(name));
+        roleNameText.shouldHave(text(name));
     }
 
     public String getOldRoleName() {
@@ -316,15 +324,10 @@ public class RolePage {
 		commonWaiter($(By.xpath("//button[text()='Yes, delete']")),visible).click();
 		commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
 		XPATH_NOTIFICATION_TEXT.shouldHave(text("The role successfully obsolete."));
-		
 	}
 
-    public boolean defaultRoleDisabled(String value){
-        return $(By.xpath(String.format(disable_Edit_Button,value))).isEnabled();
-    }
-
     public void roleNameExists(String role) {
-        $(By.xpath(String.format(roleNameCheck, role))).shouldBe(Condition.visible);
+        $(By.xpath(String.format(roleNameCheck, role))).shouldBe(visible);
     }
 
     public void verifyAssignedPermission(String roleName, Set<String> set){
@@ -349,15 +352,16 @@ public class RolePage {
         Assert.assertEquals("Role Name is not entered as expected", roleName, inputRoleName.getValue());
     }
 
-    public void iEnableDisableRole(String value){
-        if(value.equals("enabled") && Objects.equals(disableRole.getAttribute("aria-checked"), "false")) {
-            disableRole.click();
-            updatedNotification(String.format(disable_Enable_Role_Notification, value));
-            Assert.assertEquals("Role is not enabled", "true", disableRole.getAttribute("aria-checked"));
-        }else if(value.equals("disabled") && Objects.equals(disableRole.getAttribute("aria-checked"), "true")) {
-            disableRole.click();
-            updatedNotification(String.format(disable_Enable_Role_Notification, value));
-            Assert.assertEquals("Role is not disabled", "false", disableRole.getAttribute("aria-checked"));
+    public void iEnableDisableRole(String value,String name){
+        SelenideElement enableDisableButton = $(By.xpath(String.format(disableEditButton, name)));
+        if(value.equals("enabled") && Objects.equals(enableDisableButton.getAttribute("aria-checked"), "false")) {
+            enableDisableButton.click();
+            updatedNotification(String.format(DISABLE_ENABLE_ROLE_NOTIFICATION, value));
+            enableDisableButton.shouldHave(attribute("aria-checked","true"));
+        }else if(value.equals("disabled") && Objects.equals(enableDisableButton.getAttribute("aria-checked"), "true")) {
+            enableDisableButton.click();
+            updatedNotification(String.format(DISABLE_ENABLE_ROLE_NOTIFICATION, value));
+            enableDisableButton.shouldHave(attribute("aria-checked","false"));
         }
     }
 

@@ -7,13 +7,13 @@ Feature: User login
   @SMOKE
   @LOGIN
   Scenario: User login
-    Given I open login page
+    Given login page is open
     When I enter "bio4cadmin" as username and "Merck@dmin" as password
     And I push the login button
     Then I am logged in
 
   Scenario: IVI Bug-IVI-4488 IVI-4850 BIOCRS-5151 | Account Lock on 5 unsuccessful attempts and unlock the same account by admin user
-    Given I open login page
+    Given login page is open
     When I login to application with wrong password
       | username         | password   | message                                                                                                                                     |
       | AccountLockUser  | MerckApp2@ | Invalid username or password. You have 4 attempt(s) left.                                                                                   |
@@ -32,13 +32,13 @@ Feature: User login
     Then I see account unlock message is displayed
     And I see the user is unlocked
     And I logout
-    And I open login page
+    And login page is open
     And I enter "AccountLockUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
 
   Scenario Outline: Login errors
-    Given I open login page
+    Given login page is open
     When I enter "<login>" as username and "<password>" as password
     And I push the login button
     Then I am not logged in
@@ -51,12 +51,12 @@ Feature: User login
 
 
   Scenario Outline: New user login Or Connect after reset the password
-    Given I open login page
+    Given login page is open
     When I enter "<login>" as username and "<tempPassword>" as password
     And I push the login button
     And I change password "<newPassword>"
     And I open portal
-    And I open login page
+    And login page is open
     And I enter "<login>" as username and "<newPassword>" as password
     And I push the login button
     Then I am logged in
@@ -68,29 +68,20 @@ Feature: User login
 
 
   Scenario: User login for user disabled
-    Given I open login page
+    Given login page is open
     When I enter "UserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
 
   Scenario: BIOFOUND-27788 | Verify the errors when user doesn't set the password according to the password policy
-    Given I open login page
+    Given login page is open
     When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
     And I push the login button
     Then I provide less complex passwords to verify the password policy
-      | merckapp    | Password doesn't met the policy criteria. |
-      | MERCKAPP    | Password doesn't met the policy criteria. |
-      | MerckApp    | Password doesn't met the policy criteria. |
-      | 123456789   | Password doesn't met the policy criteria. |
-      | MerckApp1   | Password doesn't met the policy criteria. |
-      | Mar1@       | Password doesn't met the policy criteria. |
-
-  Scenario Outline: BIOFOUND-27788 | Verify the Error texts while setting wrong confirm Password
-    Given I open login page
-    When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
-    And I push the login button
-    Then I provide "<newPassword>", wrong "<confirmPassword>" to verify the error "<error>"
-
-    Examples:
-      | newPassword | confirmPassword | error |
-      | MerckApp1@  | MerckApp2@      | New password and confirmation password do not match. |
+      | merckapp    | merckapp    | Password doesn't met the policy criteria.           |
+      | MERCKAPP    | MERCKAPP    | Password doesn't met the policy criteria.           |
+      | MerckApp    | MerckApp    | Password doesn't met the policy criteria.           |
+      | 123456789   | 123456789   | Password doesn't met the policy criteria.           |
+      | MerckApp1   | MerckApp1   | Password doesn't met the policy criteria.           |
+      | Mar1@       | Mar1@       | Password doesn't met the policy criteria.           |
+      | MerckApp1@  | MerckApp2@  | New password and confirmation password do not match.|
