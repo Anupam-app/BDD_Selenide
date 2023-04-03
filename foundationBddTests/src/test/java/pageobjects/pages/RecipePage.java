@@ -4,6 +4,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 
 import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.textCaseSensitive;
 import static com.codeborne.selenide.Condition.visible;
@@ -715,7 +716,7 @@ public class RecipePage {
     }
 
     public void iVerifyLatestModifiedRecipe() {
-        latestRecipeName.shouldBe(Condition.attribute(recipeSearchTextBox.getAttribute("value")));
+        latestRecipeName.shouldHave(text(Objects.requireNonNull(recipeSearchTextBox.getAttribute("value"))));
     }
 
     public void DraftToInReview() {
