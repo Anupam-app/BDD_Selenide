@@ -312,7 +312,7 @@ public class RecipePageStepsDefinition {
 
     @When("I try to copy and paste the phase")
     public void iTryToCopyAndPasteThePhase(){
-        recipePage.copyPastePhase();
+        recipePage.copyAndPastePhase();
     }
 
     @And("I go to Recipe editor")
@@ -404,7 +404,7 @@ public class RecipePageStepsDefinition {
 
     @And("I try to save the recipe")
     public void iTryToSaveTheRecipe() {
-        recipePage.tryToSave();
+        recipePage.tryToSaveRecipe();
     }
 
     @And("I should see warning popup alert with text message {string}")
