@@ -4,7 +4,6 @@ Feature: Recipe management
   Background:
     Given I am logged in as "Bio4CAdmin" user
 
-
   Scenario: BIOCRS-5478 | Recipe modification
     Given I go to recipe page
     When I edit recipe "testDraftRecipeToAddPhase"
@@ -104,7 +103,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     And I go to other module without saving recipe
-    And I come back to Recipe page
+    And I go to Recipe editor
     Then I can create a recipe
 
   Scenario: Create new recipe with existing Recipe name
@@ -148,13 +147,12 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a new step in recipe
     And I add "Setpoint" action to the step
-   #And I add recipe action from phase library ("Already a recipe should be there in phase library")
     And I add criteria to phase using keyboard
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
     And I should see recipe opened in editor
 
-  Scenario:BIOFOUND-19474|FT_CF_Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+  Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I go to recipe page
     When I trigger edit mode
     When I add new action step using Keyboard event
@@ -174,7 +172,6 @@ Feature: Recipe management
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I go to recipe page
     And I edit recipe "maxPhaseRecipe"
-    #the maximum number of phases allowed in the recipe is 19
     When I create phase with shortcut key
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
     When I add Phases from phase library to recipe
@@ -202,6 +199,39 @@ Feature: Recipe management
        |testDraftRecipeToChangeStatus1|
        |recipeTechReview1             |
        |recipeInReview1               |
-    #And Import status shows the status before import
     And I edit recipe "testRecipeDraftToInactive1"
     Then I make recipe inactive
+    
+  Scenario: Create and save a Recipe with 30 charactors
+    When I go to Recipe editor
+    And I add few actions steps
+    And I add criteria to phase using keyboard
+    And I verify recipe status as "Unsaved"
+    And I navigate to recipe browser, open a recipe
+    Then I should see unsaved warning dialog box
+    And I select OK and navigate to recipe editor
+    And I add few more action steps
+    And I create a phase and add phase to library
+    And I save the recipe with 30 character name
+    And I verify the recipe name displayed on Recipe tab
+    And I verify recipe status as "Saved"
+    And I add few more steps and save the recipe
+    And I go to browser mode
+    And I should see full recipe name on mouse hover
+
+  Scenario: Verify new recipe and existing recipe
+    When I go to Recipe editor
+    And I add few actions steps
+    And I logout
+    And I am logged in as "BIO4CSERVICE" user
+    And I go to Recipe editor
+    And I add few actions steps
+    And I save the recipe
+    Then I verify recipe status as "Saved"
+    And I go to browser mode
+    And I should see last modified recipe name
+    And I change the recipe to in review
+    And I open the recipe and add few more steps
+    And I try to save the recipe
+    And I should see warning popup alert with text message "Recipe is locked. Please save it as new copy."
+    And I select OK and save as new recipe

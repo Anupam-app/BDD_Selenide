@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
+
 import dataobjects.Login;
 import dataobjects.Recipe;
 import io.cucumber.datatable.DataTable;
@@ -8,11 +9,14 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.awt.*;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.UserPage;
+import pageobjects.utility.SelenideHelper;
 
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
@@ -73,13 +77,6 @@ public class RecipePageStepsDefinition {
         userPage.goTo();
     }
 
-    @When("I come back to Recipe page")
-    public void iGoToRecipeAndEdit() {
-        recipePage.goTo();
-        goToIFrame();
-        recipePage.goToEditMode();
-    }
-
     @When("I can create a recipe")
     public void iCreateRecipe() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
@@ -116,36 +113,10 @@ public class RecipePageStepsDefinition {
         Assert.assertEquals(this.recipePage.getPhaseName(), this.recipe.getPhaseName());
     }
 
-    @Given("I goto to editor tab in recipe page")
-    public void iNevigateToEditorTab() {
-        recipePage.naviagateToEditorTab();
-    }
-
-    @When("I create a recipe {string} with phase")
-    public void iCreateARecipe(String recipe) {
-        this.recipe.setRecipeNode(recipe);
-        recipePage.createRecipe(recipe);
-    }
-
-    @And("I save the recipe as {string}")
-    public void iSaveRecipeAs(String recipe) {
-        this.recipe.setRecipeName(recipe);
-        recipePage.saveRecipe(recipe);
-    }
-
     @Then("I save the modified recipe")
     public void iSaveModifiedRecipeAs() {
         recipePage.saveModifiedRecipe();
     }
-
-
-    @Then("I see recipe {string} is created with draft status in browser tab")
-    public void iVerifyRecipeIsCreated(String recipe) {
-        this.recipe.setRecipeName(recipe);
-        recipePage.verifyRecipe(recipe);
-        Assert.assertEquals(this.recipe.getRecipeName(), this.recipePage.getRecipeName());
-    }
-
 
     @Given("I edit recipe {string}")
     public void iEditRecipe(String recipe) {
@@ -154,15 +125,15 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I see list of recipes are displayed")
-    public void iSeeListOfRecipes() throws InterruptedException {
+    public void iSeeListOfRecipes() {
         recipePage.verifyList();
     }
 
     @And("below {string} column is displayed")
-    public void verifyColumn(String tab, DataTable table) {
+    public void verifyColumn(String tab,DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i).get(0), tab, i);
+            recipePage.verifyColoumn(list.get(i).get(0),tab, i);
         }
     }
 
@@ -228,7 +199,7 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I print recipe {string}")
-    public void iClickOnPrint(String recipeName) throws Exception {
+    public void iPrintRecipe(String recipeName) {
         recipePage.printRecipe(recipeName);
     }
 
@@ -312,53 +283,164 @@ public class RecipePageStepsDefinition {
     public void outOfRangeErrorMessage(){
         recipePage.outOfRangeErrorMessage();
     }
+
     @And("I Validate the error message for below input values")
     public void inValidInputValue(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i));
-        }
+        list.forEach(recipePage::inValidValueAndErrorMessageOfThreshold);
     }
+
     @And("I try to change status and verify error message displayed {string}")
     public void verifyErrorMessageOfChangeStatus(String message){
         recipePage.verifyErrorMessageOfChangeStatus(message);
     }
+
     @When("I create phase with shortcut key")
-    public void createPhase(){
+    public void iCreatePhaseWithShortcutKey(){
         recipePage.createPhaseWithShortcutKey();
     }
+
     @Then("I get a warning notifying that {string}")
-        public void maxPhaseRecipeWarningMessage(String message){
+        public void iGetAWarningNotifyingThat(String message){
         recipePage.maxPhaseWarningMessage(message);
     }
+
     @When("I add Phases from phase library to recipe")
-    public void  addPhaseFromLibrary(){
+    public void  iAddPhaseFromPhaseLibraryToRecipe(){
         recipePage.addPhaseFromLibrary();
     }
+
     @When("I try to copy and paste the phase")
-    public void copyPastePhase(){
-         recipePage.copyPastePhase();
+    public void iTryToCopyAndPasteThePhase(){
+        recipePage.copyAndPastePhase();
+    }
+
+    @And("I go to Recipe editor")
+    public void theRecipeEditorPageIsOpen() {
+        recipePage.goTo();
+        goToIFrame();
+        recipePage.goToEditMode();
+    }
+
+    @And("I add few actions steps")
+    public void iAddFewActionsSteps() {
+        recipePage.addingStepByClickPlusIcon();
+        recipePage.addActionStep();
+    }
+
+    @Then("I should see unsaved warning dialog box")
+    public void iShouldSeeUnsavedWarningDialogBox() {
+        recipePage.saveRecipeWarningMsg();
+    }
+
+    @And("I select OK and navigate to recipe editor")
+    public void iSelectOkAndNavigateToRecipeEditer() {
+        recipePage.okBtn();
+    }
+
+    @And("I add few more action steps")
+    public void iAddFewMoreActionSteps() {
+        recipePage.addFewSteps();
+    }
+
+    @And("I create a phase and add phase to library")
+    public void iCreatePhaseAndAddPhaseToLibibrary() throws AWTException {
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.zoomOut();
+        recipePage.addPhaseAndLibrary(this.recipe.getPhaseName());
+    }
+
+    @And("I save the recipe with 30 character name")
+    public void  iSaveTheRecipeWithcharacterName() {
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
+        recipePage.iSaveRecipeWithkeyBoardActions(this.recipe.getRecipeName());
+    }
+
+    @And("I verify the recipe name displayed on Recipe tab")
+    public void iVerifyTheRecipeNameDisplayedOnRecipeTab() {
+        recipePage.iVerifyRecipeNameInRecipeTab(this.recipe.getRecipeName());
+    }
+
+    @Then("I verify recipe status as {string}")
+    public void iVerifyRecipeStatus(String status) {
+        recipePage.verifyRecipeStatus(status);
+    }
+
+    @And("I add few more steps and save the recipe")
+    public void iAddStepsAndSaveTheRecipe() {
+        recipePage.addFewSteps();
+        recipePage.openRecipiList();
+    }
+
+    @Then("I should see full recipe name on mouse hover")
+    public void iCheckRecipeNameWithMouseHover() {
+        recipePage.setSearch(this.recipe.getRecipeName());
+        recipePage.iCheckRecipeNameWithMouseOver();
+    }
+
+    @And("I save the recipes")
+    public void iSaveRecipes() {
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(15));
+        recipePage.saveRecipe(this.recipe.getRecipeName());
+        SelenideHelper.goToDefault();
+    }
+
+    @And("I should see last modified recipe name")
+    public void iSeeLastModifiedRecipeName() {
+        recipePage.setSearch(this.recipe.getRecipeName());
+        recipePage.iVerifyLatestModifiedRecipe();
+    }
+
+    @And("I change the recipe to in review")
+    public void iChangeRecipeToInReview() {
+        recipePage.DraftToInReview();
+        recipePage.okBtn();
+    }
+
+    @And("I open the recipe and add few more steps")
+    public void iOpenRecipeAndAddFewMoreSteps() {
+        recipePage.addFewSteps();
+    }
+
+    @And("I try to save the recipe")
+    public void iTryToSaveTheRecipe() {
+        recipePage.tryToSaveRecipe();
+    }
+
+    @And("I should see warning popup alert with text message {string}")
+    public void iSeeWarningpopupAlertWithTextMessage(String message) {
+        recipePage.waringpopupForRecipe(message);
+    }
+
+    @And("I select OK and save as new recipe")
+    public void iSelectOkAndSaveAsNewRecipe() {
+        recipePage.okBtn();
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(5));
+        recipePage.saveBtn(this.recipe.getRecipeName());
+    }
+
+    @And("I navigate to recipe browser, open a recipe")
+    public void iNavigateToRecipeBrowserAndOpenRecipe(){
+        recipePage.goToBrowserMode();
+        recipePage.chooseRecipe();
     }
 
     @And("I have exported recipes in different status")
     public void exportRecipe(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.listOfRecipeExport(list.get(i));
+        list.forEach(recipePage::listOfRecipeExport);
         }
-    }
+    
     @And("I import recipes in different status")
     public void importRecipe(DataTable table) {
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.listOfImportRecipe(list.get(i));
-        }
+        list.forEach(recipePage::listOfImportRecipe);
     }
+    
     @Then("the UoP status of imported recipe changes to Draft")
     public void importedRecipeStatusIsDraft(DataTable table){
         List<String> list = table.asList(String.class);
-        for (int i = 0; i < list.size(); i++) {
-            recipePage.importedRecipeStatusIsDraft(list.get(i));
-        }
+        list.forEach(recipePage::importedRecipeStatusIsDraft);
     }
+
 }
