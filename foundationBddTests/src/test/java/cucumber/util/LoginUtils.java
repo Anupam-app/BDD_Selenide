@@ -1,4 +1,5 @@
 package cucumber.util;
+
 import java.util.Locale;
 
 public class LoginUtils {
