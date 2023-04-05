@@ -158,11 +158,10 @@ public class RecipeConsolePage {
     }
 
     public void restartSystem() {
-        SelenideHelper.commonWaiter(restartButton, visible)
-                .click();
-        SelenideHelper.commonWaiter(yesButton, visible)
-                .click();
-        SelenideHelper.commonWaiter(holdButton, visible);
+        SelenideHelper.commonWaiter(restartButton, visible).click();
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
+        SelenideHelper.commonWaiter(confirmButton, visible).click();
+        holdButton.waitUntil(visible, 10000);
     }
 
     public void holdSystem() {
