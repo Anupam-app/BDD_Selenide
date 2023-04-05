@@ -43,6 +43,9 @@ public class RecipeConsolePage {
     private final SelenideElement preRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement postRunCommentsText = $(By.xpath("//textarea[@name='comment']"));
     private final SelenideElement executionStatusText = $(By.id("runStatus_Id"));
+    private final SelenideElement reEstablishStateButton =
+            $(By.xpath("(//*[contains(@class, 'PrivateSwitchBase-input')])[1]"));
+    private final SelenideElement confirmButton = $(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm")));
     private final ElementsCollection recipeListTable = $$(By.xpath("//tbody/tr"));
     private final String recipeListTableValues = "//tbody/tr[%d]/td[%d]/label";
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
@@ -160,9 +163,11 @@ public class RecipeConsolePage {
     public void restartSystem() {
         SelenideHelper.commonWaiter(restartButton, visible)
                 .click();
-        SelenideHelper.commonWaiter(yesButton, visible)
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled)
                 .click();
-        SelenideHelper.commonWaiter(holdButton, visible);
+        SelenideHelper.commonWaiter(confirmButton, visible)
+                .click();
+        holdButton.waitUntil(visible, 10000);
     }
 
     public void holdSystem() {
