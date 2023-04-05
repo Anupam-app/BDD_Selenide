@@ -88,7 +88,7 @@ public class AnalyticsPage {
     private final int INDEX_BATCH_ID = 1;
     private final int INDEX_PRODUCT_ID = 2;
     private final int INDEX_INTERVAL_ID = 3;
-    private final String XPATH_RIGHT_PANEL = "//span[contains(text(),'%s')]";
+    private final String XPATH_RIGHT_PANEL = "//span[(text()='%s')]";
 
     private final SelenideElement analyticsHeader = $(By.xpath("//div[text()='Analytics']"));
 
@@ -308,19 +308,25 @@ public class AnalyticsPage {
                 plusButton.waitUntil(visible, 5000);
                 break;
             case "Aggregated interval":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated Hourly"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Aggregated"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Hourly"))).waitUntil(visible, 5000);
+
                 break;
             case "Created date timestamp":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "On : 01/02/2023"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "On:"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Feb 1, 2023, 5:28:54 PM"))).waitUntil(visible, 5000);
                 break;
             case "Batch ID":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID b10"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "b10"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Batch ID"))).waitUntil(visible, 5000);
                 break;
             case "RUN ID":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Run ID recipe4sec2202..."))).shouldBe(visible);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Run ID"))).shouldBe(visible);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "recipe4sec2202..."))).shouldBe(visible);
                 break;
             case "Status":
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Status Completed"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Status"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Completed"))).waitUntil(visible, 5000);
                 break;
             case "Relational Charts with expand/collapse option":
                 relationalDropdownSelection.waitUntil(visible, 5000);
@@ -338,7 +344,7 @@ public class AnalyticsPage {
     public void verifyMessageDisplayedOnRightPanel(String message) {
         ($(By.xpath(String.format(XPATH_RIGHT_PANEL, message)))).shouldBe(visible);
         ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "Select an existing aggregate or ")))).shouldBe(visible);
-        ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "create an aggregate.")))).shouldBe(visible);
+        ($(By.xpath(String.format(XPATH_RIGHT_PANEL, "create an aggregate")))).shouldBe(visible);
     }
 
     public void chooseAggregate(String aggregate) {

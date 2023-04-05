@@ -45,7 +45,7 @@ Feature: Analytics creation
       | expandButton        |
       | Create an Aggregate |
       | My Aggregates       |
-    And I verify the message in Right Panel "No selection has been made."
+    And I verify the message in Right Panel "No selection has been made"
 
   Scenario: BIOCRS-5486 BIOCRS-5507 | PFSTC_CRS_Verify Layout in Analytics Module right panel
     Given I am logged in as "bio4cadmin" user

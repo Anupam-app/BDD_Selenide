@@ -66,7 +66,7 @@ public class RecipeConsolePage {
     private final SelenideElement loadButton = $(By.xpath("//span[contains(text(),'Load')]"));
     private final SelenideElement okStepButton = $(By.xpath("//span[text()='Ok']"));
     private final SelenideElement clickYesButton = $(By.xpath("//span[text()='Yes']"));
-    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'OK')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement abortButton = $(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT")));
     private final SelenideElement recipeRunId = $(By.xpath("(//label[@id='trimString'])[4]"));
     private final SelenideElement runIdTextbox = $(By.xpath("//input[@name='runId']"));
@@ -83,7 +83,7 @@ public class RecipeConsolePage {
             "//button[contains(@class, 'MuiButton-outlinedPrimary')]//span[contains(text(),'MANUAL OPERATION')]"));
     private final SelenideElement recipeButton = $(By.xpath("//span[contains(text(),'RECIPE RUN')]"));
     private final SelenideElement pauseButton =
-            $(By.xpath("//img[@src='/useradminportal/static/media/Group 8.59d83e21.svg']"));
+            $(By.xpath("//img[@src='/useradminportal/static/media/Group 8.569b9a4c.svg']"));
 
     private final SelenideElement clearRecipeButton =
             $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
@@ -161,9 +161,12 @@ public class RecipeConsolePage {
     }
 
     public void restartSystem() {
-        SelenideHelper.commonWaiter(restartButton, visible).click();
-        SelenideHelper.commonWaiter(reEstablishStateButton, enabled).click();
-        SelenideHelper.commonWaiter(confirmButton, visible).click();
+        SelenideHelper.commonWaiter(restartButton, visible)
+                .click();
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled)
+                .click();
+        SelenideHelper.commonWaiter(confirmButton, visible)
+                .click();
         holdButton.waitUntil(visible, 10000);
     }
 
@@ -176,12 +179,9 @@ public class RecipeConsolePage {
     }
 
     public void gotoRecipeConsole() {
-        if (!collapseIcon.isDisplayed()) {
+        if (expandIcon.isDisplayed()) {
             SelenideHelper.commonWaiter(expandIcon, visible)
                     .click();
-        }
-        if (restartButton.isDisplayed()) {
-            restartSystem();
         }
     }
 
@@ -272,8 +272,8 @@ public class RecipeConsolePage {
         batchIdTextbox.sendKeys(recipe.getBatchId());
         batchIdTextbox.sendKeys(Keys.ENTER);
         preRunCommentsText.sendKeys(recipe.getBeforeComments());
+        okButton.waitUntil(visible, 10000, 2000);
         okButton.click();
-
         abortButton.waitUntil(Condition.visible, 5000l);
 
         // wait clean panel to be disabled via css class
