@@ -148,11 +148,11 @@ public class LoginPageStepsDefinition {
 
     @And("I provide less complex passwords to verify the password policy")
     public void iChangePassword(DataTable table) {
-        List<List<String>> list = table.asLists(String.class);
-        for (List<String> strings : list) {
-            loginPage.setNewPassword(strings.get(0));
-            loginPage.setConfirmPassword(strings.get(1));
-            loginPage.verifyNotification(strings.get(2));
+        List<List<String>> passwords = table.asLists(String.class);
+        for (List<String> string : passwords) {
+            loginPage.setNewPassword(string.get(0));
+            loginPage.setConfirmPassword(string.get(1));
+            loginPage.verifyNotification(string.get(2));
         }
     }
 

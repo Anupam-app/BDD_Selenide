@@ -16,8 +16,16 @@ import org.openqa.selenium.WebElement;
 import pageobjects.utility.SelenideHelper;
 import pageobjects.utility.SortHelper;
 
-import static com.codeborne.selenide.Condition.*;
-import static com.codeborne.selenide.Selenide.*;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.visible;
+import static com.codeborne.selenide.Condition.enabled;
+
+import static com.codeborne.selenide.Selenide.switchTo;
+import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
+import static com.codeborne.selenide.Selenide.$x;
+
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import java.util.ArrayList;
@@ -60,7 +68,6 @@ public class RolePage {
     private final SelenideElement administrator = $(By.xpath("//div[text()='Administrator']"));
     private final SelenideElement processManager = $(By.xpath("//div[text()='ProcessManager']"));
     private final SelenideElement operator = $(By.xpath("//div[text()='Operator']"));
-    private final SelenideElement roleTab = $(By.xpath("//div[text()='Roles']"));
     private final String viewAll = "//div[contains(text(),'%s')]/following::div[2]/a";
     private final SelenideElement closeIcon = $(By.xpath("//div[(@class='viewAll-crossicon')]"));
     private final SelenideElement adminEditeIcon = $(By.xpath("//div[(@class='roleCard')]/parent::div/div[3]/div[5]/div"));
@@ -79,6 +86,8 @@ public class RolePage {
     private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
     private String DISABLE_ENABLE_ROLE_NOTIFICATION = "The role successfully %s.";
     private final SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
+    private final SelenideElement deleteRoleButton = $(By.xpath("//span[text()='Delete role']"));
+    private final SelenideElement yesDeleteButton = $(By.xpath("//button[text()='Yes, delete']"));
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -210,12 +219,6 @@ public class RolePage {
         switchTo().parentFrame();
     }
 
-    public void notificationError(String name) {
-        commonWaiter(roleNotificationBar, visible);
-        String expectedNotificationText = String.format(NOTIFICATION_ERROR, name);
-        roleNotificationBar.shouldHave(text(expectedNotificationText));
-    }
-
     public void iVerifyDefaultRoles(String name) {
         SelenideElement enableDisableButton = $(By.xpath(String.format(disableEditButton, name)));
         switch (name) {
@@ -253,7 +256,7 @@ public class RolePage {
         for (var param : params) {
             expectedParams.add(param.getString("value"));
         }
-        if ((count == paramsSize) && (count != 0 && paramsSize != 0)) {
+        if (count == paramsSize && count != 0) {
             Collections.sort(acceptedParams);
             Collections.sort(expectedParams);
             Assert.assertEquals(acceptedParams, expectedParams);
@@ -302,14 +305,6 @@ public class RolePage {
         SelenideHelper.commonWaiter(searchbox, visible).setValue(name);
     }
 
-    public void iCreateNewUser(String user) {
-        newUserRole.shouldBe(visible);
-    }
-
-    public void rolename(String name) {
-        newUserRoleName.shouldBe(visible);
-    }
-
     public void verifyRoleName(String name) {
         roleNameText.shouldHave(text(name));
     }
@@ -319,9 +314,9 @@ public class RolePage {
         return newRoleName.getAttribute("value");
     }
 	
-	public void deleteRole(String roleName) {
-		commonWaiter($(By.xpath("//span[text()='Delete role']")),visible).click();
-		commonWaiter($(By.xpath("//button[text()='Yes, delete']")),visible).click();
+	public void deleteRole() {
+		commonWaiter(deleteRoleButton,visible).click();
+		commonWaiter(yesDeleteButton,visible).click();
 		commonWaiter(XPATH_NOTIFICATION_TEXT,visible);
 		XPATH_NOTIFICATION_TEXT.shouldHave(text("The role successfully obsolete."));
 	}

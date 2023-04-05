@@ -1,6 +1,9 @@
 Feature: Roles Permissions PDP specific
 
-  Scenario Outline: BIOFOUND-27758 | Verify Default Users & roles
+  JIRAs tested:
+  https://stljirap.sial.com/browse/BIOFOUND-27758
+
+  Scenario Outline: Verify Default Roles & their privileges
     Given I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
     Then I verify default roles are disabled or enabled
@@ -9,9 +12,9 @@ Feature: Roles Permissions PDP specific
       | ProcessManager  |
       | Operator        |
     And I verify "<UserRole>" list of "<roles>"
-    #Then I should see view icon of particular roles
-    #  | Administrator |
-    #  | Bio4CService  |
+    Then I should see view icon of particular roles
+      | Administrator |
+      | Bio4CService  |
 
     @CRS
     Examples:

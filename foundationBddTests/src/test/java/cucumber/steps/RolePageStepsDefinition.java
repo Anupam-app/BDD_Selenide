@@ -209,21 +209,11 @@ public class RolePageStepsDefinition {
         rolePage.isearchName(this.role.getRoleName());
         rolePage.verifyRoleName(this.role.getRoleName());
     }
-
-    @And("I verify a new user {string} by selecting custom role")
-    public void iCreatedNewUserRole(String rolename) {
-        rolePage.iCreateNewUser(rolename);
-    }
-
-    @And("I should see role name {string} in role Column")
-    public void iSeeCustomRoleInRoleColumn(String role) {
-        rolePage.rolename(role);
-    }
 	
 	@When("I delete the role")
 	public void iDeleteTheRole() {
 		rolePage.modifyRole(this.role.getRoleName());
-		rolePage.deleteRole(this.role.getRoleName());
+		rolePage.deleteRole();
 	}
 
     @When("I modify permission")
