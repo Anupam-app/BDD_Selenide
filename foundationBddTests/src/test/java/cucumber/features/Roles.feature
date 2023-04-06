@@ -37,8 +37,8 @@ Feature: Role administration
 
   @IVI-5671
   Scenario: IVI Bug IVI-5671| Assigning role to user
-    When I search "testUserToAssignRole" user
-    And I edit the user
+    Given I search "testUserToAssignRole" user
+    When I edit the user
     And I assign "testRoleToAssign" to user
     And I save my user changes
     And I go to user page
@@ -54,26 +54,7 @@ Feature: Role administration
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
 
-  #TODO fix this scenario with a specific role
-  #Scenario: BIOCRS-5145|Verify Default Role Modification
-  #  Given I am logged in as "Bio4CAdmin" user
-  #  And I go to user page
-  #  When I trigger Roles mode
-  #  And I click on edit icon corresponding custom role
-  #  And I unchecked role permissions
-  #    | Create Recipe |
-  #    | Trends View   |
-  #  And I create a random rolename
-  #  Then I should see new custom role created
-  #  When I goto report management page
-  #  And I select report from dropdown "Audit Trail"
-  #  And I select date range as "Today"
-  #  When  I select template sort by "Event Time" in "false"
-  #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
-  #  Then I verify custom role modification details captured in audit trail for user "Bio4CAdmin"
-
-  @IVI-6138
-  Scenario: IVI Bug | IVI-6138 | Obsolete Role
+  Scenario: Obsolete Role
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"
@@ -83,6 +64,6 @@ Feature: Role administration
     And I search the role
     And I delete the role
     And I generate audit trail report
-    And I verify audit logs for role update
+    Then I verify audit logs for role update
     And I check the audit trail report 
     And I see the role deleted in report

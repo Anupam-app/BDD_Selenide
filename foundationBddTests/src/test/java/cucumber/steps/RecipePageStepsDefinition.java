@@ -452,7 +452,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I add few actions steps")
-    public void AddFewwSteps() {
+    public void iAddFewActionsSteps() {
         recipePage.addingPhaseByPlus();
         recipePage.addActionStep();
         recipePage.addFewSteps();
@@ -461,7 +461,7 @@ public class RecipePageStepsDefinition {
     @And("I create a random phase with multiple steps")
     public void iCreateRandomPhaseWithMultipleSteps(){
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
-        recipePage.createPhaseWithmutlipleSteps(this.recipe.getPhaseName());
+        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
     @And("I click on GoTo Phase button")
@@ -480,7 +480,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I save as recipe name {string}")
-    public void iSaveAsecipeName(String name) {
+    public void iSaveAsRecipeName(String name) {
        recipePage.saveAsRecipeWithShortCutKeys(name);
     }
 
@@ -489,7 +489,7 @@ public class RecipePageStepsDefinition {
         recipePage.goToBrowserMode();
         List<String> list = table.asList(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.iChecktwoRecipes(list.get(i));
+            list.forEach(recipePage::iCheckTwoRecipes);
         }
     }
 
@@ -499,7 +499,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I add few actions steps to existing recipe")
-    public void iAddstepsofExistingRecipe() {
+    public void iAddFewActionsStepsToExistingRecipe() {
         recipePage.addFewSteps();
     }
 
@@ -544,13 +544,13 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I discard the recipe")
-    public void iDiscardRecipe() {
+    public void iDiscardTheRecipe() {
         recipePage.iDiscard_Btn();
     }
 
     @And("I save the recipe from warning box")
-    public void iSaveRecipeFromWarningBox() {
-        recipePage.saveBtnFromWarningBox();
+    public void iSaveTheRecipeFromWarningBox() {
+        recipePage.saveFromWarningBox();
     }
 
     @And("I add one new step")
@@ -564,12 +564,12 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I try to add phase to phase library")
-    public void iAddPhaseToPhaseLibrary() throws AWTException {
+    public void iTryToAddPhaseToPhaseLibrary() throws AWTException {
         recipePage.addPhaseLibraryWithErrorPhase();
     }
 
     @Then("I get appropriate error")
-    public void iCheckErrorMessage() {
+    public void iGetappropriateError() {
         recipePage.checkErrorMsg();
     }
 
@@ -579,12 +579,12 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I clear errors in the phase")
-    public void iClearErrors() {
+    public void iClearErrorsInThePhase() {
         recipePage.iClearPhaseErrorStep();
     }
 
     @Then("I can add phase to phase library.")
-    public void iCanAddPhaseToOhaseLibrary() throws AWTException {
+    public void iCanAddPhaseToPhaseLibrary() throws AWTException {
         recipePage.addPhaseLibraryWithErrorPhase();
     }
 }
