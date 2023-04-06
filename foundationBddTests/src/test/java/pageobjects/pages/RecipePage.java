@@ -11,7 +11,9 @@ import com.codeborne.selenide.WebDriverRunner;
 
 import cucumber.util.I18nUtils;
 import dataobjects.Report;
-import java.awt.AWTException;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.List;
@@ -146,7 +148,21 @@ public class RecipePage {
     private final SelenideElement recipe_BlueNotification = $(By.xpath("//div[@class='notification-bar information-bar']"));
 
     private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
-
+    private final SelenideElement goToPhaseButton = $(By.className("go-to-phase-btn"));
+    private final SelenideElement goToStep = $(By.xpath("//div[@class='go-to-steps-btn']"));
+    private final SelenideElement stepInvocation = $(By.xpath("(//td[@class='step-cell'])[2]"));
+    private SelenideElement latestRecipeName = $(By.xpath("(//table[@class='table']/tbody/tr/td)[1]"));
+    private final String addSteps = "(//span[@class='target'])[%s]";
+    private final String OperationalActionsList = "//p[@class='action-item lavel-2'][@title='%s']";
+    private final String warningOptions = "//button[text()='%s']";
+    private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
+    private final String popUpMessage = "//span[text()='%s']";
+    private SelenideElement phase1 = $(By.xpath("//label[text()='Phase 1']"));
+    private SelenideElement phaseLibrary = $(By.xpath("//label[text()='Save to phase library']"));
+    private final String errorMsg = "//h4[text()='%s']";
+    private final String phaseAction = "(//div[@class='last-step'])[last()]//label[text()='%s']";
+    private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
+    private final String blankRecipeMessage = "//div[text()='%s']";
 
     public void goTo() {
         recipePageLinkText.click();
@@ -218,7 +234,6 @@ public class RecipePage {
         searchTextBox.sendKeys("setpoint");
         searchTextBox.sendKeys(Keys.ENTER);
         switchTo().parentFrame();
-
     }
 
     public void saveRecipe(String recipeName) {
@@ -683,7 +698,7 @@ public class RecipePage {
     public void addCriteria() {
         commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).click();
         stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
-        criteriaPlaceholder.sendKeys("Off");
+        criteriaPlaceholder.sendKeys("Ended");
         criteriaPlaceholder.sendKeys(Keys.ENTER);
     }
 
@@ -782,5 +797,131 @@ public class RecipePage {
     
     public void verifyNotification(String message) {
         commonWaiter(recipe_BlueNotification, visible).shouldHave(text(message));
+    }
+
+    public void addFewSteps() {
+        $(By.xpath(String.format(addSteps, "1"))).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
+    }
+     public void createPhaseWithmutlipleSteps(String phaseName){
+         $(By.xpath(String.format(addSteps, "1"))).click();
+         stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
+         phaseElementTextBox.sendKeys(phaseName);
+         phaseElementTextBox.sendKeys(Keys.ENTER);
+     }
+
+     public void goToPhaseBtn(){
+        commonWaiter(goToPhaseButton,visible).click();
+     }
+
+     public void goToStep(){
+        commonWaiter(goToStep,visible).click();
+     }
+     public void stepInvocation(){
+        stepInvocation.shouldBe(visible);
+}
+
+    public void iChecktwoRecipes(String recipes) {
+        SelenideHelper.commonWaiter(recipeSearchTextBox, visible).click();
+        recipeSearchTextBox.clear();
+        recipeSearchTextBox.sendKeys(recipes);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        recipeSearchTextBox.shouldHave(attribute("value",latestRecipeName.getText()));
+    }
+
+    public void stepsNotModified() {
+        $(By.xpath(String.format(addSteps, "1"))).shouldBe(visible);
+        $(By.xpath(String.format(addSteps,"2"))).shouldNotBe(visible);
+    }
+
+    public void verifyUnsaved(){
+        $(By.xpath(String.format(label, "Unsaved"))).shouldBe(visible);
+    }
+
+    public void operationActions(){
+        commonWaiter(opertionAction,visible).click();
+    }
+
+    public void verifyPhaseOption(){
+        $(By.xpath(String.format(OperationalActionsList,"Phases"))).shouldBe(visible);
+    }
+
+    public void verifySavedRecipe(){
+        $(By.xpath(String.format(label,"Saved"))).shouldBe(visible);
+    }
+
+    public void closeBtn() {
+        stepAction.moveToElement(recipeElementText).moveToElement(close_Btn).click().perform();
+        System.out.println("Clear the recipe name");
+    }
+
+    public void blankRecipe() {
+        $(By.xpath(String.format(blankRecipeMessage, "Start creating your recipe by adding actions or phases from"))).waitUntil(Condition.visible, 50001).isDisplayed();
+    }
+
+    public void cancelRecipe() {
+        $(By.xpath(String.format(warningOptions, "Cancel"))).waitUntil(Condition.visible, 50001).click();
+    }
+
+    public void iDiscard_Btn() {
+        $(By.xpath(String.format(warningOptions, "Discard"))).waitUntil(Condition.visible, 50001).click();
+    }
+
+    public void saveBtnFromWarningBox() {
+        $(By.xpath(String.format(warningOptions, "Save"))).waitUntil(Condition.visible, 50001).click();
+    }
+
+    public void singleStep() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
+        searchTextBox.sendKeys("setpoint");
+        searchTextBox.sendKeys(Keys.ENTER);
+    }
+
+    public void creatingPhaseWithError(){
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
+        searchTextBox.sendKeys("Unit");
+        searchTextBox.sendKeys(Keys.ENTER);
+        $(By.xpath(String.format(addSteps,"1"))).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
+        phaseElementTextBox.setValue(RandomStringUtils.randomAlphabetic(3));
+        phaseElementTextBox.sendKeys(Keys.ENTER);
+    }
+
+    public void addPhaseLibraryWithErrorPhase() throws AWTException {
+        SelenideHelper.commonWaiter(phase1, visible).click();
+        zoomOut();
+        stepAction.contextClick(phase1).perform();
+        stepAction.moveToElement(phaseLibrary).click().perform();
+    }
+
+    public void zoomOut() throws AWTException {
+        Robot robot = new Robot();
+        for (int i = 0; i < 5; i++) {
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+        }
+    }
+
+    public void checkErrorMsg() {
+        $(By.xpath(String.format(errorMsg, "Error"))).waitUntil(Condition.visible, 50001);
+    }
+
+    public void checkWindowPopupMsg() {
+        $(By.xpath(String.format(popUpMessage, "Phase has errors. Cannot add to Phase Library."))).waitUntil(Condition.visible, 50001);
+        commonWaiter(okButton, visible).click();
+    }
+
+    public void iClearPhaseErrorStep() {
+        SelenideElement changeStep = $(By.xpath(String.format(phaseAction, "Unit")));
+        commonWaiter(changeSteps, visible).click();
+        stepAction.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).build().perform();
+        stepAction.sendKeys(Keys.ARROW_DOWN).sendKeys(Keys.ENTER).build().perform();
     }
 }
