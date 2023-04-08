@@ -56,7 +56,7 @@ public class TrendsPage {
     private final SelenideElement starred_Text = $(By.xpath("//label[text() ='Starred']"));
     private final SelenideElement default_Text = $(By.xpath("//label[text() ='Default']"));
     private final SelenideElement listOfCollection_Text = $(By.xpath("//label[text() ='List of collections']"));
-    private final SelenideElement saveAsCollections_Text = $(By.xpath("//button/span[text()='Save as Collection']"));
+    private final SelenideElement saveAsCollections_Text = $(By.xpath("//button[text()='Save as Collection']"));
 
     private final SelenideElement footerValidation = $(By.xpath("//div[@class = 'chart-footer']"));
     private final SelenideElement overlay = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Overlay']"));
@@ -87,8 +87,7 @@ public class TrendsPage {
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement arrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement deleteCollectionButton =
-            $(By.xpath("//button[@type='button']/span[text()='Delete']"));
+    private final SelenideElement deleteCollectionButton = $(By.xpath("//button[@type='button' and text()='Delete']"));
     private final String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
 
     private final SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));

@@ -158,14 +158,15 @@ public class AnalyticsPage {
 
     public void createAggregate(Recipe recipe, String analyticsInterval) {
         int INDEX_BATCH_ID = 1;
-        $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).click();
-
+        $(By.xpath(String.format(XPATH_DROPDOWN_SELECTION, INDEX_BATCH_ID))).waitUntil(visible, 10000, 1000L)
+                .click();
         String XPATH_OPTION_SELECTION = "//*[@class='ant-select-item ant-select-item-option']";
         var options = $$(By.xpath(XPATH_OPTION_SELECTION));
-        for (WebElement option : options) {
+        for (SelenideElement option : options) {
             if (option.getText()
                     .equals(recipe.getBatchId())) {
-                option.click();
+                option.waitUntil(visible, 10000, 1000)
+                        .click();
                 break;
             }
         }

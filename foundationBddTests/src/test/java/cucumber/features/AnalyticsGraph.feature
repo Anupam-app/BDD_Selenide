@@ -1,5 +1,6 @@
 Feature: Analytics graph
 
+  @IVI-7594
   Scenario Outline: Plot Graph
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute1min" and run it during 65 seconds if not done before
@@ -13,18 +14,18 @@ Feature: Analytics graph
 
     @IVI
     Examples:
-      | analyticsParams                | graphName |
-      | parameters/ivi/analyticsParams | line      |
-#      | parameters/ivi/analyticsParams | scatter     |
-#      | parameters/ivi/analyticsParams | logarithmic |
-#      | parameters/ivi/analyticsParams | OLS         |
-#      | parameters/ivi/analyticsParams | LOESS       |
-#
-#    @CRS
-#    Examples:
-#      | analyticsParams                | graphName   |
-#      | parameters/crs/analyticsParams | line        |
-#      | parameters/crs/analyticsParams | scatter     |
-#      | parameters/crs/analyticsParams | logarithmic |
-#      | parameters/crs/analyticsParams | OLS         |
-#      | parameters/crs/analyticsParams | LOESS       |
+      | analyticsParams                | graphName   |
+      | parameters/ivi/analyticsParams | line        |
+      | parameters/ivi/analyticsParams | scatter     |
+      | parameters/ivi/analyticsParams | logarithmic |
+      | parameters/ivi/analyticsParams | OLS         |
+      | parameters/ivi/analyticsParams | LOESS       |
+
+    @CRS
+    Examples:
+      | analyticsParams                | graphName   |
+      | parameters/crs/analyticsParams | line        |
+      | parameters/crs/analyticsParams | scatter     |
+      | parameters/crs/analyticsParams | logarithmic |
+      | parameters/crs/analyticsParams | OLS         |
+      | parameters/crs/analyticsParams | LOESS       |

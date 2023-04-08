@@ -1,6 +1,6 @@
 Feature: Analytics creation
 
-  @SMOKE
+  @SMOKE @IVI-7594
   Scenario Outline: Aggregate creation
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute" and run it during 15 seconds
@@ -22,6 +22,7 @@ Feature: Analytics creation
       | Param1          | Unit1 | Param2          | Unit2 | Param3          | Unit3 |
       | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV | rpm   |
 
+  @IVI-7594
   Scenario: BIOCRS-5969 Aggregate creation while recipe run is in progress
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToVerifyAnalytics" and pause it during 10 seconds

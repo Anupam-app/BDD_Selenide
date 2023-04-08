@@ -1,5 +1,6 @@
 Feature: Trends PDP
 
+  @IVI-7185
   Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the Trends Panel-3
     Given I am logged in as "bio4cAdmin" user
     And I navigate to trends page
@@ -25,9 +26,10 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
+  @IVI-7185
   Scenario Outline: BIOCRS-5482 BIOCRS-1405 | Verify the Trends layout | Verify the chart area -list of collection
     Given I am logged in as "bio4cAdmin" user
     And I navigate to trends page
@@ -45,8 +47,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
   @BIOCRS-9267
   Scenario Outline: BIOCRS-1405 | Save the collection from -list of collection
@@ -67,8 +69,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
   Scenario Outline: BIOCRS-1405 | remove 1 parameter while saving collection
     Given I am logged in as "bio4cAdmin" user
@@ -86,8 +88,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
   Scenario Outline: BIOCRS-5482 BIOCRS-1405 | Duplicate Trends collection
     Given I am logged in as "bio4cAdmin" user
@@ -96,7 +98,7 @@ Feature: Trends PDP
     And I save as trends collections
     And I choose "<Param3>","<Param4>" parameters as default collection
     And I save as trends collections as in step 4
-    Then I see the error message "Collection Name already exists." on collection name window
+    Then I see the error message "Collection Name already exist" on collection name window
     And I delete the collection name
 
     @CRS
@@ -106,8 +108,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 | Param3    | Param4               |
-      | P001   | P002   | P001 OUT% | P001 Speed Manual SP |
+      | Param1          | Param2          | Param3      | Param4           |
+      | P001 - Speed PV | P002 - Speed PV | P001 - OUT% | P001 - Manual SP |
 
   Scenario Outline: BIOCRS-1405 | To check the list of parameter groupings (collections)  are user specific.
     Given I am logged in as "bio4cAdmin" user
@@ -139,8 +141,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
   Scenario Outline: BIOCRS-5482 | Verify the Trends layout | Verify the chart area -Default collections
     Given I am logged in as "bio4cAdmin" user
@@ -156,8 +158,8 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
 
 
   Scenario Outline: BIOCRS-5483 | Verify Default Collection in Trends | Default Trends Parameters List
@@ -195,5 +197,5 @@ Feature: Trends PDP
 
     @IVI
     Examples:
-      | Param1 | Param2 |
-      | P001   | P002   |
+      | Param1          | Param2          |
+      | P001 - Speed PV | P002 - Speed PV |
