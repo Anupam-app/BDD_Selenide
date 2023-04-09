@@ -32,7 +32,7 @@ Feature: User login
     Then I see account unlock message is displayed
     And I see the user is unlocked
     And I logout
-    And I open login page
+    And login page is open
     And I enter "AccountLockUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
@@ -77,10 +77,10 @@ Feature: User login
     When I enter "NewUserTempPwd" as username and "Wrv0*]G0=p" as password
     And I push the login button
     Then I provide less complex passwords to verify the password policy
-      | merckapp    | merckapp    | Password doesn't met the policy criteria.           |
-      | MERCKAPP    | MERCKAPP    | Password doesn't met the policy criteria.           |
-      | MerckApp    | MerckApp    | Password doesn't met the policy criteria.           |
-      | 123456789   | 123456789   | Password doesn't met the policy criteria.           |
-      | MerckApp1   | MerckApp1   | Password doesn't met the policy criteria.           |
-      | Mar1@       | Mar1@       | Password doesn't met the policy criteria.           |
-      | MerckApp1@  | MerckApp2@  | New password and confirmation password do not match.|
+      | merckapp   | merckapp   | Password doesn't met the policy criteria.            |
+      | MERCKAPP   | MERCKAPP   | Password doesn't met the policy criteria.            |
+      | MerckApp   | MerckApp   | Password doesn't met the policy criteria.            |
+      | 123456789  | 123456789  | Password doesn't met the policy criteria.            |
+      | MerckApp1  | MerckApp1  | Password doesn't met the policy criteria.            |
+      | Mar1@      | Mar1@      | Password doesn't met the policy criteria.            |
+      | MerckApp1@ | MerckApp2@ | New password and confirmation password do not match. |

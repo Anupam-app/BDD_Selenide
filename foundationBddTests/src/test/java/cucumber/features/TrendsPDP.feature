@@ -118,7 +118,7 @@ Feature: Trends PDP
     And I save as trends collections
     Then I see "<Param1>","<Param2>" parameters displayed
     And I logout
-    And I open login page
+    And login page is open
     And I enter "bio4cService" as username and "Merck$ervice" as password
     And I push the login button
     And I navigate to trends page
@@ -127,7 +127,7 @@ Feature: Trends PDP
     And I go to list of collection
     And I delete the collection name
     And I logout
-    And I open login page
+    And login page is open
     And I enter "bio4cAdmin" as username and "Merck@dmin" as password
     And I push the login button
     And I navigate to trends page

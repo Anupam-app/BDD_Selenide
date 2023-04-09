@@ -5,7 +5,7 @@ Feature: Recipe console
     Given I am logged in as "Bio4CAdmin" user
 
   @SMOKE
-  @PLC 
+  @PLC
   Scenario: Recipe system Hold/Restart
     Given I expand recipe console in pnid
     When I hold and restart the system
@@ -96,7 +96,7 @@ Feature: Recipe console
     And I select template sort by "Run" in "false"
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
-	
+
   @BIOCRS-9352
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
@@ -240,7 +240,7 @@ Feature: Recipe console
     And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
- 
+
   Scenario: BIOFOUND-10802: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -271,124 +271,129 @@ Feature: Recipe console
     And I Verify manual run status in recipe consol
     And I login with "Bio4CAdmin" same user as above "Merck@dmin"
     And I verify the recipe execution details in console View.
- 
- Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
- 	Given I expand recipe console
-	When I load recipe "testRecipeWithChar30NameLengt"
-	Then I verify the recipe name displayed on load recipe list 
-	And I verify the recipe name is trimmed on recipe console UI
-	And I verify the recipe lengthy step is trimmed
-	And I verify mouse hover on step displays tool tip with full step details
- 
- Scenario: BIOFOUND-13262: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal
- 	Given I expand recipe console
- 	When I load recipe "testRecipeToExecute1min"
-	Then I should see pre run window
-	When I clear and try to enter lenghty RUN ID, BatchID
-	And provide remaining mandatory data to select OK button
-	Then I should see recipe execution started succesfully
-	And I validate the recipe console UI elements
-	And I mouse hover RUNID and BatchID to validate full text displayed
-	And I Abort the recipe execution
-	And I validate the RUNID BATCHID text displayed on Post run window
 
-   @BIOCRS-9352
- Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
- 	Given I expand recipe console
- 	When I select "Manual operation" tab
- 	And I start Manual run
- 	And I enter manual operation name more than 30 char and Tab out
- 	Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
- 	And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
- 	And I validate all above text value trimmed on recipe console UI
- 	And I mouse hover to see full text displayed on tooltip
- 	When I stop the run execution
- 	Then I verify the text value trimmed on post run window
- 	And I mouse hover to see full text displayed  on tooltip
+  Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
+    Given I expand recipe console
+    When I load recipe "testRecipeWithChar30NameLengt"
+    Then I verify the recipe name displayed on load recipe list
+    And I verify the recipe name is trimmed on recipe console UI
+    And I verify the recipe lengthy step is trimmed
+    And I verify mouse hover on step displays tool tip with full step details
 
- Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
- 	When I expand recipe console in pnid
-	And I load recipe "testRecipeToExecute1min"
-	And I start recipe execution
-	And I logout
-	And I open login page
-	And I login with "Bio4Cservice" same user as above "Merck$ervice"
-	And I expand recipe console in pnid
-	And I click on pause button
-	And I click on resume button
-	And I logout
-	And I open login page
-	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-	And I expand recipe console in pnid
-	And I click on jump step "1"
-	And I click on abort button
-	Then I should see the recipe run aborted
-	And control should be on rerun button
-	And I goto report management page
-	When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+  Scenario: BIOFOUND-13262: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal
+    Given I expand recipe console
+    When I load recipe "testRecipeToExecute1min"
+    Then I should see pre run window
+    When I clear and try to enter lenghty RUN ID, BatchID
+    And provide remaining mandatory data to select OK button
+    Then I should see recipe execution started succesfully
+    And I validate the recipe console UI elements
+    And I mouse hover RUNID and BatchID to validate full text displayed
+    And I Abort the recipe execution
+    And I validate the RUNID BATCHID text displayed on Post run window
 
- Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
-  When I expand recipe console in pnid
-  And I load recipe "testRecipeToExecute1min"
-  And I start recipe execution
-  And I hold the system 
-  And Recipe execution is paused
-  And I restart the system
-  And I click on pause button
-  And I click on resume button
-  Then control should be on pause button
-  And I click on jump step "1"
-  And I click on abort button
-  Then I should see the recipe run aborted
-  And control should be on rerun button
-  And I goto report management page
-  When I select report from dropdown "Audit Trail"
-  And I select user in dropdown "Bio4CAdmin"
-  And I check audit trial logs
- 	
-Scenario: BIOFOUND-11955: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and Restart
-	When I expand recipe console in pnid
-	And I hold the system
-	And I restart the system
-	And I load the recipe "testRecipeToExecute1min"
-	And I start recipe execution
-	And I hold the system
-	And I restart the system
-	And I see Recipe should be executed
-	And I hold the system
-	And I restart the system
-	And I goto report management page
-	When I select report from dropdown "Audit Trail"
-	And I select user in dropdown "Bio4CAdmin"
-	And I check audit trial logs
+  @BIOCRS-9352
+  Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
+    Given I expand recipe console
+    When I select "Manual operation" tab
+    And I start Manual run
+    And I enter manual operation name more than 30 char and Tab out
+    Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
+    And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
+    And I validate all above text value trimmed on recipe console UI
+    And I mouse hover to see full text displayed on tooltip
+    When I stop the run execution
+    Then I verify the text value trimmed on post run window
+    And I mouse hover to see full text displayed  on tooltip
 
-Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page
- 	Given I expand recipe console in pnid
-	When I load recipe "testRecipeFlows"
-	And I start recipe execution
-	And I hold the system
-	Then Verify the recipe console extended view UI components
-	And I goto report management page
-	And I go to Main screen
-	And I expand recipe console in pnid
-	Then Verify the recipe console extended view UI components
-	And I logout
-	And I open login page
-	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-	Then Verify the recipe console extended view UI components
-	Then I see process hold button is displayed
-	
-Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorised User or User with no permission to Run Recipe		
-	Given  I expand recipe console in pnid
-	When I logout
-	And I open login page
-	And I login with "reportUnauthUser" same user as above "MerckApp1@"
-	Then I verify recipe console expand is disabled
-	And I logout
-	And I open login page
-	And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-	And I expand recipe console in pnid
-	And I verify the recipe execution details
+  Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I logout
+    And login page is open
+    And I enter "Bio4Cservice" as username and "Merck$ervice" as password
+    And I push the login button
+    And I expand recipe console in pnid
+    And I click on pause button
+    And I click on resume button
+    And I logout
+    And login page is open
+    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
+    And I push the login button
+    And I expand recipe console in pnid
+    And I click on jump step "1"
+    And I click on abort button
+    Then I should see the recipe run aborted
+    And control should be on rerun button
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
+    And I check audit trial logs
+
+  Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
+    When I expand recipe console in pnid
+    And I load recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I hold the system
+    And Recipe execution is paused
+    And I restart the system
+    And I click on pause button
+    And I click on resume button
+    Then control should be on pause button
+    And I click on jump step "1"
+    And I click on abort button
+    Then I should see the recipe run aborted
+    And control should be on rerun button
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
+    And I check audit trial logs
+
+  Scenario: BIOFOUND-11955: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and Restart
+    When I expand recipe console in pnid
+    And I hold the system
+    And I restart the system
+    And I load the recipe "testRecipeToExecute1min"
+    And I start recipe execution
+    And I hold the system
+    And I restart the system
+    And I see Recipe should be executed
+    And I hold the system
+    And I restart the system
+    And I goto report management page
+    When I select report from dropdown "Audit Trail"
+    And I select user in dropdown "Bio4CAdmin"
+    And I check audit trial logs
+
+  Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page
+    Given I expand recipe console in pnid
+    When I load recipe "testRecipeFlows"
+    And I start recipe execution
+    And I hold the system
+    Then Verify the recipe console extended view UI components
+    And I goto report management page
+    And I go to Main screen
+    And I expand recipe console in pnid
+    Then Verify the recipe console extended view UI components
+    And I logout
+    And login page is open
+    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
+    And I push the login button
+    Then Verify the recipe console extended view UI components
+    Then I see process hold button is displayed
+
+  Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorised User or User with no permission to Run Recipe
+    Given  I expand recipe console in pnid
+    When I logout
+    And login page is open
+    And I enter "reportUnauthUser" as username and "MerckApp1@" as password
+    And I push the login button
+    Then I verify recipe console expand is disabled
+    And I logout
+    And login page is open
+    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
+    And I push the login button
+    And I expand recipe console in pnid
+    And I verify the recipe execution details
 

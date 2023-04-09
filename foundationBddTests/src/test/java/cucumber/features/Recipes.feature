@@ -111,7 +111,8 @@ Feature: Recipe management
     Then I see warning message is displayed "Please save the recipe."
 
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
-    Given I go to recipe page
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     When I trigger edit mode
     And I create a random phase
     And I go to other module without saving recipe
@@ -238,7 +239,7 @@ Feature: Recipe management
     And I create a random phase
     And I add step after step "1"
     Then I see blank step is added
-    
+
   @IVI-6167
   Scenario: IVI Bug IVI-6167 | Recipe Management | Unable to modify a recipe which is in approved or InReview state
     Given I am logged in as "Bio4CAdmin" user
@@ -246,7 +247,7 @@ Feature: Recipe management
     When I edit recipe "testRecipeFlows"
     And I add step after step "1"
     Then I see blank step is added
-    
+
   @IVI-6153
   Scenario: IVI Bug IVI-6153 | Recipe Editor | Text/confirmation message not displayed on recipe editor
     Given I am logged in as "Bio4CAdmin" user
@@ -255,9 +256,10 @@ Feature: Recipe management
     Then I verify recipe tab title
     When I create a phase
     Then I verify notification messages "Phase created successfully"
-    
+
   Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
-    Given I go to recipe page
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     When I trigger edit mode
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
@@ -266,15 +268,16 @@ Feature: Recipe management
     And I add new action step using Keyboard event
     And I add "Setpoint" action to the step
     And I Validate the error message for below input values
-        |5   |
-        |3.  |
-        |.2  |
-        |-1  |
+      | 5  |
+      | 3. |
+      | .2 |
+      | -1 |
     And I save the recipe with name "errorRecipe"
     And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
 
   Scenario:BIOFOUND-27906 |Maximum Phases
-    Given I go to recipe page
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     And I edit recipe "maxPhaseRecipe"
     When I create phase with shortcut key
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
@@ -284,29 +287,32 @@ Feature: Recipe management
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
   Scenario:BIOFOUND-27810|Recipe status after import
-    Given I go to recipe page
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     And I have exported recipes in different status
-       |testRecipeDraftToInactive    |
-       |testRecipeDraftToReject      |
-       |testDraftRecipeToChangeStatus|
-       |recipeTechReview             |
-       |recipeInReview               |
+      | testRecipeDraftToInactive     |
+      | testRecipeDraftToReject       |
+      | testDraftRecipeToChangeStatus |
+      | recipeTechReview              |
+      | recipeInReview                |
     And I import recipes in different status
-       |testRecipeDraftToInactive    |
-       |testRecipeDraftToReject      |
-       |testDraftRecipeToChangeStatus|
-       |recipeTechReview             |
-       |recipeInReview               |
+      | testRecipeDraftToInactive     |
+      | testRecipeDraftToReject       |
+      | testDraftRecipeToChangeStatus |
+      | recipeTechReview              |
+      | recipeInReview                |
     Then the UoP status of imported recipe changes to Draft
-       |testRecipeDraftToInactive1    |
-       |testRecipeDraftToReject1      |
-       |testDraftRecipeToChangeStatus1|
-       |recipeTechReview1             |
-       |recipeInReview1               |
+      | testRecipeDraftToInactive1     |
+      | testRecipeDraftToReject1       |
+      | testDraftRecipeToChangeStatus1 |
+      | recipeTechReview1              |
+      | recipeInReview1                |
     And I edit recipe "testRecipeDraftToInactive1"
     Then I make recipe inactive
-    
+
   Scenario: Create and save a Recipe with 30 charactors
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     When I go to Recipe editor
     And I add few actions steps
     And I add criteria to phase using keyboard
@@ -324,6 +330,8 @@ Feature: Recipe management
     And I should see full recipe name on mouse hover
 
   Scenario: Verify new recipe and existing recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
     When I go to Recipe editor
     And I add few actions steps
     And I logout
