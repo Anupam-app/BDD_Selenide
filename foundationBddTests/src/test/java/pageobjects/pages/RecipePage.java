@@ -794,11 +794,9 @@ public class RecipePage {
     }
 
     public void addCriteria() {
-        commonWaiter($(By.xpath(String.format(stepNumber, "1"))), visible).click();
-        stepAction.keyDown(Keys.SHIFT)
-                .sendKeys(Keys.ARROW_UP)
-                .perform();
-        criteriaPlaceholder.sendKeys("Off");
+        commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).click();
+        stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
+        criteriaPlaceholder.sendKeys("Running");
         criteriaPlaceholder.sendKeys(Keys.ENTER);
     }
 

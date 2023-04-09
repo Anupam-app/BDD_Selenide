@@ -24,7 +24,7 @@ Feature: Trends PDP
       | Param1   | Param2   |
       | PI101 PV | PI102 PV |
 
-    @IVI
+    @IVI @IVI-7185
     Examples:
       | Param1          | Param2          |
       | P001 - Speed PV | P002 - Speed PV |
@@ -86,7 +86,7 @@ Feature: Trends PDP
       | Param1   | Param2   |
       | PI101 PV | PI102 PV |
 
-    @IVI
+    @IVI @IVI-7185
     Examples:
       | Param1          | Param2          |
       | P001 - Speed PV | P002 - Speed PV |
@@ -156,7 +156,7 @@ Feature: Trends PDP
       | Param1   | Param2   |
       | PI101 PV | PI102 PV |
 
-    @IVI
+    @IVI @IVI-7185
     Examples:
       | Param1          | Param2          |
       | P001 - Speed PV | P002 - Speed PV |
@@ -195,7 +195,7 @@ Feature: Trends PDP
       | Param1   | Param2   |
       | PI101 PV | PI102 PV |
 
-    @IVI
+    @IVI @IVI-7185
     Examples:
       | Param1          | Param2          |
       | P001 - Speed PV | P002 - Speed PV |

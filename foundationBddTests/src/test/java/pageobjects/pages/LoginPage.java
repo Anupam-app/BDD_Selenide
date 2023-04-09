@@ -12,6 +12,7 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import pageobjects.utility.SelenideHelper;
@@ -41,6 +42,8 @@ public class LoginPage {
     private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
     private final SelenideElement savePasswordButton =
             $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
+    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
+    private SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -95,10 +98,12 @@ public class LoginPage {
 
     public void setNewPassword(String newPassword) {
         commonWaiter(newPasswordTextbox, visible);
+        newPasswordTextbox.clear();
         newPasswordTextbox.setValue(newPassword);
     }
 
     public void setConfirmPassword(String newPassword) {
+        confirmPasswordTextbox.clear();
         confirmPasswordTextbox.setValue(newPassword);
         tempPwd_submitButton.click();
     }
@@ -119,5 +124,15 @@ public class LoginPage {
     public void setCurrentPassword(String newPassword) {
         currentPasswordTestbox.clear();
         currentPasswordTestbox.setValue(newPassword);
+    }
+
+    public void verifyNotification(String value){
+        commonWaiter(tempPwd_ErrorNotification,visible);
+        tempPwd_ErrorNotification.shouldHave(text(value));
+    }
+
+    public void errorNotification(String message) {
+        commonWaiter(LOGIN_ERROR_NOTIFICATION_TEXT, visible);
+        LOGIN_ERROR_NOTIFICATION_TEXT.shouldHave(text(message));
     }
 }

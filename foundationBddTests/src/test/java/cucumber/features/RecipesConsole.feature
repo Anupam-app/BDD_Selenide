@@ -250,7 +250,7 @@ Feature: Recipe console
     And I go to main
     Then I verify the recipe execution details in console View
     And I logout
-    And I open login page
+    And login page is open
     And I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View

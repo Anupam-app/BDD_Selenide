@@ -70,7 +70,7 @@ Feature: User management
     Then I should see the report file presence
     And I see the "testUserEnabled" user disabled in report
     When I logout
-    And I open login page
+    And login page is open
     And I enter "testUserEnabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I see the error message "Unauthorized access, Failed to authenticate"
@@ -95,14 +95,15 @@ Feature: User management
     And I should see the report file presence
     And I see the "testUserDisabled" user enabled in report
     And I logout
-    And I open login page
+    And login page is open
     And I enter "testUserDisabled" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
 
-  Scenario: BIOCRS-586 | Unauthorized user cant edit the user
+  Scenario: BIOCRS-586| BIOFOUND-27775 | Unauthorized user cant edit the user
     Given I am logged in as "reportUnauthUser" user
     And I go to user page
+    And I verify create User icon "not exists"
     When I search "testUserToEditFields" user
     Then I cant edit the user
 
@@ -132,26 +133,10 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
 
-  @IVI-4908
-  Scenario Outline: IVI BUG IVI-4908 | Verify Default Users & roles
+  Scenario: Verify Default Users
     Given I am logged in as "Bio4CAdmin" user
-    And I go to user page
+    When I go to user page
     And I verify default user account "Bio4CService" and "Administrator"
-    And I trigger Roles mode
-    And I verify default roles
-      | Bio4C Service |
-      | Administrator |
-      | Operator      |
-    And I verify "<UserRole>" list of "<roles>"
-    #TO-DO : skipping the test step until IVI-4908 is fixed
-    #Then I should see view icon of particular roles
-      #| Administrator |
-      #| Bio4CService  |
-
-    Examples:
-      | roles                         | UserRole  |
-      | parameters/crs/privilegeslist | privilege |
-
 
   Scenario: Assign custom role to new user |BIOCRS-2585|
     Given I am logged in as "Bio4CAdmin" user
@@ -189,7 +174,7 @@ Feature: User management
   @IVI-6602
   Scenario Outline: Verify the system allows user to change the password 3
     Given I open portal
-    And I open login page
+    And login page is open
     When I login to application with wrong password
       | username | password       | message                                                   |
       | <user>   | <old password> | Invalid username or password. You have 4 attempt(s) left. |
@@ -208,8 +193,8 @@ Feature: User management
     Then I see password updated message is displayed for "<user>"
     And I logout
     Examples:
-      | user          | old password | newPassword | confirmPassword | first name | last name | user role |
-      | testPwdChange | MerckApp1@   | MerckApp2@  | MerckApp1@      | testPwd    | testing   |           |
+      | user          | old password | newPassword | confirmPassword | first name | last name |
+      | testPwdChange | MerckApp1@   | MerckApp2@  | MerckApp1@      | testPwd    | testing   |
 
   Scenario: BIOCRS-5377: Verify the Application Icons
     Given I am logged in as "Bio4CAdmin" user
@@ -256,8 +241,9 @@ Feature: User management
     When I change default page to "Reports"
     And I save user preferences
     And I logout
-    And I open login page
+    And login page is open
     And I enter "testUserForI18N" as username and "MerckApp1@" as password
     And I push the login button
     Then I am logged in
     And I am landed on "Report Management" page
+

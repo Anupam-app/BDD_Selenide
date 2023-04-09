@@ -35,7 +35,7 @@ public class LoginPageStepsDefinition {
         this.userPage = userPage;
     }
 
-    @Given("I open login page")
+    @Given("login page is open")
     public void iOpenLogin() {
         if (!ContextHelper.isOrchestrator()) {
             loginPage.openLogin();
@@ -144,5 +144,20 @@ public class LoginPageStepsDefinition {
         loginPage.setUser(username);
         loginPage.setPassword(password);
         loginPage.pushLogin();
+    }
+
+    @And("I provide less complex passwords to verify the password policy")
+    public void iChangePassword(DataTable table) {
+        List<List<String>> passwords = table.asLists(String.class);
+        for (List<String> string : passwords) {
+            loginPage.setNewPassword(string.get(0));
+            loginPage.setConfirmPassword(string.get(1));
+            loginPage.verifyNotification(string.get(2));
+        }
+    }
+
+    @And("I verify error message {string}")
+    public void iVerifyErrorMessage(String message){
+        loginPage.errorNotification(message);
     }
 }

@@ -10,13 +10,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
-
 import utils.PdfTableExtractUtils;
 import utils.TimezoneUtils;
 import utils.pdf.PdfTable;
@@ -103,13 +100,10 @@ public class Report {
         URL url = new URL(reportUrl);
 
         // get table from table title and check is not null and contains rows
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE)
-                .stream()
-                .findFirst()
-                .get();
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
+                .findFirst().get();
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
-        Assert.assertTrue("Table contains no data", table.getRows()
-                .size() > 1);
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
         // get field value and check is not null
         String fieldValue = PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD);
@@ -121,7 +115,6 @@ public class Report {
      * Check event table in the report
      *
      * @param reportUrl Report url
-     * @throws IOException
      */
     public void checkEventTable(String reportUrl) throws IOException {
 
@@ -129,8 +122,7 @@ public class Report {
 
         PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), EVENT_TABLE_HEADER);
         if (table != null) {
-            Assert.assertTrue("Table must contains at least one row in the body", table.getRows()
-                    .size() > 1);
+            Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
         }
     }
 
@@ -138,7 +130,6 @@ public class Report {
      * Check audit table in the report
      *
      * @param reportUrl Report url
-     * @throws IOException
      */
     public void checkAuditTable(String reportUrl) throws Exception {
 
@@ -147,8 +138,7 @@ public class Report {
         PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), AUDIT_TABLE_HEADER);
 
         if (table != null) {
-            Assert.assertTrue("Table must contains at least one row in the body", table.getRows()
-                    .size() > 1);
+            Assert.assertTrue("Table must contains at least one row in the body", table.getRows().size() > 1);
         }
     }
 
@@ -156,7 +146,6 @@ public class Report {
      * Check user information - Expected format : UserLogin(Firstname Lastname) - No internal user like OMIUser
      *
      * @param reportUrl Report url
-     * @throws IOException
      */
 
     public void checkUserInformation(String reportUrl, String user) throws IOException {
@@ -169,15 +158,12 @@ public class Report {
                 // extract only user column data
                 PdfTable columnDataTable = PdfTableExtractUtils.extractColumnData(reportTable, userColumnIndex);
 
-                if (columnDataTable != null) {
+                if(columnDataTable != null) {
 
                     // start from 1 to skip the header row
                     for (int i = 1; i < columnDataTable.getRowCount(); i++) {
 
-                        String userColumnValue = columnDataTable.getRows()
-                                .get(i)
-                                .get(0)
-                                .getText(false);
+                        String userColumnValue = columnDataTable.getRows().get(i).get(0).getText(false);
 
                         if (!StringUtils.isEmpty(userColumnValue)) {
 
@@ -188,8 +174,8 @@ public class Report {
 
                             // check user format
                             Assert.assertTrue(String.format(
-                                    "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
-                                    userColumnValue), userNameValidation(userColumnValue));
+                                "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                                userColumnValue), userNameValidation(userColumnValue));
                         }
                     }
                 }
@@ -197,7 +183,7 @@ public class Report {
         }
     }
 
-    // temporary solution until BIOFOUND-29184 is implemented
+    //temporary solution  until BIOFOUND-29184 is implemented
     public boolean userNameValidation(String userValue) {
         return userValue.matches(USER_COLUMN_FORMAT) || userValue.matches(USER_COLUMN_FORMAT_OT);
     }
@@ -206,7 +192,6 @@ public class Report {
      * Check Event Time information - No internal user like OMIUser
      *
      * @param reportUrl Report url
-     * @throws IOException
      */
 
     public void checkEventTimeInformation(String reportUrl) throws Exception {
@@ -220,10 +205,7 @@ public class Report {
 
                 for (int i = 1; i < reportTable.getRowCount(); i++) {
                     SimpleDateFormat formatter = new SimpleDateFormat("dd/MMM/yyyy");
-                    String eventColumnValue1 = reportTable.getRows()
-                            .get(i)
-                            .get(eventColumnIndex)
-                            .getText(false);
+                    String eventColumnValue1 = reportTable.getRows().get(i).get(eventColumnIndex).getText(false);
                     if (!StringUtils.isEmpty(eventColumnValue1)) {
                         // check date range within last 7 days
                         try {
@@ -233,11 +215,7 @@ public class Report {
                             int diffInDays =
                                     (int) ((currentdate.getTime() - eventDateTime.getTime()) / (1000 * 60 * 60 * 24));
 
-                            if (diffInDays <= 7) {
-                                Assert.assertTrue(true);
-                            } else {
-                                Assert.assertTrue(false);
-                            }
+                            Assert.assertTrue(diffInDays <= 7);
                         } catch (Exception ignore) {
                         }
 
@@ -256,30 +234,12 @@ public class Report {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
-                String appNameColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(1)
-                        .getText(false);
-                String recordColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(2)
-                        .getText(false);
-                String userColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(userColumnIndex)
-                        .getText(false);
-                String attributeColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(5)
-                        .getText(false);
-                String currValueColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(6)
-                        .getText(false);
-                String preValueColumnValue = reportTable.getRows()
-                        .get(1)
-                        .get(7)
-                        .getText(false);
+                String appNameColumnValue = reportTable.getRows().get(1).get(1).getText(false);
+                String recordColumnValue = reportTable.getRows().get(1).get(2).getText(false);
+                String userColumnValue = reportTable.getRows().get(1).get(userColumnIndex).getText(false);
+                String attributeColumnValue = reportTable.getRows().get(1).get(5).getText(false);
+                String currValueColumnValue = reportTable.getRows().get(1).get(6).getText(false);
+                String preValueColumnValue = reportTable.getRows().get(1).get(7).getText(false);
                 if (!StringUtils.isEmpty(userColumnValue)) {
                     // check user is not an internal user
                     if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
@@ -309,27 +269,13 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
             for (Map.Entry m : list.entrySet()) {
                 // check first row
-                if ((reportTable.getRows()
-                        .get(1)
-                        .get(5)
-                        .getText(false)).equals(m.getKey())) {
-                    Assert.assertTrue(m.getValue()
-                            .equals(reportTable.getRows()
-                                    .get(1)
-                                    .get(6)
-                                    .getText(false)));
+                if ((reportTable.getRows().get(1).get(5).getText(false)).equals(m.getKey())) {
+                    Assert.assertEquals(m.getValue(), reportTable.getRows().get(1).get(6).getText(false));
                 }
                 // check from 2nd row till 5th row in PDF table
                 for (int rowno = 2; rowno < 6; rowno++) {
-                    if ((reportTable.getRows()
-                            .get(rowno)
-                            .get(0)
-                            .getText(false)).equals(m.getKey())) {
-                        Assert.assertTrue(m.getValue()
-                                .equals(reportTable.getRows()
-                                        .get(rowno)
-                                        .get(1)
-                                        .getText(false)));
+                    if ((reportTable.getRows().get(rowno).get(0).getText(false)).equals(m.getKey())) {
+                        Assert.assertEquals(m.getValue(), reportTable.getRows().get(rowno).get(1).getText(false));
                     }
                 }
             }
@@ -347,29 +293,14 @@ public class Report {
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
                 for (int i = 1; i < 3; i++) {
-                    String appNameColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(1)
-                            .getText(false);
-                    String recordColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(2)
-                            .getText(false);
-                    String userColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(userColumnIndex)
-                            .getText(false);
-                    String attributeColumnValue = reportTable.getRows()
-                            .get(1)
-                            .get(5)
-                            .getText(false);
-                    String currValueColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(6)
-                            .getText(false);
+                    String appNameColumnValue = reportTable.getRows().get(i).get(1).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(2).getText(false);
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String attributeColumnValue = reportTable.getRows().get(1).get(5).getText(false);
+                    String currValueColumnValue = reportTable.getRows().get(i).get(6).getText(false);
                     if (i == 1) {
                         if (attributeColumnValue.equalsIgnoreCase("permissions")) {
-                            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+                            String[] permissions = permissionList.toArray(new String[0]);
                             Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
                             Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
                             Assert.assertTrue(recordColumnValue.contains(roleName));
@@ -380,30 +311,17 @@ public class Report {
                         } else if (attributeColumnValue.equalsIgnoreCase("roleName")) {
                             Assert.assertTrue(currValueColumnValue.contains(roleName));
                         }
-                    } else if (i == 2) {
-                        if (reportTable.getRows()
-                                .get(2)
-                                .get(5)
-                                .getText(false)
-                                .equalsIgnoreCase("permissions")) {
-                            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+                    }
+                    if (i == 2) {
+                        if (reportTable.getRows().get(2).get(5).getText(false).equalsIgnoreCase("permissions")) {
+                            String[] permissions = permissionList.toArray(new String[0]);
                             for (var permission : permissions) {
-                                Assert.assertTrue((reportTable.getRows()
-                                        .get(2)
-                                        .get(6)
-                                        .getText(false)
-                                        .replaceAll("\\s", "")).contains(permission.replaceAll("\\s", "")));
+                                Assert.assertTrue(
+                                        (reportTable.getRows().get(2).get(6).getText(false).replaceAll("\\s", ""))
+                                                .contains(permission.replaceAll("\\s", "")));
                             }
-                        } else if (reportTable.getRows()
-                                .get(2)
-                                .get(5)
-                                .getText(false)
-                                .equalsIgnoreCase("roleName")) {
-                            Assert.assertTrue(reportTable.getRows()
-                                    .get(2)
-                                    .get(6)
-                                    .getText(false)
-                                    .contains(roleName));
+                        } else if (reportTable.getRows().get(2).get(5).getText(false).equalsIgnoreCase("roleName")) {
+                            Assert.assertTrue(reportTable.getRows().get(2).get(6).getText(false).contains(roleName));
                         }
                     }
                 }
@@ -423,30 +341,12 @@ public class Report {
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
                 for (int i = 1; i < 3; i++) {
-                    String appNameColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(1)
-                            .getText(false);
-                    String recordColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(2)
-                            .getText(false);
-                    String userColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(userColumnIndex)
-                            .getText(false);
-                    String attributeColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(5)
-                            .getText(false);
-                    String currValueColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(6)
-                            .getText(false);
-                    String preValueColumnValue = reportTable.getRows()
-                            .get(i)
-                            .get(7)
-                            .getText(false);
+                    String appNameColumnValue = reportTable.getRows().get(i).get(1).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(2).getText(false);
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String attributeColumnValue = reportTable.getRows().get(i).get(5).getText(false);
+                    String currValueColumnValue = reportTable.getRows().get(i).get(6).getText(false);
+                    String preValueColumnValue = reportTable.getRows().get(i).get(7).getText(false);
                     if (!StringUtils.isEmpty(userColumnValue)) {
                         // check user is not an internal user
                         if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
@@ -463,12 +363,10 @@ public class Report {
                         Assert.assertTrue(attributeColumnValue.contains("status"));
                         if (i == 1) {
                             Assert.assertTrue(currValueColumnValue.contains(status));
-                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW")
-                                    .contains(preValueColumnValue));
+                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW").contains(preValueColumnValue));
                         } else {
                             Assert.assertTrue(preValueColumnValue.contains("Draft"));
-                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW")
-                                    .contains(currValueColumnValue));
+                            Assert.assertTrue(List.of("IN-REVIEW", "TECH-REVIEW").contains(currValueColumnValue));
                         }
                     }
                 }
@@ -479,89 +377,52 @@ public class Report {
     }
 
     public void consolidatedValidateReportSummary(PdfTable table, String startDate, String endDate, String batchId,
-            String productId, String runID) throws Exception {
+            String productId, String runID) {
         boolean flag = false;
 
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
-        Assert.assertTrue("Table contains no data", table.getRows()
-                .size() > 1);
-        Assert.assertTrue("No field with start date", PdfTableExtractUtils.getTableFieldValue(table, START_DATE)
-                .contains(startDate));
-        Assert.assertTrue("No field with end date", PdfTableExtractUtils.getTableFieldValue(table, END_DATE)
-                .contains(endDate));
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
+        Assert.assertTrue("No field with start date",
+                PdfTableExtractUtils.getTableFieldValue(table, START_DATE).contains(startDate));
+        Assert.assertTrue("No field with end date",
+                PdfTableExtractUtils.getTableFieldValue(table, END_DATE).contains(endDate));
 
         String actual = PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID);
-        if (actual.contains(batchId)) {
-            flag = true;
-            Assert.assertTrue(flag);
-        } else {
-            Assert.assertTrue(flag);
-
-        }
+        Assert.assertTrue(actual.contains(batchId));
 
         String actual1 = PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID);
-        if (actual1.contains(productId)) {
-
-            flag = true;
-            Assert.assertTrue(flag);
-        } else {
-            Assert.assertTrue(flag);
-
-        }
+        Assert.assertTrue(actual1.contains(productId));
         String actual2 = PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD);
-        if (actual2.contains(runID)) {
-
-            flag = true;
-            Assert.assertTrue(flag);
-        } else {
-            Assert.assertTrue(flag);
-
-        }
+        Assert.assertTrue(actual2.contains(runID));
     }
 
     public void InstrumentSummary(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
-
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), INSTRUMENT_SUMMARY)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, UNIT_OPERATION_NAME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, RECIPE_FILE_NAME) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, START_TIME) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, END_TIME) == 3);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, RUN_STATUS) == 4);
-
-        Assert.assertNotNull(table.getRowCount() > 1);
-
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), INSTRUMENT_SUMMARY).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, UNIT_OPERATION_NAME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, RECIPE_FILE_NAME));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, START_TIME));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, END_TIME));
+        Assert.assertEquals(4, PdfTableExtractUtils.getColumnIndex(table, RUN_STATUS));
+        Assert.assertTrue(table.getRowCount() > 1);
     }
 
     public void checkSignturesTable(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures")
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "User name") == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Signature") == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, "Date") == 2);
+        PdfTable table =
+                PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures").stream().findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, "User name"));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, "Signature"));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, "Date"));
 
-        Assert.assertNotNull(table.getRowCount() > 1);
-        Assert.assertTrue(table.getRows()
-                .get(1)
-                .get(PdfTableExtractUtils.getColumnIndex(table, "User name"))
-                .getText(false)
-                .equals("Bio4CAdmin"));
-        Assert.assertTrue(table.getRows()
-                .get(1)
-                .get(PdfTableExtractUtils.getColumnIndex(table, "Signature"))
-                .getText(false)
-                .equals("Administrator Bio4C"));
-        Assert.assertTrue(table.getRows()
-                .get(1)
-                .get(PdfTableExtractUtils.getColumnIndex(table, "Date"))
-                .getText(false)
+        Assert.assertTrue(table.getRowCount() > 1);
+        Assert.assertEquals("Bio4CAdmin", table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "User name"))
+                .getText(false));
+        Assert.assertEquals("Administrator Bio4C", table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Signature"))
+                .getText(false));
+        Assert.assertTrue(table.getRows().get(1).get(PdfTableExtractUtils.getColumnIndex(table, "Date")).getText(false)
                 .matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
 
     }
@@ -569,14 +430,12 @@ public class Report {
     public void ConsolidatedAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), CONSOLIDATED_ALARMS)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, INTOUCH_TYPE) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, COMMENT) == 3);
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), CONSOLIDATED_ALARMS).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, INTOUCH_TYPE));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, COMMENT));
         Assert.assertTrue(table.getRowCount() > 1);
 
     }
@@ -584,82 +443,71 @@ public class Report {
     public void OnUnitOperation(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), ON_UNIT_OPERATION_USERS)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, USER_NAME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, FIRST_INSTANCE) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, LAST_INSTANCE) == 3);
-        Assert.assertNotNull(table.getRowCount() > 1);
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), ON_UNIT_OPERATION_USERS).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, USER_NAME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, MACHINE_NAME));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, FIRST_INSTANCE));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, LAST_INSTANCE));
+        Assert.assertTrue(table.getRowCount() > 1);
     }
 
     public void AuditTrail(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, APPLICATION_NAME) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, RECORD) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, COMMENT) == 3);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ATTRIBUTE) == 4);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, CURRENT_VALUE) == 5);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, PREVIOUS_VALUE) == 5);
-        Assert.assertNotNull(table.getRowCount() > 1);
+        PdfTable table =
+                PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL).stream().findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, APPLICATION_NAME));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, RECORD));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, COMMENT));
+        Assert.assertEquals(4, PdfTableExtractUtils.getColumnIndex(table, ATTRIBUTE));
+        Assert.assertEquals(5, PdfTableExtractUtils.getColumnIndex(table, CURRENT_VALUE));
+        Assert.assertEquals(5, PdfTableExtractUtils.getColumnIndex(table, PREVIOUS_VALUE));
+        Assert.assertTrue(table.getRowCount() > 1);
     }
 
     public void processAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PROCESS_ALARMS)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, TYPE) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, NAME) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, CATEGORY) == 3);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, USER) == 4);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ALARM_TYPE) == 5);
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PROCESS_ALARMS).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, TYPE));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, NAME));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, CATEGORY));
+        Assert.assertEquals(4, PdfTableExtractUtils.getColumnIndex(table, USER));
+        Assert.assertEquals(5, PdfTableExtractUtils.getColumnIndex(table, ALARM_TYPE));
     }
 
     public void systemAlarm(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), SYSTEM_ALARMS)
-                .stream()
-                .findFirst()
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), SYSTEM_ALARMS).stream().findFirst()
                 .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, NAME) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, TYPE) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, COMMENT) == 3);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, USER) == 4);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ALARM_TYPE) == 5);
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, NAME));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, TYPE));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, COMMENT));
+        Assert.assertEquals(4, PdfTableExtractUtils.getColumnIndex(table, USER));
+        Assert.assertEquals(5, PdfTableExtractUtils.getColumnIndex(table, ALARM_TYPE));
     }
 
     public void recipeStepsSummary(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY)
-                .stream()
-                .findFirst()
-                .get();
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
+                .findFirst().get();
         // table
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION) == 3);
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION));
     }
 
     public void validateRunSummary(PdfTable table, Recipe recipe) {
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
-        Assert.assertTrue("Table contains no data", table.getRows()
-                .size() > 1);
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
         // get field value and check is not null
         Assert.assertNotNull("No field with id " + recipe.getMachineName(),
@@ -690,20 +538,16 @@ public class Report {
                 PdfTableExtractUtils.getTableFieldValue(table, RUN_STATUS));
     }
 
-
     public void validateConsolidateRunSummary(String reportPdfUrl, List<Recipe> recipes) throws IOException {
         URL url = new URL(reportPdfUrl);
         List<PdfTable> runSummaryTables =
                 PdfTableExtractUtils.getTablesFromTableTitle((url.openStream()), REPORT_SUMMARY_TITLE);
-
         Assert.assertEquals(recipes.size() + 1, runSummaryTables.size());
 
         var consolidatedReportSummary = runSummaryTables.get(0);
-
         var startDateFromReport = PdfTableExtractUtils.getTableFieldValue(consolidatedReportSummary, START_DATE);
-        TimezoneUtils.compareDateFromLocalToDistantServer("Start date not expected", recipes.stream()
-                .findFirst()
-                .get().startDate, startDateFromReport, REPORT_DATE_FORMAT);
+        TimezoneUtils.compareDateFromLocalToDistantServer("Start date not expected",
+                recipes.stream().findFirst().get().startDate, startDateFromReport, REPORT_DATE_FORMAT);
 
         var endDateFromReport = PdfTableExtractUtils.getTableFieldValue(consolidatedReportSummary, END_DATE);
         TimezoneUtils.compareDateFromLocalToDistantServer("End date not expected",
@@ -749,13 +593,10 @@ public class Report {
         URL url = new URL(reportUrl);
 
         // get table from table title and check is not null and contains rows
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE)
-                .stream()
-                .findFirst()
-                .get();
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), REPORT_SUMMARY_TITLE).stream()
+                .findFirst().get();
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
-        Assert.assertTrue("Table contains no data", table.getRows()
-                .size() > 1);
+        Assert.assertTrue("Table contains no data", table.getRows().size() > 1);
 
         for (var recipe : recipes) {
             validateRecipeInReport(template, table, recipe);
@@ -790,12 +631,10 @@ public class Report {
         var recipeDateFromReport = PdfTableExtractUtils.getTableFieldValue(table, dateColumnFromReport);
         Assert.assertNotNull(message + " is null", recipeDateFromReport);
 
-        DateTimeFormatter formatterRecipe = DateTimeFormatter.ofPattern(RECIPE_DATE_FORMAT)
-                .localizedBy(Locale.ENGLISH);
+        DateTimeFormatter formatterRecipe = DateTimeFormatter.ofPattern(RECIPE_DATE_FORMAT).localizedBy(Locale.ENGLISH);
         LocalDateTime localRecipeDate = LocalDateTime.parse(recipeDate, formatterRecipe);
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REPORT_DATE_FORMAT)
-                .localizedBy(Locale.ENGLISH);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(REPORT_DATE_FORMAT).localizedBy(Locale.ENGLISH);
         LocalDateTime serverRecipeDateFromReport = LocalDateTime.parse(recipeDateFromReport, formatter);
 
         TimezoneUtils.compareDateFromLocalToDistantServer(message + " and recipe date from report are not the same",
@@ -810,14 +649,12 @@ public class Report {
      */
     public void checkPreRunColumnsInReport(String reportUrl) throws IOException {
         URL url = new URL(reportUrl);
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EVENT_DESCRIPTION) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, SETPOINT) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, EGU) == 3);
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), PRE_RUN_DATE_TITLE).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, EVENT_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, EVENT_DESCRIPTION));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, SETPOINT));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, EGU));
         Assert.assertTrue(table.getRowCount() > 0);
     }
 
@@ -829,14 +666,12 @@ public class Report {
      */
     public void checkRecipeColumnsInReport(String reportUrl) throws IOException {
         URL url = new URL(reportUrl);
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY)
-                .stream()
-                .findFirst()
-                .get();
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME) == 0);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER) == 1);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER) == 2);
-        Assert.assertTrue(PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION) == 3);
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), RECIPE_STEPS_SUMMARY).stream()
+                .findFirst().get();
+        Assert.assertEquals(0, PdfTableExtractUtils.getColumnIndex(table, STEP_START_TIME));
+        Assert.assertEquals(1, PdfTableExtractUtils.getColumnIndex(table, STEP_NUMBER));
+        Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, PHASE_NUMBER));
+        Assert.assertEquals(3, PdfTableExtractUtils.getColumnIndex(table, ACTION_DESCRIPTION));
         Assert.assertTrue(table.getRowCount() > 0);
     }
 
@@ -847,34 +682,14 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
-                Assert.assertTrue(reportTable.getRows()
-                        .get(1)
-                        .get(userColumnIndex)
-                        .getText(false)
-                        .contains(userNameLoggedIn));
-                Assert.assertTrue(reportTable.getRows()
-                        .get(1)
-                        .get(1)
-                        .getText(false)
-                        .contains("IDManagement"));
-                Assert.assertTrue(reportTable.getRows()
-                        .get(1)
-                        .get(2)
-                        .getText(false)
-                        .contains(roleName));
-                Assert.assertTrue((reportTable.getRows()
-                        .get(1)
-                        .get(4)
-                        .getText(false)
-                        .contains(userNameLoggedIn + " has made theRole, " + roleName + " obsolete")));
-                Assert.assertTrue((reportTable.getRows()
-                        .get(1)
-                        .get(6)
-                        .getText(false)).isBlank());
-                Assert.assertTrue((reportTable.getRows()
-                        .get(1)
-                        .get(7)
-                        .getText(false)).isBlank());
+                Assert.assertTrue(
+                        reportTable.getRows().get(1).get(userColumnIndex).getText(false).contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows().get(1).get(1).getText(false).contains("IDManagement"));
+                Assert.assertTrue(reportTable.getRows().get(1).get(2).getText(false).contains(roleName));
+                Assert.assertEquals((reportTable.getRows().get(1).get(4).getText(false)).replaceAll("\\s",""), (userNameLoggedIn + " has made the Role, " + roleName + " obsolete").replaceAll("\\s",""));
+                Assert.assertTrue(reportTable.getRows().get(1).get(5).getText(false).isEmpty());
+                Assert.assertTrue(reportTable.getRows().get(1).get(6).getText(false).isEmpty());
+                Assert.assertTrue(reportTable.getRows().get(1).get(7).getText(false).isEmpty());
             }
             break;
         }
@@ -888,4 +703,65 @@ public class Report {
                 .findFirst()
                 .isPresent());
     }
+	
+    public void checkModifiedRolePermission(String reportUrl, String roleName,String oldRoleName, String userNameLoggedIn, Set<String> permissionList,Set<String> oldPermissionList)
+            throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                // start from 1 to skip the header row
+                for (int i = 1; i < 3; i++) {
+                    String appNameColumnValue = reportTable.getRows().get(i).get(1).getText(false);
+                    String recordColumnValue = reportTable.getRows().get(i).get(2).getText(false);
+                    String userColumnValue = reportTable.getRows().get(i).get(userColumnIndex).getText(false);
+                    String commentColumnValue = reportTable.getRows().get(i).get(4).getText(false);
+                    String attributeColumnValue = reportTable.getRows().get(i).get(5).getText(false);
+                    String currValueColumnValue = reportTable.getRows().get(i).get(6).getText(false);
+                    String prevValueColumnValue = reportTable.getRows().get(i).get(7).getText(false);
+                    String[] permissions = permissionList.toArray(new String[0]);
+                    String[] oldPermissions = oldPermissionList.toArray(new String[0]);
+                    if(i==1){
+                        if (attributeColumnValue.equalsIgnoreCase("permissions")) {
+                            Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                            Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
+                            Assert.assertEquals(recordColumnValue, "Role -"+roleName);
+                            Assert.assertEquals(commentColumnValue, userNameLoggedIn+" updated Role"+oldRoleName);
+                            for (var permission : permissions) {
+                                Assert.assertTrue((currValueColumnValue.replaceAll("\\s", ""))
+                                        .contains(permission.replaceAll("\\s", "")));
+                            }
+                            for (var oldPermission : oldPermissions) {
+                                Assert.assertTrue((prevValueColumnValue.replaceAll("\\s", ""))
+                                        .contains(oldPermission.replaceAll("\\s", "")));
+                            }
+                        } else if (attributeColumnValue.equalsIgnoreCase("roleName")) {
+                            Assert.assertTrue(currValueColumnValue.contains(roleName));
+                            Assert.assertTrue(prevValueColumnValue.contains(oldRoleName));
+                        }
+                    }
+                    if(i==2) {
+                        if (reportTable.getRows().get(2).get(0).getText(false).equalsIgnoreCase("permissions")) {
+                        for (var permission : permissions) {
+                            Assert.assertTrue(
+                                    (reportTable.getRows().get(2).get(1).getText(false).replaceAll("\\s", ""))
+                                            .contains(permission.replaceAll("\\s", "")));
+                        }
+                        for (var oldPermission : oldPermissions) {
+                            Assert.assertTrue((reportTable.getRows().get(2).get(2).getText(false).replaceAll("\\s", ""))
+                                    .contains(oldPermission.replaceAll("\\s", "")));
+                        }
+                    } else if (reportTable.getRows().get(2).get(0).getText(false).equalsIgnoreCase("roleName")) {
+                            Assert.assertTrue(reportTable.getRows().get(2).get(1).getText(false).contains(roleName));
+                            Assert.assertTrue(reportTable.getRows().get(2).get(2).getText(false).contains(oldRoleName));
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+
 }

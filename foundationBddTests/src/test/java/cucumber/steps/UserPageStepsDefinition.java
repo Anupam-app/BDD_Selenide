@@ -310,7 +310,7 @@ public class UserPageStepsDefinition {
         userPage.selectStatus(status);
     }
 
-    @When("I verify filetr tag")
+    @When("I verify filter tag")
     public void iVerifyFilterTag(String status) {
         Assert.assertEquals(status, userPage.getFilterTagText());
     }
@@ -434,5 +434,22 @@ public class UserPageStepsDefinition {
 	@When("I save my user modification changes")
     public void iSaveMyUserModificationChanges() {
         userPage.saveMyUserChanges();
+    }
+
+    @And ("I verify create User icon {string}")
+    public void createUserIconPresence(String value){
+        userPage.createUserIconPresent(value);
+    }
+
+    @And("I see {string} role assigned to user")
+    public void verifyRoleAssigned(String role){
+        userPage.roleAssignedToUser(role);
+    }
+
+    @Given("I search {string} to validate role {string} assigned")
+    public void roleAssignedToUser(String user,String role) {
+        this.user.setUserName(user);
+        userPage.setSearch(user);
+        userPage.roleAssignedToUser(role);
     }
 }

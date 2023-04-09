@@ -242,8 +242,12 @@ public class TrendsPage {
 
     public void selectMultipleCheckbox(String tag1, String tag2) {
         $(By.xpath(String.format(collection_radiobutton, "Default"))).click();
-        $(By.xpath(String.format(checkboxDefaultCollection, tag1))).click();
-        $(By.xpath(String.format(checkboxDefaultCollection, tag2))).click();
+        for (SelenideElement allTags : leddgerParametersCheckBox) {
+            String tagsName = allTags.parent().getAttribute("title");
+            if (tagsName.equals(tag1) || tagsName.equals(tag2)) {
+                allTags.click();
+            }
+        }
     }
 
     public void trendsPanelValidation(String options) {
@@ -396,7 +400,6 @@ public class TrendsPage {
         if (lastTime.getHours() == 0) {
             lastTime.setHours(24);
         }
-
         long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000);
 
         Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",

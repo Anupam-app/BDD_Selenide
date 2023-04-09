@@ -448,6 +448,7 @@ public class RecipeConsolePage {
             manualWindowPopup_Btn.click();
         }
         this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
+        commonWaiter(manualOperationName, visible);
         manualOperationName.sendKeys(this.recipe.getMachineName());
         this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
         runIdTextbox.sendKeys(this.recipe.getRunId());

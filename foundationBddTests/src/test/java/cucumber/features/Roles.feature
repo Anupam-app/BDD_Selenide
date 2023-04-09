@@ -37,8 +37,8 @@ Feature: Role administration
 
   @IVI-5671
   Scenario: IVI Bug IVI-5671| Assigning role to user
-    When I search "testUserToAssignRole" user
-    And I edit the user
+    Given I search "testUserToAssignRole" user
+    When I edit the user
     And I assign "testRoleToAssign" to user
     And I save my user changes
     And I go to user page
@@ -82,6 +82,6 @@ Feature: Role administration
     And I search the role
     And I delete the role
     And I generate audit trail report
-    And I verify audit logs for role update
-    And I check the audit trail report
+    Then I verify audit logs for role update
+    And I check the audit trail report 
     And I see the role deleted in report
