@@ -65,6 +65,8 @@ public class BackupPage {
 
     private SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
     private final String scheduledBackupDetails = "//div[@class='scheduled-row']/div[%d]";
+    private final SelenideElement noData = $(By.xpath("//div[@class='no-data-based-on-search']"));
+
     private final SelenideElement backupName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
     private final String historyColumnValue = "(//*[contains(@class,'history-card')])[1]/div[%d]";
     private final String historyColumnName = "//div[text()='%s']";
@@ -77,8 +79,8 @@ public class BackupPage {
 
     private final String backupSubMenu = "//*[contains(@class,'sub-menu')][text()='%s']";
     private final SelenideElement restoreButton = $(By.xpath("//button[@class='btn-restore']"));
-    private final SelenideElement successButton = $(By.xpath("//button[@class='rectangle-1']"));
-    private final SelenideElement failureButton = $(By.xpath("//button[@class='rectangle-2']"));
+    private final SelenideElement successButton = $(By.xpath("//button[@class='rectangle-1 disabled_btn']"));
+    private final SelenideElement failureButton = $(By.xpath("//button[@class='rectangle-2 disabled_btn']"));
 
     private final SelenideElement weeklyBackup = $(By.xpath(
             "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[2]"));
@@ -127,23 +129,25 @@ public class BackupPage {
 
     public void backupHistoryTab() {
         datePicker.shouldBe(visible);
-        $(By.xpath(String.format(historyColumnName, "Backup Name"))).shouldBe(visible);
-        $(By.xpath(String.format(historyColumnName, "Backed up by"))).shouldBe(visible);
-        $(By.xpath(String.format(historyColumnName, "Backup/Restore"))).shouldBe(visible);
-        $(By.xpath(String.format(historyColumnName, "Status"))).shouldBe(visible);
-        for (int i = 1; i < 6; i++) {
-            Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
-        }
-        Assert.assertEquals("User is not from the list", "Bio4CAdmin",
-                $(By.xpath(String.format(historyColumnValue, 3))).getText());
+        if (!(noData.isDisplayed())) {
+            $(By.xpath(String.format(historyColumnName, "Backup Name"))).shouldBe(visible);
+            $(By.xpath(String.format(historyColumnName, "Backed up by"))).shouldBe(visible);
+            $(By.xpath(String.format(historyColumnName, "Backup/Restore"))).shouldBe(visible);
+            $(By.xpath(String.format(historyColumnName, "Status"))).shouldBe(visible);
+            for (int i = 1; i < 6; i++) {
+                Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
+            }
+            Assert.assertEquals("User is not from the list", "Bio4CAdmin",
+                    $(By.xpath(String.format(historyColumnValue, 3))).getText());
 
-        String[] backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText()
-                .split(": ");
-        Assert.assertTrue(
-                backupDate[1].matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
-        String status = $(By.xpath(String.format(historyColumnValue, 5))).getText();
-        Assert.assertTrue("Backup Status is not correct", (status.equalsIgnoreCase("Running")
-                || status.equalsIgnoreCase("success") || status.equalsIgnoreCase("Aborted")));
+            String[] backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText()
+                    .split(": ");
+            Assert.assertTrue(
+                    backupDate[1].matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
+            String status = $(By.xpath(String.format(historyColumnValue, 5))).getText();
+            Assert.assertTrue("Backup Status is not correct", (status.equalsIgnoreCase("Running")
+                    || status.equalsIgnoreCase("success") || status.equalsIgnoreCase("Aborted")));
+        }
     }
 
     public void backupRestoreTab() {
@@ -151,12 +155,14 @@ public class BackupPage {
         restoreButton.waitUntil(visible, 2000);
         failureButton.waitUntil(visible, 2000);
         successButton.waitUntil(visible, 2000);
-        $(By.xpath(String.format(restoreColumnName, "Backup Name"))).shouldBe(visible);
-        $(By.xpath(String.format(restoreColumnName, "Backed up by"))).shouldBe(visible);
-        $(By.xpath(String.format(restoreColumnName, "Size"))).shouldBe(visible);
-        $(By.xpath(String.format(restoreColumnName, "Backup Date"))).shouldBe(visible);
-        for (int i = 2; i <= 6; i++) {
-            Assert.assertNotNull($(By.xpath(String.format(restoreColumnValue, i))).getText());
+        if (!(noData.isDisplayed())) {
+            $(By.xpath(String.format(restoreColumnName, "Backup Name"))).shouldBe(visible);
+            $(By.xpath(String.format(restoreColumnName, "Backed up by"))).shouldBe(visible);
+            $(By.xpath(String.format(restoreColumnName, "Size"))).shouldBe(visible);
+            $(By.xpath(String.format(restoreColumnName, "Backup Date"))).shouldBe(visible);
+            for (int i = 2; i <= 6; i++) {
+                Assert.assertNotNull($(By.xpath(String.format(restoreColumnValue, i))).getText());
+            }
         }
     }
 

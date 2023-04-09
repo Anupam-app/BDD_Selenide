@@ -240,8 +240,8 @@ public class RecipeConsolePage {
 
     public void verifyManualRunOptions() {
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "START"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEXTS, "BATCH ID"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEXTS, "RUN ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "Batch ID"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_TEXTS, "Run ID"))).shouldBe(visible);
         $(By.xpath(String.format(XPATH_TEXTS, "DHMS"))).shouldBe(visible);
         timerValue.shouldBe(visible);
     }
@@ -599,7 +599,7 @@ public class RecipeConsolePage {
     }
 
     public void validateMsg(String message) {
-        if (runIdExistMsg.getText()
+        if (commonWaiter(runIdExistMsg, visible).getText()
                 .equalsIgnoreCase(message)) {
             runIdExistMsg.shouldBe(visible);
         } else {
