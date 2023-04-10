@@ -136,6 +136,8 @@ public class RecipePage {
 	private final SelenideElement notificationMessage = $(By.xpath("//div[@class='notification-bar warning-bar']"));
 	private final String recipe_Step = "//label[@class='stepCount' and text()=%s]";
 	private final String searchPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%s]";
+	private final SelenideElement recipeFile = $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
+	private final SelenideElement printRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
 	public static final String RECIPE_DATE_FILTER_IVI = "MMM d, yyyy";
 	private final SelenideElement recipe_BlueNotification = $(By.xpath("//div[@class='notification-bar information-bar']"));
 	private final SelenideElement recipeManagementHeader = $(By.xpath("//h2[text()='Recipe Management']"));
@@ -148,12 +150,18 @@ public class RecipePage {
 	private final String warningOptions = "//button[text()='%s']";
 	private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
 	private final String popUpMessage = "//span[text()='%s']";
+	private final SelenideElement recipeInActiveButton = $(By.xpath("//label[text()='Approved-InActive']"));
 	private SelenideElement phaseOne = $(By.xpath("//label[text()='Phase 1']"));
 	private SelenideElement phaseLibrary = $(By.xpath("//label[text()='Save to phase library']"));
 	private final String errorMsg = "//h4[text()='%s']";
-	private final String phaseAction = "(//div[@class='last-step'])[last()]//label[text()='%s']";
 	private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
 	private final String blankRecipeMessage = "//div[text()='%s']";
+	private final SelenideElement  recipeStartCreation = $(By.xpath("//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
+	private final String actionsButton = "//button[contains(text(),'%s')]";
+	private final SelenideElement recipeImport =$(By.className("rename-recipe-import-input"));
+	private final SelenideElement  recipeWarningStatusInEditor =$(By.xpath("//div[text()='No Status Change allowed.']"));
+	private final SelenideElement secondaryButton = $(By.xpath("//button[@class='btn-secondary']"));
+	private final SelenideElement invocationStepNumber =$(By.xpath("(//div[@class='phase-invocation stepNumber']/label[@class='stepCount'])[1]"));
 
 	public void goTo() {
 		recipePageLinkText.click();
@@ -176,7 +184,7 @@ public class RecipePage {
 	}
 
 	public void verifyPhaseMessage(String message) {
-		Assert.assertTrue(noPhaseAvailableMsg.getText().equalsIgnoreCase(message));
+		noPhaseAvailableMsg.shouldHave(text(message));
 	}
 
 	public void goToBrowserMode() {
@@ -232,7 +240,7 @@ public class RecipePage {
 	public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
 		commonWaiter(XPATH_WARNNOTIFICATION_TEXT, visible);
 		XPATH_WARNNOTIFICATION_TEXT.shouldHave(ownText(message));
-		$(By.xpath("//*[@class='btn-primary']")).click();
+		primaryButton.click();
 	}
 
 	public void saveModifiedRecipe() {
@@ -331,7 +339,7 @@ public class RecipePage {
 	}
 
 	public void verifyPhaseButtons() {
-		($(By.xpath("//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"))).shouldBe(visible);
+		recipeStartCreation.shouldBe(visible);
 		$(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
 		$(By.xpath(String.format(phaseMessage, "Please add a phase."))).shouldBe(visible);
 		commonWaiter(okButton, visible).click();
@@ -368,9 +376,9 @@ public class RecipePage {
 		okButton.click();
 		commonWaiter(statusInReview, visible).click();
 		selectApprove.click();
-		$(By.xpath("//button[contains(text(),'Change')]")).click();
+		$(By.xpath(String.format(actionsButton, "Change"))).click();
 		inputPassword.sendKeys(password);
-		$(By.xpath("//button[contains(text(),'SIGN')]")).click();
+		$(By.xpath(String.format(actionsButton, "SIGN"))).click();
 		statusApproved.waitUntil(Condition.visible, 5000l);
 		browserLinkText.click();
 		editorLinkText.click();
@@ -380,12 +388,12 @@ public class RecipePage {
 		commonWaiter(statusDraft, visible).click();
 		selectInReview.click();
 		primaryButton.click();
-		$(By.xpath("//button[text()='Ok']")).click();
+		$(By.xpath(String.format(actionsButton, "Ok"))).click();
 		commonWaiter(statusInReview, visible).click();
 		selectInactive.click();
-		$(By.xpath("//button[text()='Change']")).click();
+		$(By.xpath(String.format(actionsButton, "Change"))).click();
 		inputPassword.sendKeys(password);
-		$(By.xpath("//button[text()='SIGN']")).click();
+		$(By.xpath(String.format(actionsButton, "SIGN"))).click();
 		statusApproved.waitUntil(Condition.visible, 5000l);
 		browserLinkText.click();
 		editorLinkText.click();
@@ -394,10 +402,10 @@ public class RecipePage {
 	public void rejectTechReviewRecipe() {
 		commonWaiter(statusDraft, visible).click();
 		selectTechReview.click();
-		$(By.xpath("//button[text()='Change']")).click();
+		$(By.xpath(String.format(actionsButton, "Change"))).click();
 		commonWaiter(statusInReview, visible).click();
 		selectDraft.click();
-		$(By.xpath("//button[text()='Change']")).click();
+		$(By.xpath(String.format(actionsButton, "Change"))).click();
 		statusApproved.waitUntil(Condition.visible, 5000l);
 		browserLinkText.click();
 		editorLinkText.click();
@@ -432,8 +440,7 @@ public class RecipePage {
 		var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
 		importRecipe.click();
 		importButton.click();
-		SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
-		recipeInputSave.click();
+		recipeImport.click();
 		SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
 		var value = RandomStringUtils.randomAlphabetic(10);
 		recipeInputSave.setValue(value);
@@ -442,15 +449,13 @@ public class RecipePage {
 	}
 
 	public void chooseOption(String option) {
-		$(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
+		commonWaiter(recipeFile, visible).click();
 		$(By.xpath(String.format(chooseOption, option))).click();
-		Selenide.sleep(5000);
-
 	}
 
 	public void printRecipe(String recipeName) {
-		$(By.xpath("//*[@class=\"navButton\"][text()='File']")).click();
-		$(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']")).shouldBe(visible);
+		commonWaiter(recipeFile, visible).click();
+		printRecipe.shouldBe(visible);
 	}
 
 	public void lookAtTheUserNotification() {
@@ -696,10 +701,9 @@ public class RecipePage {
 
 	public void warningMessage(String message) {
 		switchTo().frame("CrossDomainiframeId");
-		commonWaiter($(By.xpath("//label[text()='Approved-InActive']")),visible).click();
-		String actual = $(By.xpath("//div[text()='No Status Change allowed.']")).getText();
-		Assert.assertEquals(actual, message);
-		$(By.xpath("//button[@class='btn-secondary']")).click();
+		commonWaiter(recipeInActiveButton,visible).click();
+		recipeWarningStatusInEditor.shouldHave(text(message));
+		secondaryButton.click();
 	}
 
 	public void cannotEditRecipe() {
@@ -731,7 +735,7 @@ public class RecipePage {
 	}
 
 	public void verifyPhaseIsRenamed(String phaseName) {
-		commonWaiter($(By.xpath("(//div[@class='phase-invocation stepNumber']/label[@class='stepCount'])[1]")),visible);
+		commonWaiter(invocationStepNumber,visible);
 		$(By.xpath(String.format("//label[text()='%s']", phaseName))).shouldBe(visible);
 	}
 

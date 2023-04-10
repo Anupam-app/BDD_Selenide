@@ -464,12 +464,12 @@ public class RecipePageStepsDefinition {
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
-    @And("I click on GoTo Phase button")
+    @And("I select GoTo Phase button")
     public void iClickOnGoToPhaseButton(){
         recipePage.goToPhaseBtn();
     }
 
-    @And("I click on GoTo Step button a drop down opened")
+    @And("I select GoTo Step button a drop down opened")
     public void iClickOnGoToStepButtonDropDownOpened(){
         recipePage.goToStep();
     }
@@ -518,11 +518,6 @@ public class RecipePageStepsDefinition {
        recipePage.verifyPhaseOption();
     }
 
-    @And("I add recipe step again")
-    public void iAddRecipeStepAgain(){
-        recipePage.addFewSteps();
-    }
-
     @Then("Recipe is saved")
     public void recipeIsSaved(){
         recipePage.verifySavedRecipe();
@@ -533,7 +528,7 @@ public class RecipePageStepsDefinition {
         recipePage.closeBtn();
     }
 
-    @Then("Blank recipe is displayed")
+    @Then("blank recipe is displayed")
     public void iDisplayedBlankRecipe() {
         recipePage.blankRecipe();
     }
@@ -586,5 +581,13 @@ public class RecipePageStepsDefinition {
     @Then("I can add phase to phase library.")
     public void iCanAddPhaseToPhaseLibrary() throws AWTException {
         recipePage.addPhaseLibraryWithErrorPhase();
+    }
+
+    @And("I add action and create random phase with multiple steps")
+    public void iAddActionAndCreateRandomPhaseWithMultipleSteps(){
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
+        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 }
