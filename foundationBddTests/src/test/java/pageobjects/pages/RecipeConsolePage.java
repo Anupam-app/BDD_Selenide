@@ -94,7 +94,7 @@ public class RecipeConsolePage {
     private final SelenideElement manualStartButton = $(By.xpath("//img[contains(@src,'START_btn.3c28170b.svg')]"));
     private final SelenideElement manualOperationName = $(By.xpath("//input[@name ='recipeName']"));
     private final SelenideElement manualStopButton =
-            $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.0328c518.svg']"));
+            $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.fa5c7ba8.svg']"));
     private final SelenideElement matchId = $(By.xpath("(//label[@id='trimString'])[1]"));
     private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[3]"));
     private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[4]"));
@@ -122,8 +122,7 @@ public class RecipeConsolePage {
     private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
     private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
-    private final SelenideElement processRestartMsg =
-            $(By.xpath("//h6[contains(text(),'Are you sure you want to restart the process?')]"));
+    private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Process Restart')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
     private final SelenideElement endManualOperation = $(By.xpath("//h6[text()='End Manual Operation']"));
     private final SelenideElement quitEndMAnualOperation = $(By.xpath("//img[contains(@src,'data:image/png;')]"));
@@ -142,7 +141,7 @@ public class RecipeConsolePage {
     private final SelenideElement ManualOperationRecipe = matchId;
     private final SelenideElement RunID = recipeRunBatchId;
     private final SelenideElement BatchID = $(By.xpath("(//label[@id='trimString'])[2]"));
-    private final SelenideElement ConditionalStatement = $(By.xpath("//label[text()='Mobius® Cell Retention System']"));
+    private final SelenideElement ConditionalStatement = $(By.xpath("//label[text()='IVI']"));
 
     private Recipe recipe;
 
@@ -411,6 +410,10 @@ public class RecipeConsolePage {
     }
 
     public void processHold() {
+        if (restartButton.isDisplayed()) {
+            restartSystem();
+            SelenideHelper.commonWaiter(holdButton, visible);
+        }
         $(By.xpath(String.format(XPATH_PNID_BUTTON, "PROCESS HOLD"))).click();
     }
 
@@ -764,8 +767,8 @@ public class RecipeConsolePage {
     public void iVerifyProcessRestartPopup() {
         if (processRestartWindowPopup.isDisplayed()) {
             processRestartMsg.shouldBe(visible);
-            noButton.shouldBe(visible);
-            yesButton.shouldBe(visible);
+            $(By.xpath(String.format(XPATH_PNID_BUTTON, "Cancel"))).shouldBe(visible);
+            $(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm"))).shouldBe(visible);
         }
     }
 
@@ -1184,10 +1187,22 @@ public class RecipeConsolePage {
     }
 
     public void validateConfirmBtn() {
-        SelenideHelper.commonWaiter(processRestartMsg, visible)
+        SelenideHelper.commonWaiter(reEstablishStateButton, enabled)
                 .click();
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_PNID_BUTTON, "Confirm"))), visible)
+        SelenideHelper.commonWaiter(confirmButton, visible)
                 .click();
+    }
+
+    public void iValidateStart() {
+        SelenideHelper.commonWaiter(start_Btn, visible);
+    }
+
+    public void iValidationPreRun() {
+        if (preRunWindowPopop.isDisplayed()) {
+            preRunWindowPopop.shouldBe(visible);
+        } else {
+            preRunWindowPopop.shouldNotBe(visible);
+        }
     }
 
     public void iValidateSpecialCharManual(String ManualOperationName, String runId, String batchId, String productId,

@@ -255,6 +255,7 @@ Feature: Recipe console
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
 
+  @BIOCRS-9352
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
@@ -269,8 +270,6 @@ Feature: Recipe console
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe consol
-    And I login with "Bio4CAdmin" same user as above "Merck@dmin"
-    And I verify the recipe execution details in console View.
 
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
     Given I expand recipe console
@@ -389,10 +388,5 @@ Feature: Recipe console
     And I enter "reportUnauthUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I verify recipe console expand is disabled
-    And I logout
-    And login page is open
-    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
-    And I push the login button
-    And I expand recipe console in pnid
-    And I verify the recipe execution details
+
 

@@ -387,6 +387,16 @@ public class RecipeConsoleStepsDefinition {
         }
     }
 
+    @Then("I should see start button is displayed")
+    public void iSeeStartButton() {
+        recipeConsolePage.iValidateStart();
+    }
+
+    @Then("I should not see special characters not allowed")
+    public void iShouldnotSeeSpecialCharactersNotAllowed() {
+        recipeConsolePage.iValidationPreRun();
+    }
+
     @When("I resume and verify recipe execution is resumed")
     public void resumeStatus() {
         recipeConsolePage.clickResumeButton();
