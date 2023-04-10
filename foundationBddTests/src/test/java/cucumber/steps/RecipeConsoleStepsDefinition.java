@@ -263,7 +263,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("Recipe execution is paused")
     public void recipeExecIsPaused() throws ParseException {
-        recipeConsolePage.recipeisPaused();
+        recipeConsolePage.recipeIsPaused();
     }
 
     @When("I hold the system")

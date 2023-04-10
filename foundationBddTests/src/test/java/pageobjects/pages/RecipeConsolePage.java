@@ -248,7 +248,7 @@ public class RecipeConsolePage {
 
     public String startAndWaitRecipe(Recipe recipe, int seconds) {
         String runId = startRecipe(recipe);
-        abortButton.waitUntil(Condition.not(Condition.visible), seconds * 2000l);
+        abortButton.waitUntil(Condition.not(Condition.visible), seconds * 2000L);
         SelenideHelper.commonWaiter(startDate, visible);
         recipe.setStartDate(startDate.getText());
         recipe.setEndDate(endDate.getText());
@@ -537,11 +537,11 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).shouldNotBe(selected);
     }
 
-    public void recipeisPaused() throws ParseException {
+    public void recipeIsPaused() throws ParseException {
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).shouldNotBe(selected);
         SimpleDateFormat formatter = new SimpleDateFormat("dd:hh:mm:ss");
         String timeStart = pauseTimerValue.getText();
-        Selenide.sleep(2000);
+        Selenide.sleep(5000);
         String timeEnd = pauseTimerValue.getText();
         Date startTime = formatter.parse(timeStart);
         Date endTime = formatter.parse(timeEnd);
@@ -591,7 +591,7 @@ public class RecipeConsolePage {
         runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         runIdTextbox.sendKeys(value);
         Selenide.sleep(2000);
-        runIdTextbox.sendKeys(Keys.ENTER);
+        runIdTextbox.sendKeys(Keys.TAB);
     }
 
     public void uniqBatchId(String batchId) {

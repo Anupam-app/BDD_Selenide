@@ -148,8 +148,7 @@ Feature: Recipe management
     Then I should see "blank" step added
     And I add "Setpoint" action to the step
 
-  @IVI-5149
-  Scenario: IVI BUG IVI-5149 | BIOFOUND-3768| Create step using Action browser
+  Scenario: BIOFOUND-3768| Create step using Action browser
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode

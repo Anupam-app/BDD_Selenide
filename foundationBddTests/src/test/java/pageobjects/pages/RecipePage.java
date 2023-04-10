@@ -24,6 +24,7 @@ import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -650,19 +651,18 @@ public class RecipePage {
         switch (dateRange) {
             case "Today":
             case "Yesterday":
-                String dateValue = dateColumn.getAttribute("value")
-                        .split("to")[0].trim();
-                Date selectedDate = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue);
+                String dateValue = dateColumn.getAttribute("value").split("To")[0].trim();
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
-                    String startDateRow1 = startDateRep.getText()
-                            .split(" ")[0].trim();
-                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
+                    Selenide.sleep(1000);
+                    String startDateRow1 = startDateRep.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
-                    startDateRow1 = startDateRep.getText()
-                            .split(" ")[0].trim();
-                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow1);
-                    if (selectedAsendingDate.equals(selectedDate) && selectedDesendingDate.equals(selectedDate)) {
+                    Selenide.sleep(1000);
+                    startDateRow1 = startDateRep.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -675,24 +675,22 @@ public class RecipePage {
             case "Last Month":
             case "Custom Range":
                 commonWaiter(dateColumn, visible);
-                String dateValue1 = dateColumn.getAttribute("value")
-                        .split("to")[0].trim();
-                Date selectedDate1 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue1);
-                String dateValue2 = dateColumn.getAttribute("value")
-                        .split("to")[1].trim();
-                Date selectedDate2 = new SimpleDateFormat("dd/MMM/yyyy").parse(dateValue2);
+                String dateValue1 = dateColumn.getAttribute("value").split("To")[0].trim();
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, RECIPE_DATE_FILTER_IVI);
+                String dateValue2 = dateColumn.getAttribute("value").split("To")[1].trim();
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
-                    String startDateRow = startDateRep.getText()
-                            .split(" ")[0].trim();
-                    Date selectedAsendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(startDateRow);
+                    Selenide.sleep(1000);
+                    String startDateRow = startDateRep.getText();
+                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
-                    String endDateRow = startDateRep.getText()
-                            .split(" ")[0].trim();
-                    Date selectedDesendingDate = new SimpleDateFormat("dd/MMM/yyyy").parse(endDateRow);
-                    if ((selectedAsendingDate.equals(selectedDate1) || selectedAsendingDate.after(selectedDate1))
-                            && (selectedDesendingDate.equals(selectedDate2)
-                                    || selectedDesendingDate.before(selectedDate2))) {
+                    Selenide.sleep(1000);
+                    String endDateRow = startDateRep.getText();
+                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
+                        && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                        || selectedDesendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -771,7 +769,7 @@ public class RecipePage {
         $(By.xpath(String.format(expandAction, "Flowpath"))).click();
         $(By.xpath(String.format(expandAction, "Control"))).waitUntil(visible, 1000)
                 .click();
-        $(By.xpath(String.format(rootStep, "Inlet"))).doubleClick();
+        $(By.xpath(String.format(rootStep, "Inlet"))).scrollIntoView(false).doubleClick();
     }
 
     public void addMessageInStep() {

@@ -97,7 +97,7 @@ Feature: Recipe console
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
 
-  @BIOCRS-9352
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
@@ -145,7 +145,7 @@ Feature: Recipe console
     And Recipe should be executed
 
     # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
-  @BIOCRS-9352
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
@@ -202,7 +202,7 @@ Feature: Recipe console
     Then I verify Recipe Run tab is "enabled"
     
     # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
-  @BIOCRS-9352
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I start Manual run
@@ -255,7 +255,7 @@ Feature: Recipe console
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
 
-  @BIOCRS-9352
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
     Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
@@ -291,7 +291,7 @@ Feature: Recipe console
     And I Abort the recipe execution
     And I validate the RUNID BATCHID text displayed on Post run window
 
-  @BIOCRS-9352
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
     Given I expand recipe console
     When I select "Manual operation" tab
