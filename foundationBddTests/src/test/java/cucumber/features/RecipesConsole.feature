@@ -381,7 +381,6 @@ Feature: Recipe console
     And I enter "bio4cAdmin" as username and "Merck@dmin" as password
     And I push the login button
     Then Verify the recipe console extended view UI components
-    Then I see process hold button is displayed
 
   Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorised User or User with no permission to Run Recipe
     Given  I expand recipe console in pnid

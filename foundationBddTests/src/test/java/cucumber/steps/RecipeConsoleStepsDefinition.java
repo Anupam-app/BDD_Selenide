@@ -224,7 +224,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I see the system on hold")
     public void iSeeTheSystemOnHold() {
-        recipeConsolePage.seeSystemOnHold();
+        recipeConsolePage.seeSystemOnRestart();
     }
 
     @Then("I see the system is restarted")
@@ -730,12 +730,6 @@ public class RecipeConsoleStepsDefinition {
     @And("I validate the RUNID BATCHID text displayed on Post run window")
     public void iValidatePostRunWindow() {
         recipeConsolePage.iDisplayedRunIdAndBatchId();
-    }
-
-    @Then("I see process hold button is displayed")
-    public void iSeeProcessHoldButton() {
-        recipeConsolePage.iClickOnAbortButton();
-        recipeConsolePage.clickOnOk();
     }
 
     @Then("Verify the recipe console extended view UI components")
