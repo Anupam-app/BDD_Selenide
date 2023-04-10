@@ -41,7 +41,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: IVI Bug IVI-5819| BIOCRS-5106/592 Generate and sign Audittrail report
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     And I select user in dropdown "Bio4CAdmin"
@@ -56,7 +56,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a recipe run history report
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Run History"
     And I choose recipe run "recipe4sec220211129030358"
@@ -70,7 +70,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a consolidated report
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Consolidated"
     And I choose recipe run "recipe4sec220211129030358" for consolidation
@@ -84,7 +84,7 @@ Feature: Report administration
 
   @SMOKE
   Scenario: Generate and sign a custom report
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
@@ -98,7 +98,7 @@ Feature: Report administration
     And I should see the report file presence
 
   Scenario: Generate run history report and check report content
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Run History"
@@ -111,7 +111,7 @@ Feature: Report administration
     And I check report content
 
   Scenario: Generate Audittrail report and verify that user information are consistent
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     When I goto report management page
     And I select report from dropdown "Audit Trail"
@@ -123,7 +123,7 @@ Feature: Report administration
     And I verify that user information are consistent
 
   Scenario: Report Approval E-Sign Failure On Entering Wrong Password
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     And I click on generate button

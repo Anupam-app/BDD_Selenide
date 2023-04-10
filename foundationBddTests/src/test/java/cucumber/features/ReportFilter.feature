@@ -26,26 +26,26 @@ Feature: Reports Filter
   Scenario: Verify search reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I search the report name "AuditTrail_1_Bio4CAdmin"
-    Then I should see report "AuditTrail_1_Bio4CAdmin"
+    When I search the report name "AuditTrail_1_testadmin"
+    Then I should see report "AuditTrail_1_testadmin"
 
   Scenario: Verify filter reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
     When I click on filter icon and select report type "Run Summary"
-    Then I should see report "RunSummary_18_Bio4CAdmin"
+    Then I should see report "RunSummary_18_testadmin"
 
   Scenario: Verify created by reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I select report user from dropdown created by "Bio4CAdmin"
-    Then I should see report "AuditTrail_1_Bio4CAdmin"
+    When I select report user from dropdown created by "testadmin"
+    Then I should see report "AuditTrail_1_testadmin"
 
   Scenario: Verify signed by reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I select report user from dropdown signed by "Bio4CAdmin"
-    Then I should see report "RunSummary_18_Bio4CAdmin"
+    When I select report user from dropdown signed by "testadmin"
+    Then I should see report "RunSummary_18_testadmin"
 
   Scenario: Verify search runs reports functionality in Report Management
     Given I goto report management page
