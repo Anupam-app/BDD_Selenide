@@ -312,7 +312,6 @@ Feature: Recipe management
     And I cancel the recipe
     And I close the recipe
     And I discard the recipe
-    Then I add few actions steps to existing recipe
     And I add one new step
     And I close the recipe
     And I save the recipe from warning box
