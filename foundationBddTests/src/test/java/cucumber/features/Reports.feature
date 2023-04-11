@@ -44,7 +44,7 @@ Feature: Report administration
     Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    And I select user in dropdown "Bio4CAdmin"
+    And I select user in dropdown "testadmin"
     And I select date range as "Last 7 Days"
     And I click on generate button
     And I goto report management page

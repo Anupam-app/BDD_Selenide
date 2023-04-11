@@ -114,6 +114,7 @@ public class RecipePageStepsDefinition {
     public void igoToOtherModule() {
         switchTo().parentFrame();
         userPage.goTo();
+        recipePage.unappliedChangesPopUp();
     }
 
     @When("I can create a recipe")
@@ -257,6 +258,9 @@ public class RecipePageStepsDefinition {
     public void iClickOnImport() {
         recipePage.importRecipe(recipe.getRecipeName());
         recipe.setRecipeImportedName(recipePage.getGeneratedName());
+        switchTo().parentFrame();
+        reportPage.goToReports();
+        iGoToRecipePage();
     }
 
     @When("I click on import {string}")
@@ -344,6 +348,7 @@ public class RecipePageStepsDefinition {
 
     @And("I close and reopen the recipe")
     public void openRecipe() {
+        iGoToBrowserMode();
         recipePage.openRecipe(this.recipe.getRecipeName());
     }
 
@@ -572,6 +577,7 @@ public class RecipePageStepsDefinition {
 
     @And("I navigate to recipe browser, open a recipe")
     public void iNavigateToRecipeBrowserAndOpenRecipe() {
+        // iGoToBrowserMode();
         recipePage.goToBrowserMode();
         recipePage.chooseRecipe();
     }
@@ -590,6 +596,7 @@ public class RecipePageStepsDefinition {
 
     @Then("the UoP status of imported recipe changes to Draft")
     public void importedRecipeStatusIsDraft(DataTable table) {
+        iGoToBrowserMode();
         List<String> list = table.asList(String.class);
         list.forEach(recipePage::importedRecipeStatusIsDraft);
     }
