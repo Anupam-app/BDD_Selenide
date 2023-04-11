@@ -1,6 +1,13 @@
 @CRS @IVI
 Feature: Recipe management
 
+  JIRAs tested:
+  https://stljirap.sial.com/browse/BIOFOUND-27859
+  https://stljirap.sial.com/browse/BIOFOUND-10899
+  https://stljirap.sial.com/browse/BIOFOUND-12786
+  https://stljirap.sial.com/browse/BIOFOUND-10897
+  https://stljirap.sial.com/browse/BIOFOUND-27821
+
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
     Given I am logged in as "Bio4CAdmin" user
@@ -248,4 +255,75 @@ Feature: Recipe management
     Then I verify recipe tab title
     When I create a phase
     Then I verify notification messages "Phase created successfully"
-    
+
+  Scenario: Availability of GoTo step and Goto Phase buttons
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I add few actions steps
+    And I create a random phase with multiple steps
+    And I select GoTo Phase button
+    And I select GoTo Step button a drop down opened
+    Then drop down contain phase invocation step number
+
+  Scenario: Recipe management_Save As recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "testRecipeDraftToReject"
+    And I add few actions steps to existing recipe
+    And I save as recipe name "secondRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      |testRecipeDraftToReject|
+      |secondRecipe			  |
+    When I edit recipe "testRecipeDraftToReject"
+    And I verify recipe steps are not modified
+    And I add few actions steps to existing recipe
+    And I verify the Unsaved status below recipe name
+    And I save as recipe name "ThirdRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      |testRecipeDraftToReject|
+      |secondRecipe			  |
+      |ThirdRecipe			  |
+
+  Scenario: Recipe management_ Operation phase criteria
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I add action and create random phase with multiple steps
+    And I expand the recipe action browser
+    And phases option is displayed
+    And I add few actions steps to existing recipe
+    And I create a random phase with multiple steps
+    And I expand the recipe action browser
+    And phases option is displayed
+    And I save the recipe
+    Then Recipe is saved
+
+  Scenario: Recipe management_Closing recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "testDraftRecipe"
+    And I close the recipe
+    Then blank recipe is displayed
+    And I go to browser mode
+    And I edit recipe "testDraftRecipe"
+    And I add few actions steps to existing recipe
+    And I close the recipe
+    And I cancel the recipe
+    And I close the recipe
+    And I discard the recipe
+    And I add one new step
+    And I close the recipe
+    And I save the recipe from warning box
+    And I perform saveAs option to save recipe
+
+  Scenario: Addition of phases with errors to Phase Library
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I create phase with errors
+    And I try to add phase to phase library
+    Then I get appropriate error
+    And Phase is not added to phase library.
+    When I clear errors in the phase
+    Then I can add phase to phase library.

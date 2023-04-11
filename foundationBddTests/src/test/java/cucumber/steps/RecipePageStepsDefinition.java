@@ -9,6 +9,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.awt.AWTException;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -213,7 +215,7 @@ public class RecipePageStepsDefinition {
 
     @When("I perform saveAs option to save recipe")
     public void iDoSaveAsRecipeWithShortCutKeys() {
-        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(4));
         recipePage.saveAsRecipeWithShortCutKeys(this.recipe.getRecipeName());
     }
 
@@ -446,5 +448,145 @@ public class RecipePageStepsDefinition {
 	@When("I verify notification messages {string}")
     public void iVerifyNotification(String message) {
         recipePage.verifyNotification(message);
+    }
+
+    @And("I add few actions steps")
+    public void iAddFewActionsSteps() {
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        recipePage.addFewSteps();
+    }
+
+    @And("I create a random phase with multiple steps")
+    public void iCreateRandomPhaseWithMultipleSteps(){
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
+        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+    }
+
+    @And("I select GoTo Phase button")
+    public void iClickOnGoToPhaseButton(){
+        recipePage.goToPhaseBtn();
+    }
+
+    @And("I select GoTo Step button a drop down opened")
+    public void iClickOnGoToStepButtonDropDownOpened(){
+        recipePage.goToStep();
+    }
+
+    @Then("drop down contain phase invocation step number")
+    public void dropDownContainPhaseInvocationStepNumber(){
+        recipePage.stepInvocation();
+    }
+
+    @And("I save as recipe name {string}")
+    public void iSaveAsRecipeName(String name) {
+       recipePage.saveAsRecipeWithShortCutKeys(name);
+    }
+
+    @And("^I verify below recipes are displayed in recipe browser list$")
+    public void iVerifyTwoRecipes(DataTable table) {
+        recipePage.goToBrowserMode();
+        List<String> list = table.asList(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            list.forEach(recipePage::iCheckTwoRecipes);
+        }
+    }
+
+    @And("I verify recipe steps are not modified")
+    public void iVerifyRecipeStepsAreNotModified() {
+        recipePage.stepsNotModified();
+    }
+
+    @And("I add few actions steps to existing recipe")
+    public void iAddFewActionsStepsToExistingRecipe() {
+        recipePage.addFewSteps();
+    }
+
+    @And("I verify the Unsaved status below recipe name")
+    public void iVerifyUnsavedStatus() {
+        recipePage.verifyUnsaved();
+    }
+
+    @And("I expand the recipe action browser")
+    public void iExpandTheRecipeActionBrowser(){
+        recipePage.operationActions();
+    }
+
+    @And("phases option is displayed")
+    public void phaseOptionIsDisplayed(){
+       recipePage.verifyPhaseOption();
+    }
+
+    @Then("Recipe is saved")
+    public void recipeIsSaved(){
+        recipePage.verifySavedRecipe();
+    }
+
+    @And("I close the recipe")
+    public void iCloseTheRecipe() {
+        recipePage.closeBtn();
+    }
+
+    @Then("blank recipe is displayed")
+    public void iDisplayedBlankRecipe() {
+        recipePage.blankRecipe();
+    }
+
+    @And("I cancel the recipe")
+    public void iCancelTheRecipe() {
+        recipePage.cancelRecipe();
+    }
+
+    @And("I discard the recipe")
+    public void iDiscardTheRecipe() {
+        recipePage.iDiscard_Btn();
+    }
+
+    @And("I save the recipe from warning box")
+    public void iSaveTheRecipeFromWarningBox() {
+        recipePage.saveFromWarningBox();
+    }
+
+    @And("I add one new step")
+    public void iAddOneNewStep() {
+        recipePage.singleStep();
+    }
+
+    @When("I create phase with errors")
+    public void iCreatePhaseWithErrors() {
+        recipePage.creatingPhaseWithError();
+    }
+
+    @And("I try to add phase to phase library")
+    public void iTryToAddPhaseToPhaseLibrary() throws AWTException {
+        recipePage.addPhaseLibraryWithErrorPhase();
+    }
+
+    @Then("I get appropriate error")
+    public void iGetappropriateError() {
+        recipePage.checkErrorMsg();
+    }
+
+    @And("Phase is not added to phase library.")
+    public void phaseIsNotAddedToPhaseLibrary(){
+        recipePage.checkWindowPopupMsg();
+    }
+
+    @And("I clear errors in the phase")
+    public void iClearErrorsInThePhase() {
+        recipePage.iClearPhaseErrorStep();
+    }
+
+    @Then("I can add phase to phase library.")
+    public void iCanAddPhaseToPhaseLibrary() throws AWTException {
+        recipePage.addPhaseLibraryWithErrorPhase();
+    }
+
+    @And("I add action and create random phase with multiple steps")
+    public void iAddActionAndCreateRandomPhaseWithMultipleSteps(){
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
+        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 }
