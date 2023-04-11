@@ -243,7 +243,8 @@ public class TrendsPage {
     public void selectMultipleCheckbox(String tag1, String tag2) {
         $(By.xpath(String.format(collection_radiobutton, "Default"))).click();
         for (SelenideElement allTags : leddgerParametersCheckBox) {
-            String tagsName = allTags.parent().getAttribute("title");
+            String tagsName = allTags.parent()
+                    .getAttribute("title");
             if (tagsName.equals(tag1) || tagsName.equals(tag2)) {
                 allTags.click();
             }
@@ -448,7 +449,8 @@ public class TrendsPage {
 
     public void listOfCollection(String name) {
         commonWaiter(arrowOfListOfCollection, visible).click();
-        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+        $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible, 2000)
+                .click();
     }
 
     public void removeParam1AndSaveCollection(String param1, String name) {

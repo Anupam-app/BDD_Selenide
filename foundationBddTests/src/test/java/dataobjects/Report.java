@@ -29,7 +29,7 @@ public class Report {
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_FORMAT_OT = "^[a-z0-9]*$";
-    private final String USER_COLUMN_FORMAT_NONADMIN_USER = "[aA-zZ]+\\([aA-zZ\\-]+([aA-zZ\\-]+)*\\)";
+    private final String USER_COLUMN_FORMAT_NONADMIN_USER = "[aA-zZ]+\\s+\\([aA-zZ\\-]+([aA-zZ\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
     private final String INTERNAL_USER = "OMIUser";
     private final String EVENT_TABLE_HEADER = "Event Time|Event Description|Old Value|New Value";
@@ -519,11 +519,11 @@ public class Report {
         Assert.assertEquals(2, PdfTableExtractUtils.getColumnIndex(table, "Date"));
 
         Assert.assertTrue(table.getRowCount() > 1);
-        Assert.assertEquals("Bio4CAdmin", table.getRows()
+        Assert.assertEquals("testadmin", table.getRows()
                 .get(1)
                 .get(PdfTableExtractUtils.getColumnIndex(table, "User name"))
                 .getText(false));
-        Assert.assertEquals("Administrator Bio4C", table.getRows()
+        Assert.assertEquals("Test Admin", table.getRows()
                 .get(1)
                 .get(PdfTableExtractUtils.getColumnIndex(table, "Signature"))
                 .getText(false));

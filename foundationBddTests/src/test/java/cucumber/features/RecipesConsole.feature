@@ -113,6 +113,7 @@ Feature: Recipe console
     Then I should see special characters not allowed
     And I Verify manual run status in recipe consol
 
+  @IVI-7599
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
