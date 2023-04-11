@@ -23,9 +23,7 @@ import com.codeborne.selenide.WebDriverRunner;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
@@ -189,7 +187,7 @@ public class RecipePage {
     private SelenideElement phase1 = $(By.xpath("//label[text()='Phase 1']"));
     private SelenideElement clearSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private SelenideElement latestRecipeName = $(By.xpath("(//table[@class='table']/tbody/tr/td)[1]"));
-    private final String wariningMessage = "//div[text()='Recipe is locked. Please save it as new copy.']";
+    private final String warningMessage = "//span[text()='Recipe is locked. Please save it as new copy.']";
     private final SelenideElement recipeFile = $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
     private final SelenideElement printRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
     private final SelenideElement saveRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
@@ -651,18 +649,22 @@ public class RecipePage {
         switch (dateRange) {
             case "Today":
             case "Yesterday":
-                String dateValue = dateColumn.getAttribute("value").split("To")[0].trim();
+                String dateValue = dateColumn.getAttribute("value")
+                        .split("To")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAsendingDate =
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
-                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                    LocalDate selectedDesendingDate =
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
+                            && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -675,9 +677,11 @@ public class RecipePage {
             case "Last Month":
             case "Custom Range":
                 commonWaiter(dateColumn, visible);
-                String dateValue1 = dateColumn.getAttribute("value").split("To")[0].trim();
+                String dateValue1 = dateColumn.getAttribute("value")
+                        .split("To")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, RECIPE_DATE_FILTER_IVI);
-                String dateValue2 = dateColumn.getAttribute("value").split("To")[1].trim();
+                String dateValue2 = dateColumn.getAttribute("value")
+                        .split("To")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, RECIPE_DATE_FILTER_IVI);
                 if (startDateRep.isDisplayed()) {
                     sortList("Last Modified On", false);
@@ -688,9 +692,10 @@ public class RecipePage {
                     Selenide.sleep(1000);
                     String endDateRow = startDateRep.getText();
                     LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
-                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1))
-                        && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                        || selectedDesendingDate.isBefore(selectedDate2))) {
+                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
+                            || selectedAsendingDate.isAfter(selectedDate1))
+                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDesendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -769,7 +774,8 @@ public class RecipePage {
         $(By.xpath(String.format(expandAction, "Flowpath"))).click();
         $(By.xpath(String.format(expandAction, "Control"))).waitUntil(visible, 1000)
                 .click();
-        $(By.xpath(String.format(rootStep, "Inlet"))).scrollIntoView(false).doubleClick();
+        $(By.xpath(String.format(rootStep, "Inlet"))).scrollIntoView(false)
+                .doubleClick();
     }
 
     public void addMessageInStep() {
@@ -792,8 +798,10 @@ public class RecipePage {
     }
 
     public void addCriteria() {
-        commonWaiter($(By.xpath(String.format(stepNumber, "1"))),visible).click();
-        stepAction.keyDown(Keys.SHIFT).sendKeys(Keys.ARROW_UP).perform();
+        commonWaiter($(By.xpath(String.format(stepNumber, "1"))), visible).click();
+        stepAction.keyDown(Keys.SHIFT)
+                .sendKeys(Keys.ARROW_UP)
+                .perform();
         criteriaPlaceholder.sendKeys("Running");
         criteriaPlaceholder.sendKeys(Keys.ENTER);
     }
@@ -1017,7 +1025,7 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-        $(By.xpath(wariningMessage)).shouldHave(text(message));
+        $(By.xpath(warningMessage)).shouldHave(text(message));
     }
 
     public void saveBtn(String recipeName) {
@@ -1028,8 +1036,7 @@ public class RecipePage {
     }
 
     public void tryToSaveRecipe() {
-        commonWaiter(recipeFile, visible).click();
-        commonWaiter(saveRecipe, visible).click();
+        saveEditorButton.click();
     }
 
     public void verifyRecipeStatus(String condition) {

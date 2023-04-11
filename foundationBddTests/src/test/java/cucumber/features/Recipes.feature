@@ -330,7 +330,6 @@ Feature: Recipe management
 
   Scenario: Verify new recipe and existing recipe
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
     When I go to Recipe editor
     And I add few actions steps
     And I logout

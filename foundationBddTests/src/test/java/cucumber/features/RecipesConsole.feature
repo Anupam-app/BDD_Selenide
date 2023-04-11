@@ -170,7 +170,7 @@ Feature: Recipe console
 
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
-    When I load recipe "testRecipeFlows"
+    When I load recipe "testRecipeToExecute"
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
     When I start recipe execution

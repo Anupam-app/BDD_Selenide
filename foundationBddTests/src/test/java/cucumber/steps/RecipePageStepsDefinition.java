@@ -1,6 +1,14 @@
 package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
+import static pageobjects.utility.SelenideHelper.goToIFrame;
+
+import java.awt.*;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Recipe;
@@ -9,26 +17,21 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import java.awt.*;
-import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 public class RecipePageStepsDefinition {
 
     private final RecipePage recipePage;
     private final UserPage userPage;
     private ReportsPage reportPage;
-    private final  Recipe recipe;
+    private final Recipe recipe;
     private final Login login;
 
-    public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login, ReportsPage reportPage) {
+    public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
+            ReportsPage reportPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
@@ -80,7 +83,10 @@ public class RecipePageStepsDefinition {
 
     @Then("I go to browser mode")
     public void iGoToBrowserMode() {
-        recipePage.goToBrowserMode();
+        switchTo().parentFrame();
+        reportPage.goToReports();
+        iGoToRecipePage();
+        // recipePage.goToBrowserMode();
     }
 
     @When("I create a random phase")
@@ -163,10 +169,11 @@ public class RecipePageStepsDefinition {
     }
 
     @And("below {string} column is displayed")
-    public void verifyColumn(String tab,DataTable table) {
+    public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i).get(0),tab, i);
+            recipePage.verifyColoumn(list.get(i)
+                    .get(0), tab, i);
         }
     }
 
@@ -284,7 +291,8 @@ public class RecipePageStepsDefinition {
     public void iSeeExpectedTextsFromRecipeModuleParameters() {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
-        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(), deviceShapeElementNotTranslated.isEmpty());
+        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+                deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
 
@@ -369,92 +377,92 @@ public class RecipePageStepsDefinition {
     public void touchButtonsAreNotDisplayed() {
         recipePage.touchButtonNotDisplayed();
     }
-	
-	@When("I rename phase in recipe")
-	public void iRenamePhase() {
-		this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
-		recipePage.renamePhase(this.recipe.getPhaseName());
-	}
-	
-	@When("I am able to see the phase is renamed in Step")
-	public void iverifyPhaseNameInStep() {
-		recipePage.verifyPhaseIsRenamed(this.recipe.getPhaseName());
-	}
-	
-	@When("the deleted phase is not shown in invocation step")
-	public void iVerifyDeletedPhaseIsNotInvokedInStep() {
-		recipePage.iSeeDeletedPhaseIsNotSeenInStep();
-	}
-	
-	@When("I delete phase to recipe with cross button")
-	public void iDeletePhaseToRecipeWithCrossButton() {
-		recipePage.deletePhaseToRecipeWithCrossButton();
-	}
-	
-	@And("I add step after step {string}")
+
+    @When("I rename phase in recipe")
+    public void iRenamePhase() {
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.renamePhase(this.recipe.getPhaseName());
+    }
+
+    @When("I am able to see the phase is renamed in Step")
+    public void iverifyPhaseNameInStep() {
+        recipePage.verifyPhaseIsRenamed(this.recipe.getPhaseName());
+    }
+
+    @When("the deleted phase is not shown in invocation step")
+    public void iVerifyDeletedPhaseIsNotInvokedInStep() {
+        recipePage.iSeeDeletedPhaseIsNotSeenInStep();
+    }
+
+    @When("I delete phase to recipe with cross button")
+    public void iDeletePhaseToRecipeWithCrossButton() {
+        recipePage.deletePhaseToRecipeWithCrossButton();
+    }
+
+    @And("I add step after step {string}")
     public void insertStepAfterStep(String stepNo) {
         recipePage.addActionStepAfterStep(stepNo);
     }
-	
-	@And("I see blank step is added")
+
+    @And("I see blank step is added")
     public void iSeeBlankStep() {
         recipePage.iSeeBlankStep();
     }
-	
-	@And("I verify recipe tab title")
+
+    @And("I verify recipe tab title")
     public void iVerifyRecipeTab() {
         recipePage.verifyRecipeTab();
     }
-	
-	@When("I create a phase")
+
+    @When("I create a phase")
     public void iCreatePhaseToRecipe() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
         recipePage.createPhase(this.recipe.getPhaseName());
     }
-	
-	@When("I verify notification messages {string}")
+
+    @When("I verify notification messages {string}")
     public void iVerifyNotification(String message) {
         recipePage.verifyNotification(message);
     }
-	
+
     @And("I try to change the setpoint value to out of range")
-    public void outRangeValuePassing(){
+    public void outRangeValuePassing() {
         recipePage.outOfRangeValue();
     }
 
     @Then("I verify error message displayed")
-    public void outOfRangeErrorMessage(){
+    public void outOfRangeErrorMessage() {
         recipePage.outOfRangeErrorMessage();
     }
 
     @And("I Validate the error message for below input values")
-    public void inValidInputValue(DataTable table){
+    public void inValidInputValue(DataTable table) {
         List<String> list = table.asList(String.class);
         list.forEach(recipePage::inValidValueAndErrorMessageOfThreshold);
     }
 
     @And("I try to change status and verify error message displayed {string}")
-    public void verifyErrorMessageOfChangeStatus(String message){
+    public void verifyErrorMessageOfChangeStatus(String message) {
         recipePage.verifyErrorMessageOfChangeStatus(message);
     }
 
     @When("I create phase with shortcut key")
-    public void iCreatePhaseWithShortcutKey(){
+    public void iCreatePhaseWithShortcutKey() {
         recipePage.createPhaseWithShortcutKey();
     }
 
     @Then("I get a warning notifying that {string}")
-        public void iGetAWarningNotifyingThat(String message){
+    public void iGetAWarningNotifyingThat(String message) {
         recipePage.maxPhaseWarningMessage(message);
     }
 
     @When("I add Phases from phase library to recipe")
-    public void  iAddPhaseFromPhaseLibraryToRecipe(){
+    public void iAddPhaseFromPhaseLibraryToRecipe() {
         recipePage.addPhaseFromLibrary();
     }
 
     @When("I try to copy and paste the phase")
-    public void iTryToCopyAndPasteThePhase(){
+    public void iTryToCopyAndPasteThePhase() {
         recipePage.copyAndPastePhase();
     }
 
@@ -494,7 +502,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I save the recipe with 30 character name")
-    public void  iSaveTheRecipeWithcharacterName() {
+    public void iSaveTheRecipeWithcharacterName() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
         recipePage.iSaveRecipeWithkeyBoardActions(this.recipe.getRecipeName());
     }
@@ -563,25 +571,25 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I navigate to recipe browser, open a recipe")
-    public void iNavigateToRecipeBrowserAndOpenRecipe(){
+    public void iNavigateToRecipeBrowserAndOpenRecipe() {
         recipePage.goToBrowserMode();
         recipePage.chooseRecipe();
     }
 
     @And("I have exported recipes in different status")
-    public void exportRecipe(DataTable table){
+    public void exportRecipe(DataTable table) {
         List<String> list = table.asList(String.class);
         list.forEach(recipePage::listOfRecipeExport);
-        }
-    
+    }
+
     @And("I import recipes in different status")
     public void importRecipe(DataTable table) {
         List<String> list = table.asList(String.class);
         list.forEach(recipePage::listOfImportRecipe);
     }
-    
+
     @Then("the UoP status of imported recipe changes to Draft")
-    public void importedRecipeStatusIsDraft(DataTable table){
+    public void importedRecipeStatusIsDraft(DataTable table) {
         List<String> list = table.asList(String.class);
         list.forEach(recipePage::importedRecipeStatusIsDraft);
     }
