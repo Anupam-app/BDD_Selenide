@@ -207,6 +207,18 @@ public class RecipePage {
             $(By.xpath("//div[contains(text(),'No value before/after decimal point')]"));
     private final SelenideElement unappliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
     private final SelenideElement exitWithoutSaveButton = $(By.xpath("//span[text()='Exit without saving']"));
+    private final SelenideElement goToPhaseButton = $(By.className("go-to-phase-btn"));
+    private final SelenideElement goToStep = $(By.xpath("//div[@class='go-to-steps-btn']"));
+    private final SelenideElement stepInvocation = $(By.xpath("(//td[@class='step-cell'])[2]"));
+    private final String addSteps = "(//span[@class='target'])[%s]";
+    private final String OperationalActionsList = "//p[@class='action-item lavel-2'][@title='%s']";
+    private final String warningOptions = "//button[text()='%s']";
+    private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
+    private final String popUpMessage = "//span[text()='%s']";
+    private SelenideElement phaseOne = $(By.xpath("//label[text()='Phase 1']"));
+    private final String errorMsg = "//h4[text()='%s']";
+    private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
+    private final String blankRecipeMessage = "//div[text()='%s']";
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1152,7 +1164,151 @@ public class RecipePage {
         if (unappliedChanges.exists()) {
             commonWaiter(exitWithoutSaveButton, visible).click();
         }
+    }
 
+    public void addingPhaseByPlus() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+    }
+
+    public void createPhaseWithMutlipleSteps(String phaseName) {
+        $(By.xpath(String.format(addSteps, "1"))).click();
+        stepAction.keyDown(Keys.CONTROL)
+                .sendKeys("g")
+                .keyUp(Keys.CONTROL)
+                .build()
+                .perform();
+        phaseElementTextBox.sendKeys(phaseName);
+        phaseElementTextBox.sendKeys(Keys.ENTER);
+    }
+
+    public void goToPhaseBtn() {
+        commonWaiter(goToPhaseButton, visible).click();
+    }
+
+    public void goToStep() {
+        commonWaiter(goToStep, visible).click();
+    }
+
+    public void stepInvocation() {
+        stepInvocation.shouldBe(visible);
+    }
+
+    public void iCheckTwoRecipes(String recipes) {
+        SelenideHelper.commonWaiter(recipeSearchTextBox, visible)
+                .click();
+        recipeSearchTextBox.clear();
+        recipeSearchTextBox.sendKeys(recipes);
+        recipeSearchTextBox.sendKeys(Keys.ENTER);
+        recipeSearchTextBox.shouldHave(attribute("value", latestRecipeName.getText()));
+    }
+
+    public void stepsNotModified() {
+        $(By.xpath(String.format(addSteps, "1"))).shouldBe(visible);
+        $(By.xpath(String.format(addSteps, "2"))).shouldNotBe(visible);
+    }
+
+    public void verifyUnsaved() {
+        $(By.xpath(String.format(label, "Unsaved"))).shouldBe(visible);
+    }
+
+    public void operationActions() {
+        commonWaiter(opertionAction, visible).click();
+    }
+
+    public void verifyPhaseOption() {
+        $(By.xpath(String.format(OperationalActionsList, "Phases"))).shouldBe(visible);
+    }
+
+    public void verifySavedRecipe() {
+        $(By.xpath(String.format(label, "Saved"))).shouldBe(visible);
+    }
+
+    public void closeBtn() {
+        stepAction.moveToElement(recipeElementText)
+                .moveToElement(close_Btn)
+                .click()
+                .perform();
+        System.out.println("Clear the recipe name");
+    }
+
+    public void blankRecipe() {
+        $(By.xpath(String.format(blankRecipeMessage, "Start creating your recipe by adding actions or phases from")))
+                .waitUntil(Condition.visible, 50001);
+    }
+
+    public void cancelRecipe() {
+        $(By.xpath(String.format(warningOptions, "Cancel"))).waitUntil(Condition.visible, 50001)
+                .click();
+    }
+
+    public void iDiscard_Btn() {
+        $(By.xpath(String.format(warningOptions, "Discard"))).waitUntil(Condition.visible, 50001)
+                .click();
+    }
+
+    public void saveFromWarningBox() {
+        $(By.xpath(String.format(warningOptions, "Save"))).waitUntil(Condition.visible, 50001)
+                .click();
+    }
+
+    public void singleStep() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
+        searchTextBox.sendKeys("setpoint");
+        searchTextBox.sendKeys(Keys.ENTER);
+    }
+
+    public void creatingPhaseWithError() {
+        plusButton.waitUntil(Condition.visible, 5000l);
+        plusButton.click();
+        SelenideElement searchTextBox = $(By.className("search-txt-box"));
+        searchTextBox.sendKeys("Unit");
+        searchTextBox.sendKeys(Keys.ENTER);
+        $(By.xpath(String.format(addSteps, "1"))).click();
+        stepAction.keyDown(Keys.CONTROL)
+                .sendKeys("g")
+                .keyUp(Keys.CONTROL)
+                .build()
+                .perform();
+        phaseElementTextBox.setValue(RandomStringUtils.randomAlphabetic(3));
+        phaseElementTextBox.sendKeys(Keys.ENTER);
+    }
+
+    public void addPhaseLibraryWithErrorPhase() throws AWTException {
+        SelenideHelper.commonWaiter(phaseOne, visible)
+                .click();
+        zoomOut();
+        stepAction.contextClick(phaseOne)
+                .perform();
+        stepAction.moveToElement(phaseLibrary)
+                .click()
+                .perform();
+    }
+
+    public void checkErrorMsg() {
+        $(By.xpath(String.format(errorMsg, "Error"))).waitUntil(Condition.visible, 50001);
+    }
+
+    public void checkWindowPopupMsg() {
+        $(By.xpath(String.format(popUpMessage, "Phase has errors. Cannot add to Phase Library.")))
+                .waitUntil(Condition.visible, 50001);
+        commonWaiter(okButton, visible).click();
+    }
+
+    public void iClearPhaseErrorStep() {
+        commonWaiter(changeSteps, visible).click();
+        stepAction.sendKeys(Keys.ARROW_DOWN)
+                .sendKeys(Keys.ENTER)
+                .build()
+                .perform();
+        stepAction.sendKeys(Keys.ARROW_DOWN)
+                .sendKeys(Keys.ENTER)
+                .build()
+                .perform();
     }
 
 }
+
+
