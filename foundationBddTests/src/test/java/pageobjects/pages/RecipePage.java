@@ -72,7 +72,7 @@ public class RecipePage {
 	private final SelenideElement plusButton = $(By.className("icon-plus"));
 	private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'home-screen-icon-block icon-plus')]"));
 	private final By deletePhaseButton = By.className("deleteButton");
-	private final SelenideElement primaryButton = $(By.className("btn-primary"));
+	private final SelenideElement primaryButton = $(By.xpath("//*[@class='btn-primary']"));
 	private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save') or contains(text(),'save')]"));
 	private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
 	private final SelenideElement deleteButton = $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));

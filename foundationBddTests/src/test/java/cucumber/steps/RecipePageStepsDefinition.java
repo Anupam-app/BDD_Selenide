@@ -338,7 +338,6 @@ public class RecipePageStepsDefinition {
 
     @And("I add action to the step")
     public void actionAddedInStep() {
-        recipePage.addingPhaseByPlus();
         recipePage.addActionStep();
     }
 
