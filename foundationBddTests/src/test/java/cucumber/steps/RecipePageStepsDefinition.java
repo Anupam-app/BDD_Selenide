@@ -85,6 +85,7 @@ public class RecipePageStepsDefinition {
     public void iGoToBrowserMode() {
         switchTo().parentFrame();
         reportPage.goToReports();
+        recipePage.unappliedChangesPopUp();
         iGoToRecipePage();
         // recipePage.goToBrowserMode();
     }

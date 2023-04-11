@@ -877,7 +877,8 @@ public class RecipeConsolePage {
 
     public void iLoadRecipelink(String recipeName) {
         if (abortButton.isDisplayed()) {
-            abortButton.click();
+            abortButton.waitUntil(enabled, 5000, 1000)
+                    .click();
             clickYesButton.waitUntil(Condition.visible, 1000)
                     .click();
             okButton.waitUntil(Condition.visible, 5001)

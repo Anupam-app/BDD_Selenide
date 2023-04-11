@@ -450,8 +450,6 @@ public class RecipePage {
         inputPassword.sendKeys(password);
         $(By.xpath("//button[contains(text(),'SIGN')]")).click();
         statusApproved.waitUntil(Condition.visible, 5000l);
-        browserLinkText.click();
-        editorLinkText.click();
     }
 
     public void inactiveRecipe(String password) {
@@ -480,7 +478,8 @@ public class RecipePage {
     }
 
     public String getStatus() {
-        return statusApproved.getText();
+        return statusApproved.waitUntil(visible, 2000)
+                .getText();
     }
 
     public void exportRecipe(String recipeName) {
