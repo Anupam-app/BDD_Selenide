@@ -129,6 +129,7 @@ public class TrendsPage {
 
     private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
     private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
+    private String parameters = "//li[text()='%s']/span";
 
     public void goToTrends() {
         commonWaiter(trends, visible).click();
@@ -457,7 +458,7 @@ public class TrendsPage {
         saveTrendsCollection.click();
         collectionName.click();
         collectionName.sendKeys(name);
-        $(By.xpath(String.format("//li[text()='%s']/span", param1))).click();
+        $(By.xpath(String.format(parameters, param1))).click();
         collectionCreate.click();
         spinnerComponent.spinnerIcon.waitUntil(not(visible), 20000);
         commonWaiter(defaultExpandArrow, visible).click();

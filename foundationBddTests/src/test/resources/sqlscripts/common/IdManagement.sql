@@ -160,11 +160,7 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (17, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (18, 8)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (18, 8)
-GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 9)
-GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (20, 3)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (20, 3)
 GO
@@ -200,11 +196,7 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 69)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 141)
 GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 91)
-GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 92)
-GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 58)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 56)
 GO
