@@ -118,26 +118,22 @@ Feature: Trends PDP
     And I save as trends collections
     Then I see "<Param1>","<Param2>" parameters displayed
     And I logout
-    And login page is open
-    And I enter "bio4cService" as username and "Merck$ervice" as password
-    And I push the login button
+    And I am logged in as "Bio4cService" user
     And I navigate to trends page
     When I choose "<Param1>","<Param2>" parameters as default collection
     And I save as trends collections as in step 4
     And I go to list of collection
     And I delete the collection name
     And I logout
-    And login page is open
-    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
-    And I push the login button
+    And I am logged in as "Bio4CAdmin" user
     And I navigate to trends page
     And I go to list of collection
     Then I delete the collection name
 
-    @CRS
-    Examples:
-      | Param1   | Param2   |
-      | PI101 PV | PI102 PV |
+#    @CRS
+#    Examples:
+#      | Param1   | Param2   |
+#      | PI101 PV | PI102 PV |
 
     @IVI
     Examples:

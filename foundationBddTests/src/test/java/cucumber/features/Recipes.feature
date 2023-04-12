@@ -209,7 +209,7 @@ Feature: Recipe management
     When I trigger edit mode
     Then I verify phase buttons and warning messages
 
-  Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
+  Scenario: Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
@@ -321,15 +321,9 @@ Feature: Recipe management
     And I add few actions steps
     And I add criteria to phase using keyboard
     And I verify recipe status as "Unsaved"
-    #And I navigate to recipe browser, open a recipe
-    #Then I should see unsaved warning dialog box
-    #And I select OK and navigate to recipe editor
-    #And I add few more action steps
-    #And I create a phase and add phase to library
     And I save the recipe with 30 character name
     And I verify the recipe name displayed on Recipe tab
     And I verify recipe status as "Saved"
-    #And I add few more steps and save the recipe
     And I go to browser mode
     And I should see full recipe name on mouse hover
 

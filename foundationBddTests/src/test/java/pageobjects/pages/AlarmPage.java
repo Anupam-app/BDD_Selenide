@@ -5,7 +5,6 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
-import static pageobjects.utility.SelenideHelper.goToIFrame;
 
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
@@ -70,7 +69,4 @@ public class AlarmPage {
 
     }
 
-    public void switchToFrame() {
-        goToIFrame();
-    }
 }

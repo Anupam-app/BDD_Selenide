@@ -65,6 +65,7 @@ public class UserProfilePageStepsDefinition {
     public void iSeeExpectedTextsOnScreenKeyBoard() {
         userProfilePage.goToUserProfile();
         var showKeyboardText = I18nUtils.getValueFromKey("portal.modal.list.userPreferences");
+        System.out.println(showKeyboardText);
         userProfilePage.seeExpectedTextsOnUserProfile(showKeyboardText);
         userProfilePage.closeUserProfile();
     }

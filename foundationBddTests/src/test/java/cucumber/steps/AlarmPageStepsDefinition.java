@@ -30,7 +30,7 @@ public class AlarmPageStepsDefinition {
     @Given("I navigate to alarms page")
     public void iNavigateToAlarmsPage() {
         alarmPage.goToAlarms();
-        alarmPage.switchToFrame();
+        SelenideHelper.goToIFrame();
     }
 
     @Given("I acknowledge the alarm")
