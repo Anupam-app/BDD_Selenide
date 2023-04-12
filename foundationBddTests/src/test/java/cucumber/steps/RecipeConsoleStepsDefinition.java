@@ -32,7 +32,6 @@ public class RecipeConsoleStepsDefinition {
 
     public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics,
             Recipe currentRecipe) {
-
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
