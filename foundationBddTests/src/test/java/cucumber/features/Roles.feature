@@ -54,7 +54,7 @@ Feature: Role administration
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
 
-  Scenario: Obsolete Role
+  Scenario: IVI Bug | IVI-6138 | Obsolete Role
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"
@@ -65,5 +65,5 @@ Feature: Role administration
     And I delete the role
     And I generate audit trail report
     Then I verify audit logs for role update
-    And I check the audit trail report 
+    And I check the audit trail report
     And I see the role deleted in report

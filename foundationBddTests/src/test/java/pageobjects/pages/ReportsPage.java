@@ -165,8 +165,8 @@ public class ReportsPage {
 
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
     private SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='trend_name_error_text']"));
-
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+    private final SelenideElement searchTextReportManagement = $(By.id("search"));
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -256,7 +256,7 @@ public class ReportsPage {
         var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order")));
         var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "react-bootstrap-table-sort-order dropup")));
         SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
-    }
+	}
 
     public SelenideElement getTemplateColumnHeader(String columnName) {
         return $(By.xpath(String.format(XPATH_TEMPLATE_COLUMN_HEADER, columnName)));
@@ -1051,5 +1051,9 @@ public class ReportsPage {
             return $(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))).isDisplayed();
         });
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))), visible).click();
+	}
+	
+    public void iVerifyReportPageLoaded() {
+        searchTextReportManagement.waitUntil(visible,5000L,500L);
     }
 }

@@ -1,13 +1,22 @@
 package pageobjects.pages;
 
-import com.codeborne.selenide.Condition;
-import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+
 import org.openqa.selenium.By;
+
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 public class SettingPage {
 
@@ -31,7 +40,8 @@ public class SettingPage {
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToSettingsPage() {
-        SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible).click();
+        SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible)
+                .click();
     }
 
     public void goToSystemComponents() {
@@ -67,7 +77,8 @@ public class SettingPage {
     }
 
     public void seeLanguageActivated(String languageName) {
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, languageName))), Condition.visible);
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, languageName))),
+                Condition.visible);
     }
 
     public void seeContent(String expectedText) {
@@ -77,4 +88,16 @@ public class SettingPage {
     public void verifySettingHeader() {
         settingsHeader.shouldBe(visible);
     }
+
+    private void zoomOut() throws AWTException {
+        Robot robot = new Robot();
+        for (int i = 0; i < 3; i++) {
+            robot.keyPress(KeyEvent.VK_CONTROL);
+            robot.keyPress(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_SUBTRACT);
+            robot.keyRelease(KeyEvent.VK_CONTROL);
+            Selenide.sleep(2000);
+        }
+    }
+
 }

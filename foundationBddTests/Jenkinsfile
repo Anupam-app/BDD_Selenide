@@ -202,7 +202,7 @@ pipeline {
                     //credentialsId hardcoded to access JIRA tickets
                     withCredentials([usernamePassword(credentialsId: "d18dbba9-4225-4cfb-9f87-2085fb1a0e49", usernameVariable: 'user', passwordVariable: 'password')]){
                         if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
-                                                return
+                            return
                         }
 
                         def commandTag = ' -Dcucumber.filter.tags="(@'+env.PDP

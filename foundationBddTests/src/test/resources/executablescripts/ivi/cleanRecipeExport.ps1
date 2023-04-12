@@ -1,1 +1,6 @@
 rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testDraftRecipeToAddPhase.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testRecipeDraftToInactive.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testRecipeDraftToReject.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\ testDraftRecipeToChangeStatus.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\recipeTechReview.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\recipeInReview.acercp'

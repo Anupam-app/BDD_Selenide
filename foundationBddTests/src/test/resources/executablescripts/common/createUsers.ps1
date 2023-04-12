@@ -36,3 +36,6 @@ NET USER "NewUserTempPwd" "MerckApp1@" /ADD
 
 NET USER "customRoleEdit" /DELETE
 NET USER "customRoleEdit" "MerckApp1@" /ADD
+
+NET USER "testadmin" /DELETE
+NET USER "testadmin" "MerckApp1@" /ADD

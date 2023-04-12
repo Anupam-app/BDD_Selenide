@@ -115,7 +115,16 @@ Feature: Recipe management
     Then I verify notification messages "Phase created successfully"
     And I go to browser mode
     And I edit recipe "testRecipeDraftToReject"
-    And I see warning message is displayed "Please save the recipe."
+    Then I see warning message is displayed "Please save the recipe."
+
+  Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I create a random phase
+    And I go to other module without saving recipe
+    And I go to Recipe editor
+    Then I can create a recipe
 
   Scenario: Create new recipe with existing Recipe name
     Given I am logged in as "Bio4CAdmin" user
@@ -144,10 +153,9 @@ Feature: Recipe management
     When I trigger edit mode
     When I add new action step using Keyboard event
     Then I should see "blank" step added
-    And I add action to the step
+    And I add "Setpoint" action to the step
 
-  @IVI-5149
-  Scenario: IVI BUG IVI-5149 | BIOFOUND-3768| Create step using Action browser
+  Scenario: BIOFOUND-3768| Create step using Action browser
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
@@ -161,9 +169,8 @@ Feature: Recipe management
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
-    And I create a new phase in recipe
-    And I add action to the step
-   #And I add recipe action from phase library ("Already a recipe should be there in phase library")
+    And I create a new step in recipe
+    And I add "Setpoint" action to the step
     And I add criteria to phase using keyboard
     And I save the recipe with name "testRecipe"
     And I close and reopen the recipe
@@ -202,8 +209,7 @@ Feature: Recipe management
     When I trigger edit mode
     Then I verify phase buttons and warning messages
 
-  @IVI-6688
-  Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
+  Scenario: Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "testDraftRecipe"
@@ -238,7 +244,7 @@ Feature: Recipe management
     And I create a random phase
     And I add step after step "1"
     Then I see blank step is added
-    
+
   @IVI-6167
   Scenario: IVI Bug IVI-6167 | Recipe Management | Unable to modify a recipe which is in approved or InReview state
     Given I am logged in as "Bio4CAdmin" user
@@ -246,7 +252,7 @@ Feature: Recipe management
     When I edit recipe "testRecipeFlows"
     And I add step after step "1"
     Then I see blank step is added
-    
+
   @IVI-6153
   Scenario: IVI Bug IVI-6153 | Recipe Editor | Text/confirmation message not displayed on recipe editor
     Given I am logged in as "Bio4CAdmin" user
@@ -255,6 +261,89 @@ Feature: Recipe management
     Then I verify recipe tab title
     When I create a phase
     Then I verify notification messages "Phase created successfully"
+
+  Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    When I add new action step using Keyboard event
+    And I add "Threshold" action to the step
+    And I try to change the setpoint value to out of range
+    Then I verify error message displayed
+    And I add new action step using Keyboard event
+    And I add "Setpoint" action to the step
+    And I Validate the error message for below input values
+      | 5  |
+      | 3. |
+      | .2 |
+      | -1 |
+    And I save the recipe with name "errorRecipe"
+    And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+
+  Scenario:BIOFOUND-27906 |Maximum Phases
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    And I edit recipe "maxPhaseRecipe"
+    When I create phase with shortcut key
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+    When I add Phases from phase library to recipe
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+    When I try to copy and paste the phase
+    Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
+
+  Scenario:BIOFOUND-27810|Recipe status after import
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    And I have exported recipes in different status
+      | testRecipeDraftToInactive     |
+      | testRecipeDraftToReject       |
+      | testDraftRecipeToChangeStatus |
+      | recipeTechReview              |
+      | recipeInReview                |
+    And I import recipes in different status
+      | testRecipeDraftToInactive     |
+      | testRecipeDraftToReject       |
+      | testDraftRecipeToChangeStatus |
+      | recipeTechReview              |
+      | recipeInReview                |
+    Then the UoP status of imported recipe changes to Draft
+      | testRecipeDraftToInactive1     |
+      | testRecipeDraftToReject1       |
+      | testDraftRecipeToChangeStatus1 |
+      | recipeTechReview1              |
+      | recipeInReview1                |
+    And I edit recipe "testRecipeDraftToInactive1"
+    Then I make recipe inactive
+
+  Scenario: Create and save a Recipe with 30 charactors
+    Given I am logged in as "Bio4CAdmin" user
+    When I go to Recipe editor
+    And I add few actions steps
+    And I add criteria to phase using keyboard
+    And I verify recipe status as "Unsaved"
+    And I save the recipe with 30 character name
+    And I verify the recipe name displayed on Recipe tab
+    And I verify recipe status as "Saved"
+    And I go to browser mode
+    And I should see full recipe name on mouse hover
+
+  Scenario: Verify new recipe and existing recipe
+    Given I am logged in as "Bio4CAdmin" user
+    When I go to Recipe editor
+    And I add few actions steps
+    And I logout
+    And I am logged in as "BIO4CSERVICE" user
+    And I go to Recipe editor
+    And I add few actions steps
+    And I save the recipe
+    Then I verify recipe status as "Saved"
+    And I go to browser mode
+    And I should see last modified recipe name
+    And I change the recipe to in review
+    And I open the recipe and add few more steps
+    And I try to save the recipe
+    And I should see warning popup alert with text message "Recipe is locked. Please save it as new copy."
+    And I select OK and save as new recipe
 
   Scenario: Availability of GoTo step and Goto Phase buttons
     Given I am logged in as "Bio4CAdmin" user
@@ -273,17 +362,17 @@ Feature: Recipe management
     And I add few actions steps to existing recipe
     And I save as recipe name "secondRecipe"
     Then I verify below recipes are displayed in recipe browser list
-      |testRecipeDraftToReject|
-      |secondRecipe			  |
+      | testRecipeDraftToReject |
+      | secondRecipe            |
     When I edit recipe "testRecipeDraftToReject"
     And I verify recipe steps are not modified
     And I add few actions steps to existing recipe
     And I verify the Unsaved status below recipe name
     And I save as recipe name "ThirdRecipe"
     Then I verify below recipes are displayed in recipe browser list
-      |testRecipeDraftToReject|
-      |secondRecipe			  |
-      |ThirdRecipe			  |
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+      | ThirdRecipe             |
 
   Scenario: Recipe management_ Operation phase criteria
     Given I am logged in as "Bio4CAdmin" user

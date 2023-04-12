@@ -16,7 +16,7 @@ public class AlarmPageStepsDefinition {
 
     @Given("I go to alarm")
     public void iGotoAlarm() {
-        alarmPage.goToAlarm();
+        alarmPage.goToAlarms();
         SelenideHelper.goToIFrame();
     }
 
@@ -26,4 +26,21 @@ public class AlarmPageStepsDefinition {
         alarmPage.seeContent(expectedText);
         SelenideHelper.goParentFrame();
     }
+
+    @Given("I navigate to alarms page")
+    public void iNavigateToAlarmsPage() {
+        alarmPage.goToAlarms();
+        SelenideHelper.goToIFrame();
+    }
+
+    @Given("I acknowledge the alarm")
+    public void iAcknowledgeAlarm() {
+        alarmPage.acknowledgeAlarm();
+    }
+
+    @Given("Alarm is acknowledged")
+    public void iVerifyAcknowledgeAlarm() {
+        alarmPage.verifyAcknowledgedAlarm();
+    }
 }
+

@@ -4,6 +4,9 @@ import cucumber.util.I18nUtils;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+
+import java.awt.AWTException;
+
 import org.junit.Assert;
 import pageobjects.pages.SettingPage;
 import pageobjects.utility.SelenideHelper;
@@ -32,7 +35,7 @@ public class SettingsStepsDefinition {
     }
 
     @When("I change custom label {string}")
-    public void iChangeSettings(String customLabelName) {
+    public void iChangeSettings(String customLabelName) throws AWTException {
         settingPage.changeSettings(customLabelName);
     }
 

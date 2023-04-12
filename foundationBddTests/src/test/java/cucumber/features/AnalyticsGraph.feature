@@ -1,5 +1,6 @@
 Feature: Analytics graph
- 
+
+  @IVI-7594
   Scenario Outline: Plot Graph
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute1min" and run it during 65 seconds if not done before

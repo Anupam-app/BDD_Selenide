@@ -1,6 +1,15 @@
 package cucumber.steps;
 
 import com.codeborne.selenide.Selenide;
+
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
+
 import cucumber.util.I18nUtils;
 import dataobjects.Analytics;
 import dataobjects.Recipe;
@@ -10,25 +19,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.junit.Assert;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.utility.SelenideHelper;
 
 public class RecipeConsoleStepsDefinition {
 
-    private RecipeConsolePage recipeConsolePage;
+    private final RecipeConsolePage recipeConsolePage;
     private Recipe currentRecipe;
-    private List<Recipe> recipes;
-    private Report report;
-    private Analytics analytics;
+    private final List<Recipe> recipes;
+    private final Report report;
+    private final Analytics analytics;
 
-    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics, Recipe currentRecipe) {
-
+    public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics,
+            Recipe currentRecipe) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
@@ -41,6 +44,7 @@ public class RecipeConsoleStepsDefinition {
     @Given("I expand recipe console in pnid")
     public void iGotoRecipeConsole() {
         recipeConsolePage.gotoRecipeConsole();
+        Selenide.sleep(2000);
     }
 
     @Given("I load recipe {string}")
@@ -80,6 +84,29 @@ public class RecipeConsoleStepsDefinition {
         iStartAndWaitRecipeExecution(seconds, null, null);
     }
 
+    @When("I start and pause recipe execution during {int} seconds")
+    public void iStartAndPauseRecipeExecution(int seconds) {
+        iStartAndPauseRecipeExecution(seconds, null, null);
+    }
+
+    public void iStartAndPauseRecipeExecution(int seconds, String batchId, String productId) {
+        generateRecipeValues(batchId, productId);
+        String runId = recipeConsolePage.startAndPauseRecipe(this.currentRecipe, seconds);
+        currentRecipe.setRunId(runId);
+        recipes.add(currentRecipe);
+    }
+
+    @When("I load recipe {string} and pause it during {int} seconds")
+    public void iStartAndPauseRecipeExecution(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        iLoadRecipeAndIPauseIt(recipe, seconds);
+    }
+
+    private void iLoadRecipeAndIPauseIt(String recipe, int seconds) {
+        iLoadRecipe(recipe);
+        iStartAndPauseRecipeExecution(seconds);
+    }
+
     public void iStartAndWaitRecipeExecution(int seconds, String batchId, String productId) {
         generateRecipeValues(batchId, productId);
         String runId = recipeConsolePage.startAndWaitRecipe(this.currentRecipe, seconds);
@@ -102,24 +129,29 @@ public class RecipeConsoleStepsDefinition {
     @When("I start recipe execution")
     public void iStartRecipeExecution() {
         generateRecipeValues(null, null);
-        recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
     }
 
     @When("I rerun recipe execution and timer starts from zero")
     public void iRerunRecipeExecution() throws ParseException {
         generateRecipeValues(null, null);
-        recipeConsolePage.reRunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.reRunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
     }
 
     @When("I provide special chars in pre run comments")
     public void iStartRecipeExecutionWithSpecialChars() {
         generateRecipeValues(null, null);
-        recipeConsolePage.startRecipeWithErrors(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), "$%^%(&^&");
+        recipeConsolePage.startRecipeWithErrors(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                "$%^%(&^&");
     }
 
     @Then("I see the error message as {string}")
     public void iSeeErrorMessage(String message) {
         recipeConsolePage.verifyCommentErrorMessage(message);
+        String runId = recipeConsolePage.startRecipe(this.currentRecipe);
+        this.currentRecipe.setRunId(runId);
     }
 
     private void generateRecipeValues(String batchId, String productId) {
@@ -191,7 +223,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I see the system on hold")
     public void iSeeTheSystemOnHold() {
-        recipeConsolePage.seeSystemOnHold();
+        recipeConsolePage.seeSystemOnRestart();
     }
 
     @Then("I see the system is restarted")
@@ -210,7 +242,8 @@ public class RecipeConsoleStepsDefinition {
         var expectedRestartText = I18nUtils.getValueFromKey("portal.recipeConsole.button.processRestart");
         var expectedHoldText = I18nUtils.getValueFromKey("portal.recipeConsole.button.processHold");
         var restartOrHoldContent = recipeConsolePage.seeRestartOrHoldContent();
-        Assert.assertTrue(restartOrHoldContent.equals(expectedRestartText) || restartOrHoldContent.equals(expectedHoldText));
+        Assert.assertTrue(
+                restartOrHoldContent.equals(expectedRestartText) || restartOrHoldContent.equals(expectedHoldText));
         SelenideHelper.goParentFrame();
     }
 
@@ -229,7 +262,7 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("Recipe execution is paused")
     public void recipeExecIsPaused() throws ParseException {
-        recipeConsolePage.recipeisPaused();
+        recipeConsolePage.recipeIsPaused();
     }
 
     @When("I hold the system")
@@ -274,8 +307,13 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.isExecuted(seconds);
     }
 
+    @Then("I see the system on restart")
+    public void iSeeTheSystemOnRestart() {
+        recipeConsolePage.seeSystemOnRestart();
+    }
+
     @Then("I should see the recipe run {string}")
-    public void iVerifyRecipeAbort(String status) throws InterruptedException {
+    public void iVerifyRecipeAbort(String status) {
         if (status.equalsIgnoreCase("Aborted")) {
             Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
             recipeConsolePage.clickOnOk();
@@ -286,7 +324,7 @@ public class RecipeConsoleStepsDefinition {
     }
 
     @Then("I should see error message about recipe step")
-    public void errorMessageOfJumpStep() throws InterruptedException {
+    public void errorMessageOfJumpStep() {
         recipeConsolePage.jumpStepErrorMessage();
         recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
     }
@@ -320,7 +358,8 @@ public class RecipeConsoleStepsDefinition {
     public void reRunRecipe() {
         recipeConsolePage.reRun();
         generateRecipeValues("", "");
-        recipeConsolePage.startRerunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.startRerunRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
     }
 
     @When("I Process hold the system")
@@ -342,7 +381,19 @@ public class RecipeConsoleStepsDefinition {
     public void recipeOperation(String status) {
         if (status.equalsIgnoreCase("Manual operation")) {
             recipeConsolePage.manualOperation("enabled");
+        } else if (status.equalsIgnoreCase("Recipe Run")) {
+            recipeConsolePage.recipeRun("enabled");
         }
+    }
+
+    @Then("I should see start button is displayed")
+    public void iSeeStartButton() {
+        recipeConsolePage.iValidateStart();
+    }
+
+    @Then("I should not see special characters not allowed")
+    public void iShouldnotSeeSpecialCharactersNotAllowed() {
+        recipeConsolePage.iValidationPreRun();
     }
 
     @When("I resume and verify recipe execution is resumed")
@@ -351,11 +402,12 @@ public class RecipeConsoleStepsDefinition {
         ctrlOnPauseButton();
     }
 
-    //we enchance the code on merging (Run, Rerun & Start)
+    // we enchance the code on merging (Run, Rerun & Start)
     @And("I start Manual run")
     public void manualRun() {
         generateRecipeValues(null, null);
-        recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
     }
 
     @Then("I validate the timer, stop button, run details")
@@ -381,7 +433,7 @@ public class RecipeConsoleStepsDefinition {
     }
 
     @Then("I validate the date formats in Post run window and enter comments")
-    public void validatePostRun() throws ParseException {
+    public void validatePostRun() {
         recipeConsolePage.verifyPostRunDate();
     }
 
@@ -407,18 +459,13 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("I should not see unapproved recipe")
     public void iverifyunApprovedRecipe() {
-        Assert.assertTrue(recipeConsolePage.verifyApprovedRecipe());
+        recipeConsolePage.verifyApprovedRecipe();
         recipeConsolePage.clickOnClose();
     }
 
     @Then("I should see recipe name and recipe steps details")
     public void iverifyRecipeNameandRecipeSteps() {
-        Assert.assertTrue(recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId()));
-    }
-
-    @Then("I should see start button is displayed")
-    public void iSeeStartButton() {
-        recipeConsolePage.iValidateStart();
+        recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
     }
 
     @When("I click on start button")
@@ -439,8 +486,8 @@ public class RecipeConsoleStepsDefinition {
     }
 
     @Then("I should see {string} message")
-    public void iseemessage(String message) {
-        recipeConsolePage.validateHilightedMsg(message);
+    public void iSeeMessage(String message) {
+        recipeConsolePage.validateHighlightedMsg(message);
     }
 
     @When("I enter existing value in RUNID")
@@ -456,15 +503,17 @@ public class RecipeConsoleStepsDefinition {
     @And("I Verify manual run status in recipe consol")
     public void iVerifyRecipeRunStatus() {
         generateRandomRecipeValues();
-        recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
-                this.currentRecipe.getProductId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(),
+                this.currentRecipe.getBatchId(), this.currentRecipe.getProductId(),
+                this.currentRecipe.getBeforeComments());
     }
 
     @And("I start manual recipe execution")
     public void iStartManualRecipeExecution() {
         generateRandomRecipeValues();
-        recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
-                this.currentRecipe.getProductId(), this.currentRecipe.getBeforeComments());
+        recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(),
+                this.currentRecipe.getBatchId(), this.currentRecipe.getProductId(),
+                this.currentRecipe.getBeforeComments());
         recipeConsolePage.okButton();
         recipeConsolePage.stopBtn();
         recipeConsolePage.validateYesBtn();
@@ -478,19 +527,56 @@ public class RecipeConsoleStepsDefinition {
     @When("I enter special characters {string} in comments section")
     public void iValidateSpecialChar(String specialchar) {
         generateRandomRecipeValues();
-        recipeConsolePage.iValidateSpecialCharManual(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
-                this.currentRecipe.getProductId(), specialchar);
+        recipeConsolePage.iValidateSpecialCharManual(this.currentRecipe.getManualOperationName(),
+                this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(), this.currentRecipe.getProductId(),
+                specialchar);
     }
 
-    @Then("I should not see special characters not allowed")
+    @Then("I should see special characters not allowed")
     public void iShouldnotSeeSpecialCharacters() {
-        recipeConsolePage.iValidationPreRun();
+        recipeConsolePage.iVerifySpecialCharcterMsg();
     }
 
-    @And("I verify all mandatory fields has asterick mark {string}")
-    public void iVerifyAllMandatoryFieldsHasAsterickMark(String mark) {
-        recipeConsolePage.reRun();
-        recipeConsolePage.verifyAsterickMark(mark);
+    @And("I go to Main screen")
+    public void gotoMainPage() {
+        SelenideHelper.goToDefault();
+        recipeConsolePage.mainPage();
+    }
+
+    @And("I run the recipe")
+    public void runRecipe(int seconds) {
+        recipeConsolePage.clickOnLoadRecipe();
+        generateRandomRecipeValues();
+        String runId = recipeConsolePage.startAndWaitRecipe(this.currentRecipe, seconds);
+        currentRecipe.setRunId(runId);
+        recipeConsolePage.isExecuted();
+    }
+
+    @And("I verify the recipe execution details in console View")
+    public void recipeDetailsInConsole() {
+        recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
+    }
+
+    @And("I select run recipe")
+    public void iSelectrunRecipe() {
+        recipeConsolePage.run_Btn();
+    }
+
+    @When("I expand recipe console")
+    public void iExpandRecipeConsole() {
+        recipeConsolePage.gotoRecipeConsole();
+    }
+
+    @And("I verify the recipe execution details in console View.")
+    public void iVerifyRecipeExcution() {
+        recipeConsolePage.expandRecipeConsole();
+        recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
+    }
+
+    @And("I verify the Batch ID suggestion with unique Value")
+    public void iVerifyBatchidWithUniqueValue() {
+        generateRandomRecipeValues();
+        recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
     }
 
     @When("I Select Process Hold")
@@ -500,14 +586,15 @@ public class RecipeConsoleStepsDefinition {
 
     @And("I verify the Process hold Dialog box , buttons")
     public void iVerifyProcessHoldDailogBox() {
-        recipeConsolePage.iverifyDailogBox();
+
+        recipeConsolePage.iVerifyDialogBox();
     }
 
     @And("I Select Yes button")
     public void iSelectYesButton() {
         recipeConsolePage.validateYesBtn();
     }
-    
+
     @And("I Select confirm button")
     public void iSelectConfirmButton() {
         recipeConsolePage.validateConfirmBtn();
@@ -517,17 +604,10 @@ public class RecipeConsoleStepsDefinition {
     public void iVerifyCloseAndNobuttonFunctionality() {
         recipeConsolePage.validateNoBtn();
     }
-    
+
     @And("I validate close,cancel button functionality")
     public void iVerifyCloseAndCancelButtonFunctionality() {
         recipeConsolePage.validateCancelBtn();
-    }
-
-    @And("I refresh the portal")
-    public void iRefreshThePortal() {
-        recipeConsolePage.iRefreshPortal();
-        Selenide.sleep(2000);
-        SelenideHelper.maximize();
     }
 
     @Then("I should see change of Process holding to Process restart")
@@ -555,11 +635,6 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.iVerifyProcessRestartToProcessHold();
     }
 
-    @And("I verify the recipe execution details in console View")
-    public void recipeDetailsInConsole() {
-        recipeConsolePage.verifyRecipeDetails(this.currentRecipe.getBatchId());
-    }
-
     private void generateRandomRecipeValues() {
         this.currentRecipe.setProductId(RandomStringUtils.randomAlphabetic(10));
         this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(10));
@@ -569,10 +644,10 @@ public class RecipeConsoleStepsDefinition {
         this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(10));
     }
 
-    @And("I verify the Batch ID suggestion with unique Value")
-    public void iVerifyBatchidWithUniqueValue() {
-        generateRandomRecipeValues();
-        recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
+    @And("I verify all mandatory fields has asterick mark {string}")
+    public void iVerifyAllMandatoryFieldsHasAsterickMark(String mark) {
+        recipeConsolePage.reRun();
+        recipeConsolePage.iVerifyAstericMark(mark);
     }
 
     @When("I enter special characters {string} in run comments section")
@@ -580,32 +655,195 @@ public class RecipeConsoleStepsDefinition {
         generateRandomRecipeValues();
         recipeConsolePage.iValidateSpecialCharRun(this.currentRecipe.getRunId(), this.currentRecipe.getBatchId(),
                 this.currentRecipe.getProductId(), specialchar);
+        recipeConsolePage.manualValidation(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(),
+                this.currentRecipe.getBatchId(), this.currentRecipe.getProductId(),
+                this.currentRecipe.getBeforeComments());
+        recipeConsolePage.okButton();
+        recipeConsolePage.stopBtn();
+        recipeConsolePage.validateYesBtn();
     }
-	
-	@Then("I verify step related valve {string} is executed")
-	public void ifElseStepExecuted(String action) {
-		recipeConsolePage.ifElseStepExecuted(action);
-	}
-	
-	@And("I wait for recipe Execution to be completed")
-	public void verifyRecipeRunComplete() {
-		recipeConsolePage.verifyRecipeRunComplete();
-		recipeConsolePage.isExecuted();
-	}
-	
-	@Then("I verify step in console does not show extra words")
-	public void ifElseStepShouldBeCorrect() {
-		recipeConsolePage.checkJunkWords();
-	}
-	
-	@Then("pre-run window should not be opened")
+
+    @And("I wait for {int} sec and stop the run")
+    public void iWaitAndStopManualOperation(int seconds) {
+        recipeConsolePage.startAndWaitManualOperation(seconds);
+        recipeConsolePage.clickOnOk();
+    }
+
+    @When("I load recipe {string} and select run button")
+    public void iLoadRecipeAndRunTheRecipe(String recipe, int seconds) {
+        iGotoRecipeConsole();
+        iLoadRecipeAndIStartIt(recipe, seconds);
+    }
+
+    @Then("I should see pre run window")
+    public void iSeePreRunWindow() {
+        recipeConsolePage.run_Btn();
+        recipeConsolePage.preRunWindow_Popup();
+    }
+
+    @When("I clear and try to enter lenghty RUN ID, BatchID")
+    public void iEnterLenghtyRunIdAndBatchID() {
+        this.currentRecipe.setRunId(RandomStringUtils.randomAlphabetic(50));
+        recipeConsolePage.runIdManual(this.currentRecipe.getRunId());
+        this.currentRecipe.setBatchId(RandomStringUtils.randomAlphabetic(45));
+        recipeConsolePage.uniqBatchId(this.currentRecipe.getBatchId());
+    }
+
+    @And("provide remaining mandatory data to select OK button")
+    public void provideRemainingData() {
+        generateRandomRecipeValues();
+        recipeConsolePage.iProvideData(this.currentRecipe.getProductId(), this.currentRecipe.getBeforeComments());
+    }
+
+    @Then("I verify the recipe name is trimmed on recipe console UI")
+    public void iVerifyUiFielsOfManualOperations() {
+        recipeConsolePage.iVerifyRecipeName();
+        recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Trimmed");
+        recipeConsolePage.iVerifyConditionalStatement();
+    }
+
+    @And("I verify the recipe lengthy step is trimmed")
+    public void iCheckRecipeStepsTrimmed() {
+        generateRecipeValues(null, null);
+        String runId = recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
+        this.currentRecipe.setRunId(runId);
+    }
+
+    @Then("I verify mouse hover on step displays tool tip with full step details")
+    public void iVerifyMouseHoverStepDetails() {
+        recipeConsolePage.iCheckStepDetailsWithMouseHover();
+    }
+
+    @And("I should see recipe execution started succesfully")
+    public void iSeeRecipeExecution() {
+        recipeConsolePage.verifyAbortButton();
+    }
+
+    @And("I validate the recipe console UI elements")
+    public void iValidateTheUIElements() {
+        recipeConsolePage.pauseButton();
+        recipeConsolePage.verifyAbortButton();
+    }
+
+    @And("I mouse hover RUNID and BatchID to validate full text displayed")
+    public void iCheckBatchIdAndRunIdWithMouseHover() {
+        recipeConsolePage.iCheckStepDetailsWithMouseHover();
+    }
+
+    @And("I Abort the recipe execution")
+    public void iAbortTheRecipeExecution() {
+        recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
+    }
+
+    @And("I validate the RUNID BATCHID text displayed on Post run window")
+    public void iValidatePostRunWindow() {
+        recipeConsolePage.iDisplayedRunIdAndBatchId();
+    }
+
+    @Then("Verify the recipe console extended view UI components")
+    public void iVerifyUIComponents() {
+        recipeConsolePage.iVerifyRecipeConsoleElement();
+        recipeConsolePage.checkButton();
+    }
+
+    @Given("I load the recipe {string}")
+    public void iLoadTheRecipe(String recipe) {
+        this.currentRecipe = new Recipe();
+        this.currentRecipe.setRecipeName(recipe);
+        recipeConsolePage.iLoadRecipelink(recipe);
+    }
+
+    @And("I enter manual operation name more than 30 char and Tab out")
+    public void iEnterLenthyManualOperationName() {
+        recipeConsolePage.iCheckLengthyCharacter();
+    }
+
+    @And("Verify the wanring message {string}")
+    public void iVerifyErrorMessage(String name) {
+        recipeConsolePage.iCheckErrorMessage(name);
+    }
+
+    @And("I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID")
+    public void iEnterLengthyText() {
+        generateRandomRecipeValues();
+        recipeConsolePage.iEnterLengthyChar(this.currentRecipe.getManualOperationName(), this.currentRecipe.getRunId(),
+                this.currentRecipe.getBatchId(), this.currentRecipe.getProductId());
+    }
+
+    @And("I validate all above text value trimmed on recipe console UI")
+    public void iVerifyTextValue() {
+        recipeConsolePage.iVerifyDisplayedOrTrimmed("Trimmed");
+    }
+
+    @And("I mouse hover to see full text displayed on tooltip")
+    public void iVerifyTextDisplayedWithUsingMouseHover() {
+        recipeConsolePage.iVerifyDisplayedOrTrimmed("Display");
+    }
+
+    @And("I stop the run execution")
+    public void iStopRunExecution() {
+        recipeConsolePage.stopBtn();
+        recipeConsolePage.validateYesBtn();
+    }
+
+    @And("I verify the text value trimmed on post run window")
+    public void iVerifyTextValueTrimmedOnPostRunWindow() {
+        recipeConsolePage.iVerifyPostRunWindowValues("Trimmed");
+    }
+
+    @Then("I verify recipe console expand is disabled")
+    public void iVerifyRecipeConsoleExpandAndCollapse() {
+        recipeConsolePage.collapseRecipeConsoleNotDisplay();
+    }
+
+    @And("I mouse hover to see full text displayed  on tooltip")
+    public void iVerifyTextWithMouseHover() {
+        recipeConsolePage.iVerifyPostRunWindowValues("Display");
+        recipeConsolePage.okButton();
+    }
+
+    @Then("Verify the recipe console extended view")
+    public void iVerifyRecipeConsoleUIInProcessRestart() {
+        recipeConsolePage.expandConsole();
+        recipeConsolePage.iVerifyRecipeConsoleElement();
+        recipeConsolePage.checkButton();
+    }
+
+    @And("I stop the manual run after waiting for {int} sec time and close the post run window")
+    public void stopManualRunAfterSec(int second) {
+        recipeConsolePage.stopManualRunAfterSecond(second);
+    }
+
+    @Then("I verify the recipe execution details")
+    public void iVerifyTheRecipeExecutionDetails() {
+        recipeConsolePage.iVerifyConsoleDetails();
+    }
+
+    @And("I verify the recipe name displayed on load recipe list")
+    public void iVerifyTheRecipeNameDisplayed() {
+        recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Display");
+    }
+
+    @Then("I verify step related valve {string} is executed")
+    public void ifElseStepExecuted(String action) {
+        recipeConsolePage.ifElseStepExecuted(action);
+    }
+
+    @And("I wait for recipe Execution to be completed")
+    public void verifyRecipeRunComplete() {
+        recipeConsolePage.verifyRecipeRunComplete();
+        recipeConsolePage.isExecuted();
+    }
+
+    @Then("I verify step in console does not show extra words")
+    public void ifElseStepShouldBeCorrect() {
+        recipeConsolePage.checkJunkWords();
+    }
+
+    @Then("pre-run window should not be opened")
     public void iDoNotSeeeepreRunWindowPopup() {
         recipeConsolePage.preRunWindowNotVisible();
     }
-	
-	@Then("I see the error message is displayed as {string}")
-	public void iSeeErrorMessageisdisplayed(String message) {
-		recipeConsolePage.isGeneratedNotificationWhenRecipeIsLoaded(message);
-	}
 
 }
