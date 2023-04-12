@@ -876,7 +876,6 @@ public class Report {
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
                 for (int i = 1; i < 3; i++) {
-
                     String appNameColumnValue = reportTable.getRows()
                             .get(i)
                             .get(1)

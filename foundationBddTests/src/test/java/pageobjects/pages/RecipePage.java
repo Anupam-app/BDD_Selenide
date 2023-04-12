@@ -505,7 +505,6 @@ public class RecipePage {
     }
 
     public void checkNotification(String notification) {
-        System.out.print(notification);
         notificationTexts.shouldHave(
                 CollectionCondition.anyMatch("User notification should contain this notification", n -> n.getText()
                         .equals(notification)));
@@ -1229,7 +1228,6 @@ public class RecipePage {
                 .moveToElement(close_Btn)
                 .click()
                 .perform();
-        System.out.println("Clear the recipe name");
     }
 
     public void blankRecipe() {

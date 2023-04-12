@@ -87,7 +87,6 @@ public class RecipePageStepsDefinition {
         reportPage.goToReports();
         recipePage.unappliedChangesPopUp();
         iGoToRecipePage();
-        // recipePage.goToBrowserMode();
     }
 
     @When("I create a random phase")
