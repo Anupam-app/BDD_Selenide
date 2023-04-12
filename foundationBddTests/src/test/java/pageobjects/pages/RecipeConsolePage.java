@@ -1090,8 +1090,8 @@ public class RecipeConsolePage {
         }
         // Check the values for status Column
         for (int i = 1; i < recipeListTable.size(); i++) {
-            Assert.assertEquals("Status is not correct",
-                    $(By.xpath(String.format(recipeListTableValues, i, 2))).getAttribute("title"), "Approved-Active");
+            Assert.assertEquals("Status is not correct", "Approved-Active",
+                    $(By.xpath(String.format(recipeListTableValues, i, 2))).getAttribute("title"));
         }
         // Check the values for date Column
         for (int i = 1; i < recipeListTable.size(); i++) {
@@ -1100,8 +1100,8 @@ public class RecipeConsolePage {
         }
         // Check the values for created By Column
         for (int i = 1; i < recipeListTable.size(); i++) {
-            Assert.assertEquals("created column value is not correct",
-                    $(By.xpath(String.format(recipeListTableValues, i, 4))).getAttribute("title"), "Bio4CAdmin");
+            Assert.assertEquals("created column value is not correct", "Bio4CAdmin",
+                    $(By.xpath(String.format(recipeListTableValues, i, 4))).getAttribute("title"));
         }
 
     }
