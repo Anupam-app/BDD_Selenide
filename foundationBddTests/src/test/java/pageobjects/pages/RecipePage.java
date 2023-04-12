@@ -490,7 +490,7 @@ public class RecipePage {
     }
 
     public String getStatus() {
-        return statusApproved.waitUntil(visible, 2000)
+        return statusApproved.waitUntil(visible, 5000)
                 .getText();
     }
 

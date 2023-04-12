@@ -631,7 +631,7 @@ public class RecipePageStepsDefinition {
 
     @And("^I verify below recipes are displayed in recipe browser list$")
     public void iVerifyTwoRecipes(DataTable table) {
-        recipePage.goToBrowserMode();
+        iGoToBrowserMode();
         List<String> list = table.asList(String.class);
         for (int i = 1; i < list.size(); i++) {
             list.forEach(recipePage::iCheckTwoRecipes);

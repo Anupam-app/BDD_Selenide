@@ -209,7 +209,6 @@ Feature: Recipe management
     When I trigger edit mode
     Then I verify phase buttons and warning messages
 
-  @IVI-6688
   Scenario: IVI Bug IVI-4443 IVI-4480 | Save As recipe with shortcut keys
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -369,17 +368,17 @@ Feature: Recipe management
     And I add few actions steps to existing recipe
     And I save as recipe name "secondRecipe"
     Then I verify below recipes are displayed in recipe browser list
-      |testRecipeDraftToReject|
-      |secondRecipe			  |
+      | testRecipeDraftToReject |
+      | secondRecipe            |
     When I edit recipe "testRecipeDraftToReject"
     And I verify recipe steps are not modified
     And I add few actions steps to existing recipe
     And I verify the Unsaved status below recipe name
     And I save as recipe name "ThirdRecipe"
     Then I verify below recipes are displayed in recipe browser list
-      |testRecipeDraftToReject|
-      |secondRecipe			  |
-      |ThirdRecipe			  |
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+      | ThirdRecipe             |
 
   Scenario: Recipe management_ Operation phase criteria
     Given I am logged in as "Bio4CAdmin" user
