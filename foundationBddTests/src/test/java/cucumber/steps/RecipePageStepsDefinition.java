@@ -26,7 +26,7 @@ public class RecipePageStepsDefinition {
 
     private final RecipePage recipePage;
     private final UserPage userPage;
-    private ReportsPage reportPage;
+    private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
 
@@ -430,9 +430,9 @@ public class RecipePageStepsDefinition {
         recipePage.verifyNotification(message);
     }
 
-    @And("I try to change the setpoint value to out of range")
-    public void outRangeValuePassing() {
-        recipePage.outOfRangeValue();
+    @And("I try to change the setpoint value to {string} of range")
+    public void outRangeValuePassing(String message) {
+        recipePage.outAndInOfRangeValue(message);
     }
 
     @Then("I verify error message displayed")
@@ -733,11 +733,6 @@ public class RecipePageStepsDefinition {
         recipePage.addActionStep();
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
-    }
-
-    @And("I try to change the setpoint value in range")
-    public void setInRangeValue(){
-        recipePage.setInRangeValue();
     }
 
 }

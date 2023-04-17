@@ -8,6 +8,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
   https://stljirap.sial.com/browse/BIOFOUND-27818
+  https://stljirap.sial.com/browse/BIOFOUND-19474
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -263,13 +264,13 @@ Feature: Recipe management
     When I create a phase
     Then I verify notification messages "Phase created successfully"
 
-  Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+  Scenario:Recipe status cannot be changed when errors are present|Validate error message displayed when
+  invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
+    When I go to Recipe editor
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
-    And I try to change the setpoint value to out of range
+    And I try to change the setpoint value to "out" of range
     Then I verify error message displayed
     And I add new action step using Keyboard event
     And I add "Setpoint" action to the step
@@ -281,7 +282,7 @@ Feature: Recipe management
       | 1  |
     And I save the recipe with name "errorRecipe"
     Then I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
-    And I try to change the setpoint value in range
+    And I try to change the setpoint value to "in" of range
     And I save the modified recipe
     And I approve recipe
 
