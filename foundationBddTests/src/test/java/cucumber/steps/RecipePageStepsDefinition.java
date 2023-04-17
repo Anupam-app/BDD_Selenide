@@ -31,7 +31,7 @@ public class RecipePageStepsDefinition {
     private final Login login;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-            ReportsPage reportPage) {
+                                     ReportsPage reportPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
@@ -174,7 +174,7 @@ public class RecipePageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             recipePage.verifyColoumn(list.get(i)
-                    .get(0), tab, i);
+                .get(0), tab, i);
         }
     }
 
@@ -296,7 +296,7 @@ public class RecipePageStepsDefinition {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
         Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
-                deviceShapeElementNotTranslated.isEmpty());
+            deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
 
@@ -733,6 +733,11 @@ public class RecipePageStepsDefinition {
         recipePage.addActionStep();
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+    }
+
+    @Then("I click on draft and verify warning message {string}")
+    public void errorRecipeWarningMessage(String message){
+        recipePage.errorRecipeWarningMessage(message);
     }
 
 }

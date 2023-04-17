@@ -219,6 +219,7 @@ public class RecipePage {
     private final String errorMsg = "//h4[text()='%s']";
     private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
     private final String blankRecipeMessage = "//div[text()='%s']";
+    private final SelenideElement errorRecipeWarningMessage = $(By.xpath("(//span[text()='Recipe has errors. Cannot change status.'])[2]"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1305,6 +1306,15 @@ public class RecipePage {
                 .sendKeys(Keys.ENTER)
                 .build()
                 .perform();
+    }
+
+    public void errorRecipeWarningMessage(String message){
+        clickOnDraft();
+        errorRecipeWarningMessage.waitUntil(visible,2000L,1000L).shouldHave(text(message));
+        okButton.waitUntil(visible,2000L,1000L).click();
+    }
+    private void clickOnDraft(){
+        commonWaiter(statusDraft, visible).click();
     }
 
 }

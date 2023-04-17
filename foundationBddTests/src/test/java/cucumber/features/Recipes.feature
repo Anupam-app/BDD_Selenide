@@ -7,6 +7,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-12786
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
+  https://stljirap.sial.com/browse/BIOFOUND-27818
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -416,3 +417,15 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
+
+  Scenario: Recipe status change when errors are present
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I add few actions steps
+    And I add new action step using Keyboard event
+    And I save as recipe name "errorRecipe"
+    Then I click on draft and verify warning message "Recipe has errors. Cannot change status."
+    And I add "Setpoint" action to the step
+    And I save the modified recipe
+    And I approve recipe
