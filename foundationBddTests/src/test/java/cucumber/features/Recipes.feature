@@ -265,7 +265,7 @@ Feature: Recipe management
 
   Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe pageF
+    And I go to recipe page
     When I trigger edit mode
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
