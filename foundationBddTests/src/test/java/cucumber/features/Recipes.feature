@@ -417,7 +417,7 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
-
+  @test
   Scenario: Recipe status change when errors are present
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
