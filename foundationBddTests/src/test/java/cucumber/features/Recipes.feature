@@ -262,10 +262,10 @@ Feature: Recipe management
     Then I verify recipe tab title
     When I create a phase
     Then I verify notification messages "Phase created successfully"
-  @test
+
   Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
+    And I go to recipe pageF
     When I trigger edit mode
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
