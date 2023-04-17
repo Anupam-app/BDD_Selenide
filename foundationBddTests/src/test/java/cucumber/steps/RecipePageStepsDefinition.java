@@ -735,9 +735,9 @@ public class RecipePageStepsDefinition {
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
-    @Then("I click on draft and verify warning message {string}")
-    public void errorRecipeWarningMessage(String message){
-        recipePage.errorRecipeWarningMessage(message);
+    @And("I try to change the setpoint value in range")
+    public void setInRangeValue(){
+        recipePage.setInRangeValue();
     }
 
 }

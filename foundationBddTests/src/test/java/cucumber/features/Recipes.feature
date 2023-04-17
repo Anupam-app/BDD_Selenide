@@ -262,7 +262,7 @@ Feature: Recipe management
     Then I verify recipe tab title
     When I create a phase
     Then I verify notification messages "Phase created successfully"
-
+  @test
   Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -278,8 +278,13 @@ Feature: Recipe management
       | 3. |
       | .2 |
       | -1 |
+      | 1  |
     And I save the recipe with name "errorRecipe"
-    And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+    Then I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+    And I try to change the setpoint value in range
+    And I save the modified recipe
+    And I approve recipe
+
 
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I am logged in as "Bio4CAdmin" user
@@ -417,15 +422,3 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
-  @test
-  Scenario: Recipe status change when errors are present
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
-    And I add few actions steps
-    And I add new action step using Keyboard event
-    And I save as recipe name "errorRecipe"
-    Then I click on draft and verify warning message "Recipe has errors. Cannot change status."
-    And I add "Setpoint" action to the step
-    And I save the modified recipe
-    And I approve recipe

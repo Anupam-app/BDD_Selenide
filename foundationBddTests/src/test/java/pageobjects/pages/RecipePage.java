@@ -94,7 +94,7 @@ public class RecipePage {
     private final SelenideElement addStepButton =
             $(By.xpath("//*[contains(@class, 'home-screen-icon-block icon-plus')]"));
     private final By deletePhaseButton = By.className("deleteButton");
-    private final SelenideElement recipeSaveError = $(By.xpath("//div[@class='desc' ]/span"));
+    private final SelenideElement errorRecipeWarningMessage = $(By.xpath("//div[@class='desc' ]/span"));
     private final SelenideElement primaryButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton =
             $(By.xpath("//button[contains(text(),'Save') or contains(text(),'save')]"));
@@ -219,7 +219,7 @@ public class RecipePage {
     private final String errorMsg = "//h4[text()='%s']";
     private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
     private final String blankRecipeMessage = "//div[text()='%s']";
-    private final SelenideElement errorRecipeWarningMessage = $(By.xpath("(//span[text()='Recipe has errors. Cannot change status.'])[2]"));
+    private final SelenideElement setpointInOutRange = $(By.xpath("//input[@type='text' and @data-label='action-value']"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -846,8 +846,8 @@ public class RecipePage {
     }
 
     public void outOfRangeValue() {
-        $(By.xpath("//input[@type='text' and @data-label='action-value']")).click();
-        $(By.xpath("//input[@type='text' and @data-label='action-value']")).sendKeys("8000");
+        setpointInOutRange.click();
+        setpointInOutRange.sendKeys("8000");
 
     }
 
@@ -874,6 +874,10 @@ public class RecipePage {
                 secondStep.sendKeys(value);
                 outOFRange.shouldBe(visible);
                 break;
+            case ("1"):
+                secondStep.sendKeys(value);
+                outOFRange.shouldBe(visible);
+                break;
             default:
         }
     }
@@ -881,9 +885,8 @@ public class RecipePage {
     public void verifyErrorMessageOfChangeStatus(String message) {
         Selenide.sleep(2000);
         commonWaiter(statusDraft, visible).click();
-        String actualMessage = recipeSaveError.waitUntil(visible, 5000)
-                .getText();
-        Assert.assertEquals(actualMessage, message);
+        errorRecipeWarningMessage.waitUntil(visible,2000L,1000L).shouldHave(text(message));
+        okButton.waitUntil(visible,2000L,1000L).click();
     }
 
     public void createPhaseWithShortcutKey() {
@@ -1308,14 +1311,12 @@ public class RecipePage {
                 .perform();
     }
 
-    public void errorRecipeWarningMessage(String message){
-        clickOnDraft();
-        errorRecipeWarningMessage.waitUntil(visible,2000L,1000L).shouldHave(text(message));
-        okButton.waitUntil(visible,2000L,1000L).click();
+    public void setInRangeValue(){
+        setpointInOutRange.click();
+        setpointInOutRange.sendKeys(Keys.CONTROL,"a",Keys.DELETE);
+        setpointInOutRange.sendKeys("50");
     }
-    private void clickOnDraft(){
-        commonWaiter(statusDraft, visible).click();
-    }
+
 
 }
 
