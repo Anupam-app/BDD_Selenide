@@ -430,23 +430,23 @@ public class RecipePageStepsDefinition {
         recipePage.verifyNotification(message);
     }
 
-    @And("I try to change the setpoint value to {string} of range")
+    @And("I verify error message {string} for out of range value entry")
     public void outRangeValuePassing(String message) {
-        recipePage.outAndInOfRangeValue(message);
+        recipePage.outAndInOfRangeValue("out");
+        recipePage.outOfRangeErrorMessage(message);
     }
 
-    @Then("I verify error message displayed")
-    public void outOfRangeErrorMessage() {
-        recipePage.outOfRangeErrorMessage();
+    @And("I validate below error message for respective {string} values provided")
+    public void inValidInputValue(String message,DataTable table) {
+        recipePage.keyboardActionRecipe();
+        recipePage.addActionStep(message);
+        List <List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i).get(0),list.get(i).get(1));
+        }
     }
 
-    @And("I Validate the error message for below input values")
-    public void inValidInputValue(DataTable table) {
-        List<String> list = table.asList(String.class);
-        list.forEach(recipePage::inValidValueAndErrorMessageOfThreshold);
-    }
-
-    @And("I try to change status and verify error message displayed {string}")
+    @And("I verify error message {string} on changing recipe status")
     public void verifyErrorMessageOfChangeStatus(String message) {
         recipePage.verifyErrorMessageOfChangeStatus(message);
     }
@@ -734,5 +734,20 @@ public class RecipePageStepsDefinition {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
-
+    @When("I edit the recipe {string} from recipe browser")
+    public void editRecipeFromBrowser(String recipe){
+        recipePage.goTo();
+        goToIFrame();
+        this.recipe.setRecipeName(recipe);
+        recipePage.editRecipe(recipe);
+    }
+    @When("I update actual range of value")
+    public void updateThresholdValue(){
+        recipePage.outAndInOfRangeValue("in");
+    }
+    @Then("I should be able to save & approve recipe")
+    public void saveAndApproveRecipe(){
+        recipePage.saveModifiedRecipe();
+        recipePage.approveRecipe(login.getPassword());
+    }
 }

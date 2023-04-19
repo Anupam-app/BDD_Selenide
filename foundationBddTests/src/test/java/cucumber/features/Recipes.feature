@@ -264,27 +264,19 @@ Feature: Recipe management
     When I create a phase
     Then I verify notification messages "Phase created successfully"
 
-  Scenario:Recipe status cannot be changed when errors are present|Validate error message displayed when
-  invalid/out of range float value is provided in Recipe steps
+  Scenario: Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
     When I go to Recipe editor
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
-    And I try to change the setpoint value to "out" of range
-    Then I verify error message displayed
-    And I add new action step using Keyboard event
-    And I add "Setpoint" action to the step
-    And I Validate the error message for below input values
-      | 5  |
-      | 3. |
-      | .2 |
-      | -1 |
-      | 1  |
+    And I verify error message "Out of Range" for out of range value entry
+    And I validate below error message for respective "Setpoint" values provided
+      | 5  |Out of Range                        |
+      | 3. |No value before/after decimal point |
+      | .2 |No value before/after decimal point |
+      | -1 |Out of Range                        |
+      | 1  |                                    |
     And I save the recipe with name "errorRecipe"
-    Then I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
-    And I try to change the setpoint value to "in" of range
-    And I save the modified recipe
-    And I approve recipe
 
 
   Scenario:BIOFOUND-27906 |Maximum Phases
@@ -423,3 +415,10 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
+
+  Scenario: Recipe status cannot change when errors are present
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "errorRecipe" from recipe browser
+    Then I verify error message "Recipe has errors. Cannot change status." on changing recipe status
+    When I update actual range of value
+    Then I should be able to save & approve recipe

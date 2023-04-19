@@ -857,31 +857,30 @@ public class RecipePage {
         }
     }
 
-    public void outOfRangeErrorMessage() {
-        outOFRange.shouldBe(visible);
+    public void outOfRangeErrorMessage(String message) {
+        outOFRange.shouldBe(text(message));
     }
 
-    public void inValidValueAndErrorMessageOfThreshold(String value) {
+    public void inValidValueAndErrorMessageOfThreshold(String value, String message) {
         secondStep.click();
         secondStep.sendKeys(Keys.CONTROL, "a",Keys.DELETE);
 
         switch (value) {
             case ("5"):
                 secondStep.setValue(value);
-                outOFRange.shouldBe(visible);
+                outOFRange.shouldBe(text(message));
                 break;
             case ("3."):
             case (".2"):
                 secondStep.sendKeys(value);
-                thresholdErrorMessage.shouldBe(visible);
+                thresholdErrorMessage.shouldBe(text(message));
                 break;
             case ("-1"):
                 secondStep.sendKeys(value);
-                outOFRange.shouldBe(visible);
+                outOFRange.shouldBe(text(message));
                 break;
             case ("1"):
                 secondStep.sendKeys(value);
-                outOFRange.shouldBe(visible);
                 break;
             default:
         }
