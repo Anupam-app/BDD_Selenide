@@ -266,7 +266,7 @@ Feature: Recipe management
 
   Scenario: Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
     And I verify error message "Out of Range" for out of range value entry
@@ -316,7 +316,7 @@ Feature: Recipe management
 
   Scenario: Create and save a Recipe with 30 charactors
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I add criteria to phase using keyboard
     And I verify recipe status as "Unsaved"
@@ -328,7 +328,7 @@ Feature: Recipe management
 
   Scenario: Verify new recipe and existing recipe
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I logout
     And I am logged in as "BIO4CSERVICE" user

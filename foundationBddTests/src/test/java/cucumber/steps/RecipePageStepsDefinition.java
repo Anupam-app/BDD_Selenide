@@ -471,7 +471,7 @@ public class RecipePageStepsDefinition {
         recipePage.copyAndPastePhase();
     }
 
-    @And("I go to Recipe editor")
+    @And("I open Recipe editor")
     public void theRecipeEditorPageIsOpen() {
         recipePage.goTo();
         goToIFrame();
