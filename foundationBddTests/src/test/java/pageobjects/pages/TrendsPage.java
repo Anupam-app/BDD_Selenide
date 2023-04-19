@@ -23,14 +23,18 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import cucumber.util.I18nUtils;
+import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
 
 
 public class TrendsPage {
+
     private final String XPATH_STARRED_ICON = "//label[contains(text(),'%s')]/parent::*//span[@class='starred-icon']";
     private final String XPATH_LISTOFCOLLECTION_PARAMS =
             "(//input[@id='option1' and @value='%s']/parent::button/following-sibling::div//li/label)[%d]";
@@ -41,15 +45,18 @@ public class TrendsPage {
 
     private final SelenideElement graphStartTime =
             $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[1]"));
+    private String XPATH_GENERIC_ICON = "//label[contains(text(),'%s')]/parent::*//span[contains(@class,'icon')]";
     private final SelenideElement graphLastTime =
             $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()]"));
     private final SelenideElement trends = $(By.xpath("//*[contains(@class,'Trends')]"));
+    private SelenideElement StarredIcon = $(By.xpath(String.format(XPATH_GENERIC_ICON, "Starred")));
+    private String ledgerParam = "//*[local-name ()='g']//*[contains(text(),'%s')]";
     private final SelenideElement areaGraph_Text = $(By.xpath("//span[text() = 'Area Graph']"));
     private final SelenideElement lineGraph_Text = $(By.xpath("//span[text() = 'Line Graph']"));
     private final SelenideElement starred_Text = $(By.xpath("//label[text() ='Starred']"));
     private final SelenideElement default_Text = $(By.xpath("//label[text() ='Default']"));
     private final SelenideElement listOfCollection_Text = $(By.xpath("//label[text() ='List of collections']"));
-    private final SelenideElement saveAsCollections_Text = $(By.xpath("//button/span[text()='Save as Collection']"));
+    private final SelenideElement saveAsCollections_Text = $(By.xpath("//button[text()='Save as Collection']"));
 
     private final SelenideElement footerValidation = $(By.xpath("//div[@class = 'chart-footer']"));
     private final SelenideElement overlay = $(By.xpath("//input[@class='ant-radio-button-input'][@value='Overlay']"));
@@ -78,10 +85,9 @@ public class TrendsPage {
             $(By.xpath("//input[@value='Starred']/following-sibling::span[contains(@class,'icon')]"));
     private final SelenideElement DefaultArrow =
             $(By.xpath("//input[@value='Default']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement ArrowOfListOfCollection =
+    private final SelenideElement arrowOfListOfCollection =
             $(By.xpath("//input[@value='List of collections']/following-sibling::span[contains(@class,'icon')]"));
-    private final SelenideElement deleteCollectionButton =
-            $(By.xpath("//button[@type='button']/span[text()='Delete']"));
+    private final SelenideElement deleteCollectionButton = $(By.xpath("//button[@type='button' and text()='Delete']"));
     private final String ledggerParam = "//*[local-name ()='g']//*[text()='%s (in psi)']";
 
     private final SelenideElement trendsCollapseArrow = $(By.xpath("//span[@class ='icon-arrow']"));
@@ -111,6 +117,19 @@ public class TrendsPage {
             "//div[@class='coll-panel']/button/label[text()='%s']/following::span[@class='delete-collection']";
     private final String XPATH_PARAMETER_UNCHECK =
             "//div[@class='coll-panel']/button/label[text()='%s']/following::input[@value='%s']";
+    private final SelenideElement expandListOfCollection = $(
+            By.xpath("//label[(@title='List of collections')]/following-sibling::span[@class='collpase-expand-icon']"));
+
+    private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+
+    private SelenideElement starredLabel = $(By.xpath("//label[contains(@title,'Starred')]"));
+    private String checkboxDefaultCollection = "//li[@title='%s']//input";
+    private SelenideElement graphLastSecondTime =
+            $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
+
+    private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
+    private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
+    private String parameters = "//li[text()='%s']/span";
 
     public void goToTrends() {
         commonWaiter(trends, visible).click();
@@ -136,17 +155,21 @@ public class TrendsPage {
                 trendsCollapseArrow.click();
                 break;
             case "Starred_Collection":
+                // go from expand to collapse
+                SelenideHelper.commonWaiter(StarredIcon, visible);
                 if (starredExpandArrow.isDisplayed()) {
-                    StarredArrow.click();
+                    starredExpandArrow.click();
                 }
                 break;
             case "Default_Collection":
+                // go from expand to collapse
+                SelenideHelper.commonWaiter(StarredIcon, visible);
                 if (defaultExpandArrow.isDisplayed()) {
-                    DefaultArrow.click();
+                    defaultExpandArrow.click();
                 }
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -164,7 +187,7 @@ public class TrendsPage {
                 defaultCollapseArrow.should(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.should(visible);
+                arrowOfListOfCollection.should(visible);
                 break;
             default:
         }
@@ -177,13 +200,19 @@ public class TrendsPage {
                 trendsExpandArrow.click();
                 break;
             case "Starred_Collection":
-                StarredArrow.click();
+                if (SelenideHelper.commonWaiter(starredCollapseArrow, visible)
+                        .isDisplayed()) {
+                    starredCollapseArrow.click();
+                }
                 break;
             case "Default_Collection":
-                DefaultArrow.click();
+                if (SelenideHelper.commonWaiter(defaultCollapseArrow, visible)
+                        .isDisplayed()) {
+                    defaultCollapseArrow.click();
+                }
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.click();
+                arrowOfListOfCollection.click();
                 break;
             default:
         }
@@ -201,7 +230,7 @@ public class TrendsPage {
                 defaultExpandArrow.shouldBe(visible);
                 break;
             case "List of Collection ":
-                ArrowOfListOfCollection.shouldBe(visible);
+                arrowOfListOfCollection.shouldBe(visible);
                 break;
             default:
         }
@@ -214,10 +243,11 @@ public class TrendsPage {
 
     public void selectMultipleCheckbox(String tag1, String tag2) {
         $(By.xpath(String.format(collection_radiobutton, "Default"))).click();
-        for (SelenideElement alltags : leddgerParametersCheckBox) {
-            String tagsname = alltags.getAttribute("value");
-            if (tagsname.equals(tag1) || tagsname.equals(tag2)) {
-                alltags.click();
+        for (SelenideElement allTags : leddgerParametersCheckBox) {
+            String tagsName = allTags.parent()
+                    .getAttribute("title");
+            if (tagsName.equals(tag1) || tagsName.equals(tag2)) {
+                allTags.click();
             }
         }
     }
@@ -287,17 +317,21 @@ public class TrendsPage {
     }
 
     public void collectionName(String name) {
-        saveTrendsCollection.click();
+        saveAsCollections_Text.click();
         collectionName.click();
         collectionName.sendKeys(name);
         Selenide.sleep(5000);
         collectionCreate.click();
-        ArrowOfListOfCollection.click();
-        commonWaiter($(By.xpath(String.format(collectionNameRadioButton, name))), visible).click();
+        if (!expandListOfCollection.isDisplayed()) {
+            arrowOfListOfCollection.click();
+        }
+        $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible, 5000L, 1000L)
+                .click();
+
     }
 
     public void chooseCollection(String name) {
-        $(By.xpath(String.format(nameOfListCollection, name))).click();
+        commonWaiter($(By.xpath(String.format(nameOfListCollection, name))), visible).click();
     }
 
     public void defaultCollectionTagsValidation(String parameters) {
@@ -338,7 +372,7 @@ public class TrendsPage {
     }
 
     public void ledgerParameterOnChartArea(String param) {
-        commonWaiter($(By.xpath(String.format(ledggerParam, param))), Condition.visible);
+        commonWaiter($(By.xpath(String.format(ledgerParam, param))), Condition.visible);
     }
 
     public void noParametersStarred() {
@@ -352,17 +386,22 @@ public class TrendsPage {
     }
 
     public void graphTime() throws ParseException {
-        String startTimeString = graphStartTime.getText();
-        String lastTimeString = graphLastTime.getText();
+        String startTimeString = commonWaiter(graphStartTime, visible).getText()
+                .replaceAll("\\s", "");
 
-        SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+        String lastTimeString = graphLastTime.getText();
+        if (lastTimeString.length() != 20) {
+            lastTimeString = graphLastSecondTime.getText();
+        }
+        lastTimeString = lastTimeString.replaceAll("\\s", "");
+
+        SimpleDateFormat format = new SimpleDateFormat("MMMd,yyyy,HH:mm:ssa", Locale.US);
         Date startTime = format.parse(startTimeString);
         Date lastTime = format.parse(lastTimeString);
 
         if (lastTime.getHours() == 0) {
             lastTime.setHours(24);
         }
-
         long difference = Math.abs((lastTime.getTime() - startTime.getTime())) / (60 * 1000);
 
         Assert.assertTrue(String.format("difference greater than 45 minutes :%s for dates between %s and %s",
@@ -370,6 +409,17 @@ public class TrendsPage {
 
         Assert.assertTrue(String.format("difference lower than 1 hour :%s for dates between %s and %s", difference,
                 lastTimeString, startTimeString), difference <= 60);
+    }
+
+    public void seeContent(String expectedText) {
+        var starredElement = SelenideHelper.commonWaiter(starredLabel, Condition.visible);
+        starredElement.shouldHave(Condition.text(expectedText));
+    }
+
+    public List<String> getDeviceShapeElementNotLoaded() {
+        SelenideHelper.commonWaiter(defaultButton, Condition.visible)
+                .click();
+        return I18nUtils.getElementsNotI18N(deviceShapeElements);
     }
 
     public void trendsHeaderValidation() {
@@ -394,22 +444,25 @@ public class TrendsPage {
         commonWaiter(errorText, visible);
         errorText.shouldHave(text(message));
         commonWaiter(closeDialogue, visible).click();
-        ArrowOfListOfCollection.click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 
     public void listOfCollection(String name) {
-        ArrowOfListOfCollection.click();
-        $(By.xpath(String.format(collectionNameRadioButton, name))).click();
+        commonWaiter(arrowOfListOfCollection, visible).click();
+        $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible, 2000)
+                .click();
     }
 
     public void removeParam1AndSaveCollection(String param1, String name) {
         saveTrendsCollection.click();
         collectionName.click();
         collectionName.sendKeys(name);
-        $(By.xpath(String.format("//li[text()='%s']/span", param1))).click();
+        $(By.xpath(String.format(parameters, param1))).click();
         collectionCreate.click();
-        ArrowOfListOfCollection.click();
+        spinnerComponent.spinnerIcon.waitUntil(not(visible), 20000);
+        commonWaiter(defaultExpandArrow, visible).click();
+        arrowOfListOfCollection.click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).click();
     }
 

@@ -19,8 +19,8 @@ NET USER "testUserToResetPwd" "M)^40kMb8^" /ADD
 NET USER "UserDisabled" /DELETE
 NET USER "UserDisabled" "MerckApp1@" /ADD
 
-NET USER "Acclock" /DELETE
-NET USER "Acclock" "MerckApp1@" /ADD
+NET USER "AccountLockUser" /DELETE
+NET USER "AccountLockUser" "MerckApp1@" /ADD
 
 NET USER "reportUnauthUser" /DELETE
 NET USER "reportUnauthUser" "MerckApp1@" /ADD
@@ -28,5 +28,14 @@ NET USER "reportUnauthUser" "MerckApp1@" /ADD
 NET USER "NewUserRole" /DELETE
 NET USER "NewUserRole" "MerckApp1@" /ADD
 
-NET USER "testChangePwd" /DELETE
-NET USER "testChangePwd" "MerckApp1@" /ADD
+NET USER "testPwdChange" /DELETE
+NET USER "testPwdChange" "MerckApp1@" /ADD
+
+NET USER "NewUserTempPwd" /DELETE
+NET USER "NewUserTempPwd" "MerckApp1@" /ADD
+
+NET USER "customRoleEdit" /DELETE
+NET USER "customRoleEdit" "MerckApp1@" /ADD
+
+NET USER "testadmin" /DELETE
+NET USER "testadmin" "MerckApp1@" /ADD

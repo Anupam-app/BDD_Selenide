@@ -15,4 +15,9 @@ public class HomePageStepsDefinition {
     public void iOpenPortal() {
         homePage.open();
     }
+
+    @Given("I go to main")
+    public void iGoToMain() {
+        homePage.goToMain();
+    }
 }

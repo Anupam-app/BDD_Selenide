@@ -57,7 +57,7 @@ public class RecipeFilterStepsDefinition {
     }
 
     @Then("^I should see recipe list displayed based on date range dropdown$")
-    public void iviewrecipereportlistdaterange(DataTable datatable)
+    public void iViewRecipeReportListDateRange(DataTable datatable)
             throws ParseException, InterruptedException {
         List<String> options = datatable.asList();
         for (String datarange : options) {

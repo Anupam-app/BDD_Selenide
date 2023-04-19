@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import dataobjects.Login;
+import dataobjects.Report;
 import dataobjects.Role;
 import dataobjects.RoleAction;
 import io.cucumber.datatable.DataTable;
@@ -12,16 +14,26 @@ import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
+import pageobjects.pages.UserPage;
 
 public class RolePageStepsDefinition {
 
     private final RolePage rolePage;
     private final Role role;
+    private final Report report;
+    private final ReportsPage reportPage;
+    private final Login login;
+    private final UserPage userPage;
 
-    public RolePageStepsDefinition(RolePage rolePage, Role role) {
+    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login, UserPage userPage) {
         this.rolePage = rolePage;
         this.role = role;
+        this.report = report;
+        this.reportPage = reportPage;
+        this.login = login;
+        this.userPage = userPage;
         this.role.getPermissions().clear();
     }
 
@@ -47,10 +59,11 @@ public class RolePageStepsDefinition {
         rolePage.checkSortedElement(columnName, Boolean.parseBoolean(sortMode));
     }
 
-    @Given("I search {string} role")
-    public void iSearchRole(String role) {
+    @Given("I verify {string} role is {string}")
+    public void iSearchRole(String role, String value) {
         this.role.setRoleName(role);
         rolePage.searchRole(this.role.getRoleName());
+        rolePage.iEnableDisableRole(value,role);
     }
 
     @When("I assign permission {string}")
@@ -72,6 +85,7 @@ public class RolePageStepsDefinition {
         ArrayList<String> expectedPermissions = new ArrayList<>(role.getPermissions());
         Collections.sort(expectedPermissions);
         Assert.assertEquals(expectedPermissions, permissions);
+        rolePage.cancelButton();
     }
 
     @When("I search the role")
@@ -114,6 +128,11 @@ public class RolePageStepsDefinition {
         rolePage.roleExists(role);
     }
 
+    @Given("tooltip shows the role name as {string}")
+    public void tooltipShowsRoleName(String role) {
+        rolePage.verifyRoleNameToolTip(role);
+    }
+
     @Then("I do not see Roles mode")
     public void iDoNotSeeRolesMode() {
         rolePage.NoRolesTab();
@@ -129,7 +148,6 @@ public class RolePageStepsDefinition {
         this.role.setRoleName(name);
         this.role.setRoleAction(RoleAction.ERROR);
         rolePage.createNewrole(this.role.getRoleName());
-
     }
 
     @When("I click on save button")
@@ -137,26 +155,29 @@ public class RolePageStepsDefinition {
         rolePage.saveButton();
     }
 
-    @And("^I verify default roles$")
-    public void iNavigateroleIconVerifyDefaultRoles(DataTable datatable) {
+    @And("^I verify default roles are disabled or enabled$")
+    public void iVerifyDefaultRoles(DataTable datatable) {
         List<String> roles = datatable.asList();
         for (String names : roles) {
             rolePage.iVerifyDefaultRoles(names);
         }
     }
 
-
     @And("I verify {string} list of {string}")
     public void iVerifyPrivilegesListOfRoles(String userRole, String roles) {
-        if (userRole.equalsIgnoreCase("privilege")) {
-            rolePage.privilegesOfroles(roles);
-        } else if (userRole.equalsIgnoreCase("proceessmanager")) {
-            rolePage.processManager(roles);
+        if (userRole.equalsIgnoreCase("admin")) {
+            rolePage.adminRolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("service")) {
+            rolePage.serviceRolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("processManager")) {
+            rolePage.processMgr_RolePermission(roles);
+        } else if (userRole.equalsIgnoreCase("operator")) {
+            rolePage.operatorRolePermission(roles);
         }
     }
 
-    @And("^I should see view icon of perticular roles$")
-    public void iSeeViewIconOfperticularRoles(DataTable datatable) {
+    @And("^I should see view icon of particular roles$")
+    public void iSeeViewIconOfParticularRoles(DataTable datatable) {
         List<String> icon = datatable.asList();
         for (String name : icon) {
             rolePage.validateViewIcon(name);
@@ -188,15 +209,60 @@ public class RolePageStepsDefinition {
         rolePage.isearchName(this.role.getRoleName());
         rolePage.verifyRoleName(this.role.getRoleName());
     }
+	
+	@When("I delete the role")
+	public void iDeleteTheRole() {
+		rolePage.modifyRole(this.role.getRoleName());
+		rolePage.deleteRole();
+	}
 
-    @And("I verify a new user {string} by selecting custom role")
-    public void iCreatedNewUserRole(String rolename) {
-        rolePage.iCreateNewUser(rolename);
+    @When("I modify permission")
+    public void iModifyPermission(DataTable table) {
+        List<List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            this.role.getPermissions().remove(list.get(i).get(0));
+            rolePage.clickOnPermission(list.get(i).get(0));
+            this.role.getPermissions().add(list.get(i).get(1));
+            rolePage.clickOnPermission(list.get(i).get(1));
+        }
     }
 
-    @And("I should see role name {string} in role culumn")
-    public void iSeeCustomRoleInRoleColumn(String role) {
-        rolePage.rolename(role);
+    @And("I see modified role name is displayed on Role list data")
+    public void iVerifyRoleNameDisplayed(){
+        rolePage.searchRole(this.role.getUpdatedRoleName());
+        rolePage.roleNameExists(this.role.getUpdatedRoleName());
     }
 
+    @And("I verify Role permission are updated")
+    public void modifiedRolePermission(){
+        rolePage.verifyAssignedPermission(this.role.getUpdatedRoleName(),this.role.getPermissions());
+    }
+
+    @And("I update roleName as {string}")
+    public void updateRoleName(String roleName){
+        this.role.setUpdatedRoleName(roleName);
+        rolePage.updateRoleName(roleName);
+    }
+
+    @When("I save role successfully")
+    public void saveRole() {
+        rolePage.saveButton();
+        rolePage.notification(this.role.getRoleAction());
+    }
+
+    @And("I search and edit role {string}")
+    public void iSearchAndEditRole(String roleName){
+        this.role.setRoleName(roleName);
+        rolePage.searchRole(this.role.getRoleName());
+        this.role.setRoleAction(RoleAction.UPDATED);
+        rolePage.modifyRole(this.role.getRoleName());
+        rolePage.getPermissionList().forEach(p -> this.role.getPermissions().add(p));
+        rolePage.getOldPermissionList().forEach(p -> this.role.getPermissions().add(p));
+    }
+
+    @And("I trigger roles mode")
+    public void iTriggerUserRolesMode() {
+        userPage.goTo();
+        rolePage.gotoRolesTab();
+    }
 }

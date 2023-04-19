@@ -4,13 +4,16 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
 
+import cucumber.util.I18nUtils;
 import dataobjects.Trends;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.TrendsPage;
+import pageobjects.utility.SelenideHelper;
 
 public class TrendsPageStepsDefinition {
 
@@ -160,6 +163,13 @@ public class TrendsPageStepsDefinition {
         trendsPage.isGeneratedNotificationWhenCreateExistingCollection(message, trends.getCollectionName());
     }
 
+    @Then("I see expected texts from trend module")
+    public void iSeeTextsFromTrendModule() {
+        var expectedText = I18nUtils.getValueFromKey("trends.collection.starred");
+        trendsPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
+    }
+
     @Then("I go to list of collection")
     public void iGoToListOfCollection() {
         trendsPage.listOfCollection(trends.getCollectionName());
@@ -181,4 +191,17 @@ public class TrendsPageStepsDefinition {
         trendsPage.unCheckParameter(this.trends.getCollectionName(), param1);
     }
 
+    @Then("I see the graph is plotted for selected parameters in chart area {string}")
+    public void iSeeTheGraphIsPlottedForSelectedParametersInChartArea(String param1) throws ParseException {
+        trendsPage.ledgerParameterOnChartArea(param1);
+        trendsPage.validateGraph();
+    }
+
+    @Then("I see expected texts from trend module parameters")
+    public void iSeeTextsFromTrendModuleParameters() {
+        var deviceShapeElementNotTranslated = trendsPage.getDeviceShapeElementNotLoaded();
+        Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
+                deviceShapeElementNotTranslated.isEmpty());
+        SelenideHelper.goParentFrame();
+    }
 }

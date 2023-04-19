@@ -17,14 +17,14 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
 
   @SMOKE
   Scenario Outline: Generate and sign a custom report
-    Given I am logged in as "Bio4CAdmin" user
+    Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Custom"
     And I select report include "Audit Trail"
@@ -45,7 +45,7 @@ Feature: Report administration Based on PDP
       | parameters                  |
       | parameters/crs/trendsParams |
 
-    @IVI
+    @IVI @REPORT
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |

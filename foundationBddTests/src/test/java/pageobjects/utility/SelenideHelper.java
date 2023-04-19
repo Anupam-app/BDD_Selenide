@@ -7,7 +7,12 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
+import java.text.ParseException;
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Optional;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -27,15 +32,18 @@ public class SelenideHelper {
     }
 
     public static Wait<WebDriver> fluentWaiter() {
-
         return new FluentWait<>(WebDriverRunner.getWebDriver())
-                .withTimeout(Duration.ofSeconds(60))
-                .pollingEvery(Duration.ofSeconds(5))
+                .withTimeout(Duration.ofSeconds(60 * 2))
+                .pollingEvery(Duration.ofSeconds(10))
                 .ignoring(NoSuchElementException.class);
     }
 
     public static void goToIFrame() {
         switchTo().frame("CrossDomainiframeId");
+    }
+
+    public static void goParentFrame() {
+        switchTo().parentFrame();
     }
 
     public static String removeLastCharOptional(String s) {
@@ -50,8 +58,20 @@ public class SelenideHelper {
         DriverHooks.currentScenario.attach(screenshot, "image/png", "name");
     }
 
-    public static void goToDefault() {
-        switchTo().defaultContent();
+    public static LocalDate dateParser(String value, String orgFormat) throws ParseException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
+        LocalDate selectedDate = LocalDate.parse(value, formatter);
+
+        return selectedDate;
+    }
+    
+    public static LocalDateTime dateParserLocalDateTime(String value, String orgFormat) throws ParseException {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
+        LocalDateTime selectedDate = LocalDateTime.parse(value, formatter);
+
+        return selectedDate;
     }
 
     public static void appRefresh() {
@@ -62,4 +82,8 @@ public class SelenideHelper {
         WebDriverRunner.getWebDriver().manage().window().fullscreen();
     }
 
+    public static void goToDefault() {
+        switchTo().defaultContent();
+    }
 }
+

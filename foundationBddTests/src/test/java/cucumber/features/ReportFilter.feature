@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Apply Filter Reports
+Feature: Reports Filter
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -26,26 +26,26 @@ Feature: Apply Filter Reports
   Scenario: Verify search reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I search the report name "AuditTrail_1_Bio4CAdmin"
-    Then I should see report "AuditTrail_1_Bio4CAdmin"
+    When I search the report name "AuditTrail_1_testadmin"
+    Then I should see report "AuditTrail_1_testadmin"
 
   Scenario: Verify filter reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
     When I click on filter icon and select report type "Run Summary"
-    Then I should see report "RunSummary_18_Bio4CAdmin"
+    Then I should see report "RunSummary_18_testadmin"
 
   Scenario: Verify created by reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I select report user from dropdown created by "Bio4CAdmin"
-    Then I should see report "AuditTrail_1_Bio4CAdmin"
+    When I select report user from dropdown created by "testadmin"
+    Then I should see report "AuditTrail_1_testadmin"
 
   Scenario: Verify signed by reports functionality in Report Management
     Given I goto report management page
     And I trigger report mode
-    When I select report user from dropdown signed by "Bio4CAdmin"
-    Then I should see report "RunSummary_18_Bio4CAdmin"
+    When I select report user from dropdown signed by "testadmin"
+    Then I should see report "RunSummary_18_testadmin"
 
   Scenario: Verify search runs reports functionality in Report Management
     Given I goto report management page
@@ -62,13 +62,13 @@ Feature: Apply Filter Reports
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
 
+  @IVI-7606
   Scenario: Verify filter run reports functionality in Report Management Based on status
     Given I goto report management page
     When  I filter on icon and select run status as "Completed"
     Then  I should see run status as "Completed"
     When  I filter on icon and select run status as "Aborted"
     Then  I should see run status as "Aborted"
-
 
   Scenario: Verify run history functionality based on the Date range.
     Given I goto report management page
@@ -80,7 +80,6 @@ Feature: Apply Filter Reports
       | This Month   |
       | Last Month   |
       | Custom Range |
-
 
   Scenario: Verify sort run functionality all columns in ascending order
     Given I goto report management page
@@ -95,7 +94,6 @@ Feature: Apply Filter Reports
       | Process Type |
       | Status       |
 
-
   Scenario: Verify report history functionality based on the Date range.
     Given I goto report management page
     And   I trigger report mode
@@ -107,7 +105,6 @@ Feature: Apply Filter Reports
       | This Month   |
       | Last Month   |
       | Custom Range |
-
 
   Scenario: Verify sort reports functionality all columns in ascending order
     Given I goto report management page
@@ -127,7 +124,6 @@ Feature: Apply Filter Reports
       | E-Sign.Status  |
       | Signed By      |
 
-
   Scenario: Verify consolidated reports functionality  all columns in sorting order
     Given I goto report management page
     When I select report from dropdown "Consolidated"
@@ -137,7 +133,6 @@ Feature: Apply Filter Reports
       | Start Date   |
       | Process Type |
       | Status       |
-
 
   Scenario: Verify filter consolidated reports functionality in Report Management Based on status
     Given I goto report management page
@@ -150,7 +145,6 @@ Feature: Apply Filter Reports
     And I trigger report template mode
     When  I select template sort by "<columns>" in "<descending>"
     Then "<columns>" list should be sorted in "<descending>" order
-
     Examples:
       | columns          | descending |
       | Last Modified By | false      |
@@ -158,5 +152,8 @@ Feature: Apply Filter Reports
       | Last Modified By | true       |
       | Last Modified On | false      |
 
- 	  
- 	  
+  Scenario: IVI Bug IVI-6034| Verify filter reports functionality in Report Management based on signed status
+    Given I goto report management page
+    And I trigger report mode
+    When I click on filter icon and select eSignStatus "Not Signed"
+    Then I should see reports with eSignStatus "Not Signed"

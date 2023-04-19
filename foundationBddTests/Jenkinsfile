@@ -46,10 +46,10 @@ pipeline {
 						$sourcePath="$env:WORKSPACE\\foundationBddTests\\src\\test\\resources\\"
 
 						$SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
-						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword						
+						$cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
 
 						$Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
-						
+
 						Copy-Item -Path "$sourcePath" -Destination "$env:TargetResourcesPath" -ToSession $Session -Recurse -force
 						'''
 					}
@@ -62,8 +62,8 @@ pipeline {
 					hostName: "${env.CIPHostName}",
 					credentialsId: "${env.CredentialsId}",
 					winRMOperations: [
-						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/common'),
-						invokeCommand(env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/'+env.PDP)
+						invokeCommand('powershell ' +env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/common'),
+						invokeCommand('powershell ' +env.TargetResourcesPath+'/playAllSqlScripts.ps1 '+env.CIPHostName+' '+env.TargetResourcesPath+'/sqlscripts/'+env.PDP)
 					]
 				)
             }
@@ -79,7 +79,7 @@ pipeline {
 							invokeCommand(env.TargetResourcesPath+'/playAllExecutableScriptsLocal.ps1 '+env.TargetResourcesPath+'/executablescripts/'+env.PDP),
 						]
 					)
-                }				
+                }
             }
         }
         stage ('Copy config files') {
@@ -103,71 +103,84 @@ pipeline {
         }
         stage ('Change consul portal configuration to be seen as local server') {
             steps {
-                withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
-                {
-                    powershell '''
-                    $hostname = hostname.exe
+                script {
+                    if(env.PDP != 'ORCHESTRATOR'){
+                        withCredentials([usernamePassword(credentialsId: "${env.CredentialsId}", usernameVariable: 'user', passwordVariable: 'password')])
+                        {
+                        powershell '''
+                        $hostname = hostname.exe
 
-                    $ipTarget= Resolve-DNSName $hostname -type A | Select -ExpandProperty IPAddress
+                        $ipTarget= Resolve-DNSName $hostname -type A | Select -ExpandProperty IPAddress
 
-                    $user = $env:user
-                    $password = $env:password
+                        $user = $env:user
+                        $password = $env:password
 
-                    $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
-                    $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
+                        $SecurePassword = $password | ConvertTo-SecureString -AsPlainText -Force
+                        $cred = New-Object System.Management.Automation.PSCredential -ArgumentList $user, $SecurePassword
 
-                    $Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
+                        $Session = New-PSSession -ComputerName "$env:CIPHostName" -Credential $cred
 
-                    function changeConsulConfig {
-                        Param (
-                            $IpTargetGenerated,
-                            $IpTargetProvidedByTheClient
-                        )
-                        $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing | Select -ExpandProperty Content
-                        $convertedJson = ConvertFrom-Json -InputObject $content
-                        $convertedJsonDecode64 = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($convertedJson.value))
+                        function changeConsulConfig {
+                            Param (
+                                $IpTargetGenerated,
+                                $IpTargetProvidedByTheClient
+                            )
+                            $content = Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing | Select -ExpandProperty Content
+                            $convertedJson = ConvertFrom-Json -InputObject $content
+                            $convertedJsonDecode64 = [System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($convertedJson.value))
 
-                        $needToChangeConsulAndRestartPortalAndPlc=$false;
+                            $needToChangeConsulAndRestartPortalAndPlc=$false;
 
-                        if(!($convertedJsonDecode64 -like "*$IpTargetGenerated*")){
-                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetGenerated")
-                            $needToChangeConsulAndRestartPortalAndPlc=$true
+                            if(!($convertedJsonDecode64 -like "*$IpTargetGenerated*")){
+                                $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetGenerated")
+                                $needToChangeConsulAndRestartPortalAndPlc=$true
+                            }
+
+                            if(!($convertedJsonDecode64 -like "*$IpTargetProvidedByTheClient*")){
+                                $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetProvidedByTheClient")
+                                $needToChangeConsulAndRestartPortalAndPlc=$true
+                            }
+
+                            if($needToChangeConsulAndRestartPortalAndPlc -eq $true){
+                                echo $contentReplaced
+                                $headers = @{}
+                                $headers["Content-Type"] = "application/json"
+                                Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
+                                sc.exe start "CODESYS Control Win V3 - x64"
+                                Stop-Service bio4c-portal
+                                Start-Service bio4c-portal
+                            }
                         }
 
-                        if(!($convertedJsonDecode64 -like "*$IpTargetProvidedByTheClient*")){
-                            $contentReplaced = $convertedJsonDecode64.replace('- 127.0.0.1',"- 127.0.0.1`r`n    - $IpTargetProvidedByTheClient")
-                            $needToChangeConsulAndRestartPortalAndPlc=$true
-                        }
-
-                        if($needToChangeConsulAndRestartPortalAndPlc -eq $true){
-                            echo $contentReplaced
-                            $headers = @{}
-                            $headers["Content-Type"] = "application/json"
-                            Invoke-WebRequest -Uri "http://localhost:8500/v1/kv/config/bio4c-portal/data" -UseBasicParsing -Body $contentReplaced -ContentType "application/json" -Headers $headers -Method Put
-                            sc.exe start "CODESYS Control Win V3 - x64"
-                            Stop-Service bio4c-portal
-                            Start-Service bio4c-portal
+                        Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget,$env:IpTargetClient
+                        '''
                         }
                     }
-
-                    Invoke-Command -Session $Session -ScriptBlock ${Function:changeConsulConfig} -ArgumentList $ipTarget,$env:IpTargetClient
-                    '''
                 }
             }
         }
         stage ('Wait for environment availability') {
             steps {
-                retry(30) {
-                    sh '''
-                    sleep 30
-                    curl -k --fail https://$CIPHostName/alarm-management/actuator/health
-                    curl -k --fail https://$CIPHostName/analytics/actuator/health
-                    curl -k --fail https://$CIPHostName/useradminportal/actuator/health
-                    curl -k --fail https://$CIPHostName/config-management/actuator/health
-                    curl -k --fail https://$CIPHostName/recipe-management/actuator/health
-                    curl -k --fail https://$CIPHostName/reportingmanagement/actuator/health
-                    curl -k --fail https://$CIPHostName/trends/actuator/health
-                    '''
+                script {
+                    if(env.PDP != 'ORCHESTRATOR'){
+                        retry(30) {
+                            sh '''
+                            sleep 30
+                            curl -k --fail https://$CIPHostName/analytics/actuator/health
+                            curl -k --fail https://$CIPHostName/recipe-management/actuator/health
+                            '''
+                        }
+                    }
+                    retry(30) {
+                        sh '''
+                        sleep 30
+                        curl -k --fail https://$CIPHostName/alarm-management/actuator/health
+                        curl -k --fail https://$CIPHostName/useradminportal/actuator/health
+                        curl -k --fail https://$CIPHostName/config-management/actuator/health
+                        curl -k --fail https://$CIPHostName/reportingmanagement/actuator/health
+                        curl -k --fail https://$CIPHostName/trends/actuator/health
+                        '''
+                    }
                 }
             }
         }
@@ -186,37 +199,58 @@ pipeline {
         stage('Test all bdd tests') {
 			steps {
                 script {
-                    if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
-                        return
-                    }
+                    //credentialsId hardcoded to access JIRA tickets
+                    withCredentials([usernamePassword(credentialsId: "d18dbba9-4225-4cfb-9f87-2085fb1a0e49", usernameVariable: 'user', passwordVariable: 'password')]){
+                        if(env.PrepareEnvironmentOnly != null && env.PrepareEnvironmentOnly == 'YES'){
+                            return
+                        }
 
-                    def commandTag = ' -Dcucumber.filter.tags="@'+env.PDP
+                        def commandTag = ' -Dcucumber.filter.tags="(@'+env.PDP
 
-                    if(env.Mode != null && env.Mode != ''){
-                        commandTag+=' and @'+env.Mode
-                    }
-                    else{
-                        if(env.PDP != 'CRS'){
-                            def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
-                            if(response.status==200){
-                               def jsonResponse = readJSON text: response.content
+                        if(env.Mode != null && env.Mode != ''){
+                            commandTag+=' and @'+env.Mode
+                        }
+                        else{
+                            if(env.PDP != 'CRS'){
+                                def response = httpRequest(url:'https://' + env.CIPHostName + '/api/features', ignoreSslErrors: true)
+                                if(response.status==200){
+                                   def jsonResponse = readJSON text: response.content
 
-                               jsonResponse.features.each{val->
-                                    commandTag+=' or @'+val
-                               }
+                                   jsonResponse.features.each{val->
+                                        commandTag+=' or @'+val
+                                   }
+                                }
                             }
                         }
+
+                        commandTag+=')'
+
+                        if(env.SkipPendingBugs != null && env.SkipPendingBugs == 'YES'){
+                            def authorizationEncoded = (user +':'+ password).bytes.encodeBase64().toString()
+                            def jiraResponse =  httpRequest customHeaders: [[maskValue: true, name: 'authorization', value: 'Basic '+ authorizationEncoded ]],
+                            url: 'https://stljirap.sial.com/rest/api/2/search?jql=labels%3DTestAutomation_Bug%20AND%20status%21%3DCLOSED', ignoreSslErrors: true
+
+                            if(jiraResponse.status==200) {
+                                def jsonResponse = readJSON text: jiraResponse.content
+
+                                jsonResponse.issues.each {
+                                    val->
+                                    commandTag+=' and not @'+val.key
+                                }
+                            }
+                        }
+
+                        commandTag+='" -DtestFailureIgnoreProp=true'
+
+                        println('commandTag: '+commandTag)
+
+                        rtMavenRun(
+                            tool: 'apache-maven-3.6.3',
+                            pom: 'foundationBddTests/pom.xml',
+                            goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
+                            resolverId: "MAVEN_RESOLVER"
+                        )
                     }
-					commandTag+='" -DtestFailureIgnoreProp=true'
-
-                    println('commandTag: '+commandTag)
-
-                    rtMavenRun(
-                        tool: 'apache-maven-3.6.3',
-                        pom: 'foundationBddTests/pom.xml',
-                        goals: 'clean test -Dneodymium.url.host=' + env.CIPHostName + commandTag,
-                        resolverId: "MAVEN_RESOLVER"
-                    )
 				}
 			}
 		}
@@ -235,7 +269,7 @@ pipeline {
 		}
 		stage("Generate Allure Reports") {
 			steps {
-				script {	
+				script {
 					dir ('foundationBddTests/target') {
 						allure([
                             includeProperties: false,
@@ -245,7 +279,7 @@ pipeline {
                             results: [[path: 'allure-results']]
 						])
 					}
-				}                
+				}
 			}
 		}
 	}
@@ -256,6 +290,7 @@ pipeline {
                 notifyBitbucket(considerUnstableAsSuccess: true)
             }
             emailext (
+				//Allure report template is present on stlbiopdv01bp01.global.sial.com server in D:\Jenkins\email-templates\bddtests-allure-report.groovy file
                 body: '''${SCRIPT, template="bddtests-allure-report.groovy"}''',
                 mimeType: 'text/html',
                 replyTo: '$DEFAULT_REPLYTO',

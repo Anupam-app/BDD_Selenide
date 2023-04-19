@@ -12,26 +12,34 @@ import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
 import pageobjects.pages.UserPage;
+import pageobjects.pages.UserProfilePage;
+import pageobjects.utility.ContextHelper;
 
 public class LoginPageStepsDefinition {
 
     private final LoginPage loginPage;
     private final HomePage homepage;
     private final RecipeConsolePage recipeConsolePage;
+    private final UserProfilePage userProfilePage;
     private final Login login;
     private final UserPage userPage;
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login, UserPage userPage) {
+
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login,
+                                    UserProfilePage userProfilePage, UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
         this.login = login;
+        this.userProfilePage = userProfilePage;
         this.userPage = userPage;
     }
 
-    @Given("I open login page")
+    @Given("login page is open")
     public void iOpenLogin() {
-        loginPage.openLogin();
+        if (!ContextHelper.isOrchestrator()) {
+            loginPage.openLogin();
+        }
     }
 
     @When("I enter {string} as username and {string} as password")
@@ -43,17 +51,16 @@ public class LoginPageStepsDefinition {
     @When("I push the login button")
     public void iPushTheLoginButton() {
         loginPage.pushLogin();
-
     }
 
     @Then("I am logged in")
     public void iAmLoggedIn() {
-        loginPage.checkLoggedIn(true);
+        userProfilePage.checkUserProfilePresence(true);
     }
 
     @Then("I am not logged in")
     public void iAmNotLoggedIn() {
-        loginPage.checkLoggedIn(false);
+        userProfilePage.checkUserProfilePresence(false);
     }
 
     @Then("I should see the message {string}")
@@ -71,30 +78,37 @@ public class LoginPageStepsDefinition {
             loginPage.pushLogin();
             loginPage.checkLoggedIn(false);
             loginPage.checkMessage(list.get(i).get(2));
-
         }
     }
 
     @When("I am logged in as {string} user")
     public void iLoginAsGivenUser(String username) {
-        homepage.open();
-        loginPage.waitPnidLoading();
-        loginPage.openLogin();
-        login.setLogin(username);
-        login.setPassword(LoginUtils.getPassword(username));
-        loginPage.setUser(login.getLogin());
-        loginPage.setPassword(login.getPassword());
-        loginPage.pushLogin();
-        loginPage.waitControlOnPnid();
-        recipeConsolePage.cleanLastRecipeDisplay();
+        if (ContextHelper.isOrchestrator()) {
+            homepage.open();
+            login.setLogin(username);
+            login.setPassword(LoginUtils.getPassword(username));
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
+            loginPage.pushLogin();
+        } else {
+            homepage.open();
+            loginPage.waitPnidLoading();
+            loginPage.openLogin();
+            login.setLogin(username);
+            login.setPassword(LoginUtils.getPassword(username));
+            loginPage.setUser(login.getLogin());
+            loginPage.setPassword(login.getPassword());
+            loginPage.pushLogin();
+            loginPage.waitControlOnPnid();
+            recipeConsolePage.cleanLastRecipeDisplay();
+        }
     }
 
     @Given("I change password {string}")
     public void iChangePassword(String password) {
-        loginPage.setNewpassword(password);
-        loginPage.setConfirmpassword(password);
+        loginPage.setNewPassword(password);
+        loginPage.setConfirmPassword(password);
     }
-
 
     @Then("I relogin")
     public void iReLogin() {
@@ -113,41 +127,37 @@ public class LoginPageStepsDefinition {
         loginPage.checkMessage(message);
     }
 
-    @When("I try to change password {string}")
-    public void iTryToChangePassword(String password) {
-        loginPage.setCurrentpassword(password);
-        loginPage.setNewpasswordUser(password);
-        loginPage.setConfirmpasswordUser(password);
-    }
-
     @When("I try to change password {string} {string} {string}")
-    public void iTryToChangePassword(String currentPassword, String np, String cp) {
+    public void iTryToChangePassword(String currentPassword, String newPassword, String confirmPassword) {
         userPage.userProfileIcon();
         userPage.changePassword();
-        loginPage.setCurrentpassword(currentPassword);
-        loginPage.setNewpasswordUser(np);
-        loginPage.setConfirmpasswordUser(cp);
+        loginPage.setCurrentPassword(currentPassword);
+        loginPage.setNewPassword(newPassword);
+        loginPage.savePassword(confirmPassword);
     }
 
-    @When("^I login to application with password$")
-    public void iShouldSeeLoginErrorMessage(DataTable table) {
-        List<List<String>> list = table.asLists(String.class);
-
-        for (int i = 1; i < list.size(); i++) {
-            loginPage.setUser(list.get(i).get(0));
-            loginPage.setPassword(list.get(i).get(1));
-            loginPage.pushLogin();
-            loginPage.checkLoggedIn(false);
-            loginPage.checkMessage(list.get(i).get(2));
-
-        }
-    }
-
-    @And("I login with {string} same user as above {string}")
-    public void iVerifyExistingrecipeWithSameCredential(String username, String password) {
+    @And("I logout and login as {string} and password as {string}")
+    public void logourAndLogin(String username, String password)
+    {
+        loginPage.iLogout();
+        loginPage.openLogin();
         loginPage.setUser(username);
         loginPage.setPassword(password);
         loginPage.pushLogin();
     }
 
+    @And("I provide less complex passwords to verify the password policy")
+    public void iChangePassword(DataTable table) {
+        List<List<String>> passwords = table.asLists(String.class);
+        for (List<String> string : passwords) {
+            loginPage.setNewPassword(string.get(0));
+            loginPage.setConfirmPassword(string.get(1));
+            loginPage.verifyNotification(string.get(2));
+        }
+    }
+
+    @And("I verify error message {string}")
+    public void iVerifyErrorMessage(String message){
+        loginPage.errorNotification(message);
+    }
 }

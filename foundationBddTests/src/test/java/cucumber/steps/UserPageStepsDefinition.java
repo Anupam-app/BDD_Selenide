@@ -2,6 +2,7 @@ package cucumber.steps;
 
 import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.switchTo;
+import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.User;
@@ -122,6 +123,11 @@ public class UserPageStepsDefinition {
     @When("I save my user changes")
     public void iSaveMyChanges() {
         userPage.saveMyChanges();
+    }
+
+    @When("I check user notification is displayed")
+    public void iCheckUserNotificationIsDisplayed() {
+        userPage.waitForUserCreationNotification(user.getUserName());
         userPage.isGeneratedNotificationWhenUserModified(user.getUserName());
     }
 
@@ -212,6 +218,11 @@ public class UserPageStepsDefinition {
         userPage.enterMobNum(user);
     }
 
+    @When("I choose user language {string}")
+    public void iChooseUserLanguage(String language) {
+        userPage.chooseUserLanguage(language);
+    }
+
     @When("I enter email {string}")
     public void iEnterEmail(String user) {
         this.user.setEmailId(user);
@@ -268,9 +279,19 @@ public class UserPageStepsDefinition {
         userPage.resetPassword();
     }
 
+    @When("I unlock the account")
+    public void iClickOnUnlockAccount() {
+        userPage.unlockAccount();
+    }
+
     @Then("I see password reset message is displayed")
     public void iSeePasswordResetMessagedisplayed() {
-        userPage.isGeneratedNotificationWhenPasswordReset();
+        userPage.isGeneratedNotificationWhenPasswordReset(this.user.getUserName());
+    }
+
+    @Then("I see account unlock message is displayed")
+    public void iSeeAccountUnlockMessagedisplayed() {
+        userPage.isGeneratedNotificationWhenAccountUnlock();
     }
 
     @Then("I see error message is displayed for {string}")
@@ -289,7 +310,7 @@ public class UserPageStepsDefinition {
         userPage.selectStatus(status);
     }
 
-    @When("I verify filetr tag")
+    @When("I verify filter tag")
     public void iVerifyFilterTag(String status) {
         Assert.assertEquals(status, userPage.getFilterTagText());
     }
@@ -299,11 +320,12 @@ public class UserPageStepsDefinition {
         userPage.createNewUser(this.user.getUserName());
     }
 
-    @When("I verify default user account {string} and {string}")
-    public void iVerifyDefaultUserAccount(String user1, String user2) {
-        userPage.userAccountRole(user1, user2);
+    @Then("I see expected texts from user module")
+    public void iSeeExpectedTextsFromUserModule() {
+        var expectedText = I18nUtils.getValueFromKey("user.header.title");
+        userPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
-
 
     @Given("I go to userprofile")
     public void iGoToUserProfile() {
@@ -386,9 +408,9 @@ public class UserPageStepsDefinition {
         userPage.closeChangeUserPropertiesChangeModal();
     }
 
-    @Then("I should see {string} {string} and {string} under user profile icon")
-    public void iVerifyUserProfile(String firstName, String lastName, String role) {
-        userPage.verifyUserProfileIcon(firstName, lastName, role);
+    @Then("I should see {string} {string} under user profile icon")
+    public void iVerifyUserProfile(String firstName, String lastName) {
+        userPage.verifyUserProfileIcon(firstName, lastName);
         Selenide.sleep(2000);
         userPage.changePassword();
         userPage.closeChangeUserPropertiesChangeModal();
@@ -398,5 +420,36 @@ public class UserPageStepsDefinition {
     public void iClickOnChangePswd() {
         userPage.changePassword();
     }
+	
+	@Then("I see error message is displayed {string}")
+	public void iSeeErrorMessageisdisplayed(String message) {
+		userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+	}
+	
+	@When("I verify default user account {string} and {string}")
+    public void iVerifyDefaultUserAccount(String user1, String user2) {
+        userPage.userAccountRole(user1, user2);
+    }
+	
+	@When("I save my user modification changes")
+    public void iSaveMyUserModificationChanges() {
+        userPage.saveMyUserChanges();
+    }
 
+    @And ("I verify create User icon {string}")
+    public void createUserIconPresence(String value){
+        userPage.createUserIconPresent(value);
+    }
+
+    @And("I see {string} role assigned to user")
+    public void verifyRoleAssigned(String role){
+        userPage.roleAssignedToUser(role);
+    }
+
+    @Given("I search {string} to validate role {string} assigned")
+    public void roleAssignedToUser(String user,String role) {
+        this.user.setUserName(user);
+        userPage.setSearch(user);
+        userPage.roleAssignedToUser(role);
+    }
 }

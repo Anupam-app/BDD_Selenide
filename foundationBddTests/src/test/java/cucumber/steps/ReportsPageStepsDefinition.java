@@ -1,6 +1,7 @@
 package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
+import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
@@ -15,13 +16,12 @@ import io.cucumber.java.en.When;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.List;
-
-import javax.print.attribute.SetOfIntegerSyntax;
-
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.utility.ContextHelper;
+import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
 
@@ -29,9 +29,9 @@ public class ReportsPageStepsDefinition {
     private final ReportsPage reportPage;
     private final ReportTemplate reportTemplate;
     private final User user;
+    private final Role role;
     private final LoginPage loginPage;
     private final Login login;
-    private final Role role;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
                                       ReportTemplate reportTemplate, User user, Login login, Role role) {
@@ -64,7 +64,7 @@ public class ReportsPageStepsDefinition {
     public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            reportPage.verifyColoumn(list.get(i).get(0), tab, i);
+            reportPage.verifyColumn(list.get(i).get(0), tab, i);
         }
     }
 
@@ -110,7 +110,6 @@ public class ReportsPageStepsDefinition {
     public void iChooseTemplate(String template) {
         reportPage.chooseReportTemplate(template);
         this.report.setReportName(template);
-
     }
 
     @Then("I check audit trial report content")
@@ -118,17 +117,31 @@ public class ReportsPageStepsDefinition {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
         this.report.checkEventTimeInformation(reportPage.getPdfUrl());
+        this.report.checkSignturesTable(reportPage.getPdfUrl());
     }
 
-    @When("I dont see the presence of generate button")
+    @When("I don't see the presence of run mode")
+    public void iDontSeeRunLink() {
+        reportPage.verifyRunMode();
+    }
+
+    @Then("I don't see the presence of generate button")
     public void iDontSeeGenerateButton() {
         reportPage.verifyGenerateButton();
+    }
+
+    @When("I select device {string}")
+    public void iSelectDefaultDevice(String device){
+        if(ContextHelper.isOrchestrator()){
+            reportPage.selectDevice(device);
+        }
     }
 
     @Then("I click on generate button")
     public void iClickOnGenerateButton() throws InterruptedException {
         reportPage.generateReport();
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
+        reportPage.reportRequestNotificationVisibility();
     }
 
     @When("I click on view button")
@@ -139,7 +152,6 @@ public class ReportsPageStepsDefinition {
     @When("I trigger report mode")
     public void iTriggerReportMode() {
         reportPage.gotoReportsTab();
-
     }
 
     @Then("I should see the report signed")
@@ -157,9 +169,7 @@ public class ReportsPageStepsDefinition {
 
     @When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
-        report.getRecipes()
-                .forEach(recipe -> reportPage
-                        .checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+        report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
     @When("I should see the report file presence")
@@ -180,10 +190,11 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I generate the {string} Report for {string} user")
-    public void iGenerateTheAuditTrailReport(String report, String user) throws Exception {
+    public void iGenerateTheAuditTrailReport(String report, String user) {
         reportPage.goToReports();
         reportPage.switchToFrame();
         this.reportTemplate.setName(report);
+        reportPage.iVerifyReportPageLoaded();
         reportPage.selectReport(report);
         reportPage.selectUserOnRunPage(user);
     }
@@ -236,7 +247,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I select below parameters")
-    public void iSelectTrendsParameters(DataTable table) throws InterruptedException {
+    public void iSelectTrendsParameters(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.selectParams(list.get(i).get(0));
@@ -244,7 +255,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I choose {string} trends {string}")
-    public void iSelectTrendsParameters(String noOfParams, String parameters) throws Exception {
+    public void iSelectTrendsParameters(String noOfParams, String parameters) {
         reportPage.selectParameters(noOfParams, parameters);
     }
 
@@ -311,11 +322,38 @@ public class ReportsPageStepsDefinition {
         iClickOnGenerateButton();
     }
 
+    @When("I verify audit logs for user update")
+    public void iVerifyAuditLogsForUserUpdate() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName());
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for role update")
+    public void iVerifyAuditLogsForRoleUpdate() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the role added in report")
+    public void iVerifyThatRoleIsAdded() throws Exception {
+        this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
+        switchTo().parentFrame();
+    }
+
     @When("I check the audit trail report")
     public void iVerifyTheAuditTrailReport() {
         iGotoReportManagementPage();
         iTriggerReportMode();
         iShouldSeeTheReportFilePresence();
+    }
+
+    @Then("I see expected texts from report module")
+    public void iSeeExpectedTextsFromReportModule() {
+        var expectedText = I18nUtils.getValueFromKey("report.reportNavbar.menu.reportManagement");
+        reportPage.seeContent(expectedText);
+        SelenideHelper.goParentFrame();
     }
 
     @And("I create new report template with existing name")
@@ -378,7 +416,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Given("I select the report template")
-    public void i_select_report_template() throws InterruptedException {
+    public void i_select_report_template() {
         reportPage.openReportTemplate(this.reportTemplate.getName());
     }
 
@@ -422,7 +460,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I search modified the template")
-    public void i_search_modified_template() throws InterruptedException {
+    public void i_search_modified_template() {
         reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
     }
 
@@ -445,21 +483,63 @@ public class ReportsPageStepsDefinition {
         loginPage.setPassword(password);
     }
 
+    @Then("I verify recipe details captured in report run tab {string}")
+    public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
+        reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
+    }
+
     @And("I should see newly created user {string} present in report")
     public void iSeenewlyCreatedUserPresentInReport(String user) {
         reportPage.verifyNewUser(user);
     }
 
-    @Then("I verify custom role modification details captured in audit trail for user {string}")
-    public void iverifyAuditTrailReportWithEntries(String username) throws ParseException {
-        var message = String.format("%s updated Role %s", username, this.role.getOldRoleName());
-        var message1 = String.format("Role -%s", this.role.getRoleName());
-        Assert.assertTrue(reportPage.verifyAuditTrailRecord(message, message1));
-        reportPage.switchToDefaultContent();
+    @Then("I should see change password entries in audit trail report for {string}")
+    public void iverifyAuditTrailReport(String username) throws ParseException {
+        var message = String.format("%s changed the account password", username);
+        Assert.assertTrue(reportPage.verifyAuditTrail(message));
+        SelenideHelper.goToDefault();
     }
 
-    @Then("I verify recipe details captured in report run tab {string}")
-    public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
-        reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
+    @Then("I verify custom role updated details captured in audit trail for user {string}")
+    public void iVerifyAuditTrailReportWithEntries(String username) throws ParseException {
+        var message = String.format("%s updated Role %s", username, this.role.getRoleName());
+        var message1 = String.format("Role -%s", this.role.getUpdatedRoleName());
+        reportPage.verifyAuditTrailRecord(message, message1);
+        SelenideHelper.goToDefault();
     }
+
+    @Then("I verify custom role disabled details captured in audit trail for user {string}")
+    public void iVerifyAuditTrailReportCustomRole(String username) throws ParseException {
+        var message = String.format("%s disabled role %s", username, this.role.getRoleName());
+        reportPage.verifyAuditTrailRecord(message, this.role.getRoleName());
+        SelenideHelper.goToDefault();
+    }
+
+    @Then("I verify custom role permissions details captured in audit trail for user")
+    public void iVerifyAuditTrailReportRolePermissions() throws IOException {
+        iVerifyTheAuditTrailReport();
+        this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(), this.role.getOldPermissions());
+        SelenideHelper.goToDefault();
+    }
+
+	@Then("I see the role deleted in report")
+	public void iVerifyThatRoleIsDeleted() throws Exception {
+		this.report.checkDeletedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin());
+		switchTo().parentFrame();
+	}
+	
+	@Then("I verify consolidate manual run summary report")
+	public void iVerifyConsolidateManualSummaryReport() throws Exception {
+		this.report.verifyConsolidateManualSummaryReport(reportPage.getPdfUrl());
+	}
+	
+	@And("I save Trends without name")
+    public void iCreateTrendsChartsWithoutName() {
+        reportPage.saveTrendsButton();
+    }
+	
+	@Then("I see error message displayed {string}")
+	public void iSeeErrorMessageisdisplayed(String message) {
+		reportPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+	}
 }

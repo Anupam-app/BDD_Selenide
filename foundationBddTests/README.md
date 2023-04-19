@@ -37,10 +37,6 @@ Launch maven command mentioned above
 By default action in browser are not displayed to ensure that the resolution used is the good one in headless mode
 This can be deactivated for debug purpose in config/browser.properties file: browserprofile.Chrome.headless = false
 
-##### Consult report
-
-For local development you can consult after mvn command launched foundationBddTests\target\cucumber-report.html with chrome browser
-
 ##### Jenkins Parameters
 
 * CIPHostName : hostname to launch the bdd tests
@@ -52,3 +48,10 @@ For local development you can consult after mvn command launched foundationBddTe
 * Mode : only launch the tag chosen in mode, example: SMOKE, it adds the PDP condition automatically (optional)
 * PrepareEnvironmentOnly : only launch dataset insertion and prepare the env for tests automation but do not launch the tests (optional)
 
+##### Cucumber report
+
+For local development you can consult after mvn command launched foundationBddTests\target\cucumber-report.html with chrome browser
+
+##### Allure report
+
+Allure report template is present on stlbiopdv01bp01.global.sial.com server in D:\Jenkins\email-templates\bddtests-allure-report.groovy file
