@@ -125,7 +125,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     And I go to other module without saving recipe
-    And I go to Recipe editor
+    And I open Recipe editor
     Then I can create a recipe
 
   Scenario: Create new recipe with existing Recipe name
@@ -332,7 +332,7 @@ Feature: Recipe management
     And I add few actions steps
     And I logout
     And I am logged in as "BIO4CSERVICE" user
-    And I go to Recipe editor
+    And I open Recipe editor
     And I add few actions steps
     And I save the recipe
     Then I verify recipe status as "Saved"
