@@ -1,3 +1,4 @@
+@CRS @IVI
 Feature: Alarm creation
 
   Scenario: Alarm acknowledgement
