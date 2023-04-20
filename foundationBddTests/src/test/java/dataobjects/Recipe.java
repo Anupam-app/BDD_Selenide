@@ -23,5 +23,10 @@ public class Recipe {
     String status;
     String ManualOperationName;
     String steps;
+    String saveAsRecipeName;
+    String stepActionValue;
+    int orgStepCount;
+    int stepCountBeforeCutStep;
+    int phaseCount;
 }
 

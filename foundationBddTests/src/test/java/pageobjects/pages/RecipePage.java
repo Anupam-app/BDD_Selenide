@@ -1,5 +1,6 @@
 package pageobjects.pages;
 
+import static com.codeborne.selenide.CollectionCondition.size;
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.not;
@@ -219,6 +220,23 @@ public class RecipePage {
     private final String errorMsg = "//h4[text()='%s']";
     private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
     private final String blankRecipeMessage = "//div[text()='%s']";
+    private final String actionStepPlaceholder = "(//input[@placeholder='Search instruments and actions...'])[%d]";
+    private final ElementsCollection actionsStepCount = $$(By.xpath("//div[@class='step-wrapper']"));
+    private final SelenideElement getStepValue = $(By.xpath("//div[contains(@class,'selected-row')]/div[@class='action']/div"));
+    private final ElementsCollection recipeNotificationTexts =
+            $$(By.xpath("//div[@class='notification-bar information-bar']"));
+    private final SelenideElement criteriaConditionLabel = $(By.xpath("//div[@class='criteria-group']/div"));
+    private final ElementsCollection actionSteps = $$(By.xpath("smart-search-container"));
+    // Default step time
+    private final SelenideElement stepWait_Title = $(By.xpath("//h4[text()='Default step wait time']"));
+    private final SelenideElement timer = $(By.xpath("//input[@placeholder='Select time']"));
+    private final SelenideElement selectTime = $(By.xpath("//input[@class='ant-time-picker-panel-input' and @placeholder='Select time']"));
+    private final SelenideElement waitTime_AddButton = $(By.xpath("//button[text()='Add']"));
+    private final String NOTIFICATION_SAVE_RECIPE = "Recipe created Successfully";
+    private final String NOTIFICATION_UPDATE_RECIPE = "Recipe Updated Successfully";
+    private final String NOTIFICATION_PHASE_CREATION = "Phase created successfully";
+    private final String NOTIFICATION_STEP_DELETION = "Step deleted successfully";
+    private final String NOTIFICATION_STEP_CUT = "Step cut successfully";
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1307,6 +1325,139 @@ public class RecipePage {
                 .perform();
     }
 
+    public int actionsStepsCount() {
+        return actionsStepCount.size();
+    }
+
+    public void addActionStep(int stepNo) {
+        SelenideElement addActionToStep = $(By.xpath(String.format(actionStepPlaceholder, stepNo)));
+        addActionToStep.click();
+        addActionToStep.sendKeys(Keys.CONTROL, "a");
+        addActionToStep.sendKeys(Keys.DELETE);
+        addActionToStep.sendKeys(setActionStepValue(Integer.toString(stepNo)));
+        addActionToStep.sendKeys(Keys.ENTER);
+        getStepValue.getAttribute("data-value").contains(setActionStepValue(Integer.toString(stepNo)));
+    }
+
+    public String setActionStepValue(String value) {
+        String action;
+        switch (value) {
+            case "1":
+                action = "Start Full Process";
+                break;
+            case "2":
+                action = "Pressure setpoint";
+                break;
+            case "3":
+                action = "Feed pump setpoint";
+                break;
+            case "4":
+                action = "Speed Setpoint  (RPM)";
+                break;
+            case "5":
+                action = "Ramp Rate";
+                break;
+            case "6":
+                action = "Speed RPM mode";
+                break;
+            default:
+                action = null;
+        }
+        return action;
+    }
+
+    public void setDefaultStepWaitTime(String time, String value) {
+        String data = null;
+        if (value.contains("seconds")) {
+            data = "00:00:" + time;
+        } else if (value.contains("minutes")) {
+            data = "00:" + time + ":00";
+        }
+        commonWaiter(stepWait_Title, visible);
+        timer.clear();
+        timer.click();
+        selectTime.setValue(data);
+        waitTime_AddButton.click();
+    }
+
+    public void saveRecipeNewAndExisting(String recipe) {
+        if (recipeInputSave.isDisplayed()) {
+            saveRecipe_touchButton(recipe);
+            recipeNotification(NOTIFICATION_SAVE_RECIPE);
+        } else {
+            recipeNotification(NOTIFICATION_UPDATE_RECIPE);
+        }
+    }
+
+    public void saveRecipe_touchButton(String recipeName) {
+        recipeInputSave.click();
+        commonWaiter(recipeInputSave, visible)
+                .clear();
+        recipeInputSave.setValue(recipeName);
+        saveButton.click();
+    }
+
+    public void recipeNotification(String notification) {
+        recipeNotificationTexts.shouldHave(
+                CollectionCondition.anyMatch("User notification should contain this notification", n -> n.getText()
+                        .equals(notification)));
+    }
+
+    // select one or multiple step
+    public void selectStep(String stepNo) {
+        if (stepNo.contains(",")) {
+            String[] number = stepNo.split(",");
+            stepAction.keyDown(Keys.CONTROL)
+                    .perform();
+            for (String s : number) {
+                $(By.xpath(String.format(XPATH_STEP, s))).waitUntil(visible, 5000).click();
+            }
+            stepAction.keyUp(Keys.CONTROL)
+                    .perform();
+        } else {
+            $(By.xpath(String.format(XPATH_STEP, stepNo))).waitUntil(visible, 5000).click();
+        }
+    }
+
+    public void verifyRecipeActionStepCount(int newValue) {
+        Assert.assertEquals("Action steps count is not correct", newValue, actionsStepsCount());
+    }
+
+    public void actionStepDeletion(int count){
+        if (actionsStepsCount() < count) {
+            String actionValue = setActionStepValue(Integer.toString(count));
+            actionsStepCount.shouldHave(size(count - 1));
+            for (SelenideElement element : actionSteps) {
+                String value = element.getAttribute("data-value");
+                Assert.assertFalse("action step deletion:", value.contains(actionValue));
+            }
+        }
+    }
+
+    public String getActionValue(){
+        return getStepValue.getAttribute("data-value");
+    }
+
+    public void verifyStepActionValue(String value){
+        Assert.assertEquals("Cut step and pasted step assertion", value, getActionValue());
+
+    }
+
+    public void addCriteriaCondition() {
+        if(criteriaPlaceholder.isDisplayed()) {
+            criteriaPlaceholder.sendKeys("Running");
+            criteriaPlaceholder.sendKeys(Keys.ENTER);
+            criteriaConditionLabel.getAttribute("data-value").contains("Running");
+        }
+    }
+
+    public void compareTwoSteps(String stepOne, String stepTwo) {
+        selectStep(stepOne);
+        String stepOneValue = getActionValue();
+        selectStep(stepTwo);
+        String stepTwoValue = getActionValue();
+        Assert.assertEquals("Copied step and pasted step assertion", stepOneValue, stepTwoValue);
+    }
 }
 
 

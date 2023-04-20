@@ -1,6 +1,8 @@
 package pageobjects.utility;
 
 import com.codeborne.selenide.Condition;
+
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byAttribute;
 import static com.codeborne.selenide.Selenide.refresh;
 import static com.codeborne.selenide.Selenide.switchTo;
@@ -84,6 +86,11 @@ public class SelenideHelper {
 
     public static void goToDefault() {
         switchTo().defaultContent();
+    }
+
+    public static void selectButton(SelenideElement locator) {
+        locator.waitUntil(visible, 10000).isEnabled();
+        locator.click();
     }
 }
 
