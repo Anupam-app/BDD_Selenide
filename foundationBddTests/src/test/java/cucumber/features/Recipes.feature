@@ -270,7 +270,7 @@ Feature: Recipe management
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
     And I verify error message "Out of Range" for out of range value entry
-    And I validate below error message for respective "Setpoint" values provided
+    And I should see error message for respective "Setpoint" values provided
       | 5  |Out of Range                        |
       | 3. |No value before/after decimal point |
       | .2 |No value before/after decimal point |

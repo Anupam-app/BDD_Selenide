@@ -220,6 +220,8 @@ public class RecipePage {
     private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
     private final String blankRecipeMessage = "//div[text()='%s']";
     private final SelenideElement setpointInOutRange = $(By.xpath("//input[@type='text' and @data-label='action-value']"));
+    private final SelenideElement recipeCreateButton = $(By.xpath(
+        "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -420,9 +422,7 @@ public class RecipePage {
     }
 
     public void verifyPhaseButtons() {
-        ($(By.xpath(
-            "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]")))
-            .shouldBe(visible);
+        recipeCreateButton.shouldBe(visible);
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
         $(By.xpath(String.format(phaseMessage, "Please add a phase."))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
@@ -522,7 +522,6 @@ public class RecipePage {
         var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
         importRecipe.click();
         importButton.click();
-        SelenideElement recipeInputSave = $(By.className("rename-recipe-import-input"));
         recipeInputSave.click();
         SelenideHelper.commonWaiter(recipeInputSave, visible)
             .clear();

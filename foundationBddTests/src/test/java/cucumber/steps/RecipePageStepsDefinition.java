@@ -436,7 +436,7 @@ public class RecipePageStepsDefinition {
         recipePage.outOfRangeErrorMessage(message);
     }
 
-    @And("I validate below error message for respective {string} values provided")
+    @And("I should see error message for respective {string} values provided")
     public void inValidInputValue(String message,DataTable table) {
         recipePage.keyboardActionRecipe();
         recipePage.addActionStep(message);
@@ -734,6 +734,7 @@ public class RecipePageStepsDefinition {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
+
     @When("I edit the recipe {string} from recipe browser")
     public void editRecipeFromBrowser(String recipe){
         recipePage.goTo();
@@ -741,10 +742,12 @@ public class RecipePageStepsDefinition {
         this.recipe.setRecipeName(recipe);
         recipePage.editRecipe(recipe);
     }
+
     @When("I update actual range of value")
     public void updateThresholdValue(){
         recipePage.outAndInOfRangeValue("in");
     }
+
     @Then("I should be able to save & approve recipe")
     public void saveAndApproveRecipe(){
         recipePage.saveModifiedRecipe();
