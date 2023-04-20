@@ -42,32 +42,23 @@ public class AlarmPage {
     }
 
     public void acknowledgeAlarm() {
-        // Selenide.sleep(5000);
-        for (int j = 0; j < 1600; j++) {
-
+        for (int j = 0; j < 60; j++) {
             for (int i = 1; i <= alarmTable.size(); i++) {
                 try {
-
                     if (($(By.xpath(String.format(alarmStatus, i))).isDisplayed())) {
-                        System.out.println(j);
                         commonWaiter(($(By.xpath(String.format(alarmStatus, i)))), visible).click();
-                        System.out.println(acknowledgeHeader.getText());
                         commonWaiter(acknowledgeButton, visible).click();
                         commonWaiter(closeAlarm, visible).click();
-                        // commonWaiter(($(By.xpath(String.format(acknowledgedBy, i)))), visible)
-                        // .shouldHave(text("Administrator Bio4C"));
                         break;
-                        // Selenide.sleep(3000);
                     }
-                } catch (NoSuchElementException | StaleElementReferenceException e) {
-                    System.out.print("Already done");
+                } catch (NoSuchElementException e) {
+                    System.out.print("Alarm is already acknowledged");
+                } catch (StaleElementReferenceException e) {
+                    System.out.print("Alarm is already acknowledged");
                 }
             }
 
-            Selenide.sleep(3000);
-            // ElementsCollection alarmTable = $$(By.xpath("//table[@class='alarm-list-table']/tbody/tr"));
-            System.out.println("alarmTable.size()_" + j + "_" + alarmTable.size());
-            // commonWaiter(acknowledgeAlarm, visible).click();
+            Selenide.sleep(3000);       
         }
     }
 
