@@ -1403,7 +1403,6 @@ public class RecipePage {
                         .equals(notification)));
     }
 
-    // select one or multiple step
     public void selectStep(String stepNo) {
         if (stepNo.contains(",")) {
             String[] number = stepNo.split(",");
@@ -1440,7 +1439,6 @@ public class RecipePage {
 
     public void verifyStepActionValue(String value){
         Assert.assertEquals("Cut step and pasted step assertion", value, getActionValue());
-
     }
 
     public void addCriteriaCondition() {

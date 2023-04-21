@@ -1,3 +1,4 @@
+@IVI
 Feature: Recipe Touch Enabler
 
   Background:
@@ -5,7 +6,6 @@ Feature: Recipe Touch Enabler
     And I go to recipe page
     And I trigger edit mode
 
-  @IVI
   Scenario: Verify Add step, Add criteria, save, Delete functionality
     When I add 3 action steps
     And I set a step wait time to "04 seconds"
@@ -16,7 +16,6 @@ Feature: Recipe Touch Enabler
     When I Save the recipe
     Then I should see step is deleted
 
-  @IVI
   Scenario: Verify Copy step, cut step, paste step functionality
     When I add 3 action steps
     And I add a criteria to step "2"
@@ -28,4 +27,4 @@ Feature: Recipe Touch Enabler
     Then I should be notified that "Step cut successfully"
     And I paste the cut step before the step 2
     And I Save the recipe
-    And I should see step count is unchanged
+    And I should see cut step is pasted

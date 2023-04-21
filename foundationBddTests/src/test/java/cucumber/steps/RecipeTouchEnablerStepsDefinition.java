@@ -58,7 +58,7 @@ public class RecipeTouchEnablerStepsDefinition {
         recipeTouch.buttonClick("Paste Step Before");
     }
 
-    @And("I should see step count is unchanged")
+    @And("I should see cut step is pasted")
     public void cutPasteStep(){
         recipePage.verifyRecipeActionStepCount(recipe.getStepCountBeforeCutStep());
         recipePage.verifyStepActionValue(recipe.getStepActionValue());

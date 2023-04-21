@@ -35,7 +35,7 @@ public class RecipeTouchEnablerPage {
     private final String SAVE_PHASE_LIBRARY_BUTTON = "ant-btn phase-library-save-button";
     private final String STEP_WAIT_TIME_BUTTON = "ant-btn step-wait-time-default-button";
     private final String CLEAR_ALL_BUTTON = "ant-btn recipe-clear-all-button";
-    private final String button_locator = "//button[contains(@class,'%s')]";
+    private final String BUTTON_LOCATOR = "//button[contains(@class,'%s')]";
     private SelenideElement buttonClick = null;
 
     /**
@@ -45,73 +45,73 @@ public class RecipeTouchEnablerPage {
     public void buttonClick(String value) {
         switch(value) {
             case "New Recipe":
-                buttonClick = $(By.xpath(String.format(button_locator, NEW_RECIPE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, NEW_RECIPE_BUTTON)));
                 break;
             case "Import":
-                buttonClick = $(By.xpath(String.format(button_locator, IMPORT_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, IMPORT_BUTTON)));
                 break;
             case "Save":
-                buttonClick = $(By.xpath(String.format(button_locator, SAVE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, SAVE_BUTTON)));
                 break;
             case "Save As":
-                buttonClick = $(By.xpath(String.format(button_locator, SAVE_AS_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, SAVE_AS_BUTTON)));
                 break;
             case "Export":
-                buttonClick = $(By.xpath(String.format(button_locator, EXPORT_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, EXPORT_BUTTON)));
                 break;
             case "Add Step":
-                buttonClick = $(By.xpath(String.format(button_locator, ADD_STEP_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, ADD_STEP_BUTTON)));
                 break;
             case "Add Criteria":
-                buttonClick = $(By.xpath(String.format(button_locator, ADD_CRITERIA_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, ADD_CRITERIA_BUTTON)));
                 break;
             case "Add Phase":
-                buttonClick = $(By.xpath(String.format(button_locator, ADD_PHASE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, ADD_PHASE_BUTTON)));
                 break;
             case "Insert Before Step":
-                buttonClick = $(By.xpath(String.format(button_locator, INSERT_BEFORE_STEP)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, INSERT_BEFORE_STEP)));
                 break;
             case "Insert After Step":
-                buttonClick = $(By.xpath(String.format(button_locator, INSERT_AFTER_STEP)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, INSERT_AFTER_STEP)));
                 break;
             case "Copy Step":
-                buttonClick = $(By.xpath(String.format(button_locator, COPY_STEP_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, COPY_STEP_BUTTON)));
                 break;
             case "Cut Step":
-                buttonClick = $(By.xpath(String.format(button_locator, CUT_STEP_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, CUT_STEP_BUTTON)));
                 break;
             case "Paste Step After":
-                buttonClick = $(By.xpath(String.format(button_locator, PASTE_STEP_AFTER_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PASTE_STEP_AFTER_BUTTON)));
                 break;
             case "Paste Step Before":
-                buttonClick = $(By.xpath(String.format(button_locator, PASTE_STEP_BEFORE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PASTE_STEP_BEFORE_BUTTON)));
                 break;
             case "Delete Step":
-                buttonClick = $(By.xpath(String.format(button_locator, DELETE_STEP_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, DELETE_STEP_BUTTON)));
                 break;
             case "Copy Phase":
-                buttonClick = $(By.xpath(String.format(button_locator, COPY_PHASE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, COPY_PHASE_BUTTON)));
                 break;
             case "Cut Phase":
-                buttonClick = $(By.xpath(String.format(button_locator, CUT_PHASE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, CUT_PHASE_BUTTON)));
                 break;
             case "Paste Phase After":
-                buttonClick = $(By.xpath(String.format(button_locator, PASTE_PHASE_AFTER_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PASTE_PHASE_AFTER_BUTTON)));
                 break;
             case "Paste Phase Before":
-                buttonClick = $(By.xpath(String.format(button_locator, PASTE_PHASE_BEFORE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PASTE_PHASE_BEFORE_BUTTON)));
                 break;
             case "Phase Delete":
-                buttonClick = $(By.xpath(String.format(button_locator, PHASE_DELETE_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PHASE_DELETE_BUTTON)));
                 break;
             case "Save Phase Library":
-                buttonClick = $(By.xpath(String.format(button_locator, SAVE_PHASE_LIBRARY_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, SAVE_PHASE_LIBRARY_BUTTON)));
                 break;
             case "Step Wait Time":
-                buttonClick = $(By.xpath(String.format(button_locator, STEP_WAIT_TIME_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, STEP_WAIT_TIME_BUTTON)));
                 break;
             case "Clear All":
-                buttonClick = $(By.xpath(String.format(button_locator, CLEAR_ALL_BUTTON)));
+                buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, CLEAR_ALL_BUTTON)));
                 break;
 
             default:
