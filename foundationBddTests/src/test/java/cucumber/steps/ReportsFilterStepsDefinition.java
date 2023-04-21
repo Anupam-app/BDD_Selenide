@@ -1,25 +1,31 @@
 package cucumber.steps;
 
 
+import java.text.ParseException;
+import java.util.List;
+
+import org.junit.Assert;
+
+import dataobjects.ReportTemplate;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.text.ParseException;
-import java.util.List;
-import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 
 public class ReportsFilterStepsDefinition {
 
     private ReportsPage reportPage;
+    private final ReportTemplate reportTemplate;
 
-    public ReportsFilterStepsDefinition(ReportsPage reportPage) {
+    public ReportsFilterStepsDefinition(ReportsPage reportPage, ReportTemplate reportTemplate) {
         this.reportPage = reportPage;
+        this.reportTemplate = reportTemplate;
     }
 
     @When("I search the report template {string}")
     public void iSearchTheReportTemplate(String templateName) {
-        reportPage.searchReportOrTemplate(templateName);
+        this.reportTemplate.setName(templateName);
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
     }
 
     @When("I click on filter icon and select template status {string}")
@@ -132,8 +138,7 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("^I should see recipe report list displayed based on date range dropdown$")
-    public void iviewrecipereportlistdaterange(DataTable datatable)
-            throws ParseException, InterruptedException {
+    public void iviewrecipereportlistdaterange(DataTable datatable) throws ParseException, InterruptedException {
         List<String> options = datatable.asList();
         for (String datarange : options) {
             reportPage.selectDateRangeRprt(datarange);
@@ -172,15 +177,15 @@ public class ReportsFilterStepsDefinition {
     public void i_hould_see_consolidated_status(String status) {
         Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
     }
-	
-	@When("I click on filter icon and select eSignStatus {string}")
-	public void iSelectESignStatus(String status) {
-		reportPage.selectESignStatus(status);
-	}
-	
-	@Then("I should see reports with eSignStatus {string}")
-	public void i_should_see_eSigned_status(String status) {
-		reportPage.verifyESignedStatus(status);
-	}
-	
+
+    @When("I click on filter icon and select eSignStatus {string}")
+    public void iSelectESignStatus(String status) {
+        reportPage.selectESignStatus(status);
+    }
+
+    @Then("I should see reports with eSignStatus {string}")
+    public void i_should_see_eSigned_status(String status) {
+        reportPage.verifyESignedStatus(status);
+    }
+
 }
