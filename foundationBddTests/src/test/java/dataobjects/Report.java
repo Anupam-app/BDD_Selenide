@@ -1026,7 +1026,7 @@ public class Report {
                                     .contains(userNameLoggedIn + " approved andsigned Report Template"));
                             Assert.assertTrue(currValueColumnValue.contains(status));
                             Assert.assertTrue(preValueColumnValue.contains("In Review"));
-                        } else if (i == 2) {
+                        } else {
                             Assert.assertTrue(
                                     commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
                             Assert.assertTrue(preValueColumnValue.contains("Draft"));

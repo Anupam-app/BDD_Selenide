@@ -290,7 +290,7 @@ public class ReportsPageStepsDefinition {
 
 
     @When("I save the report template")
-    public void iSaveReportTemplate() {
+    public void iSaveTheReportTemplate() {
         reportPage.saveReportTemplate();
     }
 
@@ -433,22 +433,22 @@ public class ReportsPageStepsDefinition {
     }
 
     @Given("I select the report template")
-    public void i_select_report_template() {
+    public void iSelectTemplate() {
         reportPage.openReportTemplate(this.reportTemplate.getName());
     }
 
     @When("I save As the report template")
-    public void i_save_as_the_report_template() {
+    public void iSaveAsReportTemplate() {
         reportPage.iSaveAs();
     }
 
     @Then("I see SaveTemplate popup window")
-    public void i_see_save_template_popup_window() {
+    public void iSeeSavePopUpWindow() {
         reportPage.ivalidateWindow();
     }
 
     @When("I modify the Existing template")
-    public void i_modify_the_existing_template() throws InterruptedException {
+    public void iUpdateExistingTemplate() throws InterruptedException {
         this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
         this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
         reportPage.iRename(this.reportTemplate.getSaveAsName());
@@ -461,33 +461,33 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I see {string} button enable and save As the report template")
-    public void i_see_button_enable_and_save_as_the_report_template(String string) {
+    public void iSaveAsReportTemplate(String string) {
         reportPage.iValidation();
         reportPage.iSaveAs();
     }
 
     @And("I save report template")
-    public void i_save_report_template() {
+    public void iSaveReportTemplate() {
         reportPage.isave();
     }
 
     @Then("I see {string} successfully message")
-    public void i_see_successfully_message(String message) {
+    public void iSeeSuccessfullyMessage(String message) {
         reportPage.iCheckNotifactionMsg(message);
     }
 
     @When("I search modified the template")
-    public void i_search_modified_template() {
+    public void ISearchModifiedTemplate() {
         reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
     }
 
     @And("I see report template status Draft in template page")
-    public void i_see_report_template_status_draft_template_page() {
+    public void iSeeReportTemplateStatusDraftTemplatePage() {
         reportPage.iValidationdraft();
     }
 
     @Then("I verify run summary report report")
-    public void i_verify_run_summary_report() throws IOException {
+    public void iVerifyRunSummaryReport() throws IOException {
         this.report.checkEventTable(reportPage.getPdfUrl());
         this.report.checkFiledIds(reportPage.getPdfUrl(), report.getRecipes(), report.getReportName());
         this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
@@ -495,18 +495,18 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I enter {string} as username and {string} password")
-    public void i_Enter_Username_Password(String username, String password) {
+    public void iEnterUsernamePassword(String username, String password) {
         loginPage.setUser(username);
         loginPage.setPassword(password);
     }
 
     @Then("I verify recipe details captured in report run tab {string}")
-    public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
+    public void iVerifyRunReportWithRecipeEntries(String recipeName) throws ParseException {
         reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
     }
 
     @And("I should see newly created user {string} present in report")
-    public void iSeenewlyCreatedUserPresentInReport(String user) {
+    public void iSeeNewlyCreatedUserPresentInReport(String user) {
         reportPage.verifyNewUser(user);
     }
 
