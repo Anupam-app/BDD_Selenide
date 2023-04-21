@@ -7,6 +7,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-12786
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
+  https://stljirap.sial.com/browse/BIOFOUND-27908
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -123,7 +124,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     And I go to other module without saving recipe
-    And I go to Recipe editor
+    And I open Recipe editor
     Then I can create a recipe
 
   Scenario: Create new recipe with existing Recipe name
@@ -317,7 +318,7 @@ Feature: Recipe management
 
   Scenario: Create and save a Recipe with 30 charactors
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I add criteria to phase using keyboard
     And I verify recipe status as "Unsaved"
@@ -329,11 +330,11 @@ Feature: Recipe management
 
   Scenario: Verify new recipe and existing recipe
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I logout
     And I am logged in as "BIO4CSERVICE" user
-    And I go to Recipe editor
+    And I open Recipe editor
     And I add few actions steps
     And I save the recipe
     Then I verify recipe status as "Saved"
@@ -416,3 +417,18 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
+
+  Scenario : Validate the add Step count
+    Given I am logged in as "Bio4CAdmin" user
+    When I open Recipe editor
+    When I add new action step using Keyboard event
+    Then I see "blank" step added & I add Setpoint action to the step
+    And I should see step count increases by "1"
+    Then I verify the action added
+    When I add action from action browser
+    Then I should see step count increases
+    When I copy the step "2"
+    And I paste step after Step "2"
+    Then I should see step count increases
+    When I add a phase to recipe from phase library
+    Then I should see step count increases

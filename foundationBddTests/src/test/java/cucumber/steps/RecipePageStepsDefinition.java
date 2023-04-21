@@ -471,7 +471,7 @@ public class RecipePageStepsDefinition {
         recipePage.copyAndPastePhase();
     }
 
-    @And("I go to Recipe editor")
+    @And("I open Recipe editor")
     public void theRecipeEditorPageIsOpen() {
         recipePage.goTo();
         goToIFrame();
@@ -733,6 +733,16 @@ public class RecipePageStepsDefinition {
         recipePage.addActionStep();
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+    }
+
+    @Then("I see {string} step added & I add Setpoint action to the step")
+    public void actionAddedInBlankStep(String status){
+        recipePage.placeholder(status);
+
+    }
+    @And("I should see step count increases by {string}")
+    public void stepCountIncrease(){
+        recipePage.verifyAndGetStepCount();
     }
 
 }

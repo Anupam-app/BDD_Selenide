@@ -136,8 +136,6 @@ public class RecipePage {
     private final SelenideElement saveEditorButton = $(By.xpath("//button[contains(@class,'save-button')]"));
     private final SelenideElement importMenuButton = $(By.xpath("//button[contains(@class,'import-button')]"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(@class,'import-button-text')]"));
-
-
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
     private ElementsCollection dateOptionsRprt =
@@ -1305,6 +1303,13 @@ public class RecipePage {
                 .sendKeys(Keys.ENTER)
                 .build()
                 .perform();
+    }
+
+    public void verifyAndGetStepCount(){
+        SelenideElement stepCountNumberInRecipe = $(By.xpath("//div[@class='step-count']//label)[3]"));
+
+            SelenideElement  addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
+
     }
 
 }
