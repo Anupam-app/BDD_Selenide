@@ -1198,7 +1198,6 @@ public class ReportsPage {
                 }
             }
         }
-
     }
 
     public void createTemplatePageValidation(String options) {

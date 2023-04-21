@@ -1104,7 +1104,6 @@ public class Report {
                         Assert.assertTrue(commentColumnValue.contains("Bio4CAdmin created ReportTemplate"));
                     }
                 }
-
                 switch (attributeColumnValue) {
                     case "status":
                         Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("Draft"));
@@ -1137,11 +1136,6 @@ public class Report {
                 break;
             }
         }
-
-
-
     }
-
-
 
 }
