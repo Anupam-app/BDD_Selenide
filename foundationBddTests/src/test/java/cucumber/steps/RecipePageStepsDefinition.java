@@ -26,12 +26,12 @@ public class RecipePageStepsDefinition {
 
     private final RecipePage recipePage;
     private final UserPage userPage;
-    private ReportsPage reportPage;
+    private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-            ReportsPage reportPage) {
+                                     ReportsPage reportPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
@@ -174,7 +174,7 @@ public class RecipePageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             recipePage.verifyColoumn(list.get(i)
-                    .get(0), tab, i);
+                .get(0), tab, i);
         }
     }
 
@@ -296,7 +296,7 @@ public class RecipePageStepsDefinition {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
         Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
-                deviceShapeElementNotTranslated.isEmpty());
+            deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
 
@@ -430,23 +430,23 @@ public class RecipePageStepsDefinition {
         recipePage.verifyNotification(message);
     }
 
-    @And("I try to change the setpoint value to out of range")
-    public void outRangeValuePassing() {
-        recipePage.outOfRangeValue();
+    @And("I verify error message {string} for out of range value entry")
+    public void outRangeValuePassing(String message) {
+        recipePage.outAndInOfRangeValue("out");
+        recipePage.outOfRangeErrorMessage(message);
     }
 
-    @Then("I verify error message displayed")
-    public void outOfRangeErrorMessage() {
-        recipePage.outOfRangeErrorMessage();
+    @And("I should see error message for respective {string} values provided")
+    public void inValidInputValue(String message,DataTable table) {
+        recipePage.keyboardActionRecipe();
+        recipePage.addActionStep(message);
+        List <List<String>> list = table.asLists(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i).get(0),list.get(i).get(1));
+        }
     }
 
-    @And("I Validate the error message for below input values")
-    public void inValidInputValue(DataTable table) {
-        List<String> list = table.asList(String.class);
-        list.forEach(recipePage::inValidValueAndErrorMessageOfThreshold);
-    }
-
-    @And("I try to change status and verify error message displayed {string}")
+    @And("I verify error message {string} on changing recipe status")
     public void verifyErrorMessageOfChangeStatus(String message) {
         recipePage.verifyErrorMessageOfChangeStatus(message);
     }
@@ -471,7 +471,7 @@ public class RecipePageStepsDefinition {
         recipePage.copyAndPastePhase();
     }
 
-    @And("I go to Recipe editor")
+    @And("I open Recipe editor")
     public void theRecipeEditorPageIsOpen() {
         recipePage.goTo();
         goToIFrame();
@@ -735,4 +735,22 @@ public class RecipePageStepsDefinition {
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
+    @When("I edit the recipe {string} from recipe browser")
+    public void editRecipeFromBrowser(String recipe){
+        recipePage.goTo();
+        goToIFrame();
+        this.recipe.setRecipeName(recipe);
+        recipePage.editRecipe(recipe);
+    }
+
+    @When("I update actual range of value")
+    public void updateThresholdValue(){
+        recipePage.outAndInOfRangeValue("in");
+    }
+
+    @Then("I should be able to save & approve recipe")
+    public void saveAndApproveRecipe(){
+        recipePage.saveModifiedRecipe();
+        recipePage.approveRecipe(login.getPassword());
+    }
 }
