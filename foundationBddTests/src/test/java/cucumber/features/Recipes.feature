@@ -7,6 +7,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-12786
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
+  https://stljirap.sial.com/browse/BIOFOUND-27818
+  https://stljirap.sial.com/browse/BIOFOUND-19474
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -123,7 +125,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     And I go to other module without saving recipe
-    And I go to Recipe editor
+    And I open Recipe editor
     Then I can create a recipe
 
   Scenario: Create new recipe with existing Recipe name
@@ -262,23 +264,20 @@ Feature: Recipe management
     When I create a phase
     Then I verify notification messages "Phase created successfully"
 
-  Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+  Scenario: Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
+    When I open Recipe editor
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
-    And I try to change the setpoint value to out of range
-    Then I verify error message displayed
-    And I add new action step using Keyboard event
-    And I add "Setpoint" action to the step
-    And I Validate the error message for below input values
-      | 5  |
-      | 3. |
-      | .2 |
-      | -1 |
+    And I verify error message "Out of Range" for out of range value entry
+    And I should see error message for respective "Setpoint" values provided
+      | 5  |Out of Range                        |
+      | 3. |No value before/after decimal point |
+      | .2 |No value before/after decimal point |
+      | -1 |Out of Range                        |
+      | 1  |                                    |
     And I save the recipe with name "errorRecipe"
-    And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+
 
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I am logged in as "Bio4CAdmin" user
@@ -317,7 +316,7 @@ Feature: Recipe management
 
   Scenario: Create and save a Recipe with 30 charactors
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I add criteria to phase using keyboard
     And I verify recipe status as "Unsaved"
@@ -329,11 +328,11 @@ Feature: Recipe management
 
   Scenario: Verify new recipe and existing recipe
     Given I am logged in as "Bio4CAdmin" user
-    When I go to Recipe editor
+    When I open Recipe editor
     And I add few actions steps
     And I logout
     And I am logged in as "BIO4CSERVICE" user
-    And I go to Recipe editor
+    And I open Recipe editor
     And I add few actions steps
     And I save the recipe
     Then I verify recipe status as "Saved"
@@ -416,3 +415,10 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
+
+  Scenario: Recipe status cannot change when errors are present
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "errorRecipe" from recipe browser
+    Then I verify error message "Recipe has errors. Cannot change status." on changing recipe status
+    When I update actual range of value
+    Then I should be able to save & approve recipe
