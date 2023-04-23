@@ -42,14 +42,11 @@ Feature: Report Template module validations
       | Alarms      |
     And I save the report template
     And I search and approve the report template
-    And I search the report template
-    Then I verify the report template
+    Then I search and verify the report template
     And I generate the "Audit Trail" Report for "Bio4CAdmin" user
     And I verify audit logs for template update
     And I click on generate button
-    And I goto report management page
-    And I trigger report mode
-    And I should see the report file presence
+    And I see the report file is generated
     And I verify the audit trail for template
 
   Scenario: Create Report Templates With existing Name
@@ -63,8 +60,8 @@ Feature: Report Template module validations
 
   Scenario: Template Approval E-Sign Failure On Entering Wrong Password
     And I open the report template dashboard
-    And I search the report template "testInReviewTemplate"
-    When I try to approve the report template with wrong password "abde@39"
+    When I search the report template "testInReviewTemplate"
+    And I try to approve the report template with wrong password "abde@39"
     Then I verify the password error message "Incorrect Password"
 
   Scenario: Approved Report Template Is Not Modifiable
@@ -82,5 +79,4 @@ Feature: Report Template module validations
     And I search and approve the report template
     And I search the report template
     And I change the template status Approved to Inactive
-    And I search the report template
-    Then I verify the report template
+    Then I search and verify the report template

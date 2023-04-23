@@ -470,8 +470,7 @@ public class ReportsPage {
     }
 
     public void waitForReportGeneration(SelenideElement element, Condition condition) throws InterruptedException {
-        element.waitUntil(condition, 360000L, 200L);
-        Thread.sleep(1000);
+        element.waitUntil(condition, 180000L, 200L);
     }
 
     public void exists(String name) {
@@ -701,12 +700,8 @@ public class ReportsPage {
     public void approvedTemplateValidation() {
         SelenideHelper.commonWaiter(templateNameTextBox, disabled);
         for (var option : checkBoxTemplate) {
-            if (option.getAttribute("class")
-                    .contains("disabled")) {
-                Assert.assertTrue(true);
-                break;
-            } else
-                Assert.fail();
+            Assert.assertTrue(option.getAttribute("class")
+                    .contains("disabled"));
         }
     }
 
@@ -1139,9 +1134,8 @@ public class ReportsPage {
             noDatamsg.shouldBe(visible);
         } else {
             for (int i = 1; i <= reportListTable.size(); i++) {
-                Assert.assertTrue(
-                        $(By.xpath(String.format("//table[@id='reportListTable']/tbody/tr[%d]/td[5]", i))).getText()
-                                .equalsIgnoreCase(status));
+                Assert.assertTrue($(By.xpath(String.format(XPATH_ReportColumnName_Value, i, 5))).getText()
+                        .equalsIgnoreCase(status));
             }
         }
     }

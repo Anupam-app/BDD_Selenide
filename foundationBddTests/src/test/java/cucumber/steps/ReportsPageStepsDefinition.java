@@ -185,6 +185,14 @@ public class ReportsPageStepsDefinition {
         reportPage.checkReportPdfInPage();
     }
 
+    @When("I see the report file is generated")
+    public void iShouldSeeTheReportFileGenerated() {
+        iGotoReportManagementPage();
+        iTriggerReportMode();
+        reportPage.viewReports(this.report.getName());
+        reportPage.checkReportPdfInPage();
+    }
+
     @Then("I check report content")
     public void iCheckReportContent() throws Exception {
         this.report.checkEventTable(reportPage.getPdfUrl());
@@ -200,7 +208,6 @@ public class ReportsPageStepsDefinition {
     public void iGenerateTheAuditTrailReport(String report, String user) {
         reportPage.goToReports();
         reportPage.switchToFrame();
-        // this.reportTemplate.setName(report);
         reportPage.iVerifyReportPageLoaded();
         reportPage.selectReport(report);
         reportPage.selectUserOnRunPage(user);
@@ -317,10 +324,11 @@ public class ReportsPageStepsDefinition {
                 this.reportTemplate.getStatus());
     }
 
-    @Then("I verify the report template")
-    public void iVerifyTheReportTemplate() {
+    @Then("I search and verify the report template")
+    public void iSearchAndVerifyTheReportTemplate() {
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         reportPage.openReportTemplate(this.reportTemplate.getName());
-        // Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+        Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
         reportPage.cancelButton();
         reportPage.gotoRunTab();
         switchTo().parentFrame();
