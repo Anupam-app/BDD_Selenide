@@ -554,14 +554,7 @@ public class ReportsPage {
     }
 
     public void isReportIncludeSelected(String reportInclude) {
-        if (reportInclude.equals("Alarms")) {
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX_CHECKED, reportInclude))).shouldBe(visible);
-        } else if (reportInclude.contains("Trends")) {
-            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX_CHECKED, reportInclude))).shouldBe(visible);
-        } else {
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX_CHECKED, reportInclude))).shouldBe(visible);
-        }
+        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX_CHECKED, reportInclude))).shouldBe(visible);
     }
 
     public void saveReportTemplate() {
