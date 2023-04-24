@@ -1,7 +1,7 @@
 @SMOKE
 Feature: I18N on all modules
 
-  @IVI @CRS @IVI-4913
+  @CRS @IVI-4913
   Scenario Outline: IVI Bug - IVI-4913 | Test i18n all modules
     Given I am using language "en-US"
     And I am logged in as "testUserForI18N" user
@@ -36,7 +36,7 @@ Feature: I18N on all modules
       | fr-FR    |
       | en-US    |
 
-  @IVI @CRS
+  @CRS
   Scenario: Test i18n device shape
     Given I am using language "en-US"
     And I am logged in as "testUserForI18N" user
