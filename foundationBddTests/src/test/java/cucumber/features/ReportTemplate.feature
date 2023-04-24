@@ -3,6 +3,7 @@ Feature: Report Template module validations
 
   JIRAs test:
   https://stljirap.sial.com/browse/BIOFOUND-28944
+  https://stljirap.sial.com/browse/BIOFOUND-28946
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -68,6 +69,18 @@ Feature: Report Template module validations
     And I open the report template dashboard
     When I search the report template "testReportTemplate"
     Then I verify template is not editable
+
+  Scenario Outline: Draft and In Review Report Template should be Editable
+    And I open the report template dashboard
+    When I search and open the report template "<templateName>"
+    And I select below report include sections
+      | Event Summary |
+    And I save the report template
+    Then I search and verify the updated report template
+    Examples:
+      | templateName         |
+      | testDraftTemplate    |
+      | testInReviewTemplate |
 
   Scenario: Verify template status approved to Inactive
     When I create report template

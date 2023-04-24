@@ -583,6 +583,7 @@ public class ReportsPageStepsDefinition {
     public void selectReportInclude(DataTable table) {
         List<List<String>> reportInclude = table.asLists(String.class);
         for (List<String> strings : reportInclude) {
+            reportTemplate.setReportIncludeOption(strings.get(0));
             reportPage.includeReport(strings.get(0));
         }
     }
@@ -628,6 +629,20 @@ public class ReportsPageStepsDefinition {
         for (String s : list) {
             reportPage.createTemplatePageValidation(s);
         }
+    }
+
+    @When("I search and open the report template {string}")
+    public void iSearchOpenTheReportTemplate(String templateName) {
+        this.reportTemplate.setName(templateName);
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+        reportPage.openReportTemplate(this.reportTemplate.getName());
+    }
+
+    @Then("I search and verify the updated report template")
+    public void iSearchAndVerifyTheUpdatedReportTemplate() {
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+        reportPage.openReportTemplate(this.reportTemplate.getName());
+        reportPage.isReportIncludeSelected(reportTemplate.getReportIncludeOption());
     }
 
 }
