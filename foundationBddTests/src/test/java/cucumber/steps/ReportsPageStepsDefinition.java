@@ -1,6 +1,14 @@
 package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Report;
@@ -13,11 +21,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.ContextHelper;
@@ -34,7 +37,7 @@ public class ReportsPageStepsDefinition {
     private final Login login;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-                                      ReportTemplate reportTemplate, User user, Login login, Role role) {
+            ReportTemplate reportTemplate, User user, Login login, Role role) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
@@ -64,7 +67,8 @@ public class ReportsPageStepsDefinition {
     public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            reportPage.verifyColumn(list.get(i).get(0), tab, i);
+            reportPage.verifyColumn(list.get(i)
+                    .get(0), tab, i);
         }
     }
 
@@ -98,7 +102,8 @@ public class ReportsPageStepsDefinition {
 
     @And("I choose corresponding recipe run")
     public void iChooseCorrespondingRecipeRun() {
-        report.getRecipes().forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
+        report.getRecipes()
+                .forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -131,8 +136,8 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I select device {string}")
-    public void iSelectDefaultDevice(String device){
-        if(ContextHelper.isOrchestrator()){
+    public void iSelectDefaultDevice(String device) {
+        if (ContextHelper.isOrchestrator()) {
             reportPage.selectDevice(device);
         }
     }
@@ -169,11 +174,21 @@ public class ReportsPageStepsDefinition {
 
     @When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
-        report.getRecipes().forEach(recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+        report.getRecipes()
+                .forEach(
+                        recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
     @When("I should see the report file presence")
     public void iShouldSeeTheReportFilePresence() {
+        reportPage.viewReports(this.report.getName());
+        reportPage.checkReportPdfInPage();
+    }
+
+    @When("I see the report file is generated")
+    public void iShouldSeeTheReportFileGenerated() {
+        iGotoReportManagementPage();
+        iTriggerReportMode();
         reportPage.viewReports(this.report.getName());
         reportPage.checkReportPdfInPage();
     }
@@ -193,7 +208,6 @@ public class ReportsPageStepsDefinition {
     public void iGenerateTheAuditTrailReport(String report, String user) {
         reportPage.goToReports();
         reportPage.switchToFrame();
-        this.reportTemplate.setName(report);
         reportPage.iVerifyReportPageLoaded();
         reportPage.selectReport(report);
         reportPage.selectUserOnRunPage(user);
@@ -250,7 +264,8 @@ public class ReportsPageStepsDefinition {
     public void iSelectTrendsParameters(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            reportPage.selectParams(list.get(i).get(0));
+            reportPage.selectParams(list.get(i)
+                    .get(0));
         }
     }
 
@@ -282,7 +297,7 @@ public class ReportsPageStepsDefinition {
 
 
     @When("I save the report template")
-    public void iSaveReportTemplate() {
+    public void iSaveTheReportTemplate() {
         reportPage.saveReportTemplate();
     }
 
@@ -309,10 +324,14 @@ public class ReportsPageStepsDefinition {
                 this.reportTemplate.getStatus());
     }
 
-    @Then("I verify the report template")
-    public void iVerifyTheReportTemplate() {
+    @Then("I search and verify the report template")
+    public void iSearchAndVerifyTheReportTemplate() {
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         reportPage.openReportTemplate(this.reportTemplate.getName());
         Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+        reportPage.cancelButton();
+        reportPage.gotoRunTab();
+        switchTo().parentFrame();
     }
 
     @When("I generate audit trail report")
@@ -338,7 +357,8 @@ public class ReportsPageStepsDefinition {
 
     @Then("I see the role added in report")
     public void iVerifyThatRoleIsAdded() throws Exception {
-        this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions());
+        this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(),
+                this.role.getPermissions());
         switchTo().parentFrame();
     }
 
@@ -356,9 +376,10 @@ public class ReportsPageStepsDefinition {
         SelenideHelper.goParentFrame();
     }
 
-    @And("I create new report template with existing name")
+    @And("I provide the existing template name")
     public void iEnterExistingReportTemplateName() {
-        reportPage.createTemplate(this.reportTemplate.getName());
+        this.reportTemplate.setName("testReportTemplate");
+        reportPage.createDuplicateTemplate(this.reportTemplate.getName());
     }
 
     @Then("I verify the template name error message")
@@ -372,9 +393,9 @@ public class ReportsPageStepsDefinition {
     }
 
     @And("I try to approve the report template with wrong password {string}")
-    public void iApproveTemplateWrongPassword(String value) {
+    public void iApproveTemplateWrongPassword(String password) {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
-        reportPage.approveTemplate(this.reportTemplate.getName(), value, this.reportTemplate.getStatus());
+        reportPage.approveTemplate(this.reportTemplate.getName(), password, this.reportTemplate.getStatus());
     }
 
     @Then("I esign the report with wrong password {string}")
@@ -384,6 +405,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I verify template is not editable")
     public void iVerifyTemplateIsEditable() {
+        reportPage.openReportTemplate(this.reportTemplate.getName());
         reportPage.approvedTemplateValidation();
     }
 
@@ -406,71 +428,74 @@ public class ReportsPageStepsDefinition {
             iTriggerReportMode();
             reportPage.gotoRunTab();
             iSelectReportFromDropdown("Consolidated");
-            waiting = !report.getRecipes().stream().allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
+            waiting = !report.getRecipes()
+                    .stream()
+                    .allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
         }
     }
 
     @When("I choose recipes from consolidation run")
     public void iChooseRecipeRunForConsolidation() {
-        report.getRecipes().forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
+        report.getRecipes()
+                .forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
 
     @Given("I select the report template")
-    public void i_select_report_template() {
+    public void iSelectTemplate() {
         reportPage.openReportTemplate(this.reportTemplate.getName());
     }
 
     @When("I save As the report template")
-    public void i_save_as_the_report_template() {
+    public void iSaveAsReportTemplate() {
         reportPage.iSaveAs();
     }
 
     @Then("I see SaveTemplate popup window")
-    public void i_see_save_template_popup_window() {
+    public void iSeeSavePopUpWindow() {
         reportPage.ivalidateWindow();
     }
 
     @When("I modify the Existing template")
-    public void i_modify_the_existing_template() throws InterruptedException {
+    public void iUpdateExistingTemplate() throws InterruptedException {
         this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
         this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
         reportPage.iRename(this.reportTemplate.getSaveAsName());
     }
 
-    @When("I change the templete status Approved to Inactive")
-    public void i_change_template_status_approved_to_inactive() {
+    @When("I change the template status Approved to Inactive")
+    public void iChangeTemplateStatusApprovedToInactive() {
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
         reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
 
     @Then("I see {string} button enable and save As the report template")
-    public void i_see_button_enable_and_save_as_the_report_template(String string) {
+    public void iSaveAsReportTemplate(String string) {
         reportPage.iValidation();
         reportPage.iSaveAs();
     }
 
     @And("I save report template")
-    public void i_save_report_template() {
+    public void iSaveReportTemplate() {
         reportPage.isave();
     }
 
     @Then("I see {string} successfully message")
-    public void i_see_successfully_message(String message) {
+    public void iSeeSuccessfullyMessage(String message) {
         reportPage.iCheckNotifactionMsg(message);
     }
 
     @When("I search modified the template")
-    public void i_search_modified_template() {
+    public void ISearchModifiedTemplate() {
         reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
     }
 
     @And("I see report template status Draft in template page")
-    public void i_see_report_template_status_draft_template_page() {
+    public void iSeeReportTemplateStatusDraftTemplatePage() {
         reportPage.iValidationdraft();
     }
 
     @Then("I verify run summary report report")
-    public void i_verify_run_summary_report() throws IOException {
+    public void iVerifyRunSummaryReport() throws IOException {
         this.report.checkEventTable(reportPage.getPdfUrl());
         this.report.checkFiledIds(reportPage.getPdfUrl(), report.getRecipes(), report.getReportName());
         this.report.checkPreRunColumnsInReport(reportPage.getPdfUrl());
@@ -478,18 +503,18 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I enter {string} as username and {string} password")
-    public void i_Enter_Username_Password(String username, String password) {
+    public void iEnterUsernamePassword(String username, String password) {
         loginPage.setUser(username);
         loginPage.setPassword(password);
     }
 
     @Then("I verify recipe details captured in report run tab {string}")
-    public void iverifyRunReportwithRecipeEntries(String recipeName) throws ParseException {
+    public void iVerifyRunReportWithRecipeEntries(String recipeName) throws ParseException {
         reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
     }
 
     @And("I should see newly created user {string} present in report")
-    public void iSeenewlyCreatedUserPresentInReport(String user) {
+    public void iSeeNewlyCreatedUserPresentInReport(String user) {
         reportPage.verifyNewUser(user);
     }
 
@@ -518,28 +543,91 @@ public class ReportsPageStepsDefinition {
     @Then("I verify custom role permissions details captured in audit trail for user")
     public void iVerifyAuditTrailReportRolePermissions() throws IOException {
         iVerifyTheAuditTrailReport();
-        this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(), this.role.getOldPermissions());
+        this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
+                this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
+                this.role.getOldPermissions());
         SelenideHelper.goToDefault();
     }
 
-	@Then("I see the role deleted in report")
-	public void iVerifyThatRoleIsDeleted() throws Exception {
-		this.report.checkDeletedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin());
-		switchTo().parentFrame();
-	}
-	
-	@Then("I verify consolidate manual run summary report")
-	public void iVerifyConsolidateManualSummaryReport() throws Exception {
-		this.report.verifyConsolidateManualSummaryReport(reportPage.getPdfUrl());
-	}
-	
-	@And("I save Trends without name")
+    @Then("I see the role deleted in report")
+    public void iVerifyThatRoleIsDeleted() throws Exception {
+        this.report.checkDeletedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @Then("I verify consolidate manual run summary report")
+    public void iVerifyConsolidateManualSummaryReport() throws Exception {
+        this.report.verifyConsolidateManualSummaryReport(reportPage.getPdfUrl());
+    }
+
+    @And("I save Trends without name")
     public void iCreateTrendsChartsWithoutName() {
         reportPage.saveTrendsButton();
     }
-	
-	@Then("I see error message displayed {string}")
-	public void iSeeErrorMessageisdisplayed(String message) {
-		reportPage.isGeneratedNotificationWhenCreateExistingUsername(message);
-	}
+
+    @Then("I see error message displayed {string}")
+    public void iSeeErrorMessageisdisplayed(String message) {
+        reportPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+    }
+
+    @When("I create report template")
+    public void iCreateReportTemplate() {
+        iGotoReportManagementPage();
+        iTriggerTemplateMode();
+        this.reportTemplate.setName(RandomStringUtils.randomAlphabetic(10));
+        this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
+        reportPage.createTemplate(this.reportTemplate.getName());
+    }
+
+    @And("I select below report include sections")
+    public void selectReportInclude(DataTable table) {
+        List<List<String>> reportInclude = table.asLists(String.class);
+        for (List<String> strings : reportInclude) {
+            reportPage.includeReport(strings.get(0));
+        }
+    }
+
+    @When("I search and approve the report template")
+    public void iSearchAndApproveTheReportTemplate() {
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+        iPutTheReportTemplateInReview();
+        reportPage.saveReportTemplate();
+        reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+        iApproveTheReportTemplate();
+    }
+
+    @When("I open the report template {string}")
+    public void iSearchAndOpenTheReportTemplate(String templateName) {
+        reportPage.searchReportOrTemplate(templateName);
+        reportPage.openReportTemplate(templateName);
+    }
+
+    @Given("I open the report template dashboard")
+    public void iOpenTemplateDashboard() {
+        iGotoReportManagementPage();
+        reportPage.gotoTemplate();
+    }
+
+    @Then("I verify the audit trail for template")
+    public void iCheckAuditTrialReportContentForTemplate() throws Exception {
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkTemplateStatus(reportPage.getPdfUrl(), this.reportTemplate.getName(),
+                this.reportTemplate.getStatus(), this.login.getLogin());
+        this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(),
+                this.reportTemplate.getStatus(), this.login.getLogin());
+    }
+
+    @When("I verify audit logs for template update")
+    public void iVerifyAuditLogsForTemplateCreate() {
+        reportPage.verifyAuditLogsForTemplateCreate(this.reportTemplate.getName());
+    }
+
+    @When("I verify below options availability")
+    public void iSeeTheAvailabilityOfOptions(DataTable table) {
+        List<String> list = table.asList(String.class);
+        for (String s : list) {
+            reportPage.createTemplatePageValidation(s);
+        }
+    }
+
 }
