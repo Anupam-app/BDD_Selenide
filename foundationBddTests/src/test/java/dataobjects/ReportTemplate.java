@@ -19,4 +19,5 @@ public class ReportTemplate {
     @Setter
     @Getter
     String reportIncludeOption;
+
 }
