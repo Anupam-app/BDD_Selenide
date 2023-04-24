@@ -277,7 +277,8 @@ public class ReportsPage {
                         .isBlank());
                 break;
             case "reports":
-                $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).shouldHave(text(columnName));
+                $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).waitUntil(visible, 5000)
+                        .shouldHave(text(columnName));
                 Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex)))
                         .waitUntil(visible, 5000)
                         .getText()
