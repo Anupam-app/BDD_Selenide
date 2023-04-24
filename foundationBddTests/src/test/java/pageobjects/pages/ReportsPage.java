@@ -54,6 +54,8 @@ public class ReportsPage {
     private final String XPATH_REPORT_NAME = "//td[contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_CHECKBOX =
             "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='check_box']";
+    private final String XPATH_TEMPLATE_CHECKBOX_CHECKED =
+            "//li[@class=\"checkbox_item checkbox_focus \"]/div[@class='item_value'][contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_EYEICON =
             "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='eye_icon']";
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[contains(text(),'%s')]";
@@ -544,9 +546,15 @@ public class ReportsPage {
         } else if (reportInclude.contains("Trends")) {
             SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
+            selectParameters("2", "parameters/ivi/trendsParams");
+            saveTrends();
         } else {
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
         }
+    }
+
+    public void isReportIncludeSelected(String reportInclude) {
+        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX_CHECKED, reportInclude))).shouldBe(visible);
     }
 
     public void saveReportTemplate() {
