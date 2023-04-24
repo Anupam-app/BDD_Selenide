@@ -546,8 +546,6 @@ public class ReportsPage {
         } else if (reportInclude.contains("Trends")) {
             SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
             $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
-            selectParameters("2", "parameters/ivi/trendsParams");
-            saveTrends();
         } else {
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
         }
