@@ -633,7 +633,6 @@ public class ReportsPageStepsDefinition {
         this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
         reportPage.iRename(this.reportTemplate.getSaveAsName());
         reportPage.iCheckNotificationMsg("Report template created");
-
     }
 
 }
