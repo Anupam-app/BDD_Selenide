@@ -8,7 +8,7 @@ import pageobjects.utility.SelenideHelper;
 
 public class AlarmPageStepsDefinition {
 
-    private AlarmPage alarmPage;
+    private final AlarmPage alarmPage;
 
     public AlarmPageStepsDefinition(AlarmPage alarmPage) {
         this.alarmPage = alarmPage;
@@ -34,7 +34,7 @@ public class AlarmPageStepsDefinition {
     }
 
     @Given("I acknowledge the alarm")
-    public void iAcknowledgeAlarm() {
+    public void iAcknowledgeAlarm() throws InterruptedException {
         alarmPage.acknowledgeAlarm();
     }
 

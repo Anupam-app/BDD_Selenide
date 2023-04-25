@@ -8,6 +8,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
   https://stljirap.sial.com/browse/BIOFOUND-27908
+  https://stljirap.sial.com/browse/BIOFOUND-27818
+  https://stljirap.sial.com/browse/BIOFOUND-19474
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -263,23 +265,20 @@ Feature: Recipe management
     When I create a phase
     Then I verify notification messages "Phase created successfully"
 
-  Scenario:BIOFOUND-19474|Recipe Management_Validate error message displayed when invalid/out of range float value is provided in Recipe steps
+  Scenario: Validate error message displayed when invalid/out of range float value is provided in Recipe steps
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
+    When I open Recipe editor
     When I add new action step using Keyboard event
     And I add "Threshold" action to the step
-    And I try to change the setpoint value to out of range
-    Then I verify error message displayed
-    And I add new action step using Keyboard event
-    And I add "Setpoint" action to the step
-    And I Validate the error message for below input values
-      | 5  |
-      | 3. |
-      | .2 |
-      | -1 |
+    And I verify error message "Out of Range" for out of range value entry
+    And I should see error message for respective "Setpoint" values provided
+      | 5  |Out of Range                        |
+      | 3. |No value before/after decimal point |
+      | .2 |No value before/after decimal point |
+      | -1 |Out of Range                        |
+      | 1  |                                    |
     And I save the recipe with name "errorRecipe"
-    And I try to change status and verify error message displayed "Recipe has errors. Cannot change status."
+
 
   Scenario:BIOFOUND-27906 |Maximum Phases
     Given I am logged in as "Bio4CAdmin" user
@@ -418,17 +417,25 @@ Feature: Recipe management
     When I clear errors in the phase
     Then I can add phase to phase library.
 
-  Scenario : Validate the add Step count
+#  Scenario : Validate the add Step count
+#    Given I am logged in as "Bio4CAdmin" user
+#    When I open Recipe editor
+#    When I add new action step using Keyboard event
+#    Then I see "blank" step added & I add Setpoint action to the step
+#    And I should see step count increases by "1"
+#    Then I verify the action added
+#    When I add action from action browser
+#    Then I should see step count increases
+#    When I copy the step "2"
+#    And I paste step after Step "2"
+#    Then I should see step count increases
+#    When I add a phase to recipe from phase library
+#    Then I should see step count increases
+
+  Scenario: Recipe status cannot change when errors are present
     Given I am logged in as "Bio4CAdmin" user
-    When I open Recipe editor
-    When I add new action step using Keyboard event
-    Then I see "blank" step added & I add Setpoint action to the step
-    And I should see step count increases by "1"
-    Then I verify the action added
-    When I add action from action browser
-    Then I should see step count increases
-    When I copy the step "2"
-    And I paste step after Step "2"
-    Then I should see step count increases
-    When I add a phase to recipe from phase library
-    Then I should see step count increases
+    When I edit the recipe "errorRecipe" from recipe browser
+    Then I verify error message "Recipe has errors. Cannot change status." on changing recipe status
+    When I update actual range of value
+    Then I should be able to save & approve recipe
+

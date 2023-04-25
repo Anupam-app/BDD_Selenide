@@ -1,0 +1,3 @@
+[submodule "PDP/ot_pdp_crs_codesys"]
+	path = PDP/ot_pdp_crs_codesys
+	url = http://dfwstp01.sial.com:7990/scm/biop/ot_pdp_crs_codesys.git
