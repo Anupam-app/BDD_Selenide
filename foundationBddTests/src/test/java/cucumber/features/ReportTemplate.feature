@@ -4,6 +4,7 @@ Feature: Report Template module validations
   JIRAs test:
   https://stljirap.sial.com/browse/BIOFOUND-28944
   https://stljirap.sial.com/browse/BIOFOUND-28946
+  https://stljirap.sial.com/browse/BIOFOUND-28948
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -93,3 +94,17 @@ Feature: Report Template module validations
     And I search the report template
     And I change the template status Approved to Inactive
     Then I search and verify the report template
+
+  Scenario Outline: clone the report template with different statuses
+    And I open the report template dashboard
+    When I search and open the report template "<templateName>"
+    And I clone the report template
+    Then I should see new template created with "Draft" status
+    And Existing template should also be present with "<status>"
+
+    Examples:
+      | templateName         | status    |
+      | testDraftTemplate    | Draft     |
+      | testInReviewTemplate | In Review |
+      | testReportTemplate   | Approved  |
+      | testInactiveTemplate | Inactive  |

@@ -802,7 +802,7 @@ public class ReportsPage {
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
-                                                                                            // is without 0 prefix
+                // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
@@ -883,24 +883,19 @@ public class ReportsPage {
         saveReportTemplate();
     }
 
-    public void iCheckNotifactionMsg(String status) {
+    public void iCheckNotificationMsg(String status) {
         SelenideHelper.commonWaiter(notificationMsg, visible);
     }
 
-    public void iSearchrepo(String templateName) {
+    public void iSearchReportTemplate(String templateName) {
         SelenideHelper.commonWaiter(reportSearch, visible)
                 .setValue(templateName);
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
 
-    public boolean iValidationdraft() {
-        boolean isTrue = false;
-        if (!column_temp.isDisplayed()) {
-            column_temp.shouldNotBe(visible);
-        } else {
-            column_temp.shouldBe(visible);
-        }
-        return isTrue;
+    public void iValidateStatus(String status) {
+        Assert.assertTrue(column_temp.getText()
+                .equalsIgnoreCase(status));
     }
 
     public void selectDateRangeRprt(String option) {
@@ -938,7 +933,7 @@ public class ReportsPage {
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");// M is used as actual value
-                                                                                          // is without 0 prefix
+                // is without 0 prefix
 
                 if (startDateRep.isDisplayed()) {
                     sortList("Date Generated", false);
@@ -969,7 +964,7 @@ public class ReportsPage {
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
-                                                                                            // is without 0 prefix
+                // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
