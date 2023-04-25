@@ -968,4 +968,174 @@ public class Report {
         }
     }
 
+    public void checkTemplateStatus(String reportUrl, String templateName, String status, String userNameLoggedIn)
+            throws IOException {
+
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                // start from 1 to skip the header row
+                for (int i = 1; i < 3; i++) {
+                    String appNameColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(1)
+                            .getText(false);
+                    String recordColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(2)
+                            .getText(false);
+                    String userColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(userColumnIndex)
+                            .getText(false);
+                    String commentColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false);
+                    String attributeColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(5)
+                            .getText(false);
+                    String currValueColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(6)
+                            .getText(false);
+                    String preValueColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(7)
+                            .getText(false);
+
+                    if (!StringUtils.isEmpty(userColumnValue)) {
+                        // check user is not an internal user
+                        if (StringUtils.containsIgnoreCase(StringUtils.trim(userColumnValue), INTERNAL_USER)) {
+                            Assert.fail(String.format("Internal user in the report : %s", userColumnValue));
+                        }
+                        // check user format
+                        Assert.assertTrue(String.format(
+                                "User format error. Value : %s. Expected pattern : UserLogin(Firstname Lastname)",
+                                userColumnValue), userColumnValue.matches(USER_COLUMN_FORMAT));
+                        Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                        Assert.assertTrue(appNameColumnValue.contains("ReportManagement"));
+                        Assert.assertTrue(recordColumnValue.contains(templateName));
+                        Assert.assertTrue(attributeColumnValue.contains("status"));
+                        if (i == 1) {
+                            Assert.assertTrue(commentColumnValue
+                                    .contains(userNameLoggedIn + " approved andsigned Report Template"));
+                            Assert.assertTrue(currValueColumnValue.contains(status));
+                            Assert.assertTrue(preValueColumnValue.contains("In Review"));
+                        } else {
+                            Assert.assertTrue(
+                                    commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
+                            Assert.assertTrue(preValueColumnValue.contains("Draft"));
+                            Assert.assertTrue(currValueColumnValue.contains("In Review"));
+                        }
+                    }
+                }
+            }
+            break;
+        }
+    }
+
+    public void checkCreatedTemplate(String reportUrl, String templateName, String status, String userNameLoggedIn)
+            throws IOException {
+        URL url = new URL(reportUrl);
+        String attributeColumnValue = null;
+        String currValueColumnValue = null;
+        int flag = 0;
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            flag = flag + 1;
+            if (flag == 1) {
+                for (int i = 3; i < 9; i++) {
+                    if (!(i == 8)) {
+                        attributeColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(0)
+                                .getText(false);
+                        currValueColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(1)
+                                .getText(false);
+                    }
+                }
+            } else {
+                for (int i = 1; i < 5; i++) {
+                    if (!(i == 1)) {
+                        attributeColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(4)
+                                .getText(false);
+                        currValueColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(5)
+                                .getText(false);
+                    } else {
+                        String appNameColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(1)
+                                .getText(false);
+                        String recordColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(2)
+                                .getText(false);
+                        String userColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(3)
+                                .getText(false);
+                        String commentColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(4)
+                                .getText(false);
+                        attributeColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(5)
+                                .getText(false);
+                        currValueColumnValue = reportTable.getRows()
+                                .get(i)
+                                .get(6)
+                                .getText(false);
+                        Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                        Assert.assertTrue(appNameColumnValue.contains("ReportManagement"));
+                        Assert.assertTrue(recordColumnValue.contains(templateName));
+                        Assert.assertTrue(commentColumnValue.contains("Bio4CAdmin created ReportTemplate"));
+                    }
+                }
+                switch (attributeColumnValue) {
+                    case "status":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("Draft"));
+                        break;
+                    case "isDefault":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("n"));
+                        break;
+                    case "templateType":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("RunSummary"));
+                        break;
+                    case "name":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase(templateName));
+                        break;
+                    case "createdBy":
+                    case "lastModifiedBy":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase(userNameLoggedIn));
+                        break;
+                    case "signatureC ount":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("1"));
+                        break;
+                    case "deviceId":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("IVI"));
+                        break;
+                    case "state":
+                        Assert.assertTrue(currValueColumnValue.equalsIgnoreCase("true"));
+                        break;
+                }
+            }
+            if (flag > 1) {
+                break;
+            }
+        }
+    }
+
 }

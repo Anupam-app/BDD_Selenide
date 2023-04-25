@@ -15,4 +15,9 @@ public class ReportTemplate {
     @Setter
     @Getter
     String SaveAsName;
+
+    @Setter
+    @Getter
+    String reportIncludeOption;
+
 }
