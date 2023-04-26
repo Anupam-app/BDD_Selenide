@@ -455,43 +455,22 @@ public class ReportsPageStepsDefinition {
         reportPage.ivalidateWindow();
     }
 
-    @When("I modify the Existing template")
-    public void iUpdateExistingTemplate() throws InterruptedException {
-        this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
-        this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
-        reportPage.iRename(this.reportTemplate.getSaveAsName());
-    }
-
     @When("I change the template status Approved to Inactive")
     public void iChangeTemplateStatusApprovedToInactive() {
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
         reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
 
-    @Then("I see {string} button enable and save As the report template")
-    public void iSaveAsReportTemplate(String string) {
-        reportPage.iValidation();
-        reportPage.iSaveAs();
+    @When("I should see new template created with {string} status")
+    public void ISearchModifiedTemplate(String status) {
+        reportPage.iSearchReportTemplate(this.reportTemplate.getSaveAsName());
+        reportPage.iValidateStatus(status);
     }
 
-    @And("I save report template")
-    public void iSaveReportTemplate() {
-        reportPage.isave();
-    }
-
-    @Then("I see {string} successfully message")
-    public void iSeeSuccessfullyMessage(String message) {
-        reportPage.iCheckNotifactionMsg(message);
-    }
-
-    @When("I search modified the template")
-    public void ISearchModifiedTemplate() {
-        reportPage.iSearchrepo(this.reportTemplate.getSaveAsName());
-    }
-
-    @And("I see report template status Draft in template page")
-    public void iSeeReportTemplateStatusDraftTemplatePage() {
-        reportPage.iValidationdraft();
+    @When("Existing template should also be present with {string}")
+    public void ISearchExistingTemplate(String status) {
+        reportPage.iSearchReportTemplate(this.reportTemplate.getName());
+        reportPage.iValidateStatus(status);
     }
 
     @Then("I verify run summary report report")
@@ -566,7 +545,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I see error message displayed {string}")
-    public void iSeeErrorMessageisdisplayed(String message) {
+    public void iSeeErrorMessageIsDisplayed(String message) {
         reportPage.isGeneratedNotificationWhenCreateExistingUsername(message);
     }
 
@@ -643,6 +622,17 @@ public class ReportsPageStepsDefinition {
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         reportPage.openReportTemplate(this.reportTemplate.getName());
         reportPage.isReportIncludeSelected(reportTemplate.getReportIncludeOption());
+    }
+
+    @Then("I clone the report template")
+    public void iCloneTheReportTemplate() {
+        reportPage.iValidation();
+        reportPage.iSaveAs();
+        reportPage.ivalidateWindow();
+        this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
+        this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
+        reportPage.iRename(this.reportTemplate.getSaveAsName());
+        reportPage.iCheckNotificationMsg("Report template created");
     }
 
 }
