@@ -3,7 +3,7 @@ package cucumber.steps;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
-import java.awt.*;
+import java.awt.AWTException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -759,8 +759,4 @@ public class RecipePageStepsDefinition {
         recipePage.multipleSteps();
     }
 
-    @And("I should see warning popup {string}")
-    public void iAddACriteria(String Message){
-        recipePage.errorMessage(Message);
-    }
 }

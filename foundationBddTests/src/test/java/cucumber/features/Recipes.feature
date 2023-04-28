@@ -429,7 +429,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I add all the criteria with few actions steps
     Then I save as recipe name "RecipeWithAllCriteria"
-    And I go to browser mode
+    When I go to browser mode
     And I edit recipe "RecipeWithAllCriteria"
     And I add criteria to phase using keyboard
-    And I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"
+    Then I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"
