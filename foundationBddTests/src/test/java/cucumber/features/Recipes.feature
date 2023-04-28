@@ -422,3 +422,14 @@ Feature: Recipe management
     Then I verify error message "Recipe has errors. Cannot change status." on changing recipe status
     When I update actual range of value
     Then I should be able to save & approve recipe
+
+  Scenario:BIOFOUND-27865 :Addition of recipe criteria
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I trigger edit mode
+    And I add all the criteria with few actions steps
+    Then I save as recipe name "RecipeWithAllCriteria"
+    And I go to browser mode
+    And I edit recipe "RecipeWithAllCriteria"
+    And I add criteria to phase using keyboard
+    And I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"

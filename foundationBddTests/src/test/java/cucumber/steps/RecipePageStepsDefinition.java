@@ -753,4 +753,14 @@ public class RecipePageStepsDefinition {
         recipePage.saveModifiedRecipe();
         recipePage.approveRecipe(login.getPassword());
     }
+
+    @And("I add all the criteria with few actions steps")
+    public void iAddAllTheCriteriaWithFewActionsSteps() throws AWTException {
+        recipePage.multipleSteps();
+    }
+
+    @And("I should see warning popup {string}")
+    public void iAddACriteria(String Message){
+        recipePage.errorMessage(Message);
+    }
 }
