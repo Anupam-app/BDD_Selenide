@@ -1345,7 +1345,7 @@ public class RecipePage {
                 action = "Start Full Process";
                 break;
             case "2":
-                action = "Pressure setpoint";
+                action = "pressure setpoint";
                 break;
             case "3":
                 action = "Feed pump setpoint";
