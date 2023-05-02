@@ -1298,7 +1298,6 @@ public class RecipePage {
 
     public void multipleSteps() throws AWTException {
         addingStepByClickPlusIcon();
-        SelenideElement searchTextBox = $(By.className("search-txt-box"));
         searchTextBox.sendKeys("Start Purging");
         searchTextBox.sendKeys(Keys.ENTER);
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");

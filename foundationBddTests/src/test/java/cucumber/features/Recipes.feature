@@ -9,6 +9,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27821
   https://stljirap.sial.com/browse/BIOFOUND-27818
   https://stljirap.sial.com/browse/BIOFOUND-19474
+  https://stljirap.sial.com/browse/BIOFOUND-27865
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -423,7 +424,7 @@ Feature: Recipe management
     When I update actual range of value
     Then I should be able to save & approve recipe
 
-  Scenario:BIOFOUND-27865 :Addition of recipe criteria
+  Scenario: Addition of recipe criteria
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I trigger edit mode
