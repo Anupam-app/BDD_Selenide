@@ -424,6 +424,7 @@ Feature: Recipe management
     When I update actual range of value
     Then I should be able to save & approve recipe
 
+  @IVI-7794
   Scenario: Addition of recipe criteria
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
