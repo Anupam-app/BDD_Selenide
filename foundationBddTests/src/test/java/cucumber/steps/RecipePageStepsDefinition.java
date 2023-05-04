@@ -3,7 +3,7 @@ package cucumber.steps;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
-import java.awt.*;
+import java.awt.AWTException;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -753,4 +753,10 @@ public class RecipePageStepsDefinition {
         recipePage.saveModifiedRecipe();
         recipePage.approveRecipe(login.getPassword());
     }
+
+    @And("I add all the criteria with few actions steps")
+    public void iAddAllTheCriteriaWithFewActionsSteps() throws AWTException {
+        recipePage.multipleSteps();
+    }
+
 }
