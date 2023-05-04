@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
+import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -46,7 +47,7 @@ public class RecipePage {
     private final String XPATH_STEP = "//div[@class='search-box-wrapper' and contains(@data-contextmenu,'step%s')]";
     private final String XPATH_DELETEBUTTON = "//*[@data-contextmenu='phase%s']//input[@class='deleteButton']";
     Actions stepAction = new Actions(WebDriverRunner.getWebDriver());
-
+    private Recipe recipe;
     private final String XPATH_IMPORT_RECIPE = "//tr[td[contains(.,'%s')]]";
     private final String XPATH_EDIT_EXPORT_ICON =
         "//tr[td[contains(text(),'%s')]]/td/div[contains(@class, 'export-icon')]";
@@ -233,6 +234,12 @@ public class RecipePage {
     private final SelenideElement setpointInOutRange = $(By.xpath("//input[@type='text' and @data-label='action-value']"));
     private final SelenideElement recipeCreateButton = $(By.xpath(
         "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
+    private final String SELECT_PHASE = "//label[@class='phaseHead' and @data-phasename='%s']";
+    private final ElementsCollection phaseStepsActions = $$(By.xpath("//div[@class='recipe-phase-container']//div[@class='smart-search-container']"));
+    private final String PHASE_NAME_LABEL = "//div[@data-phasename='%s']/div/div";
+    private final String PHASE_IN_PROGRESS_TEXT = "Phase creation in progress. Press \"Enter\" once completed.";
+    private final ElementsCollection phaseCount = $$(By.xpath("//label[@class='phaseHead']"));
+    private final String XPATH_STEP_NUMBER = "//div[@class='stepNumber' and contains(@data-contextmenu,'step%s')]";
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1336,6 +1343,7 @@ public class RecipePage {
         addActionToStep.sendKeys(setActionStepValue(Integer.toString(stepNo)));
         addActionToStep.sendKeys(Keys.ENTER);
         Assert.assertTrue(getStepValue.getAttribute("data-value").contains(setActionStepValue(Integer.toString(stepNo))));
+
     }
 
     public String setActionStepValue(String value) {
@@ -1345,7 +1353,7 @@ public class RecipePage {
                 action = "Start Full Process";
                 break;
             case "2":
-                action = "Pressure setpoint";
+                action = "pressure setpoint";
                 break;
             case "3":
                 action = "Feed pump setpoint";
@@ -1405,10 +1413,11 @@ public class RecipePage {
     public void selectStep(String stepNo) {
         if (stepNo.contains(",")) {
             String[] number = stepNo.split(",");
+            $(By.xpath(String.format(label, "Unsaved"))).click();
             stepAction.keyDown(Keys.CONTROL)
                     .perform();
             for (String s : number) {
-                $(By.xpath(String.format(XPATH_STEP, s))).waitUntil(visible, 5000).click();
+                $(By.xpath(String.format(XPATH_STEP_NUMBER, s))).waitUntil(visible, 5000).click();
             }
             stepAction.keyUp(Keys.CONTROL)
                     .perform();
@@ -1454,6 +1463,47 @@ public class RecipePage {
         selectStep(stepTwo);
         String stepTwoValue = getActionValue();
         Assert.assertEquals("Copied step and pasted step assertion", stepOneValue, stepTwoValue);
+    }
+
+    public void addPhaseAndVerifySuccessMessage(String phase) {
+        phaseElementTextBox.sendKeys(phase);
+        phaseElementTextBox.sendKeys(Keys.ENTER);
+        recipeNotification(NOTIFICATION_PHASE_CREATION);
+    }
+
+    public void selectPhase(String phaseName) {
+        commonWaiter($(By.xpath(String.format(PHASE_NAME_LABEL, phaseName))), visible).click();
+    }
+
+    public int phaseCountUsingName(String phaseName) {
+        return  $$(By.xpath(String.format(SELECT_PHASE, phaseName))).size();
+    }
+
+    public int phaseCount(){
+        return phaseCount.size();
+    }
+
+    public void verifyPhaseSteps(String stepNumbers){
+        if (stepNumbers.contains(",")) {
+            String[] numbers = stepNumbers.split(",");
+            for (int i=0;i<numbers.length;i++) {
+                phaseStepsActions.get(i).getAttribute("data-value").contains(setActionStepValue(numbers[i]));
+            }
+        }
+    }
+
+    public void verifyPhaseName(String phaseName){
+        $(By.xpath(String.format(PHASE_NAME_LABEL,phaseName))).shouldBe(visible);
+    }
+
+    public void verifyPhaseCountAfterPasteAction(int count, String phaseName){
+        int pastedPhaseCount = phaseCountUsingName(phaseName);
+        Assert.assertTrue("Phase paste is not done",pastedPhaseCount==1 && pastedPhaseCount<count);
+    }
+
+    public void phaseCreationNotification(){
+        commonWaiter(notificationMessage, visible)
+                .shouldHave(text(PHASE_IN_PROGRESS_TEXT));
     }
 }
 

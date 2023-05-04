@@ -3,8 +3,7 @@ Feature: Recipe Touch Enabler
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    And I trigger edit mode
+    And I open Recipe editor
 
   Scenario: Verify Add step, Add criteria, save, Delete functionality
     When I add 3 action steps
@@ -28,3 +27,18 @@ Feature: Recipe Touch Enabler
     And I paste the cut step before the step 2
     And I Save the recipe
     And I should see cut step is pasted
+
+  Scenario Outline: Verify Add phase, copy, paste phase functionality
+    When I add 4 action steps
+    And I initiate Phase creation using action step "2,3"
+    Then I should see phase creation warning message
+    When I add phase successfully
+    Then I should see phase has action steps "2,3"
+    When I "<action>" to "<pasteAction>" Phase
+    Then I verify phase is pasted "<value>"
+    And I Save the recipe
+
+    Examples:
+      |action     |pasteAction        |value  |
+      |Copy Phase |Paste Phase Before |Before |
+      |Copy Phase |Paste Phase After  |After  |
