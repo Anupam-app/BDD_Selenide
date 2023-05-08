@@ -754,8 +754,4 @@ public class RecipePageStepsDefinition {
         recipePage.approveRecipe(login.getPassword());
     }
 
-    @When("I should see phase creation warning message")
-    public void iVerifyPhaseCreationWarningText() {
-        recipePage.phaseCreationNotification();
-    }
 }

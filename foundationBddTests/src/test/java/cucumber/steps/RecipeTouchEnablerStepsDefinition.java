@@ -106,10 +106,13 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.actionStepDeletion(recipe.getOrgStepCount());
     }
 
-    @And("I initiate Phase creation using action step {string}")
+    @And("I add Phase creation using action step {string}")
     public void addPhase(String stepNo){
+        this.recipe.setPhaseActionSteps((stepNo));
         recipePage.selectStep(stepNo);
         recipeTouch.buttonClick("Add Phase");
+        recipePage.phaseCreationNotification();
+        addPhaseAndVerifySuccessText();
     }
 
     @And("I add phase successfully")
@@ -119,13 +122,18 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.verifyPhaseName(this.recipe.getPhaseName());
     }
 
-    @And("I {string} to {string} Phase")
-    public void copyPastePhase(String button1, String button2) {
+    @And("I {string}")
+    public void copyPastePhase(String actionButton) {
         recipePage.selectPhase(this.recipe.getPhaseName());
         this.recipe.setPhaseCount(recipePage.phaseCountUsingName(this.recipe.getPhaseName()));
-        recipeTouch.buttonClick(button1);
+        recipeTouch.buttonClick(actionButton);
+
+    }
+
+    @And("I paste phase {string}")
+    public void pastePhase(String actionButton){
         recipePage.selectPhase(this.recipe.getPhaseName());
-        recipeTouch.buttonClick(button2);
+        recipeTouch.buttonClick(actionButton);
         this.recipe.setPhaseCountCopyPaste(recipePage.phaseCount());
     }
 
@@ -135,8 +143,8 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.verifyPhaseCountAfterPasteAction(this.recipe.getPhaseCountCopyPaste(),this.recipe.getPhaseName()+"_2");
     }
 
-    @And("I should see phase has action steps {string}")
-    public void verifyPhaseSteps(String stepNumbers){
-        recipePage.verifyPhaseSteps(stepNumbers);
+    @And("I verify steps are added in phase")
+    public void verifyPhaseSteps(){
+        recipePage.verifyPhaseSteps(this.recipe.getPhaseActionSteps());
     }
 }

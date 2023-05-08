@@ -30,15 +30,13 @@ Feature: Recipe Touch Enabler
 
   Scenario Outline: Verify Add phase, copy, paste phase functionality
     When I add 4 action steps
-    And I initiate Phase creation using action step "2,3"
-    Then I should see phase creation warning message
-    When I add phase successfully
-    Then I should see phase has action steps "2,3"
-    When I "<action>" to "<pasteAction>" Phase
+    And I add Phase creation using action step "2,3"
+    Then I verify steps are added in phase
+    When I "<action>"
+    And I paste phase "<value>"
     Then I verify phase is pasted "<value>"
-    And I Save the recipe
 
     Examples:
-      |action     |pasteAction        |value  |
-      |Copy Phase |Paste Phase Before |Before |
-      |Copy Phase |Paste Phase After  |After  |
+      |action     |value  |
+      |Copy Phase |Before |
+      |Copy Phase |After  |

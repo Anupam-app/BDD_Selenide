@@ -43,6 +43,12 @@ public class RecipeTouchEnablerPage {
      * @param value : button name
      */
     public void buttonClick(String value) {
+        if(value.equalsIgnoreCase("Before")){
+            value= "Paste Phase Before";
+        }
+        else if(value.equalsIgnoreCase("After")){
+            value= "Paste Phase After";
+        }
         switch(value) {
             case "New Recipe":
                 buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, NEW_RECIPE_BUTTON)));
