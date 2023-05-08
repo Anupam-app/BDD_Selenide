@@ -94,9 +94,7 @@ public class RecipePage {
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save') or contains(text(),'save')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement deleteButton = $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));
-
-    private final SelenideElement XPATH_WARN_NOTIFICATION_TEXT = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
-
+    private final SelenideElement warningNotificationText = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
     private final String chooseOption = "//*[@class=\"submenu-value-left\"]/label[text()='%s']";
     private final String deletePhaseMessage = "//span[(text()='%s') and (text()='%s')]";
@@ -303,8 +301,8 @@ public class RecipePage {
     }
 
     public void isGeneratedNotificationWhenCreateExistingRecipe(String message) {
-        commonWaiter(XPATH_WARN_NOTIFICATION_TEXT, visible);
-        XPATH_WARN_NOTIFICATION_TEXT.shouldHave(ownText(message));
+        commonWaiter(warningNotificationText, visible);
+        warningNotificationText.shouldHave(ownText(message));
         $(By.xpath("//*[@class='btn-primary']")).click();
     }
 
@@ -1184,7 +1182,6 @@ public class RecipePage {
         addActionToStep.sendKeys(setActionStepValue(Integer.toString(stepNo)));
         addActionToStep.sendKeys(Keys.ENTER);
         Assert.assertTrue(getStepValue.getAttribute("data-value").contains(setActionStepValue(Integer.toString(stepNo))));
-
     }
 
     public String setActionStepValue(String value) {

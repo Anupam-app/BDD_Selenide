@@ -106,7 +106,7 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.actionStepDeletion(recipe.getOrgStepCount());
     }
 
-    @And("I add Phase creation using action step {string}")
+    @And("I add Phase using action step {string}")
     public void addPhase(String stepNo){
         this.recipe.setPhaseActionSteps((stepNo));
         recipePage.selectStep(stepNo);
@@ -127,7 +127,6 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.selectPhase(this.recipe.getPhaseName());
         this.recipe.setPhaseCount(recipePage.phaseCountUsingName(this.recipe.getPhaseName()));
         recipeTouch.buttonClick(actionButton);
-
     }
 
     @And("I paste phase {string}")
@@ -147,4 +146,5 @@ public class RecipeTouchEnablerStepsDefinition {
     public void verifyPhaseSteps(){
         recipePage.verifyPhaseSteps(this.recipe.getPhaseActionSteps());
     }
+    
 }
