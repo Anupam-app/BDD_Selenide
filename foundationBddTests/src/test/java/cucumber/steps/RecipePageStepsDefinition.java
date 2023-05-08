@@ -519,7 +519,7 @@ public class RecipePageStepsDefinition {
     @And("I add few more steps and save the recipe")
     public void iAddStepsAndSaveTheRecipe() {
         recipePage.addFewSteps();
-        recipePage.openRecipiList();
+        recipePage.openRecipeList();
     }
 
     @Then("I should see full recipe name on mouse hover")

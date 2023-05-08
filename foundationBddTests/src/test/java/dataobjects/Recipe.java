@@ -28,5 +28,7 @@ public class Recipe {
     int orgStepCount;
     int stepCountBeforeCutStep;
     int phaseCount;
+    int phaseCountCopyPaste;
+    String phaseActionSteps;
 }
 
