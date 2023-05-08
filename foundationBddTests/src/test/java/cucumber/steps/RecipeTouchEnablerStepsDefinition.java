@@ -123,7 +123,7 @@ public class RecipeTouchEnablerStepsDefinition {
     }
 
     @And("I {string}")
-    public void copyPastePhase(String actionButton) {
+    public void copyPhase(String actionButton) {
         recipePage.selectPhase(this.recipe.getPhaseName());
         this.recipe.setPhaseCount(recipePage.phaseCountUsingName(this.recipe.getPhaseName()));
         recipeTouch.buttonClick(actionButton);

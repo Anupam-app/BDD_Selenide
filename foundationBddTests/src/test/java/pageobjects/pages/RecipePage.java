@@ -696,12 +696,10 @@ public class RecipePage {
         } else if (status.equalsIgnoreCase("action")) {
             stepPlaceholder.shouldNotHave(text("Search instruments and actions..."));
         }
-
     }
 
     public void addActionStep(String action) {
         if (action.equalsIgnoreCase("Setpoint")) {
-
             for (WebElement placeholder : placeholders) {
                 if (placeholder.getAttribute("value").isEmpty()) {
                     placeholder.click();
@@ -717,7 +715,6 @@ public class RecipePage {
             stepPlaceholder.sendKeys("Threshold");
             stepPlaceholder.sendKeys(Keys.ENTER);
         }
-
     }
 
     // TO-DO: parameters to passed from external file
