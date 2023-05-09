@@ -59,9 +59,9 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.openLoadRecipePage();
     }
 
-    @Then("I verify the details")
-    public void iVerifyTooltip() {
-        recipeConsolePage.verifyTooltipLoadRecipePage();
+    @Then("I verify all the recipes are displayed")
+    public void iVerifyLoadRecipePage() {
+        recipeConsolePage.verifyLoadRecipePage();
     }
 
     @When("I hold and restart the system")
