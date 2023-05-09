@@ -198,6 +198,8 @@ INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 141)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 92)
 GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 152)
+GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 56)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 62)

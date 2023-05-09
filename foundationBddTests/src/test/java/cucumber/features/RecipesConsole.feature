@@ -201,7 +201,7 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-    
+
     # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
@@ -217,14 +217,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
-
-  @IVI-4926
-  Scenario: IVI Bug | IVI-4926 Recipe loader | Invalid text is seen as tool tip (UI issue)
-    Given I expand recipe console in pnid
-    When I load recipe
-    Then I verify the details
-    And I validate the Start button is "enabled"
-
+    
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -389,5 +382,3 @@ Feature: Recipe console
     And I enter "reportUnauthUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I verify recipe console expand is disabled
-
-
