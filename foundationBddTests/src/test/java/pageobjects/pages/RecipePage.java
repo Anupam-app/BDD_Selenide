@@ -231,6 +231,8 @@ public class RecipePage {
     private final SelenideElement setpointInOutRange = $(By.xpath("//input[@type='text' and @data-label='action-value']"));
     private final SelenideElement recipeCreateButton = $(By.xpath(
         "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
+    private final SelenideElement stepCountNumberInRecipe = $(By.xpath("(//div[@class='step-count']//label)[3])"));
+    private final SelenideElement  addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1327,9 +1329,10 @@ public class RecipePage {
     }
 
     public void verifyAndGetStepCount(){
-        SelenideElement stepCountNumberInRecipe = $(By.xpath("//div[@class='step-count']//label)[3]"));
-
-        SelenideElement  addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
+      String  totalRecipeStepNumber = stepCountNumberInRecipe.getValue();
+      String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
+        addedStepInRecipe_StepCount.shouldHave(text(totalRecipeStepNumber));
+        latestRecipeName.shouldHave(text(Objects.requireNonNull(recipeSearchTextBox.getAttribute("value"))));
 
     }
 

@@ -437,9 +437,9 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see error message for respective {string} values provided")
-    public void inValidInputValue(String message,DataTable table) {
+    public void inValidInputValue(String action,DataTable table) {
         recipePage.keyboardActionRecipe();
-        recipePage.addActionStep(message);
+        recipePage.addActionStep(action);
         List <List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i).get(0),list.get(i).get(1));
@@ -738,7 +738,8 @@ public class RecipePageStepsDefinition {
     @Then("I see {string} step added & I add Setpoint action to the step")
     public void actionAddedInBlankStep(String status){
         recipePage.placeholder(status);
-
+        recipePage.addActionStep("Stepoint");
+        recipePage.addActionStep(1);
     }
 
     @And("I should see step count increases by {string}")
