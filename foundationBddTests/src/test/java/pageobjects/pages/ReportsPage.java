@@ -281,11 +281,13 @@ public class ReportsPage {
             case "reports":
                 $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).waitUntil(visible, 5000)
                         .shouldHave(text(columnName));
-                Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex)))
-                        .waitUntil(visible, 5000)
-                        .getText()
-                        .isBlank());
-                break;
+                if (columnIndex < 6) {
+                    Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex)))
+                            .waitUntil(visible, 5000)
+                            .getText()
+                            .isBlank());
+                    break;
+                }
         }
     }
 

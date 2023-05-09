@@ -130,10 +130,10 @@ Feature: Trends PDP
     And I go to list of collection
     Then I delete the collection name
 
-#    @CRS
-#    Examples:
-#      | Param1   | Param2   |
-#      | PI101 PV | PI102 PV |
+    @CRS
+    Examples:
+      | Param1   | Param2   |
+      | PI101 PV | PI102 PV |
 
     @IVI
     Examples:
