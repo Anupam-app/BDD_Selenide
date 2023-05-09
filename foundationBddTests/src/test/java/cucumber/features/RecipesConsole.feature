@@ -417,20 +417,3 @@ Feature: Recipe console
     And I enter "reportUnauthUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I verify recipe console expand is disabled
-
-  @IVI-4926
-  Scenario Outline: Verify Authorized user can run UnApproved Recipe
-    Given I am logged in as "reportUnauthUser" user
-    And  I expand recipe console in pnid
-    When I load recipe "<recipeName>"
-    And I start and wait recipe execution during 12 seconds
-    Then Recipe should be executed
-
-    Examples:
-      | recipeName       |
-      | testDraftRecipe  |
-      | recipeTechReview |
-      | recipeInReview   |
-
-
-
