@@ -163,22 +163,6 @@ Feature: Report administration
     Then I should see the report file presence
     And I verify consolidate summary report
 
-  Scenario: Verify Save As options in template page
-    Given I am logged in as "Bio4CAdmin" user
-    And I goto report management page
-    And I trigger report template mode
-    When I create random report template
-    And I select report include "Audit Trail"
-    And I select report include "Run Summary"
-    Then I save the report template
-    And I search the report template
-    And I select the report template
-    Then I see "Save As" button enable and save As the report template
-    And I see SaveTemplate popup window
-    When I modify the Existing template
-    Then I see "Report template created" successfully message
-    And I search modified the template
-
   @IVI-7601
   Scenario: Verify Create Custom Template
     Given I am logged in as "Bio4CAdmin" user

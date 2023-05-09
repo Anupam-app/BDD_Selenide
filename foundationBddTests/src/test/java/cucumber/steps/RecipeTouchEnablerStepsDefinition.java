@@ -78,7 +78,7 @@ public class RecipeTouchEnablerStepsDefinition {
     }
 
     @And("I Copy step number {string}")
-    public void copStep(String stepNo){
+    public void copyStep(String stepNo){
         recipePage.selectStep(stepNo);
         recipeTouch.buttonClick("Copy Step");
     }
@@ -106,4 +106,45 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.actionStepDeletion(recipe.getOrgStepCount());
     }
 
+    @And("I add Phase using action step {string}")
+    public void addPhase(String stepNo){
+        this.recipe.setPhaseActionSteps((stepNo));
+        recipePage.selectStep(stepNo);
+        recipeTouch.buttonClick("Add Phase");
+        recipePage.phaseCreationNotification();
+        addPhaseAndVerifySuccessText();
+    }
+
+    @And("I add phase successfully")
+    public void addPhaseAndVerifySuccessText() {
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.addPhaseAndVerifySuccessMessage(this.recipe.getPhaseName());
+        recipePage.verifyPhaseName(this.recipe.getPhaseName());
+    }
+
+    @And("I {string}")
+    public void copyPhase(String actionButton) {
+        recipePage.selectPhase(this.recipe.getPhaseName());
+        this.recipe.setPhaseCount(recipePage.phaseCountUsingName(this.recipe.getPhaseName()));
+        recipeTouch.buttonClick(actionButton);
+    }
+
+    @And("I paste phase {string}")
+    public void pastePhase(String actionButton){
+        recipePage.selectPhase(this.recipe.getPhaseName());
+        recipeTouch.buttonClick(actionButton);
+        this.recipe.setPhaseCountCopyPaste(recipePage.phaseCount());
+    }
+
+    @And("I verify phase is pasted {string}")
+    public void phasePasted(String action){
+        recipePage.verifyPhaseName(this.recipe.getPhaseName()+"_2");
+        recipePage.verifyPhaseCountAfterPasteAction(this.recipe.getPhaseCountCopyPaste(),this.recipe.getPhaseName()+"_2");
+    }
+
+    @And("I verify steps are added in phase")
+    public void verifyPhaseSteps(){
+        recipePage.verifyPhaseSteps(this.recipe.getPhaseActionSteps());
+    }
+    
 }
