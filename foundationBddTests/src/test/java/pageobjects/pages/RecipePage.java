@@ -1317,6 +1317,12 @@ public class RecipePage {
         stepAction.moveToElement(addOrCriteria).click().build().perform();
     }
 
+    public void iSaveRecipeWithKeyboardAction(){
+        stepAction.keyDown(Keys.CONTROL)
+            .sendKeys("s")
+            .build()
+            .perform();
+    }
 }
 
 

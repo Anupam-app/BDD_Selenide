@@ -759,4 +759,9 @@ public class RecipePageStepsDefinition {
         recipePage.multipleSteps();
     }
 
+    @And("I save the recipe using keyboard event")
+    public void iSaveTheRecipeUsingKeyboardEvent(){
+        recipePage.iSaveRecipeWithKeyboardAction();
+    }
+
 }
