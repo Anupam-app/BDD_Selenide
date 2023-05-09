@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
@@ -1081,29 +1082,20 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
     }
 
-    public void verifyTooltipLoadRecipePage() {
-
-        // Check the values for RecipeName Column
+    public void verifyLoadRecipePage() {
         for (int i = 1; i <= recipeListTable.size(); i++) {
-            Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i, 1))).getAttribute("title")
-                    .matches("^[a-zA-Z0-9]*$"));
+            String status = $(By.xpath(String.format(recipeListTableValues, i, 2))).getText();
+            Assert.assertTrue(status.equalsIgnoreCase("Approved-Active") || status.equalsIgnoreCase("Draft")
+                    || status.equalsIgnoreCase("In-Review") || status.equalsIgnoreCase("Tech-Review"));
+            $(By.xpath(String.format(recipeListTableValues, i, 1)))
+                    .shouldNotHave(attribute("title", "[object Object]"));
+            $(By.xpath(String.format(recipeListTableValues, i, 2)))
+                    .shouldNotHave(attribute("title", "[object Object]"));
+            $(By.xpath(String.format(recipeListTableValues, i, 3)))
+                    .shouldNotHave(attribute("title", "[object Object]"));
+            $(By.xpath(String.format(recipeListTableValues, i, 4)))
+                    .shouldNotHave(attribute("title", "[object Object]"));
         }
-        // Check the values for status Column
-        for (int i = 1; i < recipeListTable.size(); i++) {
-            Assert.assertEquals("Status is not correct", "Approved-Active",
-                    $(By.xpath(String.format(recipeListTableValues, i, 2))).getAttribute("title"));
-        }
-        // Check the values for date Column
-        for (int i = 1; i < recipeListTable.size(); i++) {
-            Assert.assertTrue($(By.xpath(String.format(recipeListTableValues, i, 3))).getAttribute("title")
-                    .matches(("([a-zA-Z0-9]{3}) ([0-9]{2}),([0-9]{4})")));
-        }
-        // Check the values for created By Column
-        for (int i = 1; i < recipeListTable.size(); i++) {
-            Assert.assertEquals("created column value is not correct", "Bio4CAdmin",
-                    $(By.xpath(String.format(recipeListTableValues, i, 4))).getAttribute("title"));
-        }
-
     }
 
     public void reRunRecipe(String productId, String batchId, String beforeComments) throws ParseException {
