@@ -1,35 +1,31 @@
 @CRS @IVI
 Feature: Recipe console
 
-  JIRAs tested:
-  https://stljirap.sial.com/browse/BIOFOUND-29286
+  Background:
+    Given I am logged in as "Bio4CAdmin" user
 
   @SMOKE
   @PLC
   Scenario: Recipe system Hold/Restart
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I hold and restart the system
     Then I see the system is restarted
 
   Scenario: BIOCRS-5498 | Recipe system Hold/Restart validation when recipe already loaded but not started
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute1min"
     And I hold the system
     Then I see the system on restart
     And clear panel and run button is disabled
 
   Scenario: BIOCRS-5479 | Verify Recipe Run Console Options
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand and collapse recipe console in pnid
+    Given I expand and collapse recipe console in pnid
     When I verify Recipe run options
     And I goto manual operation tab
     Then I verify manual operation options
 
   Scenario: BIOCRS-5498 BIOCRS-5480| Recipe system Hold/Restart validation when recipe already loaded and started
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I hold the system
@@ -50,8 +46,7 @@ Feature: Recipe console
     Then I check audit trial logs
 
   Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I wait for 4 seconds
@@ -61,8 +56,7 @@ Feature: Recipe console
     And I rerun recipe execution and timer starts from zero
 
   Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
     Then I see the error message as "Special characters are not allowed for Comments"
@@ -73,15 +67,13 @@ Feature: Recipe console
 
   @SMOKE
   Scenario: Recipe execution
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
     And I start and wait recipe execution during 12 seconds
     Then Recipe should be executed
 
   Scenario: BIOCRS-660 | Recipe operational control workflow
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on pause button
@@ -94,8 +86,7 @@ Feature: Recipe console
     And control should be on rerun button
 
   Scenario: Verify the Recipe Execution|BIOCRS-1593|
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I click on load recipe
     Then I should not see unapproved recipe
     And I load recipe "testRecipeToExecute"
@@ -108,7 +99,6 @@ Feature: Recipe console
 
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
-    Given I am logged in as "Bio4CAdmin" user
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
     When I click on start button
@@ -125,8 +115,7 @@ Feature: Recipe console
 
   @IVI-7599
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
     And I verify all mandatory fields has asterick mark "*"
     When I click ok button
@@ -139,16 +128,14 @@ Feature: Recipe console
 
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I click on jump step "10"
     Then I should see error message about recipe step
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Forward-Reverse step
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
     Then I jump to Step no and verify step execution
@@ -161,8 +148,7 @@ Feature: Recipe console
     # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
@@ -184,8 +170,7 @@ Feature: Recipe console
     And I verify Manual Operation tab is "enabled"
 
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
     Then I verify Manual Operation tab is "enabled"
     And I verify Recipe Run tab is "enabled"
@@ -206,8 +191,7 @@ Feature: Recipe console
     And I verify Manual Operation tab is "enabled"
 
   Scenario: BIOCRS-4047|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute"
     And I wait until Run button is displayed and "enabled"
     When I hold the system
@@ -217,12 +201,11 @@ Feature: Recipe console
     And I restart the Process hold
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
-    
+
     # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I start Manual run
     Then I validate the timer, stop button, run details
     When I Process hold the system
@@ -234,17 +217,9 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
-
-  @IVI-4926
-  Scenario: Verify Recipe Loader Page
-    Given I am logged in as "reportUnauthUser" user
-    And I expand recipe console in pnid
-    When I load recipe
-    Then I verify all the recipes are displayed
-
+    
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I Select Process Hold
     And I verify the Process hold Dialog box , buttons
     And I validate close,No button functionality
@@ -261,8 +236,7 @@ Feature: Recipe console
     And I verify the recipe console Elements
 
   Scenario: BIOFOUND-10802: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I verify the recipe execution details in console View
@@ -277,8 +251,7 @@ Feature: Recipe console
 
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
     Then I should see start button is displayed
     When I click on start button
@@ -293,8 +266,7 @@ Feature: Recipe console
     And I Verify manual run status in recipe consol
 
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console
+    Given I expand recipe console
     When I load recipe "testRecipeWithChar30NameLengt"
     Then I verify the recipe name displayed on load recipe list
     And I verify the recipe name is trimmed on recipe console UI
@@ -302,8 +274,7 @@ Feature: Recipe console
     And I verify mouse hover on step displays tool tip with full step details
 
   Scenario: BIOFOUND-13262: Verify recipe console extended view UI when lengthy data is provided in Pre-run modal
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console
+    Given I expand recipe console
     When I load recipe "testRecipeToExecute1min"
     Then I should see pre run window
     When I clear and try to enter lenghty RUN ID, BatchID
@@ -316,8 +287,7 @@ Feature: Recipe console
 
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console
+    Given I expand recipe console
     When I select "Manual operation" tab
     And I start Manual run
     And I enter manual operation name more than 30 char and Tab out
@@ -330,8 +300,7 @@ Feature: Recipe console
     And I mouse hover to see full text displayed  on tooltip
 
   Scenario: BIOFOUND-11336: Multiple Users_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I logout
@@ -356,8 +325,7 @@ Feature: Recipe console
     And I check audit trial logs
 
   Scenario: BIOFOUND-11316: Recipe Management_ Verify Audit Trail log for recipe start, end, pause, resume and abort operation during Recipe execution
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
     And I hold the system
@@ -376,8 +344,7 @@ Feature: Recipe console
     And I check audit trial logs
 
   Scenario: BIOFOUND-11955: FT_CF_ Recipe Management_ Verify Audit Trail log for System Hold and Restart
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    When I expand recipe console in pnid
     And I hold the system
     And I restart the system
     And I load the recipe "testRecipeToExecute1min"
@@ -393,8 +360,7 @@ Feature: Recipe console
     And I check audit trial logs
 
   Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page
-    Given I am logged in as "Bio4CAdmin" user
-    And I expand recipe console in pnid
+    Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
     And I hold the system
@@ -410,8 +376,7 @@ Feature: Recipe console
     Then Verify the recipe console extended view UI components
 
   Scenario: BIOFOUND-9215: Verify Recipe Console access privileges for Unauthorised User or User with no permission to Run Recipe
-    Given I am logged in as "Bio4CAdmin" user
-    And  I expand recipe console in pnid
+    Given  I expand recipe console in pnid
     When I logout
     And login page is open
     And I enter "reportUnauthUser" as username and "MerckApp1@" as password
