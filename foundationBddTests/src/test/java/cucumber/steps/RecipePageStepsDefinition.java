@@ -161,7 +161,7 @@ public class RecipePageStepsDefinition {
     @Given("I edit recipe {string}")
     public void iEditRecipe(String recipe) {
         this.recipe.setRecipeName(recipe);
-        recipePage.editRecipe(recipe);
+        recipePage.editRecipe(this.recipe.getRecipeName());
     }
 
     @And("I see list of recipes are displayed")
