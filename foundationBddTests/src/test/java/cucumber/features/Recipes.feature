@@ -451,7 +451,7 @@ Feature: Recipe management
     And I edit recipe "RecipeWithAllCriteria"
     And I add criteria to phase using keyboard
     Then I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"
-@test
+
   Scenario: Cloning of Tech review recipe
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
