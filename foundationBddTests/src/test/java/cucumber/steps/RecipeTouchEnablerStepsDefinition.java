@@ -46,6 +46,7 @@ public class RecipeTouchEnablerStepsDefinition {
 
     @And("I paste the copied step after step {int}")
     public void pasteCopiedStep(int stepNo) {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         String stepNumber = Integer.toString(stepNo);
         recipePage.selectStep(stepNumber);
         recipeTouch.buttonClick("Paste Step After");

@@ -417,21 +417,20 @@ Feature: Recipe management
     And Phase is not added to phase library.
     When I clear errors in the phase
     Then I can add phase to phase library.
-
-  Scenario : Validate the add Step count
+  @test
+  Scenario: Validate the add Step count
     Given I am logged in as "Bio4CAdmin" user
     When I open Recipe editor
     When I add new action step using Keyboard event
-    Then I see "blank" step added & I add Setpoint action to the step
-    And I should see step count increases by "1"
-    Then I verify the action added
-    When I add action from action browser
-    Then I should see step count increases
-    When I copy the step "2"
-    And I paste step after Step "2"
-    Then I should see step count increases
-    When I add a phase to recipe from phase library
-    Then I should see step count increases
+    Then I add "Setpoint" to the "blank" step
+    And I should see step count increased by 1
+    And I select action from action browser
+    And I should see step count increased by 1
+    And I Copy step number "2"
+    And I paste the copied step after step 2
+    And I should see step count increased by 1
+    When I add Phases from phase library to recipe
+    And I should see step count increased by 1
 
   Scenario: Recipe status cannot change when errors are present
     Given I am logged in as "Bio4CAdmin" user

@@ -209,7 +209,7 @@ public class RecipePage {
         "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
 
     private final SelenideElement stepCountNumberInRecipe = $(By.xpath("(//div[@class='step-count']//label)[3])"));
-    private final SelenideElement  addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
+    private final SelenideElement addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
 
     private final String SELECT_PHASE = "//label[@class='phaseHead' and @data-phasename='%s']";
     private final ElementsCollection phaseStepsActions = $$(By.xpath("//div[@class='recipe-phase-container']//div[@class='smart-search-container']"));
@@ -221,7 +221,9 @@ public class RecipePage {
     private final String changeCriteria = "(//div[@class='criteria-select'])[%s]";
     private final SelenideElement addIfCriteria = $(By.xpath("//ul[@class='options-container']//li[2]"));
     private final SelenideElement addAndCriteria = $(By.xpath("(//div[@class='criteria-head criteria-type-and'])[2]"));
-    private final SelenideElement  addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
+    private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
+    private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
+    private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
 
 
     public void goTo() {
@@ -706,8 +708,9 @@ public class RecipePage {
                 if (placeholder.getAttribute("value").isEmpty()) {
                     placeholder.click();
                     placeholder.clear();
-                    placeholder.sendKeys("Setpoint");
+                    placeholder.sendKeys(action);
                     placeholder.sendKeys(Keys.ENTER);
+                    Assert.assertTrue(getActionValue().contains(action));
                     break;
                 }
             }
@@ -720,7 +723,8 @@ public class RecipePage {
     }
 
     // TO-DO: parameters to passed from external file
-    public void addStepActionBrowser() {
+    public void addStepActionBrowser()throws AWTException {
+        zoomOut();
         opertionAction.waitUntil(visible, 2000).click();
         $(By.xpath(String.format(expandAction, "Product Inlet"))).click();
         $(By.xpath(String.format(expandAction, "Flowpath"))).click();
@@ -840,7 +844,8 @@ public class RecipePage {
 
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
-        $(By.xpath("//span[text()='Phase123']")).doubleClick();
+        phaseLibViewIcon.click();
+        addPhasefromLibraryBtn.waitUntil(visible,3000L,1000L).click();
     }
 
     public void copyAndPastePhase() {
@@ -938,8 +943,8 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-       // $(By.xpath(warningMessage)).shouldHave(text(message));
-        $(By.xpath(String.format(warningMessage,message))).shouldHave(text(message));
+        // $(By.xpath(warningMessage)).shouldHave(text(message));
+        $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
     }
 
     public void saveBtn(String recipeName) {
@@ -1178,9 +1183,9 @@ public class RecipePage {
         return actionsStepCount.size();
     }
 
-    public void verifyAndGetStepCount(){
-      String  totalRecipeStepNumber = stepCountNumberInRecipe.getValue();
-      String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
+    public void verifyAndGetStepCount() {
+        String totalRecipeStepNumber = stepCountNumberInRecipe.getValue();
+        String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
         addedStepInRecipe_StepCount.shouldHave(text(totalRecipeStepNumber));
         latestRecipeName.shouldHave(text(Objects.requireNonNull(recipeSearchTextBox.getAttribute("value"))));
 
@@ -1331,34 +1336,34 @@ public class RecipePage {
     }
 
     public int phaseCountUsingName(String phaseName) {
-        return  $$(By.xpath(String.format(SELECT_PHASE, phaseName))).size();
+        return $$(By.xpath(String.format(SELECT_PHASE, phaseName))).size();
     }
 
-    public int phaseCount(){
+    public int phaseCount() {
         return phaseCount.size();
     }
 
-    public void verifyPhaseSteps(String stepNumbers){
+    public void verifyPhaseSteps(String stepNumbers) {
         if (stepNumbers.contains(",")) {
             String[] numbers = stepNumbers.split(",");
-            for (int i=0;i<numbers.length;i++) {
+            for (int i = 0; i < numbers.length; i++) {
                 Assert.assertTrue(phaseStepsActions.get(i).getAttribute("data-value").contains(setActionStepValue(numbers[i])));
             }
         }
     }
 
-    public void verifyPhaseName(String phaseName){
-        $(By.xpath(String.format(PHASE_NAME_LABEL,phaseName))).shouldBe(visible);
+    public void verifyPhaseName(String phaseName) {
+        $(By.xpath(String.format(PHASE_NAME_LABEL, phaseName))).shouldBe(visible);
     }
 
-    public void verifyPhaseCountAfterPasteAction(int count, String phaseName){
+    public void verifyPhaseCountAfterPasteAction(int count, String phaseName) {
         int pastedPhaseCount = phaseCountUsingName(phaseName);
-        Assert.assertTrue("Phase paste is not done",pastedPhaseCount==1 && pastedPhaseCount<count);
+        Assert.assertTrue("Phase paste is not done", pastedPhaseCount == 1 && pastedPhaseCount < count);
     }
 
-    public void phaseCreationNotification(){
+    public void phaseCreationNotification() {
         commonWaiter(notificationMessage, visible)
-                .shouldHave(text(PHASE_IN_PROGRESS_TEXT));
+            .shouldHave(text(PHASE_IN_PROGRESS_TEXT));
     }
 
     public void multipleSteps() throws AWTException {
@@ -1375,11 +1380,23 @@ public class RecipePage {
         commonWaiter($(By.xpath(String.format(stepNumber, "1"))), visible).click();
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "c");
         searchTextBox.sendKeys(Keys.LEFT_CONTROL + "v");
-        commonWaiter($(By.xpath(String.format(changeCriteria,"2"))),visible).click();
+        commonWaiter($(By.xpath(String.format(changeCriteria, "2"))), visible).click();
         zoomOut();
         stepAction.moveToElement(addIfCriteria).click().build().perform();
-        commonWaiter(addAndCriteria,visible).click();
+        commonWaiter(addAndCriteria, visible).click();
         stepAction.moveToElement(addOrCriteria).click().build().perform();
     }
+
+    public void verifyActionStepCount(int oldValue, int incrementValue) {
+        System.out.println(oldValue);
+        System.out.println(actionsStepsCount());
+        Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
+    }
+
+//    public void verifyStepCountAfterAddingPhase(){
+//        String  totalRecipeStepNumber = stepCountNumberInRecipe.getValue();
+//        String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
+//        Assert.assertTrue("Action steps count is not correct",);
+//    }
 
 }

@@ -302,6 +302,7 @@ public class RecipePageStepsDefinition {
 
     @When("I add new action step using Keyboard event")
     public void addStepKeyboard() {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.keyboardActionRecipe();
     }
 
@@ -321,7 +322,8 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select action from action browser")
-    public void actionBrowser() {
+    public void actionBrowser()throws AWTException {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.addStepActionBrowser();
     }
 
@@ -463,6 +465,7 @@ public class RecipePageStepsDefinition {
 
     @When("I add Phases from phase library to recipe")
     public void iAddPhaseFromPhaseLibraryToRecipe() {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.addPhaseFromLibrary();
     }
 
@@ -735,16 +738,16 @@ public class RecipePageStepsDefinition {
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
-    @Then("I see {string} step added & I add Setpoint action to the step")
-    public void actionAddedInBlankStep(String status){
+    @Then("I add {string} to the {string} step")
+    public void actionAddedInBlankStep(String action,String status){
         recipePage.placeholder(status);
-        recipePage.addActionStep("Stepoint");
-        recipePage.addActionStep(1);
+        recipePage.addActionStep(action);
+
     }
 
-    @And("I should see step count increases by {string}")
-    public void stepCountIncrease(){
-        recipePage.verifyAndGetStepCount();
+    @And("I should see step count increased by {int}")
+    public void stepCountIncrease(int value){
+        recipePage.verifyActionStepCount(recipe.getOrgStepCount(), value);
     }
 
     @When("I edit the recipe {string} from recipe browser")
