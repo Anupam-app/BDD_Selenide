@@ -742,7 +742,6 @@ public class RecipePageStepsDefinition {
     public void actionAddedInBlankStep(String action,String status){
         recipePage.placeholder(status);
         recipePage.addActionStep(action);
-
     }
 
     @And("I should see step count increased by {int}")

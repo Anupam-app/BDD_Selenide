@@ -943,7 +943,6 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-        // $(By.xpath(warningMessage)).shouldHave(text(message));
         $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
     }
 
@@ -1188,7 +1187,6 @@ public class RecipePage {
         String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
         addedStepInRecipe_StepCount.shouldHave(text(totalRecipeStepNumber));
         latestRecipeName.shouldHave(text(Objects.requireNonNull(recipeSearchTextBox.getAttribute("value"))));
-
     }
 
     public void addActionStep(int stepNo) {
@@ -1261,7 +1259,6 @@ public class RecipePage {
     }
 
     public void recipeNotification(String notification) {
-
         recipeNotificationTexts.shouldHave(
             CollectionCondition.anyMatch("User notification should contain this notification", n -> n.getText()
                 .equals(notification)));
@@ -1388,15 +1385,7 @@ public class RecipePage {
     }
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {
-        System.out.println(oldValue);
-        System.out.println(actionsStepsCount());
         Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
     }
-
-//    public void verifyStepCountAfterAddingPhase(){
-//        String  totalRecipeStepNumber = stepCountNumberInRecipe.getValue();
-//        String stepCountInRecipe = addedStepInRecipe_StepCount.getText();
-//        Assert.assertTrue("Action steps count is not correct",);
-//    }
 
 }
