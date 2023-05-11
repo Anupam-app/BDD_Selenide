@@ -302,6 +302,7 @@ public class RecipePageStepsDefinition {
 
     @When("I add new action step using Keyboard event")
     public void addStepKeyboard() {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.keyboardActionRecipe();
     }
 
@@ -321,7 +322,8 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select action from action browser")
-    public void actionBrowser() {
+    public void actionBrowser()throws AWTException {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.addStepActionBrowser();
     }
 
@@ -437,9 +439,9 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see error message for respective {string} values provided")
-    public void inValidInputValue(String message,DataTable table) {
+    public void inValidInputValue(String action,DataTable table) {
         recipePage.keyboardActionRecipe();
-        recipePage.addActionStep(message);
+        recipePage.addActionStep(action);
         List <List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i).get(0),list.get(i).get(1));
@@ -463,6 +465,7 @@ public class RecipePageStepsDefinition {
 
     @When("I add Phases from phase library to recipe")
     public void iAddPhaseFromPhaseLibraryToRecipe() {
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.addPhaseFromLibrary();
     }
 
@@ -735,6 +738,17 @@ public class RecipePageStepsDefinition {
         recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
     }
 
+    @Then("I add {string} to the {string} step")
+    public void actionAddedInBlankStep(String action,String status){
+        recipePage.placeholder(status);
+        recipePage.addActionStep(action);
+    }
+
+    @And("I should see step count increased by {int}")
+    public void stepCountIncrease(int value){
+        recipePage.verifyActionStepCount(recipe.getOrgStepCount(), value);
+    }
+
     @When("I edit the recipe {string} from recipe browser")
     public void editRecipeFromBrowser(String recipe){
         recipePage.goTo();
@@ -760,3 +774,4 @@ public class RecipePageStepsDefinition {
     }
 
 }
+

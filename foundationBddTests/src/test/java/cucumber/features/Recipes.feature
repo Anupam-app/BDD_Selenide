@@ -7,6 +7,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-12786
   https://stljirap.sial.com/browse/BIOFOUND-10897
   https://stljirap.sial.com/browse/BIOFOUND-27821
+  https://stljirap.sial.com/browse/BIOFOUND-27908
   https://stljirap.sial.com/browse/BIOFOUND-27818
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
@@ -417,6 +418,20 @@ Feature: Recipe management
     When I clear errors in the phase
     Then I can add phase to phase library.
 
+  Scenario: Validate the add Step count
+    Given I am logged in as "Bio4CAdmin" user
+    When I open Recipe editor
+    When I add new action step using Keyboard event
+    Then I add "Setpoint" to the "blank" step
+    And I should see step count increased by 1
+    And I select action from action browser
+    And I should see step count increased by 1
+    And I Copy step number "2"
+    And I paste the copied step after step 2
+    And I should see step count increased by 1
+    When I add Phases from phase library to recipe
+    And I should see step count increased by 1
+
   Scenario: Recipe status cannot change when errors are present
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "errorRecipe" from recipe browser
@@ -435,3 +450,4 @@ Feature: Recipe management
     And I edit recipe "RecipeWithAllCriteria"
     And I add criteria to phase using keyboard
     Then I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"
+
