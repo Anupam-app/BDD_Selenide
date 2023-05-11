@@ -773,5 +773,10 @@ public class RecipePageStepsDefinition {
         recipePage.multipleSteps();
     }
 
+    @And("I should see confirmation message {string}")
+    public void notification(String text) {
+        recipePage.checkNotification(text);
+    }
+
 }
 

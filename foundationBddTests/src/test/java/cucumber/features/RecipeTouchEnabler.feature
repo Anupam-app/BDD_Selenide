@@ -40,3 +40,20 @@ Feature: Recipe Touch Enabler
       |action     |value  |
       |Copy Phase |Before |
       |Copy Phase |After  |
+
+  Scenario: Verify Save to Phase library functionality
+    When I add 4 action steps
+    And I add Phase using action step "2,3"
+    Then I verify steps are added in phase
+    And I save phase to Phase library
+    Then I should be notified that "Phase successfully added to phase library"
+    And I should see phase details under phase library
+
+  @IVI-7828
+  Scenario: Verify Delete phase functionality
+    When I add 4 action steps
+    And I add Phase using action step "2,3"
+    Then I verify steps are added in phase
+    And I Delete phase
+    And I should see confirmation message "Phase Deleted Successfully"
+

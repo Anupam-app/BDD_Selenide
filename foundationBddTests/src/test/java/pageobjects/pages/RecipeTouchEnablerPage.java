@@ -3,6 +3,7 @@ package pageobjects.pages;
 import com.codeborne.selenide.SelenideElement;
 import org.openqa.selenium.By;
 
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static pageobjects.utility.SelenideHelper.selectButton;
 import pageobjects.utility.SelenideHelper;
@@ -37,6 +38,7 @@ public class RecipeTouchEnablerPage {
     private final String CLEAR_ALL_BUTTON = "ant-btn recipe-clear-all-button";
     private final String BUTTON_LOCATOR = "//button[contains(@class,'%s')]";
     private SelenideElement buttonClick = null;
+    private final String phaseUnderLib = "//p[@data-path='Phase Library--->%s']";
 
     /**
      * Reusable method to verify button is enabled and select the button
@@ -107,7 +109,7 @@ public class RecipeTouchEnablerPage {
             case "Paste Phase Before":
                 buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PASTE_PHASE_BEFORE_BUTTON)));
                 break;
-            case "Phase Delete":
+            case "Delete Phase":
                 buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, PHASE_DELETE_BUTTON)));
                 break;
             case "Save Phase Library":
@@ -125,4 +127,9 @@ public class RecipeTouchEnablerPage {
         SelenideHelper.takePicture();
         selectButton(buttonClick);
     }
+
+    public void verifyPhaseInLibrary(String name) {
+        $(By.xpath(String.format(phaseUnderLib,name))).shouldBe(visible);
+    }
+
 }

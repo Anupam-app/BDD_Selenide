@@ -70,7 +70,6 @@ public class RecipePage {
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement editorLinkText = $(By.xpath("//a[contains(text(),'Editor') or contains(text(),'editor')]"));
     private final SelenideElement browserLinkText = $(By.xpath("//a[contains(text(),'Browser') or contains(text(),'browser')]"));
-    private final SelenideElement phaseLibIcon = $(By.xpath("//span[(text()='Phase Library')]"));
     private final SelenideElement noPhaseAvailableMsg = $(By.xpath("//span[(text()='There is No Phase in Phase Library')]"));
     private final SelenideElement searchTextBox = $(By.className("search-txt-box"));
 
@@ -97,7 +96,7 @@ public class RecipePage {
     private final SelenideElement warningNotificationText = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
     private final String chooseOption = "//*[@class=\"submenu-value-left\"]/label[text()='%s']";
-    private final String deletePhaseMessage = "//span[(text()='%s') and (text()='%s')]";
+    private final String deletePhaseMessage = "//span[(text()='Proceed with deleting the Phase -%s')]";
     private final String touchIdButtons = "//button[@class='%s']";
     private final String phasenumber_Label = "//label[contains(text(),'%s')]";
     private final String phaseNameLabel = "(//input[@class='phase-Name'])[%d]";
@@ -210,7 +209,7 @@ public class RecipePage {
 
     private final SelenideElement stepCountNumberInRecipe = $(By.xpath("(//div[@class='step-count']//label)[3])"));
     private final SelenideElement addedStepInRecipe_StepCount = $(By.xpath("//label[starts-with(@class,'stepCount')]"));
-
+    private final String phaseLabel = "//label[@data-phasename='%s']";
     private final String SELECT_PHASE = "//label[@class='phaseHead' and @data-phasename='%s']";
     private final ElementsCollection phaseStepsActions = $$(By.xpath("//div[@class='recipe-phase-container']//div[@class='smart-search-container']"));
     private final String PHASE_NAME_LABEL = "//div[@data-phasename='%s']/div/div";
@@ -224,7 +223,7 @@ public class RecipePage {
     private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
-
+    private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -242,7 +241,7 @@ public class RecipePage {
     }
 
     public void goToPhaseLibrary() {
-        phaseLibIcon.waitUntil(Condition.visible, 5000L).click();
+        phaseLibrary.waitUntil(Condition.visible, 5000L).click();
         noPhaseAvailableMsg.shouldBe(visible);
     }
 
@@ -362,7 +361,7 @@ public class RecipePage {
         commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
         commonWaiter(deleteButton, visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
-        $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
+        $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
     }
 
@@ -370,7 +369,7 @@ public class RecipePage {
         commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
         stepAction.keyDown(commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible), Keys.LEFT_CONTROL).sendKeys(Keys.DELETE).perform();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
-        $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
+        $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
     }
 
@@ -1025,7 +1024,7 @@ public class RecipePage {
         commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
         commonWaiter($(By.xpath("(//input[@class='deleteButton'])[3]")), visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
-        $(By.xpath(String.format(deletePhaseMessage, "Proceed with deleting the Phase -", phaseName))).shouldBe(visible);
+        $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
     }
 
@@ -1386,6 +1385,20 @@ public class RecipePage {
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {
         Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
+    }
+
+    public void phaseSelection(String name) {
+        commonWaiter($(By.xpath(String.format(phaseLabel, name))), visible).click();
+    }
+
+    public void expandPhaseLibrary(){
+        phaseLibrary.waitUntil(Condition.visible, 5000L).click();
+    }
+
+    public void handleWarningPopUp(String phaseName){
+        warningPopUpDialog.waitUntil(visible, 5000L);
+        $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
+        primaryButton.click();
     }
 
 }

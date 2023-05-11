@@ -147,5 +147,23 @@ public class RecipeTouchEnablerStepsDefinition {
     public void verifyPhaseSteps(){
         recipePage.verifyPhaseSteps(this.recipe.getPhaseActionSteps());
     }
-    
+
+    @And("I save phase to Phase library")
+    public void phaseSelection() {
+        recipePage.phaseSelection(this.recipe.getPhaseName());
+        recipeTouch.buttonClick("Save Phase Library");
+    }
+
+    @And("I should see phase details under phase library")
+    public void verifyPhaseInLibrary(){
+        recipePage.expandPhaseLibrary();
+        recipeTouch.verifyPhaseInLibrary(this.recipe.getPhaseName());
+    }
+    @And("I Delete phase")
+    public void deletePhase() {
+        recipePage.phaseSelection(this.recipe.getPhaseName());
+        recipeTouch.buttonClick("Delete Phase");
+        recipePage.handleWarningPopUp(this.recipe.getPhaseName());
+    }
+
 }
