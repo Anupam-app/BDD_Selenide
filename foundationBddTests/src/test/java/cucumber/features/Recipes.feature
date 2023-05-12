@@ -462,5 +462,4 @@ Feature: Recipe management
     And I go to browser mode
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
-    And I go to browser mode
-    Then I should see last modified recipe name
+    Then I see new recipe is saved as "Draft"

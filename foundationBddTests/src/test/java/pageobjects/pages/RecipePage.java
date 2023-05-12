@@ -224,7 +224,7 @@ public class RecipePage {
     private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
-
+    private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1036,9 +1036,9 @@ public class RecipePage {
         Assert.assertTrue(($(By.xpath(String.format(searchPlaceholder, "6")))).getAttribute("value").isBlank());
     }
 
-    public void verifyRecipeTab() {
-        $(By.xpath(String.format(label, "Untitled"))).shouldBe(visible);
-        $(By.xpath(String.format(label, "Unsaved"))).shouldBe(visible);
+    public void verifyRecipeTab(String name,String status) {
+        $(By.xpath(String.format(label, name))).shouldBe(visible);
+        $(By.xpath(String.format(label, status))).shouldBe(visible);
     }
 
     public void createPhase(String phase) {
@@ -1390,4 +1390,7 @@ public class RecipePage {
         Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
     }
 
+    public void approvalStatus(String value){
+        approvalStatus.shouldHave(text(value));
+    }
 }

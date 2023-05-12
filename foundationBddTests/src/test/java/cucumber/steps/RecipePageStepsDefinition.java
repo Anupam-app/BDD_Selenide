@@ -418,7 +418,7 @@ public class RecipePageStepsDefinition {
 
     @And("I verify recipe tab title")
     public void iVerifyRecipeTab() {
-        recipePage.verifyRecipeTab();
+        recipePage.verifyRecipeTab("Untitled","Unsaved");
     }
 
     @When("I create a phase")
@@ -778,4 +778,9 @@ public class RecipePageStepsDefinition {
         recipePage.iSaveRecipeWithKeyboardAction();
     }
 
+    @Then("I see new recipe is saved as {string}")
+    public void newRecipeIsSaved(String status){
+        recipePage.verifyRecipeTab(this.recipe.getRecipeName(),"Saved");
+        recipePage.approvalStatus(status);
+    }
 }
