@@ -159,6 +159,7 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.expandPhaseLibrary();
         recipeTouch.verifyPhaseInLibrary(this.recipe.getPhaseName());
     }
+    
     @And("I Delete phase")
     public void deletePhase() {
         recipePage.phaseSelection(this.recipe.getPhaseName());
