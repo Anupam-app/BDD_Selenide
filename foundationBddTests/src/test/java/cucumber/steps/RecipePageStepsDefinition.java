@@ -161,7 +161,7 @@ public class RecipePageStepsDefinition {
     @Given("I edit recipe {string}")
     public void iEditRecipe(String recipe) {
         this.recipe.setRecipeName(recipe);
-        recipePage.editRecipe(recipe);
+        recipePage.editRecipe(this.recipe.getRecipeName());
     }
 
     @And("I see list of recipes are displayed")
@@ -418,7 +418,7 @@ public class RecipePageStepsDefinition {
 
     @And("I verify recipe tab title")
     public void iVerifyRecipeTab() {
-        recipePage.verifyRecipeTab();
+        recipePage.verifyRecipeTab("Untitled","Unsaved");
     }
 
     @When("I create a phase")
@@ -773,5 +773,15 @@ public class RecipePageStepsDefinition {
         recipePage.multipleSteps();
     }
 
-}
+    @And("I save the recipe using keyboard event")
+    public void iSaveTheRecipeUsingKeyboardEvent(){
+        recipePage.iSaveRecipeWithKeyboardAction();
+    }
 
+    @Then("I see new recipe is saved as Draft")
+    public void newRecipeIsSaved(){
+        iGoToBrowserMode();
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
+    }
+
+}

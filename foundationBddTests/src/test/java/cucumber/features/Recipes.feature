@@ -11,6 +11,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27818
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
+  https://stljirap.sial.com/browse/BIOFOUND-27816
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -451,3 +452,14 @@ Feature: Recipe management
     And I add criteria to phase using keyboard
     Then I should see warning popup alert with text message "recipe.alert.msg.max_criteria_ms"
 
+  Scenario: Cloning of Tech review recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "recipeTechReview"
+    And I add few actions steps to existing recipe
+    And I save the recipe using keyboard event
+    Then Recipe is saved
+    And I go to browser mode
+    When I edit recipe "recipeTechReview"
+    And I perform saveAs option to save recipe
+    Then I see new recipe is saved as Draft
