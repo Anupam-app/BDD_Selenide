@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
@@ -68,7 +69,7 @@ public class TrendsPage {
     private final SelenideElement startdate =
             $(By.xpath("//div[(@class=\"ant-picker-input ant-picker-input-active\")]"));
     private final SelenideElement end_date = $(By.xpath("//*[(@placeholder='End datetime')]"));
-    private final SelenideElement donwload =
+    private final SelenideElement downloadButton =
             $(By.xpath("//*[(@class='ant-btn ant-btn-primary ant-dropdown-trigger download-button')]"));
 
     private final SelenideElement chartAreaGraphMessage = $(By.xpath(
@@ -130,6 +131,8 @@ public class TrendsPage {
     private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
     private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
     private String parameters = "//li[text()='%s']/span";
+
+    private String downloadData = "//span[text()='%s']";
 
     public void goToTrends() {
         commonWaiter(trends, visible).click();
@@ -282,6 +285,15 @@ public class TrendsPage {
         commonWaiter(validateGraph, visible);
     }
 
+    public void downloadGraph(String option) {
+        commonWaiter(downloadButton, visible).click();
+        commonWaiter($(By.xpath(String.format(downloadData, option))), visible).click();
+    }
+
+    public void verifyDownloadGraph() {
+        downloadButton.waitUntil(enabled, 5000);
+    }
+
     public void footerValidation(String options) {
 
         switch (options) {
@@ -310,7 +322,7 @@ public class TrendsPage {
                 end_date.shouldBe(visible);
                 break;
             case "download":
-                donwload.shouldBe(visible);
+                downloadButton.shouldBe(visible);
                 break;
             default:
         }
