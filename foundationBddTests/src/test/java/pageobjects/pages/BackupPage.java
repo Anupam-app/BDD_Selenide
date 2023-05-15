@@ -44,7 +44,7 @@ public class BackupPage {
     private String XPATH_HEADER = "//div[@class='header-title']";
     private String XPATH_ORCHESTRATOR_HEADER = "//div[contains(@class,'BackupRestore_header-title')]";
 
-    private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[6]"));
+    private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
     private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
     private SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
     private SelenideElement scheduleTextBox = $(By.xpath("//input[@class ='schedule-text-box']"));
