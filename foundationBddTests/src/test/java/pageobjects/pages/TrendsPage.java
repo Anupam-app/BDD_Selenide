@@ -127,11 +127,9 @@ public class TrendsPage {
     private String checkboxDefaultCollection = "//li[@title='%s']//input";
     private SelenideElement graphLastSecondTime =
             $(By.xpath("//*[@class='highcharts-axis-labels highcharts-xaxis-labels']/*[last()-1]"));
-
     private SelenideElement defaultButton = $(By.xpath("(//button[@class='trends-parameters']//input)[2]"));
     private ElementsCollection deviceShapeElements = $$(By.xpath("(//div[@class='trends-sidebar']//ul//li//label)"));
     private String parameters = "//li[text()='%s']/span";
-
     private String downloadData = "//span[text()='%s']";
 
     public void goToTrends() {
