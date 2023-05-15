@@ -114,6 +114,15 @@ public class TrendsPageStepsDefinition {
         trendsPage.graphTime();
     }
 
+    @When("I download the graph as {string}")
+    public void iDownloadGraph(String option) {
+        trendsPage.downloadGraph(option);
+    }
+
+    @When("I see graph is downloaded")
+    public void iSeeGraphDownloaded() {
+        trendsPage.verifyDownloadGraph();
+    }
 
     @When("I select the {string} collection")
     public void iSelectTheDefaultCollection(String btn) {

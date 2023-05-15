@@ -195,3 +195,26 @@ Feature: Trends PDP
     Examples:
       | Param1          | Param2          |
       | P001 - Speed PV | P002 - Speed PV |
+
+  Scenario Outline: BIOCRS-5482 | Verify the download button
+    Given I am logged in as "bio4cAdmin" user
+    And I navigate to trends page
+    When I select the "Default" collection
+    And I choose "<Param1>","<Param2>" parameters
+    And I see the graph is plotted for selected parameters in chart area "<Param1>","<Param2>"
+    And I download the graph as "<option>"
+    Then I see graph is downloaded
+
+    @CRS
+    Examples:
+      | Param1   | Param2   | option |
+      | PI101 PV | PI102 PV | data   |
+
+    @IVI @IVI-7185
+    Examples:
+      | Param1          | Param2          | option |
+      | P001 - Speed PV | P002 - Speed PV | Data   |
+      | P001 - Speed PV | P002 - Speed PV | PNG    |
+      | P001 - Speed PV | P002 - Speed PV | PDF    |
+      | P001 - Speed PV | P002 - Speed PV | JPG    |
+
