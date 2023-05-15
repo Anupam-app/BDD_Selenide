@@ -1391,6 +1391,7 @@ public class RecipePage {
     }
 
     public void approvalStatus(String value){
-        approvalStatus.shouldHave(text(value));
+        var actualText = $(By.xpath(String.format(importRecipeStatusVerify, value))).waitUntil(visible, 5000L).getText();
+        Assert.assertEquals("Verification of recipe status is Draft:", "Draft", actualText);
     }
 }

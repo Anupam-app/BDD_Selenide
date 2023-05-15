@@ -778,9 +778,14 @@ public class RecipePageStepsDefinition {
         recipePage.iSaveRecipeWithKeyboardAction();
     }
 
-    @Then("I see new recipe is saved as {string}")
-    public void newRecipeIsSaved(String status){
-        recipePage.verifyRecipeTab(this.recipe.getRecipeName(),"Saved");
-        recipePage.approvalStatus(status);
+    @Then("I see new recipe is saved as Draft")
+    public void newRecipeIsSaved(){
+        switchTo().parentFrame();
+        reportPage.goToReports();
+        recipePage.unappliedChangesPopUp();
+        iGoToRecipePage();
+        recipePage.setSearch(this.recipe.getRecipeName());
+        recipePage.iVerifyLatestModifiedRecipe();
+        recipePage.approvalStatus(this.recipe.getRecipeName());
     }
 }
