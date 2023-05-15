@@ -1390,8 +1390,4 @@ public class RecipePage {
         Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
     }
 
-    public void approvalStatus(String value){
-        var actualText = $(By.xpath(String.format(importRecipeStatusVerify, value))).waitUntil(visible, 5000L).getText();
-        Assert.assertEquals("Verification of recipe status is Draft:", "Draft", actualText);
-    }
 }

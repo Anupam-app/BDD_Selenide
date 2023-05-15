@@ -780,12 +780,8 @@ public class RecipePageStepsDefinition {
 
     @Then("I see new recipe is saved as Draft")
     public void newRecipeIsSaved(){
-        switchTo().parentFrame();
-        reportPage.goToReports();
-        recipePage.unappliedChangesPopUp();
-        iGoToRecipePage();
-        recipePage.setSearch(this.recipe.getRecipeName());
-        recipePage.iVerifyLatestModifiedRecipe();
-        recipePage.approvalStatus(this.recipe.getRecipeName());
+        iGoToBrowserMode();
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
     }
+
 }
