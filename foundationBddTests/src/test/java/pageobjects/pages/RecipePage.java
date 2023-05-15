@@ -224,6 +224,7 @@ public class RecipePage {
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
+    private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -755,7 +756,6 @@ public class RecipePage {
     }
 
     public void openRecipe(String recipeName) {
-        // commonWaiter(browserLinkText, visible).click();
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         $(By.xpath(String.format(XPATH_IMPORT_RECIPE, recipeName))).click();
@@ -942,7 +942,7 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-        $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
+        $(By.xpath(String.format(warningMessage,message))).shouldHave(text(message));
     }
 
     public void saveBtn(String recipeName) {
@@ -978,7 +978,6 @@ public class RecipePage {
         importInputTextBox.sendKeys(Keys.DELETE);
         importInputTextBox.waitUntil(visible, 5000L).setValue(recipeName.concat("1"));
         saveButton.click();
-        // browserLinkText.waitUntil(Condition.visible, 5000L).click();
     }
 
     public void importedRecipeStatusIsDraft(String recipeName) {
@@ -1037,9 +1036,9 @@ public class RecipePage {
         Assert.assertTrue(($(By.xpath(String.format(searchPlaceholder, "6")))).getAttribute("value").isBlank());
     }
 
-    public void verifyRecipeTab() {
-        $(By.xpath(String.format(label, "Untitled"))).shouldBe(visible);
-        $(By.xpath(String.format(label, "Unsaved"))).shouldBe(visible);
+    public void verifyRecipeTab(String name,String status) {
+        $(By.xpath(String.format(label, name))).shouldBe(visible);
+        $(By.xpath(String.format(label, status))).shouldBe(visible);
     }
 
     public void createPhase(String phase) {
@@ -1381,6 +1380,10 @@ public class RecipePage {
         stepAction.moveToElement(addIfCriteria).click().build().perform();
         commonWaiter(addAndCriteria, visible).click();
         stepAction.moveToElement(addOrCriteria).click().build().perform();
+    }
+
+    public void iSaveRecipeWithKeyboardAction(){
+        stepAction.keyDown(Keys.CONTROL).sendKeys("s").build().perform();
     }
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {

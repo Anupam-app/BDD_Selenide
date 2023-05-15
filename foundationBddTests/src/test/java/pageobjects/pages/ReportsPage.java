@@ -253,7 +253,6 @@ public class ReportsPage {
                 $$(templateListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
                 break;
             case "reports":
-                Thread.sleep(5000);
                 $$(reportListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
                 break;
         }
