@@ -12,6 +12,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
+  https://stljirap.sial.com/browse/BIOFOUND-27935
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -463,3 +464,15 @@ Feature: Recipe management
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
+ @test
+  Scenario: Delete step and criteria from recipe
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "criteriaRecipe" from recipe browser
+    And I delete the step"3" using shortcut key
+    And verify step"3" is deleted and message seen "Step cut successfully"
+    And I delete the step"2" using cross button
+    And verify step"2" is deleted and message seen "Step deleted successfully"
+    And I delete the "WHEN" criteria using shortcut key
+    And verify "WHEN" criteria is deleted and message seen "Step cut successfully"
+    And I delete the "IF-ELSE" criteria using cross button
+    And verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
