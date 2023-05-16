@@ -275,11 +275,11 @@ Feature: Recipe management
     And I add "Threshold" action to the step
     And I verify error message "Out of Range" for out of range value entry
     And I should see error message for respective "Setpoint" values provided
-      | 5  |Out of Range                        |
-      | 3. |No value before/after decimal point |
-      | .2 |No value before/after decimal point |
-      | -1 |Out of Range                        |
-      | 1  |                                    |
+      | 5  | Out of Range                        |
+      | 3. | No value before/after decimal point |
+      | .2 | No value before/after decimal point |
+      | -1 | Out of Range                        |
+      | 1  |                                     |
     And I save the recipe with name "errorRecipe"
 
 
@@ -464,7 +464,7 @@ Feature: Recipe management
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
- @test
+
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "criteriaRecipe" from recipe browser
