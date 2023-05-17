@@ -158,6 +158,7 @@ Feature: Reports Filter
     When I click on filter icon and select eSignStatus "Not Signed"
     Then I should see reports with eSignStatus "Not Signed"
 
+  @IVI-7601
   Scenario: Verify the system allows user to filter runs based on batchID
     Given I goto report management page
     When I select report from dropdown "Consolidated"
