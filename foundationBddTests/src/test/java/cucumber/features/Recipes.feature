@@ -469,7 +469,8 @@ Feature: Recipe management
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
-    Then I perform saveAs recipe to verify the warning popup alert on selecting existing recipeecipe
+    And I saveAs the recipe
+    Then I select existing recipe to verify the warning text message
       |recipeInReview               |
       |testRecipeWithChar30NameLengt|
       |testRecipeDraftToInactive1   |

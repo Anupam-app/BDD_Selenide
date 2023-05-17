@@ -789,13 +789,18 @@ public class RecipePageStepsDefinition {
         recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
     }
 
-    @Then("^I perform saveAs recipe to verify the warning popup alert on selecting existing recipeecipe$")
-    public void iVerifyTheWarningPopupAlert(DataTable table) {
+    @And("I saveAs the recipe")
+    public void iSaveAsTheRecipe(){
         recipePage.saveAsRecipe();
+    }
+
+    @Then("^I select existing recipe to verify the warning text message$")
+    public void iVerifyTheWarningPopupAlert(DataTable table) {
         List<String> list = table.asList(String.class);
         for (int i = 1; i < list.size(); i++) {
             list.forEach(recipePage::iVerifyTheAlert);
         }
 
     }
+
 }
