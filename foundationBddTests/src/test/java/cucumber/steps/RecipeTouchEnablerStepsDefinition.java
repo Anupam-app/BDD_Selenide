@@ -7,6 +7,14 @@ import org.apache.commons.lang3.RandomStringUtils;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.RecipeTouchEnablerPage;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+
+
 public class RecipeTouchEnablerStepsDefinition {
 
     private final RecipePage recipePage;
@@ -109,10 +117,7 @@ public class RecipeTouchEnablerStepsDefinition {
 
     @And("I add Phase using action step {string}")
     public void addPhase(String stepNo){
-        this.recipe.setPhaseActionSteps((stepNo));
-        recipePage.selectStep(stepNo);
-        recipeTouch.buttonClick("Add Phase");
-        recipePage.phaseCreationNotification();
+        addingPhase(stepNo);
         addPhaseAndVerifySuccessText();
     }
 
@@ -123,11 +128,24 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.verifyPhaseName(this.recipe.getPhaseName());
     }
 
-    @And("I {string}")
-    public void copyPhase(String actionButton) {
+    @And("I Copy Phase")
+    public void copyPhase() {
         recipePage.selectPhase(this.recipe.getPhaseName());
         this.recipe.setPhaseCount(recipePage.phaseCountUsingName(this.recipe.getPhaseName()));
-        recipeTouch.buttonClick(actionButton);
+        recipeTouch.buttonClick("Copy Phase");
+    }
+
+    @And("I Cut Phase {int}")
+    public void cutPhase(int phaseNumber) {
+        String phaseName = null;
+        if(phaseNumber==1){
+            phaseName = this.recipe.getPhaseName();
+        } else if (phaseNumber== 2){
+            phaseName = this.recipe.getSecondPhaseName();
+        }
+        recipePage.selectPhase(phaseName);
+        this.recipe.setPhaseCount(recipePage.phaseCountUsingName(phaseName));
+        recipeTouch.buttonClick("Cut Phase");
     }
 
     @And("I paste phase {string}")
@@ -137,10 +155,40 @@ public class RecipeTouchEnablerStepsDefinition {
         this.recipe.setPhaseCountCopyPaste(recipePage.phaseCount());
     }
 
-    @And("I verify phase is pasted {string}")
-    public void phasePasted(String action){
+    @And("I paste phase {string} phase {int}")
+    public void cutPastePhase(String actionButton, int phaseNo){
+        String phaseName = null;
+        if(phaseNo==1){
+            phaseName = this.recipe.getPhaseName();
+        } else if (phaseNo== 2){
+            phaseName = this.recipe.getSecondPhaseName();
+        }
+        recipePage.selectPhase(phaseName);
+        recipeTouch.buttonClick(actionButton);
+        this.recipe.setPhaseCountCopyPaste(recipePage.phaseCount());
+    }
+
+    @And("I verify copied phase is pasted")
+    public void copyPhasePasted(){
         recipePage.verifyPhaseName(this.recipe.getPhaseName()+"_2");
         recipePage.verifyPhaseCountAfterPasteAction(this.recipe.getPhaseCountCopyPaste(),this.recipe.getPhaseName()+"_2");
+    }
+
+    @And("I verify phase is pasted {string} phase")
+    public void cutPhasePasted(String action){
+        recipePage.verifyPhaseName(this.recipe.getPhaseName());
+        recipePage.verifyPhaseName(this.recipe.getSecondPhaseName());
+        Set<String> cutPasteAfterList = new HashSet<>();
+        cutPasteAfterList.add(this.recipe.getPhaseName());
+        cutPasteAfterList.add(this.recipe.getSecondPhaseName());
+        List<String> list = new ArrayList<>(cutPasteAfterList);
+        list.sort(Collections.reverseOrder());
+        Set<String> cutPasteBeforeList= new LinkedHashSet<>(list);
+        if(action.equalsIgnoreCase("After")){
+            recipePage.phaseListOrder(cutPasteAfterList);
+        }else if (action.equalsIgnoreCase("Before")){
+            recipePage.phaseListOrder(cutPasteBeforeList);
+        }
     }
 
     @And("I verify steps are added in phase")
@@ -165,6 +213,25 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.phaseSelection(this.recipe.getPhaseName());
         recipeTouch.buttonClick("Delete Phase");
         recipePage.handleWarningPopUp(this.recipe.getPhaseName());
+    }
+
+    @And("I add 2 phases with Steps {string} & {string}")
+    public void addMultiplePhases(String phaseOneSteps, String phaseTwoSteps){
+        addingPhase(phaseOneSteps);
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.addPhaseAndVerifySuccessMessage(this.recipe.getPhaseName());
+        recipePage.verifyPhaseName(this.recipe.getPhaseName());
+        addingPhase(phaseTwoSteps);
+        this.recipe.setSecondPhaseName(RandomStringUtils.randomAlphabetic(10));
+        recipePage.addPhaseAndVerifySuccessMessage(this.recipe.getSecondPhaseName());
+        recipePage.verifyPhaseName(this.recipe.getSecondPhaseName());
+    }
+
+    public void addingPhase(String stepNo){
+        this.recipe.setPhaseActionSteps((stepNo));
+        recipePage.selectStep(stepNo);
+        recipeTouch.buttonClick("Add Phase");
+        recipePage.phaseCreationNotification();
     }
 
 }

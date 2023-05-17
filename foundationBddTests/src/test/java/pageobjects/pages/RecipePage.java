@@ -26,11 +26,12 @@ import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 
-import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -81,7 +82,7 @@ public class RecipePage {
     private final SelenideElement recipeCriteriaSearchTextBox = $(By.className("search-txt-box"));
     private final SelenideElement recipeSearchTextBox = $(By.id("search"));
     private final SelenideElement phaseElementTextBox = $(By.className("phase-Name"));
-
+    private final ElementsCollection phaseNameText = $$(By.className("phase-Name"));
     private final SelenideElement filterError = $(By.xpath("//h4"));
     private final SelenideElement openButton = $(By.className("open-recipe-btn"));
     private final SelenideElement insertStepBeforeButton = $(By.xpath("//button[@class=\"ant-btn step-insert-before-button\"]"));
@@ -1402,6 +1403,14 @@ public class RecipePage {
         warningPopUpDialog.waitUntil(visible, 5000L);
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         primaryButton.click();
+    }
+
+    public void phaseListOrder(Set<String> expectedList){
+        Set<String> phaseNames = new HashSet<>();
+        for (SelenideElement selenideElement : phaseNameText) {
+            phaseNames.add(selenideElement.getValue());
+        }
+        Assert.assertEquals("order of phases check", expectedList, phaseNames);
     }
 
 }
