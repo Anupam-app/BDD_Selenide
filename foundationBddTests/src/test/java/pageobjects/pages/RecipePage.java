@@ -225,6 +225,7 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
+    private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1404,4 +1405,16 @@ public class RecipePage {
         primaryButton.click();
     }
 
+    public void saveAsRecipe() {
+        stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
+    }
+
+    public void iVerifyTheAlert(String recipes){
+        SelenideHelper.commonWaiter(recipeInputSave, visible).click();
+        recipeInputSave.clear();
+        recipeInputSave.sendKeys(recipes);
+        saveButton.click();
+        overWrittenAlertMSG.shouldBe(visible);
+        primaryButton.click();
+    }
 }

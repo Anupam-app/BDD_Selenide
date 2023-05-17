@@ -12,6 +12,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
+  https://stljirap.sial.com/browse/BIOFOUND-27905
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -463,3 +464,18 @@ Feature: Recipe management
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
+
+  Scenario Outline:  Overwritting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "<recipes>"
+    And I saveAs the recipe
+    Then I select existing to verify the warning popup alert
+      |recipeInReview               |
+      |testRecipeWithChar30NameLengt|
+      |testRecipeDraftToInactive1   |
+
+  Examples:
+      |recipes          |
+      |testDraftRecipe  |
+      |recipeTechReview |
