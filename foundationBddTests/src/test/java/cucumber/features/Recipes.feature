@@ -469,10 +469,10 @@ Feature: Recipe management
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "criteriaRecipe" from recipe browser
     And I delete the step"3" using shortcut key
-    And verify step"3" is deleted and message seen "Step cut successfully"
+    Then I verify step"3" is deleted and message seen "Step cut successfully"
     And I delete the step"2" using cross button
-    And verify step"2" is deleted and message seen "Step deleted successfully"
+    Then I verify step"2" is deleted and message seen "Step deleted successfully"
     And I delete the "WHEN" criteria using shortcut key
-    And verify "WHEN" criteria is deleted and message seen "Step cut successfully"
+    Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
-    And verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+    Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"

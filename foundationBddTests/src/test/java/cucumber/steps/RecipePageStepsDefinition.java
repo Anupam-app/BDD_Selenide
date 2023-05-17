@@ -794,7 +794,7 @@ public class RecipePageStepsDefinition {
         recipePage.deleteStepUsingShortcut(stepNo);
     }
 
-    @And("verify step{string} is deleted and message seen {string}")
+    @And("I verify step{string} is deleted and message seen {string}")
     public void validateStepDelete(String stepNo, String message){
         recipePage.validateStepDelete(stepNo);
     }
@@ -814,7 +814,7 @@ public class RecipePageStepsDefinition {
         recipePage.deleteCriteriaUsingCrossButton(step);
     }
 
-    @And("verify {string} criteria is deleted and message seen {string}")
+    @And("I verify {string} criteria is deleted and message seen {string}")
     public void validateCriteriaDelete(String step, String message){
         recipePage.validatecriteriaDelete(step);
     }

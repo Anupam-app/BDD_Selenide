@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 
-import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -225,8 +224,8 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
-    private final String deleteStepButton = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
-    private final SelenideElement deleteCriteriaButton = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
+    private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
+    private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
 
     public void goTo() {
@@ -1409,7 +1408,7 @@ public class RecipePage {
 
     public void deleteStepUsingCrossButton(String stepNo) {
         $(By.xpath(String.format(stepNumber, stepNo))).waitUntil(visible, 2000L, 1000L).click();
-        $(By.xpath(String.format(deleteStepButton, stepNo))).click();
+        $(By.xpath(String.format(deleteStepIcon, stepNo))).click();
         recipeNotification("Step deleted successfully");
     }
 
@@ -1431,7 +1430,7 @@ public class RecipePage {
 
     public void deleteCriteriaUsingCrossButton(String step) {
         $(By.xpath(String.format(selectCriteria, step))).waitUntil(visible, 2000, 1000).click();
-        deleteCriteriaButton.waitUntil(visible, 2000, 1000).click();
+        deleteCriteriaIcon.waitUntil(visible, 2000, 1000).click();
         recipeNotification("Criteria deleted successfully");
     }
 
