@@ -32,14 +32,26 @@ Feature: Recipe Touch Enabler
     When I add 4 action steps
     And I add Phase using action step "2,3"
     Then I verify steps are added in phase
-    When I "<action>"
+    When I Copy Phase
     And I paste phase "<value>"
-    Then I verify phase is pasted "<value>"
+    Then I verify copied phase is pasted
 
     Examples:
-      |action     |value  |
-      |Copy Phase |Before |
-      |Copy Phase |After  |
+      |value  |
+      |Before |
+      |After  |
+
+  Scenario Outline: Verify Add phase, cut, paste phase functionality
+    When I add 6 action steps
+    And I add 2 phases with Steps "4,5" & "2,3"
+    And I Cut Phase <cutPhase>
+    And I paste phase "<action>" phase <pastePhaseNo>
+    Then I verify phase is pasted "<action>" phase
+
+    Examples:
+      |cutPhase |action  |pastePhaseNo |
+      |2        |Before  |1            |
+      |2        |After   |1            |
 
   Scenario: Verify Save to Phase library functionality
     When I add 4 action steps
@@ -56,4 +68,3 @@ Feature: Recipe Touch Enabler
     Then I verify steps are added in phase
     And I Delete phase
     And I should see confirmation message "Phase Deleted Successfully"
-
