@@ -1418,7 +1418,8 @@ public class RecipePage {
         });
 
         saveButton.click();
-        overWrittenAlertMSG.shouldBe(visible);
+        commonWaiter(overWrittenAlertMSG,visible).shouldHave(text("Recipe is locked. Please save it as new copy."));
         primaryButton.click();
     }
+
 }
