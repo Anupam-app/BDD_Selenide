@@ -207,7 +207,9 @@ public class ReportsPage {
     private final SelenideElement eSignedStatus = $(By.xpath("//table[@id='reportListTable']//th[5]"));
     private final SelenideElement signatureText = $(By.xpath("//div[text()='Signature Needed']"));
     private final SelenideElement signaturevalue = $(By.xpath("//input[contains(@placeholder,'0-1')]"));
-
+    private final SelenideElement selectBatchIDDropdown =
+            $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
+    private final String XPATH_BATCHID_DROPDOWN = "//li[text()='%s']";
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -290,15 +292,15 @@ public class ReportsPage {
         }
     }
 
-    public void selectReport(String reportname) {
+    public void selectReport(String reportName) {
         SelenideHelper.fluentWaiter()
                 .until((webDriver) -> {
                     SelenideHelper.commonWaiter(selectReportDropdown, visible)
                             .click();
-                    return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))).isDisplayed();
+                    return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))).isDisplayed();
                 });
 
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportname))), visible)
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))), visible)
                 .click();
     }
 
@@ -1233,6 +1235,18 @@ public class ReportsPage {
                 break;
             default:
         }
+    }
+
+    public void selectBatchId(String batchID) {
+        SelenideHelper.fluentWaiter()
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectBatchIDDropdown, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_BATCHID_DROPDOWN, batchID))).isDisplayed();
+                });
+
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCHID_DROPDOWN, batchID))), visible)
+                .click();
     }
 
 }

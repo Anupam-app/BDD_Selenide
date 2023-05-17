@@ -635,4 +635,9 @@ public class ReportsPageStepsDefinition {
         reportPage.iCheckNotificationMsg("Report template created");
     }
 
+    @Given("I select batchID from dropdown {string}")
+    public void iSelectBatchIDFromDropdown(String batchID) {
+        reportPage.selectBatchId(batchID);
+    }
+
 }
