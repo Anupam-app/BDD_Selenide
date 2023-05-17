@@ -1412,7 +1412,11 @@ public class RecipePage {
     public void iVerifyTheAlert(String recipes){
         SelenideHelper.commonWaiter(recipeInputSave, visible).click();
         recipeInputSave.clear();
-        recipeInputSave.sendKeys(recipes);
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            recipeInputSave.setValue(recipes);
+            return recipeInputSave.getValue().equals(recipes);
+        });
+
         saveButton.click();
         overWrittenAlertMSG.shouldBe(visible);
         primaryButton.click();
