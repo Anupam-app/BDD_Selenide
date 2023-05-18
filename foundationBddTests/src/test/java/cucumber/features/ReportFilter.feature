@@ -165,3 +165,15 @@ Feature: Reports Filter
     And I select batchID from dropdown "b10"
     Then I should see recipe run "recipe4sec220211129030358" from consolidated report
     And I should see recipe run "recipe10sec220211129035112" from consolidated report
+
+  Scenario: Filter consolidated runs based on the Date range.
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    Then I should see consolidated runs list displayed based on date range dropdown
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom Range |

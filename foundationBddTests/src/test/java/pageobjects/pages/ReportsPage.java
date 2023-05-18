@@ -114,7 +114,7 @@ public class ReportsPage {
     private final SelenideElement saveAlarmButton = $(By.xpath("//button[contains(text(),'Save')]"));
     private final SelenideElement openButton = $(By.xpath("//button[contains(text(),'Open')]"));
     private final SelenideElement primaryButton = $(By.xpath("//button[contains(text(),'SIGN')]"));
-    private final SelenideElement reportEsignButton = $(By.xpath("//button[contains(text(),'e-sign')]"));
+    private final SelenideElement reportESignButton = $(By.xpath("//button[contains(text(),'e-sign')]"));
 
     private final ElementsCollection foundationRunListTable =
             $$(By.xpath("//*[@id='foundationRunListTable']/tbody/tr"));
@@ -155,17 +155,20 @@ public class ReportsPage {
     private final SelenideElement errorMsgSameTemplateName = $(By.xpath("//div[contains(@class,'alert_msg')]"));
     private final SelenideElement errorMsgTemplateApproval = $(By.xpath("//span[@class='validate-error']"));
     private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
-    private final SelenideElement XPATH_ERRORNOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
+    private final SelenideElement XPATH_ERROR_NOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification =
             "Failed to create report template because %s already exists. Use a different name.";
 
 
     private final SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final ElementsCollection dateOptionsRprt =
+    private final ElementsCollection dateOptionsReport =
             $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
     private final ElementsCollection dateOptions =
             $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
+
+    private final ElementsCollection dateOptionsConsolidated =
+            $$(By.xpath("//div[contains(@class,'ranges')]/div/ul/li"));
 
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter']"));
 
@@ -173,6 +176,8 @@ public class ReportsPage {
     private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
     private final SelenideElement consolidateColumn = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[6]"));
     private final SelenideElement startDate = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
+    private final SelenideElement consolidateStartDate = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[5]"));
+
     private final SelenideElement clearAllFilters = $(By.xpath("//div[text()='Clear All']"));
     private final SelenideElement previousMonth =
             $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
@@ -199,17 +204,17 @@ public class ReportsPage {
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
 
     private final SelenideElement reportManagementHeader = $(By.xpath("//h2[text()='Report Management']"));
-    private final SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='trend_name_error_text']"));
+    private final SelenideElement XPATH_ERROR_NOTIFICATION_TEXT = $(By.xpath("//*[@class='trend_name_error_text']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     private final SelenideElement searchTextReportManagement = $(By.id("search"));
     private final SelenideElement templateCancelButton = $(By.xpath("//b[contains(text(),'Cancel')]"));
 
     private final SelenideElement eSignedStatus = $(By.xpath("//table[@id='reportListTable']//th[5]"));
     private final SelenideElement signatureText = $(By.xpath("//div[text()='Signature Needed']"));
-    private final SelenideElement signaturevalue = $(By.xpath("//input[contains(@placeholder,'0-1')]"));
+    private final SelenideElement signatureValue = $(By.xpath("//input[contains(@placeholder,'0-1')]"));
     private final SelenideElement selectBatchIDDropdown =
             $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
-    private final String XPATH_BATCHID_DROPDOWN = "//li[text()='%s']";
+    private final String XPATH_BATCH_ID_DROPDOWN = "//li[text()='%s']";
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -375,9 +380,9 @@ public class ReportsPage {
         reportViewButton.click();
     }
 
-    public void esignReports(String reportName, String password) {
+    public void eSignReports(String reportName, String password) {
         $(By.xpath(String.format(XPATH_REPORT_NAME, reportName))).click();
-        reportEsignButton.click();
+        reportESignButton.click();
         inputPassword.sendKeys(password);
         commonWaiter(primaryButton, visible).click();
     }
@@ -536,7 +541,7 @@ public class ReportsPage {
     }
 
     public void isGeneratedNotificationWhenMoreThanSixParams(String message) {
-        XPATH_ERRORNOTIFICATION.shouldHave(text(message));
+        XPATH_ERROR_NOTIFICATION.shouldHave(text(message));
     }
 
     public void includeReport(String reportInclude) {
@@ -780,15 +785,15 @@ public class ReportsPage {
                     sortList("Start Date", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = startDate.getText();
-                    LocalDate selectedAsendingDate =
+                    LocalDate selectedAscendingDate =
                             SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Start Date", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDate.getText();
-                    LocalDate selectedDesendingDate =
+                    LocalDate selectedDescendingDate =
                             SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
-                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
-                            && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                    if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -812,14 +817,15 @@ public class ReportsPage {
                 if (startDate.isDisplayed()) {
                     sortList("Start Date", false);
                     String startDateRow = startDate.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAscendingDate =
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Start Date", true);
                     String endDateRow = startDate.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
-                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
-                            || selectedAsendingDate.isAfter(selectedDate1))
-                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                                    || selectedDesendingDate.isBefore(selectedDate2))) {
+                    LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -845,6 +851,13 @@ public class ReportsPage {
         SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
     }
 
+    public void sortConsolidatedList(String columnName, boolean descending) {
+        SelenideElement sortAction = getReportColumnHeader(columnName);
+        var ascendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order")));
+        var descendingIcon = $(By.xpath(String.format(XPATH_ORDER_ICON, "order dropup")));
+        SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
+    }
+
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns,
                 dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
@@ -864,7 +877,7 @@ public class ReportsPage {
         saveAs_btn.click();
     }
 
-    public void ivalidateWindow() {
+    public void iValidateWindow() {
         saveTemplateTxt.shouldBe(visible);
     }
 
@@ -872,14 +885,14 @@ public class ReportsPage {
         saveTemplateAs.click();
         saveTemplateAs.clear();
         saveTemplateAs.setValue(templateName);
-        isave();
+        iSave();
     }
 
-    public void isave() {
+    public void iSave() {
         saveBtn.click();
     }
 
-    public void putReportTemplateToinactive(String templateName, String status) {
+    public void putReportTemplateToInactive(String templateName, String status) {
         openReportTemplate(templateName);
         reportTemplateStatusIcon.click();
         changeStatus(status);
@@ -901,10 +914,10 @@ public class ReportsPage {
                 .equalsIgnoreCase(status));
     }
 
-    public void selectDateRangeRprt(String option) {
+    public void selectDateRangeReport(String option) {
         commonWaiter(dateColumn, visible);
         dateColumn.click();
-        for (SelenideElement element : dateOptionsRprt) {
+        for (SelenideElement element : dateOptionsReport) {
             if (element.getText()
                     .equalsIgnoreCase(option)) {
                 element.click();
@@ -927,7 +940,7 @@ public class ReportsPage {
 
     }
 
-    public boolean verifyDateRangesRprt(String dateRange) throws ParseException {
+    public boolean verifyDateRangesReport(String dateRange) throws ParseException {
         boolean isTrue = false;
         switch (dateRange) {
             case "Today":
@@ -942,15 +955,15 @@ public class ReportsPage {
                     sortList("Date Generated", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = startDateRep.getText();
-                    LocalDate selectedAsendingDate =
+                    LocalDate selectedAscendingDate =
                             SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Date Generated", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDateRep.getText();
-                    LocalDate selectedDesendingDate =
+                    LocalDate selectedDescendingDate =
                             SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
-                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
-                            && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                    if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -974,14 +987,15 @@ public class ReportsPage {
                 if (startDateRep.isDisplayed()) {
                     sortList("Date Generated", false);
                     String startDateRow = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAscendingDate =
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Date Generated", true);
                     String endDateRow = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
-                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
-                            || selectedAsendingDate.isAfter(selectedDate1))
-                            && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                                    || selectedDesendingDate.isBefore(selectedDate2))) {
+                    LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -1009,7 +1023,7 @@ public class ReportsPage {
         SortHelper.sortList(sortAction, ascendingIcon, descendingIcon, descending);
     }
 
-    public void selectConsolidatedStatus(String consolidatedreportstatus) {
+    public void selectConsolidatedStatus(String consolidatedReportStatus) {
         commonWaiter(filterIcon, visible);
         filterIcon.click();
         processType.shouldBe(visible);
@@ -1017,8 +1031,8 @@ public class ReportsPage {
         if (clearAllFilters.isDisplayed()) {
             clearAllFilters.click();
         }
-        if (!$(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).isSelected()) {
-            $(By.xpath(String.format("//span[text()='%s']", consolidatedreportstatus))).click();
+        if (!$(By.xpath(String.format("//span[text()='%s']", consolidatedReportStatus))).isSelected()) {
+            $(By.xpath(String.format("//span[text()='%s']", consolidatedReportStatus))).click();
         }
         applyFilterButton.click();
     }
@@ -1052,12 +1066,12 @@ public class ReportsPage {
         return $(By.xpath(String.format(XPATH_CHECKBOX_CONSOLIDATED_REPORT, run))).isDisplayed();
     }
 
-    public boolean verifyrunDetails(String recipeName, String processType, String status) throws ParseException {
+    public boolean verifyRunDetails(String recipeName, String processType, String status) throws ParseException {
         boolean result = false;
         if (startDate.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT);
-            String currentDateandTime = sdf.format(new Date());
-            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateandTime);
+            String currentDateAndTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateAndTime);
             Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(startDate.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
@@ -1086,8 +1100,8 @@ public class ReportsPage {
         boolean result = false;
         if (eventTime.isDisplayed()) {
             SimpleDateFormat sdf = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT);
-            String currentDateandTime = sdf.format(new Date());
-            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateandTime);
+            String currentDateAndTime = sdf.format(new Date());
+            Date dateAndTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(currentDateAndTime);
             Date eventEntriesTime = new SimpleDateFormat(Report.RECIPE_DATE_FORMAT).parse(eventTime.getText());
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
@@ -1150,7 +1164,7 @@ public class ReportsPage {
     }
 
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
-        XPATH_ERRORNOTIFICATION_TEXT.waitUntil(visible, 5001)
+        XPATH_ERROR_NOTIFICATION_TEXT.waitUntil(visible, 5001)
                 .shouldHave(text(message));
     }
 
@@ -1212,7 +1226,7 @@ public class ReportsPage {
                 break;
             case "Signature Needed":
                 signatureText.waitUntil(visible, 5000);
-                signaturevalue.shouldBe(visible);
+                signatureValue.shouldBe(visible);
                 break;
             case "Cancel":
                 templateCancelButton.shouldBe(visible);
@@ -1242,11 +1256,105 @@ public class ReportsPage {
                 .until((webDriver) -> {
                     SelenideHelper.commonWaiter(selectBatchIDDropdown, visible)
                             .click();
-                    return $(By.xpath(String.format(XPATH_BATCHID_DROPDOWN, batchID))).isDisplayed();
+                    return $(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, batchID))).isDisplayed();
                 });
 
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCHID_DROPDOWN, batchID))), visible)
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, batchID))), visible)
                 .click();
+    }
+
+    public void selectConsolidatedDateRange(String option) {
+        commonWaiter(dateColumn, visible);
+        dateColumn.click();
+        ElementsCollection options = dateOptionsConsolidated;
+        for (SelenideElement element : options) {
+            if (element.getText()
+                    .equalsIgnoreCase(option)) {
+                element.click();
+                break;
+            }
+        }
+
+        if (option.equalsIgnoreCase("Custom Range")) {
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            commonWaiter(previousMonth, visible);
+            int index = getRandomNumber(0, availableDates.size() / 2);
+            availableDates.get(index)
+                    .click();
+            index = getRandomNumber(availableDates.size() / 2, availableDates.size());
+            availableDates.get(index)
+                    .click();
+
+        }
+
+    }
+
+    public boolean verifyConsolidateDateRanges(String dateRange) throws ParseException {
+        boolean isTrue = false;
+        switch (dateRange) {
+            case "Today":
+            case "Yesterday":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
+                        .split("to")[0].trim();
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");
+
+                if (consolidateStartDate.isDisplayed()) {
+                    System.out.println("1");
+                    sortConsolidatedList("Start Date", false);
+                    Selenide.sleep(1000);
+                    String startDateRow1 = consolidateStartDate.getText();
+                    System.out.println(startDateRow1);
+                    LocalDate selectedAscendingDate =
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    sortConsolidatedList("Start Date", true);
+                    Selenide.sleep(1000);
+                    startDateRow1 = consolidateStartDate.getText();
+                    LocalDate selectedDescendingDate =
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+            case "Last 7 Days":
+            case "Last 30 Days":
+            case "This Month":
+            case "Last Month":
+            case "Custom Range":
+                commonWaiter(spinnerComponent.spinnerIcon, not(visible));
+                commonWaiter(dateColumn, visible);
+                String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
+                        .split("to")[0].trim();
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
+                // is without 0 prefix
+                String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
+                        .split("to")[1].trim();
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
+                if (consolidateStartDate.isDisplayed()) {
+                    sortConsolidatedList("Start Date", false);
+                    String startDateRow = consolidateStartDate.getText();
+                    LocalDate selectedAscendingDate =
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    sortConsolidatedList("Start Date", true);
+                    String endDateRow = consolidateStartDate.getText();
+                    LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
+                        isTrue = true;
+                    }
+                } else if (noDatamsg.isDisplayed()) {
+                    isTrue = true;
+                }
+                break;
+        }
+        return isTrue;
     }
 
 }
