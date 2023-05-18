@@ -474,7 +474,7 @@ Feature: Recipe management
     Then I select existing recipe to verify the warning text message
       |recipeInReview               |
       |testRecipeWithChar30NameLengt|
-      |testRecipeDraftToInactive    |
+      |ApprovedInActiveRecipe       |
 
   Examples:
       |recipes          |
