@@ -1296,13 +1296,10 @@ public class ReportsPage {
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");
-
                 if (consolidateStartDate.isDisplayed()) {
-                    System.out.println("1");
                     sortConsolidatedList("Start Date", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = consolidateStartDate.getText();
-                    System.out.println(startDateRow1);
                     LocalDate selectedAscendingDate =
                             SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortConsolidatedList("Start Date", true);
@@ -1328,7 +1325,6 @@ public class ReportsPage {
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
-                // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
