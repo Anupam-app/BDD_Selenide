@@ -1274,7 +1274,6 @@ public class ReportsPage {
                 break;
             }
         }
-
         if (option.equalsIgnoreCase("Custom Range")) {
             commonWaiter(previousMonth, visible);
             previousMonth.click();
@@ -1285,9 +1284,7 @@ public class ReportsPage {
             index = getRandomNumber(availableDates.size() / 2, availableDates.size());
             availableDates.get(index)
                     .click();
-
         }
-
     }
 
     public boolean verifyConsolidateDateRanges(String dateRange) throws ParseException {
