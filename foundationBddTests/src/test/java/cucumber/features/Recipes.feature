@@ -12,11 +12,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
-<<<<<<< HEAD
   https://stljirap.sial.com/browse/BIOFOUND-27905
-=======
   https://stljirap.sial.com/browse/BIOFOUND-27935
->>>>>>> f430cc7d895daa763df06edb24eb5d529d2d3ec3
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
