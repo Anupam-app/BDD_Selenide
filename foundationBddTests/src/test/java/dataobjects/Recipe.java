@@ -9,6 +9,7 @@ public class Recipe {
 
     String recipeName;
     String phaseName;
+    String secondPhaseName;
     String recipeNode;
     String runId;
     String productId;
