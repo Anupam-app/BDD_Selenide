@@ -227,6 +227,10 @@ public class RecipePage {
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
     private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
+    private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
+    private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
+    private final String selectCriteria = "//label[@data-contextmenu='%s']";
+
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -725,7 +729,7 @@ public class RecipePage {
     }
 
     // TO-DO: parameters to passed from external file
-    public void addStepActionBrowser()throws AWTException {
+    public void addStepActionBrowser() throws AWTException {
         zoomOut();
         opertionAction.waitUntil(visible, 2000).click();
         $(By.xpath(String.format(expandAction, "Product Inlet"))).click();
@@ -846,7 +850,7 @@ public class RecipePage {
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
         phaseLibViewIcon.click();
-        addPhasefromLibraryBtn.waitUntil(visible,3000L,1000L).click();
+        addPhasefromLibraryBtn.waitUntil(visible, 3000L, 1000L).click();
     }
 
     public void copyAndPastePhase() {
@@ -944,7 +948,7 @@ public class RecipePage {
     }
 
     public void waringpopupForRecipe(String message) {
-        $(By.xpath(String.format(warningMessage,message))).shouldHave(text(message));
+        $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
     }
 
     public void saveBtn(String recipeName) {
@@ -1038,7 +1042,7 @@ public class RecipePage {
         Assert.assertTrue(($(By.xpath(String.format(searchPlaceholder, "6")))).getAttribute("value").isBlank());
     }
 
-    public void verifyRecipeTab(String name,String status) {
+    public void verifyRecipeTab(String name, String status) {
         $(By.xpath(String.format(label, name))).shouldBe(visible);
         $(By.xpath(String.format(label, status))).shouldBe(visible);
     }
@@ -1384,26 +1388,42 @@ public class RecipePage {
         stepAction.moveToElement(addOrCriteria).click().build().perform();
     }
 
-    public void iSaveRecipeWithKeyboardAction(){
+    public void iSaveRecipeWithKeyboardAction() {
         stepAction.keyDown(Keys.CONTROL).sendKeys("s").build().perform();
     }
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {
-        Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount() ) && ((actionsStepsCount() - oldValue) == 1));
+        Assert.assertTrue("Action steps count is not correct", (oldValue < actionsStepsCount()) && ((actionsStepsCount() - oldValue) == 1));
     }
 
     public void phaseSelection(String name) {
         commonWaiter($(By.xpath(String.format(phaseLabel, name))), visible).click();
     }
 
-    public void expandPhaseLibrary(){
+    public void expandPhaseLibrary() {
         phaseLibrary.waitUntil(Condition.visible, 5000L).click();
     }
 
-    public void handleWarningPopUp(String phaseName){
+    public void handleWarningPopUp(String phaseName) {
         warningPopUpDialog.waitUntil(visible, 5000L);
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         primaryButton.click();
+    }
+    
+    public void deleteStepUsingCrossButton(String stepNo) {
+        $(By.xpath(String.format(stepNumber, stepNo))).waitUntil(visible, 2000L, 1000L).click();
+        $(By.xpath(String.format(deleteStepIcon, stepNo))).click();
+        recipeNotification("Step deleted successfully");
+    }
+
+    public void deleteStepUsingShortcut(String stepNo) {
+        $(By.xpath(String.format(stepNumber, stepNo))).waitUntil(visible, 2000L, 1000L).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys(Keys.DELETE).perform();
+        recipeNotification("Step cut successfully");
+    }
+
+    public void validateStepDelete(String stepNo) {
+        $(By.xpath(String.format(stepNumber, stepNo))).shouldNot(visible);
     }
 
     public void saveAsRecipe() {
@@ -1420,6 +1440,22 @@ public class RecipePage {
         saveButton.click();
         commonWaiter(overWrittenAlertMSG, visible).shouldHave(text("Recipe is locked. Please save it as new copy."));
         primaryButton.click();
+    }
+
+    public void deleteCriteriaUsingShortcut(String step) {
+        $(By.xpath(String.format(selectCriteria, step))).waitUntil(visible, 2000, 1000).click();
+        stepAction.keyDown(Keys.CONTROL).sendKeys(Keys.DELETE).perform();
+        recipeNotification("Step cut successfully");
+    }
+
+    public void deleteCriteriaUsingCrossButton(String step) {
+        $(By.xpath(String.format(selectCriteria, step))).waitUntil(visible, 2000, 1000).click();
+        deleteCriteriaIcon.waitUntil(visible, 2000, 1000).click();
+        recipeNotification("Criteria deleted successfully");
+    }
+
+    public void validatecriteriaDelete(String step) {
+        $(By.xpath(String.format(selectCriteria, step))).shouldNot(visible);
     }
 
     public void phaseListOrder(Set<String> expectedList){

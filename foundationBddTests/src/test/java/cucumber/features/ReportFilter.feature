@@ -157,3 +157,11 @@ Feature: Reports Filter
     And I trigger report mode
     When I click on filter icon and select eSignStatus "Not Signed"
     Then I should see reports with eSignStatus "Not Signed"
+
+  @IVI-7601
+  Scenario: Verify the system allows user to filter runs based on batchID
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    And I select batchID from dropdown "b10"
+    Then I should see recipe run "recipe4sec220211129030358" from consolidated report
+    And I should see recipe run "recipe10sec220211129035112" from consolidated report

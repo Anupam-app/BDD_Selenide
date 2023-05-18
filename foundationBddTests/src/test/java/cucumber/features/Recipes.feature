@@ -12,7 +12,11 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
+<<<<<<< HEAD
   https://stljirap.sial.com/browse/BIOFOUND-27905
+=======
+  https://stljirap.sial.com/browse/BIOFOUND-27935
+>>>>>>> f430cc7d895daa763df06edb24eb5d529d2d3ec3
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -275,11 +279,11 @@ Feature: Recipe management
     And I add "Threshold" action to the step
     And I verify error message "Out of Range" for out of range value entry
     And I should see error message for respective "Setpoint" values provided
-      | 5  |Out of Range                        |
-      | 3. |No value before/after decimal point |
-      | .2 |No value before/after decimal point |
-      | -1 |Out of Range                        |
-      | 1  |                                    |
+      | 5  | Out of Range                        |
+      | 3. | No value before/after decimal point |
+      | .2 | No value before/after decimal point |
+      | -1 | Out of Range                        |
+      | 1  |                                     |
     And I save the recipe with name "errorRecipe"
 
 
@@ -473,9 +477,21 @@ Feature: Recipe management
     Then I select existing recipe to verify the warning text message
       |recipeInReview               |
       |testRecipeWithChar30NameLengt|
-      |testRecipeDraftToInactive1   |
+      |testRecipeDraftToInactive    |
 
   Examples:
       |recipes          |
       |testDraftRecipe  |
       |recipeTechReview |
+
+  Scenario: Delete step and criteria from recipe
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "criteriaRecipe" from recipe browser
+    And I delete the step"3" using shortcut key
+    Then I verify step"3" is deleted and message seen "Step cut successfully"
+    And I delete the step"2" using cross button
+    Then I verify step"2" is deleted and message seen "Step deleted successfully"
+    And I delete the "WHEN" criteria using shortcut key
+    Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
+    And I delete the "IF-ELSE" criteria using cross button
+    Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
