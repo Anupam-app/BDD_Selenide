@@ -226,9 +226,11 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
+    private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
+
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1424,6 +1426,22 @@ public class RecipePage {
         $(By.xpath(String.format(stepNumber, stepNo))).shouldNot(visible);
     }
 
+    public void saveAsRecipe() {
+        stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
+    }
+
+    public void iVerifyTheAlert(String recipes) {
+        SelenideHelper.commonWaiter(recipeInputSave, visible).click();
+        recipeInputSave.clear();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            recipeInputSave.setValue(recipes);
+            return recipeInputSave.getValue().equals(recipes);
+        });
+        saveButton.click();
+        commonWaiter(overWrittenAlertMSG, visible).shouldHave(text("Recipe is locked. Please save it as new copy."));
+        primaryButton.click();
+    }
+
     public void deleteCriteriaUsingShortcut(String step) {
         $(By.xpath(String.format(selectCriteria, step))).waitUntil(visible, 2000, 1000).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys(Keys.DELETE).perform();
@@ -1439,11 +1457,11 @@ public class RecipePage {
     public void validatecriteriaDelete(String step) {
         $(By.xpath(String.format(selectCriteria, step))).shouldNot(visible);
     }
-    
+
     public void phaseListOrder(Set<String> expectedList){
         Set<String> phaseNames = new HashSet<>();
         for (SelenideElement selenideElement : phaseNameText) {
-            phaseNames.add(selenideElement.getValue());
+                phaseNames.add(selenideElement.getValue());
         }
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
     }
