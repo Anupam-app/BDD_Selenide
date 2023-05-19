@@ -239,7 +239,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I esign the report")
     public void iEsignReports() throws InterruptedException {
-        reportPage.esignReports(this.report.getName(), this.login.getPassword());
+        reportPage.eSignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
 
@@ -398,9 +398,9 @@ public class ReportsPageStepsDefinition {
         reportPage.approveTemplate(this.reportTemplate.getName(), password, this.reportTemplate.getStatus());
     }
 
-    @Then("I esign the report with wrong password {string}")
-    public void iEsignReportsWrongPassword(String value) {
-        reportPage.esignReports(this.report.getName(), value);
+    @Then("I eSign the report with wrong password {string}")
+    public void iESignReportsWrongPassword(String value) {
+        reportPage.eSignReports(this.report.getName(), value);
     }
 
     @Then("I verify template is not editable")
@@ -452,13 +452,13 @@ public class ReportsPageStepsDefinition {
 
     @Then("I see SaveTemplate popup window")
     public void iSeeSavePopUpWindow() {
-        reportPage.ivalidateWindow();
+        reportPage.iValidateWindow();
     }
 
     @When("I change the template status Approved to Inactive")
     public void iChangeTemplateStatusApprovedToInactive() {
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
-        reportPage.putReportTemplateToinactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
+        reportPage.putReportTemplateToInactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
 
     @When("I should see new template created with {string} status")
@@ -489,7 +489,7 @@ public class ReportsPageStepsDefinition {
 
     @Then("I verify recipe details captured in report run tab {string}")
     public void iVerifyRunReportWithRecipeEntries(String recipeName) throws ParseException {
-        reportPage.verifyrunDetails(recipeName, "Operation", "Completed");
+        reportPage.verifyRunDetails(recipeName, "Operation", "Completed");
     }
 
     @And("I should see newly created user {string} present in report")
@@ -628,7 +628,7 @@ public class ReportsPageStepsDefinition {
     public void iCloneTheReportTemplate() {
         reportPage.iValidation();
         reportPage.iSaveAs();
-        reportPage.ivalidateWindow();
+        reportPage.iValidateWindow();
         this.reportTemplate.setSaveAsName(RandomStringUtils.randomAlphabetic(10));
         this.reportTemplate.setStatus(ReportTemplateStatus.DRAFT);
         reportPage.iRename(this.reportTemplate.getSaveAsName());
