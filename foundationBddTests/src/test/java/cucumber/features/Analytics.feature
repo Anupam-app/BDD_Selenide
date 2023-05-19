@@ -1,6 +1,6 @@
 Feature: Analytics creation
 
-  @SMOKE @IVI-7594
+  @SMOKE @IVI-7594 @IVI-7601
   Scenario Outline: Aggregate creation
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute" and run it during 15 seconds
@@ -17,12 +17,12 @@ Feature: Analytics creation
       | Param1   | Unit1 | Param2   | Unit2 | Param3   | Unit3 |
       | PI101 PV | psi   | PI102 PV | psi   | PI103 PV | psi   |
 
-    @IVI
+    @IVI @IVI-7601
     Examples:
       | Param1          | Unit1 | Param2          | Unit2 | Param3          | Unit3 |
       | P001 - Speed PV | rpm   | P002 - Speed PV | rpm   | P003 - Speed PV | rpm   |
 
-  @IVI-7594
+  @IVI-7601
   Scenario: BIOCRS-5969 Aggregate creation while recipe run is in progress
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToVerifyAnalytics" and pause it during 10 seconds
@@ -39,6 +39,7 @@ Feature: Analytics creation
     And I go to analytics
     Then I verify analytics status "Completed",BatchID, RunID, Timestamp
 
+  @IVI
   Scenario: BIOCRS-5486 | PFSTC_CRS_Verify Layout in Analytics Module
     Given I am logged in as "bio4cadmin" user
     When I go to analytics
@@ -48,6 +49,7 @@ Feature: Analytics creation
       | My Aggregates       |
     And I verify the message in Right Panel "No selection has been made"
 
+  @IVI
   Scenario: BIOCRS-5486 BIOCRS-5507 | PFSTC_CRS_Verify Layout in Analytics Module right panel
     Given I am logged in as "bio4cadmin" user
     When I go to analytics

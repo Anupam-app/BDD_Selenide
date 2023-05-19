@@ -215,6 +215,7 @@ public class ReportsPage {
     private final SelenideElement selectBatchIDDropdown =
             $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
     private final String XPATH_BATCH_ID_DROPDOWN = "//li[text()='%s']";
+    private final String dateFormat = "M/d/yyyy";
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -779,7 +780,7 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);
 
                 if (startDate.isDisplayed()) {
                     sortList("Start Date", false);
@@ -809,11 +810,11 @@ public class ReportsPage {
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
-                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (startDate.isDisplayed()) {
                     sortList("Start Date", false);
                     String startDateRow = startDate.getText();
@@ -948,7 +949,7 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");// M is used as actual value
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);// M is used as actual value
                 // is without 0 prefix
 
                 if (startDateRep.isDisplayed()) {
@@ -979,11 +980,11 @@ public class ReportsPage {
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
-                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (startDateRep.isDisplayed()) {
                     sortList("Date Generated", false);
                     String startDateRow = startDateRep.getText();
@@ -1295,7 +1296,7 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, "M/d/yyyy");
+                LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);
                 if (consolidateStartDate.isDisplayed()) {
                     sortConsolidatedList("Start Date", false);
                     Selenide.sleep(1000);
@@ -1324,10 +1325,10 @@ public class ReportsPage {
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[0].trim();
-                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, "M/d/yyyy");// M is used as actual value
+                LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
                         .split("to")[1].trim();
-                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, "M/d/yyyy");
+                LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (consolidateStartDate.isDisplayed()) {
                     sortConsolidatedList("Start Date", false);
                     String startDateRow = consolidateStartDate.getText();

@@ -62,7 +62,7 @@ Feature: Reports Filter
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
 
-  @IVI-7606
+  @IVI-7601
   Scenario: Verify filter run reports functionality in Report Management Based on status
     Given I goto report management page
     When  I filter on icon and select run status as "Completed"
