@@ -14,7 +14,7 @@ import pageobjects.pages.ReportsPage;
 
 public class ReportsFilterStepsDefinition {
 
-    private ReportsPage reportPage;
+    private final ReportsPage reportPage;
     private final ReportTemplate reportTemplate;
 
     public ReportsFilterStepsDefinition(ReportsPage reportPage, ReportTemplate reportTemplate) {
@@ -54,7 +54,7 @@ public class ReportsFilterStepsDefinition {
     }
 
     @When("I search the recipe run {string}")
-    public void isearchRunReport(String recipeRunName) {
+    public void iSearchRunReport(String recipeRunName) {
         reportPage.searchReportOrTemplate(recipeRunName);
     }
 
@@ -94,27 +94,26 @@ public class ReportsFilterStepsDefinition {
     }
 
     @When("I filter on icon and select run status as {string}")
-    public void i_filter_on_icon_and_select_run_status(String status1) {
+    public void selectRunStatus(String status1) {
         reportPage.selectrunStatus(status1);
     }
 
     @Then("I should see run status as {string}")
-    public void i_should_see_run_status(String status) {
+    public void iSeeRunStatus(String status) {
         Assert.assertTrue(reportPage.verifyRunStatus(status));
     }
 
     @Then("^I should see recipe run list displayed based on date range dropdown$")
-    public void i_should_see_recipe_run_list_displayed_based_on_option(DataTable datatable)
-            throws ParseException, InterruptedException {
+    public void recipeRunListDisplayed(DataTable datatable) throws ParseException, InterruptedException {
         List<String> options = datatable.asList();
-        for (String datarange : options) {
-            reportPage.selectDateRange(datarange);
-            Assert.assertTrue(reportPage.verifyDateRanges(datarange));
+        for (String dateRange : options) {
+            reportPage.selectDateRange(dateRange);
+            Assert.assertTrue(reportPage.verifyDateRanges(dateRange));
         }
     }
 
     @Then("^Report columns should be sorted in ascending order$")
-    public void report_columns_sorted_in_asc_order(DataTable datatable) {
+    public void reportColumnsSortedAscending(DataTable datatable) {
         List<String> options = datatable.asList();
         for (String columnName : options) {
             reportPage.sortList(columnName, false);
@@ -127,9 +126,8 @@ public class ReportsFilterStepsDefinition {
         reportPage.checkTableContainsUserAndDateRange(days, userid, results);
     }
 
-
     @Then("^Report columns should be sorted in descending order$")
-    public void report_columns_sorted_in_desc_order(DataTable datatable) {
+    public void reportColumnsSortedDescending(DataTable datatable) {
         List<String> options = datatable.asList();
         for (String columnName : options) {
             reportPage.sortList(columnName, true);
@@ -138,16 +136,16 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("^I should see recipe report list displayed based on date range dropdown$")
-    public void iviewrecipereportlistdaterange(DataTable datatable) throws ParseException, InterruptedException {
+    public void iViewRecipeReportListDateRange(DataTable datatable) throws ParseException, InterruptedException {
         List<String> options = datatable.asList();
-        for (String datarange : options) {
-            reportPage.selectDateRangeRprt(datarange);
-            reportPage.verifyDateRangesRprt(datarange);
+        for (String dateRange : options) {
+            reportPage.selectDateRangeReport(dateRange);
+            reportPage.verifyDateRangesReport(dateRange);
         }
     }
 
     @Then("^Reports columns should be sorted in ascending order$")
-    public void reports_columns_sorted_ascending_order(DataTable datatable) {
+    public void reportsColumnsSortedAscendingOrder(DataTable datatable) {
         List<String> options = datatable.asList();
         for (String columnName : options) {
             reportPage.sortList(columnName, false);
@@ -156,7 +154,7 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("^Reports columns should be sorted in descending order$")
-    public void reports_columns_sorted_descending_order(DataTable datatable) {
+    public void reportsColumnsSortedDescendingOrder(DataTable datatable) {
         List<String> options = datatable.asList();
         for (String columnName : options) {
             reportPage.sortList(columnName, true);
@@ -165,7 +163,7 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("^I verify consolidated columns and columns should be sorted$")
-    public void iVerifyConsilidatedColumnsSorted(DataTable datatable) {
+    public void iVerifyConsolidatedColumnsSorted(DataTable datatable) {
         List<String> options = datatable.asList();
         for (String columnName : options) {
             reportPage.sortListConsolidated(columnName, false);
@@ -174,7 +172,7 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("I should see consolidated status as {string}")
-    public void i_hould_see_consolidated_status(String status) {
+    public void iSeeConsolidatedStatus(String status) {
         Assert.assertTrue(reportPage.verifyConsolidatedStatus(status));
     }
 
@@ -184,8 +182,17 @@ public class ReportsFilterStepsDefinition {
     }
 
     @Then("I should see reports with eSignStatus {string}")
-    public void i_should_see_eSigned_status(String status) {
+    public void iSeeESignedStatus(String status) {
         reportPage.verifyESignedStatus(status);
+    }
+
+    @Then("I should see consolidated runs list displayed based on date range dropdown")
+    public void iSeeConsolidatedRunsBasedOnDate(DataTable datatable) throws ParseException, InterruptedException {
+        List<String> options = datatable.asList();
+        for (String dateRange : options) {
+            reportPage.selectConsolidatedDateRange(dateRange);
+            Assert.assertTrue(reportPage.verifyConsolidateDateRanges(dateRange));
+        }
     }
 
 }

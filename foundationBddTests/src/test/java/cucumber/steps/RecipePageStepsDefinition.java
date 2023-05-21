@@ -789,4 +789,48 @@ public class RecipePageStepsDefinition {
         recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
     }
 
+    @And("I saveAs the recipe")
+    public void iSaveAsTheRecipe(){
+        recipePage.saveAsRecipe();
+    }
+
+    @Then("^I select existing recipe to verify the warning text message$")
+    public void iVerifyTheWarningPopupAlert(DataTable table) {
+        List<String> list = table.asList(String.class);
+        for (int i = 1; i < list.size(); i++) {
+            list.forEach(recipePage::iVerifyTheAlert);
+        }
+
+    }
+
+    @And("I delete the step{string} using shortcut key")
+    public void deleteStepUsingShortcut(String stepNo){
+        recipePage.deleteStepUsingShortcut(stepNo);
+    }
+
+    @And("I verify step{string} is deleted and message seen {string}")
+    public void validateStepDelete(String stepNo, String message){
+        recipePage.validateStepDelete(stepNo);
+    }
+
+    @And("I delete the step{string} using cross button")
+    public void deleteStepUsingCrossButton(String stepNo){
+        recipePage.deleteStepUsingCrossButton(stepNo);
+    }
+
+    @And("I delete the {string} criteria using shortcut key")
+    public void deleteCriteriaUsingShortCut(String step){
+        recipePage.deleteCriteriaUsingShortcut(step);
+    }
+
+    @And("I delete the {string} criteria using cross button")
+    public void deleteCriteriaUsingCrossButton(String step){
+        recipePage.deleteCriteriaUsingCrossButton(step);
+    }
+
+    @And("I verify {string} criteria is deleted and message seen {string}")
+    public void validateCriteriaDelete(String step, String message){
+        recipePage.validatecriteriaDelete(step);
+    }
+
 }

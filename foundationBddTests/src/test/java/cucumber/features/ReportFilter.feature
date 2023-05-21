@@ -62,7 +62,7 @@ Feature: Reports Filter
     When I select report from dropdown "Consolidated"
     Then I should see recipe run "recipe4sec220211129035111" from consolidated report
 
-  @IVI-7606
+  @IVI-7601
   Scenario: Verify filter run reports functionality in Report Management Based on status
     Given I goto report management page
     When  I filter on icon and select run status as "Completed"
@@ -157,3 +157,23 @@ Feature: Reports Filter
     And I trigger report mode
     When I click on filter icon and select eSignStatus "Not Signed"
     Then I should see reports with eSignStatus "Not Signed"
+
+  @IVI-7601
+  Scenario: Verify the system allows user to filter runs based on batchID
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    And I select batchID from dropdown "b10"
+    Then I should see recipe run "recipe4sec220211129030358" from consolidated report
+    And I should see recipe run "recipe10sec220211129035112" from consolidated report
+
+  Scenario: Filter consolidated runs based on the Date range.
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    Then I should see consolidated runs list displayed based on date range dropdown
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom Range |
