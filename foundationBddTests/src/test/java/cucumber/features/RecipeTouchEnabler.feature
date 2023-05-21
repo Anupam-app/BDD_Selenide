@@ -3,10 +3,10 @@ Feature: Recipe Touch Enabler
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
-    And I open Recipe editor
 
   Scenario: Verify Add step, Add criteria, save, Delete functionality
-    When I add 3 action steps
+    When I open Recipe editor
+    And I add 3 action steps
     And I set a step wait time to "04 seconds"
     And I add a criteria to step "2"
     And I Save the recipe
@@ -16,7 +16,8 @@ Feature: Recipe Touch Enabler
     Then I should see step is deleted
 
   Scenario: Verify Copy step, cut step, paste step functionality
-    When I add 3 action steps
+    When  I open Recipe editor
+    And I add 3 action steps
     And I add a criteria to step "2"
     And I Copy step number "2"
     And I paste the copied step after step 3
@@ -29,7 +30,8 @@ Feature: Recipe Touch Enabler
     And I should see cut step is pasted
 
   Scenario Outline: Verify Add phase, copy, paste phase functionality
-    When I add 4 action steps
+    When  I open Recipe editor
+    And I add 4 action steps
     And I add Phase using action step "2,3"
     Then I verify steps are added in phase
     When I Copy Phase
@@ -42,7 +44,8 @@ Feature: Recipe Touch Enabler
       |After  |
 
   Scenario Outline: Verify Add phase, cut, paste phase functionality
-    When I add 6 action steps
+    When  I open Recipe editor
+    And I add 6 action steps
     And I add 2 phases with Steps "4,5" & "2,3"
     And I Cut Phase <cutPhase>
     And I paste phase "<action>" phase <pastePhaseNo>
@@ -54,7 +57,8 @@ Feature: Recipe Touch Enabler
       |2        |After   |1            |
 
   Scenario: Verify Save to Phase library functionality
-    When I add 4 action steps
+    When  I open Recipe editor
+    And I add 4 action steps
     And I add Phase using action step "2,3"
     Then I verify steps are added in phase
     And I save phase to Phase library
@@ -63,8 +67,28 @@ Feature: Recipe Touch Enabler
 
   @IVI-7828
   Scenario: Verify Delete phase functionality
-    When I add 4 action steps
+    When  I open Recipe editor
+    And I add 4 action steps
     And I add Phase using action step "2,3"
     Then I verify steps are added in phase
     And I Delete phase
     And I should see confirmation message "Phase Deleted Successfully"
+
+  Scenario: Save as new recipe
+    When I go to recipe page
+    And I edit recipe "recipeTechReview"
+    And I select "Save As" button
+    And I SaveAs recipe "RecipeSaveAsSecond"
+    Then I verify below recipes are displayed in recipe browser list
+      | recipeTechReview   |
+      | RecipeSaveAsSecond |
+
+  Scenario: Recipe export and import using Touch button
+    When I go to recipe page
+    And I search the recipe "twoPhaseTestRecipe"
+    And I export the recipe
+    And I trigger edit mode
+    And I Import Recipe
+    And I look at the user notification
+    Then I should see the recipe exported in user notifications
+    And I should see the recipe imported in user notifications

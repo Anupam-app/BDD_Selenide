@@ -116,7 +116,7 @@ public class RecipePage {
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
     private final SelenideElement statusApproved = $(By.xpath("//div[@class='status-tooltip']"));
     private final SelenideElement clickOnDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private final ElementsCollection notificationTexts = $$(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
+    private final ElementsCollection notificationTexts = $$(By.xpath("//div[contains(@class,'description-text-blue orch-notification-description')]"));
     private final SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private final String upIcon = "(//div[@class='up-icon'])[%d]";
     private final SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
@@ -377,17 +377,7 @@ public class RecipePage {
 
     public void saveAsRecipeWithShortCutKeys(String recipeName) {
         stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
-        recipeInputSave.click();
-
-        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
-        recipeInputSave.click();
-
-        SelenideHelper.fluentWaiter().until((webDriver) -> {
-            recipeInputSave.setValue(recipeName);
-            return recipeInputSave.getValue().equals(recipeName);
-        });
-
-        saveButton.click();
+        saveAsButton(recipeName);
     }
 
     public void copyPhase() {
@@ -499,14 +489,7 @@ public class RecipePage {
 
     public void importRecipe(String recipeName) {
         SelenideHelper.commonWaiter(importMenuButton, visible).click();
-        var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
-        importRecipe.click();
-        importButton.click();
-        recipeInputSave.click();
-        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
-        var value = RandomStringUtils.randomAlphabetic(10);
-        recipeInputSave.setValue(value);
-        saveButton.click();
+        importRecipeSelection(recipeName);
         // browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
 
@@ -1413,4 +1396,26 @@ public class RecipePage {
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
     }
 
+    public void importRecipeSelection(String recipeName){
+        var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
+        importRecipe.click();
+        importButton.click();
+        importInputTextBox.click();
+        SelenideHelper.commonWaiter(importInputTextBox, visible).clear();
+        var value = RandomStringUtils.randomAlphabetic(10);
+        importInputTextBox.setValue(value);
+        saveButton.click();
+    }
+
+    public void saveAsButton(String recipeName){
+        commonWaiter(recipeInputSave,visible).click();
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
+        recipeInputSave.click();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            recipeInputSave.setValue(recipeName);
+            return recipeInputSave.getValue().equals(recipeName);
+        });
+
+        saveButton.click();
+    }
 }
