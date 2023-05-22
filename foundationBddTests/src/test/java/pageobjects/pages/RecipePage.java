@@ -1451,7 +1451,7 @@ public class RecipePage {
 
     public void importRecipeSelection(String recipeName){
         var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
-        importRecipe.click();
+        importRecipe.waitUntil(visible,10000, 500).click();
         importButton.click();
         importInputTextBox.click();
         SelenideHelper.commonWaiter(importInputTextBox, visible).clear();
