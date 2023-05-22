@@ -1191,7 +1191,6 @@ public class Report {
                                 (userNameLoggedIn + " disabled role" + roleName).replaceAll("\\s", ""));
                     }
                 }
-
             }
             break;
         }
