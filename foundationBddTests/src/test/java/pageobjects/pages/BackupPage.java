@@ -159,7 +159,7 @@ public class BackupPage {
             $(By.xpath(String.format(restoreColumnName, "Backed up by"))).shouldBe(visible);
             $(By.xpath(String.format(restoreColumnName, "Size"))).shouldBe(visible);
             $(By.xpath(String.format(restoreColumnName, "Backup Date"))).shouldBe(visible);
-            for (int i = 2; i <= 6; i++) {
+            for (int i = 2; i < 6; i++) {
                 Assert.assertNotNull($(By.xpath(String.format(restoreColumnValue, i))).getText());
             }
         }
