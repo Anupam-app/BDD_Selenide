@@ -14,20 +14,20 @@ Feature: Roles Permissions Check
   Scenario: Disable/Enable Custom role
     Given I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
-    Then I verify "testRoleToBeEnabledDisabled" role is "disabled"
+    Then I verify "CustomRoleDisable" role is "disabled"
     And I goto report management page
     When I select report from dropdown "Audit Trail"
-    Then I verify custom role disabled details captured in audit trail for user "Bio4CAdmin"
-    When I logout and login as "testUserToTestRole" and password as "MerckApp1@"
+    Then I verify custom role "disabled" details captured in audit trail for user "Bio4CAdmin"
+    When I logout and login as "userRoleDisable" and password as "MerckApp1@"
     Then I verify error message "Unauthorized access, Failed to authenticate"
     And I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
-    Then I verify "testRoleToBeEnabledDisabled" role is "enabled"
-    And I logout and login as "testUserToTestRole" and password as "MerckApp1@"
+    Then I verify "CustomRoleDisable" role is "enabled"
+    And I logout and login as "userRoleDisable" and password as "MerckApp1@"
     And I am logged in
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I generate audit trail report
-    Then I verify custom role enabled details captured in audit trail for user "Bio4CAdmin"
+    Then I verify custom role "enabled" details captured in audit trail for user "Bio4CAdmin"
     And I check the audit trail report
     And I see the role disabling enabling events in report
 
