@@ -1138,4 +1138,63 @@ public class Report {
         }
     }
 
+    public void verifyAuditReportForRoleDisableEnable(String reportUrl, String roleName, String userNameLoggedIn)
+            throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                for (int i = 1; i < 3; i++) {
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(userColumnIndex)
+                            .getText(false)
+                            .contains(userNameLoggedIn));
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(1)
+                            .getText(false)
+                            .contains("IDManagement"));
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(2)
+                            .getText(false)
+                            .contains(roleName));
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(5)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(6)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(i)
+                            .get(7)
+                            .getText(false)
+                            .isEmpty());
+                    if (i == 1) {
+                        Assert.assertEquals((reportTable.getRows()
+                                .get(i)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
+                                (userNameLoggedIn + " enabled role" + roleName).replaceAll("\\s", ""));
+                    } else {
+                        Assert.assertEquals((reportTable.getRows()
+                                .get(i)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
+                                (userNameLoggedIn + " disabled role" + roleName).replaceAll("\\s", ""));
+                    }
+                }
+
+            }
+            break;
+        }
+    }
+
 }

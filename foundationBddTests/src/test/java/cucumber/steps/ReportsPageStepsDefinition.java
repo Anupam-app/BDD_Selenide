@@ -519,6 +519,13 @@ public class ReportsPageStepsDefinition {
         SelenideHelper.goToDefault();
     }
 
+    @Then("I verify custom role enabled details captured in audit trail for user {string}")
+    public void iVerifyAuditTrailReportCustomRoleEnabled(String username) throws ParseException {
+        var message = String.format("%s enabled role %s", username, this.role.getRoleName());
+        reportPage.verifyAuditTrailRecord(message, this.role.getRoleName());
+        SelenideHelper.goToDefault();
+    }
+
     @Then("I verify custom role permissions details captured in audit trail for user")
     public void iVerifyAuditTrailReportRolePermissions() throws IOException {
         iVerifyTheAuditTrailReport();
@@ -638,6 +645,13 @@ public class ReportsPageStepsDefinition {
     @Given("I select batchID from dropdown {string}")
     public void iSelectBatchIDFromDropdown(String batchID) {
         reportPage.selectBatchId(batchID);
+    }
+
+    @Then("I see the role disabling enabling events in report")
+    public void iVerifyThatRoleIsDisabledAndEnabled() throws Exception {
+        this.report.verifyAuditReportForRoleDisableEnable(reportPage.getPdfUrl(), this.role.getRoleName(),
+                this.login.getLogin());
+        switchTo().parentFrame();
     }
 
 }

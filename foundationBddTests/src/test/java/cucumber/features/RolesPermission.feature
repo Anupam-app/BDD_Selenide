@@ -11,20 +11,25 @@ Feature: Roles Permissions Check
     When I go to user page
     Then I do not see Roles mode
 
-  Scenario: Disable Custom role and User has no privilege to login
+  Scenario: Disable/Enable Custom role
     Given I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
-    Then I verify "CustomRoleDisable" role is "disabled"
+    Then I verify "testRoleToBeEnabledDisabled" role is "disabled"
     And I goto report management page
     When I select report from dropdown "Audit Trail"
     Then I verify custom role disabled details captured in audit trail for user "Bio4CAdmin"
-    When I logout and login as "userRoleDisable" and password as "MerckApp1@"
+    When I logout and login as "testUserToTestRole" and password as "MerckApp1@"
     Then I verify error message "Unauthorized access, Failed to authenticate"
     And I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
-    Then I verify "CustomRoleDisable" role is "enabled"
-    And I logout and login as "userRoleDisable" and password as "MerckApp1@"
+    Then I verify "testRoleToBeEnabledDisabled" role is "enabled"
+    And I logout and login as "testUserToTestRole" and password as "MerckApp1@"
     And I am logged in
+    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
+    And I generate audit trail report
+    Then I verify custom role enabled details captured in audit trail for user "Bio4CAdmin"
+    And I check the audit trail report
+    And I see the role disabling enabling events in report
 
   Scenario: Modify custom role-Privileges and Name
     Given I am logged in as "Bio4CAdmin" user
@@ -34,9 +39,9 @@ Feature: Roles Permissions Check
     And I search and edit role "editCustomRole"
     And I update roleName as "modifiedCustomRole"
     And I modify permission
-      | removePermission | AddPermission       |
-      | Create User      | Create Role         |
-      | Basic Process    | View Present Alarm  |
+      | removePermission | AddPermission      |
+      | Create User      | Create Role        |
+      | Basic Process    | View Present Alarm |
     And I save role successfully
     Then I see modified role name is displayed on Role list data
     And I verify Role permission are updated

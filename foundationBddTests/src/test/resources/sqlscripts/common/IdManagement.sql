@@ -58,6 +58,8 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (40, 0x020000009D57374F3DB939F168094AC73CC83F862228F77387E4797C3D16D516A7FE8091B88323343E41087D8B9C18223BC9201787252DFDBC7E6145D03ED919F31BA9E2C78955E09CA05AAE82A916DD1152998C0C83C672E1E4F609AFF4AE57EE549DCF, N'6SncntQTWCW8CEqcaXcg5g==', N'/N32AFbBNtbHJH0rlN7wgg==', 0, NULL)
 GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (41, 0x020000001296945E9BB98D6F9649E863AC96A67AA5071F0EF54AA57754E2AA210C42C91D6BE2806584B853B242389ADB5D7044B79D97169853BCE04F3BE07D4B87D3EAD8B17481DC7DE577E9EB86AEC2B85BAEDFA79CF8F6BEAE2F0EBBE926F33DB91313, N'2PoT7+Stw/D7pI5MQ99lfQ==', N'/qMTWpS5viDn2g5OrWLUmw==', 0, NULL)
+GO
 SET IDENTITY_INSERT [dbo].[user_password] OFF
 GO
 SET IDENTITY_INSERT [dbo].[user_store] ON 
@@ -108,6 +110,8 @@ INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [firs
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (40, N'', N'varun.mittal@external.merckgroup.com', N'12345', N'true', N'Test', N'Admin', N'', N'testadmin', 0, 0, NULL, 0)
 GO
+INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (41, N'', N'varun.mittal@external.merckgroup.com', N'123456', N'true', N'testUserToTestRole', N'testUserToTestRole', N'', N'testUserToTestRole', 0, 0, NULL, 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -127,6 +131,8 @@ GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (12, N'editCustomRole', N'editCustomRole', N'editCustomRole', NULL, N'editCustomRole', N'User Created', 1, 0, N'ENABLED')
 GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (13, N'CustomRoleDisable', N'CustomRoleDisable', N'CustomRoleDisable', NULL, N'CustomRoleDisable', N'User Created', 1, 0, N'ENABLED')
+GO
+INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (14, N'testRoleToBeEnabledDisabled', N'testRoleToBeEnabledDisabled', N'testRoleToBeEnabledDisabled', NULL, N'testRoleToBeEnabledDisabled', N'User Created', 1, 0, N'ENABLED')
 GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
@@ -175,6 +181,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (33, 13)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (40, 1)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (41, 14)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
@@ -295,6 +303,12 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (13, 69)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (13, 83)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (14, 1)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (14, 147)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (14, 148)
 GO
 DELETE FROM dbo.user_preferences;
 GO
