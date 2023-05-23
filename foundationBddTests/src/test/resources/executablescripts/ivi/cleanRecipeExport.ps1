@@ -4,3 +4,4 @@ rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\testRecipeD
 rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\ testDraftRecipeToChangeStatus.acercp'
 rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\recipeTechReview.acercp'
 rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\recipeInReview.acercp'
+rm 'C:\BIO4C\Data\Export\RecipeManagement\IVIFamily\IVISubFamily\IVI\twoPhaseTestRecipe.acercp'
