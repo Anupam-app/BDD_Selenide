@@ -130,7 +130,7 @@ Feature: Report administration
     And I click on generate button
     And I goto report management page
     And I trigger report mode
-    And I esign the report with wrong password "abcde#23"
+    And I eSign the report with wrong password "abcde#23"
     Then I verify the password error message "Incorrect Password"
 
   @IVI-7601

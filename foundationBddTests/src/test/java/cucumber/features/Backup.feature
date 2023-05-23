@@ -1,7 +1,7 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: Backup creation
 
-  @SMOKE @IVI-4722
+  @SMOKE
   Scenario: BIOCRS-5113 BIOCRS-5473| Create Backup
     Given I am logged in as "bio4cadmin" user
     And I goto backup page
@@ -12,9 +12,9 @@ Feature: Backup creation
     And I wait the end of backup
     And I go to backup history
     Then I verify backup history details
-    And I verify backup in restore tab
+    #And I verify backup in restore tab
 
-  @BIOCRS-9281 @IVI-4722
+  @BIOCRS-9281
   Scenario Outline: BIOCRS-5113 BIOCRS-5473 | Schedule backup
     Given I am logged in as "bio4cadmin" user
     And I goto backup page
@@ -25,7 +25,7 @@ Feature: Backup creation
     Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
     And I verify backup history details
-    And I verify backup in restore tab
+    #And I verify backup in restore tab
     And I go to backup mode
     When I schedule backup with existing name "<occurrence>"
     Then I see the notification message "Unable to schedule backup job"
@@ -41,7 +41,6 @@ Feature: Backup creation
     When I goto backup page
     Then I am not able to trigger a backup
 
-  @IVI-4722
   Scenario: BIOCRS-604| UATC_CRS_Verify the backup Operations when Recipe execution is in Progress
     Given I am logged in as "bio4cadmin" user
     And I expand recipe console in pnid

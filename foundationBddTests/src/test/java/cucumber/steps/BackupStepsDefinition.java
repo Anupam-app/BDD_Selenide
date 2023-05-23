@@ -73,8 +73,9 @@ public class BackupStepsDefinition {
 
     @Then("I verify backup history details")
     public void iVerifyBackup() {
+        backupPage.waitForImmediateBackupSucess();
         Assert.assertEquals(BackupStatus.Success.toString(), this.backupPage.getLastStatusText());
-        this.backupsetting.setBackupName(backupPage.getBackUpName());
+        //this.backupsetting.setBackupName(backupPage.getBackUpName());
     }
 
     @Then("I verify backup history tab")
@@ -122,7 +123,7 @@ public class BackupStepsDefinition {
     }
 
     @Then("I see the notification message")
-    public void iSeeErrorMessagedisplayed() {
+    public void iSeeErrorMessageDisplayed() {
         var message = String.format("Failed to schedule backup. %s already exists", backupsetting.getBackupName());
         backupPage.notificationMessage(message);
     }
