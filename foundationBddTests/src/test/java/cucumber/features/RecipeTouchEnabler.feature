@@ -82,7 +82,7 @@ Feature: Recipe Touch Enabler
     Then I verify below recipes are displayed in recipe browser list
       | recipeTechReview   |
       | RecipeSaveAsSecond |
-  @RecipeTest
+
   Scenario: Recipe export and import using Touch button
     When I go to recipe page
     And I search the recipe "twoPhaseTestRecipe"
