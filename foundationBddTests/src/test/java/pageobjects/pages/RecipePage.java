@@ -1454,8 +1454,8 @@ public class RecipePage {
         importRecipe.waitUntil(visible,10000, 500).click();
         importButton.click();
         importInputTextBox.click();
-        SelenideHelper.commonWaiter(importInputTextBox, visible).clear();
-        var value = RandomStringUtils.randomAlphabetic(10);
+        importInputTextBox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        var value = RandomStringUtils.randomAlphabetic(5);
         importInputTextBox.setValue(value);
         saveButton.click();
     }
