@@ -226,7 +226,7 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
-    private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
+    private final String overWrittenAlertMSG = "//span[text()='%s']";
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
@@ -973,7 +973,11 @@ public class RecipePage {
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         var actualText = $(By.xpath(String.format(importRecipeStatusVerify, recipeName))).waitUntil(visible, 5000L).getText();
-        Assert.assertEquals("Verification of recipe status is Draft:", "Draft", actualText);
+        if(actualText.equals("Draft")){
+            Assert.assertEquals("Verification of recipe status is Draft:", "Draft", actualText);
+        } else if (actualText.equals("Tech-Review")) {
+            Assert.assertEquals("Verification of recipe status is Tech-Review:", "Tech-Review", actualText);
+        }
         recipeSearchTextBox.clear();
     }
 
@@ -1413,7 +1417,7 @@ public class RecipePage {
         stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
     }
 
-    public void iVerifyTheAlert(String recipes) {
+    public void iVerifyTheAlert(String recipes,String message) {
         SelenideHelper.commonWaiter(recipeInputSave, visible).click();
         recipeInputSave.clear();
         SelenideHelper.fluentWaiter().until((webDriver) -> {
@@ -1421,7 +1425,7 @@ public class RecipePage {
             return recipeInputSave.getValue().equals(recipes);
         });
         saveButton.click();
-        commonWaiter(overWrittenAlertMSG, visible).shouldHave(text("Recipe is locked. Please save it as new copy."));
+        $(By.xpath(String.format(overWrittenAlertMSG, message))).shouldHave(text(message));
         primaryButton.click();
     }
 

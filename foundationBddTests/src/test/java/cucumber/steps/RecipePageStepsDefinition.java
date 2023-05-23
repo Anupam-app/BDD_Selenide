@@ -794,11 +794,11 @@ public class RecipePageStepsDefinition {
         recipePage.saveAsRecipe();
     }
 
-    @Then("^I select existing recipe to verify the warning text message$")
-    public void iVerifyTheWarningPopupAlert(DataTable table) {
+    @Then("I select existing recipe to verify the warning text message {string}")
+    public void iVerifyTheWarningPopupAlert(String message,DataTable table) {
         List<String> list = table.asList(String.class);
         for (int i = 1; i < list.size(); i++) {
-            list.forEach(recipePage::iVerifyTheAlert);
+            recipePage.iVerifyTheAlert(list.get(i),message);
         }
 
     }
@@ -831,6 +831,12 @@ public class RecipePageStepsDefinition {
     @And("I verify {string} criteria is deleted and message seen {string}")
     public void validateCriteriaDelete(String step, String message){
         recipePage.validatecriteriaDelete(step);
+    }
+
+    @Then("I verify the recipe {string}")
+    public void iVerifyTheRecipeStatus(String status){
+        iGoToBrowserMode();
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
     }
 
 }

@@ -14,6 +14,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27816
   https://stljirap.sial.com/browse/BIOFOUND-27905
   https://stljirap.sial.com/browse/BIOFOUND-27935
+  https://stljirap.sial.com/browse/BIOFOUND-27904
+  https://stljirap.sial.com/browse/BIOFOUND-27903
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -471,7 +473,7 @@ Feature: Recipe management
     And I go to recipe page
     When I edit recipe "<recipes>"
     And I saveAs the recipe
-    Then I select existing recipe to verify the warning text message
+    Then I select existing recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
       |recipeInReview               |
       |testRecipeWithChar30NameLengt|
       |ApprovedInActiveRecipe       |
@@ -492,3 +494,17 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+
+  Scenario Outline:  Overwritting recipe with different status
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "<recipes>"
+    And I saveAs the recipe
+    And I select existing recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
+      |testDraftRecipe |
+      |recipeTechReview|
+    Then I verify the recipe "<status>"
+    Examples:
+      |recipes          |status     |
+      |recipeTechReview |Draft      |
+      |testDraftRecipe  |Tech-Review|
