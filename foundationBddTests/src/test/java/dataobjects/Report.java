@@ -1196,4 +1196,28 @@ public class Report {
         }
     }
 
+    public void checkAddedUser(String reportUrl, String userName, String userNameLoggedIn, Map<String, String> list)
+            throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+
+            for (Map.Entry m : list.entrySet()) {
+                for (int rowno = 1; rowno < 8; rowno++) {
+                    if ((reportTable.getRows()
+                            .get(rowno)
+                            .get(0)
+                            .getText(false)).equals(m.getKey())) {
+                        Assert.assertEquals(m.getValue(), reportTable.getRows()
+                                .get(rowno)
+                                .get(1)
+                                .getText(false));
+                    }
+                }
+            }
+            break;
+        }
+    }
+
 }

@@ -401,6 +401,12 @@ public class ReportsPage {
         $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated", username))).shouldBe(visible);
     }
 
+    public void verifyAuditLogsForUserCreate(String username) {
+        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin added", username))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("ID Management"));
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
+    }
+
     public void verifyAuditLogsForRoleUpdate(String role) {
         $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role))).shouldBe(visible);
     }
