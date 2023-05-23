@@ -182,7 +182,6 @@ public class RecipePage {
     private final String OperationalActionsList = "//p[@class='action-item lavel-2'][@title='%s']";
     private final String warningOptions = "//button[text()='%s']";
     private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
-    private final String popUpMessage = "//span[text()='%s']";
     private final SelenideElement phaseOne = $(By.xpath("//label[text()='Phase 1']"));
     private final String errorMsg = "//h4[text()='%s']";
     private final SelenideElement changeSteps = $(By.xpath("(//div[@class='action'])[2]"));
@@ -226,7 +225,6 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
-    private final String overWrittenAlertMSG = "//span[text()='%s']";
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
@@ -1159,7 +1157,7 @@ public class RecipePage {
     }
 
     public void checkWindowPopupMsg() {
-        $(By.xpath(String.format(popUpMessage, "Phase has errors. Cannot add to Phase Library."))).waitUntil(Condition.visible, 50001);
+        $(By.xpath(String.format(warningMessage, "Phase has errors. Cannot add to Phase Library."))).waitUntil(Condition.visible, 50001);
         commonWaiter(okButton, visible).click();
     }
 
@@ -1425,7 +1423,7 @@ public class RecipePage {
             return recipeInputSave.getValue().equals(recipes);
         });
         saveButton.click();
-        $(By.xpath(String.format(overWrittenAlertMSG, message))).shouldHave(text(message));
+        $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
         primaryButton.click();
     }
 
