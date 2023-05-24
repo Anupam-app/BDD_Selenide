@@ -4,7 +4,7 @@ import static com.codeborne.selenide.Selenide.switchTo;
 
 import com.codeborne.selenide.Selenide;
 
-import java.awt.AWTException
+import java.awt.AWTException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
