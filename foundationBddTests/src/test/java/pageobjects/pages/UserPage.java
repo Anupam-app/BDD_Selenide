@@ -1,22 +1,33 @@
 package pageobjects.pages;
 
-import static com.codeborne.selenide.Condition.*;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
+import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.Condition.attribute;
+import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.enabled;
+import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.ownText;
+import static com.codeborne.selenide.Condition.text;
+import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.$$;
+import static pageobjects.utility.SelenideHelper.commonWaiter;
+
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
-import java.awt.AWTException;
-import java.awt.Robot;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.function.Function;
+
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+
 import pageobjects.utility.SelenideHelper;
-import static pageobjects.utility.SelenideHelper.commonWaiter;
 import pageobjects.utility.SortHelper;
 
 public class UserPage {
@@ -36,13 +47,16 @@ public class UserPage {
         return users;
     };
 
-    private final ElementsCollection userslist = $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
+    private final ElementsCollection userslist =
+            $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
 
-    private final SelenideElement XPATH_NOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+    private final SelenideElement XPATH_NOTIFICATION_TEXT =
+            $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
 
     private final SelenideElement alertNotificationText = $(By.xpath("//*[@role='alert']"));
 
-    private final SelenideElement XPATH_ERRORNOTIFICATION_TEXT = $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
+    private final SelenideElement XPATH_ERRORNOTIFICATION_TEXT =
+            $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
 
     private final SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
@@ -62,7 +76,7 @@ public class UserPage {
     private final SelenideElement saveButton = $(By.id("save_Btn"));
     private final SelenideElement resetPwdButton = $(By.id("resetPass_Btn"));
     private final SelenideElement unlockAccountButton = $(By.xpath("//button[@class='user_btn btn_primary lck_btn']"));
-    private final SelenideElement confirmationButton = $(By.id("remove_backup")); //TODO id to be changed from dev team
+    private final SelenideElement confirmationButton = $(By.id("remove_backup")); // TODO id to be changed from dev team
     private final SelenideElement disableUserButton = $(By.id("btn_disabl"));
     private final SelenideElement enableUserButton = $(By.id("btn_enabl"));
     private final SelenideElement createUserPlusButton = $(By.xpath("//div[contains(@class,'Adduserplus')]"));
@@ -75,38 +89,47 @@ public class UserPage {
     private final String xpathUserName = "//tr[td[contains(.,'%s')]]";
     private final SelenideElement userNameField = $(By.xpath("(//td[@class='customusername'])[1]"));
     private final String defaultRolesnames = "//div[text()='%s']";
-    private final String checkPermissions = "//label[@class='ant-checkbox-wrapper']/span/input/following-sibling::span[(contains(text(),'%s'))]";
-    private final SelenideElement editIconOfOperator = $(By.xpath("//*[text()='Operator']/parent::div//div[5]/*[(@class='edit-icon')]"));
+    private final String checkPermissions =
+            "//label[@class='ant-checkbox-wrapper']/span/input/following-sibling::span[(contains(text(),'%s'))]";
+    private final SelenideElement editIconOfOperator =
+            $(By.xpath("//*[text()='Operator']/parent::div//div[5]/*[(@class='edit-icon')]"));
     private final String applicationModule = "//div[contains(@class,'icontitle') and contains(text(),'%s')]";
     private final SelenideElement userHeader = $(By.xpath("//div[text()='User Management']"));
     private final SelenideElement userProfile = $(By.xpath("//*[@id='userProfile']"));
     private final SelenideElement chnagePwd = $(By.xpath("//span[text()='Change password']"));
     private final SelenideElement chnagePwdWindow = $(By.xpath("//h5[text()='Change Password']"));
     private final SelenideElement roleStatus = $(By.xpath("//table[@id='auditListTable']/tbody/tr/td[3]"));
-    private final SelenideElement closeUserPropertiesChangeModal = $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
+    private final SelenideElement closeUserPropertiesChangeModal =
+            $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
     private final SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
     private final SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
-    private final SelenideElement selectLanguageDropdown = $(By.xpath("//div[@id='language']//div[@class='role-dropdown-container']"));
+    private final SelenideElement selectLanguageDropdown =
+            $(By.xpath("//div[@id='language']//div[@class='role-dropdown-container']"));
     private final String XPATH_LANGUAGE_OPTION_DROPDOWN = "//li[contains(text(),'%s')]";
-    private final SelenideElement roleAssigned = $(By.xpath("//table[@id='foundusertable']/tbody/tr/td[@class='rolecss']/div/div"));
+    private final SelenideElement roleAssigned =
+            $(By.xpath("//table[@id='foundusertable']/tbody/tr/td[@class='rolecss']/div/div"));
+
     public void setSearch(String search) {
         userSearchTextBox.clear();
         userSearchTextBox.setValue(search);
     }
 
     public void UserLocked(String user) {
-        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible).shouldHave(cssValue("color","rgba(230, 30, 80, 1)"));
-        $(By.xpath(String.format(xpathUserName, user))).shouldHave(attribute("class","rowLockedUser"));
+        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible)
+                .shouldHave(cssValue("color", "rgba(230, 30, 80, 1)"));
+        $(By.xpath(String.format(xpathUserName, user))).shouldHave(attribute("class", "rowLockedUser"));
     }
 
     public void UserUnLocked(String user) {
         cancelButton.click();
-        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible).shouldHave(cssValue("color","rgba(33, 37, 41, 1)"));
-        $(By.xpath(String.format(xpathUserName, user) + "/td")).shouldHave(attribute("class","customusername"));
+        $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible)
+                .shouldHave(cssValue("color", "rgba(33, 37, 41, 1)"));
+        $(By.xpath(String.format(xpathUserName, user) + "/td")).shouldHave(attribute("class", "customusername"));
     }
 
     public void edit(String user) {
-        SelenideHelper.commonWaiter($(By.xpath(String.format(xpathEditUserIcon, user))), visible).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(xpathEditUserIcon, user))), visible)
+                .click();
     }
 
     public void cannotEdit(String user) {
@@ -117,7 +140,8 @@ public class UserPage {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
         for (var user : users) {
             if (user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
-                $(By.xpath(String.format(xpathEditUserIcon, user))).shouldHave(attribute("class","edit-icon disabled"));
+                $(By.xpath(String.format(xpathEditUserIcon, user)))
+                        .shouldHave(attribute("class", "edit-icon disabled"));
             } else {
                 $(By.xpath(String.format(xpathEditUserIcon, user))).shouldBe(enabled);
             }
@@ -159,19 +183,22 @@ public class UserPage {
     }
 
     public boolean isUserDisabled() {
-        return disableUserButton.getAttribute("class").equals("togg_btn toggle_act")
-                &&
-                enableUserButton.getAttribute("class").equals("togg_btn");
+        return disableUserButton.getAttribute("class")
+                .equals("togg_btn toggle_act")
+                && enableUserButton.getAttribute("class")
+                        .equals("togg_btn");
     }
 
     public boolean isUserEnabled() {
-        return enableUserButton.getAttribute("class").equals("togg_btn toggle_act")
-                &&
-                disableUserButton.getAttribute("class").equals("togg_btn");
+        return enableUserButton.getAttribute("class")
+                .equals("togg_btn toggle_act")
+                && disableUserButton.getAttribute("class")
+                        .equals("togg_btn");
     }
 
     public void createNewUser(String userName) {
-        SelenideHelper.commonWaiter(createUserPlusButton, visible).click();
+        SelenideHelper.commonWaiter(createUserPlusButton, visible)
+                .click();
         userNameTextBox.setValue(userName);
     }
 
@@ -179,7 +206,8 @@ public class UserPage {
         selectRoleFromDropdown.click();
         List<WebElement> options = selectRoleFromDropdown.findElements(By.tagName("li"));
         for (WebElement option : options) {
-            if (option.getText().equals(roleName)) {
+            if (option.getText()
+                    .equals(roleName)) {
                 option.click();
                 break;
             }
@@ -283,12 +311,16 @@ public class UserPage {
 
     public void isGeneratedNotificationWhenPasswordReset(String name) {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("User " + name + " password reset successfully! New password has been sent to the user's registered email address."));
+        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText()
+                .equalsIgnoreCase("User " + name
+                        + " password reset successfully! New password has been sent to the user's registered email address."));
+        commonWaiter(cancelButton, visible).click();
     }
 
     public void isGeneratedNotificationWhenAccountUnlock() {
         commonWaiter(XPATH_NOTIFICATION_TEXT, visible);
-        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText().equalsIgnoreCase("The account was successfully unlocked"));
+        Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText()
+                .equalsIgnoreCase("The account was successfully unlocked"));
     }
 
     public List<String> getAllUserColumnHeaders() {
@@ -297,7 +329,8 @@ public class UserPage {
 
 
     public void userProfile() {
-        SelenideHelper.commonWaiter(userProfileIcon, visible).click();
+        SelenideHelper.commonWaiter(userProfileIcon, visible)
+                .click();
     }
 
     public void userPreferences() {
@@ -305,9 +338,11 @@ public class UserPage {
     }
 
     public void chooseAndSaveDefaultPage(String defaultOptionName) {
-        SelenideHelper.commonWaiter(selectOption, visible).click();
+        SelenideHelper.commonWaiter(selectOption, visible)
+                .click();
         commonWaiter($(By.xpath(String.format("//li[contains(text(),'%s')]", defaultOptionName))), visible).click();
-        SelenideHelper.commonWaiter(savePreferenceButton, visible).click();
+        SelenideHelper.commonWaiter(savePreferenceButton, visible)
+                .click();
     }
 
     public String getActiveIconTitle() {
@@ -345,11 +380,13 @@ public class UserPage {
     }
 
     public void userProfileIcon() {
-        SelenideHelper.commonWaiter(userProfile, visible).click();
+        SelenideHelper.commonWaiter(userProfile, visible)
+                .click();
     }
 
     public void changePassword() {
-        SelenideHelper.commonWaiter(chnagePwd, visible).click();
+        SelenideHelper.commonWaiter(chnagePwd, visible)
+                .click();
     }
 
     public void windowPopup() {
@@ -367,7 +404,8 @@ public class UserPage {
     }
 
     public void closeChangeUserPropertiesChangeModal() {
-        SelenideHelper.commonWaiter(closeUserPropertiesChangeModal, visible).click();
+        SelenideHelper.commonWaiter(closeUserPropertiesChangeModal, visible)
+                .click();
     }
 
     public void verifyUserProfileIcon(String firstname, String lastname) {
@@ -395,33 +433,36 @@ public class UserPage {
     public void checkAlarmHeader() {
         userHeader.shouldBe(visible);
     }
-    
+
     public void userAccountRole(String user1, String User2) {
         $(By.xpath(String.format(defaultRolesnames, user1))).shouldBe(visible);
         $(By.xpath(String.format(defaultRolesnames, User2))).shouldBe(visible);
     }
-    
+
     public void saveMyUserChanges() {
         saveButton.click();
     }
 
     public void chooseUserLanguage(String language) {
-        SelenideHelper.fluentWaiter().until((webDriver) -> {
-            SelenideHelper.commonWaiter(selectLanguageDropdown, visible).click();
-            return $(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))).isDisplayed();
-        });
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible).click();
+        SelenideHelper.fluentWaiter()
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectLanguageDropdown, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))).isDisplayed();
+                });
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_LANGUAGE_OPTION_DROPDOWN, language))), visible)
+                .click();
     }
 
-    public void createUserIconPresent(String value){
-        if(value.equalsIgnoreCase("not exists")) {
+    public void createUserIconPresent(String value) {
+        if (value.equalsIgnoreCase("not exists")) {
             createUserPlusButton.should(not(appear));
-        } else if (value.equalsIgnoreCase("exists")){
+        } else if (value.equalsIgnoreCase("exists")) {
             createUserPlusButton.should(appear);
         }
     }
 
-    public void roleAssignedToUser(String role){
+    public void roleAssignedToUser(String role) {
         roleAssigned.shouldHave(text(role));
     }
 }

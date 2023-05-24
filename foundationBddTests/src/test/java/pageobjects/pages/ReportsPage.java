@@ -56,7 +56,7 @@ public class ReportsPage {
             "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='check_box']";
     private final String XPATH_TEMPLATE_CHECKBOX_CHECKED =
             "//li[@class=\"checkbox_item checkbox_focus \"]/div[@class='item_value'][contains(text(),'%s')]";
-    private final String XPATH_TEMPLATE_EYEICON =
+    private final String XPATH_TEMPLATE_EYE_ICON =
             "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='eye_icon']";
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[contains(text(),'%s')]";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT =
@@ -192,7 +192,7 @@ public class ReportsPage {
     private final String XPATH_REPORTS_COLUMNS = "//table[@id='reportListTable']//td[%s]";
     private final String XPATH_ESIGN_STATUS = "//span[text()='%s']";
 
-    private final String XAPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
+    private final String XPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement requestNotification =
             $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
@@ -231,7 +231,7 @@ public class ReportsPage {
     };
 
     Function<Integer, List<String>> consolidatedColumns = (index) -> {
-        var users = $$(By.xpath(String.format(XAPATH_CONSOLIDATED_COLUMNS, index))).texts();
+        var users = $$(By.xpath(String.format(XPATH_CONSOLIDATED_COLUMNS, index))).texts();
         users.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return users;
     };
@@ -553,14 +553,14 @@ public class ReportsPage {
 
     public void includeReport(String reportInclude) {
         if (reportInclude.equals("Alarms")) {
-            $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
+            $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
             saveAlarmButton.click();
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
         } else if (reportInclude.contains("Trends")) {
-            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))), visible);
-            $(By.xpath(String.format(XPATH_TEMPLATE_EYEICON, reportInclude))).click();
+            SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))), visible);
+            $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))).click();
         } else {
             $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).click();
         }
@@ -677,7 +677,7 @@ public class ReportsPage {
         var formatter = DateTimeFormatter.ofPattern(Report.RECIPE_DATE_FORMAT)
                 .localizedBy(Locale.US);
 
-        // limit the results to avoid test to take to much time
+        // limit the results to avoid test to take too much time
         for (int i = 0; i < auditListTable.size() && i < results; i++) {
             validateAuditTrail(userid, dateInPast, formatter, i + 1);
             validateAuditTrail(userid, dateInPast, formatter, auditListTable.size() - i);
@@ -1355,6 +1355,13 @@ public class ReportsPage {
                 break;
         }
         return isTrue;
+    }
+
+    public void verifyAuditLogsForResetPassword(String username) {
+        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin reset password for User Account ", username)))
+                .shouldBe(visible);
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("ID Management"));
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
     }
 
 }
