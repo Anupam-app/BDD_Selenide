@@ -147,7 +147,6 @@ public class RecipeConsolePage {
     private Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
-
         this.recipe = recipe;
     }
 

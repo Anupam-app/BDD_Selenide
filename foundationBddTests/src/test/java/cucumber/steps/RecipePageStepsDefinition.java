@@ -18,6 +18,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeTouchEnablerPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
@@ -29,14 +30,16 @@ public class RecipePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
+    private final RecipeTouchEnablerPage recipeTouch;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage) {
+                                     ReportsPage reportPage,RecipeTouchEnablerPage recipeTouch) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
+        this.recipeTouch = recipeTouch;
     }
 
     @Given("I go to recipe page")
@@ -680,19 +683,9 @@ public class RecipePageStepsDefinition {
         recipePage.blankRecipe();
     }
 
-    @And("I cancel the recipe")
-    public void iCancelTheRecipe() {
-        recipePage.cancelRecipe();
-    }
-
-    @And("I discard the recipe")
-    public void iDiscardTheRecipe() {
-        recipePage.iDiscard_Btn();
-    }
-
-    @And("I save the recipe from warning box")
-    public void iSaveTheRecipeFromWarningBox() {
-        recipePage.saveFromWarningBox();
+    @And("I {string} the recipe")
+    public void iSelectButton(String value) {
+        recipePage.selectButtonDialogBox(value);
     }
 
     @And("I add one new step")
@@ -833,24 +826,15 @@ public class RecipePageStepsDefinition {
         recipePage.validatecriteriaDelete(step);
     }
 
-    @Then("I verify the Default step wait time menu button")
-    public void verifyStepWaitTimeButton(){
-        recipePage.verifyStepWaitTimeButton();
-    }
-
-    @And("I click on Default step wait time button")
-    public void clickOnDefaultStepWaitTime(){
-        recipePage.clickOnDefaultStepWaitTime();
-    }
-
-    @Then("I verify the default step wait time popup")
+    @Then("I verify the default step wait time dialog box")
     public void defaultStepWaitTimePopUp(){
         recipePage.defaultStepWaitTimePopUp();
     }
 
-    @And("I select hours, minutes and seconds value and save")
+    @And("I update default wait time")
     public void verifyTimeField(){
-        recipePage.verifyTimeField();
+        //recipeTouch.buttonClick("Step Wait Time");
+        recipePage.setDefaultStepWaitTime("01","hours");
     }
 
     @Then("I verify the saved step wait time")

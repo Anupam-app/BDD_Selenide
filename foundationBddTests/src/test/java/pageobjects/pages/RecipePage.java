@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -180,7 +181,7 @@ public class RecipePage {
     private final SelenideElement stepInvocation = $(By.xpath("(//td[@class='step-cell'])[2]"));
     private final String addSteps = "(//span[@class='target'])[%s]";
     private final String OperationalActionsList = "//p[@class='action-item lavel-2'][@title='%s']";
-    private final String warningOptions = "//button[text()='%s']";
+    private final String button = "//button[text()='%s']";
     private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
     private final String popUpMessage = "//span[text()='%s']";
     private final SelenideElement phaseOne = $(By.xpath("//label[text()='Phase 1']"));
@@ -230,12 +231,13 @@ public class RecipePage {
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
-    private final String touchButton = "//span[text()='%s']";
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
-    private final String button = "//button[text()='%s']";
     private final SelenideElement defaultStepTimeValue = $(By.xpath("//input[@class='ant-time-picker-panel-input']"));
+    private Recipe recipe;
 
-
+    public RecipePage(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1116,16 +1118,8 @@ public class RecipePage {
         $(By.xpath(String.format(blankRecipeMessage, "Start creating your recipe by adding actions or phases from"))).waitUntil(Condition.visible, 50001);
     }
 
-    public void cancelRecipe() {
-        $(By.xpath(String.format(warningOptions, "Cancel"))).waitUntil(Condition.visible, 50001).click();
-    }
-
-    public void iDiscard_Btn() {
-        $(By.xpath(String.format(warningOptions, "Discard"))).waitUntil(Condition.visible, 50001).click();
-    }
-
-    public void saveFromWarningBox() {
-        $(By.xpath(String.format(warningOptions, "Save"))).waitUntil(Condition.visible, 50001).click();
+    public void selectButtonDialogBox(String value) {
+        $(By.xpath(String.format(button, value))).waitUntil(Condition.visible, 50001).click();
     }
 
     public void singleStep() {
@@ -1231,6 +1225,7 @@ public class RecipePage {
         timer.clear();
         timer.click();
         selectTime.setValue(data);
+        this.recipe.setDefaultWaitTime(data);
         waitTime_AddButton.click();
     }
 
@@ -1456,14 +1451,6 @@ public class RecipePage {
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
     }
 
-    public void verifyStepWaitTimeButton(){
-        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).shouldBe(visible);
-    }
-
-    public void clickOnDefaultStepWaitTime(){
-        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
-    }
-
     public void defaultStepWaitTimePopUp(){
         $(By.xpath(String.format(defaultStepWaitPopUp,"Default step wait time"))).waitUntil(visible,3000L,1000L);
         $(By.xpath(String.format(defaultStepWaitPopUp,"SELECT TIME"))).waitUntil(visible,3000L,1000L);
@@ -1471,17 +1458,9 @@ public class RecipePage {
         $(By.xpath(String.format(button,"Add"))).shouldBe(visible);
     }
 
-    public void verifyTimeField(){
-        setDefaultStepWaitTime("05","seconds");
-        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
-        setDefaultStepWaitTime("10","minutes");
-        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
-        setDefaultStepWaitTime("02","hours");
-    }
-
     public void verifySaveTimeFieldValue() {
         timer.waitUntil(visible, 2000L, 1000L).click();
-        selectTime.getValue().contains("02:10:05");
+        Assert.assertEquals(selectTime.getValue(),recipe.getDefaultWaitTime());
     }
 
     public void importRecipeSelection(String recipeName){

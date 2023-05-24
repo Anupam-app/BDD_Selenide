@@ -403,12 +403,12 @@ Feature: Recipe management
     And I edit recipe "testDraftRecipe"
     And I add few actions steps to existing recipe
     And I close the recipe
-    And I cancel the recipe
+    And I "Cancel" the recipe
     And I close the recipe
-    And I discard the recipe
+    And I "Discard" the recipe
     And I add one new step
     And I close the recipe
-    And I save the recipe from warning box
+    And I "Save" the recipe
     And I perform saveAs option to save recipe
 
   Scenario: Addition of phases with errors to Phase Library
@@ -497,10 +497,9 @@ Feature: Recipe management
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "criteriaRecipe" from recipe browser
-    Then I verify the Default step wait time menu button
-    And I click on Default step wait time button
-    Then I verify the default step wait time popup
-    And I select hours, minutes and seconds value and save
-    And I click on Default step wait time button
+    And  I select "Step Wait Time" button
+    Then I verify the default step wait time dialog box
+    And I update default wait time
+    And  I select "Step Wait Time" button
     Then I verify the saved step wait time
 
