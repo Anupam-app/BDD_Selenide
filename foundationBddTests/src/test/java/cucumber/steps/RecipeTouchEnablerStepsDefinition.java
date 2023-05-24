@@ -253,4 +253,16 @@ public class RecipeTouchEnablerStepsDefinition {
     public void saveAsRecipe(String recipeName){
         recipePage.saveAsButton(recipeName);
     }
+
+    @And("I {string} number {int}")
+    public void insertStep(String action, int stepNo){
+        recipePage.selectStep(Integer.toString(stepNo));
+        recipeTouch.buttonClick(action);
+    }
+
+    @And("I add action to new blank step")
+    public void addActionToBlankStep(){
+        recipePage.placeholder("blank");
+        recipePage.addActionStep(recipe.getOrgStepCount()+1);
+    }
 }
