@@ -229,6 +229,11 @@ public class RecipePage {
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
+    private final String touchButton = "//span[text()='%s']";
+    private final String defaultStepWaitPopUp = "//*[text()='%s']";
+    private final String button = "//button[text()='%s']";
+    private final SelenideElement defaultStepTimeValue = $(By.xpath("//input[@class='ant-time-picker-panel-input']"));
+
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -1234,6 +1239,8 @@ public class RecipePage {
             data = "00:00:" + time;
         } else if (value.contains("minutes")) {
             data = "00:" + time + ":00";
+        }else if (value.contains("hours")){
+            data = time + ":10" + ":05";
         }
         commonWaiter(stepWait_Title, visible);
         timer.clear();
@@ -1407,7 +1414,7 @@ public class RecipePage {
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         primaryButton.click();
     }
-    
+
     public void deleteStepUsingCrossButton(String stepNo) {
         $(By.xpath(String.format(stepNumber, stepNo))).waitUntil(visible, 2000L, 1000L).click();
         $(By.xpath(String.format(deleteStepIcon, stepNo))).click();
@@ -1439,13 +1446,41 @@ public class RecipePage {
     public void validatecriteriaDelete(String step) {
         $(By.xpath(String.format(selectCriteria, step))).shouldNot(visible);
     }
-    
+
     public void phaseListOrder(Set<String> expectedList){
         Set<String> phaseNames = new HashSet<>();
         for (SelenideElement selenideElement : phaseNameText) {
             phaseNames.add(selenideElement.getValue());
         }
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
+    }
+
+    public void verifyStepWaitTimeButton(){
+        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).shouldBe(visible);
+    }
+
+    public void clickOnDefaultStepWaitTime(){
+        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
+    }
+
+    public void defaultStepWaitTimePopUp(){
+        $(By.xpath(String.format(defaultStepWaitPopUp,"Default step wait time"))).waitUntil(visible,3000L,1000L);
+        $(By.xpath(String.format(defaultStepWaitPopUp,"SELECT TIME"))).waitUntil(visible,3000L,1000L);
+        $(By.xpath(String.format(button,"Cancel"))).shouldBe(visible);
+        $(By.xpath(String.format(button,"Add"))).shouldBe(visible);
+    }
+
+    public void verifyTimeField(){
+        setDefaultStepWaitTime("05","seconds");
+        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
+        setDefaultStepWaitTime("10","minutes");
+        $(By.xpath(String.format(touchButton,"Default Step Wait Time"))).click();
+        setDefaultStepWaitTime("02","hours");
+    }
+
+    public void verifySaveTimeFieldValue(){
+        timer.waitUntil(visible,2000L,1000L).click();
+        selectTime.getValue().contains("02:10:05");
     }
 
 }

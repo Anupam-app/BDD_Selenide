@@ -13,6 +13,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
   https://stljirap.sial.com/browse/BIOFOUND-27935
+  https://stljirap.sial.com/browse/BIOFOUND-28042
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -476,3 +477,13 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+  @test
+  Scenario: Default step wait time validation in Recipe Editor
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "criteriaRecipe" from recipe browser
+    Then I verify the Default step wait time menu button
+    And I click on Default step wait time button
+    Then I verify the default step wait time popup
+    And I select hours, minutes and seconds value and save
+    And I click on Default step wait time button
+    Then I verify the saved step wait time

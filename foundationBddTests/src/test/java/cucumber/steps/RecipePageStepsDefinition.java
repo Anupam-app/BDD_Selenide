@@ -818,4 +818,30 @@ public class RecipePageStepsDefinition {
     public void validateCriteriaDelete(String step, String message){
         recipePage.validatecriteriaDelete(step);
     }
+
+    @Then("I verify the Default step wait time menu button")
+    public void verifyStepWaitTimeButton(){
+        recipePage.verifyStepWaitTimeButton();
+    }
+
+    @And("I click on Default step wait time button")
+    public void clickOnDefaultStepWaitTime(){
+        recipePage.clickOnDefaultStepWaitTime();
+    }
+
+    @Then("I verify the default step wait time popup")
+    public void defaultStepWaitTimePopUp(){
+        recipePage.defaultStepWaitTimePopUp();
+    }
+
+    @And("I select hours, minutes and seconds value and save")
+    public void verifyTimeField(){
+        recipePage.verifyTimeField();
+    }
+
+    @Then("I verify the saved step wait time")
+    public void verifySaveTimeFieldValue(){
+        recipePage.verifySaveTimeFieldValue();
+    }
+
 }
