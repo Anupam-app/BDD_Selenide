@@ -10,7 +10,8 @@ Feature: User management
     And I enter random firstname
     And I enter random lastname
     And I enter random employeeID
-    And I enter email "alexis.thiebaut@merckgroup.com"
+    And I enter random department
+    And I enter email "varun.mittal@external.merckgroup.com"
     And I enter mobile number "0123456789"
     And I choose user language "English"
     And I save the new user
@@ -19,6 +20,10 @@ Feature: User management
     And I search the user
     And I edit the user
     Then The username is equal to the expected one
+    And I generate audit trail report
+    And I verify audit logs for user create
+    And I check the audit trail report
+    And I see the user added in report
 
   Scenario Outline: IVI Bug  IVI-5793| Create new user with existing username
     Given I am logged in as "Bio4CAdmin" user
@@ -81,9 +86,9 @@ Feature: User management
     And I go to user page
     When I search "testUserDisabled" user
     And I edit the user
-	And I select role "Operator"
+    And I select role "Operator"
     And I save my user changes
-    Then I see error message is displayed as "User details cannot be modified for disabled user" 
+    Then I see error message is displayed as "User details cannot be modified for disabled user"
     And I enable the user
     And I save my user changes
     And I edit the user
@@ -199,25 +204,25 @@ Feature: User management
   Scenario: BIOCRS-5377: Verify the Application Icons
     Given I am logged in as "Bio4CAdmin" user
     Then I verify the below Icons on left rail of Portal
-      | Main          |
-      | Trends        |
-      | Analytics     |
-      | Alarms        |
-      | Recipes       |
-      | Reports       |
-      | Users         |
-      | Backup        |
-      | Settings      |
+      | Main      |
+      | Trends    |
+      | Analytics |
+      | Alarms    |
+      | Recipes   |
+      | Reports   |
+      | Users     |
+      | Backup    |
+      | Settings  |
 
   @IVI-5823
   Scenario: IVI Bug IVI-5823| User Management | Irrelevant message is displayed when custom user tries to modify his own role
-  	Given I am logged in as "testUserToEditFields" user
+    Given I am logged in as "testUserToEditFields" user
     And I go to user page
     When I search "testUserToEditFields" user
     And I edit the user
     And I select role "Operator"
     And I save my user changes
-    Then I see error message is displayed "Please update user details" 
+    Then I see error message is displayed "Please update user details"
 
   @IVI-6198
   Scenario: BIOCRS-4364 | Verify editable fields in user

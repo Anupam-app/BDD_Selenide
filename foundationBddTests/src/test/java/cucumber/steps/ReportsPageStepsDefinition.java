@@ -647,4 +647,11 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @When("I verify audit logs for user create")
+    public void iVerifyAuditLogsForUserCreate() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForUserCreate(this.user.getUserName());
+        switchTo().parentFrame();
+    }
+
 }
