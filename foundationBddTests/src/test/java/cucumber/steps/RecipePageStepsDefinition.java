@@ -308,12 +308,7 @@ public class RecipePageStepsDefinition {
 
     @Then("I should see {string} step added")
     public void verifyStep(String status) {
-
-        if (status.equalsIgnoreCase("blank")) {
-            recipePage.placeholder(status);
-        } else if (status.equalsIgnoreCase("action")) {
-            recipePage.placeholder(status);
-        }
+        recipePage.placeholder(status);
     }
 
     @And("I add {string} action to the step")
