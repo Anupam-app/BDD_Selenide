@@ -833,7 +833,6 @@ public class RecipePageStepsDefinition {
 
     @And("I update default wait time")
     public void verifyTimeField(){
-        //recipeTouch.buttonClick("Step Wait Time");
         recipePage.setDefaultStepWaitTime("01","hours");
     }
 
