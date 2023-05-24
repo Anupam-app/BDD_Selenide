@@ -266,7 +266,7 @@ public class UserPageStepsDefinition {
         list.put("role", user.getRoleName());
         list.put("employeeID", user.getEmployeeId());
         list.put("email", user.getEmailId());
-        this.report.checkModifiedUser(reportPage.getPdfUrl(), user.getUserName(), this.login.getLogin(), list);
+        this.report.checkModifiedUser(reportPage.getPdfUrl(), userName, this.login.getLogin(), list);
         switchTo().parentFrame();
     }
 
