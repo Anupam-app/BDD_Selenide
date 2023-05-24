@@ -494,7 +494,6 @@ Feature: Recipe management
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
 
-  @test
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "criteriaRecipe" from recipe browser
