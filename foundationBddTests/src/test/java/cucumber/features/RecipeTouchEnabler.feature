@@ -96,11 +96,11 @@ Feature: Recipe Touch Enabler
   Scenario Outline: Verify Insert Step before & after, recipe clear button functionality
     When I open Recipe editor
     And I trigger edit mode
-    Then I add 3 action steps
+    And I add 3 action steps
     And I "<action>" number 2
     And I add action to new blank step
     And I Save the recipe
-    When I select "Clear All" button
+    And I select "Clear All" button
     And I Save the recipe
     Then blank recipe is displayed
 
