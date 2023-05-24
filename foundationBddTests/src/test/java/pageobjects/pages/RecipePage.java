@@ -116,7 +116,7 @@ public class RecipePage {
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
     private final SelenideElement statusApproved = $(By.xpath("//div[@class='status-tooltip']"));
     private final SelenideElement clickOnDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private final ElementsCollection notificationTexts = $$(By.xpath("//div[@class='description-text-blue orch-notification-description']"));
+    private final ElementsCollection notificationTexts = $$(By.xpath("//div[contains(@class,'description-text-blue orch-notification-description')]"));
     private final SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private final String upIcon = "(//div[@class='up-icon'])[%d]";
     private final SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
@@ -226,6 +226,7 @@ public class RecipePage {
     private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
+    private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
@@ -233,6 +234,7 @@ public class RecipePage {
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
     private final String button = "//button[text()='%s']";
     private final SelenideElement defaultStepTimeValue = $(By.xpath("//input[@class='ant-time-picker-panel-input']"));
+
 
 
     public void goTo() {
@@ -385,17 +387,7 @@ public class RecipePage {
 
     public void saveAsRecipeWithShortCutKeys(String recipeName) {
         stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
-        recipeInputSave.click();
-
-        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
-        recipeInputSave.click();
-
-        SelenideHelper.fluentWaiter().until((webDriver) -> {
-            recipeInputSave.setValue(recipeName);
-            return recipeInputSave.getValue().equals(recipeName);
-        });
-
-        saveButton.click();
+        saveAsButton(recipeName);
     }
 
     public void copyPhase() {
@@ -507,14 +499,7 @@ public class RecipePage {
 
     public void importRecipe(String recipeName) {
         SelenideHelper.commonWaiter(importMenuButton, visible).click();
-        var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
-        importRecipe.click();
-        importButton.click();
-        recipeInputSave.click();
-        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
-        var value = RandomStringUtils.randomAlphabetic(10);
-        recipeInputSave.setValue(value);
-        saveButton.click();
+        importRecipeSelection(recipeName);
         // browserLinkText.waitUntil(Condition.visible, 5000l).click();
     }
 
@@ -1431,6 +1416,22 @@ public class RecipePage {
         $(By.xpath(String.format(stepNumber, stepNo))).shouldNot(visible);
     }
 
+    public void saveAsRecipe() {
+        stepAction.keyDown(recipeBlock, Keys.SHIFT).keyDown(Keys.CONTROL).sendKeys("s").perform();
+    }
+
+    public void iVerifyTheAlert(String recipes) {
+        SelenideHelper.commonWaiter(recipeInputSave, visible).click();
+        recipeInputSave.clear();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            recipeInputSave.setValue(recipes);
+            return recipeInputSave.getValue().equals(recipes);
+        });
+        saveButton.click();
+        commonWaiter(overWrittenAlertMSG, visible).shouldHave(text("Recipe is locked. Please save it as new copy."));
+        primaryButton.click();
+    }
+
     public void deleteCriteriaUsingShortcut(String step) {
         $(By.xpath(String.format(selectCriteria, step))).waitUntil(visible, 2000, 1000).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys(Keys.DELETE).perform();
@@ -1450,7 +1451,7 @@ public class RecipePage {
     public void phaseListOrder(Set<String> expectedList){
         Set<String> phaseNames = new HashSet<>();
         for (SelenideElement selenideElement : phaseNameText) {
-            phaseNames.add(selenideElement.getValue());
+                phaseNames.add(selenideElement.getValue());
         }
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
     }
@@ -1478,9 +1479,31 @@ public class RecipePage {
         setDefaultStepWaitTime("02","hours");
     }
 
-    public void verifySaveTimeFieldValue(){
-        timer.waitUntil(visible,2000L,1000L).click();
+    public void verifySaveTimeFieldValue() {
+        timer.waitUntil(visible, 2000L, 1000L).click();
         selectTime.getValue().contains("02:10:05");
+    }
+
+    public void importRecipeSelection(String recipeName){
+        var importRecipe = $(By.xpath(String.format("//td[contains(@title,'%s')]", recipeName)));
+        importRecipe.waitUntil(visible,10000, 500).click();
+        importButton.click();
+        importInputTextBox.click();
+        importInputTextBox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        var value = RandomStringUtils.randomAlphabetic(5);
+        importInputTextBox.setValue(value);
+        saveButton.click();
+    }
+
+    public void saveAsButton(String recipeName){
+        commonWaiter(recipeInputSave,visible).click();
+        SelenideHelper.commonWaiter(recipeInputSave, visible).clear();
+        recipeInputSave.click();
+        SelenideHelper.fluentWaiter().until((webDriver) -> {
+            recipeInputSave.setValue(recipeName);
+            return recipeInputSave.getValue().equals(recipeName);
+        });
+        saveButton.click();
     }
 
 }

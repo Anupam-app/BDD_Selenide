@@ -1,6 +1,6 @@
 Feature: Analytics graph
 
-  @IVI-7594
+  @IVI-7594 @IVI-7601
   Scenario Outline: Plot Graph
     Given I am logged in as "bio4cadmin" user
     And I load recipe "testRecipeToExecute1min" and run it during 65 seconds if not done before
@@ -12,7 +12,7 @@ Feature: Analytics graph
     Then Graph should be plotted
     And Values for parameter should be displayed in Data section of aggregate
 
-    @IVI
+    @IVI @IVI-7601
     Examples:
       | analyticsParams                | graphName   |
       | parameters/ivi/analyticsParams | line        |

@@ -1,5 +1,12 @@
 package cucumber.steps;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
 import dataobjects.Login;
 import dataobjects.Report;
 import dataobjects.Role;
@@ -9,11 +16,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
 import pageobjects.pages.UserPage;
@@ -27,14 +29,16 @@ public class RolePageStepsDefinition {
     private final Login login;
     private final UserPage userPage;
 
-    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login, UserPage userPage) {
+    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login,
+            UserPage userPage) {
         this.rolePage = rolePage;
         this.role = role;
         this.report = report;
         this.reportPage = reportPage;
         this.login = login;
         this.userPage = userPage;
-        this.role.getPermissions().clear();
+        this.role.getPermissions()
+                .clear();
     }
 
     @Given("I trigger Roles mode")
@@ -46,7 +50,7 @@ public class RolePageStepsDefinition {
     public void iCreateRandomRole() {
         this.role.setRoleName(RandomStringUtils.randomAlphabetic(10));
         this.role.setRoleAction(RoleAction.ADDED);
-        rolePage.createNewrole(this.role.getRoleName());
+        rolePage.createNewRole(this.role.getRoleName());
     }
 
     @When("I select role sort by {string} in {string}")
@@ -63,12 +67,13 @@ public class RolePageStepsDefinition {
     public void iSearchRole(String role, String value) {
         this.role.setRoleName(role);
         rolePage.searchRole(this.role.getRoleName());
-        rolePage.iEnableDisableRole(value,role);
+        rolePage.iEnableDisableRole(value, role);
     }
 
     @When("I assign permission {string}")
     public void iAssignPermission(String role) {
-        this.role.getPermissions().add(role);
+        this.role.getPermissions()
+                .add(role);
         rolePage.clickOnPermission(role);
     }
 
@@ -79,7 +84,7 @@ public class RolePageStepsDefinition {
 
     @Then("I verify role details")
     public void iVerifyRoleDetails() {
-        Assert.assertEquals(rolePage.getRoleNameFromTextbox(), role.getRoleName());
+        Assert.assertEquals(rolePage.getRoleNameFromTextBox(), role.getRoleName());
         List<String> permissions = rolePage.getPermissionList();
         Collections.sort(permissions);
         ArrayList<String> expectedPermissions = new ArrayList<>(role.getPermissions());
@@ -103,7 +108,9 @@ public class RolePageStepsDefinition {
         this.role.setRoleAction(RoleAction.UPDATED);
         this.role.setRoleName(role);
         rolePage.modifyRole(role);
-        rolePage.getPermissionList().forEach(p -> this.role.getPermissions().add(p));
+        rolePage.getPermissionList()
+                .forEach(p -> this.role.getPermissions()
+                        .add(p));
     }
 
     @Then("I verify user details")
@@ -113,7 +120,8 @@ public class RolePageStepsDefinition {
 
     @When("I remove permission {string}")
     public void iRemovePermissions(String role) {
-        this.role.getPermissions().remove(role);
+        this.role.getPermissions()
+                .remove(role);
         rolePage.clickOnPermission(role);
     }
 
@@ -147,7 +155,7 @@ public class RolePageStepsDefinition {
     public void iCreateRole(String name) {
         this.role.setRoleName(name);
         this.role.setRoleAction(RoleAction.ERROR);
-        rolePage.createNewrole(this.role.getRoleName());
+        rolePage.createNewRole(this.role.getRoleName());
     }
 
     @When("I click on save button")
@@ -193,53 +201,59 @@ public class RolePageStepsDefinition {
     public void iRemovePermissions(DataTable datatable) {
         List<String> uncheck = datatable.asList();
         for (String name : uncheck) {
-            rolePage.unselectrolepremission(name);
+            rolePage.unselectRolePermission(name);
         }
     }
 
-    @And("I create a random rolename")
+    @And("I create a random role-name")
     public void iEnterNewCustomRoleName() {
         this.role.setRoleName(RandomStringUtils.randomAlphabetic(10));
         this.role.setOldRoleName(rolePage.getOldRoleName());
-        rolePage.iCreateRondomName(this.role.getRoleName());
+        rolePage.iCreateRandomName(this.role.getRoleName());
     }
 
     @And("I should see new custom role created")
     public void iShouldSeeNewCustomRole() {
-        rolePage.isearchName(this.role.getRoleName());
+        rolePage.iSearchName(this.role.getRoleName());
         rolePage.verifyRoleName(this.role.getRoleName());
     }
-	
-	@When("I delete the role")
-	public void iDeleteTheRole() {
-		rolePage.modifyRole(this.role.getRoleName());
-		rolePage.deleteRole();
-	}
+
+    @When("I delete the role")
+    public void iDeleteTheRole() {
+        rolePage.modifyRole(this.role.getRoleName());
+        rolePage.deleteRole();
+    }
 
     @When("I modify permission")
     public void iModifyPermission(DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            this.role.getPermissions().remove(list.get(i).get(0));
-            rolePage.clickOnPermission(list.get(i).get(0));
-            this.role.getPermissions().add(list.get(i).get(1));
-            rolePage.clickOnPermission(list.get(i).get(1));
+            this.role.getPermissions()
+                    .remove(list.get(i)
+                            .get(0));
+            rolePage.clickOnPermission(list.get(i)
+                    .get(0));
+            this.role.getPermissions()
+                    .add(list.get(i)
+                            .get(1));
+            rolePage.clickOnPermission(list.get(i)
+                    .get(1));
         }
     }
 
     @And("I see modified role name is displayed on Role list data")
-    public void iVerifyRoleNameDisplayed(){
+    public void iVerifyRoleNameDisplayed() {
         rolePage.searchRole(this.role.getUpdatedRoleName());
         rolePage.roleNameExists(this.role.getUpdatedRoleName());
     }
 
     @And("I verify Role permission are updated")
-    public void modifiedRolePermission(){
-        rolePage.verifyAssignedPermission(this.role.getUpdatedRoleName(),this.role.getPermissions());
+    public void modifiedRolePermission() {
+        rolePage.verifyAssignedPermission(this.role.getUpdatedRoleName(), this.role.getPermissions());
     }
 
     @And("I update roleName as {string}")
-    public void updateRoleName(String roleName){
+    public void updateRoleName(String roleName) {
         this.role.setUpdatedRoleName(roleName);
         rolePage.updateRoleName(roleName);
     }
@@ -251,13 +265,17 @@ public class RolePageStepsDefinition {
     }
 
     @And("I search and edit role {string}")
-    public void iSearchAndEditRole(String roleName){
+    public void iSearchAndEditRole(String roleName) {
         this.role.setRoleName(roleName);
         rolePage.searchRole(this.role.getRoleName());
         this.role.setRoleAction(RoleAction.UPDATED);
         rolePage.modifyRole(this.role.getRoleName());
-        rolePage.getPermissionList().forEach(p -> this.role.getPermissions().add(p));
-        rolePage.getOldPermissionList().forEach(p -> this.role.getPermissions().add(p));
+        rolePage.getPermissionList()
+                .forEach(p -> this.role.getPermissions()
+                        .add(p));
+        rolePage.getOldPermissionList()
+                .forEach(p -> this.role.getPermissions()
+                        .add(p));
     }
 
     @And("I trigger roles mode")

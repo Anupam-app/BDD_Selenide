@@ -12,6 +12,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-19474
   https://stljirap.sial.com/browse/BIOFOUND-27865
   https://stljirap.sial.com/browse/BIOFOUND-27816
+  https://stljirap.sial.com/browse/BIOFOUND-27905
   https://stljirap.sial.com/browse/BIOFOUND-27935
   https://stljirap.sial.com/browse/BIOFOUND-28042
 
@@ -466,6 +467,21 @@ Feature: Recipe management
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
 
+  Scenario Outline:  Overwritting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "<recipes>"
+    And I saveAs the recipe
+    Then I select existing recipe to verify the warning text message
+      |recipeInReview               |
+      |testRecipeWithChar30NameLengt|
+      |ApprovedInActiveRecipe       |
+
+  Examples:
+      |recipes          |
+      |testDraftRecipe  |
+      |recipeTechReview |
+
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
     When I edit the recipe "criteriaRecipe" from recipe browser
@@ -477,6 +493,7 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+
   @test
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user
@@ -487,3 +504,4 @@ Feature: Recipe management
     And I select hours, minutes and seconds value and save
     And I click on Default step wait time button
     Then I verify the saved step wait time
+

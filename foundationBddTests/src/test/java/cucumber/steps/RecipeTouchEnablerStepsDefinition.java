@@ -3,6 +3,7 @@ package cucumber.steps;
 import dataobjects.Recipe;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.apache.commons.lang3.RandomStringUtils;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.RecipeTouchEnablerPage;
@@ -13,6 +14,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.Collections;
 import java.util.LinkedHashSet;
+
+import static com.codeborne.selenide.Selenide.switchTo;
 
 
 public class RecipeTouchEnablerStepsDefinition {
@@ -234,4 +237,20 @@ public class RecipeTouchEnablerStepsDefinition {
         recipePage.phaseCreationNotification();
     }
 
+    @When("I select {string} button")
+    public void buttonSelection(String value){
+        recipeTouch.buttonClick(value);
+    }
+
+    @And("I Import Recipe")
+    public void importRecipe(){
+        buttonSelection("Import");
+        recipePage.importRecipeSelection(recipe.getRecipeName());
+        recipe.setRecipeImportedName(recipePage.getGeneratedName());
+    }
+
+    @And("I SaveAs recipe {string}")
+    public void saveAsRecipe(String recipeName){
+        recipePage.saveAsButton(recipeName);
+    }
 }

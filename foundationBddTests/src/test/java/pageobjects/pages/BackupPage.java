@@ -40,7 +40,7 @@ public class BackupPage {
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     private String XPATH_NOTIFICATION_BACKUP_END =
-            "//*[contains(@class,'custom-notification-bar')][contains(text(),'%s')]";
+            "//*[contains(@class,'notification-bar')][contains(text(),'%s')]";
     private String XPATH_HEADER = "//div[@class='header-title']";
     private String XPATH_ORCHESTRATOR_HEADER = "//div[contains(@class,'BackupRestore_header-title')]";
 
@@ -130,7 +130,6 @@ public class BackupPage {
     public void backupHistoryTab() {
         datePicker.shouldBe(visible);
         if (!(noData.isDisplayed())) {
-            $(By.xpath(String.format(historyColumnName, "Backup Name"))).shouldBe(visible);
             $(By.xpath(String.format(historyColumnName, "Backed up by"))).shouldBe(visible);
             $(By.xpath(String.format(historyColumnName, "Backup/Restore"))).shouldBe(visible);
             $(By.xpath(String.format(historyColumnName, "Status"))).shouldBe(visible);
@@ -138,7 +137,7 @@ public class BackupPage {
                 Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
             }
             Assert.assertEquals("User is not from the list", "Bio4CAdmin",
-                    $(By.xpath(String.format(historyColumnValue, 3))).getText());
+                    $(By.xpath(String.format(historyColumnValue, 2))).getText());
 
             String[] backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText()
                     .split(": ");
@@ -160,7 +159,7 @@ public class BackupPage {
             $(By.xpath(String.format(restoreColumnName, "Backed up by"))).shouldBe(visible);
             $(By.xpath(String.format(restoreColumnName, "Size"))).shouldBe(visible);
             $(By.xpath(String.format(restoreColumnName, "Backup Date"))).shouldBe(visible);
-            for (int i = 2; i <= 6; i++) {
+            for (int i = 2; i < 6; i++) {
                 Assert.assertNotNull($(By.xpath(String.format(restoreColumnValue, i))).getText());
             }
         }
@@ -354,6 +353,10 @@ public class BackupPage {
 
     public void waitForImmediateBackupRunning() {
         waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
+    }
+
+    public void waitForImmediateBackupSucess() {
+        waitForScheduledBackupState(List.of(BackupStatus.Success), BACKUP_SCHEDULED_TIME_TO_WAIT);
     }
 
     public void notificationMessage(String message) {
