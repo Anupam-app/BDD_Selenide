@@ -137,6 +137,10 @@ Feature: User management
     And I edit the user
     And I click on reset password
     Then I see password reset message is displayed
+    And I generate audit trail report
+    And I verify audit logs for reset password
+    And I check the audit trail report
+    Then I see the reset password events in report
 
   Scenario: Verify Default Users
     Given I am logged in as "Bio4CAdmin" user
