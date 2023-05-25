@@ -48,7 +48,7 @@ Feature: User login
       | login         | password     | message                                                   |
       | bio4cservice1 | Merck$ervice | Bad credentials                                           |
       | Bio4cService  | MerckApp2@   | Invalid username or password. You have 4 attempt(s) left. |
-
+ @test
   Scenario Outline: New user login Or Connect after reset the password
     Given login page is open
     When I enter "<login>" as username and "<tempPassword>" as password
@@ -56,6 +56,9 @@ Feature: User login
     And I change password "<newPassword>"
     And I open portal
     And login page is open
+    And I enter "<login>" as username and "<tempPassword>" as password
+    And I push the login button
+    And I should see the message "Invalid username or password. You have 4 attempt(s) left."
     And I enter "<login>" as username and "<newPassword>" as password
     And I push the login button
     Then I am logged in
