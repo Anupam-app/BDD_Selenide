@@ -132,7 +132,6 @@ public class RecipeConsoleStepsDefinition {
         recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
                 this.currentRecipe.getBeforeComments());
     }
-
     @When("I rerun recipe execution and timer starts from zero")
     public void iRerunRecipeExecution() throws ParseException {
         generateRecipeValues(null, null);
@@ -751,7 +750,7 @@ public class RecipeConsoleStepsDefinition {
     public void iLoadTheRecipe(String recipe) {
         this.currentRecipe = new Recipe();
         this.currentRecipe.setRecipeName(recipe);
-        recipeConsolePage.iLoadRecipelink(recipe);
+        recipeConsolePage.iLoadRecipeLink(recipe);
     }
 
     @And("I enter manual operation name more than 30 char and Tab out")

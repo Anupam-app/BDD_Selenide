@@ -7,12 +7,10 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
-import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
-import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import pageobjects.utility.SelenideHelper;
@@ -22,11 +20,10 @@ public class LoginPage {
     private final SelenideElement userIdTextBox = $(By.id("userId"));
     private final SelenideElement loginPageTitle = $(By.xpath("//span[@class='headermain__header--main']"));
     private final SelenideElement userPasswordTextBox = $(By.id("userPassword"));
-    private final SelenideElement newPasswordTextbox = $(By.id("newPassword"));
-    private final SelenideElement confirmPasswordTextbox = $(By.id("confirmPassword"));
+    private final SelenideElement newPasswordTextBox = $(By.id("newPassword"));
+    private final SelenideElement confirmPasswordTextBox = $(By.id("confirmPassword"));
 
     private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
-    private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
     private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
@@ -34,16 +31,12 @@ public class LoginPage {
 
 	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
 	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-	private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
-    private final String pnidLoginTestId = "pnid_login_info";
-    private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
-    private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
+	private final SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+    private final SelenideElement currentPasswordTextBox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
     private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
-    private final SelenideElement savePasswordButton =
-            $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
     private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
-    private SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
+    private final SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -97,19 +90,19 @@ public class LoginPage {
     }
 
     public void setNewPassword(String newPassword) {
-        commonWaiter(newPasswordTextbox, visible);
-        newPasswordTextbox.clear();
-        newPasswordTextbox.setValue(newPassword);
+        commonWaiter(newPasswordTextBox, visible);
+        newPasswordTextBox.clear();
+        newPasswordTextBox.setValue(newPassword);
     }
 
     public void setConfirmPassword(String newPassword) {
-        confirmPasswordTextbox.clear();
-        confirmPasswordTextbox.setValue(newPassword);
+        confirmPasswordTextBox.clear();
+        confirmPasswordTextBox.setValue(newPassword);
         tempPwd_submitButton.click();
     }
 
     public void savePassword(String newPassword) {
-        confirmPasswordTextbox.setValue(newPassword);
+        confirmPasswordTextBox.setValue(newPassword);
         savePassword.click();
     }
 
@@ -122,8 +115,8 @@ public class LoginPage {
     }
 
     public void setCurrentPassword(String newPassword) {
-        currentPasswordTestbox.clear();
-        currentPasswordTestbox.setValue(newPassword);
+        currentPasswordTextBox.clear();
+        currentPasswordTextBox.setValue(newPassword);
     }
 
     public void verifyNotification(String value){

@@ -4,7 +4,6 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.attribute;
 import static com.codeborne.selenide.Condition.disappears;
 import static com.codeborne.selenide.Condition.enabled;
-import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -51,7 +50,6 @@ public class RecipeConsolePage {
     private final String recipeListTableValues = "//tbody/tr[%d]/td[%d]/label";
     private final SelenideElement runIcon = $(By.xpath("//img[contains(@src,'RUN')]"));
     private final SelenideElement rerunIcon = $(By.xpath("//img[contains(@src,'RE-RUN')]"));
-    private final SelenideElement abortIcon = $(By.xpath("//img[contains(@src,'ABORT')]"));
     private final SelenideElement collapseIcon = $(By.xpath("//img[@class='jss8']"));
     private final SelenideElement runCommentErrorMsg =
             $(By.xpath("//span[(text()='Special characters are not allowed for Comments')]"));
@@ -88,7 +86,7 @@ public class RecipeConsolePage {
 
     private final SelenideElement clearRecipeButton =
             $(By.xpath("//*[contains(@class,'MuiTypography-root') and text()='Clear Panel']"));
-    private ElementsCollection recipeStepCount = $$(By.xpath(
+    private final ElementsCollection recipeStepCount = $$(By.xpath(
             "//div[@class='MuiGrid-root MuiGrid-container MuiGrid-direction-xs-column']/div/div[@class='MuiGrid-root MuiGrid-container']"));
     private final SelenideElement closeJumpStep = $(By.xpath(
             "//img[@src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAFKADAAQAAAABAAAAEwAAAAAA/SztAAABDUlEQVQ4Ea3UUQuCMBDA8UulqKeIkCCQoO//kYIIepGejSKt/oOTabqd0L3opvdrN6/N3t+QbzweT8myVNI0ZTgp6rqW16uWxWIuGZlgp9NZkiSRotjLarU0g1V1l8vlKk3TyPF4kIRMVgbGJA95yRI+Rr5zSKRMVjYF7WPk47gVglKmFR3CdJta0IqGMIwOGENjGPkzbRsGfvST83wrZXlzHy7UDaMguI/qj4Uw3vkpWRO5stGszA/G+gH8eb0PgqyQMv1gzPxYjIJ+uZS52+WmPh0E+xj9udmsTX36Aw5humdcY83fAUOY7lkMbUELZkEdyHmmR1Csz0IojgM5HDm6rNgYitP+U/51Yn8AzV4maDdMLYMAAAAASUVORK5CYII=']"));
@@ -112,39 +110,37 @@ public class RecipeConsolePage {
     private final ElementsCollection textBox_RedClrMsg =
             $$(By.xpath("//span[text()='Mandatory field should not be empty.']"));
     private final SelenideElement start_Btn = $(By.xpath("//img[contains(@src,'START')]"));
-    private final SelenideElement preRunWindowPopop = $(By.xpath("//p[text()='Pre-Run Record']"));
+    private final SelenideElement preRunWindowPopUp = $(By.xpath("//p[text()='Pre-Run Record']"));
     private final SelenideElement runIdExistMsg = $(By.xpath("//span[text()='Run ID is already in use.']"));
-    private final SelenideElement manualOpareationTextbox = $(By.xpath("//input[@name='recipeName']"));
+    private final SelenideElement manualOperationTextBox = $(By.xpath("//input[@name='recipeName']"));
     private final SelenideElement recipeStep = $(By.xpath("//label[contains(@title,'Acid > Pump > ON')]"));
     private final SelenideElement mainPage = $(By.xpath("//div[@id='PNID']"));
     private final SelenideElement processHoldDailogBox =
             $(By.xpath("//h6[text()='Are you sure you want to put the process on hold?']"));
-    private final SelenideElement processhold_Box = $(By.xpath("//h6[text()='Process Hold']"));
+    private final SelenideElement processHold_Button = $(By.xpath("//h6[text()='Process Hold']"));
     private final SelenideElement clearRecipeText = $(By.xpath("//p[text()='Clear Panel']"));
     private final SelenideElement loadRecipeText = $(By.xpath("//p[text()='Load Recipe']"));
     private final SelenideElement processRestart = $(By.xpath("//span[text()='PROCESS RESTART']"));
     private final SelenideElement processRestartMsg = $(By.xpath("//h6[contains(text(),'Process Restart')]"));
     private final SelenideElement processRestartWindowPopup = $(By.xpath("//h6[text()='Process Restart']"));
-    private final SelenideElement endManualOperation = $(By.xpath("//h6[text()='End Manual Operation']"));
-    private final SelenideElement quitEndMAnualOperation = $(By.xpath("//img[contains(@src,'data:image/png;')]"));
     private final SelenideElement recipeNameTrimmed =
             $(By.xpath("//label[@class='text-ellipsis'][text()='testRecipeWithChar30NameLengt']"));
     private final SelenideElement postRunId = $(By.xpath("(//div[@class='postrunFormDetails']/span/label)[2]"));
     private final String postRunDetails = "(//div[@class='postrunFormDetails']/span/label)[%s]";
-    private final SelenideElement manualOperation_lengthychar =
+    private final SelenideElement manualOperation_lengthy =
             $(By.xpath("//span[text()='Manual Operation Name should not exceed 30 characters.']"));
     private final SelenideElement manualWindowPopup = $(By.xpath("//div[@class='roleHeadline']"));
     private final SelenideElement manualWindowPopup_Btn = $(By.xpath("//button[@class='roleBtnSave']"));
     private final String stepIdDetails = "(//label[@id='trimString'])[%s]";
     private final String timeDetails = "//div[@id='timerCycle']//span[%s]";
-    private SelenideElement specialCharactarErrorMsg =
+    private final SelenideElement specialCharacterErrorMsg =
             $(By.xpath("//span[text()='Special characters are not allowed for Comments']"));
     private final SelenideElement ManualOperationRecipe = matchId;
     private final SelenideElement RunID = recipeRunBatchId;
     private final SelenideElement BatchID = $(By.xpath("(//label[@id='trimString'])[2]"));
     private final SelenideElement ConditionalStatement = $(By.xpath("//label[text()='IVI']"));
-
-    private Recipe recipe;
+    private final String LABEL_TEXT = "//span[text()='%s']";
+    private final Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
 
@@ -215,7 +211,7 @@ public class RecipeConsolePage {
             $(By.xpath(String.format(XPATH_TEXTS, "Clear Panel"))).click();
         }
         $(By.xpath(String.format(XPATH_TEXTS, "Load Recipe"))).click();
-        loadButton.waitUntil(Condition.visible, 20000l);
+        loadButton.waitUntil(Condition.visible, 20000L);
         $(By.xpath(String.format(XPATH_LOAD_RECIPE, recipeName))).click();
         loadButton.click();
     }
@@ -262,11 +258,11 @@ public class RecipeConsolePage {
 
     public String startRecipe(Recipe recipe) {
         // take clear panel css class when disabled
-        clearRecipeButton.waitUntil(visible, 15000l, 1000l);
+        clearRecipeButton.waitUntil(visible, 15000L, 1000L);
         var classClearRecipeButton = clearRecipeButton.getAttribute("class");
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000l);
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).waitUntil(Condition.visible, 20000L);
         $(By.xpath(String.format(XPATH_CTRL_ICONS, "RUN"))).click();
-        preRunWindowPopop.waitUntil(visible, 2000L);
+        preRunWindowPopUp.waitUntil(visible, 2000L);
         String runId = runIdTextbox.getValue();
         productIdTextbox.setValue(recipe.getProductId());
         batchIdTextbox.click();
@@ -275,7 +271,7 @@ public class RecipeConsolePage {
         preRunCommentsText.sendKeys(recipe.getBeforeComments());
         okButton.waitUntil(visible, 10000, 2000);
         okButton.click();
-        abortButton.waitUntil(Condition.visible, 5000l);
+        abortButton.waitUntil(Condition.visible, 5000L);
 
         // wait clean panel to be disabled via css class
         SelenideHelper.fluentWaiter()
@@ -287,22 +283,22 @@ public class RecipeConsolePage {
     }
 
     public void isExecuted() {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 5000l);
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 5000L);
     }
 
     public void isExecuted(int seconds) {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, seconds * 1000l);
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, seconds * 1000L);
     }
-
     public void clickPauseButton() {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 4000l)
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(visible, 4000L)
                 .click();
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(not(visible), 2000l);
+        $(By.xpath(String.format(LABEL_TEXT,"Resume"))).waitUntil(visible,5000);
     }
 
     public void clickResumeButton() {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).waitUntil(Condition.visible, 5000l)
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).waitUntil(Condition.visible, 5000L)
                 .click();
+        $(By.xpath(String.format(LABEL_TEXT,"Pause"))).waitUntil(visible,5000);
     }
 
     public boolean verifyResumeButton() {
@@ -322,14 +318,14 @@ public class RecipeConsolePage {
 
     public void clickOnJumpToStep(String stepNumber) {
         Selenide.sleep(2000);
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "JUMP_STEP"))).waitUntil(Condition.visible, 4000l, 50l)
+        $(By.xpath(String.format(XPATH_CTRL_ICONS, "JUMP_STEP"))).waitUntil(Condition.visible, 4000L, 50L)
                 .click();
-        inputStepNumber.waitUntil(Condition.visible, 4000l, 50l);
+        inputStepNumber.waitUntil(Condition.visible, 4000L, 500L);
         Selenide.sleep(1000);
         inputStepNumber.sendKeys(stepNumber);
-        okStepButton.waitUntil(Condition.visible, 4000l, 500)
+        okStepButton.waitUntil(Condition.visible, 4000L, 500)
                 .click();
-        abortButton.waitUntil(visible, 4000l, 500);
+        abortButton.waitUntil(visible, 4000L, 500);
         Selenide.sleep(2000);
     }
 
@@ -347,16 +343,16 @@ public class RecipeConsolePage {
     }
 
     public void clickOnAbortButton(String afterComments) {
-        abortButton.waitUntil(Condition.visible, 10000l)
+        abortButton.waitUntil(visible, 10000L)
                 .click();
-        clickYesButton.waitUntil(Condition.visible, 5000l)
+        clickYesButton.waitUntil(visible, 5000L)
                 .click();
-        SelenideHelper.commonWaiter(preRunCommentsText, visible)
+        commonWaiter(preRunCommentsText, visible)
                 .sendKeys(afterComments);
     }
 
     public void clickOnOk() {
-        okButton.waitUntil(Condition.visible, 5000l)
+        okButton.waitUntil(Condition.visible, 5000L)
                 .click();
     }
 
@@ -380,7 +376,7 @@ public class RecipeConsolePage {
 
     public void jumpStepErrorMessage() {
         var stepCount = recipeStepCount.size();
-        $(By.xpath(String.format(errorMessage, stepCount))).isDisplayed();
+        Assert.assertTrue($(By.xpath(String.format(errorMessage, stepCount))).isDisplayed());
         closeJumpStep.click();
     }
 
@@ -495,12 +491,12 @@ public class RecipeConsolePage {
     public void incrementTimer() {
         SelenideElement minuteValidate = $(By.xpath(String.format(timeDetails, 3)));
         SelenideElement secondValidate = $(By.xpath(String.format(timeDetails, 4)));
-        int fristTime = Integer.parseInt(secondValidate.getText());
+        int firstTime = Integer.parseInt(secondValidate.getText());
         int minFirstTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
         Selenide.sleep(2000);
         int secondTime = Integer.parseInt(secondValidate.getText());
         int minSecondTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
-        int differ = (minSecondTime * 60 + secondTime) - (minFirstTime * 60 + fristTime);
+        int differ = (minSecondTime * 60 + secondTime) - (minFirstTime * 60 + firstTime);
         Assert.assertTrue(differ >= 2);
     }
 
@@ -566,7 +562,7 @@ public class RecipeConsolePage {
     }
 
     public void preRunWindow_Popup() {
-        commonWaiter(preRunWindowPopop, visible);
+        commonWaiter(preRunWindowPopUp, visible);
     }
 
     public void okButton() {
@@ -626,9 +622,9 @@ public class RecipeConsolePage {
             Assert.assertEquals("warning pop displayed: ", "Recipe is already loaded", manualWindowPopup.getText());
             manualWindowPopup_Btn.click();
         }
-        manualOpareationTextbox.click();
-        manualOpareationTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
-        manualOpareationTextbox.setValue(ManualOperationName);
+        manualOperationTextBox.click();
+        manualOperationTextBox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
+        manualOperationTextBox.setValue(ManualOperationName);
         runIdTextbox.click();
         runIdTextbox.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         runIdTextbox.setValue(runId);
@@ -640,26 +636,6 @@ public class RecipeConsolePage {
         preRunCommentsText.click();
         preRunCommentsText.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.DELETE));
         preRunCommentsText.sendKeys(beforeComments);
-    }
-
-    public void iValidateSpecialChar_manaul(String spcialCharacter) {
-        preRunCommentsText.click();
-        preRunCommentsText.sendKeys(spcialCharacter);
-        SelenideHelper.commonWaiter(okButton, visible)
-                .click();
-    }
-
-    public void iValidateSpecialChar_run(String runId, String batchId, String productId, String value) {
-        runIdTextbox.setValue(runId);
-        productIdTextbox.setValue(productId);
-        batchIdTextbox.click();
-        batchIdTextbox.sendKeys(batchId);
-        batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(value);
-        SelenideHelper.commonWaiter(okButton, visible)
-                .click();
-        specialCharactarErrorMsg.scrollIntoView(true);
-        Selenide.sleep(2000);
     }
 
     public void clickOnLoadRecipe() {
@@ -676,12 +652,8 @@ public class RecipeConsolePage {
     }
 
     public boolean verifyRecipeDetails(String batch_Id) {
-        boolean isResult = false;
-        if (commonWaiter(batchId, visible).getText()
-                .equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed()) {
-            isResult = true;
-        }
-        return isResult;
+        return commonWaiter(batchId, visible).getText()
+                .equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed();
     }
 
     public void clickOnClose() {
@@ -704,8 +676,8 @@ public class RecipeConsolePage {
             closeButtonOfStop.click();
             commonWaiter(okButton, visible).click();
         }
-        if ($(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).isDisplayed()) {
-            $(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).click();
+        if (abortButton.isDisplayed()) {
+            abortButton.click();
             clickYesButton.waitUntil(Condition.visible, 1000)
                     .click();
             okButton.waitUntil(Condition.visible, 5001)
@@ -725,7 +697,7 @@ public class RecipeConsolePage {
     }
 
     public void iVerifyDialogBox() {
-        if (processhold_Box.isDisplayed()) {
+        if (processHold_Button.isDisplayed()) {
             Assert.assertTrue("Element is Displayed", processHoldDailogBox.isDisplayed());
         }
     }
@@ -741,7 +713,7 @@ public class RecipeConsolePage {
     }
 
     public void processRestart() {
-        if (!processhold_Box.isDisplayed()) {
+        if (!processHold_Button.isDisplayed()) {
             SelenideHelper.commonWaiter(processRestart, visible);
         } else {
             processRestart.shouldNotBe(visible);
@@ -753,7 +725,7 @@ public class RecipeConsolePage {
             SelenideHelper.commonWaiter(expandIcon, visible)
                     .click();
         }
-        if (processhold_Box.isDisplayed()) {
+        if (processHold_Button.isDisplayed()) {
             recipeButton.shouldNot(visible);
             manualOperations.shouldNotHave(visible);
         }
@@ -840,11 +812,11 @@ public class RecipeConsolePage {
     }
 
     public void iVerifyRecipeNameDisplayedOrTrimmed(String condition) {
-        SelenideElement recipelenthName = $(By.xpath("//label[text()='testRecipeWithChar30NameLengt']"));
+        SelenideElement recipeName = $(By.xpath("//label[text()='testRecipeWithChar30NameLengt']"));
         if (condition.equalsIgnoreCase("Display")) {
-            SelenideHelper.commonWaiter(recipelenthName, appear);
+            SelenideHelper.commonWaiter(recipeName, appear);
         } else if (condition.equalsIgnoreCase("Trimmed")) {
-            stepAction.moveToElement(recipelenthName)
+            stepAction.moveToElement(recipeName)
                     .perform();
             Selenide.sleep(2000);
         }
@@ -876,7 +848,7 @@ public class RecipeConsolePage {
         Assert.assertTrue(postRunBatchID.isDisplayed());
     }
 
-    public void iLoadRecipelink(String recipeName) {
+    public void iLoadRecipeLink(String recipeName) {
         if (abortButton.isDisplayed()) {
             abortButton.waitUntil(enabled, 5000, 1000)
                     .click();
@@ -919,7 +891,7 @@ public class RecipeConsolePage {
     }
 
     public void verifyAbortButton() {
-        $(By.xpath(String.format(XPATH_CTRL_ICONS, "ABORT"))).waitUntil(Condition.visible, 50001);
+        abortButton.waitUntil(Condition.visible, 50001);
     }
 
     public void iCheckLengthyCharacter() {
@@ -942,13 +914,13 @@ public class RecipeConsolePage {
     }
 
     public void iCheckErrorMessage(String name) {
-        if (manualOperation_lengthychar.getText()
+        if (manualOperation_lengthy.getText()
                 .equalsIgnoreCase(name)) {
-            manualOperation_lengthychar.shouldBe(visible);
+            manualOperation_lengthy.shouldBe(visible);
         }
 
         else {
-            manualOperation_lengthychar.shouldNotBe(visible);
+            manualOperation_lengthy.shouldNotBe(visible);
         }
         SelenideHelper.commonWaiter(manualOperationName, visible)
                 .click();
@@ -956,8 +928,8 @@ public class RecipeConsolePage {
     }
 
     public void iEnterLengthyChar(String ManualOperationName, String runId, String batchId, String productId) {
-        manualOpareationTextbox.click();
-        manualOpareationTextbox.setValue(ManualOperationName);
+        manualOperationTextBox.click();
+        manualOperationTextBox.setValue(ManualOperationName);
         runIdTextbox.setValue(runId);
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -1030,13 +1002,6 @@ public class RecipeConsolePage {
         }
     }
 
-    public void iClickOnAbortButton() {
-        abortButton.waitUntil(visible, 5000L)
-                .click();
-        clickYesButton.waitUntil(Condition.visible, 1000L)
-                .click();
-    }
-
     public void stopManualRunAfterSecond(int second) {
         manualStopButton.waitUntil(Condition.visible, second * 1001L);
         closeButtonOfStop.click();
@@ -1052,8 +1017,8 @@ public class RecipeConsolePage {
 
     public void iVerifySpecialCharcterMsg() {
         commonWaiter(okButton, visible).click();
-        specialCharactarErrorMsg.scrollIntoView(true);
-        commonWaiter(specialCharactarErrorMsg, appear);
+        specialCharacterErrorMsg.scrollIntoView(true);
+        commonWaiter(specialCharacterErrorMsg, appear);
     }
 
     public void openLoadRecipePage() {
@@ -1061,8 +1026,8 @@ public class RecipeConsolePage {
             restartSystem();
             SelenideHelper.commonWaiter(holdButton, visible);
         }
-        if (abortIcon.isDisplayed()) {
-            abortIcon.click();
+        if (abortButton.isDisplayed()) {
+            abortButton.click();
             clickYesButton.waitUntil(Condition.visible, 1000)
                     .click();
             okButton.waitUntil(Condition.visible, 5001)
@@ -1102,7 +1067,7 @@ public class RecipeConsolePage {
         SimpleDateFormat formatter = new SimpleDateFormat("DD:HH:MM:SS");
         String timeStart = pauseTimerValue.getText();
         Date startTime = formatter.parse(timeStart);
-        rerunIcon.waitUntil(Condition.visible, 20000l);
+        rerunIcon.waitUntil(Condition.visible, 20000L);
         rerunIcon.click();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -1115,16 +1080,12 @@ public class RecipeConsolePage {
         String timeEnd = pauseTimerValue.getText();
         Date endTime = formatter.parse(timeEnd);
         long timeDifference = (endTime).getTime() - (startTime).getTime();
-        if (timeDifference < 0) {
-            Assert.assertTrue(true);
-        } else {
-            Assert.assertTrue(false);
-        }
+        Assert.assertTrue(timeDifference < 0);
 
     }
 
     public void startRecipeWithErrors(String productId, String batchId, String beforeComments) {
-        runIcon.waitUntil(Condition.visible, 20000l);
+        runIcon.waitUntil(Condition.visible, 20000L);
         runIcon.click();
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -1171,7 +1132,7 @@ public class RecipeConsolePage {
     }
 
     public void preRunWindowNotVisible() {
-        preRunWindowPopop.shouldNotBe(visible);
+        preRunWindowPopUp.shouldNotBe(visible);
     }
 
     public void validateCancelBtn() {
@@ -1191,17 +1152,17 @@ public class RecipeConsolePage {
     }
 
     public void iValidationPreRun() {
-        if (preRunWindowPopop.isDisplayed()) {
-            preRunWindowPopop.shouldBe(visible);
+        if (preRunWindowPopUp.isDisplayed()) {
+            preRunWindowPopUp.shouldBe(visible);
         } else {
-            preRunWindowPopop.shouldNotBe(visible);
+            preRunWindowPopUp.shouldNotBe(visible);
         }
     }
 
     public void iValidateSpecialCharManual(String ManualOperationName, String runId, String batchId, String productId,
             String value) {
-        manualOpareationTextbox.click();
-        manualOpareationTextbox.setValue(ManualOperationName);
+        manualOperationTextBox.click();
+        manualOperationTextBox.setValue(ManualOperationName);
         runIdTextbox.setValue(runId);
         productIdTextbox.setValue(productId);
         batchIdTextbox.click();
@@ -1223,7 +1184,7 @@ public class RecipeConsolePage {
                 .shouldBe(visible);
         SelenideHelper.commonWaiter(preRunCommentsText, visible)
                 .sendKeys("Ok");
-        okButton.waitUntil(Condition.visible, 5000l)
+        okButton.waitUntil(Condition.visible, 5000L)
                 .click();
     }
 

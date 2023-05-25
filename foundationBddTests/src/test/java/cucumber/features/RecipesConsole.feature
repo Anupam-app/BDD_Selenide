@@ -45,7 +45,7 @@ Feature: Recipe console
     And I select user in dropdown "Bio4CAdmin"
     Then I check audit trial logs
 
-  Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
+  Scenario: Recipe execution time is cached when it is Rerun after being aborted
     Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
@@ -55,7 +55,7 @@ Feature: Recipe console
     Then control should be on rerun button
     And I rerun recipe execution and timer starts from zero
 
-  Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
+  Scenario: Special chars are not allowed in comments
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
@@ -303,19 +303,13 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
-    And I logout
-    And login page is open
-    And I enter "Bio4Cservice" as username and "Merck$ervice" as password
-    And I push the login button
+    And I logout and login as "Bio4Cservice" and password as "Merck$ervice"
     And I expand recipe console in pnid
     And I click on pause button
     And I click on resume button
-    And I logout
-    And login page is open
-    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
-    And I push the login button
+    And I logout and login as "bio4cAdmin" and password as "Merck@dmin"
     And I expand recipe console in pnid
-    And I click on jump step "1"
+    And I click on jump step "3"
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button
