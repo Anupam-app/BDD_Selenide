@@ -500,6 +500,6 @@ Feature: Recipe management
     And  I select "Step Wait Time" button
     Then I verify the default step wait time dialog box
     And I update default wait time
-    And  I select "Step Wait Time" button
+    And I select "Step Wait Time" button
     Then I verify the saved step wait time
 

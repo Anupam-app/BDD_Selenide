@@ -88,7 +88,7 @@ public class RecipePageStepsDefinition {
     public void iGoToBrowserMode() {
         switchTo().parentFrame();
         reportPage.goToReports();
-        recipePage.unappliedChangesPopUp();
+        recipePage.unAppliedChangesPopUp();
         iGoToRecipePage();
     }
 
@@ -117,7 +117,7 @@ public class RecipePageStepsDefinition {
     public void igoToOtherModule() {
         switchTo().parentFrame();
         userPage.goTo();
-        recipePage.unappliedChangesPopUp();
+        recipePage.unAppliedChangesPopUp();
     }
 
     @When("I can create a recipe")
@@ -176,7 +176,7 @@ public class RecipePageStepsDefinition {
     public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i)
+            recipePage.verifyColumn(list.get(i)
                 .get(0), tab, i);
         }
     }
@@ -509,7 +509,7 @@ public class RecipePageStepsDefinition {
     @And("I save the recipe with 30 character name")
     public void iSaveTheRecipeWithcharacterName() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
-        recipePage.iSaveRecipeWithkeyBoardActions(this.recipe.getRecipeName());
+        recipePage.iSaveRecipeWithKeyBoardActions(this.recipe.getRecipeName());
     }
 
     @And("I verify the recipe name displayed on Recipe tab")
@@ -565,7 +565,7 @@ public class RecipePageStepsDefinition {
 
     @And("I should see warning popup alert with text message {string}")
     public void iSeeWarningpopupAlertWithTextMessage(String message) {
-        recipePage.waringpopupForRecipe(message);
+        recipePage.warningPopUpMessageForRecipe(message);
     }
 
     @And("I select OK and save as new recipe")
@@ -823,7 +823,7 @@ public class RecipePageStepsDefinition {
 
     @And("I verify {string} criteria is deleted and message seen {string}")
     public void validateCriteriaDelete(String step, String message){
-        recipePage.validatecriteriaDelete(step);
+        recipePage.validateCriteriaDelete(step);
     }
 
     @Then("I verify the default step wait time dialog box")
