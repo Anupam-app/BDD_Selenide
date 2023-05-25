@@ -132,7 +132,7 @@ public class UserPageStepsDefinition {
     }
 
     @When("I disable the user")
-    public void iDissableTheUser() {
+    public void iDisableTheUser() {
         userPage.disableUser();
     }
 
@@ -260,7 +260,7 @@ public class UserPageStepsDefinition {
 
     @Then("I see the {string} user modified in report")
     public void iVerifyThatUserIsModified(String userName) throws Exception {
-        Map<String, String> list = new HashMap<String, String>();
+        Map<String, String> list = new HashMap<>();
         list.put("department", user.getDeptName());
         list.put("phoneNumber", user.getMobNum());
         list.put("role", user.getRoleName());
@@ -281,17 +281,17 @@ public class UserPageStepsDefinition {
     }
 
     @Then("I see password reset message is displayed")
-    public void iSeePasswordResetMessagedisplayed() {
+    public void iSeePasswordResetMessageDisplayed() {
         userPage.isGeneratedNotificationWhenPasswordReset(this.user.getUserName());
     }
 
     @Then("I see account unlock message is displayed")
-    public void iSeeAccountUnlockMessagedisplayed() {
+    public void iSeeAccountUnlockMessageDisplayed() {
         userPage.isGeneratedNotificationWhenAccountUnlock();
     }
 
     @Then("I see error message is displayed for {string}")
-    public void iSeeErrorMessagedisplayed(String username) {
+    public void iSeeErrorMessageDisplayed(String username) {
         var message = String.format(
                 "Failed to create user account. Username: %s already exists. Use a different username", username);
         userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
@@ -340,7 +340,7 @@ public class UserPageStepsDefinition {
     }
 
     @Given("^I verify the below Icons on left rail of Portal$")
-    public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
+    public void iVerifyTheApplicationModule(DataTable datatable) throws AWTException {
         List<String> icon = datatable.asList();
         userPage.zoomOut();
         for (String name : icon) {
@@ -399,7 +399,7 @@ public class UserPageStepsDefinition {
     }
 
     @Then("I see password updated message is displayed for {string}")
-    public void iSeePasswordUpdatedMessagedisplayed(String username) {
+    public void iSeePasswordUpdatedMessageDisplayed(String username) {
         var message = String.format("User password for %s is updated", username);
         userPage.updateNotification(message);
         userPage.closeChangeUserPropertiesChangeModal();
@@ -413,13 +413,13 @@ public class UserPageStepsDefinition {
         userPage.closeChangeUserPropertiesChangeModal();
     }
 
-    @When("I click on changepassword")
-    public void iClickOnChangePswd() {
+    @When("I click on change password")
+    public void iClickOnChangePassword() {
         userPage.changePassword();
     }
 
     @Then("I see error message is displayed {string}")
-    public void iSeeErrorMessageisdisplayed(String message) {
+    public void iSeeErrorMessageIsDisplayed(String message) {
         userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
     }
 
@@ -452,7 +452,7 @@ public class UserPageStepsDefinition {
 
     @Then("I see the user added in report")
     public void iVerifyThatUserIsAdded() throws Exception {
-        Map<String, String> list = new HashMap<String, String>();
+        Map<String, String> list = new HashMap<>();
         list.put("department", user.getDeptName());
         list.put("phoneNumber", user.getMobNum());
         list.put("role", user.getRoleName());
@@ -462,6 +462,13 @@ public class UserPageStepsDefinition {
         list.put("firstName", user.getFirstName());
         list.put("userName", user.getUserName());
         this.report.checkAddedUser(reportPage.getPdfUrl(), user.getUserName(), this.login.getLogin(), list);
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the reset password events in report")
+    public void iVerifyResetPasswordEvent() throws Exception {
+        this.report.verifyAuditReportForPasswordReset(reportPage.getPdfUrl(), user.getUserName(),
+                this.login.getLogin());
         switchTo().parentFrame();
     }
 
