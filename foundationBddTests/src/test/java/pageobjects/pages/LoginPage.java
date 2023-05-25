@@ -28,8 +28,7 @@ public class LoginPage {
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
-    private final SelenideElement SUBMIT_LOGIN =
-            $(By.xpath("//button[@class=\"user_btn btn_primary btn btn-secondary\"]"));
+    private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
     private final SelenideElement PNID_LOGIN_INFO = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
     private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));

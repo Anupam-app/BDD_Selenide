@@ -138,9 +138,9 @@ Feature: User management
     And I click on reset password
     Then I see password reset message is displayed
     And I generate audit trail report
-    And I verify audit logs for reset password
+    And I verify audit logs for "reset" password
     And I check the audit trail report
-    Then I see the reset password events in report
+    Then I see the "reset" password events in report
 
   Scenario: Verify Default Users
     Given I am logged in as "Bio4CAdmin" user
@@ -169,8 +169,8 @@ Feature: User management
       | testPwdChange | MerckApp1@      | MerckApp1@  | MerckApp1@      | Cannot reuse old password.                |
       | testPwdChange | MerckApp1@      | 1234567890  | 1234567890      | Password doesn't met the policy criteria. |
 
-  @IVI-6602
-  Scenario Outline: IVI BUG IVI-6602 | Verify the system allows user to change the password positive flow2
+  @IVI-6602 @IVI-7875
+  Scenario Outline: Verify the system allows user to change the password positive flow2
     Given I am logged in as "<user>" user
     When I try to change password "<currentPassword>" "<newPassword>" "<confirmPassword>"
     Then I see password updated message is displayed for "<user>"
@@ -181,39 +181,13 @@ Feature: User management
     Given I go to userprofile
     Then I should see "<first name>" "<last name>" under user profile icon
     And I generate audit trail report
-    And I verify audit logs for
+    And I verify audit logs for "change" password
     And I check the audit trail report
-    And I see the user added in report
+    Then I see the "change" password events in report
 
     Examples:
-      | user             | currentPassword | newPassword | confirmPassword | first name       | last name        |
-      | reportUnauthUser | MerckApp1@      | MerckApp2@  | MerckApp2@      | reportUnauthUser | reportUnauthUser |
-
-#    #TO-DO : test has dependency on above test case need to wait until IVI-6602 is fixed
-#  @IVI-6602
-#  Scenario Outline: Verify the system allows user to change the password 3
-#    Given I open portal
-#    And login page is open
-#    When I login to application with wrong password
-#      | username | password       | message                                                   |
-#      | <user>   | <old password> | Invalid username or password. You have 4 attempt(s) left. |
-#    And I enter "<user>" as username and "<newPassword>" as password
-#    And I push the login button
-#    Given I go to userprofile
-#    Then I should see "<first name>" "<last name>" under user profile icon
-#    When I goto report management page
-#    When I select report from dropdown "Audit Trail"
-#    And I select user in dropdown "<user>"
-#    And I select date range as "Today"
-#    When I select template sort by "Event Time" in "false"
-#    #audit report validation is failing Need to fix
-#    Then I should see change password entries in audit trail report for "<user>"
-#    When I try to change password "<newPassword>" "<confirmPassword>" "<confirmPassword>"
-#    Then I see password updated message is displayed for "<user>"
-#    And I logout
-#    Examples:
-#      | user          | old password | newPassword | confirmPassword | first name | last name |
-#      | testPwdChange | MerckApp1@   | MerckApp2@  | MerckApp1@      | testPwd    | testing   |
+      | user          | currentPassword | newPassword | confirmPassword | first name | last name |
+      | testPwdChange | MerckApp1@      | MerckApp2@  | MerckApp2@      | testPwd    | testing   |
 
   Scenario: BIOCRS-5377: Verify the Application Icons
     Given I am logged in as "Bio4CAdmin" user
