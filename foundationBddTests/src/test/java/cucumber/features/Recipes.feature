@@ -14,6 +14,7 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27816
   https://stljirap.sial.com/browse/BIOFOUND-27905
   https://stljirap.sial.com/browse/BIOFOUND-27935
+  https://stljirap.sial.com/browse/BIOFOUND-28042
 
   @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
@@ -74,7 +75,7 @@ Feature: Recipe management
       | UOP Status       |
 
   @IVI-4468
-  Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
+  Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obsolete and Message Validation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
@@ -295,7 +296,7 @@ Feature: Recipe management
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
-  Scenario:BIOFOUND-27810|Recipe status after import
+  Scenario: BIOFOUND-27810|Recipe status after import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I have exported recipes in different status
@@ -319,7 +320,7 @@ Feature: Recipe management
     And I edit recipe "testRecipeDraftToInactive1"
     Then I make recipe inactive
 
-  Scenario: Create and save a Recipe with 30 charactors
+  Scenario: Create and save a Recipe with 30 characters
     Given I am logged in as "Bio4CAdmin" user
     When I open Recipe editor
     And I add few actions steps
@@ -402,12 +403,12 @@ Feature: Recipe management
     And I edit recipe "testDraftRecipe"
     And I add few actions steps to existing recipe
     And I close the recipe
-    And I cancel the recipe
+    And I "Cancel" the recipe
     And I close the recipe
-    And I discard the recipe
+    And I "Discard" the recipe
     And I add one new step
     And I close the recipe
-    And I save the recipe from warning box
+    And I "Save" the recipe
     And I perform saveAs option to save recipe
 
   Scenario: Addition of phases with errors to Phase Library
@@ -466,7 +467,7 @@ Feature: Recipe management
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
 
-  Scenario Outline:  Overwritting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
+  Scenario Outline:  Overwriting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
@@ -492,3 +493,13 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+
+  Scenario: Default step wait time validation in Recipe Editor
+    Given I am logged in as "Bio4CAdmin" user
+    When I edit the recipe "criteriaRecipe" from recipe browser
+    And  I select "Step Wait Time" button
+    Then I verify the default step wait time dialog box
+    And I update default wait time
+    And I select "Step Wait Time" button
+    Then I verify the saved step wait time
+

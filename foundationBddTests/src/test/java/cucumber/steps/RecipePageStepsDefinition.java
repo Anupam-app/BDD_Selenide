@@ -18,6 +18,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeTouchEnablerPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
@@ -29,14 +30,16 @@ public class RecipePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
+    private final RecipeTouchEnablerPage recipeTouch;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage) {
+                                     ReportsPage reportPage,RecipeTouchEnablerPage recipeTouch) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
+        this.recipeTouch = recipeTouch;
     }
 
     @Given("I go to recipe page")
@@ -85,7 +88,7 @@ public class RecipePageStepsDefinition {
     public void iGoToBrowserMode() {
         switchTo().parentFrame();
         reportPage.goToReports();
-        recipePage.unappliedChangesPopUp();
+        recipePage.unAppliedChangesPopUp();
         iGoToRecipePage();
     }
 
@@ -114,7 +117,7 @@ public class RecipePageStepsDefinition {
     public void igoToOtherModule() {
         switchTo().parentFrame();
         userPage.goTo();
-        recipePage.unappliedChangesPopUp();
+        recipePage.unAppliedChangesPopUp();
     }
 
     @When("I can create a recipe")
@@ -144,7 +147,7 @@ public class RecipePageStepsDefinition {
     }
 
     @Then("I see warning message is displayed {string}")
-    public void iSeeWarningMessagedisplayed(String message) {
+    public void iSeeWarningMessageDisplayed(String message) {
         recipePage.isGeneratedNotificationWhenCreateExistingRecipe(message);
     }
 
@@ -173,7 +176,7 @@ public class RecipePageStepsDefinition {
     public void verifyColumn(String tab, DataTable table) {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.verifyColoumn(list.get(i)
+            recipePage.verifyColumn(list.get(i)
                 .get(0), tab, i);
         }
     }
@@ -291,7 +294,7 @@ public class RecipePageStepsDefinition {
         SelenideHelper.goParentFrame();
     }
 
-    @Then("I see expected texts from recipe module criterias")
+    @Then("I see expected texts from recipe module criteria")
     public void iSeeExpectedTextsFromRecipeModuleParameters() {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
@@ -387,7 +390,7 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I am able to see the phase is renamed in Step")
-    public void iverifyPhaseNameInStep() {
+    public void iVerifyPhaseNameInStep() {
         recipePage.verifyPhaseIsRenamed(this.recipe.getPhaseName());
     }
 
@@ -482,7 +485,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select OK and navigate to recipe editor")
-    public void iSelectOkAndNavigateToRecipeEditer() {
+    public void iSelectOkAndNavigateToRecipeEditor() {
         recipePage.okBtn();
     }
 
@@ -492,16 +495,16 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I create a phase and add phase to library")
-    public void iCreatePhaseAndAddPhaseToLibibrary() throws AWTException {
+    public void iCreatePhaseAndAddPhaseToLibrary() throws AWTException {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
         recipePage.zoomOut();
         recipePage.addPhaseAndLibrary(this.recipe.getPhaseName());
     }
 
     @And("I save the recipe with 30 character name")
-    public void iSaveTheRecipeWithcharacterName() {
+    public void iSaveTheRecipeWithCharacterName() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
-        recipePage.iSaveRecipeWithkeyBoardActions(this.recipe.getRecipeName());
+        recipePage.iSaveRecipeWithKeyBoardActions(this.recipe.getRecipeName());
     }
 
     @And("I verify the recipe name displayed on Recipe tab")
@@ -556,8 +559,8 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see warning popup alert with text message {string}")
-    public void iSeeWarningpopupAlertWithTextMessage(String message) {
-        recipePage.waringpopupForRecipe(message);
+    public void iSeeWarningPopupAlertWithTextMessage(String message) {
+        recipePage.warningPopUpMessageForRecipe(message);
     }
 
     @And("I select OK and save as new recipe")
@@ -603,7 +606,7 @@ public class RecipePageStepsDefinition {
     @And("I create a random phase with multiple steps")
     public void iCreateRandomPhaseWithMultipleSteps() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
-        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+        recipePage.createPhaseWithMultipleSteps(this.recipe.getPhaseName());
     }
 
     @And("I select GoTo Phase button")
@@ -675,19 +678,9 @@ public class RecipePageStepsDefinition {
         recipePage.blankRecipe();
     }
 
-    @And("I cancel the recipe")
-    public void iCancelTheRecipe() {
-        recipePage.cancelRecipe();
-    }
-
-    @And("I discard the recipe")
-    public void iDiscardTheRecipe() {
-        recipePage.iDiscard_Btn();
-    }
-
-    @And("I save the recipe from warning box")
-    public void iSaveTheRecipeFromWarningBox() {
-        recipePage.saveFromWarningBox();
+    @And("I {string} the recipe")
+    public void iSelectButton(String value) {
+        recipePage.selectButtonDialogBox(value);
     }
 
     @And("I add one new step")
@@ -706,7 +699,7 @@ public class RecipePageStepsDefinition {
     }
 
     @Then("I get appropriate error")
-    public void iGetappropriateError() {
+    public void iGetAppropriateError() {
         recipePage.checkErrorMsg();
     }
 
@@ -730,7 +723,7 @@ public class RecipePageStepsDefinition {
         recipePage.addingPhaseByPlus();
         recipePage.addActionStep();
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
-        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+        recipePage.createPhaseWithMultipleSteps(this.recipe.getPhaseName());
     }
 
     @Then("I add {string} to the {string} step")
@@ -825,7 +818,22 @@ public class RecipePageStepsDefinition {
 
     @And("I verify {string} criteria is deleted and message seen {string}")
     public void validateCriteriaDelete(String step, String message){
-        recipePage.validatecriteriaDelete(step);
+        recipePage.validateCriteriaDelete(step);
+    }
+
+    @Then("I verify the default step wait time dialog box")
+    public void defaultStepWaitTimePopUp(){
+        recipePage.defaultStepWaitTimePopUp();
+    }
+
+    @And("I update default wait time")
+    public void verifyTimeField(){
+        recipePage.setDefaultStepWaitTime("01","hours");
+    }
+
+    @Then("I verify the saved step wait time")
+    public void verifySaveTimeFieldValue(){
+        recipePage.verifySaveTimeFieldValue();
     }
 
 }
