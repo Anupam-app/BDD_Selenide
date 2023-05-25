@@ -5,12 +5,14 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import java.text.ParseException;
 import java.util.List;
+
+import org.junit.Assert;
 import pageobjects.pages.RecipePage;
 
 
 public class RecipeFilterStepsDefinition {
 
-    private RecipePage recipePage;
+    private final RecipePage recipePage;
 
     public RecipeFilterStepsDefinition(RecipePage recipePage) {
         this.recipePage = recipePage;
@@ -47,7 +49,7 @@ public class RecipeFilterStepsDefinition {
     }
 
     @When("I see recipe based on uop status as {string} and Imported as {string}")
-    public void iverifyFilteredRecipe(String status, String imported) {
+    public void iVerifyFilteredRecipe(String status, String imported) {
         recipePage.verifyRecipeStatusImported(status, imported);
     }
 
@@ -58,11 +60,11 @@ public class RecipeFilterStepsDefinition {
 
     @Then("^I should see recipe list displayed based on date range dropdown$")
     public void iViewRecipeReportListDateRange(DataTable datatable)
-            throws ParseException, InterruptedException {
+            throws ParseException {
         List<String> options = datatable.asList();
-        for (String datarange : options) {
-            recipePage.selectDateRange(datarange);
-            recipePage.verifyDateRanges(datarange);
+        for (String dateRange : options) {
+            recipePage.selectDateRange(dateRange);
+            Assert.assertTrue(recipePage.verifyDateRanges(dateRange));
         }
     }
 }

@@ -143,7 +143,6 @@ public class RecipeConsolePage {
     private final Recipe recipe;
 
     public RecipeConsolePage(Recipe recipe) {
-
         this.recipe = recipe;
     }
 

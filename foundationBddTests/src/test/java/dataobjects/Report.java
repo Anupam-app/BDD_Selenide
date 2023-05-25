@@ -29,7 +29,7 @@ public class Report {
 
     private final String USER_COLUMN_FORMAT = "[aA1-zZ9]+\\([aA1-zZ9\\-]+(\\s[aA1-zZ9\\-]+)*\\)";
     private final String USER_COLUMN_FORMAT_OT = "^[a-z0-9]*$";
-    private final String USER_COLUMN_FORMAT_NONADMIN_USER = "[aA-zZ]+\\s+\\([aA-zZ\\-]+([aA-zZ\\-]+)*\\)";
+    private final String USER_COLUMN_FORMAT_NON_ADMIN_USER = "[aA-zZ]+\\s+\\([aA-zZ\\-]+([aA-zZ\\-]+)*\\)";
     private final String USER_COLUMN_NAME = "User";
     private final String INTERNAL_USER = "OMIUser";
     private final String EVENT_TABLE_HEADER = "Event Time|Event Description|Old Value|New Value";
@@ -199,7 +199,7 @@ public class Report {
     // temporary solution until BIOFOUND-29184 is implemented
     public boolean userNameValidation(String userValue) {
         return userValue.matches(USER_COLUMN_FORMAT) || userValue.matches(USER_COLUMN_FORMAT_OT)
-                || userValue.matches(USER_COLUMN_FORMAT_NONADMIN_USER);
+                || userValue.matches(USER_COLUMN_FORMAT_NON_ADMIN_USER);
     }
 
     /**
@@ -314,13 +314,13 @@ public class Report {
                             .getText(false));
                 }
                 // check from 2nd row till 5th row in PDF table
-                for (int rowno = 2; rowno < 6; rowno++) {
+                for (int rowNo = 2; rowNo < 6; rowNo++) {
                     if ((reportTable.getRows()
-                            .get(rowno)
+                            .get(rowNo)
                             .get(0)
                             .getText(false)).equals(m.getKey())) {
                         Assert.assertEquals(m.getValue(), reportTable.getRows()
-                                .get(rowno)
+                                .get(rowNo)
                                 .get(1)
                                 .getText(false));
                     }
@@ -474,8 +474,6 @@ public class Report {
 
     public void consolidatedValidateReportSummary(PdfTable table, String startDate, String endDate, String batchId,
             String productId, String runID) {
-        boolean flag = false;
-
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
         Assert.assertTrue("Table contains no data", table.getRows()
                 .size() > 1);
@@ -507,7 +505,7 @@ public class Report {
         Assert.assertTrue(table.getRowCount() > 1);
     }
 
-    public void checkSignturesTable(String reportUrl) throws Exception {
+    public void checkSignaturesTable(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
         PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), "Signatures")
@@ -641,7 +639,7 @@ public class Report {
                 PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
         Assert.assertEquals("No field with id ", recipe.runId,
                 PdfTableExtractUtils.getTableFieldValue(table, RUN_ID_FIELD_CONSOLIDATED));
-        Assert.assertEquals("recipename id value ", recipe.recipeName,
+        Assert.assertEquals("recipe name id value ", recipe.recipeName,
                 PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
 
         TimezoneUtils.compareDateFromLocalToDistantServer("Start date not expected", recipe.startDate,
@@ -733,7 +731,7 @@ public class Report {
                 PdfTableExtractUtils.getTableFieldValue(table, BATCH_ID));
         Assert.assertEquals("Unexpected productId id value ", recipe.getProductId(),
                 PdfTableExtractUtils.getTableFieldValue(table, PRODUCT_ID));
-        Assert.assertEquals("Recipename id value ", recipe.getRecipeName(),
+        Assert.assertEquals("Recipe name id value ", recipe.getRecipeName(),
                 PdfTableExtractUtils.getTableFieldValue(table, RECIPE_NAME));
 
         validateRecipeDate("Recipe start date", table, START_DATE, recipe.getStartDate());
@@ -1204,16 +1202,72 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
 
             for (Map.Entry m : list.entrySet()) {
-                for (int rowno = 1; rowno < 8; rowno++) {
+                for (int rowNo = 1; rowNo < 8; rowNo++) {
                     if ((reportTable.getRows()
-                            .get(rowno)
+                            .get(rowNo)
                             .get(0)
                             .getText(false)).equals(m.getKey())) {
                         Assert.assertEquals(m.getValue(), reportTable.getRows()
-                                .get(rowno)
+                                .get(rowNo)
                                 .get(1)
                                 .getText(false));
                     }
+                }
+            }
+            break;
+        }
+    }
+
+    public void verifyAuditReportForPasswordReset(String reportUrl, String userName, String userNameLoggedIn,
+            String passwordAction) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(userColumnIndex)
+                        .getText(false)
+                        .contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(1)
+                        .getText(false)
+                        .contains("IDManagement"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(2)
+                        .getText(false)
+                        .contains("User -" + userName));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(7)
+                        .getText(false)
+                        .isEmpty());
+                if (passwordAction.equals("reset")) {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
+                } else {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
                 }
             }
             break;

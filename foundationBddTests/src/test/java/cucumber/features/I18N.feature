@@ -46,7 +46,7 @@ Feature: I18N on all modules
     And I navigate to trends page
     And I see expected texts from trend module parameters
     And I go to recipe page
-    And I see expected texts from recipe module criterias
+    And I see expected texts from recipe module criteria
     And I go to analytics
     And I see expected texts from analytics module parameters
 
