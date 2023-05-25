@@ -75,7 +75,7 @@ Feature: Recipe management
       | UOP Status       |
 
   @IVI-4468
-  Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obselete and Message Validation
+  Scenario: IVI Bug IVI-4468 | BIOCRS-5060|BIOFOUND-12567| Recipe Obsolete and Message Validation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I edit recipe "testRecipeDraftToInactive"
@@ -296,7 +296,7 @@ Feature: Recipe management
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
-  Scenario:BIOFOUND-27810|Recipe status after import
+  Scenario: BIOFOUND-27810|Recipe status after import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I have exported recipes in different status
@@ -320,7 +320,7 @@ Feature: Recipe management
     And I edit recipe "testRecipeDraftToInactive1"
     Then I make recipe inactive
 
-  Scenario: Create and save a Recipe with 30 charactors
+  Scenario: Create and save a Recipe with 30 characters
     Given I am logged in as "Bio4CAdmin" user
     When I open Recipe editor
     And I add few actions steps
@@ -467,7 +467,7 @@ Feature: Recipe management
     And I perform saveAs option to save recipe
     Then I see new recipe is saved as Draft
 
-  Scenario Outline:  Overwritting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
+  Scenario Outline:  Overwriting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"

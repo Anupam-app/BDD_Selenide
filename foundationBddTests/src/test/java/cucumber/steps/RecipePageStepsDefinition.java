@@ -147,7 +147,7 @@ public class RecipePageStepsDefinition {
     }
 
     @Then("I see warning message is displayed {string}")
-    public void iSeeWarningMessagedisplayed(String message) {
+    public void iSeeWarningMessageDisplayed(String message) {
         recipePage.isGeneratedNotificationWhenCreateExistingRecipe(message);
     }
 
@@ -294,7 +294,7 @@ public class RecipePageStepsDefinition {
         SelenideHelper.goParentFrame();
     }
 
-    @Then("I see expected texts from recipe module criterias")
+    @Then("I see expected texts from recipe module criteria")
     public void iSeeExpectedTextsFromRecipeModuleParameters() {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
@@ -395,7 +395,7 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I am able to see the phase is renamed in Step")
-    public void iverifyPhaseNameInStep() {
+    public void iVerifyPhaseNameInStep() {
         recipePage.verifyPhaseIsRenamed(this.recipe.getPhaseName());
     }
 
@@ -490,7 +490,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select OK and navigate to recipe editor")
-    public void iSelectOkAndNavigateToRecipeEditer() {
+    public void iSelectOkAndNavigateToRecipeEditor() {
         recipePage.okBtn();
     }
 
@@ -500,14 +500,14 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I create a phase and add phase to library")
-    public void iCreatePhaseAndAddPhaseToLibibrary() throws AWTException {
+    public void iCreatePhaseAndAddPhaseToLibrary() throws AWTException {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(10));
         recipePage.zoomOut();
         recipePage.addPhaseAndLibrary(this.recipe.getPhaseName());
     }
 
     @And("I save the recipe with 30 character name")
-    public void iSaveTheRecipeWithcharacterName() {
+    public void iSaveTheRecipeWithCharacterName() {
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(30));
         recipePage.iSaveRecipeWithKeyBoardActions(this.recipe.getRecipeName());
     }
@@ -564,7 +564,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see warning popup alert with text message {string}")
-    public void iSeeWarningpopupAlertWithTextMessage(String message) {
+    public void iSeeWarningPopupAlertWithTextMessage(String message) {
         recipePage.warningPopUpMessageForRecipe(message);
     }
 
@@ -611,7 +611,7 @@ public class RecipePageStepsDefinition {
     @And("I create a random phase with multiple steps")
     public void iCreateRandomPhaseWithMultipleSteps() {
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
-        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+        recipePage.createPhaseWithMultipleSteps(this.recipe.getPhaseName());
     }
 
     @And("I select GoTo Phase button")
@@ -704,7 +704,7 @@ public class RecipePageStepsDefinition {
     }
 
     @Then("I get appropriate error")
-    public void iGetappropriateError() {
+    public void iGetAppropriateError() {
         recipePage.checkErrorMsg();
     }
 
@@ -728,7 +728,7 @@ public class RecipePageStepsDefinition {
         recipePage.addingPhaseByPlus();
         recipePage.addActionStep();
         this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
-        recipePage.createPhaseWithMutlipleSteps(this.recipe.getPhaseName());
+        recipePage.createPhaseWithMultipleSteps(this.recipe.getPhaseName());
     }
 
     @Then("I add {string} to the {string} step")

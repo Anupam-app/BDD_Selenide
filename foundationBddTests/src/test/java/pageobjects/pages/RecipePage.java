@@ -224,7 +224,7 @@ public class RecipePage {
     private final SelenideElement addAndCriteria = $(By.xpath("(//div[@class='criteria-head criteria-type-and'])[2]"));
     private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
-    private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
+    private final SelenideElement addPhaseFromLibraryButton = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
     private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
@@ -337,7 +337,7 @@ public class RecipePage {
         return recipeElementText.getText();
     }
 
-    public void naviagateToEditorTab() {
+    public void navigateToEditorTab() {
         recipePageLinkText.click();
         switchTo().frame("CrossDomainiframeId");
         editorLinkText.waitUntil(Condition.visible, 5000L);
@@ -840,7 +840,7 @@ public class RecipePage {
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
         phaseLibViewIcon.click();
-        addPhasefromLibraryBtn.waitUntil(visible, 3000L, 1000L).click();
+        addPhaseFromLibraryButton.waitUntil(visible, 3000L, 1000L).click();
     }
 
     public void copyAndPastePhase() {
@@ -1062,7 +1062,7 @@ public class RecipePage {
         plusButton.click();
     }
 
-    public void createPhaseWithMutlipleSteps(String phaseName) {
+    public void createPhaseWithMultipleSteps(String phaseName) {
         $(By.xpath(String.format(addSteps, "1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
         phaseElementTextBox.sendKeys(phaseName);
