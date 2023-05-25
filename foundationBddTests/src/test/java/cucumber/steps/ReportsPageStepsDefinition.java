@@ -344,14 +344,14 @@ public class ReportsPageStepsDefinition {
     @When("I verify audit logs for user update")
     public void iVerifyAuditLogsForUserUpdate() {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName());
+        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName(), this.login.getLogin());
         switchTo().parentFrame();
     }
 
     @When("I verify audit logs for role update")
     public void iVerifyAuditLogsForRoleUpdate() {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+        reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName(), this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -650,14 +650,15 @@ public class ReportsPageStepsDefinition {
     @When("I verify audit logs for user create")
     public void iVerifyAuditLogsForUserCreate() {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForUserCreate(this.user.getUserName());
+        reportPage.verifyAuditLogsForUserCreate(this.user.getUserName(), this.login.getLogin());
         switchTo().parentFrame();
     }
 
-    @When("I verify audit logs for reset password")
-    public void iVerifyAuditLogsForResetPassword() {
+    @When("I verify audit logs for {string} password")
+    public void iVerifyAuditLogsForResetChangePassword(String passwordAction) {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForResetPassword(this.user.getUserName());
+        reportPage.verifyAuditLogsForResetChangePassword(this.user.getUserName(), passwordAction,
+                this.login.getLogin());
         switchTo().parentFrame();
     }
 

@@ -1218,8 +1218,8 @@ public class Report {
         }
     }
 
-    public void verifyAuditReportForPasswordReset(String reportUrl, String userName, String userNameLoggedIn)
-            throws IOException {
+    public void verifyAuditReportForPasswordReset(String reportUrl, String userName, String userNameLoggedIn,
+            String passwordAction) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -1256,11 +1256,19 @@ public class Report {
                         .get(7)
                         .getText(false)
                         .isEmpty());
-                Assert.assertEquals((reportTable.getRows()
-                        .get(1)
-                        .get(4)
-                        .getText(false)).replaceAll("\\s", ""),
-                        (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
+                if (passwordAction.equals("reset")) {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
+                } else {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
+                }
             }
             break;
         }

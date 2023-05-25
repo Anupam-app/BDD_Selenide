@@ -145,7 +145,7 @@ public class ReportsPage {
     private final String recipeAuditLogs =
             "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String userAuditLogs =
-            "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s')]";
+            "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
 
     private final SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
     private final SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
@@ -397,18 +397,18 @@ public class ReportsPage {
         templateNameTextBox.setValue(templateName);
     }
 
-    public void verifyAuditLogsForUserUpdate(String username) {
-        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin updated", username))).shouldBe(visible);
+    public void verifyAuditLogsForUserUpdate(String username, String loggedInUserName) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " updated", username))).shouldBe(visible);
     }
 
-    public void verifyAuditLogsForUserCreate(String username) {
-        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin added", username))).shouldBe(visible);
+    public void verifyAuditLogsForUserCreate(String username, String loggedInUserName) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " added", username))).shouldBe(visible);
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("ID Management"));
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
     }
 
-    public void verifyAuditLogsForRoleUpdate(String role) {
-        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin created new Role ", role))).shouldBe(visible);
+    public void verifyAuditLogsForRoleUpdate(String role, String loggedInUserName) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " created new Role ", role))).shouldBe(visible);
     }
 
     public void approveTemplate(String templateName, String password, String status) {
@@ -1357,9 +1357,14 @@ public class ReportsPage {
         return isTrue;
     }
 
-    public void verifyAuditLogsForResetPassword(String username) {
-        $(By.xpath(String.format(userAuditLogs, "Bio4CAdmin reset password for User Account ", username)))
-                .shouldBe(visible);
+    public void verifyAuditLogsForResetChangePassword(String username, String passwordAction, String loggedInUser) {
+        if (passwordAction.equals("reset")) {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser, " reset password for User Account ", username)))
+                    .shouldBe(visible);
+        } else {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account password", "")))
+                    .shouldBe(visible);
+        }
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("ID Management"));
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
     }
