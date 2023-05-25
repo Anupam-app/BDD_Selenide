@@ -7,12 +7,11 @@ import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.switchTo;
-import static pageobjects.utility.SelenideHelper.byTestAttribute;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
-import org.junit.Assert;
+
 import org.openqa.selenium.By;
 
 import pageobjects.utility.SelenideHelper;
@@ -29,21 +28,25 @@ public class LoginPage {
     private final SelenideElement submitButton = $(By.xpath("//button[@type='submit']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
-    private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
+    private final SelenideElement SUBMIT_LOGIN =
+            $(By.xpath("//button[@class=\"user_btn btn_primary btn btn-secondary\"]"));
     private final SelenideElement PNID_LOGIN_INFO = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
-	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
-	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-	private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+    private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+    private SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private final String pnidLoginTestId = "pnid_login_info";
     private SelenideElement licenseText = $(By.xpath("//h5[text()='License about to Expire']"));
     private final SelenideElement currentPasswordTestbox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
-    private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
+    private final SelenideElement tempPwd_submitButton =
+            $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
     private final SelenideElement savePasswordButton =
             $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
-    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
-    private SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
+    private final SelenideElement tempPwd_ErrorNotification =
+            $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
+    private SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT =
+            $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
@@ -55,7 +58,8 @@ public class LoginPage {
     }
 
     public void verifyLoginPageTitle() {
-        commonWaiter(loginPageTitle, visible).shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
+        commonWaiter(loginPageTitle, visible)
+                .shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
     }
 
     public void setPassword(String password) {
@@ -126,8 +130,8 @@ public class LoginPage {
         currentPasswordTestbox.setValue(newPassword);
     }
 
-    public void verifyNotification(String value){
-        commonWaiter(tempPwd_ErrorNotification,visible);
+    public void verifyNotification(String value) {
+        commonWaiter(tempPwd_ErrorNotification, visible);
         tempPwd_ErrorNotification.shouldHave(text(value));
     }
 
