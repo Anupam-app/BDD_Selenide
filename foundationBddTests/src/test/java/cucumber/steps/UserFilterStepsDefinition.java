@@ -1,8 +1,9 @@
 package cucumber.steps;
 
+import org.junit.Assert;
+
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import pageobjects.pages.UserPage;
 
 public class UserFilterStepsDefinition {
@@ -24,12 +25,12 @@ public class UserFilterStepsDefinition {
     }
 
     @When("I select default page {string}")
-    public void iselectOption(String optionName) {
+    public void iSelectOption(String optionName) {
         userPage.chooseAndSaveDefaultPage(optionName);
     }
 
     @Then("I should see home page displayed with option {string}")
-    public void iVerifytOption(String defaultOptionName) {
+    public void iVerifyOption(String defaultOptionName) {
         Assert.assertEquals(defaultOptionName, userPage.getActiveIconTitle());
     }
 
