@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 
+import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -99,7 +100,7 @@ public class RecipePage {
     private final String chooseOption = "//*[@class=\"submenu-value-left\"]/label[text()='%s']";
     private final String deletePhaseMessage = "//span[(text()='Proceed with deleting the Phase -%s')]";
     private final String touchIdButtons = "//button[@class='%s']";
-    private final String phasenumber_Label = "//label[contains(text(),'%s')]";
+    private final String phaseNumberLabel = "//label[contains(text(),'%s')]";
     private final String phaseNameLabel = "(//input[@class='phase-Name'])[%d]";
     private final String phaseMessage = "//span[(text()='%s')]";
     private final String label = "//label[contains(text(),'%s')]";
@@ -127,8 +128,8 @@ public class RecipePage {
     private final SelenideElement importButton = $(By.xpath("//button[contains(@class,'import-button-text')]"));
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final ElementsCollection dateOptionsRprt = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-    private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final ElementsCollection dateSelectionInReport = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
+    private final SelenideElement noRunFilterMessage = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private final ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
@@ -139,9 +140,9 @@ public class RecipePage {
     private final String rootStep = "(//span[text()='%s']/parent::span/span)[1]";
     private final String stepNumber = "//div[@class='stepNumber' and @data-label='step%s']";
     private final SelenideElement criteriaPlaceholder = $(By.xpath("//input[@placeholder='Search criteria...']"));
-    private final SelenideElement opertionAction = $(By.xpath("//span[contains(text(),'Operation Actions')]"));
+    private final SelenideElement operationAction = $(By.xpath("//span[contains(text(),'Operation Actions')]"));
     private final String expandAction = "//p[@title='%s']";
-    private final SelenideElement messageStepVaidate = $(By.xpath("//input[@placeholder ='Enter text']"));
+    private final SelenideElement messageStepValidate = $(By.xpath("//input[@placeholder ='Enter text']"));
     private final String editorRecipeName = "//label[contains(text(),'%s')]";
     private final SelenideElement recipeInputSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement notificationMessage = $(By.xpath("//div[@class='notification-bar warning-bar']"));
@@ -156,7 +157,7 @@ public class RecipePage {
     private final String phaseName = "//label[text()='%s']";
     private final SelenideElement chooseRecipe = $(By.xpath("//*[@class='tbl-row']//td[text()='testRecipeToExecute1min']"));
     private final SelenideElement windowPopup = $(By.xpath("//div[text()='Please save the recipe.']"));
-    private final SelenideElement addcriteria = $(By.xpath("(//span[@class='target'])[1]"));
+    private final SelenideElement addCriteriaInRecipe = $(By.xpath("(//span[@class='target'])[1]"));
     private final SelenideElement phase1 = $(By.xpath("//label[text()='Phase 1']"));
     private final SelenideElement clearSave = $(By.xpath("//input[@class='ant-input selected-recipe-input']"));
     private final SelenideElement latestRecipeName = $(By.xpath("(//table[@class='table']/tbody/tr/td)[1]"));
@@ -173,14 +174,14 @@ public class RecipePage {
     private final SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
     private final SelenideElement outOFRange = $(By.xpath("//div[contains(text(),'Out of Range')]"));
     private final SelenideElement thresholdErrorMessage = $(By.xpath("//div[contains(text(),'No value before/after decimal point')]"));
-    private final SelenideElement unappliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
+    private final SelenideElement unAppliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
     private final SelenideElement exitWithoutSaveButton = $(By.xpath("//span[text()='Exit without saving']"));
     private final SelenideElement goToPhaseButton = $(By.className("go-to-phase-btn"));
     private final SelenideElement goToStep = $(By.xpath("//div[@class='go-to-steps-btn']"));
     private final SelenideElement stepInvocation = $(By.xpath("(//td[@class='step-cell'])[2]"));
     private final String addSteps = "(//span[@class='target'])[%s]";
     private final String OperationalActionsList = "//p[@class='action-item lavel-2'][@title='%s']";
-    private final String warningOptions = "//button[text()='%s']";
+    private final String button = "//button[text()='%s']";
     private final SelenideElement close_Btn = $(By.xpath("//button[text()='x']"));
     private final String popUpMessage = "//span[text()='%s']";
     private final SelenideElement phaseOne = $(By.xpath("//label[text()='Phase 1']"));
@@ -223,14 +224,20 @@ public class RecipePage {
     private final SelenideElement addAndCriteria = $(By.xpath("(//div[@class='criteria-head criteria-type-and'])[2]"));
     private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
-    private final SelenideElement addPhasefromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
+    private final SelenideElement addPhaseFromLibraryButton = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final SelenideElement approvalStatus = $(By.xpath("//div[@class='status-tooltip']/label"));
     private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
+    private final String defaultStepWaitPopUp = "//*[text()='%s']";
+    private final SelenideElement defaultStepTimeValue = $(By.xpath("//input[@class='ant-time-picker-panel-input']"));
+    private Recipe recipe;
 
+    public RecipePage(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
     public void goTo() {
         commonWaiter(recipePageLinkText, visible).click();
@@ -264,7 +271,7 @@ public class RecipePage {
         $$(recipeListTable).shouldHave(CollectionCondition.sizeGreaterThanOrEqual(0));
     }
 
-    public void verifyColoumn(String columnName, String tab, int columnIndex) {
+    public void verifyColumn(String columnName, String tab, int columnIndex) {
         $(By.xpath(String.format(XPATH_RecipeColumnName, columnIndex))).shouldHave(text(columnName));
         for (int i = 1; i <= recipeListTable.size(); i++) {
             Assert.assertFalse($(By.xpath(String.format(XPATH_RecipeColumnName_Value, i, columnIndex))).getText().isBlank());
@@ -330,17 +337,17 @@ public class RecipePage {
         return recipeElementText.getText();
     }
 
-    public void naviagateToEditorTab() {
+    public void navigateToEditorTab() {
         recipePageLinkText.click();
         switchTo().frame("CrossDomainiframeId");
         editorLinkText.waitUntil(Condition.visible, 5000L);
         editorLinkText.click();
     }
 
-    public void createRecipe(String recipenode) {
+    public void createRecipe(String recipeNodeName) {
         plusButton.waitUntil(Condition.visible, 5000L);
         plusButton.click();
-        recipeCriteriaSearchTextBox.sendKeys(recipenode);
+        recipeCriteriaSearchTextBox.sendKeys(recipeNodeName);
         recipeCriteriaSearchTextBox.sendKeys(Keys.ENTER);
         recipeCriteriaSearchTextBox.sendKeys(Keys.LEFT_CONTROL + "g");
         phaseElementTextBox.sendKeys(RandomStringUtils.randomAlphabetic(10));
@@ -365,7 +372,7 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipe() {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         commonWaiter(deleteButton, visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
@@ -373,8 +380,8 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipeWithShortCutKeys() {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
-        stepAction.keyDown(commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible), Keys.LEFT_CONTROL).sendKeys(Keys.DELETE).perform();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
+        stepAction.keyDown(commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible), Keys.LEFT_CONTROL).sendKeys(Keys.DELETE).perform();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
@@ -386,17 +393,17 @@ public class RecipePage {
     }
 
     public void copyPhase() {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
     }
 
     public void pastePhase(String phaseName) {
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-paste-after-button"))).click();
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 2"))), visible).shouldBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 2"))), visible).shouldBe(visible);
         $(By.xpath(String.format(phaseNameLabel, 2))).shouldHave(value(phaseName + "_2"));
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-paste-before-button"))).click();
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 3"))), visible).shouldBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 3"))), visible).shouldBe(visible);
         $(By.xpath(String.format(phaseNameLabel, 3))).shouldHave(value(phaseName + "_2"));
         $(By.xpath(String.format(phaseNameLabel, 2))).shouldHave(value(phaseName + "_2_3"));
     }
@@ -429,7 +436,7 @@ public class RecipePage {
     }
 
     public void iSeePhaseDeleted() {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).shouldNotBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).shouldNotBe(visible);
     }
 
     public void approveRecipe(String password) {
@@ -516,8 +523,8 @@ public class RecipePage {
     public String getGeneratedName() {
         switchTo().parentFrame();
         notificationText.waitUntil(visible, 30000L, 500L);
-        var notif = notificationText.text();
-        return notif.split("The recipe ")[1].split(" ")[0];
+        var notificationMessage = notificationText.text();
+        return notificationMessage.split("The recipe ")[1].split(" ")[0];
     }
 
     public void checkTableContainsRecipe(String recipeName) {
@@ -580,7 +587,7 @@ public class RecipePage {
     public void selectDateRange(String option) {
         commonWaiter(dateColumn, visible);
         dateColumn.click();
-        for (SelenideElement element : dateOptionsRprt) {
+        for (SelenideElement element : dateSelectionInReport) {
             if (element.getText().equalsIgnoreCase(option)) {
                 element.click();
                 break;
@@ -615,15 +622,15 @@ public class RecipePage {
                     sortList("Last Modified On", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAscendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
-                    if (selectedAsendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDesendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                    LocalDate selectedDescendingDate = SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                    if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
-                } else if (noDatamsg.isDisplayed()) {
+                } else if (noRunFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -641,15 +648,15 @@ public class RecipePage {
                     sortList("Last Modified On", false);
                     Selenide.sleep(1000);
                     String startDateRow = startDateRep.getText();
-                    LocalDate selectedAsendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                    LocalDate selectedAscendingDate = SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Last Modified On", true);
                     Selenide.sleep(1000);
                     String endDateRow = startDateRep.getText();
-                    LocalDate selectedDesendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
-                    if ((selectedAsendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAsendingDate.isAfter(selectedDate1)) && (selectedDesendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth() || selectedDesendingDate.isBefore(selectedDate2))) {
+                    LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
+                    if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAscendingDate.isAfter(selectedDate1)) && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth() || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
-                } else if (noDatamsg.isDisplayed()) {
+                } else if (noRunFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -714,7 +721,7 @@ public class RecipePage {
     // TO-DO: parameters to passed from external file
     public void addStepActionBrowser() throws AWTException {
         zoomOut();
-        opertionAction.waitUntil(visible, 2000).click();
+        operationAction.waitUntil(visible, 2000).click();
         $(By.xpath(String.format(expandAction, "Product Inlet"))).click();
         $(By.xpath(String.format(expandAction, "Flowpath"))).click();
         $(By.xpath(String.format(expandAction, "Control"))).waitUntil(visible, 1000).click();
@@ -729,7 +736,7 @@ public class RecipePage {
     }
 
     public void messageInputStepValidate() {
-        messageStepVaidate.waitUntil(visible, 1000);
+        messageStepValidate.waitUntil(visible, 1000);
     }
 
     public void addingStepByClickPlusIcon() {
@@ -833,7 +840,7 @@ public class RecipePage {
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
         phaseLibViewIcon.click();
-        addPhasefromLibraryBtn.waitUntil(visible, 3000L, 1000L).click();
+        addPhaseFromLibraryButton.waitUntil(visible, 3000L, 1000L).click();
     }
 
     public void copyAndPastePhase() {
@@ -863,7 +870,7 @@ public class RecipePage {
     }
 
     public void addFewSteps() {
-        SelenideHelper.commonWaiter(addcriteria, visible).click();
+        SelenideHelper.commonWaiter(addCriteriaInRecipe, visible).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("c").keyUp(Keys.CONTROL).build().perform();
         stepAction.keyDown(Keys.CONTROL).sendKeys("v").keyUp(Keys.CONTROL).build().perform();
     }
@@ -880,7 +887,7 @@ public class RecipePage {
     }
 
     public void addPhaseAndLibrary(String phase) {
-        SelenideHelper.commonWaiter(addcriteria, visible).click();
+        SelenideHelper.commonWaiter(addCriteriaInRecipe, visible).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
         phaseElementTextBox.sendKeys(phase);
         phaseElementTextBox.sendKeys(Keys.ENTER);
@@ -890,7 +897,7 @@ public class RecipePage {
         stepAction.moveToElement(phaseLibrary).click().perform();
     }
 
-    public void iSaveRecipeWithkeyBoardActions(String recipeName) {
+    public void iSaveRecipeWithKeyBoardActions(String recipeName) {
         commonWaiter(editorLinkText, visible);
         Selenide.sleep(2000);
         stepAction.keyDown(Keys.CONTROL);
@@ -930,7 +937,7 @@ public class RecipePage {
         $(By.xpath("//button[@class='btn-primary']")).click();
     }
 
-    public void waringpopupForRecipe(String message) {
+    public void warningPopUpMessageForRecipe(String message) {
         $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
     }
 
@@ -990,7 +997,7 @@ public class RecipePage {
     }
 
     public void renamePhase(String phaseName) {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible);
         stepAction.doubleClick($(By.xpath(String.format(phaseNameLabel, 1)))).perform();
         commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(Keys.ENTER);
         commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(phaseName);
@@ -1004,12 +1011,12 @@ public class RecipePage {
 
     public void iSeeDeletedPhaseIsNotSeenInStep() {
         Selenide.sleep(1000);
-        $(By.xpath(String.format(phasenumber_Label, "PSH1"))).shouldNotBe(visible);
-        $(By.xpath(String.format(phasenumber_Label, "PSH2"))).shouldBe(visible);
+        $(By.xpath(String.format(phaseNumberLabel, "PSH1"))).shouldNotBe(visible);
+        $(By.xpath(String.format(phaseNumberLabel, "PSH2"))).shouldBe(visible);
     }
 
     public void deletePhaseToRecipeWithCrossButton() {
-        commonWaiter($(By.xpath(String.format(phasenumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         commonWaiter($(By.xpath("(//input[@class='deleteButton'])[3]")), visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
@@ -1044,8 +1051,8 @@ public class RecipePage {
         commonWaiter(recipe_BlueNotification, visible).shouldHave(text(message));
     }
 
-    public void unappliedChangesPopUp() {
-        if (unappliedChanges.exists()) {
+    public void unAppliedChangesPopUp() {
+        if (unAppliedChanges.exists()) {
             commonWaiter(exitWithoutSaveButton, visible).click();
         }
     }
@@ -1055,7 +1062,7 @@ public class RecipePage {
         plusButton.click();
     }
 
-    public void createPhaseWithMutlipleSteps(String phaseName) {
+    public void createPhaseWithMultipleSteps(String phaseName) {
         $(By.xpath(String.format(addSteps, "1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
         phaseElementTextBox.sendKeys(phaseName);
@@ -1092,7 +1099,7 @@ public class RecipePage {
     }
 
     public void operationActions() {
-        commonWaiter(opertionAction, visible).click();
+        commonWaiter(operationAction, visible).click();
     }
 
     public void verifyPhaseOption() {
@@ -1111,16 +1118,8 @@ public class RecipePage {
         $(By.xpath(String.format(blankRecipeMessage, "Start creating your recipe by adding actions or phases from"))).waitUntil(Condition.visible, 50001);
     }
 
-    public void cancelRecipe() {
-        $(By.xpath(String.format(warningOptions, "Cancel"))).waitUntil(Condition.visible, 50001).click();
-    }
-
-    public void iDiscard_Btn() {
-        $(By.xpath(String.format(warningOptions, "Discard"))).waitUntil(Condition.visible, 50001).click();
-    }
-
-    public void saveFromWarningBox() {
-        $(By.xpath(String.format(warningOptions, "Save"))).waitUntil(Condition.visible, 50001).click();
+    public void selectButtonDialogBox(String value) {
+        $(By.xpath(String.format(button, value))).waitUntil(Condition.visible, 50001).click();
     }
 
     public void singleStep() {
@@ -1219,11 +1218,14 @@ public class RecipePage {
             data = "00:00:" + time;
         } else if (value.contains("minutes")) {
             data = "00:" + time + ":00";
+        }else if (value.contains("hours")){
+            data = time + ":10" + ":05";
         }
         commonWaiter(stepWait_Title, visible);
         timer.clear();
         timer.click();
         selectTime.setValue(data);
+        this.recipe.setDefaultWaitTime(data);
         waitTime_AddButton.click();
     }
 
@@ -1392,7 +1394,7 @@ public class RecipePage {
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         primaryButton.click();
     }
-    
+
     public void deleteStepUsingCrossButton(String stepNo) {
         $(By.xpath(String.format(stepNumber, stepNo))).waitUntil(visible, 2000L, 1000L).click();
         $(By.xpath(String.format(deleteStepIcon, stepNo))).click();
@@ -1437,7 +1439,7 @@ public class RecipePage {
         recipeNotification("Criteria deleted successfully");
     }
 
-    public void validatecriteriaDelete(String step) {
+    public void validateCriteriaDelete(String step) {
         $(By.xpath(String.format(selectCriteria, step))).shouldNot(visible);
     }
 
@@ -1447,6 +1449,18 @@ public class RecipePage {
                 phaseNames.add(selenideElement.getValue());
         }
         Assert.assertEquals("order of phases check", expectedList, phaseNames);
+    }
+
+    public void defaultStepWaitTimePopUp(){
+        $(By.xpath(String.format(defaultStepWaitPopUp,"Default step wait time"))).waitUntil(visible,3000L,1000L);
+        $(By.xpath(String.format(defaultStepWaitPopUp,"SELECT TIME"))).waitUntil(visible,3000L,1000L);
+        $(By.xpath(String.format(button,"Cancel"))).shouldBe(visible);
+        $(By.xpath(String.format(button,"Add"))).shouldBe(visible);
+    }
+
+    public void verifySaveTimeFieldValue() {
+        timer.waitUntil(visible, 2000L, 1000L).click();
+        Assert.assertEquals(selectTime.getValue(),recipe.getDefaultWaitTime());
     }
 
     public void importRecipeSelection(String recipeName){
@@ -1468,7 +1482,6 @@ public class RecipePage {
             recipeInputSave.setValue(recipeName);
             return recipeInputSave.getValue().equals(recipeName);
         });
-
         saveButton.click();
     }
 

@@ -31,5 +31,6 @@ public class Recipe {
     int phaseCount;
     int phaseCountCopyPaste;
     String phaseActionSteps;
+    String defaultWaitTime;
 }
 

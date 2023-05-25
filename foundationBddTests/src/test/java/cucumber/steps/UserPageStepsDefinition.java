@@ -403,6 +403,7 @@ public class UserPageStepsDefinition {
         var message = String.format("User password for %s is updated", username);
         userPage.updateNotification(message);
         userPage.closeChangeUserPropertiesChangeModal();
+        this.user.setUserName(username);
     }
 
     @Then("I should see {string} {string} under user profile icon")
@@ -465,10 +466,10 @@ public class UserPageStepsDefinition {
         switchTo().parentFrame();
     }
 
-    @Then("I see the reset password events in report")
-    public void iVerifyResetPasswordEvent() throws Exception {
-        this.report.verifyAuditReportForPasswordReset(reportPage.getPdfUrl(), user.getUserName(),
-                this.login.getLogin());
+    @Then("I see the {string} password events in report")
+    public void iVerifyResetChangePasswordEvent(String passwordAction) throws Exception {
+        this.report.verifyAuditReportForPasswordReset(reportPage.getPdfUrl(), user.getUserName(), this.login.getLogin(),
+                passwordAction);
         switchTo().parentFrame();
     }
 
