@@ -799,7 +799,7 @@ public class RecipePageStepsDefinition {
 
     @Then("I select {string} recipe to verify the warning text message {string}")
     public void iVerifyTheWarningPopupAlert(String existing,String message) {
-            recipePage.iVerifyTheAlert(message,existing);
+            recipePage.iVerifyTheAlert(existing,message);
         }
 
 
@@ -837,6 +837,11 @@ public class RecipePageStepsDefinition {
     public void iVerifyTheRecipeStatus(String status){
         iGoToBrowserMode();
         recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(),status);
+    }
+
+    @And("I verify action {string} in the step")
+    public void iVerifyRecipeActionStep(String actionstep){
+        recipePage.verifyRecipeActionStep(actionstep);
     }
 
 }

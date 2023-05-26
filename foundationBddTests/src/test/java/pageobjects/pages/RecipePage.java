@@ -1470,4 +1470,9 @@ public class RecipePage {
         saveButton.click();
     }
 
+    public void verifyRecipeActionStep(String actionstep){
+        commonWaiter($(By.xpath(String.format(stepNumber, "1"))), visible).click();
+        Assert.assertTrue(getActionValue().contains(actionstep));
+    }
+    
 }

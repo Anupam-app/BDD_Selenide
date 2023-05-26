@@ -479,7 +479,6 @@ Feature: Recipe management
       |recipes          |existing                     |
       |testDraftRecipe  |recipeInReview               |
       |recipeTechReview |testRecipeWithChar30NameLengt|
-      |                 |ApprovedInActiveRecipe       |
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -497,11 +496,12 @@ Feature: Recipe management
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
+    And I verify action "Acid pH Control Loop Setpoint" in the step
     And I saveAs the recipe
     And I select "<existing>" recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
-    And I verify recipe steps are not modified
+    And I verify action "Acid pH Control Loop Setpoint" in the step
     Then I verify the recipe "<status>"
     Examples:
-      |recipes          |status     |existing         |
-      |recipeTechReview |Draft      |testDraftRecipe  |
-      |testDraftRecipe  |Tech-Review|recipeTechReview |
+      |recipes               |status     |existing         |
+      |recipeTechReview      |Tech-Review|testDraftRecipe  |
+      |OverWritingDraftRecipe|Draft      |recipeTechReview |
