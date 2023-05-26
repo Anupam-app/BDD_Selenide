@@ -100,7 +100,7 @@ public class RecipePage {
     private final String chooseOption = "//*[@class=\"submenu-value-left\"]/label[text()='%s']";
     private final String deletePhaseMessage = "//span[(text()='Proceed with deleting the Phase -%s')]";
     private final String touchIdButtons = "//button[@class='%s']";
-    private final String phaseNumber_Label = "//label[contains(text(),'%s')]";
+    private final String phaseNumberLabel = "//label[contains(text(),'%s')]";
     private final String phaseNameLabel = "(//input[@class='phase-Name'])[%d]";
     private final String phaseMessage = "//span[(text()='%s')]";
     private final String label = "//label[contains(text(),'%s')]";
@@ -129,6 +129,8 @@ public class RecipePage {
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
     private final ElementsCollection dateSelectionInReport = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
     private final SelenideElement noRunFilterMessage = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final SelenideElement noRecipeFilterMessage = $(By.xpath("//h4[text()='No recipes matching with the applied filter']"));
+
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private final ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
@@ -330,7 +332,7 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipe() {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         commonWaiter(deleteButton, visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
@@ -338,8 +340,8 @@ public class RecipePage {
     }
 
     public void deletePhaseToRecipeWithShortCutKeys() {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible).click();
-        stepAction.keyDown(commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible), Keys.LEFT_CONTROL).sendKeys(Keys.DELETE).perform();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
+        stepAction.keyDown(commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible), Keys.LEFT_CONTROL).sendKeys(Keys.DELETE).perform();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
         commonWaiter(okButton, visible).click();
@@ -351,17 +353,17 @@ public class RecipePage {
     }
 
     public void copyPhase() {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
     }
 
     public void pastePhase(String phaseName) {
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-paste-after-button"))).click();
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 2"))), visible).shouldBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 2"))), visible).shouldBe(visible);
         $(By.xpath(String.format(phaseNameLabel, 2))).shouldHave(value(phaseName + "_2"));
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-copy-button"))).click();
         $(By.xpath(String.format(touchIdButtons, "ant-btn phase-paste-before-button"))).click();
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 3"))), visible).shouldBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 3"))), visible).shouldBe(visible);
         $(By.xpath(String.format(phaseNameLabel, 3))).shouldHave(value(phaseName + "_2"));
         $(By.xpath(String.format(phaseNameLabel, 2))).shouldHave(value(phaseName + "_2_3"));
     }
@@ -394,7 +396,7 @@ public class RecipePage {
     }
 
     public void iSeePhaseDeleted() {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible).shouldNotBe(visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).shouldNotBe(visible);
     }
 
     public void approveRecipe(String password) {
@@ -580,7 +582,7 @@ public class RecipePage {
                     if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
-                } else if (noRunFilterMessage.isDisplayed()) {
+                } else if (noRecipeFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -606,7 +608,7 @@ public class RecipePage {
                     if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAscendingDate.isAfter(selectedDate1)) && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth() || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
-                } else if (noRunFilterMessage.isDisplayed()) {
+                } else if (noRecipeFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -947,7 +949,7 @@ public class RecipePage {
     }
 
     public void renamePhase(String phaseName) {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible);
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible);
         stepAction.doubleClick($(By.xpath(String.format(phaseNameLabel, 1)))).perform();
         commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(Keys.ENTER);
         commonWaiter($(By.xpath(String.format(phaseNameLabel, 1))), visible).sendKeys(phaseName);
@@ -961,12 +963,12 @@ public class RecipePage {
 
     public void iSeeDeletedPhaseIsNotSeenInStep() {
         Selenide.sleep(1000);
-        $(By.xpath(String.format(phaseNumber_Label, "PSH1"))).shouldNotBe(visible);
-        $(By.xpath(String.format(phaseNumber_Label, "PSH2"))).shouldBe(visible);
+        $(By.xpath(String.format(phaseNumberLabel, "PSH1"))).shouldNotBe(visible);
+        $(By.xpath(String.format(phaseNumberLabel, "PSH2"))).shouldBe(visible);
     }
 
     public void deletePhaseToRecipeWithCrossButton() {
-        commonWaiter($(By.xpath(String.format(phaseNumber_Label, "Phase 1"))), visible).click();
+        commonWaiter($(By.xpath(String.format(phaseNumberLabel, "Phase 1"))), visible).click();
         commonWaiter($(By.xpath("(//input[@class='deleteButton'])[3]")), visible).click();
         String phaseName = $(By.xpath(String.format(phaseNameLabel, 1))).getText();
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);

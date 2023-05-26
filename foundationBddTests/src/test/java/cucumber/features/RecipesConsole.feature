@@ -111,13 +111,13 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should see special characters not allowed
-    And I Verify manual run status in recipe consol
+    And I Verify manual run status in recipe console
 
   @IVI-7599
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
-    And I verify all mandatory fields has asterick mark "*"
+    And I verify all mandatory fields has asterisk mark "*"
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
     When I enter existing value in RUNID
@@ -263,7 +263,7 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
-    And I Verify manual run status in recipe consol
+    And I Verify manual run status in recipe console
 
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
     Given I expand recipe console
@@ -277,9 +277,9 @@ Feature: Recipe console
     Given I expand recipe console
     When I load recipe "testRecipeToExecute1min"
     Then I should see pre run window
-    When I clear and try to enter lenghty RUN ID, BatchID
+    When I clear and try to enter lengthy RUN ID, BatchID
     And provide remaining mandatory data to select OK button
-    Then I should see recipe execution started succesfully
+    Then I should see recipe execution started successfully
     And I validate the recipe console UI elements
     And I mouse hover RUNID and BatchID to validate full text displayed
     And I Abort the recipe execution
@@ -291,7 +291,7 @@ Feature: Recipe console
     When I select "Manual operation" tab
     And I start Manual run
     And I enter manual operation name more than 30 char and Tab out
-    Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
+    Then Verify the warning message "Manual Operation Name should not exceed 30 characters."
     And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
     And I validate all above text value trimmed on recipe console UI
     And I mouse hover to see full text displayed on tooltip
