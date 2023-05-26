@@ -312,7 +312,7 @@ Feature: Recipe management
       | testDraftRecipeToChangeStatus |
       | recipeTechReview              |
       | recipeInReview                |
-    Then the UoP status of imported recipe changes to Draft
+    Then the UoP status of imported recipe changes to "Draft"
       | testRecipeDraftToInactive1     |
       | testRecipeDraftToReject1       |
       | testDraftRecipeToChangeStatus1 |
@@ -466,22 +466,20 @@ Feature: Recipe management
     And I go to browser mode
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
-    Then I see new recipe is saved as Draft
+    Then I see new recipe is saved as "Draft"
 
   Scenario Outline:  Overwritting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
     And I saveAs the recipe
-    Then I select existing recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
-      |recipeInReview               |
-      |testRecipeWithChar30NameLengt|
-      |ApprovedInActiveRecipe       |
+    Then I select "<existing>" recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
 
   Examples:
-      |recipes          |
-      |testDraftRecipe  |
-      |recipeTechReview |
+      |recipes          |existing                     |
+      |testDraftRecipe  |recipeInReview               |
+      |recipeTechReview |testRecipeWithChar30NameLengt|
+      |                 |ApprovedInActiveRecipe       |
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -495,16 +493,15 @@ Feature: Recipe management
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
 
-  Scenario Outline:  Overwritting recipe with different status
+  Scenario Outline:  Overwriting recipe with different status
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
     And I saveAs the recipe
-    And I select existing recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
-      |testDraftRecipe |
-      |recipeTechReview|
+    And I select "<existing>" recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
+    And I verify recipe steps are not modified
     Then I verify the recipe "<status>"
     Examples:
-      |recipes          |status     |
-      |recipeTechReview |Draft      |
-      |testDraftRecipe  |Tech-Review|
+      |recipes          |status     |existing         |
+      |recipeTechReview |Draft      |testDraftRecipe  |
+      |testDraftRecipe  |Tech-Review|recipeTechReview |

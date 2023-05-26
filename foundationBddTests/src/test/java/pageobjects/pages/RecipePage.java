@@ -90,7 +90,7 @@ public class RecipePage {
     private final SelenideElement addStepButton = $(By.xpath("//*[contains(@class, 'home-screen-icon-block icon-plus')]"));
     private final By deletePhaseButton = By.className("deleteButton");
     private final SelenideElement errorRecipeWarningMessage = $(By.xpath("//div[@class='desc' ]/span"));
-    private final SelenideElement primaryButton = $(By.className("btn-primary"));
+    private final SelenideElement confirmButton = $(By.className("btn-primary"));
     private final SelenideElement saveButton = $(By.xpath("//button[contains(text(),'Save') or contains(text(),'save')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement deleteButton = $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));
@@ -433,7 +433,7 @@ public class RecipePage {
     public void approveRecipe(String password) {
         commonWaiter(statusDraft, visible).click();
         selectInReview.click();
-        primaryButton.click();
+        confirmButton.click();
         okButton.click();
         commonWaiter(statusInReview, visible).click();
         selectApprove.click();
@@ -446,7 +446,7 @@ public class RecipePage {
     public void inactiveRecipe(String password) {
         commonWaiter(statusDraft, visible).click();
         selectInReview.click();
-        primaryButton.click();
+        confirmButton.click();
         $(By.xpath("//button[text()='Ok']")).click();
         commonWaiter(statusInReview, visible).click();
         selectInactive.click();
@@ -967,15 +967,11 @@ public class RecipePage {
         saveButton.click();
     }
 
-    public void importedRecipeStatusIsDraft(String recipeName) {
+    public void importedRecipeStatusIsDraft(String recipeName,String Status) {
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
         var actualText = $(By.xpath(String.format(importRecipeStatusVerify, recipeName))).waitUntil(visible, 5000L).getText();
-        if(actualText.equals("Draft")){
-            Assert.assertEquals("Verification of recipe status is Draft:", "Draft", actualText);
-        } else if (actualText.equals("Tech-Review")) {
-            Assert.assertEquals("Verification of recipe status is Tech-Review:", "Tech-Review", actualText);
-        }
+        $(By.xpath(String.format(importRecipeStatusVerify, recipeName))).shouldHave(text(Status));
         recipeSearchTextBox.clear();
     }
 
@@ -1392,7 +1388,7 @@ public class RecipePage {
     public void handleWarningPopUp(String phaseName) {
         warningPopUpDialog.waitUntil(visible, 5000L);
         $(By.xpath(String.format(deletePhaseMessage, phaseName))).shouldBe(visible);
-        primaryButton.click();
+        confirmButton.click();
     }
     
     public void deleteStepUsingCrossButton(String stepNo) {
@@ -1424,7 +1420,7 @@ public class RecipePage {
         });
         saveButton.click();
         $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
-        primaryButton.click();
+        confirmButton.click();
     }
 
     public void deleteCriteriaUsingShortcut(String step) {

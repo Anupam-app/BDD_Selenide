@@ -591,11 +591,14 @@ public class RecipePageStepsDefinition {
         list.forEach(recipePage::listOfImportRecipe);
     }
 
-    @Then("the UoP status of imported recipe changes to Draft")
-    public void importedRecipeStatusIsDraft(DataTable table) {
+    @Then("the UoP status of imported recipe changes to {string}")
+    public void importedRecipeStatusIsDraft(DataTable table,String status) {
         iGoToBrowserMode();
         List<String> list = table.asList(String.class);
-        list.forEach(recipePage::importedRecipeStatusIsDraft);
+        for (int i = 1; i < list.size(); i++) {
+            recipePage.importedRecipeStatusIsDraft(list.get(i), status);
+            //        list.forEach(recipePage::importedRecipeStatusIsDraft);
+        }
     }
 
     @And("I add few actions steps")
@@ -783,10 +786,10 @@ public class RecipePageStepsDefinition {
         recipePage.iSaveRecipeWithKeyboardAction();
     }
 
-    @Then("I see new recipe is saved as Draft")
-    public void newRecipeIsSaved(){
+    @Then("I see new recipe is saved as {string}")
+    public void newRecipeIsSaved(String status){
         iGoToBrowserMode();
-        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(),status);
     }
 
     @And("I saveAs the recipe")
@@ -794,14 +797,11 @@ public class RecipePageStepsDefinition {
         recipePage.saveAsRecipe();
     }
 
-    @Then("I select existing recipe to verify the warning text message {string}")
-    public void iVerifyTheWarningPopupAlert(String message,DataTable table) {
-        List<String> list = table.asList(String.class);
-        for (int i = 1; i < list.size(); i++) {
-            recipePage.iVerifyTheAlert(list.get(i),message);
+    @Then("I select {string} recipe to verify the warning text message {string}")
+    public void iVerifyTheWarningPopupAlert(String existing,String message) {
+            recipePage.iVerifyTheAlert(message,existing);
         }
 
-    }
 
     @And("I delete the step{string} using shortcut key")
     public void deleteStepUsingShortcut(String stepNo){
@@ -836,7 +836,7 @@ public class RecipePageStepsDefinition {
     @Then("I verify the recipe {string}")
     public void iVerifyTheRecipeStatus(String status){
         iGoToBrowserMode();
-        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName());
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(),status);
     }
 
 }
