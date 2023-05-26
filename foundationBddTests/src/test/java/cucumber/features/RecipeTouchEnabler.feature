@@ -92,3 +92,19 @@ Feature: Recipe Touch Enabler
     And I look at the user notification
     Then I should see the recipe exported in user notifications
     And I should see the recipe imported in user notifications
+
+  Scenario Outline: Verify Insert Step before & after, recipe clear button functionality
+    When I open Recipe editor
+    And I trigger edit mode
+    And I add 3 action steps
+    And I "<action>" number 2
+    And I add action to new blank step
+    And I Save the recipe
+    And I select "Clear All" button
+    And I Save the recipe
+    Then blank recipe is displayed
+
+    Examples:
+    | action             |
+    | Insert Before Step |
+    | Insert After Step  |

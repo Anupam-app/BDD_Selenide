@@ -122,16 +122,16 @@ public class ReportsPageStepsDefinition {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkUserInformation(reportPage.getPdfUrl(), this.user.getName());
         this.report.checkEventTimeInformation(reportPage.getPdfUrl());
-        this.report.checkSignturesTable(reportPage.getPdfUrl());
+        this.report.checkSignaturesTable(reportPage.getPdfUrl());
     }
 
     @When("I don't see the presence of run mode")
-    public void iDontSeeRunLink() {
+    public void iDoNotSeeRunLink() {
         reportPage.verifyRunMode();
     }
 
     @Then("I don't see the presence of generate button")
-    public void iDontSeeGenerateButton() {
+    public void iDoNotSeeGenerateButton() {
         reportPage.verifyGenerateButton();
     }
 
@@ -220,7 +220,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I see the {string} is changed to {string} in report")
-    public void iverifyRecipeStatus(String recipeName, String status) throws Exception {
+    public void iVerifyRecipeStatus(String recipeName, String status) throws Exception {
         this.report.checkRecipeStatus(reportPage.getPdfUrl(), recipeName, status, this.login.getLogin());
         switchTo().parentFrame();
     }
@@ -238,7 +238,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I esign the report")
-    public void iEsignReports() throws InterruptedException {
+    public void iESignReports() throws InterruptedException {
         reportPage.eSignReports(this.report.getName(), this.login.getPassword());
         report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
     }
@@ -291,7 +291,7 @@ public class ReportsPageStepsDefinition {
 
 
     @Then("I verify the error message {string}")
-    public void iverifyTheErrMsg(String message) {
+    public void iVerifyTheErrMsg(String message) {
         reportPage.isGeneratedNotificationWhenMoreThanSixParams(message);
     }
 
@@ -307,7 +307,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @When("I edit the report template")
-    public void ieditTheReportTemplate() {
+    public void iEditTheReportTemplate() {
         reportPage.editReportOrTemplate(this.reportTemplate.getName());
     }
 
@@ -344,14 +344,14 @@ public class ReportsPageStepsDefinition {
     @When("I verify audit logs for user update")
     public void iVerifyAuditLogsForUserUpdate() {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName());
+        reportPage.verifyAuditLogsForUserUpdate(this.user.getUserName(), this.login.getLogin());
         switchTo().parentFrame();
     }
 
     @When("I verify audit logs for role update")
     public void iVerifyAuditLogsForRoleUpdate() {
         reportPage.switchToFrame();
-        reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName());
+        reportPage.verifyAuditLogsForRoleUpdate(this.role.getRoleName(), this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -498,7 +498,7 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I should see change password entries in audit trail report for {string}")
-    public void iverifyAuditTrailReport(String username) throws ParseException {
+    public void iVerifyAuditTrailReport(String username) throws ParseException {
         var message = String.format("%s changed the account password", username);
         Assert.assertTrue(reportPage.verifyAuditTrail(message));
         SelenideHelper.goToDefault();
@@ -643,6 +643,21 @@ public class ReportsPageStepsDefinition {
     @Then("I see the role disabling enabling events in report")
     public void iVerifyThatRoleIsDisabledAndEnabled() throws Exception {
         this.report.verifyAuditReportForRoleDisableEnable(reportPage.getPdfUrl(), this.role.getRoleName(),
+                this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for user create")
+    public void iVerifyAuditLogsForUserCreate() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForUserCreate(this.user.getUserName(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for {string} password")
+    public void iVerifyAuditLogsForResetChangePassword(String passwordAction) {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForResetChangePassword(this.user.getUserName(), passwordAction,
                 this.login.getLogin());
         switchTo().parentFrame();
     }

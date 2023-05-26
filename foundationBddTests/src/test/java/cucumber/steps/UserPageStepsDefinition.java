@@ -1,7 +1,17 @@
 package cucumber.steps;
 
-import com.codeborne.selenide.Selenide;
 import static com.codeborne.selenide.Selenide.switchTo;
+
+import com.codeborne.selenide.Selenide;
+
+import java.awt.AWTException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Report;
@@ -11,12 +21,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.awt.AWTException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
 import pageobjects.pages.AlarmPage;
 import pageobjects.pages.AnalyticsPage;
 import pageobjects.pages.BackupPage;
@@ -45,19 +49,10 @@ public class UserPageStepsDefinition {
     private final ReportsPage reportPage;
     private final Login login;
 
-    public UserPageStepsDefinition(ReportsPage reportPage,
-                                   UserPage userPage,
-                                   LoginPage loginPage,
-                                   RecipePage recipePage,
-                                   TrendsPage trendsPage,
-                                   AnalyticsPage analyticsPage,
-                                   AlarmPage alarmPage,
-                                   BackupPage backupPage,
-                                   SettingPage settingPage,
-                                   ConfigurationPage configurationPage,
-                                   Report report,
-                                   User user,
-                                   Login login) {
+    public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, LoginPage loginPage,
+            RecipePage recipePage, TrendsPage trendsPage, AnalyticsPage analyticsPage, AlarmPage alarmPage,
+            BackupPage backupPage, SettingPage settingPage, ConfigurationPage configurationPage, Report report,
+            User user, Login login) {
         this.userPage = userPage;
         this.user = user;
         this.report = report;
@@ -137,7 +132,7 @@ public class UserPageStepsDefinition {
     }
 
     @When("I disable the user")
-    public void iDissableTheUser() {
+    public void iDisableTheUser() {
         userPage.disableUser();
     }
 
@@ -238,6 +233,7 @@ public class UserPageStepsDefinition {
     @Then("The username is equal to the expected one")
     public void theUserNameIsEqualToTheExpectedOne() {
         Assert.assertEquals(userPage.getUserNameFromForm(), user.getUserName());
+        userPage.cancelUser();
     }
 
     @Then("the employee id is the expected one")
@@ -264,7 +260,7 @@ public class UserPageStepsDefinition {
 
     @Then("I see the {string} user modified in report")
     public void iVerifyThatUserIsModified(String userName) throws Exception {
-        Map<String, String> list = new HashMap<String, String>();
+        Map<String, String> list = new HashMap<>();
         list.put("department", user.getDeptName());
         list.put("phoneNumber", user.getMobNum());
         list.put("role", user.getRoleName());
@@ -285,18 +281,19 @@ public class UserPageStepsDefinition {
     }
 
     @Then("I see password reset message is displayed")
-    public void iSeePasswordResetMessagedisplayed() {
+    public void iSeePasswordResetMessageDisplayed() {
         userPage.isGeneratedNotificationWhenPasswordReset(this.user.getUserName());
     }
 
     @Then("I see account unlock message is displayed")
-    public void iSeeAccountUnlockMessagedisplayed() {
+    public void iSeeAccountUnlockMessageDisplayed() {
         userPage.isGeneratedNotificationWhenAccountUnlock();
     }
 
     @Then("I see error message is displayed for {string}")
-    public void iSeeErrorMessagedisplayed(String username) {
-        var message = String.format("Failed to create user account. Username: %s already exists. Use a different username", username);
+    public void iSeeErrorMessageDisplayed(String username) {
+        var message = String.format(
+                "Failed to create user account. Username: %s already exists. Use a different username", username);
         userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
     }
 
@@ -343,7 +340,7 @@ public class UserPageStepsDefinition {
     }
 
     @Given("^I verify the below Icons on left rail of Portal$")
-    public void iVerifyTheApllicationModule(DataTable datatable) throws AWTException {
+    public void iVerifyTheApplicationModule(DataTable datatable) throws AWTException {
         List<String> icon = datatable.asList();
         userPage.zoomOut();
         for (String name : icon) {
@@ -402,10 +399,11 @@ public class UserPageStepsDefinition {
     }
 
     @Then("I see password updated message is displayed for {string}")
-    public void iSeePasswordUpdatedMessagedisplayed(String username) {
+    public void iSeePasswordUpdatedMessageDisplayed(String username) {
         var message = String.format("User password for %s is updated", username);
         userPage.updateNotification(message);
         userPage.closeChangeUserPropertiesChangeModal();
+        this.user.setUserName(username);
     }
 
     @Then("I should see {string} {string} under user profile icon")
@@ -416,40 +414,63 @@ public class UserPageStepsDefinition {
         userPage.closeChangeUserPropertiesChangeModal();
     }
 
-    @When("I click on changepassword")
-    public void iClickOnChangePswd() {
+    @When("I click on change password")
+    public void iClickOnChangePassword() {
         userPage.changePassword();
     }
-	
-	@Then("I see error message is displayed {string}")
-	public void iSeeErrorMessageisdisplayed(String message) {
-		userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
-	}
-	
-	@When("I verify default user account {string} and {string}")
+
+    @Then("I see error message is displayed {string}")
+    public void iSeeErrorMessageIsDisplayed(String message) {
+        userPage.isGeneratedNotificationWhenCreateExistingUsername(message);
+    }
+
+    @When("I verify default user account {string} and {string}")
     public void iVerifyDefaultUserAccount(String user1, String user2) {
         userPage.userAccountRole(user1, user2);
     }
-	
-	@When("I save my user modification changes")
+
+    @When("I save my user modification changes")
     public void iSaveMyUserModificationChanges() {
         userPage.saveMyUserChanges();
     }
 
-    @And ("I verify create User icon {string}")
-    public void createUserIconPresence(String value){
+    @And("I verify create User icon {string}")
+    public void createUserIconPresence(String value) {
         userPage.createUserIconPresent(value);
     }
 
     @And("I see {string} role assigned to user")
-    public void verifyRoleAssigned(String role){
+    public void verifyRoleAssigned(String role) {
         userPage.roleAssignedToUser(role);
     }
 
     @Given("I search {string} to validate role {string} assigned")
-    public void roleAssignedToUser(String user,String role) {
+    public void roleAssignedToUser(String user, String role) {
         this.user.setUserName(user);
         userPage.setSearch(user);
         userPage.roleAssignedToUser(role);
     }
+
+    @Then("I see the user added in report")
+    public void iVerifyThatUserIsAdded() throws Exception {
+        Map<String, String> list = new HashMap<>();
+        list.put("department", user.getDeptName());
+        list.put("phoneNumber", user.getMobNum());
+        list.put("role", user.getRoleName());
+        list.put("employeeID", user.getEmployeeId());
+        list.put("email", user.getEmailId());
+        list.put("lastName", user.getLastName());
+        list.put("firstName", user.getFirstName());
+        list.put("userName", user.getUserName());
+        this.report.checkAddedUser(reportPage.getPdfUrl(), user.getUserName(), this.login.getLogin(), list);
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the {string} password events in report")
+    public void iVerifyResetChangePasswordEvent(String passwordAction) throws Exception {
+        this.report.verifyAuditReportForPasswordReset(reportPage.getPdfUrl(), user.getUserName(), this.login.getLogin(),
+                passwordAction);
+        switchTo().parentFrame();
+    }
+
 }
