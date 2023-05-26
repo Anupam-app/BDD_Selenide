@@ -899,7 +899,6 @@ public class RecipePage {
     public void importedRecipeStatusIsDraft(String recipeName,String Status) {
         recipeSearchTextBox.sendKeys(recipeName);
         recipeSearchTextBox.sendKeys(Keys.ENTER);
-        var actualText = $(By.xpath(String.format(importRecipeStatusVerify, recipeName))).waitUntil(visible, 5000L).getText();
         $(By.xpath(String.format(importRecipeStatusVerify, recipeName))).shouldHave(text(Status));
         recipeSearchTextBox.clear();
     }
@@ -1332,7 +1331,7 @@ public class RecipePage {
             return recipeInputSave.getValue().equals(recipes);
         });
         saveButton.click();
-        $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
+        $(By.xpath(String.format(warningMessage, message))).shouldBe(visible);
         confirmButton.click();
     }
 
