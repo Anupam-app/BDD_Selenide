@@ -12,6 +12,8 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
+import dataobjects.Login;
+import dataobjects.User;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
@@ -44,9 +46,15 @@ public class LoginPage {
             $(By.xpath("//button[@type='submit' and @title='Please fill all the fields']"));
     private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
     private SelenideElement LOGIN_ERROR_NOTIFICATION_TEXT = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
+    private User user;
+
+    public LoginPage(User user){
+        this.user = user;
+    }
 
     public void setUser(String user) {
         userIdTextBox.setValue(user);
+        this.user.setUserName(user);
     }
 
     public void pushLogin() {
