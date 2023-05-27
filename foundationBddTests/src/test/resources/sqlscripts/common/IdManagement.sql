@@ -10,8 +10,6 @@ DELETE FROM [dbo].[user_password] where id not in ('1','2','3')
 GO
 DELETE FROM [dbo].[user_store] where user_name not in ('Bio4cService','Bio4CAdmin','admin')
 GO
-SET IDENTITY_INSERT [dbo].[user_password] ON
-GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], is_temporary_password, [password_expiry_date]) VALUES (4, 0x02000000113BFAD8804F35D57B6A294AE2768AA8A55EBE9BBD463A3FF274A9AFD9DE4815A2B01BFE1C1CAC48777DFE842CC56B5A98B4B3844F87C38227EF57EB2857B1C68176BBB1E0BC2651AFC4238940AD304446048199CF230EA3027FA6BCECE557DB, NULL, NULL, 0, NULL)
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (5, 0x02000000E9D4ED3D169931E010E233E105AD8ED66E974A7D8D0A75162BA1A4B67C4E94F19E624B1A6D0A77837D85D1C5244A0CCB8C0F78FFD00B8A414169911C6AB284179C1E71CC0B5BDC0D291BD9A722BC14012A7D9C6726EAD1E1E0FE9DCEF8A89E48, NULL, NULL, 1, NULL)
@@ -58,9 +56,7 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (40, 0x020000009D57374F3DB939F168094AC73CC83F862228F77387E4797C3D16D516A7FE8091B88323343E41087D8B9C18223BC9201787252DFDBC7E6145D03ED919F31BA9E2C78955E09CA05AAE82A916DD1152998C0C83C672E1E4F609AFF4AE57EE549DCF, N'6SncntQTWCW8CEqcaXcg5g==', N'/N32AFbBNtbHJH0rlN7wgg==', 0, NULL)
 GO
-SET IDENTITY_INSERT [dbo].[user_password] OFF
-GO
-SET IDENTITY_INSERT [dbo].[user_store] ON 
+SET IDENTITY_INSERT [dbo].[user_store] ON
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (4, N'', N'alexis.thiebaut@merckgroup.com', N'faVppoqqKR', N'true', N'testUser', N'testUser', N'0123456789', N'testUser', 0, 0, NULL, 0)
 GO
@@ -160,7 +156,7 @@ INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (17, 3)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (18, 8)
 GO
-INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 3)
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (19, 9)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (20, 3)
 GO
@@ -197,8 +193,6 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 141)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 92)
-GO
-INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (8, 152)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (9, 56)
 GO
