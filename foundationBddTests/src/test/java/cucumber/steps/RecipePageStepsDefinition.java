@@ -497,8 +497,8 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see warning popup alert with text message {string}")
-    public void iSeeWarningPopupAlertWithTextMessage(String message) {
-        recipePage.warningPopUpMessageForRecipe(message);
+    public void iSeeWarningPopUpAlertWithTextMessage(String message) {
+        recipePage.waringPopUpForRecipe(message);
     }
 
     @And("I select OK and save as new recipe")
@@ -506,6 +506,12 @@ public class RecipePageStepsDefinition {
         recipePage.okBtn();
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(5));
         recipePage.saveBtn(this.recipe.getRecipeName());
+    }
+
+    @And("I navigate to recipe browser, open a recipe {string}")
+    public void iNavigateToRecipeBrowserAndOpenRecipe(String recipeName) {
+        recipePage.goToBrowserMode();
+        recipePage.chooseRecipe(recipeName);
     }
 
     @And("I have exported recipes in different status")
@@ -520,7 +526,7 @@ public class RecipePageStepsDefinition {
         list.forEach(recipePage::listOfImportRecipe);
     }
 
-    @Then("the UoP status of imported recipe changes to {string}")
+    @Then("the UoP status of imported recipe changes to Draft")
     public void importedRecipeStatusIsDraft(DataTable table,String status) {
         iGoToBrowserMode();
         List<String> list = table.asList(String.class);
@@ -623,7 +629,8 @@ public class RecipePageStepsDefinition {
 
     @When("I create phase with errors")
     public void iCreatePhaseWithErrors() {
-        recipePage.creatingPhaseWithError();
+        this.recipe.setPhaseName(RandomStringUtils.randomAlphabetic(3));
+        recipePage.creatingPhaseWithError(this.recipe.getPhaseName());
     }
 
     @And("I try to add phase to phase library")

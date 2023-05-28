@@ -123,8 +123,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     Then I verify notification messages "Phase created successfully"
-    And I go to browser mode
-    And I edit recipe "testRecipeDraftToReject"
+    And I navigate to recipe browser, open a recipe "testRecipeDraftToReject"
     Then I see warning message is displayed "Please save the recipe."
 
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
@@ -313,7 +312,7 @@ Feature: Recipe management
       | testDraftRecipeToChangeStatus |
       | recipeTechReview              |
       | recipeInReview                |
-    Then the UoP status of imported recipe changes to "Draft"
+    Then the UoP status of imported recipe changes to Draft
       | testRecipeDraftToInactive1     |
       | testRecipeDraftToReject1       |
       | testDraftRecipeToChangeStatus1 |

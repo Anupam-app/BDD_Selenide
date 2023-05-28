@@ -129,7 +129,7 @@ public class RecipePage {
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
     private final ElementsCollection dateSelectionInReport = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-    private final SelenideElement noRunFilterMessage = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final SelenideElement noRecipeFilterMessage = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth = $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private final ElementsCollection availableDates = $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
@@ -155,6 +155,7 @@ public class RecipePage {
     private final SelenideElement maxPhaseWarningMessage = $(By.xpath("//span[(text()='Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed.')]"));
     private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
     private final String phaseName = "//label[text()='%s']";
+    private final String SELECT_RECIPE = "//*[@class='tbl-row']//td[text()='%s']";
     private final SelenideElement chooseRecipe = $(By.xpath("//*[@class='tbl-row']//td[text()='testRecipeToExecute1min']"));
     private final SelenideElement windowPopup = $(By.xpath("//div[text()='Please save the recipe.']"));
     private final SelenideElement addCriteriaInRecipe = $(By.xpath("(//span[@class='target'])[1]"));
@@ -221,14 +222,14 @@ public class RecipePage {
     private final SelenideElement addAndCriteria = $(By.xpath("(//div[@class='criteria-head criteria-type-and'])[2]"));
     private final SelenideElement addOrCriteria = $(By.xpath("//div[@class='recipe-tooltip is-visible']/ul/li"));
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
-    private final SelenideElement addPhaseFromLibraryButton = $(By.xpath("//button[text()='Add Phase To Recipe']"));
+    private final SelenideElement addPhaseFromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
 
-    private Recipe recipe;
+    private final Recipe recipe;
 
     public RecipePage(Recipe recipe) {
         this.recipe = recipe;
@@ -256,6 +257,10 @@ public class RecipePage {
 
     public void verifyPhaseMessage(String message) {
         Assert.assertTrue(noPhaseAvailableMsg.getText().equalsIgnoreCase(message));
+    }
+
+    public void goToBrowserMode() {
+        browserLinkText.click();
     }
 
     public void verifyList() {
@@ -570,7 +575,7 @@ public class RecipePage {
                     if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth() && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
-                } else if (noRunFilterMessage.isDisplayed()) {
+                } else if (noRecipeFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -596,7 +601,7 @@ public class RecipePage {
                     if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth() || selectedAscendingDate.isAfter(selectedDate1)) && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth() || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
-                } else if (noRunFilterMessage.isDisplayed()) {
+                } else if (noRecipeFilterMessage.isDisplayed()) {
                     isTrue = true;
                 }
                 break;
@@ -780,7 +785,7 @@ public class RecipePage {
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
         phaseLibViewIcon.click();
-        addPhaseFromLibraryButton.waitUntil(visible, 3000L, 1000L).click();
+        addPhaseFromLibraryBtn.waitUntil(visible, 3000L, 1000L).click();
     }
 
     public void copyAndPastePhase() {
@@ -794,6 +799,11 @@ public class RecipePage {
         stepPlaceholder.clear();
         stepPlaceholder.sendKeys("Setpoint");
         stepPlaceholder.sendKeys(Keys.ENTER);
+    }
+
+    public void chooseRecipe(String recipeName) {
+        commonWaiter($(By.xpath(String.format(SELECT_RECIPE,recipeName))), visible).click();
+        commonWaiter(openButton, visible).click();
     }
 
     public void okBtn() {
@@ -857,7 +867,7 @@ public class RecipePage {
         $(By.xpath("//button[@class='btn-primary']")).click();
     }
 
-    public void warningPopUpMessageForRecipe(String message) {
+    public void waringPopUpForRecipe(String message) {
         $(By.xpath(String.format(warningMessage, message))).shouldHave(text(message));
     }
 
@@ -1045,7 +1055,7 @@ public class RecipePage {
         searchTextBox.sendKeys(Keys.ENTER);
     }
 
-    public void creatingPhaseWithError() {
+    public void creatingPhaseWithError(String phaseName) {
         plusButton.waitUntil(Condition.visible, 5000L);
         plusButton.click();
         SelenideElement searchTextBox = $(By.className("search-txt-box"));
@@ -1053,7 +1063,7 @@ public class RecipePage {
         searchTextBox.sendKeys(Keys.ENTER);
         $(By.xpath(String.format(addSteps, "1"))).click();
         stepAction.keyDown(Keys.CONTROL).sendKeys("g").keyUp(Keys.CONTROL).build().perform();
-        phaseElementTextBox.setValue(RandomStringUtils.randomAlphabetic(3));
+        phaseElementTextBox.setValue(phaseName);
         phaseElementTextBox.sendKeys(Keys.ENTER);
     }
 
