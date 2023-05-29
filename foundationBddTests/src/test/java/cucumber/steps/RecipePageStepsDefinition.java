@@ -12,6 +12,7 @@ import org.junit.Assert;
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Recipe;
+import dataobjects.Report;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -141,6 +142,7 @@ public class RecipePageStepsDefinition {
     @And("I see my changes in recipe")
     public void iSeeMyChangesInRecipe() {
         Assert.assertEquals(this.recipePage.getPhaseName(), this.recipe.getPhaseName());
+        switchTo().parentFrame();
     }
 
     @Then("I save the modified recipe")
