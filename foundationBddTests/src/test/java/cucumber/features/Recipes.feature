@@ -312,7 +312,7 @@ Feature: Recipe management
       | testDraftRecipeToChangeStatus |
       | recipeTechReview              |
       | recipeInReview                |
-    Then the UoP status of imported recipe changes to Draft
+    Then the UoP status of imported recipe changes to "Draft"
       | testRecipeDraftToInactive1     |
       | testRecipeDraftToReject1       |
       | testDraftRecipeToChangeStatus1 |
@@ -336,10 +336,6 @@ Feature: Recipe management
   Scenario: Verify new recipe and existing recipe
     Given I am logged in as "Bio4CAdmin" user
     When I open Recipe editor
-    And I add few actions steps
-    And I logout
-    And I am logged in as "BIO4CSERVICE" user
-    And I open Recipe editor
     And I add few actions steps
     And I save the recipe
     Then I verify recipe status as "Saved"
@@ -475,10 +471,10 @@ Feature: Recipe management
     And I saveAs the recipe
     Then I select "<existing>" recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
 
-  Examples:
-      |recipes          |existing                     |
-      |testDraftRecipe  |recipeInReview               |
-      |recipeTechReview |testRecipeWithChar30NameLengt|
+    Examples:
+      | recipes          | existing                      |
+      | testDraftRecipe  | recipeInReview                |
+      | recipeTechReview | testRecipeWithChar30NameLengt |
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -502,9 +498,9 @@ Feature: Recipe management
     And I verify action "Acid pH Control Loop Setpoint" in the step
     Then I verify the recipe "<status>"
     Examples:
-      |recipes               |status     |existing         |
-      |recipeTechReview      |Tech-Review|testDraftRecipe  |
-      |OverWritingDraftRecipe|Draft      |recipeTechReview |
+      | recipes                | status      | existing         |
+      | recipeTechReview       | Tech-Review | testDraftRecipe  |
+      | OverWritingDraftRecipe | Draft       | recipeTechReview |
 
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user

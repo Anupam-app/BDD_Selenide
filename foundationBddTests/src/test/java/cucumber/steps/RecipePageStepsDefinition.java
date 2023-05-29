@@ -3,7 +3,7 @@ package cucumber.steps;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.goToIFrame;
 
-import java.awt.AWTException;
+import java.awt.*;
 import java.util.List;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -33,7 +33,7 @@ public class RecipePageStepsDefinition {
     private final RecipeTouchEnablerPage recipeTouch;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage,RecipeTouchEnablerPage recipeTouch) {
+            ReportsPage reportPage, RecipeTouchEnablerPage recipeTouch) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
@@ -167,7 +167,7 @@ public class RecipePageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             recipePage.verifyColumn(list.get(i)
-                .get(0), tab, i);
+                    .get(0), tab, i);
         }
     }
 
@@ -272,7 +272,7 @@ public class RecipePageStepsDefinition {
         recipePage.goToEditMode();
         var deviceShapeElementNotTranslated = recipePage.getDeviceShapeElementNotLoaded();
         Assert.assertTrue("deviceShapeElementNotTranslated:" + deviceShapeElementNotTranslated.toString(),
-            deviceShapeElementNotTranslated.isEmpty());
+                deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
 
@@ -293,7 +293,7 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I select action from action browser")
-    public void actionBrowser()throws AWTException {
+    public void actionBrowser() throws AWTException {
         this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
         recipePage.addStepActionBrowser();
     }
@@ -383,7 +383,7 @@ public class RecipePageStepsDefinition {
 
     @And("I verify recipe tab title")
     public void iVerifyRecipeTab() {
-        recipePage.verifyRecipeTab("Untitled","Unsaved");
+        recipePage.verifyRecipeTab("Untitled", "Unsaved");
     }
 
     @When("I create a phase")
@@ -404,12 +404,15 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I should see error message for respective {string} values provided")
-    public void inValidInputValue(String action,DataTable table) {
+    public void inValidInputValue(String action, DataTable table) {
         recipePage.keyboardActionRecipe();
         recipePage.addActionStep(action);
-        List <List<String>> list = table.asLists(String.class);
+        List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
-            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i).get(0),list.get(i).get(1));
+            recipePage.inValidValueAndErrorMessageOfThreshold(list.get(i)
+                    .get(0),
+                    list.get(i)
+                            .get(1));
         }
     }
 
@@ -526,8 +529,8 @@ public class RecipePageStepsDefinition {
         list.forEach(recipePage::listOfImportRecipe);
     }
 
-    @Then("the UoP status of imported recipe changes to Draft")
-    public void importedRecipeStatusIsDraft(DataTable table,String status) {
+    @Then("the UoP status of imported recipe changes to {string}")
+    public void importedRecipeStatusIsDraft(String status, DataTable table) {
         iGoToBrowserMode();
         List<String> list = table.asList(String.class);
         for (int i = 1; i < list.size(); i++) {
@@ -667,18 +670,18 @@ public class RecipePageStepsDefinition {
     }
 
     @Then("I add {string} to the {string} step")
-    public void actionAddedInBlankStep(String action,String status){
+    public void actionAddedInBlankStep(String action, String status) {
         recipePage.placeholder(status);
         recipePage.addActionStep(action);
     }
 
     @And("I should see step count increased by {int}")
-    public void stepCountIncrease(int value){
+    public void stepCountIncrease(int value) {
         recipePage.verifyActionStepCount(recipe.getOrgStepCount(), value);
     }
 
     @When("I edit the recipe {string} from recipe browser")
-    public void editRecipeFromBrowser(String recipe){
+    public void editRecipeFromBrowser(String recipe) {
         recipePage.goTo();
         goToIFrame();
         this.recipe.setRecipeName(recipe);
@@ -686,12 +689,12 @@ public class RecipePageStepsDefinition {
     }
 
     @When("I update actual range of value")
-    public void updateThresholdValue(){
+    public void updateThresholdValue() {
         recipePage.outAndInOfRangeValue("in");
     }
 
     @Then("I should be able to save & approve recipe")
-    public void saveAndApproveRecipe(){
+    public void saveAndApproveRecipe() {
         recipePage.saveModifiedRecipe();
         recipePage.approveRecipe(login.getPassword());
     }
@@ -707,80 +710,80 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I save the recipe using keyboard event")
-    public void iSaveTheRecipeUsingKeyboardEvent(){
+    public void iSaveTheRecipeUsingKeyboardEvent() {
         recipePage.iSaveRecipeWithKeyboardAction();
     }
 
     @Then("I see new recipe is saved as {string}")
-    public void newRecipeIsSaved(String status){
+    public void newRecipeIsSaved(String status) {
         iGoToBrowserMode();
-        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(),status);
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(), status);
     }
 
     @And("I saveAs the recipe")
-    public void iSaveAsTheRecipe(){
+    public void iSaveAsTheRecipe() {
         recipePage.saveAsRecipe();
     }
 
     @Then("I select {string} recipe to verify the warning text message {string}")
-    public void iVerifyTheWarningPopupAlert(String existing,String message) {
-            recipePage.iVerifyTheAlert(existing,message);
-        }
+    public void iVerifyTheWarningPopupAlert(String existing, String message) {
+        recipePage.iVerifyTheAlert(existing, message);
+    }
 
 
     @And("I delete the step{string} using shortcut key")
-    public void deleteStepUsingShortcut(String stepNo){
+    public void deleteStepUsingShortcut(String stepNo) {
         recipePage.deleteStepUsingShortcut(stepNo);
     }
 
     @And("I verify step{string} is deleted and message seen {string}")
-    public void validateStepDelete(String stepNo, String message){
+    public void validateStepDelete(String stepNo, String message) {
         recipePage.validateStepDelete(stepNo);
     }
 
     @And("I delete the step{string} using cross button")
-    public void deleteStepUsingCrossButton(String stepNo){
+    public void deleteStepUsingCrossButton(String stepNo) {
         recipePage.deleteStepUsingCrossButton(stepNo);
     }
 
     @And("I delete the {string} criteria using shortcut key")
-    public void deleteCriteriaUsingShortCut(String step){
+    public void deleteCriteriaUsingShortCut(String step) {
         recipePage.deleteCriteriaUsingShortcut(step);
     }
 
     @And("I delete the {string} criteria using cross button")
-    public void deleteCriteriaUsingCrossButton(String step){
+    public void deleteCriteriaUsingCrossButton(String step) {
         recipePage.deleteCriteriaUsingCrossButton(step);
     }
 
     @And("I verify {string} criteria is deleted and message seen {string}")
-    public void validateCriteriaDelete(String step, String message){
+    public void validateCriteriaDelete(String step, String message) {
         recipePage.validateCriteriaDelete(step);
     }
 
     @Then("I verify the default step wait time dialog box")
-    public void defaultStepWaitTimePopUp(){
+    public void defaultStepWaitTimePopUp() {
         recipePage.defaultStepWaitTimePopUp();
     }
 
     @And("I update default wait time")
-    public void verifyTimeField(){
-        recipePage.setDefaultStepWaitTime("01","hours");
+    public void verifyTimeField() {
+        recipePage.setDefaultStepWaitTime("01", "hours");
     }
 
     @Then("I verify the saved step wait time")
-    public void verifySaveTimeFieldValue(){
+    public void verifySaveTimeFieldValue() {
         recipePage.verifySaveTimeFieldValue();
     }
 
     @Then("I verify the recipe {string}")
-    public void iVerifyTheRecipeStatus(String status){
+    public void iVerifyTheRecipeStatus(String status) {
         iGoToBrowserMode();
-        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(),status);
+        recipePage.importedRecipeStatusIsDraft(this.recipe.getRecipeName(), status);
     }
 
     @And("I verify action {string} in the step")
-    public void iVerifyRecipeActionStep(String actionstep){
+    public void iVerifyRecipeActionStep(String actionstep) {
         recipePage.verifyRecipeActionStep(actionstep);
     }
 

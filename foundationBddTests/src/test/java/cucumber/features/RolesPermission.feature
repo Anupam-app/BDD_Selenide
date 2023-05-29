@@ -20,7 +20,8 @@ Feature: Roles Permissions Check
     Then I verify custom role "disabled" details captured in audit trail for user "Bio4CAdmin"
     When I logout and login as "userRoleDisable" and password as "MerckApp1@"
     Then I verify error message "Unauthorized access, Failed to authenticate"
-    And I am logged in as "Bio4CAdmin" user
+    And I enter "Bio4CAdmin" as username and "Merck@dmin" as password
+    And I push the login button
     When I trigger roles mode
     Then I verify "CustomRoleDisable" role is "enabled"
     And I logout and login as "userRoleDisable" and password as "MerckApp1@"
