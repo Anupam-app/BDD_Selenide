@@ -123,6 +123,7 @@ Feature: Report administration
     Then I should see the report file presence
     And I verify that user information are consistent
 
+  @IVI-7869
   Scenario: Report Approval E-Sign Failure On Entering Wrong Password
     Given I am logged in as "testadmin" user
     And I goto report management page

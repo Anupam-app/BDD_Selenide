@@ -305,7 +305,26 @@ Feature: Recipe management
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
-  Scenario: BIOFOUND-27810|Recipe status after import
+  Scenario: Recipe management_Save As recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "testRecipeDraftToReject"
+    And I add few actions steps to existing recipe
+    And I save as recipe name "secondRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+    When I edit recipe "testRecipeDraftToReject"
+    And I verify recipe steps are not modified
+    And I add few actions steps to existing recipe
+    And I verify the Unsaved status below recipe name
+    And I save as recipe name "ThirdRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+      | ThirdRecipe             |
+
+  Scenario:BIOFOUND-27810|Recipe status after import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I have exported recipes in different status
@@ -365,25 +384,6 @@ Feature: Recipe management
     And I select GoTo Step button a drop down opened
     Then drop down contain phase invocation step number
 
-  Scenario: Recipe management_Save As recipe
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I edit recipe "testRecipeDraftToReject"
-    And I add few actions steps to existing recipe
-    And I save as recipe name "secondRecipe"
-    Then I verify below recipes are displayed in recipe browser list
-      | testRecipeDraftToReject |
-      | secondRecipe            |
-    When I edit recipe "testRecipeDraftToReject"
-    And I verify recipe steps are not modified
-    And I add few actions steps to existing recipe
-    And I verify the Unsaved status below recipe name
-    And I save as recipe name "ThirdRecipe"
-    Then I verify below recipes are displayed in recipe browser list
-      | testRecipeDraftToReject |
-      | secondRecipe            |
-      | ThirdRecipe             |
-
   Scenario: Recipe management_ Operation phase criteria
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -421,11 +421,13 @@ Feature: Recipe management
     And I go to recipe page
     When I trigger edit mode
     And I create phase with errors
-    And I try to add phase to phase library
+    And I save phase to Phase library
     Then I get appropriate error
     And Phase is not added to phase library.
     When I clear errors in the phase
-    Then I can add phase to phase library.
+    And I save phase to Phase library
+    Then I should be notified that "Phase successfully added to phase library"
+    And I should see phase details under phase library
 
   Scenario: Validate the add Step count
     Given I am logged in as "Bio4CAdmin" user

@@ -60,6 +60,7 @@ Feature: Report Template module validations
     And I save the report template
     Then I verify the template name error message
 
+  @IVI-7869
   Scenario: Template Approval E-Sign Failure On Entering Wrong Password
     And I open the report template dashboard
     When I search the report template "testInReviewTemplate"

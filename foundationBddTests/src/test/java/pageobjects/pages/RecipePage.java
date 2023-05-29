@@ -105,7 +105,6 @@ public class RecipePage {
             $(By.xpath("//div[@class='phaseRow selected']//input[@class='deleteButton']"));
     private final SelenideElement warningNotificationText = $(By.xpath("//*[@class='editor-dialog']/div/div[1]/span"));
     private final String xpathEditPage = "//*[@id=\"recipeListTable\"]/tbody/tr/td[contains(.,'%s')]";
-    private final String chooseOption = "//*[@class=\"submenu-value-left\"]/label[text()='%s']";
     private final String deletePhaseMessage = "//span[(text()='Proceed with deleting the Phase -%s')]";
     private final String touchIdButtons = "//button[@class='%s']";
     private final String phaseNumberLabel = "//label[contains(text(),'%s')]";
@@ -113,7 +112,6 @@ public class RecipePage {
     private final String phaseMessage = "//span[(text()='%s')]";
     private final String label = "//label[contains(text(),'%s')]";
     private final By phasesList = By.className("phaseHead");
-
     private final SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private final SelenideElement statusDraft = $(By.xpath("//div[@class='status-tooltip']"));
     private final SelenideElement selectInReview = $(By.xpath("//span[text()='In-Review']"));
@@ -130,17 +128,15 @@ public class RecipePage {
     private final SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
     private final String upIcon = "(//div[@class='up-icon'])[%d]";
     private final SelenideElement applyFilterButton = $(By.xpath("//span[text()='Apply Filters']"));
-
     private final ElementsCollection deleteButtons = $$(By.xpath("//*[@class='deleteButton']"));
     private final SelenideElement saveEditorButton = $(By.xpath("//button[contains(@class,'save-button')]"));
     private final SelenideElement importMenuButton = $(By.xpath("//button[contains(@class,'import-button')]"));
     private final SelenideElement importButton = $(By.xpath("//button[contains(@class,'import-button-text')]"));
     private final ElementsCollection recipeListTable = $$(By.xpath("//*[@id='recipeListTable']/tbody/tr"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
-    private final ElementsCollection dateSelectionInReport =
-            $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
-    private final SelenideElement noRecipeFilterMessage =
-            $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final ElementsCollection dateSelectionInReport = $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
+    private final SelenideElement noRunFilterMessage = $(By.xpath("//h4[text()='No runs matching with the applied filter.']"));
+    private final SelenideElement noRecipeFilterMessage = $(By.xpath("//h4[text()='No recipes matching with the applied filter']"));
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='recipeListTable']/tbody/tr[1]/td[6]"));
     private final SelenideElement previousMonth =
             $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
@@ -174,8 +170,6 @@ public class RecipePage {
     private final SelenideElement phaseLibrary = $(By.xpath("//span[text()='Phase Library']"));
     private final String phaseName = "//label[text()='%s']";
     private final String SELECT_RECIPE = "//*[@class='tbl-row']//td[text()='%s']";
-    private final SelenideElement chooseRecipe =
-            $(By.xpath("//*[@class='tbl-row']//td[text()='testRecipeToExecute1min']"));
     private final SelenideElement windowPopup = $(By.xpath("//div[text()='Please save the recipe.']"));
     private final SelenideElement addCriteriaInRecipe = $(By.xpath("(//span[@class='target'])[1]"));
     private final SelenideElement phase1 = $(By.xpath("//label[text()='Phase 1']"));
@@ -183,15 +177,12 @@ public class RecipePage {
     private final SelenideElement latestRecipeName = $(By.xpath("(//table[@class='table']/tbody/tr/td)[1]"));
     private final String warningMessage = "//span[text()='%s']";
     private final SelenideElement recipeFile = $(By.xpath("//*[@class=\"navButton\"][text()='File']"));
-    private final SelenideElement printRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Print']"));
     private final SelenideElement saveRecipe = $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Save']"));
     private final String recipeStatus = "//label[text()='%s']";
     private final SelenideElement exportIcon = $(By.xpath("//div[@class='export-icon']"));
     private final String importRecipeStatusVerify = "//td[text()='%s']/following-sibling::td[6]";
     private final SelenideElement importInputTextBox =
             $(By.xpath("//input[contains(@class,'rename-recipe-import-input')]"));
-    private final SelenideElement importRecipeFromEditor =
-            $(By.xpath("//*[@class=\"submenu-value-left\"]/label[text()='Import']"));
     private final SelenideElement saveBtn = $(By.className("btn_primary"));
     private final SelenideElement secondStep = $(By.xpath("(//input[@type='text' and @data-label='action-value'])[2]"));
     private final SelenideElement outOFRange = $(By.xpath("//div[contains(text(),'Out of Range')]"));
@@ -233,7 +224,6 @@ public class RecipePage {
             $(By.xpath("//input[@type='text' and @data-label='action-value']"));
     private final SelenideElement recipeCreateButton = $(By.xpath(
             "//div[(text()='Start creating your recipe by adding actions or phases from the right or pressing') ]/span[(text()='alt')]"));
-
     private final String phaseLabel = "//label[@data-phasename='%s']";
     private final String SELECT_PHASE = "//label[@class='phaseHead' and @data-phasename='%s']";
     private final ElementsCollection phaseStepsActions =
@@ -250,6 +240,7 @@ public class RecipePage {
     private final SelenideElement phaseLibViewIcon = $(By.xpath("//img[@title='View Phase']"));
     private final SelenideElement addPhaseFromLibraryBtn = $(By.xpath("//button[text()='Add Phase To Recipe']"));
     private final SelenideElement warningPopUpDialog = $(By.xpath("//h4[text()='Warning']"));
+    private final SelenideElement overWrittenAlertMSG = $(By.xpath("//span[text()='Recipe is locked. Please save it as new copy.']"));
     private final String deleteStepIcon = "//div[@data-contextmenu= 'step%s']//input[@class='deleteButton']";
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
@@ -594,7 +585,6 @@ public class RecipePage {
                 break;
             }
         }
-
         if (option.equalsIgnoreCase("Custom Range")) {
             commonWaiter(previousMonth, visible);
             previousMonth.click();
@@ -605,16 +595,14 @@ public class RecipePage {
             index = getRandomNumber(availableDates.size() / 2, availableDates.size());
             availableDates.get(index)
                     .click();
-
         }
-
     }
 
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }
 
-    public boolean verifyDateRanges(String dateRange) throws ParseException {
+    public boolean verifyDateRanges(String dateRange) {
         boolean isTrue = false;
         switch (dateRange) {
             case "Today":
@@ -897,7 +885,7 @@ public class RecipePage {
     }
 
     public void chooseRecipe(String recipeName) {
-        commonWaiter($(By.xpath(String.format(SELECT_RECIPE, recipeName))), visible).click();
+        commonWaiter($(By.xpath(String.format(SELECT_RECIPE,recipeName))), visible).click();
         commonWaiter(openButton, visible).click();
     }
 

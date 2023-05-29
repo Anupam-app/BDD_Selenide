@@ -24,7 +24,6 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import dataobjects.BackupStatus;
-import dataobjects.Backupsetting;
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.ContextHelper;
 import pageobjects.utility.SelenideHelper;
@@ -32,38 +31,36 @@ import pageobjects.utility.TimeHelper;
 
 public class BackupPage {
 
-    private Backupsetting backupsetting;
+    public static final String BACKUP_DATE_FORMAT = "MMM d, yyyy, h:mm:ss a";
 
     private final int BACKUP_FINISH_TIME_TO_WAIT = 7 * TimeHelper.ONE_MINUTE;
     private final int BACKUP_SCHEDULED_TIME_TO_WAIT = 4 * TimeHelper.ONE_MINUTE;
     private final int BACKUP_IMMEDIATE_TIME_TO_WAIT = TimeHelper.ONE_MINUTE;
 
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
-    private String XPATH_NOTIFICATION_BACKUP_END =
+    private final String XPATH_NOTIFICATION_BACKUP_END =
             "//*[contains(@class,'notification-bar')][contains(text(),'%s')]";
-    private String XPATH_HEADER = "//div[@class='header-title']";
-    private String XPATH_ORCHESTRATOR_HEADER = "//div[contains(@class,'BackupRestore_header-title')]";
+    private final String XPATH_HEADER = "//div[@class='header-title']";
+    private final String XPATH_ORCHESTRATOR_HEADER = "//div[contains(@class,'BackupRestore_header-title')]";
 
-    private SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
-    private SelenideElement backupLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='Backup']"));
-    private SelenideElement historyLinkText = $(By.xpath("//*[contains(@class,'sub-menu')][text()='History']"));
-    private SelenideElement scheduleTextBox = $(By.xpath("//input[@class ='schedule-text-box']"));
-    private SelenideElement downArrow = $(By.xpath("//span[@class='icon-down-arrow']"));
-    private SelenideElement backupNowButton = $(By.xpath("//span[contains(text(),'Backup Now')]"));
-    private SelenideElement backupScheduleButton = $(By.className("btn-schedule"));
-    private SelenideElement confirmButton = $(By.xpath("//button[contains(text(),'Confirm')]"));
-    private SelenideElement scheduleOkButton = $(By.className("btn-ok"));
-    private SelenideElement dailyBackup = $(By.xpath(
+    private final SelenideElement lastStatusText = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[5]"));
+    private final SelenideElement scheduleTextBox = $(By.xpath("//input[@class ='schedule-text-box']"));
+    private final SelenideElement downArrow = $(By.xpath("//span[@class='icon-down-arrow']"));
+    private final SelenideElement backupNowButton = $(By.xpath("//span[contains(text(),'Backup Now')]"));
+    private final SelenideElement backupScheduleButton = $(By.className("btn-schedule"));
+    private final SelenideElement confirmButton = $(By.xpath("//button[contains(text(),'Confirm')]"));
+    private final SelenideElement scheduleOkButton = $(By.className("btn-ok"));
+    private final SelenideElement dailyBackup = $(By.xpath(
             "(//*[@class='ant-radio-group ant-radio-group-outline backup-radio-group']//div/label/span/input)[1]"));
-    private SelenideElement dateInput = $(By.xpath("//input[@placeholder='DD/MMM/YYYY']"));
-    private SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
-    private SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
-    private SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
-    private SelenideElement confirmationModal = $(By.xpath("//div[@class='modal-msg-block']"));
-    private SelenideElement okButton = $(By.xpath("//button[@class='btn-ok']"));
-    private SelenideElement lastScheduledBackUpName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
+    private final SelenideElement dateInput = $(By.xpath("//input[@placeholder='DD/MMM/YYYY']"));
+    private final SelenideElement timeInput = $(By.xpath("(//input[@placeholder='Select time'])[1]"));
+    private final SelenideElement backupLocation = $(By.xpath("//div[@class='backup-location']"));
+    private final SelenideElement selectDate = $(By.xpath("//div[@aria-disabled='false']"));
+    private final SelenideElement confirmationModal = $(By.xpath("//div[@class='modal-msg-block']"));
+    private final SelenideElement okButton = $(By.xpath("//button[@class='btn-ok']"));
+    private final SelenideElement lastScheduledBackUpName = $(By.xpath("(//*[contains(@class,'history-card')])[1]/div[1]"));
 
-    private SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
+    private final SelenideElement backupHeader = $(By.xpath("//div[text()='Backup and Restore']"));
     private final String scheduledBackupDetails = "//div[@class='scheduled-row']/div[%d]";
     private final SelenideElement noData = $(By.xpath("//div[@class='no-data-based-on-search']"));
 
@@ -139,10 +136,10 @@ public class BackupPage {
             Assert.assertEquals("User is not from the list", "Bio4CAdmin",
                     $(By.xpath(String.format(historyColumnValue, 2))).getText());
 
-            String[] backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText()
-                    .split(": ");
+            String backupDate = $(By.xpath(String.format(historyColumnValue, 4))).getText();
             Assert.assertTrue(
-                    backupDate[1].matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
+                    SelenideHelper.dateFormatCheck(backupDate,BACKUP_DATE_FORMAT));
+
             String status = $(By.xpath(String.format(historyColumnValue, 5))).getText();
             Assert.assertTrue("Backup Status is not correct", (status.equalsIgnoreCase("Running")
                     || status.equalsIgnoreCase("success") || status.equalsIgnoreCase("Aborted")));
@@ -163,13 +160,6 @@ public class BackupPage {
                 Assert.assertNotNull($(By.xpath(String.format(restoreColumnValue, i))).getText());
             }
         }
-    }
-
-    public String getBackUpName() {
-        if (backupName.isDisplayed()) {
-            return backupName.getText();
-        }
-        return "";
     }
 
     public String getBackUpNameOnRestorePage() {
