@@ -11,6 +11,7 @@ import org.junit.Assert;
 
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
+import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.ReportTemplate;
 import dataobjects.ReportTemplateStatus;
@@ -35,9 +36,10 @@ public class ReportsPageStepsDefinition {
     private final Role role;
     private final LoginPage loginPage;
     private final Login login;
+    private final Recipe recipe;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-            ReportTemplate reportTemplate, User user, Login login, Role role) {
+            ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
@@ -45,6 +47,7 @@ public class ReportsPageStepsDefinition {
         this.user = user;
         this.login = login;
         this.role = role;
+        this.recipe = recipe;
     }
 
     @Given("I goto report management page")
@@ -659,6 +662,13 @@ public class ReportsPageStepsDefinition {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForResetChangePassword(this.user.getUserName(), passwordAction,
                 this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for recipe {string}")
+    public void iVerifyAuditLogsForRecipeCreate(String action) {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), this.login.getLogin(), action);
         switchTo().parentFrame();
     }
 

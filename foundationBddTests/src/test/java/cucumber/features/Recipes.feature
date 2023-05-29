@@ -28,6 +28,10 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+    And I generate audit trail report
+    And I verify audit logs for recipe "modify"
+    And I check the audit trail report
+    Then I see the "modify" recipe events in report
 
   @SMOKE @IVI-4468 @IVI-6688
   Scenario: BIOCRS-5059 | Recipe approval
@@ -114,6 +118,10 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+    And I generate audit trail report
+    And I verify audit logs for recipe "created"
+    And I check the audit trail report
+    Then I see the "created" recipe events in report
 
   Scenario: BIOCRS-5477 | User tries to select another recipe from Browser while there is unsaved recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -473,14 +481,14 @@ Feature: Recipe management
     When I edit recipe "<recipes>"
     And I saveAs the recipe
     Then I select existing recipe to verify the warning text message
-      |recipeInReview               |
-      |testRecipeWithChar30NameLengt|
-      |ApprovedInActiveRecipe       |
+      | recipeInReview                |
+      | testRecipeWithChar30NameLengt |
+      | ApprovedInActiveRecipe        |
 
-  Examples:
-      |recipes          |
-      |testDraftRecipe  |
-      |recipeTechReview |
+    Examples:
+      | recipes          |
+      | testDraftRecipe  |
+      | recipeTechReview |
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
