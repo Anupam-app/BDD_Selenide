@@ -672,4 +672,11 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @Then("I see the {string} recipe events in report")
+    public void iVerifyResetChangePasswordEvent(String recipeAction) throws Exception {
+        this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), this.login.getLogin(),
+                recipeAction);
+        switchTo().parentFrame();
+    }
+
 }

@@ -55,7 +55,6 @@ Feature: User login
     When I enter "<login>" as username and "<tempPassword>" as password
     And I push the login button
     And I change password "<newPassword>"
-    And I open portal
     And login page is open
     And I enter "<login>" as username and "<newPassword>" as password
     And I push the login button

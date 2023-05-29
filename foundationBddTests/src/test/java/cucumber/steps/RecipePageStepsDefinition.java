@@ -780,13 +780,6 @@ public class RecipePageStepsDefinition {
         recipePage.verifySaveTimeFieldValue();
     }
 
-    @Then("I see the {string} recipe events in report")
-    public void iVerifyResetChangePasswordEvent(String recipeAction) throws Exception {
-        this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), this.login.getLogin(),
-                recipeAction);
-        switchTo().parentFrame();
-    }
-
     @Then("I verify the recipe {string}")
     public void iVerifyTheRecipeStatus(String status) {
         iGoToBrowserMode();
