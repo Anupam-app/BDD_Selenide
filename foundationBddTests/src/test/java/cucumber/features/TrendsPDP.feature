@@ -117,8 +117,7 @@ Feature: Trends PDP
     When I choose "<Param1>","<Param2>" parameters as default collection
     And I save as trends collections
     Then I see "<Param1>","<Param2>" parameters displayed
-    And I logout
-    And I am logged in as "Bio4cService" user
+    And I logout and login as "Bio4cService" and password as "Merck$ervice"
     And I navigate to trends page
     When I choose "<Param1>","<Param2>" parameters as default collection
     And I save as trends collections as in step 4
