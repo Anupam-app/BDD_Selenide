@@ -9,10 +9,12 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import cucumber.util.DriverHooks;
+
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public class SelenideHelper {
     }
 
     public static SelenideElement commonWaiter(SelenideElement element, Condition condition) {
-        return element.waitUntil(condition, 20000l, 500l);
+        return element.waitUntil(condition, 20000L, 500L);
     }
 
     public static Wait<WebDriver> fluentWaiter() {
@@ -60,20 +62,9 @@ public class SelenideHelper {
         DriverHooks.currentScenario.attach(screenshot, "image/png", "name");
     }
 
-    public static LocalDate dateParser(String value, String orgFormat) throws ParseException {
-
+    public static LocalDate dateParser(String value, String orgFormat) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
-        LocalDate selectedDate = LocalDate.parse(value, formatter);
-
-        return selectedDate;
-    }
-    
-    public static LocalDateTime dateParserLocalDateTime(String value, String orgFormat) throws ParseException {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(orgFormat).localizedBy(Locale.ENGLISH);
-        LocalDateTime selectedDate = LocalDateTime.parse(value, formatter);
-
-        return selectedDate;
+        return LocalDate.parse(value, formatter);
     }
 
     public static void appRefresh() {
@@ -91,6 +82,17 @@ public class SelenideHelper {
     public static void selectButton(SelenideElement locator) {
         locator.waitUntil(visible, 10000).isEnabled();
         locator.click();
+    }
+
+    public static boolean dateFormatCheck(String dateStr, String dateFormat) {
+        DateFormat sdf = new SimpleDateFormat(dateFormat);
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
     }
 }
 

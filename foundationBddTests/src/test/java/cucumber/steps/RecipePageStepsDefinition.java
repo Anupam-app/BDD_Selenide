@@ -18,7 +18,6 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipePage;
-import pageobjects.pages.RecipeTouchEnablerPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
@@ -30,16 +29,14 @@ public class RecipePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
-    private final RecipeTouchEnablerPage recipeTouch;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-            ReportsPage reportPage, RecipeTouchEnablerPage recipeTouch) {
+                                     ReportsPage reportPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
-        this.recipeTouch = recipeTouch;
     }
 
     @Given("I go to recipe page")
@@ -656,11 +653,6 @@ public class RecipePageStepsDefinition {
         recipePage.iClearPhaseErrorStep();
     }
 
-    @Then("I can add phase to phase library.")
-    public void iCanAddPhaseToPhaseLibrary() throws AWTException {
-        recipePage.addPhaseLibraryWithErrorPhase();
-    }
-
     @And("I add action and create random phase with multiple steps")
     public void iAddActionAndCreateRandomPhaseWithMultipleSteps() {
         recipePage.addingPhaseByPlus();
@@ -783,8 +775,8 @@ public class RecipePageStepsDefinition {
     }
 
     @And("I verify action {string} in the step")
-    public void iVerifyRecipeActionStep(String actionstep) {
-        recipePage.verifyRecipeActionStep(actionstep);
+    public void iVerifyRecipeActionStep(String actionStep) {
+        recipePage.verifyRecipeActionStep(actionStep);
     }
 
 }
