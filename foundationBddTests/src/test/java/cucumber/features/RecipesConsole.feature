@@ -217,7 +217,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
-    
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -243,9 +243,7 @@ Feature: Recipe console
     When I goto report management page
     And I go to main
     Then I verify the recipe execution details in console View
-    And I logout
-    And login page is open
-    And I am logged in as "Bio4CAdmin" user
+    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
 
