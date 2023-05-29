@@ -31,7 +31,6 @@ public class RecipePageStepsDefinition {
     private final Recipe recipe;
     private final Login login;
 
-
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
                                      ReportsPage reportPage) {
         this.recipePage = recipePage;
