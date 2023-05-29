@@ -124,8 +124,7 @@ Feature: Trends PDP
     And I save as trends collections as in step 4
     And I go to list of collection
     And I delete the collection name
-    And I logout
-    And I am logged in as "Bio4CAdmin" user
+    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I navigate to trends page
     And I go to list of collection
     Then I delete the collection name
