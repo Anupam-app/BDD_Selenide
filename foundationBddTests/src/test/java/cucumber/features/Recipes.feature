@@ -14,6 +14,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27816
   https://stljirap.sial.com/browse/BIOFOUND-27905
   https://stljirap.sial.com/browse/BIOFOUND-27935
+  https://stljirap.sial.com/browse/BIOFOUND-27904
+  https://stljirap.sial.com/browse/BIOFOUND-27903
   https://stljirap.sial.com/browse/BIOFOUND-28042
 
   @IVI-6688
@@ -121,8 +123,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     Then I verify notification messages "Phase created successfully"
-    And I go to browser mode
-    And I edit recipe "testRecipeDraftToReject"
+    And I navigate to recipe browser, open a recipe "testRecipeDraftToReject"
     Then I see warning message is displayed "Please save the recipe."
 
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
@@ -465,22 +466,19 @@ Feature: Recipe management
     And I go to browser mode
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
-    Then I see new recipe is saved as Draft
+    Then I see new recipe is saved as "Draft"
 
   Scenario Outline:  Overwriting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
     And I saveAs the recipe
-    Then I select existing recipe to verify the warning text message
-      |recipeInReview               |
-      |testRecipeWithChar30NameLengt|
-      |ApprovedInActiveRecipe       |
+    Then I select "<existing>" recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
 
   Examples:
-      |recipes          |
-      |testDraftRecipe  |
-      |recipeTechReview |
+      |recipes          |existing                     |
+      |testDraftRecipe  |recipeInReview               |
+      |recipeTechReview |testRecipeWithChar30NameLengt|
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -493,6 +491,20 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+
+  Scenario Outline:  Overwriting recipe with different status
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "<recipes>"
+    And I verify action "Acid pH Control Loop Setpoint" in the step
+    And I saveAs the recipe
+    And I select "<existing>" recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
+    And I verify action "Acid pH Control Loop Setpoint" in the step
+    Then I verify the recipe "<status>"
+    Examples:
+      |recipes               |status     |existing         |
+      |recipeTechReview      |Tech-Review|testDraftRecipe  |
+      |OverWritingDraftRecipe|Draft      |recipeTechReview |
 
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user
