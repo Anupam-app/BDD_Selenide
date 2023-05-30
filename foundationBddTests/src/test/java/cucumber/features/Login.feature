@@ -62,7 +62,8 @@ Feature: User login
     And I enter "<login>" as username and "<tempPassword>" as password
     And I push the login button
     And I should see the message "Invalid username or password. You have 4 attempt(s) left."
-    And I am logged in as "<login>" user
+    And I enter "<login>" as username and "<newPassword>" as password
+    And I push the login button
     And I generate audit trail report
     And I verify audit logs for "temp" password
     And I check the audit trail report
@@ -70,8 +71,8 @@ Feature: User login
 
     Examples:
       | login                | tempPassword | newPassword |
-      | testUsrFirstLog      | Ot8[o[Zo{0   | MerckApp1@  |
-      | testUsrAfterResetPwd | IN0Ax^t;:6   | MerckApp1@  |
+      | testUsrFirstLog      | Ot8[o[Zo{0   | !2345Zxcv1  |
+      | testUsrAfterResetPwd | IN0Ax^t;:6   | !2345Zxcv1  |
 
 
   Scenario: User login for user disabled

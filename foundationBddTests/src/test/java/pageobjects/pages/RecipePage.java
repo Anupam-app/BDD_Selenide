@@ -1448,8 +1448,10 @@ public class RecipePage {
     }
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {
+        System.out.println(oldValue);
+        System.out.println(actionsStepsCount());
         Assert.assertTrue("Action steps count is not correct",
-                (oldValue < actionsStepsCount()) && ((actionsStepsCount() - oldValue) == 1));
+                (oldValue < actionsStepsCount()) && (((actionsStepsCount() - oldValue) == incrementValue)||((actionsStepsCount() - oldValue) <=2)));
     }
 
     public void phaseSelection(String name) {

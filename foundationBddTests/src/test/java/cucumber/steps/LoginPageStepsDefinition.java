@@ -46,6 +46,7 @@ public class LoginPageStepsDefinition {
     public void iEnterUsernameAndPassword(String username, String password) {
         loginPage.setUser(username);
         loginPage.setPassword(password);
+        login.setLogin(username);
     }
 
     @When("I push the login button")
