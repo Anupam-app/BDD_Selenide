@@ -234,7 +234,7 @@ Feature: Recipe console
     And I Select confirm button
     Then I should see change of Process restating to Process hold
     And I verify the recipe console Elements
-  @test
+
   Scenario: BIOFOUND-10802: FT_CF_Recipe Management_Verify recipe execution live data persistency when user switches the focus outside P&ID page
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
@@ -244,9 +244,6 @@ Feature: Recipe console
     And I go to main
     Then I verify the recipe execution details in console View
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-#    And I logout
-#    And login page is open
-#    And I am logged in as "Bio4CAdmin" user
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
 
