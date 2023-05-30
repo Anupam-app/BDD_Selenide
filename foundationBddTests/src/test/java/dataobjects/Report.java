@@ -1280,4 +1280,60 @@ public class Report {
         }
     }
 
+    public void verifyAuditReportForRecipe(String reportUrl, String recipeName, String userNameLoggedIn,
+            String recipeAction) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(userColumnIndex)
+                        .getText(false)
+                        .contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(1)
+                        .getText(false)
+                        .contains("RecipeManagement"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(2)
+                        .getText(false)
+                        .contains("Recipe Name -" + recipeName));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(7)
+                        .getText(false)
+                        .isEmpty());
+                if (recipeAction.equals("created")) {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " created a new recipe" + recipeName).replaceAll("\\s", ""));
+                } else {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
+                }
+            }
+            break;
+        }
+    }
+
 }

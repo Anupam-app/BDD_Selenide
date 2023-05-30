@@ -45,7 +45,7 @@ Feature: Recipe console
     And I select user in dropdown "Bio4CAdmin"
     Then I check audit trial logs
 
-  Scenario: IVI bug IVI-5657| Recipe Management | Recipe execution time is cached when it is Rerun after being aborted
+  Scenario: Recipe execution time is cached when it is Rerun after being aborted
     Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
     And I start recipe execution
@@ -55,7 +55,7 @@ Feature: Recipe console
     Then control should be on rerun button
     And I rerun recipe execution and timer starts from zero
 
-  Scenario: IVI Bug IVI-4469| Special chars are not allowed in comments
+  Scenario: Special chars are not allowed in comments
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute1min"
     And I provide special chars in pre run comments
@@ -111,13 +111,13 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should see special characters not allowed
-    And I Verify manual run status in recipe consol
+    And I Verify manual run status in recipe console
 
   @IVI-7599
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
     Given I expand recipe console in pnid
     And I load recipe "testRecipeToExecute" and run it during 10 seconds
-    And I verify all mandatory fields has asterick mark "*"
+    And I verify all mandatory fields has asterisk mark "*"
     When I click ok button
     Then I should see "Mandatory field should not be empty." message
     When I enter existing value in RUNID
@@ -217,7 +217,7 @@ Feature: Recipe console
     And I validate the Start button is "disabled"
     And I restart the Process hold
     And I validate the Start button is "enabled"
-    
+
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid
     When I Select Process Hold
@@ -261,7 +261,7 @@ Feature: Recipe console
     Then I should see message "Run ID is already in use."
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
-    And I Verify manual run status in recipe consol
+    And I Verify manual run status in recipe console
 
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
     Given I expand recipe console
@@ -275,9 +275,9 @@ Feature: Recipe console
     Given I expand recipe console
     When I load recipe "testRecipeToExecute1min"
     Then I should see pre run window
-    When I clear and try to enter lenghty RUN ID, BatchID
+    When I clear and try to enter lengthy RUN ID, BatchID
     And provide remaining mandatory data to select OK button
-    Then I should see recipe execution started succesfully
+    Then I should see recipe execution started successfully
     And I validate the recipe console UI elements
     And I mouse hover RUNID and BatchID to validate full text displayed
     And I Abort the recipe execution
@@ -289,7 +289,7 @@ Feature: Recipe console
     When I select "Manual operation" tab
     And I start Manual run
     And I enter manual operation name more than 30 char and Tab out
-    Then Verify the wanring message "Manual Operation Name should not exceed 30 characters."
+    Then Verify the warning message "Manual Operation Name should not exceed 30 characters."
     And I start the recipe run with lengthy text on RUNID,BATCHID,PRODUCTID
     And I validate all above text value trimmed on recipe console UI
     And I mouse hover to see full text displayed on tooltip
@@ -301,19 +301,13 @@ Feature: Recipe console
     When I expand recipe console in pnid
     And I load recipe "testRecipeToExecute1min"
     And I start recipe execution
-    And I logout
-    And login page is open
-    And I enter "Bio4Cservice" as username and "Merck$ervice" as password
-    And I push the login button
+    And I logout and login as "Bio4Cservice" and password as "Merck$ervice"
     And I expand recipe console in pnid
     And I click on pause button
     And I click on resume button
-    And I logout
-    And login page is open
-    And I enter "bio4cAdmin" as username and "Merck@dmin" as password
-    And I push the login button
+    And I logout and login as "bio4cAdmin" and password as "Merck@dmin"
     And I expand recipe console in pnid
-    And I click on jump step "1"
+    And I click on jump step "3"
     And I click on abort button
     Then I should see the recipe run aborted
     And control should be on rerun button

@@ -137,7 +137,7 @@ public class LoginPageStepsDefinition {
     }
 
     @And("I logout and login as {string} and password as {string}")
-    public void logourAndLogin(String username, String password)
+    public void logoutAndLogin(String username, String password)
     {
         loginPage.iLogout();
         loginPage.openLogin();

@@ -1373,4 +1373,16 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
     }
 
+    public void verifyAuditLogsForRecipe(String recipeName, String loggedInUserName, String recipeAction) {
+        if (recipeAction.equals("created")) {
+            $(By.xpath(String.format(userAuditLogs, loggedInUserName, " created a new recipe ", recipeName)))
+                    .shouldBe(visible);
+        } else {
+            $(By.xpath(String.format(userAuditLogs, loggedInUserName, " edited recipe ", recipeName)))
+                    .shouldBe(visible);
+        }
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("Recipe Management"));
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("Recipe Name - " + recipeName));
+    }
+
 }

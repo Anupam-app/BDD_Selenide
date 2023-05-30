@@ -14,6 +14,8 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27816
   https://stljirap.sial.com/browse/BIOFOUND-27905
   https://stljirap.sial.com/browse/BIOFOUND-27935
+  https://stljirap.sial.com/browse/BIOFOUND-27904
+  https://stljirap.sial.com/browse/BIOFOUND-27903
   https://stljirap.sial.com/browse/BIOFOUND-28042
 
   @IVI-6688
@@ -28,6 +30,10 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+    And I generate audit trail report
+    And I verify audit logs for recipe "modify"
+    And I check the audit trail report
+    Then I see the "modify" recipe events in report
 
   @SMOKE @IVI-4468 @IVI-6688
   Scenario: BIOCRS-5059 | Recipe approval
@@ -114,6 +120,10 @@ Feature: Recipe management
     And I search the recipe
     And I edit the recipe
     Then I see my changes in recipe
+    And I generate audit trail report
+    And I verify audit logs for recipe "created"
+    And I check the audit trail report
+    Then I see the "created" recipe events in report
 
   Scenario: BIOCRS-5477 | User tries to select another recipe from Browser while there is unsaved recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -121,8 +131,7 @@ Feature: Recipe management
     When I trigger edit mode
     And I create a random phase
     Then I verify notification messages "Phase created successfully"
-    And I go to browser mode
-    And I edit recipe "testRecipeDraftToReject"
+    And I navigate to recipe browser, open a recipe "testRecipeDraftToReject"
     Then I see warning message is displayed "Please save the recipe."
 
   Scenario: BIOCRS-5477 | user navigates away from 'Recipes' screen without saving recipe then recipe draft progress shall be discarded
@@ -296,7 +305,26 @@ Feature: Recipe management
     When I try to copy and paste the phase
     Then I get a warning notifying that "Cannot add phase, number of phases in the recipe is exceeding the maximum number allowed."
 
-  Scenario: BIOFOUND-27810|Recipe status after import
+  Scenario: Recipe management_Save As recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "testRecipeDraftToReject"
+    And I add few actions steps to existing recipe
+    And I save as recipe name "secondRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+    When I edit recipe "testRecipeDraftToReject"
+    And I verify recipe steps are not modified
+    And I add few actions steps to existing recipe
+    And I verify the Unsaved status below recipe name
+    And I save as recipe name "ThirdRecipe"
+    Then I verify below recipes are displayed in recipe browser list
+      | testRecipeDraftToReject |
+      | secondRecipe            |
+      | ThirdRecipe             |
+
+  Scenario:BIOFOUND-27810|Recipe status after import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     And I have exported recipes in different status
@@ -311,7 +339,7 @@ Feature: Recipe management
       | testDraftRecipeToChangeStatus |
       | recipeTechReview              |
       | recipeInReview                |
-    Then the UoP status of imported recipe changes to Draft
+    Then the UoP status of imported recipe changes to "Draft"
       | testRecipeDraftToInactive1     |
       | testRecipeDraftToReject1       |
       | testDraftRecipeToChangeStatus1 |
@@ -336,10 +364,6 @@ Feature: Recipe management
     Given I am logged in as "Bio4CAdmin" user
     When I open Recipe editor
     And I add few actions steps
-    And I logout
-    And I am logged in as "BIO4CSERVICE" user
-    And I open Recipe editor
-    And I add few actions steps
     And I save the recipe
     Then I verify recipe status as "Saved"
     And I go to browser mode
@@ -359,25 +383,6 @@ Feature: Recipe management
     And I select GoTo Phase button
     And I select GoTo Step button a drop down opened
     Then drop down contain phase invocation step number
-
-  Scenario: Recipe management_Save As recipe
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I edit recipe "testRecipeDraftToReject"
-    And I add few actions steps to existing recipe
-    And I save as recipe name "secondRecipe"
-    Then I verify below recipes are displayed in recipe browser list
-      | testRecipeDraftToReject |
-      | secondRecipe            |
-    When I edit recipe "testRecipeDraftToReject"
-    And I verify recipe steps are not modified
-    And I add few actions steps to existing recipe
-    And I verify the Unsaved status below recipe name
-    And I save as recipe name "ThirdRecipe"
-    Then I verify below recipes are displayed in recipe browser list
-      | testRecipeDraftToReject |
-      | secondRecipe            |
-      | ThirdRecipe             |
 
   Scenario: Recipe management_ Operation phase criteria
     Given I am logged in as "Bio4CAdmin" user
@@ -416,11 +421,13 @@ Feature: Recipe management
     And I go to recipe page
     When I trigger edit mode
     And I create phase with errors
-    And I try to add phase to phase library
+    And I save phase to Phase library
     Then I get appropriate error
     And Phase is not added to phase library.
     When I clear errors in the phase
-    Then I can add phase to phase library.
+    And I save phase to Phase library
+    Then I should be notified that "Phase successfully added to phase library"
+    And I should see phase details under phase library
 
   Scenario: Validate the add Step count
     Given I am logged in as "Bio4CAdmin" user
@@ -465,22 +472,19 @@ Feature: Recipe management
     And I go to browser mode
     When I edit recipe "recipeTechReview"
     And I perform saveAs option to save recipe
-    Then I see new recipe is saved as Draft
+    Then I see new recipe is saved as "Draft"
 
   Scenario Outline:  Overwriting recipe with different status such as Tech review, In review, Approved active and Approved Inactive
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
     When I edit recipe "<recipes>"
     And I saveAs the recipe
-    Then I select existing recipe to verify the warning text message
-      |recipeInReview               |
-      |testRecipeWithChar30NameLengt|
-      |ApprovedInActiveRecipe       |
+    Then I select "<existing>" recipe to verify the warning text message "Recipe is locked. Please save it as new copy."
 
-  Examples:
-      |recipes          |
-      |testDraftRecipe  |
-      |recipeTechReview |
+    Examples:
+      | recipes          | existing                      |
+      | testDraftRecipe  | recipeInReview                |
+      | recipeTechReview | testRecipeWithChar30NameLengt |
 
   Scenario: Delete step and criteria from recipe
     Given I am logged in as "Bio4CAdmin" user
@@ -493,6 +497,20 @@ Feature: Recipe management
     Then I verify "WHEN" criteria is deleted and message seen "Step cut successfully"
     And I delete the "IF-ELSE" criteria using cross button
     Then I verify "IF-ELSE" criteria is deleted and message seen "criteria deleted successfully"
+
+  Scenario Outline:  Overwriting recipe with different status
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to recipe page
+    When I edit recipe "<recipes>"
+    And I verify action "Acid pH Control Loop Setpoint" in the step
+    And I saveAs the recipe
+    And I select "<existing>" recipe to verify the warning text message "This recipe is already exist, Do you want to overwrite?"
+    And I verify action "Acid pH Control Loop Setpoint" in the step
+    Then I verify the recipe "<status>"
+    Examples:
+      | recipes                | status      | existing         |
+      | recipeTechReview       | Tech-Review | testDraftRecipe  |
+      | OverWritingDraftRecipe | Draft       | recipeTechReview |
 
   Scenario: Default step wait time validation in Recipe Editor
     Given I am logged in as "Bio4CAdmin" user

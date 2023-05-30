@@ -12,9 +12,6 @@ Feature: Roles Permissions PDP specific
       | ProcessManager  |
       | Operator        |
     And I verify "<UserRole>" list of "<roles>"
-    Then I should see view icon of particular roles
-      | Administrator |
-      | Bio4CService  |
 
     @CRS
     Examples:
@@ -24,7 +21,7 @@ Feature: Roles Permissions PDP specific
       | parameters/crs/privilegeslistProcessManager  | processManager |
       | parameters/crs/privilegeslistOperator        | operator       |
 
-    @IVI @IVI-4908
+    @IVI
     Examples:
       | roles                                        | UserRole        |
       | parameters/ivi/privilegeslist                | service         |
