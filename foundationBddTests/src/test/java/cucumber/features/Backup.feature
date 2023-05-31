@@ -46,7 +46,7 @@ Feature: Backup creation
     And I goto backup page
     When I schedule backup "Daily"
     And I see the notification message "Backup job scheduled"
-    And I schedule backup with existing name "<occurrence>"
+    And I schedule backup with existing name "Daily"
     Then I see the notification message
 
   Scenario: BIOCRS-5113| Unauthorized user cant create backup
