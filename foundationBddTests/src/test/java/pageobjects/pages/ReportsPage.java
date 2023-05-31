@@ -1381,4 +1381,24 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("Recipe Name - " + recipeName));
     }
 
+    public void verifyAuditLogsForBackUp(String backUpName, String loggedInUserName, String recipeAction) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered data backup", ""))).shouldBe(visible);
+        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).getText()
+                .contains("Backup Job Id - "));
+
+        $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("Backup Management"));
+    }
+
+    public void verifyAuditLogsForScheduleBackUp(String backUpName, String loggedInUserName, String occurrence) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " deactivated backup schedule named ", backUpName)))
+                .shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, (" scheduled " + occurrence + " backup named "),
+                backUpName))).shouldBe(visible);
+        for (int i = 1; i < 3; i++) {
+            Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).getText()
+                    .contains("Backup Schedule Name - " + backUpName));
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Backup Management"));
+        }
+    }
+
 }
