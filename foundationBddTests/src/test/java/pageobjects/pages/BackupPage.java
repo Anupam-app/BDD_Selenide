@@ -365,7 +365,6 @@ public class BackupPage {
         backupHeader.shouldBe(visible);
     }
 
-
     public void deleteBackUp(String backupName) {
         $(By.xpath(String.format(trashIcon, backupName))).waitUntil(visible, 2000)
                 .click();
