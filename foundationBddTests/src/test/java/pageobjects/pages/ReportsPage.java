@@ -1385,7 +1385,6 @@ public class ReportsPage {
         $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered data backup", ""))).shouldBe(visible);
         Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).getText()
                 .contains("Backup Job Id - "));
-
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("Backup Management"));
     }
 
