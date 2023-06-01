@@ -473,4 +473,9 @@ public class UserPageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @And("I verify {string} role is not present")
+    public void verifyRoleIsNotPresent(String roleName){
+        userPage.verifyRoleIsNotPresent(roleName);
+    }
+
 }

@@ -1,6 +1,9 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: User management
 
+  Jira:
+  https://stljirap.sial.com/browse/SMXACE-2547
+
   @SMOKE
   Scenario: Create new user
     Given I am logged in as "Bio4CAdmin" user
@@ -240,3 +243,8 @@ Feature: User management
     Then I am logged in
     And I am landed on "Report Management" page
 
+  Scenario: Prevention of Bio4C Service Role to new custom user
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I create a random username
+    And I verify "Bio4CService" role is not present

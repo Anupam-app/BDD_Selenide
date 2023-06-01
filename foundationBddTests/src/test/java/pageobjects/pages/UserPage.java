@@ -469,4 +469,15 @@ public class UserPage {
     public void roleAssignedToUser(String role) {
         roleAssigned.shouldHave(text(role));
     }
+
+    public void verifyRoleIsNotPresent(String roleName){
+        selectRoleFromDropdown.click();
+        List<WebElement> options = selectRoleFromDropdown.findElements(By.tagName("li"));
+        for (WebElement option : options) {
+            if (option.getText()!=roleName){
+                break;
+            }
+        }
+    }
+
 }
