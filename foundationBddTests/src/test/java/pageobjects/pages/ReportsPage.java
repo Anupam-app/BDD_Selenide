@@ -1361,7 +1361,11 @@ public class ReportsPage {
         if (passwordAction.equals("reset")) {
             $(By.xpath(String.format(userAuditLogs, loggedInUser, " reset password for User Account ", username)))
                     .shouldBe(visible);
-        } else {
+        } else if(passwordAction.equals("temp")) {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account temporary password on first login","")))
+                .shouldBe(visible);
+        }
+        else {
             $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account password", "")))
                     .shouldBe(visible);
         }

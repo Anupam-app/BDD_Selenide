@@ -1,6 +1,9 @@
 @CRS @IVI @ORCHESTRATOR
 Feature: User login
 
+  JIRAs tested:
+  https://stljirap.sial.com/browse/BIOFOUND-27790
+
   Background:
     Given I open portal
 
@@ -56,9 +59,15 @@ Feature: User login
     And I push the login button
     And I change password "<newPassword>"
     And login page is open
+    And I enter "<login>" as username and "<tempPassword>" as password
+    And I push the login button
+    And I should see the message "Invalid username or password. You have 4 attempt(s) left."
     And I enter "<login>" as username and "<newPassword>" as password
     And I push the login button
-    Then I am logged in
+    And I generate audit trail report
+    And I verify audit logs for "temp" password
+    And I check the audit trail report
+    Then I see the "temp" password events in report
 
     Examples:
       | login                | tempPassword | newPassword |

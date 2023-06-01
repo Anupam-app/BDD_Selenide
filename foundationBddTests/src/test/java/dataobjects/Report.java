@@ -1262,11 +1262,17 @@ public class Report {
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
-                } else {
+                } else if (passwordAction.equals("temp")){
                     Assert.assertEquals((reportTable.getRows()
                             .get(1)
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " changed the account temporary password on first login").replaceAll("\\s", ""));
+                } else {
+                        Assert.assertEquals((reportTable.getRows()
+                                .get(1)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
                 }
             }

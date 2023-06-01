@@ -433,7 +433,7 @@ public class RecipePageStepsDefinition {
     @When("I add Phases from phase library to recipe")
     public void iAddPhaseFromPhaseLibraryToRecipe() {
         this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
-        recipePage.addPhaseFromLibrary();
+        recipePage.addPhaseFromLibrary("Phase123");
     }
 
     @When("I try to copy and paste the phase")
