@@ -27,7 +27,7 @@ public class LoginPage {
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
     private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
-    private final SelenideElement pnid_LOGIN_INFO = $(SelenideHelper.byTestAttribute("pnid_login_info"));
+    private final SelenideElement pnidLoginInfo = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
 	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
 	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
@@ -83,7 +83,7 @@ public class LoginPage {
     }
 
     public void waitPnidMessage(String message) {
-        commonWaiter(pnid_LOGIN_INFO.$(byText(message)), visible);
+        commonWaiter(pnidLoginInfo.$(byText(message)), visible);
         commonWaiter(loadingIcon, not(visible));
     }
 

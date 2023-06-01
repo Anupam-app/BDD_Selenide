@@ -856,9 +856,9 @@ public class RecipePage {
         $(By.xpath("//button[text()='Ok']")).click();
     }
 
-    public void addPhaseFromLibrary() {
+    public void addPhaseFromLibrary(String phaseName) {
         phaseLibrary.click();
-        $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,"Phase123"))).waitUntil(visible,2000L,1000L).isSelected();
+        $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,phaseName))).waitUntil(visible,2000L,1000L).isSelected();
         phaseLibViewIcon.click();
         addPhaseFromLibraryBtn.waitUntil(visible, 3000L, 1000L)
                 .click();
