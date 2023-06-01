@@ -1,8 +1,9 @@
 package cucumber.steps;
 
-import cucumber.util.I18nUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
+
+import cucumber.util.I18nUtils;
 import dataobjects.BackupStatus;
 import dataobjects.Backupsetting;
 import io.cucumber.java.en.Given;
@@ -73,9 +74,9 @@ public class BackupStepsDefinition {
 
     @Then("I verify backup history details")
     public void iVerifyBackup() {
-        backupPage.waitForImmediateBackupSucess();
+        backupPage.waitForImmediateBackupSuccess();
         Assert.assertEquals(BackupStatus.Success.toString(), this.backupPage.getLastStatusText());
-        //this.backupsetting.setBackupName(backupPage.getBackUpName());
+        SelenideHelper.goToDefault();
     }
 
     @Then("I verify backup history tab")
@@ -132,4 +133,10 @@ public class BackupStepsDefinition {
     public void iVerifyScheduledBackupDetails(String occurrence) {
         backupPage.verifyScheduledBackupDetails(backupsetting.getBackupName(), occurrence);
     }
+
+    @When("I delete the backup")
+    public void iDeleteBackup() {
+        backupPage.deleteBackUp(backupsetting.getBackupName());
+    }
+
 }

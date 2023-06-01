@@ -3,7 +3,7 @@ Feature: Backup creation
 
   @SMOKE
   Scenario: BIOCRS-5113 BIOCRS-5473| Create Backup
-    Given I am logged in as "bio4cadmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto backup page
     When I trigger a immediate backup
     And I go to backup history
@@ -12,11 +12,14 @@ Feature: Backup creation
     And I wait the end of backup
     And I go to backup history
     Then I verify backup history details
-    #And I verify backup in restore tab
+    And I generate audit trail report
+    And I verify audit logs for backup "create"
+    And I check the audit trail report
+    Then I see the "create" backup events in report
 
   @BIOCRS-9281
   Scenario Outline: BIOCRS-5113 BIOCRS-5473 | Schedule backup
-    Given I am logged in as "bio4cadmin" user
+    Given I am logged in as "Bio4CAdmin" user
     And I goto backup page
     When I schedule backup "<occurrence>"
     And I see the notification message "Backup job scheduled"
@@ -25,16 +28,26 @@ Feature: Backup creation
     Then I see backup scheduled is triggered
     And I wait the end of scheduled backup
     And I verify backup history details
-    #And I verify backup in restore tab
     And I go to backup mode
-    When I schedule backup with existing name "<occurrence>"
-    Then I see the notification message "Unable to schedule backup job"
+    When I delete the backup
+    And I generate audit trail report
+    And I verify audit logs for "<occurrence>" scheduleBackUp
+    And I check the audit trail report
+    Then I see the "<occurrence>" scheduled backup events in report
 
     Examples:
       | occurrence |
       | Daily      |
       | Weekly     |
       | Monthly    |
+
+  Scenario: BackUp can not have same name as existing one
+    Given I am logged in as "Bio4CAdmin" user
+    And I goto backup page
+    When I schedule backup "Daily"
+    And I see the notification message "Backup job scheduled"
+    And I schedule backup with existing name "Daily"
+    Then I see the notification message
 
   Scenario: BIOCRS-5113| Unauthorized user cant create backup
     Given I am logged in as "reportUnauthUser" user

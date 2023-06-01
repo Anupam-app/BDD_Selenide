@@ -1262,11 +1262,17 @@ public class Report {
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
-                } else {
+                } else if (passwordAction.equals("temp")){
                     Assert.assertEquals((reportTable.getRows()
                             .get(1)
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " changed the account temporary password on first login").replaceAll("\\s", ""));
+                } else {
+                        Assert.assertEquals((reportTable.getRows()
+                                .get(1)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
                 }
             }
@@ -1326,6 +1332,125 @@ public class Report {
                             (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
                 }
             }
+            break;
+        }
+    }
+
+    public void verifyAuditReportForBackUp(String reportUrl, String backUpName, String userNameLoggedIn,
+            String backUpAction) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(userColumnIndex)
+                        .getText(false)
+                        .contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(1)
+                        .getText(false)
+                        .contains("BackupManagement"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(7)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertEquals((reportTable.getRows()
+                        .get(1)
+                        .get(4)
+                        .getText(false)).replaceAll("\\s", ""),
+                        (userNameLoggedIn + " triggered data backup" + "").replaceAll("\\s", ""));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(2)
+                        .getText(false)
+                        .contains("Backup Job ID"));
+            }
+            break;
+        }
+    }
+
+    public void verifyAuditReportForScheduleBackUp(String reportUrl, String backUpName, String userNameLoggedIn,
+            String occurrence) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                for (int i = 1; i < 3; i++) {
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(userColumnIndex)
+                            .getText(false)
+                            .contains(userNameLoggedIn));
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(1)
+                            .getText(false)
+                            .contains("BackupManagement"));
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(7)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(2)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (" Backup Schedule Name - " + backUpName).replaceAll("\\s", ""));
+                }
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(1)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(2)
+                        .get(5)
+                        .getText(false)
+                        .contains("Job Name"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(2)
+                        .get(6)
+                        .getText(false)
+                        .contains(backUpName));
+                Assert.assertEquals(reportTable.getRows()
+                        .get(1)
+                        .get(4)
+                        .getText(false)
+                        .replaceAll("\\s", ""),
+                        (userNameLoggedIn + "deactivated backup schedule named" + backUpName).replaceAll("\\s", ""));
+                Assert.assertEquals(reportTable.getRows()
+                        .get(2)
+                        .get(4)
+                        .getText(false)
+                        .replaceAll("\\s", ""),
+                        (userNameLoggedIn + "scheduled" + occurrence + "backup named" + backUpName).replaceAll("\\s",
+                                ""));
+
+            }
+
+
             break;
         }
     }
