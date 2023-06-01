@@ -112,6 +112,7 @@ public class UserPage {
     private final String moduleName = "//div[text()='%s']";
 
     private final String unlockMessage = "The account was successfully unlocked";
+    private final ElementsCollection rolesPresent = $$(By.xpath("//div[@class='role-dropdown']/following::ul/div/li"));
 
     public void setSearch(String search) {
         userSearchTextBox.clear();
@@ -472,9 +473,8 @@ public class UserPage {
 
     public void verifyRoleIsNotPresent(String roleName){
         selectRoleFromDropdown.click();
-        List<WebElement> options = selectRoleFromDropdown.findElements(By.tagName("li"));
-        for (WebElement option : options) {
-            if (option.getText()!=roleName){
+        for (SelenideElement role : rolesPresent) {
+            if (role.getText()!=roleName){
                 break;
             }
         }
