@@ -24,7 +24,6 @@ import com.codeborne.selenide.WebDriverRunner;
 import java.awt.AWTException;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
-import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
@@ -245,6 +244,7 @@ public class RecipePage {
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
+    private final String phaseSelectionFromPhaseLibrary = " //span[text()='%s']";
 
     private final Recipe recipe;
 
@@ -858,6 +858,7 @@ public class RecipePage {
 
     public void addPhaseFromLibrary() {
         phaseLibrary.click();
+        $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,"Phase123"))).waitUntil(visible,2000L,1000L).isSelected();
         phaseLibViewIcon.click();
         addPhaseFromLibraryBtn.waitUntil(visible, 3000L, 1000L)
                 .click();
@@ -1448,10 +1449,8 @@ public class RecipePage {
     }
 
     public void verifyActionStepCount(int oldValue, int incrementValue) {
-        System.out.println(oldValue);
-        System.out.println(actionsStepsCount());
         Assert.assertTrue("Action steps count is not correct",
-                (oldValue < actionsStepsCount()) && (((actionsStepsCount() - oldValue) == incrementValue)||((actionsStepsCount() - oldValue) <=2)));
+                (oldValue < actionsStepsCount()) && (((actionsStepsCount() - oldValue) == incrementValue)));
     }
 
     public void phaseSelection(String name) {
