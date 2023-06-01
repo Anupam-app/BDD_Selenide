@@ -10,6 +10,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
 import cucumber.util.I18nUtils;
+import dataobjects.Backupsetting;
 import dataobjects.Login;
 import dataobjects.Recipe;
 import dataobjects.Report;
@@ -37,9 +38,11 @@ public class ReportsPageStepsDefinition {
     private final LoginPage loginPage;
     private final Login login;
     private final Recipe recipe;
+    private final Backupsetting backupSetting;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-            ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe) {
+            ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
+            Backupsetting backupSetting) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
@@ -48,6 +51,7 @@ public class ReportsPageStepsDefinition {
         this.login = login;
         this.role = role;
         this.recipe = recipe;
+        this.backupSetting = backupSetting;
     }
 
     @Given("I goto report management page")
@@ -673,9 +677,38 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I see the {string} recipe events in report")
-    public void iVerifyResetChangePasswordEvent(String recipeAction) throws Exception {
+    public void iVerifyRecipeEvents(String recipeAction) throws Exception {
         this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), this.login.getLogin(),
                 recipeAction);
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for backup {string}")
+    public void iVerifyAuditLogsForBackUp(String action) {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), this.login.getLogin(), action);
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the {string} backup events in report")
+    public void iVerifyBackUpEvent(String backUpAction) throws Exception {
+        this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                this.login.getLogin(), backUpAction);
+        switchTo().parentFrame();
+    }
+
+    @When("I verify audit logs for {string} scheduleBackUp")
+    public void iVerifyAuditLogsForScheduleBackUp(String occurrence) {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(),
+                occurrence);
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the {string} scheduled backup events in report")
+    public void iVerifyScheduledBackUpEvent(String occurrence) throws Exception {
+        this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                this.login.getLogin(), occurrence);
         switchTo().parentFrame();
     }
 
