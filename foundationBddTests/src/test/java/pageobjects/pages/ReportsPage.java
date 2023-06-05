@@ -183,7 +183,7 @@ public class ReportsPage {
             $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
     private final ElementsCollection availableDates =
             $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
-    private final SelenideElement processType = $(By.xpath("//div[text()='Process Types']"));
+    private final SelenideElement processType = $(By.xpath("//div[text()='Process Type']"));
     private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
     private final String XPATH_USER_TABLE = "//table[@id='foundationRunListTable']";
@@ -216,6 +216,9 @@ public class ReportsPage {
             $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
     private final String XPATH_BATCH_ID_DROPDOWN = "//li[text()='%s']";
     private final String dateFormat = "M/d/yyyy";
+    private final ElementsCollection checkBoxes = $$(By.xpath("//div[@class='multi-check-box']"));
+    private final SelenideElement selectBatch = $(By.xpath("//div[@class='restore-custom-drop-down-container']"));
+    private final SelenideElement selectBatchIcon = $(By.xpath("//div[@class='restore-custom-drop-down']//span[2]"));
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -1401,6 +1404,43 @@ public class ReportsPage {
             Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).getText()
                     .contains("Backup Schedule Name - " + backUpName));
             $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Backup Management"));
+        }
+    }
+
+    public void verifyEnableGenerateBtn() {
+        for (int i = 0; i < checkBoxes.size(); i++) {
+            if (checkBoxes.get(i).isDisplayed() && checkBoxes.get(i).isEnabled()) {
+                reportGenerateButton.isEnabled();
+            }
+        }
+    }
+
+    public void verifySelectBatchDropdown() {
+        commonWaiter(selectBatch, visible);
+        commonWaiter(selectBatchIcon, visible).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, "All Batches"))), visible).click();
+    }
+
+    public void expandReportFilter() {
+        commonWaiter(filterIcon, visible);
+        filterIcon.click();
+        commonWaiter(arrowIcon, visible).click();
+        processType.shouldBe(visible);
+        status.shouldBe(visible);
+    }
+
+    public void reportFilterOptions(String name) {
+        if ($(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).isDisplayed()) {
+            if (!$(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).isSelected()) {
+                $(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).click();
+            }
+            applyFilterButton.click();
+            commonWaiter(filterIcon, visible);
+            filterIcon.click();
+            commonWaiter(arrowIcon, visible).click();
+        } else if (!filterIcon.isDisplayed()) {
+            expandReportFilter();
+            $(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).click();
         }
     }
 

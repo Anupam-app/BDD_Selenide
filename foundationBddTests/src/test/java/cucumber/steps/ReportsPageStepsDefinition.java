@@ -41,8 +41,8 @@ public class ReportsPageStepsDefinition {
     private final Backupsetting backupSetting;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-            ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
-            Backupsetting backupSetting) {
+                                      ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
+                                      Backupsetting backupSetting) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
@@ -75,7 +75,7 @@ public class ReportsPageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.verifyColumn(list.get(i)
-                    .get(0), tab, i);
+                .get(0), tab, i);
         }
     }
 
@@ -110,7 +110,7 @@ public class ReportsPageStepsDefinition {
     @And("I choose corresponding recipe run")
     public void iChooseCorrespondingRecipeRun() {
         report.getRecipes()
-                .forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
+            .forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -182,8 +182,8 @@ public class ReportsPageStepsDefinition {
     @When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
         report.getRecipes()
-                .forEach(
-                        recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+            .forEach(
+                recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
     @When("I should see the report file presence")
@@ -272,7 +272,7 @@ public class ReportsPageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.selectParams(list.get(i)
-                    .get(0));
+                .get(0));
         }
     }
 
@@ -328,7 +328,7 @@ public class ReportsPageStepsDefinition {
     public void iApproveTheReportTemplate() {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
         reportPage.approveTemplate(this.reportTemplate.getName(), this.login.getPassword(),
-                this.reportTemplate.getStatus());
+            this.reportTemplate.getStatus());
     }
 
     @Then("I search and verify the report template")
@@ -365,7 +365,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the role added in report")
     public void iVerifyThatRoleIsAdded() throws Exception {
         this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(),
-                this.role.getPermissions());
+            this.role.getPermissions());
         switchTo().parentFrame();
     }
 
@@ -436,15 +436,15 @@ public class ReportsPageStepsDefinition {
             reportPage.gotoRunTab();
             iSelectReportFromDropdown("Consolidated");
             waiting = !report.getRecipes()
-                    .stream()
-                    .allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
+                .stream()
+                .allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
         }
     }
 
     @When("I choose recipes from consolidation run")
     public void iChooseRecipeRunForConsolidation() {
         report.getRecipes()
-                .forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
+            .forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
 
     @Given("I select the report template")
@@ -530,8 +530,8 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditTrailReportRolePermissions() throws IOException {
         iVerifyTheAuditTrailReport();
         this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
-                this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
-                this.role.getOldPermissions());
+            this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
+            this.role.getOldPermissions());
         SelenideHelper.goToDefault();
     }
 
@@ -599,9 +599,9 @@ public class ReportsPageStepsDefinition {
     public void iCheckAuditTrialReportContentForTemplate() throws Exception {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkTemplateStatus(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-                this.reportTemplate.getStatus(), this.login.getLogin());
+            this.reportTemplate.getStatus(), this.login.getLogin());
         this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-                this.reportTemplate.getStatus(), this.login.getLogin());
+            this.reportTemplate.getStatus(), this.login.getLogin());
     }
 
     @When("I verify audit logs for template update")
@@ -650,7 +650,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the role disabling enabling events in report")
     public void iVerifyThatRoleIsDisabledAndEnabled() throws Exception {
         this.report.verifyAuditReportForRoleDisableEnable(reportPage.getPdfUrl(), this.role.getRoleName(),
-                this.login.getLogin());
+            this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -665,7 +665,7 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditLogsForResetChangePassword(String passwordAction) {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForResetChangePassword(this.user.getUserName(), passwordAction,
-                this.login.getLogin());
+            this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -679,7 +679,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the {string} recipe events in report")
     public void iVerifyRecipeEvents(String recipeAction) throws Exception {
         this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), this.login.getLogin(),
-                recipeAction);
+            recipeAction);
         switchTo().parentFrame();
     }
 
@@ -693,7 +693,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the {string} backup events in report")
     public void iVerifyBackUpEvent(String backUpAction) throws Exception {
         this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                this.login.getLogin(), backUpAction);
+            this.login.getLogin(), backUpAction);
         switchTo().parentFrame();
     }
 
@@ -701,15 +701,32 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditLogsForScheduleBackUp(String occurrence) {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(),
-                occurrence);
+            occurrence);
         switchTo().parentFrame();
     }
 
     @Then("I see the {string} scheduled backup events in report")
     public void iVerifyScheduledBackUpEvent(String occurrence) throws Exception {
         this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                this.login.getLogin(), occurrence);
+            this.login.getLogin(), occurrence);
         switchTo().parentFrame();
+    }
+
+    @And("I verify the batch dropdown is present")
+    public void iVerifyTheBatchDropdownIsPresent(){
+        reportPage.verifyEnableGenerateBtn();
+        reportPage.verifySelectBatchDropdown();
+    }
+
+    @And("^I verify the report filter options and status")
+    public void iVerifyTheFilterFunctionality(DataTable table) {
+        reportPage.expandReportFilter();
+        List<String> filterOptions = table.asList(String.class);
+        for (String filterOption : filterOptions) {
+            reportPage.reportFilterOptions(filterOption);
+            reportPage.verifyConsolidatedStatus(filterOption);
+            reportPage.reportFilterOptions(filterOption);
+        }
     }
 
 }

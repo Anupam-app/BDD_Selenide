@@ -67,3 +67,13 @@ Feature: Role administration
     Then I verify audit logs for role update
     And I check the audit trail report
     And I see the role deleted in report
+
+  Scenario: Verify authorized user can Delete custom role and template role
+    Given I trigger Roles mode
+    And I verify "ProcessManager" role is "enabled"
+    And I edit "ProcessManager" role and verify delete button
+    And I verify "Operator" role is "enabled"
+    And I edit "Operator" role and verify delete button
+    When I edit "deleteRole" role and verify delete button
+    And I delete the role
+    Then I verify role is not present

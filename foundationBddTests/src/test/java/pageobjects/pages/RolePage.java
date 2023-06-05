@@ -14,10 +14,13 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,9 +40,9 @@ public class RolePage {
 
     private final SelenideElement rolesLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Roles')]"));
     private final SelenideElement XPATH_NOTIFICATION_TEXT =
-            $(By.xpath("//*[@class='roleModalNotificationBar roleMgmtNotificationBar information-bar']"));
+        $(By.xpath("//*[@class='roleModalNotificationBar roleMgmtNotificationBar information-bar']"));
     private final ElementsCollection permissionsText =
-            $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
+        $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
     private final SelenideElement saveText = $(By.className("roleModalNotificationBar"));
     private final SelenideElement inputRoleName = $(By.className("roleNameInput"));
 
@@ -55,7 +58,7 @@ public class RolePage {
     private final SelenideElement selectRoleDropdown = $(By.id("role"));
 
     private final SelenideElement roleNotificationBar =
-            $(By.xpath("//*[@class = 'roleModalNotificationBar error-bar']"));
+        $(By.xpath("//*[@class = 'roleModalNotificationBar error-bar']"));
     private final String XPATH_SORT_ICON = "//div[text()='%s']/child::div[@class='sortNone']";
     private String roleTableColumnClassValue = null;
     private final String XPATH_ROLE_COLUMN_HEADER = "//div[@class='roleTableHeader']/div[text()='%s']";
@@ -73,20 +76,20 @@ public class RolePage {
     private final String viewAll = "//div[contains(text(),'%s')]/following::div[2]/a";
     private final SelenideElement closeIcon = $(By.xpath("//div[(@class='viewAll-crossicon')]"));
     private final SelenideElement adminEditeIcon =
-            $(By.xpath("//div[(@class='roleCard')]/parent::div/div[3]/div[5]/div"));
+        $(By.xpath("//div[(@class='roleCard')]/parent::div/div[3]/div[5]/div"));
     private final ElementsCollection rolePermissionList = $$(By.xpath("//div[(@class='modal-body')]//div//div"));
     private final String tagLabel = "//div[@class='permission-col'][%s]";
     private final String viewIconOfAdministrator =
-            "//*[text()='%s']/parent::div//div[5]/*[(@class='MuiSvgIcon-root roleViewIcon vieIconBottom')]";
+        "//*[text()='%s']/parent::div//div[5]/*[(@class='MuiSvgIcon-root roleViewIcon vieIconBottom')]";
     private final String uncheckPermissions =
-            "//label[contains(@class,'ant-checkbox-wrapper ant-checkbox')]/span[(contains(text(),'%s'))]";
+        "//label[contains(@class,'ant-checkbox-wrapper ant-checkbox')]/span[(contains(text(),'%s'))]";
     private final SelenideElement newRoleName = $(By.xpath("//input[(@class='roleNameInput')]"));
     private final SelenideElement save_Btn = $(By.xpath("//*[text()='Save']"));
     private final SelenideElement cancel_Btn = $(By.xpath("//*[text()='Cancel']"));
     private final SelenideElement searchBox = $(By.xpath("//input[(@class='Usersearchbox')]"));
     private final SelenideElement newUserRole = $(By.xpath("//td[text()='NewUserRole' and @class='customusername']"));
     private final SelenideElement newUserRoleName = $(By
-            .xpath("//td[text()='NewUserRole' and @class='customusername']/parent::tr/td/div/div[text()='TestRole']"));
+        .xpath("//td[text()='NewUserRole' and @class='customusername']/parent::tr/td/div/div[text()='TestRole']"));
     private final SelenideElement roleNameText = $(By.xpath("//div[@class='roleTableColumnOne roleCardMarginOne']"));
     private final String disableEditButton = "//div[contains(text(),'%s')]/following-sibling::div[5]/button";
     private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
@@ -94,6 +97,7 @@ public class RolePage {
     private final SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
     private final SelenideElement deleteRoleButton = $(By.xpath("//span[text()='Delete role']"));
     private final SelenideElement yesDeleteButton = $(By.xpath("//button[text()='Yes, delete']"));
+    private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -106,7 +110,7 @@ public class RolePage {
     public void createNewRole(String roleName) {
         createRoleButton.click();
         SelenideHelper.commonWaiter(inputRoleName, visible)
-                .setValue(roleName);
+            .setValue(roleName);
     }
 
     public void sortList(String columnName, boolean descending) {
@@ -169,7 +173,7 @@ public class RolePage {
         List<WebElement> options = selectRoleDropdown.findElements(By.tagName("li"));
         for (WebElement option : options) {
             if (option.getText()
-                    .equals(roleName)) {
+                .equals(roleName)) {
                 option.click();
                 break;
             }
@@ -192,13 +196,13 @@ public class RolePage {
     public List<String> getPermissionList() {
         return permissionsText.shouldHave(CollectionCondition.allMatch("textNotEmpty", e -> !e.getText()
                 .isEmpty()))
-                .texts();
+            .texts();
     }
 
     public List<String> getOldPermissionList() {
         return permissionsText.shouldHave(CollectionCondition.allMatch("textNotEmpty", e -> !e.getText()
                 .isEmpty()))
-                .texts();
+            .texts();
     }
 
     public void roleExists(String role) {
@@ -252,7 +256,7 @@ public class RolePage {
 
     public void rolePermissionAssigned(SelenideElement element, String roles, String rolePath) {
         SelenideHelper.commonWaiter(element, visible)
-                .click();
+            .click();
         int count = rolePermissionList.size();
         List<String> acceptedParams = new ArrayList<>();
         List<String> expectedParams = new ArrayList<>();
@@ -271,7 +275,7 @@ public class RolePage {
             Assert.assertEquals(acceptedParams, expectedParams);
         }
         SelenideHelper.commonWaiter(closeIcon, visible)
-                .click();
+            .click();
     }
 
     public void adminRolePermission(String role) {
@@ -296,7 +300,7 @@ public class RolePage {
 
     public void adminIcon() {
         SelenideHelper.commonWaiter(adminEditeIcon, visible)
-                .click();
+            .click();
     }
 
     public void unselectRolePermission(String name) {
@@ -308,16 +312,16 @@ public class RolePage {
         newRoleName.click();
         newRoleName.setValue(userName);
         SelenideHelper.commonWaiter(save_Btn, visible)
-                .click();
+            .click();
         SelenideHelper.commonWaiter(cancel_Btn, visible)
-                .click();
+            .click();
     }
 
     public void iSearchName(String name) {
         SelenideHelper.commonWaiter(searchBox, visible)
-                .click();
+            .click();
         SelenideHelper.commonWaiter(searchBox, visible)
-                .setValue(name);
+            .setValue(name);
     }
 
     public void verifyRoleName(String name) {
@@ -342,7 +346,7 @@ public class RolePage {
 
     public void verifyAssignedPermission(String roleName, Set<String> set) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(viewAll, roleName))), visible)
-                .click();
+            .click();
         int count = rolePermissionList.size();
         List<String> acceptedParams = new ArrayList<>();
         for (int i = 1; i <= count; i++) {
@@ -355,7 +359,7 @@ public class RolePage {
             Assert.assertEquals(list, acceptedParams);
         }
         SelenideHelper.commonWaiter(closeIcon, visible)
-                .click();
+            .click();
     }
 
     public void updateRoleName(String roleName) {
@@ -371,7 +375,7 @@ public class RolePage {
             updatedNotification(String.format(DISABLE_ENABLE_ROLE_NOTIFICATION, value));
             enableDisableButton.shouldHave(attribute("aria-checked", "true"));
         } else if (value.equals("disabled")
-                && Objects.equals(enableDisableButton.getAttribute("aria-checked"), "true")) {
+            && Objects.equals(enableDisableButton.getAttribute("aria-checked"), "true")) {
             enableDisableButton.click();
             updatedNotification(String.format(DISABLE_ENABLE_ROLE_NOTIFICATION, value));
             enableDisableButton.shouldHave(attribute("aria-checked", "false"));
@@ -382,4 +386,18 @@ public class RolePage {
         commonWaiter(notification_Text, visible);
         notification_Text.shouldHave(text(message));
     }
+
+    public void roleSearchAndEdit(String roleName) {
+        searchRole(roleName);
+        $(By.xpath(String.format(xpathEditRoleIcon,roleName))).waitUntil(visible,2000L,1000L).click();
+        deleteRoleButton.shouldBe(visible);
+        if(cancel_Btn.isDisplayed()) {
+            cancel_Btn.waitUntil(visible, 2000L, 1000L).click();
+        }
+    }
+
+    public void verifyRoleAfterDelete(){
+        noRoleMessageStatus.waitUntil(visible,2000,1000).shouldHave(text("No result found for deleteRole"));
+    }
+
 }
