@@ -174,7 +174,7 @@ public class ReportsPage {
 
     private final SelenideElement startDateRep = $(By.xpath("//table[@id='reportListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement statusColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[4]"));
-    private final String COLUMN_DATA = "//table[@class='table']/tbody/tr[1]/td[%d]";
+    private final String COLUMN_DATA = "//table[@class='table']/tbody/tr[%d]/td[%d]";
     private final SelenideElement startDate = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[2]"));
     private final SelenideElement consolidateStartDate = $(By.xpath("//table[@class='table']/tbody/tr[1]/td[5]"));
 
@@ -220,6 +220,8 @@ public class ReportsPage {
     private final SelenideElement selectBatch = $(By.xpath("//div[@class='restore-custom-drop-down-container']"));
     private final SelenideElement selectBatchIcon = $(By.xpath("//div[@class='restore-custom-drop-down']//span[2]"));
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
+
+    private final ElementsCollection tableCount = $$(By.xpath("//table[@class='table']//tr"));
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -1048,19 +1050,21 @@ public class ReportsPage {
     }
 
     public boolean verifyConsolidatedStatus(String status) {
-        boolean result;
+        boolean result = false;
         SelenideElement columnData;
         commonWaiter(filterSelection, visible);
-        if(status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("Aborted")) {
-            columnData = $(By.xpath(String.format(COLUMN_DATA, 7)));
-        }else {
-            columnData = $(By.xpath(String.format(COLUMN_DATA, 6)));
-        }
-        if (!columnData.isDisplayed()) {
-            result = noDatamsg.isDisplayed();
-        } else {
-            result = columnData.getText()
-                .equalsIgnoreCase(status);
+        for (int i = 1; i <= tableCount.size(); i++) {
+            if (status.equalsIgnoreCase("Completed") || status.equalsIgnoreCase("Aborted")) {
+                columnData = $(By.xpath(String.format(COLUMN_DATA, i, 7)));
+            } else {
+                columnData = $(By.xpath(String.format(COLUMN_DATA, i, 6)));
+            }
+            if (!columnData.isDisplayed()) {
+                result = noDatamsg.isDisplayed();
+            } else {
+                result = columnData.getText()
+                    .equalsIgnoreCase(status);
+            }
         }
         return result;
     }
