@@ -387,7 +387,7 @@ public class RolePage {
 
     public void roleSearchAndEdit(String roleName) {
         searchRole(roleName);
-        $(By.xpath(String.format(xpathEditRoleIcon,roleName))).waitUntil(visible,2000L,1000L).click();
+        $(By.xpath(String.format(xpathEditRoleIcon,roleName))).waitUntil(visible,5000L,1000L).click();
         deleteRoleButton.shouldBe(visible);
         if(cancel_Btn.isDisplayed()) {
             cancel_Btn.waitUntil(visible, 2000L, 1000L).click();
