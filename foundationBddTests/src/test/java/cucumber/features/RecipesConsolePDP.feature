@@ -1,4 +1,4 @@
-Feature: Recipe console PDP
+Feature: Recipe Management console PDP
 
   JIRAs tested:
   https://stljirap.sial.com/browse/BIOFOUND-29286

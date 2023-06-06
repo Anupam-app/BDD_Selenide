@@ -249,7 +249,7 @@ public class RolePageStepsDefinition {
 
     @And("I verify Role permission are updated")
     public void modifiedRolePermission() {
-        rolePage.verifyAssignedPermission(this.role.getUpdatedRoleName(), this.role.getPermissions());
+        rolePage.verifyAssignedPermission(this.role.getRoleName(), this.role.getPermissions());
     }
 
     @And("I update roleName as {string}")

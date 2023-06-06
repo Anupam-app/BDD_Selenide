@@ -32,21 +32,32 @@ Feature: Roles Permissions Check
     And I check the audit trail report
     And I see the role disabling enabling events in report
 
-  Scenario: Modify custom role-Privileges and Name
+  Scenario: Modify custom role-Privileges
     Given I am logged in as "Bio4CAdmin" user
     And I go to user page
-    When I search "customRoleEdit" to validate role "editCustomRole" assigned
+    When I search "customRoleEdit" user to validate role "editCustomRole" assigned
     And I trigger Roles mode
     And I search and edit role "editCustomRole"
-    And I update roleName as "modifiedCustomRole"
     And I modify permission
       | removePermission | AddPermission      |
       | Create User      | Create Role        |
       | Basic Process    | View Present Alarm |
     And I save role successfully
-    Then I see modified role name is displayed on Role list data
-    And I verify Role permission are updated
-    And I trigger Users mode
-    And I search "customRoleEdit" to validate role "modifiedCustomRole" assigned
+    And I search the role
+    Then I verify Role permission are updated
     And I generate audit trail report
-    And I verify custom role permissions details captured in audit trail for user
+    And I verify custom role modification-"permissions" details captured in audit trail for user
+
+  Scenario: Modify custom role - Name
+    Given I am logged in as "Bio4CAdmin" user
+    And I go to user page
+    When I search "customRoleEdit" user to validate role "editCustomRole" assigned
+    And I trigger Roles mode
+    And I search and edit role "editCustomRole"
+    And I update roleName as "modifiedCustomRole"
+    And I save role successfully
+    Then I see modified role name is displayed on Role list data
+    And I trigger Users mode
+    And I search "customRoleEdit" user to validate role "modifiedCustomRole" assigned
+    And I generate audit trail report
+    And I verify custom role modification-"roleName" details captured in audit trail for user

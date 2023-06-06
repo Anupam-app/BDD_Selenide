@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: Role administration
+Feature: Role Management
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -10,7 +10,7 @@ Feature: Role administration
     And the role "testRoleToAssign" exists
     And I trigger Users mode
 
-  Scenario: IVI Bug | IVI-4491 | Adding role and permissions
+  Scenario: Adding role and permissions
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"
@@ -25,18 +25,8 @@ Feature: Role administration
     And I check the audit trail report
     And I see the role added in report
 
-  Scenario: Modifying role and permissions
-    Given I trigger Roles mode
-    When I edit role "testRoleToRemovePermission"
-    And I remove permission "Basic navigation"
-    And I click on save button
-    And I see notification
-    And I search the role
-    And I edit the role
-    Then I verify role details
-
   @IVI-5671
-  Scenario: IVI Bug IVI-5671| Assigning role to user
+  Scenario: Assigning role to user
     Given I search "testUserToAssignRole" user
     When I edit the user
     And I assign "testRoleToAssign" to user
@@ -54,7 +44,7 @@ Feature: Role administration
     And I click on save button
     Then I see the error message of role "testRoleToRemovePermission"
 
-  Scenario: IVI Bug | IVI-6138 | Obsolete Role
+  Scenario: Obsolete Role
     Given I trigger Roles mode
     When I create random role
     And I assign permission "Basic navigation"

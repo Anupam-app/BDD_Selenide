@@ -244,7 +244,7 @@ public class RecipePage {
     private final SelenideElement deleteCriteriaIcon = $(By.xpath("//div[contains(@class,'criteria-if-else')]/div[5]"));
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
-    private final String phaseSelectionFromPhaseLibrary = " //span[text()='%s']";
+    private final String phaseSelectionFromPhaseLibrary = "//span[text()='%s']/ancestor::span/following-sibling::span//img[@title='View Phase']";
 
     private final Recipe recipe;
 
@@ -858,7 +858,8 @@ public class RecipePage {
 
     public void addPhaseFromLibrary(String phaseName) {
         phaseLibrary.click();
-        $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,phaseName))).waitUntil(visible,2000L,1000L).isSelected();
+        $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,phaseName))).waitUntil(visible,4000L,1000L)
+                .click();
         phaseLibViewIcon.click();
         addPhaseFromLibraryBtn.waitUntil(visible, 3000L, 1000L)
                 .click();
