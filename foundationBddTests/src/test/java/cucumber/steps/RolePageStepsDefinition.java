@@ -293,7 +293,7 @@ public class RolePageStepsDefinition {
 
     @Then("I verify role is not present")
     public void verifyRoleAfterDelete(){
-
+        rolePage.verifyRoleAfterDelete();
     }
 
 }
