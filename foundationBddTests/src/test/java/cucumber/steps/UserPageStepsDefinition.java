@@ -95,7 +95,7 @@ public class UserPageStepsDefinition {
     }
 
     @Given("I trigger Users mode")
-    public void iTriggerUsersMode() {
+    public void iTriggerUsersMode() throws AWTException {
         userPage.triggerUsersMode();
     }
 

@@ -3,6 +3,7 @@ Feature: User Management
 
   Jira:
   https://stljirap.sial.com/browse/SMXACE-2547
+  https://stljirap.sial.com/browse/SMXACE-2523
 
   @SMOKE
   Scenario: Create new user
@@ -248,3 +249,4 @@ Feature: User Management
     And I go to user page
     When I create a random username
     And I verify "Bio4CService" role is not present
+

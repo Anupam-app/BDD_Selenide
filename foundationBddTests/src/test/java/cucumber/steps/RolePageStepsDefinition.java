@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import java.awt.AWTException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -283,4 +284,16 @@ public class RolePageStepsDefinition {
         userPage.goTo();
         rolePage.gotoRolesTab();
     }
+
+    @And("I edit {string} role and verify delete button")
+    public void roleSearchAndEdit(String roleName) {
+        this.role.setRoleName(roleName);
+        rolePage.roleSearchAndEdit(roleName);
+    }
+
+    @Then("I verify role is not present")
+    public void verifyRoleAfterDelete(){
+        rolePage.verifyRoleAfterDelete();
+    }
+
 }

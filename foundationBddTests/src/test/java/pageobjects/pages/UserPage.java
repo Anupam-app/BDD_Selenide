@@ -268,8 +268,9 @@ public class UserPage {
         userSearchTextBox.clear();
     }
 
-    public void triggerUsersMode() {
+    public void triggerUsersMode() throws AWTException {
         UsersLinkText.click();
+        zoomOut();
     }
 
     public void resetPassword() {
