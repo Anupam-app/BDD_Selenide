@@ -459,7 +459,7 @@ public class TrendsPage {
     }
 
     public void listOfCollection(String name) {
-        arrowOfListOfCollection.waitUntil(visible,20000,500).click();
+        arrowOfListOfCollection.waitUntil(visible,20000,1000).click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible, 2000)
                 .click();
     }

@@ -860,7 +860,6 @@ public class RecipePage {
         phaseLibrary.click();
         $(By.xpath(String.format(phaseSelectionFromPhaseLibrary,phaseName))).waitUntil(visible,4000L,1000L)
                 .click();
-        phaseLibViewIcon.click();
         addPhaseFromLibraryBtn.waitUntil(visible, 3000L, 1000L)
                 .click();
     }

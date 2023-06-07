@@ -348,7 +348,7 @@ public class BackupPage {
 
     public void notificationMessage(String message) {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).waitUntil(Condition.visible,
-                BACKUP_FINISH_TIME_TO_WAIT);
+                BACKUP_FINISH_TIME_TO_WAIT,500);
     }
 
     public void confirmationPopUpAccept() {
