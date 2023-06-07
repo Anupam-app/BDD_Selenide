@@ -1417,7 +1417,7 @@ public class ReportsPage {
         }
     }
 
-    public void verifyEnableGenerateBtn() {
+    public void isGenerateButtonEnabled() {
         for (int i = 0; i < checkBoxes.size(); i++) {
             if (checkBoxes.get(i).isDisplayed() && checkBoxes.get(i).isEnabled()) {
                 reportGenerateButton.isEnabled();

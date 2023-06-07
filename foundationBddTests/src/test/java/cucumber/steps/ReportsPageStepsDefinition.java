@@ -714,7 +714,7 @@ public class ReportsPageStepsDefinition {
 
     @And("I verify the batch dropdown is present")
     public void iVerifyTheBatchDropdownIsPresent(){
-        reportPage.verifyEnableGenerateBtn();
+        reportPage.isGenerateButtonEnabled();
         reportPage.verifySelectBatchDropdown();
     }
 

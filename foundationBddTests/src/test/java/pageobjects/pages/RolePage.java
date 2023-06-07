@@ -14,7 +14,6 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
@@ -83,7 +82,7 @@ public class RolePage {
         "//label[contains(@class,'ant-checkbox-wrapper ant-checkbox')]/span[(contains(text(),'%s'))]";
     private final SelenideElement newRoleName = $(By.xpath("//input[(@class='roleNameInput')]"));
     private final SelenideElement save_Btn = $(By.xpath("//*[text()='Save']"));
-    private final SelenideElement cancel_Btn = $(By.xpath("//*[text()='Cancel']"));
+    private final SelenideElement cancelButton = $(By.xpath("//*[text()='Cancel']"));
     private final SelenideElement searchBox = $(By.xpath("//input[(@class='Usersearchbox')]"));
     private final SelenideElement newUserRole = $(By.xpath("//td[text()='NewUserRole' and @class='customusername']"));
     private final SelenideElement newUserRoleName = $(By
@@ -311,7 +310,7 @@ public class RolePage {
         newRoleName.setValue(userName);
         SelenideHelper.commonWaiter(save_Btn, visible)
             .click();
-        SelenideHelper.commonWaiter(cancel_Btn, visible)
+        SelenideHelper.commonWaiter(cancelButton, visible)
             .click();
     }
 
@@ -389,8 +388,8 @@ public class RolePage {
         searchRole(roleName);
         $(By.xpath(String.format(xpathEditRoleIcon,roleName))).waitUntil(visible,5000L,1000L).click();
         deleteRoleButton.shouldBe(visible);
-        if(cancel_Btn.isDisplayed()) {
-            cancel_Btn.waitUntil(visible, 2000L, 1000L).click();
+        if(cancelButton.isDisplayed()) {
+            cancelButton.waitUntil(visible, 2000L, 1000L).click();
         }
     }
 
