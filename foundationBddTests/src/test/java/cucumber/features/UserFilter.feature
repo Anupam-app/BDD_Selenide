@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: Apply Filter Users
+Feature: User Filter
 
   Scenario Outline: Verify the user preferred homepage is displayed based on the User Preferences
     Given I am logged in as "testUserPref" user

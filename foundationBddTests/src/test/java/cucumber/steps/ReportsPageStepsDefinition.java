@@ -526,12 +526,17 @@ public class ReportsPageStepsDefinition {
         SelenideHelper.goToDefault();
     }
 
-    @Then("I verify custom role permissions details captured in audit trail for user")
-    public void iVerifyAuditTrailReportRolePermissions() throws IOException {
+    @Then("I verify custom role modification-{string} details captured in audit trail for user")
+    public void iVerifyAuditTrailReportRolePermissions(String attribute) throws IOException {
         iVerifyTheAuditTrailReport();
-        this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
-                this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
-                this.role.getOldPermissions());
+        if (attribute.equalsIgnoreCase("permissions")) {
+            this.report.checkModifiedRolePermission(reportPage.getPdfUrl(),
+                    this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
+                    this.role.getOldPermissions());
+        } else if (attribute.equalsIgnoreCase("roleName")) {
+            this.report.checkModifiedRoleName(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
+                    this.role.getRoleName(), this.login.getLogin());
+        }
         SelenideHelper.goToDefault();
     }
 
