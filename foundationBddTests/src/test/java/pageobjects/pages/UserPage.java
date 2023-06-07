@@ -289,7 +289,7 @@ public class UserPage {
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
         commonWaiter(XPATH_ERROR_NOTIFICATION_TEXT, visible);
         XPATH_ERROR_NOTIFICATION_TEXT.shouldHave(text(message));
-
+        commonWaiter(cancelButton, visible).click();
     }
 
     public void cancelUser() {

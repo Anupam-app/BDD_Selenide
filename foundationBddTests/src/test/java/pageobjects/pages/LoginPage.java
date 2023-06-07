@@ -37,8 +37,15 @@ public class LoginPage {
     private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
     private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
     private final SelenideElement loginErrorNotificationText = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
-
-    private User user;
+    private final SelenideElement unAppliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
+    private final SelenideElement exitWithoutSaveButton = $(By.xpath("//span[text()='Exit without saving']"));
+    private final SelenideElement userNotificationSection = $(By.xpath("//div[@id='userProfile']/parent::a"));
+    private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
+    private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
+    private final SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
+    private final SelenideElement addEditUserDialog = $(By.xpath("//h5[@class='modal-title']"));
+    private final SelenideElement cancelRoleButton = $(By.className("roleBtnCancel"));
+    private final User user;
 
     public LoginPage(User user){
         this.user = user;
@@ -114,11 +121,31 @@ public class LoginPage {
     }
 
     public void iLogout() {
-        switchTo().parentFrame();
-        SelenideHelper.commonWaiter(userProfileIcon, visible)
-                .click();
-        SelenideHelper.commonWaiter(logOutButton, visible)
-                .click();
+        if (addEditUserDialog.isDisplayed()
+                && (addEditUserDialog.getText().equalsIgnoreCase("Add User")
+                || addEditUserDialog.getText().equalsIgnoreCase("Edit User"))){
+            cancelButton.click();
+        } else if (cancelRoleButton.isDisplayed()){
+            cancelRoleButton.click();
+        } else if(postRunWindow.isDisplayed()){
+            okButton.waitUntil(visible,3000)
+                    .click();
+        }
+        if (!newPasswordTextBox.isDisplayed()) {
+            switchTo().parentFrame();
+            if (userProfileIcon.isDisplayed()) {
+                if (!userNotificationSection.getAttribute("aria-expanded").equalsIgnoreCase("true")) {
+                    commonWaiter(userProfileIcon, visible)
+                            .click();
+                }
+                commonWaiter(logOutButton, visible)
+                        .click();
+                if (unAppliedChanges.exists()) {
+                    commonWaiter(exitWithoutSaveButton, visible).click();
+                }
+                waitPnidLoading();
+            }
+        }
     }
 
     public void setCurrentPassword(String newPassword) {
@@ -135,4 +162,5 @@ public class LoginPage {
         commonWaiter(loginErrorNotificationText, visible);
         loginErrorNotificationText.shouldHave(text(message));
     }
+
 }

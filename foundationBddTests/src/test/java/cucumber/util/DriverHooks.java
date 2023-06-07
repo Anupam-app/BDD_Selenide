@@ -1,5 +1,6 @@
 package cucumber.util;
 
+import com.codeborne.selenide.WebDriverRunner;
 import com.xceptance.neodymium.util.WebDriverUtils;
 import io.cucumber.java.After;
 import io.cucumber.java.AfterStep;
@@ -7,12 +8,19 @@ import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import java.io.IOException;
+
+import pageobjects.pages.LoginPage;
 import pageobjects.utility.SelenideHelper;
 import utils.TimezoneUtils;
 
 public class DriverHooks {
 
     public static Scenario currentScenario;
+    private final LoginPage loginPage;
+
+    public DriverHooks(LoginPage loginPage) {
+        this.loginPage = loginPage;
+    }
 
     @Before
     public void before(Scenario scenario) throws IOException {
@@ -38,6 +46,12 @@ public class DriverHooks {
     @After(order = 100)
     public void tearDown(Scenario scenario) {
         SelenideHelper.takePicture();
-        WebDriverUtils.tearDown(scenario);
+        try {
+            loginPage.iLogout();
+        }
+        finally {
+            WebDriverUtils.tearDown(scenario);
+            WebDriverRunner.getWebDriver().quit();
+        }
     }
 }

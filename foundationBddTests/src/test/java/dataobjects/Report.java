@@ -243,7 +243,7 @@ public class Report {
     }
 
     public void checkUserIsEnabledOrDisabled(String reportUrl, String userName, boolean targetEnable,
-            String userNameLoggedIn) throws IOException {
+                                             String userNameLoggedIn) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -473,7 +473,7 @@ public class Report {
     }
 
     public void consolidatedValidateReportSummary(PdfTable table, String startDate, String endDate, String batchId,
-            String productId, String runID) {
+                                                  String productId, String runID) {
         Assert.assertNotNull("No table found for title " + REPORT_SUMMARY_TITLE, table);
         Assert.assertTrue("Table contains no data", table.getRows()
                 .size() > 1);
@@ -824,9 +824,9 @@ public class Report {
                         .getText(false)
                         .contains(roleName));
                 Assert.assertEquals((reportTable.getRows()
-                        .get(1)
-                        .get(4)
-                        .getText(false)).replaceAll("\\s", ""),
+                                .get(1)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
                         (userNameLoggedIn + " has made the Role, " + roleName + " obsolete").replaceAll("\\s", ""));
                 Assert.assertTrue(reportTable.getRows()
                         .get(1)
@@ -864,8 +864,8 @@ public class Report {
 
     }
 
-    public void checkModifiedRolePermission(String reportUrl, String roleName, String oldRoleName,
-            String userNameLoggedIn, Set<String> permissionList, Set<String> oldPermissionList) throws IOException {
+    public void checkModifiedRolePermission(String reportUrl, String roleName,
+                                            String userNameLoggedIn, Set<String> permissionList, Set<String> oldPermissionList) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -873,7 +873,7 @@ public class Report {
             int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
             if (userColumnIndex > 0) {
                 // start from 1 to skip the header row
-                for (int i = 1; i < 3; i++) {
+                for (int i = 1; i < reportTable.getRows().size(); i++) {
                     String appNameColumnValue = reportTable.getRows()
                             .get(i)
                             .get(1)
@@ -904,61 +904,71 @@ public class Report {
                             .getText(false);
                     String[] permissions = permissionList.toArray(new String[0]);
                     String[] oldPermissions = oldPermissionList.toArray(new String[0]);
-                    if (i == 1) {
-                        if (attributeColumnValue.equalsIgnoreCase("permissions")) {
-                            Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
-                            Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
-                            Assert.assertEquals(recordColumnValue, "Role -" + roleName);
-                            Assert.assertEquals(commentColumnValue, userNameLoggedIn + " updated Role" + oldRoleName);
-                            for (var permission : permissions) {
-                                Assert.assertTrue((currValueColumnValue.replaceAll("\\s", ""))
-                                        .contains(permission.replaceAll("\\s", "")));
-                            }
-                            for (var oldPermission : oldPermissions) {
-                                Assert.assertTrue((prevValueColumnValue.replaceAll("\\s", ""))
-                                        .contains(oldPermission.replaceAll("\\s", "")));
-                            }
-                        } else if (attributeColumnValue.equalsIgnoreCase("roleName")) {
-                            Assert.assertTrue(currValueColumnValue.contains(roleName));
-                            Assert.assertTrue(prevValueColumnValue.contains(oldRoleName));
+                    if (attributeColumnValue.equalsIgnoreCase("permissions")) {
+                        Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                        Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
+                        Assert.assertEquals("Role-" + roleName,recordColumnValue);
+                        Assert.assertEquals(userNameLoggedIn + " updated Role" + roleName, commentColumnValue);
+                        for (var permission : permissions) {
+                            Assert.assertTrue((currValueColumnValue.replaceAll("\\s", ""))
+                                    .contains(permission.replaceAll("\\s", "")));
+                        }
+                        for (var oldPermission : oldPermissions) {
+                            Assert.assertTrue((prevValueColumnValue.replaceAll("\\s", ""))
+                                    .contains(oldPermission.replaceAll("\\s", "")));
                         }
                     }
-                    if (i == 2) {
-                        if (reportTable.getRows()
-                                .get(2)
-                                .get(0)
-                                .getText(false)
-                                .equalsIgnoreCase("permissions")) {
-                            for (var permission : permissions) {
-                                Assert.assertTrue((reportTable.getRows()
-                                        .get(2)
-                                        .get(1)
-                                        .getText(false)
-                                        .replaceAll("\\s", "")).contains(permission.replaceAll("\\s", "")));
-                            }
-                            for (var oldPermission : oldPermissions) {
-                                Assert.assertTrue((reportTable.getRows()
-                                        .get(2)
-                                        .get(2)
-                                        .getText(false)
-                                        .replaceAll("\\s", "")).contains(oldPermission.replaceAll("\\s", "")));
-                            }
-                        } else if (reportTable.getRows()
-                                .get(2)
-                                .get(0)
-                                .getText(false)
-                                .equalsIgnoreCase("roleName")) {
-                            Assert.assertTrue(reportTable.getRows()
-                                    .get(2)
-                                    .get(1)
-                                    .getText(false)
-                                    .contains(roleName));
-                            Assert.assertTrue(reportTable.getRows()
-                                    .get(2)
-                                    .get(2)
-                                    .getText(false)
-                                    .contains(oldRoleName));
-                        }
+                }
+            }
+            break;
+        }
+    }
+
+    public void checkModifiedRoleName(String reportUrl, String roleName, String oldRoleName,
+                                      String userNameLoggedIn) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            int userColumnIndex = PdfTableExtractUtils.getColumnIndex(reportTable, USER_COLUMN_NAME);
+            if (userColumnIndex > 0) {
+                // start from 1 to skip the header row
+                for (int i = 1; i < reportTable.getRows().size(); i++) {
+                    String appNameColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(1)
+                            .getText(false);
+                    String recordColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(2)
+                            .getText(false);
+                    String userColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(userColumnIndex)
+                            .getText(false);
+                    String commentColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false);
+                    String attributeColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(5)
+                            .getText(false);
+                    String currValueColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(6)
+                            .getText(false);
+                    String prevValueColumnValue = reportTable.getRows()
+                            .get(i)
+                            .get(7)
+                            .getText(false);
+                    if (attributeColumnValue.equalsIgnoreCase("roleName")) {
+                        Assert.assertTrue(userColumnValue.contains(userNameLoggedIn));
+                        Assert.assertTrue(appNameColumnValue.contains("IDManagement"));
+                        Assert.assertEquals("Role-" + roleName, recordColumnValue);
+                        Assert.assertEquals(userNameLoggedIn + " updated Role" + oldRoleName, commentColumnValue);
+                        Assert.assertTrue(currValueColumnValue.contains(roleName));
+                        Assert.assertTrue(prevValueColumnValue.contains(oldRoleName));
                     }
                 }
             }
@@ -1177,15 +1187,15 @@ public class Report {
                             .isEmpty());
                     if (i == 1) {
                         Assert.assertEquals((reportTable.getRows()
-                                .get(i)
-                                .get(4)
-                                .getText(false)).replaceAll("\\s", ""),
+                                        .get(i)
+                                        .get(4)
+                                        .getText(false)).replaceAll("\\s", ""),
                                 (userNameLoggedIn + " enabled role" + roleName).replaceAll("\\s", ""));
                     } else {
                         Assert.assertEquals((reportTable.getRows()
-                                .get(i)
-                                .get(4)
-                                .getText(false)).replaceAll("\\s", ""),
+                                        .get(i)
+                                        .get(4)
+                                        .getText(false)).replaceAll("\\s", ""),
                                 (userNameLoggedIn + " disabled role" + roleName).replaceAll("\\s", ""));
                     }
                 }
@@ -1219,7 +1229,7 @@ public class Report {
     }
 
     public void verifyAuditReportForPasswordReset(String reportUrl, String userName, String userNameLoggedIn,
-            String passwordAction) throws IOException {
+                                                  String passwordAction) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -1258,21 +1268,21 @@ public class Report {
                         .isEmpty());
                 if (passwordAction.equals("reset")) {
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
                 } else if (passwordAction.equals("temp")){
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " changed the account temporary password on first login").replaceAll("\\s", ""));
                 } else {
-                        Assert.assertEquals((reportTable.getRows()
-                                .get(1)
-                                .get(4)
-                                .getText(false)).replaceAll("\\s", ""),
+                    Assert.assertEquals((reportTable.getRows()
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
                 }
             }
@@ -1281,7 +1291,7 @@ public class Report {
     }
 
     public void verifyAuditReportForRecipe(String reportUrl, String recipeName, String userNameLoggedIn,
-            String recipeAction) throws IOException {
+                                           String recipeAction) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -1320,15 +1330,15 @@ public class Report {
                         .isEmpty());
                 if (recipeAction.equals("created")) {
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " created a new recipe" + recipeName).replaceAll("\\s", ""));
                 } else {
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
                 }
             }
@@ -1337,7 +1347,7 @@ public class Report {
     }
 
     public void verifyAuditReportForBackUp(String reportUrl, String backUpName, String userNameLoggedIn,
-            String backUpAction) throws IOException {
+                                           String backUpAction) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -1370,22 +1380,22 @@ public class Report {
                         .getText(false)
                         .isEmpty());
                 Assert.assertEquals((reportTable.getRows()
-                        .get(1)
-                        .get(4)
-                        .getText(false)).replaceAll("\\s", ""),
+                                .get(1)
+                                .get(4)
+                                .getText(false)).replaceAll("\\s", ""),
                         (userNameLoggedIn + " triggered data backup" + "").replaceAll("\\s", ""));
                 Assert.assertTrue(reportTable.getRows()
                         .get(1)
                         .get(2)
                         .getText(false)
-                        .contains("Backup Job ID"));
+                        .contains("Backup Job Id"));
             }
             break;
         }
     }
 
     public void verifyAuditReportForScheduleBackUp(String reportUrl, String backUpName, String userNameLoggedIn,
-            String occurrence) throws IOException {
+                                                   String occurrence) throws IOException {
         URL url = new URL(reportUrl);
         // get all tables of the report
         List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
@@ -1409,9 +1419,9 @@ public class Report {
                             .getText(false)
                             .isEmpty());
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(2)
-                            .getText(false)).replaceAll("\\s", ""),
+                                    .get(1)
+                                    .get(2)
+                                    .getText(false)).replaceAll("\\s", ""),
                             (" Backup Schedule Name - " + backUpName).replaceAll("\\s", ""));
                 }
                 Assert.assertTrue(reportTable.getRows()
@@ -1435,16 +1445,16 @@ public class Report {
                         .getText(false)
                         .contains(backUpName));
                 Assert.assertEquals(reportTable.getRows()
-                        .get(1)
-                        .get(4)
-                        .getText(false)
-                        .replaceAll("\\s", ""),
+                                .get(1)
+                                .get(4)
+                                .getText(false)
+                                .replaceAll("\\s", ""),
                         (userNameLoggedIn + "deactivated backup schedule named" + backUpName).replaceAll("\\s", ""));
                 Assert.assertEquals(reportTable.getRows()
-                        .get(2)
-                        .get(4)
-                        .getText(false)
-                        .replaceAll("\\s", ""),
+                                .get(2)
+                                .get(4)
+                                .getText(false)
+                                .replaceAll("\\s", ""),
                         (userNameLoggedIn + "scheduled" + occurrence + "backup named" + backUpName).replaceAll("\\s",
                                 ""));
 

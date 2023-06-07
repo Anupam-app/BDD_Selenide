@@ -1,4 +1,4 @@
-Feature: Report administration Based on PDP
+Feature: Report Management PDP
 
   Scenario Outline: BIOCRS-5240| Select more than 5 trends parameters
     Given I am logged in as "Bio4CAdmin" user

@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: Apply Filter Roles
+Feature: Role Filters
 
   Scenario: BIOCRS-5493- Verify search functionality in Role Management
     Given I am logged in as "Bio4cAdmin" user

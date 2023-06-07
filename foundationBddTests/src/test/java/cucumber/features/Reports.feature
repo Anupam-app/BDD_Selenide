@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR @REPORT
-Feature: Report administration
+Feature: Report Management
 
   Scenario: BIOCRS-5238/5239 | Report Management Dashboard -  Runs Tab
     Given I am logged in as "Bio4CAdmin" user
@@ -40,7 +40,7 @@ Feature: Report administration
       | Signed By      |
 
   @SMOKE
-  Scenario: IVI Bug IVI-5819| BIOCRS-5106/592 Generate and sign Audittrail report
+  Scenario: BIOCRS-5106/592 Generate and sign Audittrail report
     Given I am logged in as "testadmin" user
     And I goto report management page
     When I select report from dropdown "Audit Trail"
@@ -178,7 +178,7 @@ Feature: Report administration
     Then I should see the report file presence
     And I verify run summary report report
 
-  Scenario: IVI Bug | Report Management | Recipe Steps summary section should not be available in consolidated report for Manual run
+  Scenario: Report Management | Recipe Steps summary section should not be available in consolidated report for Manual run
     Given I am logged in as "Bio4CAdmin" user
     And I goto report management page
     When I select report from dropdown "Consolidated"

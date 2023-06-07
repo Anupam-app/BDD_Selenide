@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Reports Filter
+Feature: Report Filter
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
