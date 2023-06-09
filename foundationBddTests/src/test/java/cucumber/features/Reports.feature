@@ -195,7 +195,7 @@ Feature: Report Management
     And I goto report management page
     When I select report from dropdown "Custom"
     And I select date range as "<DateRange>"
-    And I check the row count in DB for "<DateRange>"
+    And I check the row count in DB for "AuditTrail" "<DateRange>"
     And I select report include "Audit Trail"
     And I click on generate button
     And I goto report management page

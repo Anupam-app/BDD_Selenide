@@ -48,26 +48,26 @@ public class ReportsPage {
     private final String XPATH_ACTIVE_TEMPLATE_STATUS = "(//*[@class='active-label'])";
 
     private final String XPATH_ACTIVE_TEMPLATE_STATUS_WITH_TEXT =
-        XPATH_ACTIVE_TEMPLATE_STATUS + "[contains(text(),'%s')]";
+            XPATH_ACTIVE_TEMPLATE_STATUS + "[contains(text(),'%s')]";
     private final String XPATH_SIGNED_REPORT =
-        "//tr//td[contains(text(),'Signed')]/ancestor::tr//td[contains(text(),'%s')]";
+            "//tr//td[contains(text(),'Signed')]/ancestor::tr//td[contains(text(),'%s')]";
     private final String XPATH_REPORT_NAME = "//td[contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_CHECKBOX =
-        "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='check_box']";
+            "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='check_box']";
     private final String XPATH_TEMPLATE_CHECKBOX_CHECKED =
-        "//li[@class=\"checkbox_item checkbox_focus \"]/div[@class='item_value'][contains(text(),'%s')]";
+            "//li[@class=\"checkbox_item checkbox_focus \"]/div[@class='item_value'][contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_EYE_ICON =
-        "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='eye_icon']";
+            "//div[@class='item_value'][contains(text(),'%s')]/ancestor::li/div[@class='eye_icon']";
     private final String XPATH_CONSOLIDATED_REPORT = "//*[@class='tbl-row']//td[contains(text(),'%s')]";
     private final String XPATH_CHECKBOX_CONSOLIDATED_REPORT =
-        "//td[contains(text(),'%s')]/ancestor::tr//*[@class='checkbox']";
+            "//td[contains(text(),'%s')]/ancestor::tr//*[@class='checkbox']";
     private final String XPATH_NOTIFICATION_TEXT = "//*[@class='notification-summary'][contains(text(),'%s')]";
 
     private final String XPATH_NAV = "//div[@class='navWrapper']//h2";
     private final String XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT =
-        "//table[@class='table']//td[contains(text(),'%s')]";
+            "//table[@class='table']//td[contains(text(),'%s')]";
     private final String XPATH_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT =
-        "//table[@id='foundationRunListTable']//td[contains(text(),'%s')]";
+            "//table[@id='foundationRunListTable']//td[contains(text(),'%s')]";
     private final String XPATH_TEMPLATE_COLUMNS_BY_TEXT = "//table[@id='templateListTable']//td[contains(text(),'%s')]";
     private final String XPATH_REPORT_COLUMNS_BY_TEXT = "//table[@id='reportListTable']//td[contains(text(),'%s')]";
     private final String XPATH_DROPDOWN = "//span[contains(text(),'%s')]/ancestor::div[@class='custom-drop-down']";
@@ -83,7 +83,7 @@ public class ReportsPage {
     private final String XPATH_ReportColumnName_Value = "//*[@id=\"reportListTable\"]/tbody/tr[%d]/td[%d]";
     private final String XPATH_TRENDS_PARAMETERS = "//*[@id='%s']/div[1]";
     private final String XPATH_TRENDS_PARAMS =
-        "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
+            "//*[@class='item_value'][text()='%s']/preceding-sibling::div[@class='check_box']";
 
     private final String XPATH_TEMPLATE_COLUMN_HEADER = "//th[text()='%s']";
     private final String XPATH_TEMPLATE_TABLE = "//table[@id='templateListTable']";
@@ -98,14 +98,14 @@ public class ReportsPage {
 
     private final SelenideElement selectReportDropdown = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement selectDeviceDropdown =
-        $(By.xpath("//div[@class='restore-custom-drop-down']//span[@class='active-label']"));
+            $(By.xpath("//div[@class='restore-custom-drop-down']//span[@class='active-label']"));
     private final SelenideElement selectUserDropdownRunPage =
-        $(By.xpath("//span[contains(text(),'Select User')]/following-sibling::*"));
+            $(By.xpath("//span[contains(text(),'Select User')]/following-sibling::*"));
     private final SelenideElement selectDateDropdownRunPage = $(By.xpath("//*[@id='calendar']"));
     private final SelenideElement selectReportRunReportTemplateDropDown =
-        $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
+            $(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']"));
     private final ElementsCollection optionsReportTemplate =
-        $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
+            $$(By.xpath("//*[@class='run-templete-dropdown']//*[@class='custom-drop-down-container']//ul//li//option"));
 
     private final SelenideElement reportGenerateButton = $(By.xpath("//button[contains(text(),'Generate')]"));
     private final SelenideElement reportViewButton = $(By.xpath("//button[contains(text(),'View')]"));
@@ -117,7 +117,7 @@ public class ReportsPage {
     private final SelenideElement reportESignButton = $(By.xpath("//button[contains(text(),'e-sign')]"));
 
     private final ElementsCollection foundationRunListTable =
-        $$(By.xpath("//*[@id='foundationRunListTable']/tbody/tr"));
+            $$(By.xpath("//*[@id='foundationRunListTable']/tbody/tr"));
     private final ElementsCollection auditListTable = $$(By.xpath("//*[@id='auditListTable']/tbody/tr"));
     private final ElementsCollection templateListTable = $$(By.xpath("//*[@id='templateListTable']/tbody/tr"));
     private final ElementsCollection reportListTable = $$(By.xpath("//*[@id='reportListTable']/tbody/tr"));
@@ -126,11 +126,11 @@ public class ReportsPage {
     private final SelenideElement inputPassword = $(By.xpath("//input[@type='password']"));
     private final SelenideElement reportSearch = $(By.xpath("//input[contains(@placeholder,'Search...')]"));
     private final SelenideElement templateNameTextBox =
-        $(By.xpath("//input[contains(@placeholder,'Create a Template Name')]"));
+            $(By.xpath("//input[contains(@placeholder,'Create a Template Name')]"));
     private final SelenideElement reportTemplateStatusIcon = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement reportTemplateLoadingIcon = $(By.xpath("//div[@class='spinner-circle']"));
     private final SelenideElement absentReportText =
-        $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
+            $(By.xpath("//*[@id='Report_View']//h4[text()='Report is either not available or corrupted.']"));
     private final SelenideElement applyFilterButton = $(By.xpath("//span[contains(text(),'Apply Filters')]"));
     private final SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
 
@@ -143,9 +143,9 @@ public class ReportsPage {
     private final SelenideElement column_temp = $(By.xpath("//table[@id='templateListTable']/tbody/tr[1]/td[2]"));
 
     private final String recipeAuditLogs =
-        "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
+            "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
     private final String userAuditLogs =
-        "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
+            "//*[@id='auditListTable']/tbody/tr/td[5][contains(text(),'%s') and contains(text(),'%s') and contains(text(),'%s')]";
 
     private final SelenideElement trendsAddButton = $(By.xpath("//*[@id='add_btn']"));
     private final SelenideElement trendsCancelButton = $(By.xpath("//*[@id='cancel_btn']"));
@@ -157,18 +157,18 @@ public class ReportsPage {
     private final ElementsCollection checkBoxTemplate = $$(By.xpath("//ul[@id='checkbox_list']/li"));
     private final SelenideElement XPATH_ERROR_NOTIFICATION = $(By.xpath("//*[text()='Maximum of 5 sensors allowed']"));
     private final String duplicateNameNotification =
-        "Failed to create report template because %s already exists. Use a different name.";
+            "Failed to create report template because %s already exists. Use a different name.";
 
 
     private final SelenideElement arrowIcon = $(By.xpath("//div[(@class='down-icon')]"));
     private final SelenideElement dateColumn = $(By.xpath("//input[@name='dateRange']"));
     private final ElementsCollection dateOptionsReport =
-        $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
+            $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opens')]/div/ul/li"));
     private final ElementsCollection dateOptions =
-        $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
+            $$(By.xpath("//div[contains(@class,'daterangepicker ltr auto-apply show-ranges opensright')]/div/ul/li"));
 
     private final ElementsCollection dateOptionsConsolidated =
-        $$(By.xpath("//div[contains(@class,'ranges')]/div/ul/li"));
+            $$(By.xpath("//div[contains(@class,'ranges')]/div/ul/li"));
 
     private final SelenideElement noDatamsg = $(By.xpath("//h4[text()='No runs matching with the applied filter']"));
 
@@ -201,10 +201,10 @@ public class ReportsPage {
     private final String XPATH_CONSOLIDATED_COLUMNS = "//table[@class='table table-hover']//th[text()='%s']";
     private final SelenideElement filterSelection = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement requestNotification =
-        $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
+            $(By.xpath("//div[@class='alert_msg alert alert-info alert-dismissible fade show']"));
     private final SelenideElement runColumn = $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement processTypeValue =
-        $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
+            $(By.xpath("//table[@id='foundationRunListTable']/tbody/tr[1]/td[3]"));
     private final SelenideElement eventTime = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[1]"));
     private final SelenideElement comment = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[5]"));
     private final SelenideElement record = $(By.xpath("//table[@id='auditListTable']/tbody/tr[1]/td[3]"));
@@ -219,7 +219,7 @@ public class ReportsPage {
     private final SelenideElement signatureText = $(By.xpath("//div[text()='Signature Needed']"));
     private final SelenideElement signatureValue = $(By.xpath("//input[contains(@placeholder,'0-1')]"));
     private final SelenideElement selectBatchIDDropdown =
-        $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
+            $(By.xpath("//div[@class='batch-id-drop-down']//span[@class='icon-down-arrow']"));
     private final String XPATH_BATCH_ID_DROPDOWN = "//li[text()='%s']";
     private final String dateFormat = "M/d/yyyy";
     private final ElementsCollection checkBoxes = $$(By.xpath("//div[@class='multi-check-box']"));
@@ -290,21 +290,21 @@ public class ReportsPage {
             case "runs":
                 $(By.xpath(String.format(XPATH_RunsColumnName, columnIndex))).shouldHave(text(columnName));
                 Assert.assertFalse($(By.xpath(String.format(XPATH_RunsColumnName_Value, 1, columnIndex))).getText()
-                    .isBlank());
+                        .isBlank());
                 break;
             case "templates":
                 $(By.xpath(String.format(XPATH_TemplateColumnName, columnIndex))).shouldHave(text(columnName));
                 Assert.assertFalse($(By.xpath(String.format(XPATH_TemplateColumnName_Value, columnIndex))).getText()
-                    .isBlank());
+                        .isBlank());
                 break;
             case "reports":
                 $(By.xpath(String.format(XPATH_ReportColumnName, columnIndex))).waitUntil(visible, 5000)
-                    .shouldHave(text(columnName));
+                        .shouldHave(text(columnName));
                 if (columnIndex < 6) {
                     Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, 1, columnIndex)))
-                        .waitUntil(visible, 5000)
-                        .getText()
-                        .isBlank());
+                            .waitUntil(visible, 5000)
+                            .getText()
+                            .isBlank());
                     break;
                 }
         }
@@ -312,14 +312,14 @@ public class ReportsPage {
 
     public void selectReport(String reportName) {
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> {
-                SelenideHelper.commonWaiter(selectReportDropdown, visible)
-                    .click();
-                return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))).isDisplayed();
-            });
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectReportDropdown, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))).isDisplayed();
+                });
 
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))), visible)
-            .click();
+                .click();
     }
 
     public void sortListTemplate(String columnName, boolean descending) {
@@ -345,7 +345,7 @@ public class ReportsPage {
 
     public void checkSortedElementTemplate(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getTemplateColumnHeaders(), columnName, descending, getTemplateColumns,
-            dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
+                dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
     }
 
     public List<String> getTemplateColumnHeaders() {
@@ -354,24 +354,24 @@ public class ReportsPage {
 
     public void selectUser(String user) {
         SelenideHelper.commonWaiter(selectReportDropdown, visible)
-            .click();
+                .click();
         $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).click();
     }
 
     public void selectUserOnRunPage(String user) {
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> {
-                SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible)
-                    .click();
-                return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).isDisplayed();
-            });
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).isDisplayed();
+                });
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))), visible)
-            .click();
+                .click();
     }
 
     public void selectDateFilterOnRunPage(String dateFilter) {
         SelenideHelper.commonWaiter(selectDateDropdownRunPage, visible)
-            .click();
+                .click();
         $(By.xpath(String.format(XPATH_Date_DROPDOWN, dateFilter))).click();
         if (dateFilter.equals("Custom range")) {
             commonWaiter(previousMonth, visible);
@@ -385,7 +385,6 @@ public class ReportsPage {
                     .click();
             $(By.xpath(String.format(selectedDateCurrentMonth, currentDay))).click();
             commonWaiter(applyButton, visible).click();
-            Selenide.sleep(5000);
         }
     }
 
@@ -440,7 +439,7 @@ public class ReportsPage {
     public void approveTemplate(String templateName, String password, String status) {
         openReportTemplate(templateName);
         SelenideHelper.commonWaiter(reportTemplateStatusIcon, visible)
-            .click();
+                .click();
         changeStatus(status);
         saveReportTemplate();
         inputPassword.shouldBe(visible);
@@ -457,15 +456,15 @@ public class ReportsPage {
     private void changeStatus(String status) {
         var reviewStatus = $(By.xpath(String.format(REPORT_TEMPLATE_STATUS_WITH_TEXT, status)));
         SelenideHelper.commonWaiter(reviewStatus, visible)
-            .click();
+                .click();
         var activeStatus = $(By.xpath(String.format(XPATH_ACTIVE_TEMPLATE_STATUS_WITH_TEXT, status)));
         SelenideHelper.commonWaiter(activeStatus, visible)
-            .click();
+                .click();
     }
 
     public void searchReportOrTemplate(String templateName) {
         SelenideHelper.commonWaiter(reportSearch, visible)
-            .setValue(templateName);
+                .setValue(templateName);
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
 
@@ -496,21 +495,21 @@ public class ReportsPage {
         SelenideElement notificationText = $(By.xpath(String.format(XPATH_NOTIFICATION_TEXT, text)));
         waitForReportGeneration(notificationText, visible);
         var name = notificationText.text()
-            .split(": ")[1];
+                .split(": ")[1];
         waitForReportGeneration(notificationText, not(visible));
         return name;
     }
 
     public void createTrends() {
         trendsName.waitUntil(visible, 10000)
-            .setValue(RandomStringUtils.randomAlphabetic(10));
+                .setValue(RandomStringUtils.randomAlphabetic(10));
         trendsSaveButton.click();
         trendsCancelButton.click();
     }
 
     public void cancelButton() {
         SelenideHelper.commonWaiter(templateCancelButton, visible)
-            .click();
+                .click();
     }
 
     public void waitForReportGeneration(SelenideElement element, Condition condition) throws InterruptedException {
@@ -532,7 +531,7 @@ public class ReportsPage {
 
     public void saveTrends() {
         trendsName.waitUntil(visible, 10000)
-            .setValue(RandomStringUtils.randomAlphabetic(10));
+                .setValue(RandomStringUtils.randomAlphabetic(10));
         trendsSaveButton.click();
         trendsCancelButton.click();
     }
@@ -544,7 +543,7 @@ public class ReportsPage {
                 $(By.xpath(String.format(XPATH_TRENDS_PARAMETERS, (("checkbox_item_") + i)))).click();
             }
             trendsName.waitUntil(visible, 10000)
-                .setValue(RandomStringUtils.randomAlphabetic(10));
+                    .setValue(RandomStringUtils.randomAlphabetic(10));
             trendsSaveButton.click();
             trendsAddButton.click();
         }
@@ -609,20 +608,20 @@ public class ReportsPage {
         // after finished a recipe, it takes some times to have the run in page
         // polling report run page
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> {
-                boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
+                .until((webDriver) -> {
+                    boolean isRunVisible = $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).is(visible);
 
-                if (!isRunVisible) {
-                    WebDriverRunner.getWebDriver()
-                        .switchTo()
-                        .parentFrame();
-                    goToReports();
-                    switchToFrame();
-                    selectReport(reportTemplateName);
-                }
+                    if (!isRunVisible) {
+                        WebDriverRunner.getWebDriver()
+                                .switchTo()
+                                .parentFrame();
+                        goToReports();
+                        switchToFrame();
+                        selectReport(reportTemplateName);
+                    }
 
-                return isRunVisible;
-            });
+                    return isRunVisible;
+                });
 
         // select corresponding run
         $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT, run))).click();
@@ -632,9 +631,9 @@ public class ReportsPage {
         selectReportRunReportTemplateDropDown.click();
         for (var option : optionsReportTemplate) {
             if (option.getValue()
-                .equals(template)) {
+                    .equals(template)) {
                 option.parent()
-                    .click();
+                        .click();
                 break;
             }
         }
@@ -672,22 +671,22 @@ public class ReportsPage {
 
     public void checkTableContainsRecipeRun(String recipeRun) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT, recipeRun))),
-            visible);
+                visible);
     }
 
     public void checkConsolidatedTableContainsRecipeRun(String recipeRun) {
         SelenideHelper.commonWaiter(
-            $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT, recipeRun))), visible);
+                $(By.xpath(String.format(XPATH_CONSOLIDATED_REPORT_RECIPE_RUN_COLUMNS_BY_TEXT, recipeRun))), visible);
     }
 
     public void checkTableContainsReport(String reportName) {
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_REPORT_COLUMNS_BY_TEXT, reportName))), visible);
         for (int row = 1; row <= reportListTable.size(); row++) {
             if ($(By.xpath(String.format(XPATH_ReportColumnName_Value, row, 1))).getText()
-                .equalsIgnoreCase(reportName)) {
+                    .equalsIgnoreCase(reportName)) {
                 for (int i = 1; i < 7; i++) {
                     Assert.assertFalse($(By.xpath(String.format(XPATH_ReportColumnName_Value, row, i))).getText()
-                        .isBlank());
+                            .isBlank());
                 }
                 break;
             }
@@ -696,12 +695,12 @@ public class ReportsPage {
 
     public void checkTableContainsUserAndDateRange(int days, String userid, int results) {
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> auditListTable.size() > 0);
+                .until((webDriver) -> auditListTable.size() > 0);
         Assert.assertTrue("auditListTable should contains values", auditListTable.size() > 0);
         var dateInPast = LocalDateTime.now()
-            .plusDays(-days);
+                .plusDays(-days);
         var formatter = DateTimeFormatter.ofPattern(Report.RECIPE_DATE_FORMAT)
-            .localizedBy(Locale.US);
+                .localizedBy(Locale.US);
 
         // limit the results to avoid test to take too much time
         for (int i = 0; i < auditListTable.size() && i < results; i++) {
@@ -711,14 +710,14 @@ public class ReportsPage {
     }
 
     private void validateAuditTrail(String userid, LocalDateTime dateInPast, DateTimeFormatter formatter,
-                                    int iterator) {
+            int iterator) {
         String user = $(By.xpath(String.format(XPATH_UserColumnName_Value, iterator))).getText();
         String eventDate = $(By.xpath(String.format(XPATH_DateColumnName_Value, iterator))).getText();
         Assert.assertTrue(user.toLowerCase()
-            .contains(userid));
+                .contains(userid));
         LocalDateTime eventDateTime = LocalDateTime.parse(eventDate, formatter);
         Assert.assertTrue(String.format("eventDateTime:%s is not in the expected range", eventDateTime),
-            eventDateTime.compareTo(dateInPast) >= 0);
+                eventDateTime.compareTo(dateInPast) >= 0);
     }
 
     public void checkTableContainsTemplate(String templateName) {
@@ -749,7 +748,7 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(templateNameTextBox, disabled);
         for (var option : checkBoxTemplate) {
             Assert.assertTrue(option.getAttribute("class")
-                .contains("disabled"));
+                    .contains("disabled"));
         }
     }
 
@@ -772,7 +771,7 @@ public class ReportsPage {
             isTrue = noDatamsg.isDisplayed();
         } else {
             isTrue = commonWaiter(statusColumn, appear).getText()
-                .equalsIgnoreCase(status);
+                    .equalsIgnoreCase(status);
         }
         return isTrue;
     }
@@ -783,7 +782,7 @@ public class ReportsPage {
         ElementsCollection options = dateOptions;
         for (SelenideElement element : options) {
             if (element.getText()
-                .equalsIgnoreCase(option)) {
+                    .equalsIgnoreCase(option)) {
                 element.click();
                 break;
             }
@@ -795,10 +794,10 @@ public class ReportsPage {
             commonWaiter(previousMonth, visible);
             int index = getRandomNumber(0, availableDates.size() / 2);
             availableDates.get(index)
-                .click();
+                    .click();
             index = getRandomNumber(availableDates.size() / 2, availableDates.size());
             availableDates.get(index)
-                .click();
+                    .click();
 
         }
 
@@ -811,7 +810,7 @@ public class ReportsPage {
             case "Yesterday":
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);
 
                 if (startDate.isDisplayed()) {
@@ -819,14 +818,14 @@ public class ReportsPage {
                     Selenide.sleep(1000);
                     String startDateRow1 = startDate.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Start Date", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDate.getText();
                     LocalDate selectedDescendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
-                        && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -841,24 +840,24 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[1].trim();
+                        .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (startDate.isDisplayed()) {
                     sortList("Start Date", false);
                     String startDateRow = startDate.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Start Date", true);
                     String endDateRow = startDate.getText();
                     LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
                     if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
-                        || selectedAscendingDate.isAfter(selectedDate1))
-                        && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                        || selectedDescendingDate.isBefore(selectedDate2))) {
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -893,7 +892,7 @@ public class ReportsPage {
 
     public void checkSortedElement(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportColumns,
-            dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
+                dateColumns.contains(columnName), Report.RECIPE_DATE_FORMAT);
     }
 
     public int getRandomNumber(int min, int max) {
@@ -938,13 +937,13 @@ public class ReportsPage {
 
     public void iSearchReportTemplate(String templateName) {
         SelenideHelper.commonWaiter(reportSearch, visible)
-            .setValue(templateName);
+                .setValue(templateName);
         SelenideHelper.commonWaiter(reportTemplateLoadingIcon, not(visible));
     }
 
     public void iValidateStatus(String status) {
         Assert.assertTrue(column_temp.getText()
-            .equalsIgnoreCase(status));
+                .equalsIgnoreCase(status));
     }
 
     public void selectDateRangeReport(String option) {
@@ -952,7 +951,7 @@ public class ReportsPage {
         dateColumn.click();
         for (SelenideElement element : dateOptionsReport) {
             if (element.getText()
-                .equalsIgnoreCase(option)) {
+                    .equalsIgnoreCase(option)) {
                 element.click();
                 break;
             }
@@ -964,10 +963,10 @@ public class ReportsPage {
             commonWaiter(previousMonth, visible);
             int index = getRandomNumber(0, availableDates.size() / 2);
             availableDates.get(index)
-                .click();
+                    .click();
             index = getRandomNumber(availableDates.size() / 2, availableDates.size());
             availableDates.get(index)
-                .click();
+                    .click();
 
         }
 
@@ -980,7 +979,7 @@ public class ReportsPage {
             case "Yesterday":
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);// M is used as actual value
                 // is without 0 prefix
 
@@ -989,14 +988,14 @@ public class ReportsPage {
                     Selenide.sleep(1000);
                     String startDateRow1 = startDateRep.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortList("Date Generated", true);
                     Selenide.sleep(1000);
                     startDateRow1 = startDateRep.getText();
                     LocalDate selectedDescendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
-                        && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -1011,24 +1010,24 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 // is without 0 prefix
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[1].trim();
+                        .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (startDateRep.isDisplayed()) {
                     sortList("Date Generated", false);
                     String startDateRow = startDateRep.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortList("Date Generated", true);
                     String endDateRow = startDateRep.getText();
                     LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
                     if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
-                        || selectedAscendingDate.isAfter(selectedDate1))
-                        && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                        || selectedDescendingDate.isBefore(selectedDate2))) {
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -1041,12 +1040,12 @@ public class ReportsPage {
 
     public void checkSortedElements(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, getReportsColumns,
-            dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void checkSortedElementConsolidate(String columnName, boolean descending) {
         SortHelper.checkSortedElement(getAllReportsColumnHeaders(), columnName, descending, consolidatedColumns,
-            dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
+                dateColumns.contains(columnName), Report.REPORT_DATE_FORMAT);
     }
 
     public void sortListConsolidated(String columnName, boolean descending) {
@@ -1084,7 +1083,7 @@ public class ReportsPage {
                 result = noDatamsg.isDisplayed();
             } else {
                 result = columnData.getText()
-                    .equalsIgnoreCase(status);
+                        .equalsIgnoreCase(status);
             }
         }
         return result;
@@ -1117,10 +1116,10 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 5 && statusColumn.getText()
-                .equalsIgnoreCase(status) && processTypeValue.getText()
-                .equals(processType)
-                && runColumn.getText()
-                .contains(recipeName)) {
+                    .equalsIgnoreCase(status) && processTypeValue.getText()
+                            .equals(processType)
+                    && runColumn.getText()
+                            .contains(recipeName)) {
                 result = true;
             }
         }
@@ -1133,7 +1132,7 @@ public class ReportsPage {
 
     public void verifyNewUser(String user) {
         SelenideHelper.commonWaiter(selectUserDropdownRunPage, visible)
-            .click();
+                .click();
         $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, user))).shouldBe(visible);
     }
 
@@ -1147,7 +1146,7 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 5 && comment.getText()
-                .equalsIgnoreCase(message)) {
+                    .equalsIgnoreCase(message)) {
                 result = true;
             }
         }
@@ -1163,7 +1162,7 @@ public class ReportsPage {
             long diff = dateAndTime.getTime() - eventEntriesTime.getTime();
             long diffMinutes = diff / (60 * 1000) % 60;
             if (diffMinutes < 10 && comment.getText()
-                .contains(message)) {
+                    .contains(message)) {
                 record.shouldHave(text(recordRole));
             }
         }
@@ -1195,7 +1194,7 @@ public class ReportsPage {
         } else {
             for (int i = 1; i <= reportListTable.size(); i++) {
                 Assert.assertTrue($(By.xpath(String.format(XPATH_ReportColumnName_Value, i, 5))).getText()
-                    .equalsIgnoreCase(status));
+                        .equalsIgnoreCase(status));
             }
         }
     }
@@ -1206,18 +1205,18 @@ public class ReportsPage {
 
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
         XPATH_ERROR_NOTIFICATION_TEXT.waitUntil(visible, 5001)
-            .shouldHave(text(message));
+                .shouldHave(text(message));
     }
 
     public void selectDevice(String device) {
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> {
-                SelenideHelper.commonWaiter(selectDeviceDropdown, visible)
-                    .click();
-                return $(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))).isDisplayed();
-            });
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectDeviceDropdown, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))).isDisplayed();
+                });
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_DEVICE_OPTION_DROPDOWN, device))), visible)
-            .click();
+                .click();
     }
 
     public void iVerifyReportPageLoaded() {
@@ -1233,22 +1232,22 @@ public class ReportsPage {
             for (int columnNo = 2; columnNo < 6; columnNo++) {
                 if (columnNo == 2) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Report Management"));
+                            .equalsIgnoreCase("Report Management"));
                 } else if (columnNo == 3) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Report Template - " + templateName));
+                            .equalsIgnoreCase("Report Template - " + templateName));
                 } else if (columnNo == 4) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Bio4CAdmin (Administrator Bio4C)"));
+                            .equalsIgnoreCase("Bio4CAdmin (Administrator Bio4C)"));
                 } else if (columnNo == 5 && rowNo == 1) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
+                            .equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
                 } else if (columnNo == 5 && rowNo == 2) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                            .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
                 } else if (columnNo == 5 && rowNo == 3) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                        .equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                            .equalsIgnoreCase("Bio4CAdmin created Report Template"));
                 }
             }
         }
@@ -1261,7 +1260,7 @@ public class ReportsPage {
                 break;
             case "Status":
                 reportTemplateStatusIcon.shouldBe(visible)
-                    .click();
+                        .click();
                 var reviewStatus = $(By.xpath(String.format(REPORT_TEMPLATE_STATUS_WITH_TEXT, "Draft")));
                 SelenideHelper.commonWaiter(reviewStatus, visible);
                 break;
@@ -1294,14 +1293,14 @@ public class ReportsPage {
 
     public void selectBatchId(String batchID) {
         SelenideHelper.fluentWaiter()
-            .until((webDriver) -> {
-                SelenideHelper.commonWaiter(selectBatchIDDropdown, visible)
-                    .click();
-                return $(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, batchID))).isDisplayed();
-            });
+                .until((webDriver) -> {
+                    SelenideHelper.commonWaiter(selectBatchIDDropdown, visible)
+                            .click();
+                    return $(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, batchID))).isDisplayed();
+                });
 
         SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, batchID))), visible)
-            .click();
+                .click();
     }
 
     public void selectConsolidatedDateRange(String option) {
@@ -1310,7 +1309,7 @@ public class ReportsPage {
         ElementsCollection options = dateOptionsConsolidated;
         for (SelenideElement element : options) {
             if (element.getText()
-                .equalsIgnoreCase(option)) {
+                    .equalsIgnoreCase(option)) {
                 element.click();
                 break;
             }
@@ -1321,10 +1320,10 @@ public class ReportsPage {
             commonWaiter(previousMonth, visible);
             int index = getRandomNumber(0, availableDates.size() / 2);
             availableDates.get(index)
-                .click();
+                    .click();
             index = getRandomNumber(availableDates.size() / 2, availableDates.size());
             availableDates.get(index)
-                .click();
+                    .click();
         }
     }
 
@@ -1335,21 +1334,21 @@ public class ReportsPage {
             case "Yesterday":
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 String dateValue = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate = SelenideHelper.dateParser(dateValue, dateFormat);
                 if (consolidateStartDate.isDisplayed()) {
                     sortConsolidatedList("Start Date", false);
                     Selenide.sleep(1000);
                     String startDateRow1 = consolidateStartDate.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     sortConsolidatedList("Start Date", true);
                     Selenide.sleep(1000);
                     startDateRow1 = consolidateStartDate.getText();
                     LocalDate selectedDescendingDate =
-                        SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow1, Report.RECIPE_DATE_FORMAT);
                     if (selectedAscendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()
-                        && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
+                            && selectedDescendingDate.getDayOfMonth() == selectedDate.getDayOfMonth()) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -1364,23 +1363,23 @@ public class ReportsPage {
                 commonWaiter(spinnerComponent.spinnerIcon, not(visible));
                 commonWaiter(dateColumn, visible);
                 String dateValue1 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[0].trim();
+                        .split("to")[0].trim();
                 LocalDate selectedDate1 = SelenideHelper.dateParser(dateValue1, dateFormat);// M is used as actual value
                 String dateValue2 = Objects.requireNonNull(dateColumn.getAttribute("value"))
-                    .split("to")[1].trim();
+                        .split("to")[1].trim();
                 LocalDate selectedDate2 = SelenideHelper.dateParser(dateValue2, dateFormat);
                 if (consolidateStartDate.isDisplayed()) {
                     sortConsolidatedList("Start Date", false);
                     String startDateRow = consolidateStartDate.getText();
                     LocalDate selectedAscendingDate =
-                        SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
+                            SelenideHelper.dateParser(startDateRow, Report.RECIPE_DATE_FORMAT);
                     sortConsolidatedList("Start Date", true);
                     String endDateRow = consolidateStartDate.getText();
                     LocalDate selectedDescendingDate = SelenideHelper.dateParser(endDateRow, Report.RECIPE_DATE_FORMAT);
                     if ((selectedAscendingDate.getDayOfMonth() == selectedDate1.getDayOfMonth()
-                        || selectedAscendingDate.isAfter(selectedDate1))
-                        && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
-                        || selectedDescendingDate.isBefore(selectedDate2))) {
+                            || selectedAscendingDate.isAfter(selectedDate1))
+                            && (selectedDescendingDate.getDayOfMonth() == selectedDate2.getDayOfMonth()
+                                    || selectedDescendingDate.isBefore(selectedDate2))) {
                         isTrue = true;
                     }
                 } else if (noDatamsg.isDisplayed()) {
@@ -1393,14 +1392,14 @@ public class ReportsPage {
 
     public void verifyAuditLogsForResetChangePassword(String username, String passwordAction, String loggedInUser) {
         if (passwordAction.equals("reset")) {
-                .shouldBe(visible);
-        } else if(passwordAction.equals("temp")) {
-            $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account temporary password on first login","")))
-                .shouldBe(visible);
-        }
-        else {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser, " reset password for User Account ", username)))
+                    .shouldBe(visible);
+        } else if (passwordAction.equals("temp")) {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser,
+                    " changed the account temporary password on first login", ""))).shouldBe(visible);
+        } else {
             $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account password", "")))
-                .shouldBe(visible);
+                    .shouldBe(visible);
         }
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("ID Management"));
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("User - " + username));
@@ -1409,10 +1408,10 @@ public class ReportsPage {
     public void verifyAuditLogsForRecipe(String recipeName, String loggedInUserName, String recipeAction) {
         if (recipeAction.equals("created")) {
             $(By.xpath(String.format(userAuditLogs, loggedInUserName, " created a new recipe ", recipeName)))
-                .shouldBe(visible);
+                    .shouldBe(visible);
         } else {
             $(By.xpath(String.format(userAuditLogs, loggedInUserName, " edited recipe ", recipeName)))
-                .shouldBe(visible);
+                    .shouldBe(visible);
         }
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("Recipe Management"));
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).shouldHave(text("Recipe Name - " + recipeName));
@@ -1421,25 +1420,28 @@ public class ReportsPage {
     public void verifyAuditLogsForBackUp(String backUpName, String loggedInUserName, String recipeAction) {
         $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered data backup", ""))).shouldBe(visible);
         Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 3))).getText()
-            .contains("Backup Job Id - "));
+                .contains("Backup Job Id - "));
         $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, 1, 2))).shouldHave(text("Backup Management"));
     }
 
     public void verifyAuditLogsForScheduleBackUp(String backUpName, String loggedInUserName, String occurrence) {
         $(By.xpath(String.format(userAuditLogs, loggedInUserName, " deactivated backup schedule named ", backUpName)))
-            .shouldBe(visible);
+                .shouldBe(visible);
         $(By.xpath(String.format(userAuditLogs, loggedInUserName, (" scheduled " + occurrence + " backup named "),
-            backUpName))).shouldBe(visible);
+                backUpName))).shouldBe(visible);
         for (int i = 1; i < 3; i++) {
             Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).getText()
-                .contains("Backup Schedule Name - " + backUpName));
+                    .contains("Backup Schedule Name - " + backUpName));
             $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Backup Management"));
         }
     }
 
     public void isGenerateButtonEnabled() {
         for (int i = 0; i < checkBoxes.size(); i++) {
-            if (checkBoxes.get(i).isDisplayed() && checkBoxes.get(i).isEnabled()) {
+            if (checkBoxes.get(i)
+                    .isDisplayed()
+                    && checkBoxes.get(i)
+                            .isEnabled()) {
                 reportGenerateButton.isEnabled();
             }
         }
@@ -1448,7 +1450,8 @@ public class ReportsPage {
     public void verifySelectBatchDropdown() {
         commonWaiter(selectBatch, visible);
         commonWaiter(selectBatchIcon, visible).click();
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, "All Batches"))), visible).click();
+        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_BATCH_ID_DROPDOWN, "All Batches"))), visible)
+                .click();
     }
 
     public void expandReportFilter() {

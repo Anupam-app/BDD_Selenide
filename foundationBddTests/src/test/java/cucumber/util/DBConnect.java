@@ -13,17 +13,12 @@ import io.cucumber.java.en.Given;
 
 public class DBConnect {
 
-    public static Connection con = null;
-    // Statement object
     private static Statement stmt;
-    // Constant for Database URL
     public static String DB_URL = "jdbc:sqlserver://molcipvm44:1433;databaseName=Runtime;encrypt=false";
-    // Constant for Database Username
     public static String DB_USER = "runtimeuser";
     public static String DB_PASSWORD = "Service$App1@";
 
     private final Report report;
-    public String executableQuery = null;
     public String startDate;
     public String endDate;
 
@@ -32,71 +27,16 @@ public class DBConnect {
     }
 
 
-    @Given("I check the row count in DB for {string}")
-    public void iGetTheRowCount(String dateRange) {
-        dbConnectionAndQueryExecution(dateRange);
+    @Given("I check the row count in DB for {string} {string}")
+    public void iGetTheRowCount(String reportSection, String dateRange) {
+        setDateRangeFilter(dateRange);
+        connectDB();
+        if (reportSection.equalsIgnoreCase("Audit Trail")) {
+            auditTrailQueryExecution();
+        }
     }
 
-    public void dbConnectionAndQueryExecution(String dateRange) {
-
-        if (dateRange.equals("Today")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            startDate = dateFormat.format(cal.getTime());
-            cal.set(Calendar.HOUR, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            endDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("Yesterday")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -1);
-            cal.set(Calendar.HOUR, 0);
-            cal.set(Calendar.MINUTE, 0);
-            cal.set(Calendar.SECOND, 0);
-            startDate = dateFormat.format(cal.getTime());
-            cal.set(Calendar.HOUR, 23);
-            cal.set(Calendar.MINUTE, 59);
-            cal.set(Calendar.SECOND, 59);
-            endDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("Last 7 Days")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            endDate = dateFormat.format(cal.getTime());
-            cal.add(Calendar.DATE, -6);
-            startDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("Last 30 Days")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            endDate = dateFormat.format(cal.getTime());
-            cal.add(Calendar.DATE, -29);
-            startDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("This Month")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            endDate = dateFormat.format(cal.getTime());
-            cal.set(Calendar.DAY_OF_MONTH, 1);
-            startDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("Last Month")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.DATE, 1);
-            cal.add(Calendar.DAY_OF_MONTH, -1);
-            endDate = dateFormat.format(cal.getTime());
-            cal.set(Calendar.DATE, 1);
-            startDate = dateFormat.format(cal.getTime());
-        } else if (dateRange.equals("Custom range")) {
-            DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-            Calendar cal = Calendar.getInstance();
-            endDate = dateFormat.format(cal.getTime());
-            cal.add(Calendar.MONTH, -2);
-            startDate = dateFormat.format(cal.getTime());
-        }
-        this.report.setStartDate(startDate);
-        this.report.setEndDate(endDate);
+    public void connectDB() {
         try {
             String dbClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
             Class.forName(dbClass)
@@ -106,6 +46,86 @@ public class DBConnect {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void setDateRangeFilter(String dateRange) {
+        switch (dateRange) {
+            case "Today": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = dateFormat.format(cal.getTime());
+                cal.set(Calendar.HOUR, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                endDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Yesterday": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DATE, -1);
+                cal.set(Calendar.HOUR, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                startDate = dateFormat.format(cal.getTime());
+                cal.set(Calendar.HOUR, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                endDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last 7 Days": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                endDate = dateFormat.format(cal.getTime());
+                cal.add(Calendar.DATE, -6);
+                startDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last 30 Days": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                endDate = dateFormat.format(cal.getTime());
+                cal.add(Calendar.DATE, -29);
+                startDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "This Month": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                endDate = dateFormat.format(cal.getTime());
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                startDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last Month": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.DATE, 1);
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                endDate = dateFormat.format(cal.getTime());
+                cal.set(Calendar.DATE, 1);
+                startDate = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Custom range": {
+                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
+                Calendar cal = Calendar.getInstance();
+                endDate = dateFormat.format(cal.getTime());
+                cal.add(Calendar.MONTH, -2);
+                startDate = dateFormat.format(cal.getTime());
+                break;
+            }
+        }
+        this.report.setStartDate(startDate);
+        this.report.setEndDate(endDate);
+    }
+
+    public void auditTrailQueryExecution() {
+
         try {
             String query = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
                     + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
@@ -128,7 +148,6 @@ public class DBConnect {
 
             ResultSet res = stmt.executeQuery(query.replace("startDate", startDate)
                     .replace("endDate", endDate));
-
             res.next();
             report.setRowCount(res.getInt(1));
 
