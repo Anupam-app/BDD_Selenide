@@ -192,22 +192,23 @@ Feature: Report administration
 
   Scenario Outline: Generate and sign a Ccustom report
     Given I am logged in as "testadmin" user
-#    And I goto report management page
-#    When I select report from dropdown "Custom"
-#    And I select date range as "<DateRange>"
-#    And I check the row count in DB for "<DateRange>"
-#    And I select report include "Audit Trail"
-#    And I click on generate button
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "<DateRange>"
+    And I select report include "Audit Trail"
+    And I click on generate button
     And I goto report management page
     And I trigger report mode
     And I should see the report file presence
     And I verify custom summary report
+
     Examples:
-      | DateRange |
-      | Today     |
-#      | Yesterday    |
-#      | Last 7 Days  |
-#      | Last 30 Days |
-#      | This Month   |
-#      | Last Month   |
-#      | Custom range |
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |

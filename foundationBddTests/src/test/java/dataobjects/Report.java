@@ -1481,9 +1481,7 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
             rowCount = rowCount + reportTable.getRowCount();
         }
-        System.out.println(rowCount - 11);
-        int difference = dbRowCount - (rowCount - 11);
-        Assert.assertTrue(difference < 30);
+        Assert.assertTrue((dbRowCount - (rowCount - 11)) < 30);
         for (PdfTable reportTable : reportTables) {
             Assert.assertTrue(reportTable.getRows()
                     .get(0)
@@ -1497,9 +1495,6 @@ public class Report {
                     .contains(endDate.substring(1, 11)));
             break;
         }
-
-
-
     }
 
 }

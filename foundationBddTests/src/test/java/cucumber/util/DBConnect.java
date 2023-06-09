@@ -34,12 +34,10 @@ public class DBConnect {
 
     @Given("I check the row count in DB for {string}")
     public void iGetTheRowCount(String dateRange) {
-        dbConnection(dateRange);
+        dbConnectionAndQueryExecution(dateRange);
     }
 
-    public void dbConnection(String dateRange) {
-
-
+    public void dbConnectionAndQueryExecution(String dateRange) {
 
         if (dateRange.equals("Today")) {
             DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
@@ -99,8 +97,6 @@ public class DBConnect {
         }
         this.report.setStartDate(startDate);
         this.report.setEndDate(endDate);
-        System.out.println(startDate.substring(1, 11) + " " + endDate.substring(1, 11));
-
         try {
             String dbClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
             Class.forName(dbClass)
@@ -111,18 +107,6 @@ public class DBConnect {
             e.printStackTrace();
         }
         try {
-            // var config = ConfigFactory.parseResourcesAnySyntax("parameters/ivi/Queries",
-            // ConfigParseOptions.defaults());
-            // var queries = config.getConfigList("Report.Queries");
-            //
-            // for (var query : queries) {
-            // if (query.equals("AuditTrail")) {
-            // executableQuery = query.getString("AuditTrail");
-            // System.out.println(executableQuery);
-            // }
-            //
-            // }
-            System.out.println(startDate + "  " + endDate);
             String query = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
                     + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
                     + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
@@ -146,7 +130,6 @@ public class DBConnect {
                     .replace("endDate", endDate));
 
             res.next();
-            System.out.print(res.getInt(1));
             report.setRowCount(res.getInt(1));
 
         } catch (Exception e) {

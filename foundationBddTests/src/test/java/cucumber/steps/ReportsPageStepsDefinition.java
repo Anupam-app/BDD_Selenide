@@ -188,7 +188,7 @@ public class ReportsPageStepsDefinition {
 
     @When("I should see the report file presence")
     public void iShouldSeeTheReportFilePresence() {
-        reportPage.viewReports("CustomReport_547");
+        reportPage.viewReports(this.report.getName());
         reportPage.checkReportPdfInPage();
     }
 
