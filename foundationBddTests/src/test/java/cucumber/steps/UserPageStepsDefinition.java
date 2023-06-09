@@ -95,7 +95,7 @@ public class UserPageStepsDefinition {
     }
 
     @Given("I trigger Users mode")
-    public void iTriggerUsersMode() {
+    public void iTriggerUsersMode() throws AWTException {
         userPage.triggerUsersMode();
     }
 
@@ -444,7 +444,7 @@ public class UserPageStepsDefinition {
         userPage.roleAssignedToUser(role);
     }
 
-    @Given("I search {string} to validate role {string} assigned")
+    @Given("I search {string} user to validate role {string} assigned")
     public void roleAssignedToUser(String user, String role) {
         this.user.setUserName(user);
         userPage.setSearch(user);

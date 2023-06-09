@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Recipes Management Filters
+Feature: Recipe Filters
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -10,18 +10,18 @@ Feature: Recipes Management Filters
     Then I should see recipe "testRecipeToExecute"
 
   @IVI-5144
-  Scenario: Bug- IVI-5144 | Verify message in phase library when there is no phase in phase library.
+  Scenario: Verify message in phase library when there is no phase in phase library.
     Given I go to recipe page
     When I trigger edit mode
     And I select phase library
     Then I verify the message "There is No Phase in Phase Library"
 
-  Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter functionality in Recipe Browser
+  Scenario: BIOCRS-2689 BIOCRS-5030 | Verify filter functionality in Recipe Browser
     Given I go to recipe page
     When I click on filter icon and select recipe status "Draft"
     Then I should see recipe "testDraftRecipe"
 
-  Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030| Verify created by functionality in Recipe Browser
+  Scenario: BIOCRS-2689 BIOCRS-5030| Verify created by functionality in Recipe Browser
     Given I go to recipe page
     When I select recipe created by "Bio4CAdmin"
     Then I should see recipe "testDraftRecipe"
@@ -30,7 +30,7 @@ Feature: Recipes Management Filters
     Given I go to recipe page
     When I select recipe sort by "<columnName>" in "<descending>"
     Then "<columnName>" from recipe should be displayed in sorted order "<descending>"
-    And I logout
+    #And I logout
 
     Examples:
       | columnName       | descending |
@@ -50,7 +50,7 @@ Feature: Recipes Management Filters
       | UOP Status       | false      |
 
   @IVI-6972
-  Scenario: IVI Bug IVI-4731 | BIOCRS-2689 BIOCRS-5030 | Verify filter recipe functionality in Recipe Management Based on status
+  Scenario: BIOCRS-2689 BIOCRS-5030 | Verify filter recipe functionality in Recipe Management Based on status
     Given I go to recipe page
     When I filter based on uop status as "Approved-Active" and Imported as "Yes"
     Then  I see recipe based on uop status as "Approved-Active" and Imported as "Yes"
@@ -65,3 +65,4 @@ Feature: Recipes Management Filters
       | This Month   |
       | Last Month   |
       | Custom Range |
+

@@ -1,8 +1,9 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: User management
+Feature: User Management
 
   Jira:
   https://stljirap.sial.com/browse/SMXACE-2547
+  https://stljirap.sial.com/browse/SMXACE-2523
 
   @SMOKE
   Scenario: Create new user
@@ -166,7 +167,7 @@ Feature: User management
     Given I am logged in as "<user>" user
     When I try to change password "<currentPassword>" "<newPassword>" "<confirmPassword>"
     Then I see error message is displayed as "<error message>"
-    And I logout
+    #And I logout
     Examples:
       | user          | currentPassword | newPassword | confirmPassword | error message                             |
       | testPwdChange | MerckApp1@      | MerckApp1@  | MerckApp1@      | Cannot reuse old password.                |
@@ -248,3 +249,4 @@ Feature: User management
     And I go to user page
     When I create a random username
     And I verify "Bio4CService" role is not present
+

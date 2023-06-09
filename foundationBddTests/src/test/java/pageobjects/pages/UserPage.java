@@ -268,8 +268,9 @@ public class UserPage {
         userSearchTextBox.clear();
     }
 
-    public void triggerUsersMode() {
+    public void triggerUsersMode() throws AWTException {
         UsersLinkText.click();
+        zoomOut();
     }
 
     public void resetPassword() {
@@ -288,7 +289,7 @@ public class UserPage {
     public void isGeneratedNotificationWhenCreateExistingUsername(String message) {
         commonWaiter(XPATH_ERROR_NOTIFICATION_TEXT, visible);
         XPATH_ERROR_NOTIFICATION_TEXT.shouldHave(text(message));
-
+        commonWaiter(cancelButton, visible).click();
     }
 
     public void cancelUser() {

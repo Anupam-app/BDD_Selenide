@@ -124,6 +124,8 @@ INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_na
 GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (13, N'CustomRoleDisable', N'CustomRoleDisable', N'CustomRoleDisable', NULL, N'CustomRoleDisable', N'User Created', 1, 0, N'ENABLED')
 GO
+INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (14, N'deleteRole', N'deleteRole', N'deleteRole', NULL, N'deleteRole', N'User Created', 1, 0, N'ENABLED')
+GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (4, 3)
@@ -289,6 +291,8 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (13, 69)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (13, 83)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (14, 113)
 GO
 DELETE FROM dbo.user_preferences;
 GO

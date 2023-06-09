@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: Report Template module validations
+Feature: Report Template module
 
   JIRAs test:
   https://stljirap.sial.com/browse/BIOFOUND-28944

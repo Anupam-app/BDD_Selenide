@@ -1,5 +1,5 @@
 @CRS @IVI @ORCHESTRATOR
-Feature: User login
+Feature: Login functionalities
 
   JIRAs tested:
   https://stljirap.sial.com/browse/BIOFOUND-27790
@@ -15,7 +15,7 @@ Feature: User login
     And I push the login button
     Then I am logged in
 
-  Scenario: IVI Bug-IVI-4488 IVI-4850 BIOCRS-5151 | Account Lock on 5 unsuccessful attempts and unlock the same account by admin user
+  Scenario: BIOCRS-5151 | Account Lock on 5 unsuccessful attempts and unlock the same account by admin user
     Given login page is open
     When I login to application with wrong password
       | username        | password   | message                                                                                                                                     |

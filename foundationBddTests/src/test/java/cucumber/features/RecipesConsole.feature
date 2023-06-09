@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Recipe console
+Feature: Recipe Management console
 
   Background:
     Given I am logged in as "Bio4CAdmin" user

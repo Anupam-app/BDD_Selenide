@@ -1,5 +1,5 @@
 @CRS @IVI
-Feature: Reports Filter
+Feature: Report Filter
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -177,3 +177,15 @@ Feature: Reports Filter
       | This Month   |
       | Last Month   |
       | Custom Range |
+
+  Scenario: Filtering runs in consolidated report page based on Status, Processtype
+    Given I goto report management page
+    When I select report from dropdown "Consolidated"
+    And I select date range as "Last 7 Days"
+    And I verify the batch dropdown is present
+    And I verify the report filter options and status
+      | Operation     |
+      | Unit Procedure|
+      | Manual        |
+      | Completed     |
+      | Aborted       |
