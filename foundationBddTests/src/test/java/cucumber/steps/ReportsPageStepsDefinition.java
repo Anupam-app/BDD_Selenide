@@ -188,7 +188,7 @@ public class ReportsPageStepsDefinition {
 
     @When("I should see the report file presence")
     public void iShouldSeeTheReportFilePresence() {
-        reportPage.viewReports(this.report.getName());
+        reportPage.viewReports("CustomReport_547");
         reportPage.checkReportPdfInPage();
     }
 
@@ -710,6 +710,12 @@ public class ReportsPageStepsDefinition {
         this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
                 this.login.getLogin(), occurrence);
         switchTo().parentFrame();
+    }
+
+    @Then("I verify custom summary report")
+    public void iVerifyCustomSummaryReport() throws Exception {
+        this.report.verifyCustomReport(reportPage.getPdfUrl(), report.getRowCount(), report.getEndDate(),
+                report.getStartDate());
     }
 
 }

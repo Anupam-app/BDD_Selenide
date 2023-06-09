@@ -181,8 +181,14 @@ public class ReportsPage {
     private final SelenideElement clearAllFilters = $(By.xpath("//div[text()='Clear All']"));
     private final SelenideElement previousMonth =
             $(By.xpath("//div[@class='drp-calendar left']//th[@class='prev available']"));
+    private final SelenideElement currentMonth =
+            $(By.xpath("//div[@class='drp-calendar right']//th[@class='prev available']"));
     private final ElementsCollection availableDates =
             $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
+    private final String selectedDatePreviousMonth =
+            "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
+    private final String selectedDateCurrentMonth =
+            "//div[@class='drp-calendar right']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
     private final SelenideElement processType = $(By.xpath("//div[text()='Process Types']"));
     private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
@@ -217,6 +223,7 @@ public class ReportsPage {
     private final String XPATH_BATCH_ID_DROPDOWN = "//li[text()='%s']";
     private final String dateFormat = "M/d/yyyy";
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
+    private final SelenideElement applyButton = $(By.xpath("//button[@class='applyBtn btn btn-sm btn-primary']"));
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -361,6 +368,20 @@ public class ReportsPage {
         SelenideHelper.commonWaiter(selectDateDropdownRunPage, visible)
                 .click();
         $(By.xpath(String.format(XPATH_Date_DROPDOWN, dateFilter))).click();
+        if (dateFilter.equals("Custom range")) {
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            commonWaiter(previousMonth, visible);
+            previousMonth.click();
+            LocalDate currentDate = LocalDate.now();
+            int currentDay = currentDate.getDayOfMonth();
+            $(By.xpath(String.format(selectedDatePreviousMonth, currentDay))).click();
+            currentMonth.waitUntil(visible, 1000)
+                    .click();
+            $(By.xpath(String.format(selectedDateCurrentMonth, currentDay))).click();
+            commonWaiter(applyButton, visible).click();
+            Selenide.sleep(5000);
+        }
     }
 
     public void generateReport() {
@@ -1361,11 +1382,10 @@ public class ReportsPage {
         if (passwordAction.equals("reset")) {
             $(By.xpath(String.format(userAuditLogs, loggedInUser, " reset password for User Account ", username)))
                     .shouldBe(visible);
-        } else if(passwordAction.equals("temp")) {
-            $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account temporary password on first login","")))
-                .shouldBe(visible);
-        }
-        else {
+        } else if (passwordAction.equals("temp")) {
+            $(By.xpath(String.format(userAuditLogs, loggedInUser,
+                    " changed the account temporary password on first login", ""))).shouldBe(visible);
+        } else {
             $(By.xpath(String.format(userAuditLogs, loggedInUser, " changed the account password", "")))
                     .shouldBe(visible);
         }

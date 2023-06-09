@@ -98,6 +98,18 @@ public class Report {
 
     @Setter
     @Getter
+    int rowCount;
+
+    @Setter
+    @Getter
+    String startDate;
+
+    @Setter
+    @Getter
+    String endDate;
+
+    @Setter
+    @Getter
     List<Recipe> recipes;
 
     public void checkRunId(String reportUrl, List<Recipe> recipes) throws IOException {
@@ -1262,17 +1274,18 @@ public class Report {
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " reset password for User Account" + userName).replaceAll("\\s", ""));
-                } else if (passwordAction.equals("temp")){
+                } else if (passwordAction.equals("temp")) {
                     Assert.assertEquals((reportTable.getRows()
                             .get(1)
                             .get(4)
                             .getText(false)).replaceAll("\\s", ""),
-                            (userNameLoggedIn + " changed the account temporary password on first login").replaceAll("\\s", ""));
+                            (userNameLoggedIn + " changed the account temporary password on first login")
+                                    .replaceAll("\\s", ""));
                 } else {
-                        Assert.assertEquals((reportTable.getRows()
-                                .get(1)
-                                .get(4)
-                                .getText(false)).replaceAll("\\s", ""),
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(1)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " changed the account password").replaceAll("\\s", ""));
                 }
             }
@@ -1453,6 +1466,40 @@ public class Report {
 
             break;
         }
+    }
+
+    public void verifyCustomReport(String reportUrl, int dbRowCount, String endDate, String startDate)
+            throws IOException {
+        URL url = new URL(reportUrl);
+        int rowCount = 0;
+        // get all tables of the report
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL)
+                .stream()
+                .findFirst()
+                .get();
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            rowCount = rowCount + reportTable.getRowCount();
+        }
+        System.out.println(rowCount - 11);
+        int difference = dbRowCount - (rowCount - 11);
+        Assert.assertTrue(difference < 30);
+        for (PdfTable reportTable : reportTables) {
+            Assert.assertTrue(reportTable.getRows()
+                    .get(0)
+                    .get(1)
+                    .getText(false)
+                    .contains(startDate.substring(1, 11)));
+            Assert.assertTrue(reportTable.getRows()
+                    .get(1)
+                    .get(1)
+                    .getText(false)
+                    .contains(endDate.substring(1, 11)));
+            break;
+        }
+
+
+
     }
 
 }
