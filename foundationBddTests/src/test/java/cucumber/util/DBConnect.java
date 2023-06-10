@@ -1,5 +1,10 @@
 package cucumber.util;
 
+import com.xceptance.neodymium.util.Neodymium;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -7,6 +12,7 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Properties;
 
 import dataobjects.Report;
 import io.cucumber.java.en.Given;
@@ -14,34 +20,42 @@ import io.cucumber.java.en.Given;
 public class DBConnect {
 
     private static Statement stmt;
-    public static String DB_URL = "jdbc:sqlserver://molcipvm44:1433;databaseName=Runtime;encrypt=false";
-    public static String DB_USER = "runtimeuser";
-    public static String DB_PASSWORD = "Service$App1@";
+    private final String DB_URL = "jdbc:sqlserver://%s:1433;databaseName=%s;encrypt=false";
+
+    private final String dbClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
 
     private final Report report;
     public String startDate;
     public String endDate;
 
+    DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
+
     public DBConnect(Report report) {
         this.report = report;
     }
 
-
     @Given("I check the row count in DB for {string} {string}")
-    public void iGetTheRowCount(String reportSection, String dateRange) {
+    public void iGetTheRowCount(String reportSection, String dateRange) throws IOException {
         setDateRangeFilter(dateRange);
-        connectDB();
-        if (reportSection.equalsIgnoreCase("Audit Trail")) {
+        InputStream input = new FileInputStream("config/dbparameters.properties");
+        Properties prop = new Properties();
+        prop.load(input);
+        if (reportSection.equalsIgnoreCase("AuditTrail")) {
+            var dbURL = String.format(DB_URL, Neodymium.configuration()
+                    .host(), prop.getProperty("databaseName"));
+            var dbUserName = prop.get("dbRunTimeUser");
+            var dbPassword = prop.get("dbPassword");
+            connectDB(dbURL, (String) dbUserName, (String) dbPassword);
             auditTrailQueryExecution();
         }
     }
 
-    public void connectDB() {
+    public void connectDB(String dbURL, String dbUserName, String dbPassword) {
         try {
-            String dbClass = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
             Class.forName(dbClass)
                     .newInstance();
-            Connection con = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+            Connection con = DriverManager.getConnection(dbURL, dbUserName, dbPassword);
             stmt = con.createStatement();
         } catch (Exception e) {
             e.printStackTrace();
@@ -51,8 +65,6 @@ public class DBConnect {
     public void setDateRangeFilter(String dateRange) {
         switch (dateRange) {
             case "Today": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.HOUR, 0);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
@@ -64,8 +76,6 @@ public class DBConnect {
                 break;
             }
             case "Yesterday": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 cal.add(Calendar.DATE, -1);
                 cal.set(Calendar.HOUR, 0);
                 cal.set(Calendar.MINUTE, 0);
@@ -78,32 +88,24 @@ public class DBConnect {
                 break;
             }
             case "Last 7 Days": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 endDate = dateFormat.format(cal.getTime());
                 cal.add(Calendar.DATE, -6);
                 startDate = dateFormat.format(cal.getTime());
                 break;
             }
             case "Last 30 Days": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 endDate = dateFormat.format(cal.getTime());
                 cal.add(Calendar.DATE, -29);
                 startDate = dateFormat.format(cal.getTime());
                 break;
             }
             case "This Month": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 endDate = dateFormat.format(cal.getTime());
                 cal.set(Calendar.DAY_OF_MONTH, 1);
                 startDate = dateFormat.format(cal.getTime());
                 break;
             }
             case "Last Month": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 cal.set(Calendar.DATE, 1);
                 cal.add(Calendar.DAY_OF_MONTH, -1);
                 endDate = dateFormat.format(cal.getTime());
@@ -112,8 +114,6 @@ public class DBConnect {
                 break;
             }
             case "Custom range": {
-                DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy hh:mm:ss");
-                Calendar cal = Calendar.getInstance();
                 endDate = dateFormat.format(cal.getTime());
                 cal.add(Calendar.MONTH, -2);
                 startDate = dateFormat.format(cal.getTime());
@@ -146,11 +146,10 @@ public class DBConnect {
                     + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
                     + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
 
-            ResultSet res = stmt.executeQuery(query.replace("startDate", startDate)
-                    .replace("endDate", endDate));
+            ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
+                    .replace("endDate", this.report.getEndDate()));
             res.next();
             report.setRowCount(res.getInt(1));
-
         } catch (Exception e) {
             e.printStackTrace();
         }
