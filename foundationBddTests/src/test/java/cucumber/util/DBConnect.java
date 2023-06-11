@@ -65,11 +65,11 @@ public class DBConnect {
     public void setDateRangeFilter(String dateRange) {
         switch (dateRange) {
             case "Today": {
-                cal.set(Calendar.HOUR, 0);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 startDate = dateFormat.format(cal.getTime());
-                cal.set(Calendar.HOUR, 23);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
                 cal.set(Calendar.MINUTE, 59);
                 cal.set(Calendar.SECOND, 59);
                 endDate = dateFormat.format(cal.getTime());
@@ -77,11 +77,11 @@ public class DBConnect {
             }
             case "Yesterday": {
                 cal.add(Calendar.DATE, -1);
-                cal.set(Calendar.HOUR, 0);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
                 startDate = dateFormat.format(cal.getTime());
-                cal.set(Calendar.HOUR, 23);
+                cal.set(Calendar.HOUR_OF_DAY, 23);
                 cal.set(Calendar.MINUTE, 59);
                 cal.set(Calendar.SECOND, 59);
                 endDate = dateFormat.format(cal.getTime());
@@ -145,7 +145,6 @@ public class DBConnect {
                     + "replace (PreviousValueString,'null','') as PreviousValueString\n"
                     + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
                     + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
-
             ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
                     .replace("endDate", this.report.getEndDate()));
             res.next();
