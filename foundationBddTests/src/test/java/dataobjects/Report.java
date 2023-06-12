@@ -1494,7 +1494,18 @@ public class Report {
             rowCount = rowCount + reportTable.getRowCount();
         }
         Assert.assertTrue((dbRowCount - (rowCount - 11)) < 30);
+        System.out.println(dbRowCount + " " + rowCount);
         for (PdfTable reportTable : reportTables) {
+            System.out.println(reportTable.getRows()
+                    .get(0)
+                    .get(1)
+                    .getText(false)
+                    .contains(startDate.substring(1, 11)));
+            System.out.println(reportTable.getRows()
+                    .get(1)
+                    .get(1)
+                    .getText(false)
+                    .contains(endDate.substring(1, 11)));
             Assert.assertTrue(reportTable.getRows()
                     .get(0)
                     .get(1)

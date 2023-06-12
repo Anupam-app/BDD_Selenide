@@ -190,6 +190,7 @@ Feature: Report Management
     Then I should see the report file presence
     And I verify consolidate manual run summary report
 
+  @demo
   Scenario Outline: Generate custom report for Audit Trail Section based on dates
     Given I am logged in as "testadmin" user
     And I goto report management page

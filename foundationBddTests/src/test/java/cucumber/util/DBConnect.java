@@ -148,10 +148,12 @@ public class DBConnect {
             ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
                     .replace("endDate", this.report.getEndDate()));
             res.next();
+            System.out.println(this.report.getStartDate() + " " + this.report.getEndDate());
+            System.out.println(res.getInt(1));
             report.setRowCount(res.getInt(1));
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-  
+
 }
