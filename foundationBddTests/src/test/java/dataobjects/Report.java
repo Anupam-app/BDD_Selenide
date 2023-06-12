@@ -1499,13 +1499,11 @@ public class Report {
             System.out.println(reportTable.getRows()
                     .get(0)
                     .get(1)
-                    .getText(false)
-                    .contains(startDate.substring(1, 11)));
+                    .getText(false));
             System.out.println(reportTable.getRows()
                     .get(1)
                     .get(1)
-                    .getText(false)
-                    .contains(endDate.substring(1, 11)));
+                    .getText(false));
             Assert.assertTrue(reportTable.getRows()
                     .get(0)
                     .get(1)
