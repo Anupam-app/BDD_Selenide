@@ -13,6 +13,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Properties;
+import java.util.TimeZone;
 
 import dataobjects.Report;
 import io.cucumber.java.en.Given;
@@ -30,6 +31,7 @@ public class DBConnect {
 
     DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
     Calendar cal = Calendar.getInstance();
+    TimeZone obj = TimeZone.getTimeZone("CST");
 
     public DBConnect(Report report) {
         this.report = report;
@@ -148,8 +150,6 @@ public class DBConnect {
             ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
                     .replace("endDate", this.report.getEndDate()));
             res.next();
-            System.out.println(this.report.getStartDate() + " " + this.report.getEndDate());
-            System.out.println(res.getInt(1));
             report.setRowCount(res.getInt(1));
         } catch (Exception e) {
             e.printStackTrace();

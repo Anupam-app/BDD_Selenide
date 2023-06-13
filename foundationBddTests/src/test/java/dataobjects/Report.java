@@ -1493,17 +1493,8 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
             rowCount = rowCount + reportTable.getRowCount();
         }
-        System.out.println(dbRowCount + " " + rowCount);
         Assert.assertTrue((dbRowCount - (rowCount - 11)) < 30);
         for (PdfTable reportTable : reportTables) {
-            System.out.println(reportTable.getRows()
-                    .get(0)
-                    .get(1)
-                    .getText(false));
-            System.out.println(reportTable.getRows()
-                    .get(1)
-                    .get(1)
-                    .getText(false));
             Assert.assertTrue(reportTable.getRows()
                     .get(0)
                     .get(1)
