@@ -2,6 +2,7 @@ package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disabled;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -189,6 +190,7 @@ public class ReportsPage {
             "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
     private final String selectedDateCurrentMonth =
             "//div[@class='drp-calendar right']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
+
     private final SelenideElement processType = $(By.xpath("//div[text()='Process Type']"));
     private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
     private final String XPATH_ORDER_ICON = "//span[@class='%s']";
@@ -1253,7 +1255,7 @@ public class ReportsPage {
         }
     }
 
-    public void createTemplatePageValidation(String options) {
+    public void createTemplateAndCustomPageValidation(String options) {
         switch (options) {
             case "Template Name":
                 templateNameTextBox.shouldBe(visible);
@@ -1286,6 +1288,30 @@ public class ReportsPage {
                 $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Calibration Summary"))).shouldBe(visible);
                 $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Run Header"))).shouldBe(visible);
                 $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Run Header"))).isSelected();
+                break;
+            case "Generate Button":
+                reportGenerateButton.shouldBe(visible);
+            case "Date Range":
+                SelenideHelper.commonWaiter(selectDateDropdownRunPage, visible)
+                        .click();
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Today"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Yesterday"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Last 7 Days"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Last 30 Days"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "This Month"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Last Month"))).waitUntil(enabled, 2000);
+                $(By.xpath(String.format(XPATH_Date_DROPDOWN, "Custom range"))).waitUntil(enabled, 2000);
+                break;
+            case "Alarm Eye Icon":
+                $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Alarms"))).click();
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+                saveAlarmButton.click();
+                break;
+            case "Trends Eye Icon":
+                SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Trends"))), visible);
+                $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Trends"))).click();
+                commonWaiter(trendsCancelButton, visible).click();
                 break;
             default:
         }

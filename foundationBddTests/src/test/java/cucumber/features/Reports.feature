@@ -212,3 +212,15 @@ Feature: Report Management
       | This Month   |
       | Last Month   |
       | Custom range |
+
+  Scenario: Validate custom report page contents
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    Then I verify below options availability
+      | Report Include  |
+      | Generate Button |
+      | Date Range      |
+      | Alarm Eye Icon  |
+      | Trends Eye Icon |
+

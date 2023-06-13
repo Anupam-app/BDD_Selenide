@@ -617,7 +617,7 @@ public class ReportsPageStepsDefinition {
     public void iSeeTheAvailabilityOfOptions(DataTable table) {
         List<String> list = table.asList(String.class);
         for (String s : list) {
-            reportPage.createTemplatePageValidation(s);
+            reportPage.createTemplateAndCustomPageValidation(s);
         }
     }
 
