@@ -201,7 +201,7 @@ Feature: Report Management
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify custom summary report
+    And I verify custom summary report for "AuditTrail"
 
     Examples:
       | DateRange    |
@@ -223,4 +223,27 @@ Feature: Report Management
       | Date Range      |
       | Alarm Eye Icon  |
       | Trends Eye Icon |
+
+  Scenario Outline: Generate custom report for Event Summary Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "EventSummary" "<DateRange>"
+    And I select report include "Event Summary"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "Event Summary"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
 

@@ -733,10 +733,10 @@ public class ReportsPageStepsDefinition {
         }
     }
 
-    @Then("I verify custom summary report")
-    public void iVerifyCustomSummaryReport() throws Exception {
+    @Then("I verify custom summary report for {string}")
+    public void iVerifyCustomSummaryReport(String reportSection) throws Exception {
         this.report.verifyCustomReport(reportPage.getPdfUrl(), report.getRowCount(), report.getEndDate(),
-                report.getStartDate());
+                report.getStartDate(), reportSection);
     }
 
 }

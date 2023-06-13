@@ -50,6 +50,13 @@ public class DBConnect {
             var dbPassword = prop.get("dbPassword");
             connectDB(dbURL, (String) dbUserName, (String) dbPassword);
             auditTrailQueryExecution();
+        } else if (reportSection.equalsIgnoreCase("EventSummary")) {
+            var dbURL = String.format(DB_URL, Neodymium.configuration()
+                    .host(), prop.getProperty("databaseName"));
+            var dbUserName = prop.get("dbRunTimeUser");
+            var dbPassword = prop.get("dbPassword");
+            connectDB(dbURL, (String) dbUserName, (String) dbPassword);
+            eventSummaryQueryExecution();
         }
     }
 
@@ -147,6 +154,22 @@ public class DBConnect {
                     + "replace (PreviousValueString,'null','') as PreviousValueString\n"
                     + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
                     + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
+            ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
+                    .replace("endDate", this.report.getEndDate()));
+            res.next();
+            report.setRowCount(res.getInt(1));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void eventSummaryQueryExecution() {
+        try {
+            String query = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
+                    + "where EventTime Between 'startDate' and 'endDate'\n"
+                    + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
+                    + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
+                    + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
             ResultSet res = stmt.executeQuery(query.replace("startDate", this.report.getStartDate())
                     .replace("endDate", this.report.getEndDate()));
             res.next();

@@ -59,7 +59,8 @@ public class Report {
     private final String PRE_RUN_COMMENT = "Pre-run Comment";
     private final String POST_RUN_COMMENT = "Post-run Comment";
     private final String TEMPLATE_NAME = "Template Name";
-    private final String AUDIT_TRAIL = "Audit Trail";
+    private final String AuditTrail = "Audit Trail";
+    private final String EventSummary = "Event Summary";
     private final String APPLICATION_NAME = "Application Name";
     private final String RECORD = "Record";
     private final String ATTRIBUTE = "Attribute";
@@ -577,7 +578,7 @@ public class Report {
     public void AuditTrail(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL)
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AuditTrail)
                 .stream()
                 .findFirst()
                 .get();
@@ -1480,12 +1481,12 @@ public class Report {
         }
     }
 
-    public void verifyCustomReport(String reportUrl, int dbRowCount, String endDate, String startDate)
-            throws IOException {
+    public void verifyCustomReport(String reportUrl, int dbRowCount, String endDate, String startDate,
+            String reportSection) throws IOException {
         URL url = new URL(reportUrl);
         int rowCount = 0;
         // get all tables of the report
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL)
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), reportSection)
                 .stream()
                 .findFirst()
                 .get();
