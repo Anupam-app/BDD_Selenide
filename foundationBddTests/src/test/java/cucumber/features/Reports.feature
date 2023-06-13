@@ -189,3 +189,14 @@ Feature: Report Management
     And I trigger report mode
     Then I should see the report file presence
     And I verify consolidate manual run summary report
+
+  Scenario: Validate custom report page contents
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    Then I verify below options availability
+      | Report Include  |
+      | Generate Button |
+      | Date Range      |
+      | Alarm Eye Icon  |
+      | Trends Eye Icon |
