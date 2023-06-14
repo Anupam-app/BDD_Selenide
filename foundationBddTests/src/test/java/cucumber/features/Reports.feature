@@ -201,7 +201,7 @@ Feature: Report Management
     And I goto report management page
     And I trigger report mode
     Then I should see the report file presence
-    And I verify custom summary report for "AuditTrail"
+    And I verify custom summary report for "Audit Trail"
 
     Examples:
       | DateRange    |

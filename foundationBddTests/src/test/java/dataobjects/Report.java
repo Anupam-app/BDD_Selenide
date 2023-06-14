@@ -59,8 +59,7 @@ public class Report {
     private final String PRE_RUN_COMMENT = "Pre-run Comment";
     private final String POST_RUN_COMMENT = "Post-run Comment";
     private final String TEMPLATE_NAME = "Template Name";
-    private final String AuditTrail = "Audit Trail";
-    private final String EventSummary = "Event Summary";
+    private final String AUDIT_TRAIL = "Audit Trail";
     private final String APPLICATION_NAME = "Application Name";
     private final String RECORD = "Record";
     private final String ATTRIBUTE = "Attribute";
@@ -578,7 +577,7 @@ public class Report {
     public void AuditTrail(String reportUrl) throws Exception {
         URL url = new URL(reportUrl);
 
-        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AuditTrail)
+        PdfTable table = PdfTableExtractUtils.getTablesFromTableTitle(url.openStream(), AUDIT_TRAIL)
                 .stream()
                 .findFirst()
                 .get();
