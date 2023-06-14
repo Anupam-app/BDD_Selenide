@@ -51,9 +51,9 @@ public class ReportsPageStepsDefinition {
     private final Backupsetting backupSetting;
     DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
     Calendar cal = Calendar.getInstance();
-    public String startDate;
-    public String endDate;
-    public String query;
+    public String START_DATE;
+    public String END_DATE;
+    public String QUERY;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
             ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
@@ -766,7 +766,7 @@ public class ReportsPageStepsDefinition {
             var dbUserName = prop.get("database.dbRunTimeUser");
             var dbPassword = prop.get("database.password");
             DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
-            query = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
+            QUERY = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
                     + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
                     + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
                     + "replace (e1.ValueString,'null','') as ValueString,\n"
@@ -790,13 +790,13 @@ public class ReportsPageStepsDefinition {
             var dbUserName = prop.get("database.dbRunTimeUser");
             var dbPassword = prop.get("database.password");
             DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
-            query = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
+            QUERY = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
                     + "where EventTime Between 'startDate' and 'endDate'\n"
                     + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
                     + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
                     + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
         }
-        report.setRowCount(DatabaseHelper.fetchData(query.replace("startDate", this.report.getStartDate())
+        report.setRowCount(DatabaseHelper.fetchData(QUERY.replace("startDate", this.report.getStartDate())
                 .replace("endDate", this.report.getEndDate())));
         DatabaseHelper.close();
     }
@@ -807,11 +807,11 @@ public class ReportsPageStepsDefinition {
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 cal.set(Calendar.HOUR_OF_DAY, 23);
                 cal.set(Calendar.MINUTE, 59);
                 cal.set(Calendar.SECOND, 59);
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "Yesterday": {
@@ -819,48 +819,48 @@ public class ReportsPageStepsDefinition {
                 cal.set(Calendar.HOUR_OF_DAY, 0);
                 cal.set(Calendar.MINUTE, 0);
                 cal.set(Calendar.SECOND, 0);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 cal.set(Calendar.HOUR_OF_DAY, 23);
                 cal.set(Calendar.MINUTE, 59);
                 cal.set(Calendar.SECOND, 59);
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "Last 7 Days": {
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 cal.add(Calendar.DATE, -6);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "Last 30 Days": {
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 cal.add(Calendar.DATE, -29);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "This Month": {
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 cal.set(Calendar.DAY_OF_MONTH, 1);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "Last Month": {
                 cal.set(Calendar.DATE, 1);
                 cal.add(Calendar.DAY_OF_MONTH, -1);
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 cal.set(Calendar.DATE, 1);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 break;
             }
             case "Custom range": {
-                endDate = dateFormat.format(cal.getTime());
+                END_DATE = dateFormat.format(cal.getTime());
                 cal.add(Calendar.MONTH, -2);
-                startDate = dateFormat.format(cal.getTime());
+                START_DATE = dateFormat.format(cal.getTime());
                 break;
             }
         }
-        this.report.setStartDate(startDate);
-        this.report.setEndDate(endDate);
+        this.report.setStartDate(START_DATE);
+        this.report.setEndDate(END_DATE);
     }
 
 }
