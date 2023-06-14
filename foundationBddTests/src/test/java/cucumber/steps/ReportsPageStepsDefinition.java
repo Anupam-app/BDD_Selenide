@@ -2,9 +2,18 @@ package cucumber.steps;
 
 import static com.codeborne.selenide.Selenide.switchTo;
 
+import com.xceptance.neodymium.util.Neodymium;
+
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.sql.SQLException;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -26,6 +35,7 @@ import io.cucumber.java.en.When;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.utility.ContextHelper;
+import pageobjects.utility.DatabaseHelper;
 import pageobjects.utility.SelenideHelper;
 
 public class ReportsPageStepsDefinition {
@@ -39,6 +49,11 @@ public class ReportsPageStepsDefinition {
     private final Login login;
     private final Recipe recipe;
     private final Backupsetting backupSetting;
+    DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy HH:mm:ss");
+    Calendar cal = Calendar.getInstance();
+    public String START_DATE;
+    public String END_DATE;
+    public String QUERY;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
             ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
@@ -731,6 +746,121 @@ public class ReportsPageStepsDefinition {
             reportPage.verifyConsolidatedStatus(filterOption);
             reportPage.reportFilterOptions(filterOption);
         }
+    }
+
+    @Then("I verify custom summary report for {string}")
+    public void iVerifyCustomSummaryReport(String reportSection) throws Exception {
+        this.report.verifyCustomReport(reportPage.getPdfUrl(), report.getRowCount(), report.getEndDate(),
+                report.getStartDate(), reportSection);
+    }
+
+    @Given("I check the row count in DB for {string} {string}")
+    public void iGetTheRowCount(String reportSection, String dateRange) throws IOException, SQLException {
+        setDateRangeFilter(dateRange);
+        InputStream input = new FileInputStream("src/test/resources/application.properties");
+        Properties prop = new Properties();
+        prop.load(input);
+        if (reportSection.equalsIgnoreCase("AuditTrail")) {
+            var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
+                    .host(), prop.getProperty("database.databaseName"));
+            var dbUserName = prop.get("database.dbRunTimeUser");
+            var dbPassword = prop.get("database.password");
+            DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
+            QUERY = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
+                    + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
+                    + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
+                    + "replace (e1.ValueString,'null','') as ValueString,\n"
+                    + "replace (e1.PreviousValueString,'null','') as PreviousValueString\n"
+                    + "FROM [Runtime].[dbo].[Events] e1 join [Runtime].[dbo].[Events] e2 on e1.User_Phone = e2.User_Phone\n"
+                    + "and e1.Type=e2.Type\n" + "where e1.type='Manual'\n"
+                    + "and e1.EventTime Between 'startDate' and 'endDate'\n"
+                    + "and e2.EventTime Between 'startDate' and 'endDate'\n"
+                    + "and lower(e2.Source_ProcessVariable) = 'parity_flag' and e2.ValueString = '1'\n"
+                    + "and lower(e1.Source_ProcessVariable) != 'parity_flag'\n" + "union all\n"
+                    + "Select FORMAT(EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n" + "Provider_ApplicationName,\n"
+                    + "Source_Object,\n" + "User_Name,\n" + "Comment,\n"
+                    + "replace(Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
+                    + "replace (ValueString,'null','') as ValueString,\n"
+                    + "replace (PreviousValueString,'null','') as PreviousValueString\n"
+                    + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
+                    + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
+        } else if (reportSection.equalsIgnoreCase("EventSummary")) {
+            var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
+                    .host(), prop.getProperty("database.databaseName"));
+            var dbUserName = prop.get("database.dbRunTimeUser");
+            var dbPassword = prop.get("database.password");
+            DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
+            QUERY = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
+                    + "where EventTime Between 'startDate' and 'endDate'\n"
+                    + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
+                    + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
+                    + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
+        }
+        report.setRowCount(DatabaseHelper.fetchData(QUERY.replace("startDate", this.report.getStartDate())
+                .replace("endDate", this.report.getEndDate())));
+        DatabaseHelper.close();
+    }
+
+    public void setDateRangeFilter(String dateRange) {
+        switch (dateRange) {
+            case "Today": {
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                START_DATE = dateFormat.format(cal.getTime());
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                END_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Yesterday": {
+                cal.add(Calendar.DATE, -1);
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.set(Calendar.MINUTE, 0);
+                cal.set(Calendar.SECOND, 0);
+                START_DATE = dateFormat.format(cal.getTime());
+                cal.set(Calendar.HOUR_OF_DAY, 23);
+                cal.set(Calendar.MINUTE, 59);
+                cal.set(Calendar.SECOND, 59);
+                END_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last 7 Days": {
+                END_DATE = dateFormat.format(cal.getTime());
+                cal.add(Calendar.DATE, -6);
+                START_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last 30 Days": {
+                END_DATE = dateFormat.format(cal.getTime());
+                cal.add(Calendar.DATE, -29);
+                START_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "This Month": {
+                END_DATE = dateFormat.format(cal.getTime());
+                cal.set(Calendar.DAY_OF_MONTH, 1);
+                START_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Last Month": {
+                cal.set(Calendar.DATE, 1);
+                cal.add(Calendar.DAY_OF_MONTH, -1);
+                END_DATE = dateFormat.format(cal.getTime());
+                cal.set(Calendar.DATE, 1);
+                START_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+            case "Custom range": {
+                END_DATE = dateFormat.format(cal.getTime());
+                cal.add(Calendar.MONTH, -2);
+                START_DATE = dateFormat.format(cal.getTime());
+                break;
+            }
+        }
+        this.report.setStartDate(START_DATE);
+        this.report.setEndDate(END_DATE);
     }
 
 }
