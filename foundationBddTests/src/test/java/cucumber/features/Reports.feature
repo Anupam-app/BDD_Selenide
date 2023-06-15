@@ -189,3 +189,129 @@ Feature: Report Management
     And I trigger report mode
     Then I should see the report file presence
     And I verify consolidate manual run summary report
+
+  Scenario Outline: Generate custom report for Audit Trail Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "AuditTrail" "<DateRange>"
+    And I select report include "Audit Trail"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "Audit Trail"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
+
+  Scenario: Validate custom report page contents
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    Then I verify below options availability
+      | Report Include  |
+      | Generate Button |
+      | Date Range      |
+      | Alarm Eye Icon  |
+      | Trends Eye Icon |
+
+  Scenario Outline: Generate custom report for Event Summary Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "EventSummary" "<DateRange>"
+    And I select report include "Event Summary"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "Event Summary"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
+
+  Scenario Outline: Generate custom report for Run Summary Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "RunSummary" "<DateRange>"
+    And I select report include "Run Summary"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "Recipe Steps Summary"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
+
+  Scenario Outline: Generate custom report for ProcessAlarm Summary Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "ProcessAlarms" "<DateRange>"
+    And I select report include "ProcessAlarms"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "Process Alarms"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
+
+  Scenario Outline: Generate custom report for System Alarm Summary Section based on dates
+    Given I am logged in as "testadmin" user
+    And I goto report management page
+    When I select report from dropdown "Custom"
+    And I select date range as "<DateRange>"
+    And I check the row count in DB for "SystemAlarms" "<DateRange>"
+    And I select report include "SystemAlarms"
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I verify custom summary report for "System Alarms"
+
+    Examples:
+      | DateRange    |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
+      | Custom range |
