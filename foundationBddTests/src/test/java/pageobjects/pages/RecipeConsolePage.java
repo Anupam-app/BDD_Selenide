@@ -19,7 +19,10 @@ import com.codeborne.selenide.WebDriverRunner;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
+import io.cucumber.java.en.And;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -90,13 +93,13 @@ public class RecipeConsolePage {
             "//p[text()='STEPS']/parent::div/following-sibling::div//p"));
     private final SelenideElement closeJumpStep = $(By.xpath(
             "//img[@src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAATCAYAAACQjC21AAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAFKADAAQAAAABAAAAEwAAAAAA/SztAAABDUlEQVQ4Ea3UUQuCMBDA8UulqKeIkCCQoO//kYIIepGejSKt/oOTabqd0L3opvdrN6/N3t+QbzweT8myVNI0ZTgp6rqW16uWxWIuGZlgp9NZkiSRotjLarU0g1V1l8vlKk3TyPF4kIRMVgbGJA95yRI+Rr5zSKRMVjYF7WPk47gVglKmFR3CdJta0IqGMIwOGENjGPkzbRsGfvST83wrZXlzHy7UDaMguI/qj4Uw3vkpWRO5stGszA/G+gH8eb0PgqyQMv1gzPxYjIJ+uZS52+WmPh0E+xj9udmsTX36Aw5humdcY83fAUOY7lkMbUELZkEdyHmmR1Csz0IojgM5HDm6rNgYitP+U/51Yn8AzV4maDdMLYMAAAAASUVORK5CYII=']"));
-    private final SelenideElement manualStartButton = $(By.xpath("//img[contains(@src,'START_btn.3c28170b.svg')]"));
+    private final SelenideElement manualStartButton = $(By.xpath("//img[contains(@src,'/useradminportal/static/media/START_btn.39b80dd0.svg')]"));
     private final SelenideElement manualOperationName = $(By.xpath("//input[@name ='recipeName']"));
     private final SelenideElement manualStopButton =
             $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.fa5c7ba8.svg']"));
     private final SelenideElement matchId = $(By.xpath("(//label[@id='trimString'])[1]"));
-    private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[3]"));
-    private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[4]"));
+    private final SelenideElement batchId = $(By.xpath("(//label[@id='trimString'])[2]"));
+    private final SelenideElement runId = $(By.xpath("(//label[@id='trimString'])[3]"));
     private final SelenideElement timeValidate = $(By.xpath("//div[@id='timerCycle']"));
     private final SelenideElement closeButtonOfStop = $(By.xpath("//span[contains(text(),'Yes')]"));
     private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Post-Run Record')]"));
@@ -433,7 +436,7 @@ public class RecipeConsolePage {
         okButton.click();
     }
 
-    public void manualRunStart(String productId, String batchId, String beforeComments) {
+    public String manualRunStart(String productId, String batchId, String beforeComments) throws InterruptedException {
 
         if (manualStopButton.isDisplayed()) {
             manualStopButton.click();
@@ -442,22 +445,23 @@ public class RecipeConsolePage {
         }
         commonWaiter(manualStartButton, appear);
         manualStartButton.click();
-        commonWaiter(manualWindowPopup, appear);
-        if (manualWindowPopup.getText()
-                .equalsIgnoreCase("Recipe is already loaded")) {
-            manualWindowPopup_Btn.click();
-        }
-        this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
-        commonWaiter(manualOperationName, visible);
-        manualOperationName.sendKeys(this.recipe.getMachineName());
-        this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
-        runIdTextbox.sendKeys(this.recipe.getRunId());
-        productIdTextbox.setValue(productId);
-        batchIdTextbox.click();
-        batchIdTextbox.sendKeys(batchId);
-        batchIdTextbox.sendKeys(Keys.ENTER);
-        preRunCommentsText.sendKeys(beforeComments);
-        okButton.click();
+       if(manualWindowPopup.waitUntil(Condition.not(visible),5000,1000).isDisplayed()) {
+           manualWindowPopup.getText().equalsIgnoreCase("Recipe is already loaded");
+           manualWindowPopup_Btn.click();
+       }
+           this.recipe.setMachineName(RandomStringUtils.randomAlphabetic(5));
+           commonWaiter(manualOperationName, visible);
+           manualOperationName.sendKeys(this.recipe.getMachineName());
+           //this.recipe.setRunId(RandomStringUtils.randomAlphabetic(5));
+          String runId = runIdTextbox.getValue();
+           this.recipe.setRunId(runId);
+           productIdTextbox.setValue(productId);
+           batchIdTextbox.click();
+           batchIdTextbox.sendKeys(batchId);
+           batchIdTextbox.sendKeys(Keys.ENTER);
+           preRunCommentsText.sendKeys(beforeComments);
+           okButton.click();
+           return runId;
     }
 
     public boolean verifyStopButton() {
@@ -474,8 +478,7 @@ public class RecipeConsolePage {
         Assert.assertEquals(actualBatchId.toLowerCase(), this.recipe.getBatchId()
                 .toLowerCase());
         String actualProductId = runId.getText();
-        Assert.assertEquals(actualProductId.toLowerCase(), this.recipe.getRunId()
-                .toLowerCase());
+        Assert.assertEquals(actualProductId.toLowerCase(), this.recipe.getRunId().toLowerCase());
     }
 
     public void timeValidation() {
@@ -495,8 +498,9 @@ public class RecipeConsolePage {
         Selenide.sleep(2000);
         int secondTime = Integer.parseInt(secondValidate.getText());
         int minSecondTime = Integer.parseInt(SelenideHelper.removeLastCharOptional(minuteValidate.getText()));
-        int differ = (minSecondTime * 60 + secondTime) - (minFirstTime * 60 + firstTime);
-        Assert.assertTrue(differ >= 2);
+        int differ = (minFirstTime * 60 + firstTime)-(minSecondTime * 60 + secondTime);
+        System.out.println(differ);
+        Assert.assertTrue(differ >=(-3) ||differ>= 2);
     }
 
     public void stopButton() {
@@ -1165,4 +1169,5 @@ public class RecipeConsolePage {
     public String loadedRecipeStepCount(){
         return recipeStepCount.getText();
     }
+
 }

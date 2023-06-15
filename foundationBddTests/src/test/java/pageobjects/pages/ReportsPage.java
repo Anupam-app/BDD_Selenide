@@ -31,6 +31,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
+import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -222,6 +223,9 @@ public class ReportsPage {
     List<String> dateColumns = List.of("Last Modified On", "Start Date", "Date Generated");
 
     private final ElementsCollection tableCount = $$(By.xpath("//table[@class='table']//tr"));
+    private final String selectRun = "//tr[@class='tbl-row']//td[text()='%s']";
+
+    private final Recipe recipe;
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -246,6 +250,10 @@ public class ReportsPage {
         templates.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return templates;
     };
+
+    public ReportsPage(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
 
     public void goToReports() {
@@ -1452,6 +1460,10 @@ public class ReportsPage {
             expandReportFilter();
             $(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).click();
         }
+    }
+
+    public void selectRunId(){
+        $(By.xpath(String.format(selectRun,this.recipe.getRunId()))).waitUntil(visible,5000L,1000L).click();
     }
 
 }

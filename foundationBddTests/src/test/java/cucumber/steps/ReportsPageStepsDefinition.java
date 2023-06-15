@@ -4,7 +4,9 @@ import static com.codeborne.selenide.Selenide.switchTo;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
@@ -531,11 +533,11 @@ public class ReportsPageStepsDefinition {
         iVerifyTheAuditTrailReport();
         if (attribute.equalsIgnoreCase("permissions")) {
             this.report.checkModifiedRolePermission(reportPage.getPdfUrl(),
-                    this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
-                    this.role.getOldPermissions());
+                this.role.getRoleName(), this.login.getLogin(), this.role.getPermissions(),
+                this.role.getOldPermissions());
         } else if (attribute.equalsIgnoreCase("roleName")) {
             this.report.checkModifiedRoleName(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
-                    this.role.getRoleName(), this.login.getLogin());
+                this.role.getRoleName(), this.login.getLogin());
         }
         SelenideHelper.goToDefault();
     }
@@ -732,6 +734,11 @@ public class ReportsPageStepsDefinition {
             reportPage.verifyConsolidatedStatus(filterOption);
             reportPage.reportFilterOptions(filterOption);
         }
+    }
+
+    @And("I choose the run")
+    public void selectRunId(){
+        reportPage.selectRunId();
     }
 
 }

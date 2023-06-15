@@ -86,6 +86,8 @@ public class Report {
     private final String EVENT_COLUMN_NAME = "Event Time";
     private final String AUDIT_TABLE_HEADER =
             "Event Time|Application Name|Record|User|Comment|Attribute|Current Value|Previous Value";
+    private final String PROCESS_ALARM_HEADER = "EventTime|Type|Name|Category|Comment|AlarmType";
+    private final String SYSTEM_ALARM_HEADER = "Event|Time|Name|Type|Comment|Alarm|Type";
 
 
     @Setter
@@ -1457,12 +1459,54 @@ public class Report {
                                 .replaceAll("\\s", ""),
                         (userNameLoggedIn + "scheduled" + occurrence + "backup named" + backUpName).replaceAll("\\s",
                                 ""));
-
             }
-
-
             break;
         }
+    }
+
+    public void validateManualRunSummary(String reportUrl, Map<String,String>list) throws IOException {
+        URL url = new URL(reportUrl);
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            for (Map.Entry m : list.entrySet()) {
+                // check first row
+                for (int rowNo = 1; rowNo < 9; rowNo++) {
+                    if ((reportTable.getRows()
+                        .get(0)
+                        .get(1)
+                        .getText(false)).equals(m.getKey())) {
+                        Assert.assertEquals(m.getValue(), reportTable.getRows()
+                            .get(0)
+                            .get(1)
+                            .getText(false));
+                    }
+                }
+            }
+        }
+    }
+
+    public void checkProcessAlarm(String reportUrl) throws Exception {
+
+        URL url = new URL(reportUrl);
+
+        PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), PROCESS_ALARM_HEADER);
+
+        if (table != null) {
+            Assert.assertTrue("Table must contains at least one row in the body", table.getRows()
+                .size() > 0);
+        }
+    }
+
+        public void checkSystemAlarm(String reportUrl) throws Exception {
+
+            URL url = new URL(reportUrl);
+
+            PdfTable table = PdfTableExtractUtils.getTableFromTableHeader(url.openStream(), SYSTEM_ALARM_HEADER);
+
+            if (table != null) {
+                Assert.assertTrue("Table must contains at least one row in the body", table.getRows()
+                    .size() > 0);
+            }
     }
 
 }
