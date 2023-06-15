@@ -315,7 +315,7 @@ public class AnalyticsPage {
                 break;
             case "Created date timestamp":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "On:"))).waitUntil(visible, 5000);
-                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Feb 1, 2023, 5:58:54 AM"))).waitUntil(visible, 5000);
+                $(By.xpath(String.format(XPATH_RIGHT_PANEL, "Feb 1, 2023, 12:58:54 PM"))).waitUntil(visible, 5000);
                 break;
             case "Batch ID":
                 $(By.xpath(String.format(XPATH_RIGHT_PANEL, "b10"))).waitUntil(visible, 5000);

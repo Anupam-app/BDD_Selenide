@@ -579,12 +579,18 @@ public class ReportsPage {
     }
 
     public void includeReport(String reportInclude) {
-        if (reportInclude.equals("Alarms")) {
-            $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))).click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+        if (reportInclude.contains("Alarms")) {
+            $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Alarms"))).click();
+            if (reportInclude.equalsIgnoreCase("ProcessAlarms")) {
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
+            } else if (reportInclude.equalsIgnoreCase("SystemAlarms")) {
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+            } else {
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Process"))).click();
+                $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "System"))).click();
+            }
             saveAlarmButton.click();
-            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, reportInclude))).isSelected();
+            $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Alarms"))).isSelected();
         } else if (reportInclude.contains("Trends")) {
             SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))), visible);
             $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, reportInclude))).click();

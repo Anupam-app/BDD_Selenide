@@ -760,12 +760,12 @@ public class ReportsPageStepsDefinition {
         InputStream input = new FileInputStream("src/test/resources/application.properties");
         Properties prop = new Properties();
         prop.load(input);
+        var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
+                .host(), prop.getProperty("database.databaseName"));
+        var dbUserName = prop.get("database.dbRunTimeUser");
+        var dbPassword = prop.get("database.password");
+        DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
         if (reportSection.equalsIgnoreCase("AuditTrail")) {
-            var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
-                    .host(), prop.getProperty("database.databaseName"));
-            var dbUserName = prop.get("database.dbRunTimeUser");
-            var dbPassword = prop.get("database.password");
-            DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
             QUERY = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
                     + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
                     + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
@@ -785,16 +785,28 @@ public class ReportsPageStepsDefinition {
                     + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
                     + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
         } else if (reportSection.equalsIgnoreCase("EventSummary")) {
-            var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
-                    .host(), prop.getProperty("database.databaseName"));
-            var dbUserName = prop.get("database.dbRunTimeUser");
-            var dbPassword = prop.get("database.password");
-            DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
             QUERY = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
                     + "where EventTime Between 'startDate' and 'endDate'\n"
                     + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
                     + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
                     + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
+        } else if (reportSection.equalsIgnoreCase("RunSummary")) {
+            QUERY = "With CTE As (Select\n" + "Events.EventTime,\n"
+                    + "Cast('<M>' + Replace(Replace(Events.ValueString,'&','and'), '©', '</M><M>') + '</M>' As XML)\n"
+                    + "As [RecipeStep XML]\n" + "From Events\n"
+                    + "Where Events.Source_ProcessVariable In ('SMART_Recipe.StepDataLog') And\n"
+                    + "Events.EventTime Between 'startDate' and 'endDate')\n" + "Select COUNT(*) From CTE";
+        } else if (reportSection.equalsIgnoreCase("ProcessAlarms")) {
+            QUERY = "Select COUNT(*) From [Runtime].[dbo].[Events]\n"
+                    + "Where Events.EventTime Between 'startDate' and 'endDate' And\n"
+                    + "Events.IsAlarm = 1 And Events.Alarm_Type = 'DSC' And\n" + "Events.Priority < 500 And\n"
+                    + "(Events.Priority < 11 or Events.Priority > 100)";
+        } else if (reportSection.equalsIgnoreCase("SystemAlarms")) {
+            QUERY = "Select COUNT(*) From [Runtime].[dbo].[Events]\n"
+                    + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
+                    + "And Events.IsAlarm = 1 And Events.Priority < 500 and\n"
+                    + "(Events.Alarm_Type = 'System' or (Events.Alarm_Type = 'DSC'\n"
+                    + "and Events.Priority between 11 and 100))";
         }
         report.setRowCount(DatabaseHelper.fetchData(QUERY.replace("startDate", this.report.getStartDate())
                 .replace("endDate", this.report.getEndDate())));
