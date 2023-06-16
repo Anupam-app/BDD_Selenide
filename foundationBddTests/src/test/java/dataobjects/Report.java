@@ -1559,9 +1559,6 @@ public class Report {
                             (userNameLoggedIn + " triggered a system hold action on the IVI").replaceAll("\\s", ""));
                 }
             }
-
-
-
             break;
         }
     }
