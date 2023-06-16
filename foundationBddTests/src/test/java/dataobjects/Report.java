@@ -1509,5 +1509,62 @@ public class Report {
         }
     }
 
+    public void verifyAuditReportForSystemHoldAndRestart(String reportUrl, String userNameLoggedIn) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            for (int i = 1; i < 3; i++) {
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(3)
+                        .getText(false)
+                        .contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(1)
+                        .getText(false)
+                        .contains("RecipeManagement"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(2)
+                        .getText(false)
+                        .contains("User -" + userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(7)
+                        .getText(false)
+                        .isEmpty());
+                if (i == 1) {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " triggered a system restart action on the IVI").replaceAll("\\s", ""));
+                } else {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " triggered a system hold action on the IVI").replaceAll("\\s", ""));
+                }
+            }
+
+
+
+            break;
+        }
+    }
+
 }
 

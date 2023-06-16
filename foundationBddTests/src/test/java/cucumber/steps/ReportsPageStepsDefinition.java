@@ -875,4 +875,17 @@ public class ReportsPageStepsDefinition {
         this.report.setEndDate(END_DATE);
     }
 
+    @When("I verify audit logs for system hold and restart")
+    public void iVerifyAuditLogsForSystemHoldAndRestart() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForHoldAndRestart(this.user.getUserName(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the system hold and restart entries in report")
+    public void iVerifyPDFReportForSystemHoldAndRestart() throws Exception {
+        this.report.verifyAuditReportForSystemHoldAndRestart(reportPage.getPdfUrl(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
 }
