@@ -819,7 +819,7 @@ public class ReportsPageStepsDefinition {
         DatabaseHelper.close();
     }
 
-    public void setDateRangeFilter (String dateRange){
+    public void setDateRangeFilter (String dateRange) {
         switch (dateRange) {
             case "Today": {
                 cal.set(Calendar.HOUR_OF_DAY, 0);

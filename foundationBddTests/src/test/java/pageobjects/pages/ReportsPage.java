@@ -232,7 +232,7 @@ public class ReportsPage {
     private final SelenideElement applyButton = $(By.xpath("//button[@class='applyBtn btn btn-sm btn-primary']"));
 
     private final ElementsCollection tableCount = $$(By.xpath("//table[@class='table']//tr"));
-    private final String selectRun = "//tr[@class='tbl-row']//td[text()='%s']";
+    private final String SELECTRUN = "//tr[@class='tbl-row']//td[text()='%s']";
 
     private final Recipe recipe;
 
@@ -1518,7 +1518,7 @@ public class ReportsPage {
     }
 
     public void selectRunId(){
-        $(By.xpath(String.format(selectRun,this.recipe.getRunId()))).waitUntil(visible,5000L,1000L).click();
+        $(By.xpath(String.format(SELECTRUN,this.recipe.getRunId()))).waitUntil(visible,5000L,1000L).click();
     }
 
 }
