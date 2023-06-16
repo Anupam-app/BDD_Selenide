@@ -1,4 +1,4 @@
-@CRS @IVI @Recipe
+@CRS @IVI
 Feature: Recipe Management console
 
   Background:
@@ -294,7 +294,7 @@ Feature: Recipe Management console
     And I Abort the recipe execution
     And I validate the RUNID BATCHID text displayed on Post run window
 
- # @BIOCRS-9352 @IVI-7256 @IVI-7040
+  @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
     Given I expand recipe console
     When I select "Manual operation" tab
@@ -386,10 +386,12 @@ Feature: Recipe Management console
     And I push the login button
     Then I verify recipe console expand is disabled
 
+  @IVI-7256 @IVI-7040
   Scenario: Verify manual run report PDF
     Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
     When I start Manual run
+    And I wait for 4 seconds
     When I Stop the RUN
     Then I validate the date formats in Post run window and enter comments
     And I click ok button
