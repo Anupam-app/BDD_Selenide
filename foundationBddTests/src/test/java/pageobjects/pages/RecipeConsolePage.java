@@ -391,7 +391,7 @@ public class RecipeConsolePage {
 
     public void manualOperation(String status) {
         if (status.equalsIgnoreCase("enabled")) {
-            manualOperationButton.waitUntil(visible, 100001)
+            manualOperationButton.waitUntil(enabled, 100001)
                     .click();
             manualOperationSelected.shouldBe(visible);
         } else if (status.equalsIgnoreCase("disabled")) {
