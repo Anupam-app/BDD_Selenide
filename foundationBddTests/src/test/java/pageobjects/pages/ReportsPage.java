@@ -1509,4 +1509,15 @@ public class ReportsPage {
         }
     }
 
+    public void verifyAuditLogsForHoldAndRestart(String username, String loggedInUserName) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered a system restart action on the IVI", "")))
+                .shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered a system hold action on the IVI", "")))
+                .shouldBe(visible);
+        for (int i = 1; i < 3; i++) {
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Recipe Management"));
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).shouldHave(text("User - " + username));
+        }
+    }
+
 }
