@@ -20,4 +20,8 @@ public class ReportTemplate {
     @Getter
     String reportIncludeOption;
 
+    @Setter
+    @Getter
+    String previousStatus;
+
 }

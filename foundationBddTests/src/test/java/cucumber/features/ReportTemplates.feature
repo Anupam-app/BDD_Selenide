@@ -5,6 +5,7 @@ Feature: Report Template module
   https://stljirap.sial.com/browse/BIOFOUND-28944
   https://stljirap.sial.com/browse/BIOFOUND-28946
   https://stljirap.sial.com/browse/BIOFOUND-28948
+  https://stljirap.sial.com/browse/BIOFOUND-29948
 
   Background:
     Given I am logged in as "Bio4CAdmin" user
@@ -79,6 +80,7 @@ Feature: Report Template module
       | Event Summary |
     And I save the report template
     Then I search and verify the updated report template
+
     Examples:
       | templateName         |
       | testDraftTemplate    |
@@ -95,6 +97,11 @@ Feature: Report Template module
     And I search the report template
     And I change the template status Approved to Inactive
     Then I search and verify the report template
+    And I generate the "Audit Trail" Report for "Bio4CAdmin" user
+    And I verify audit logs for template update
+    And I click on generate button
+    And I see the report file is generated
+    And I verify the audit trail for template
 
   Scenario Outline: clone the report template with different statuses
     And I open the report template dashboard
@@ -102,7 +109,6 @@ Feature: Report Template module
     And I clone the report template
     Then I should see new template created with "Draft" status
     And Existing template should also be present with "<status>"
-
     Examples:
       | templateName         | status    |
       | testDraftTemplate    | Draft     |
