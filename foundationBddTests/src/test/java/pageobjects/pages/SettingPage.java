@@ -43,6 +43,8 @@ public class SettingPage {
     public static final String TIME_FORMAT = "kk:mm:ss";
     private final String generalFormat = "(//div[@class='batch-id']/div)[%d]";
     private final SelenideElement decimalFormat = $(By.xpath("(//div[@class='batch-id'])[4]"));
+    private String dateFormat = null;
+    private String timeFormat = null;
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToSettingsPage() {
@@ -111,13 +113,15 @@ public class SettingPage {
             case "Language":
                 languageDropDown.shouldBe(visible);
                 $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "English (USA)"))).shouldBe(visible);
+                languageDropDown.click();
+                $(By.xpath(String.format(XPATH_LANGUAGE_TEXT, "Deutsch (Deutschland)"))).click();
                 break;
             case "Date Format":
-                String dateFormat = $(By.xpath(String.format(generalFormat, 2))).getText();
+                dateFormat = $(By.xpath(String.format(generalFormat, 2))).getText();
                 Assert.assertTrue(SelenideHelper.dateFormatCheck(dateFormat, DATE_FORMAT));
                 break;
             case "Time Format":
-                String timeFormat = $(By.xpath(String.format(generalFormat, 3))).getText();
+                timeFormat = $(By.xpath(String.format(generalFormat, 3))).getText();
                 Assert.assertTrue(SelenideHelper.dateFormatCheck(timeFormat, TIME_FORMAT));
                 break;
             case "Number Format":
