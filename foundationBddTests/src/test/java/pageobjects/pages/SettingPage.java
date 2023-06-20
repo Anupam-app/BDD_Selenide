@@ -10,8 +10,9 @@ import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
-import java.awt.*;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.awt.AWTException;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
