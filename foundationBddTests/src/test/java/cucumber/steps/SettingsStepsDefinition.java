@@ -1,8 +1,7 @@
 package cucumber.steps;
 
-import java.awt.*;
+import java.awt.AWTException;
 import java.util.List;
-
 import org.junit.Assert;
 
 import cucumber.util.I18nUtils;
