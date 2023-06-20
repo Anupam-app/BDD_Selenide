@@ -479,6 +479,7 @@ public class ReportsPageStepsDefinition {
 
     @When("I change the template status Approved to Inactive")
     public void iChangeTemplateStatusApprovedToInactive() {
+        this.reportTemplate.setPreviousStatus(this.reportTemplate.getStatus());
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
         reportPage.putReportTemplateToInactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
@@ -597,6 +598,7 @@ public class ReportsPageStepsDefinition {
     public void iSearchAndApproveTheReportTemplate() {
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         iPutTheReportTemplateInReview();
+        this.reportTemplate.setPreviousStatus(this.reportTemplate.getStatus());
         reportPage.saveReportTemplate();
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         iApproveTheReportTemplate();
@@ -618,14 +620,14 @@ public class ReportsPageStepsDefinition {
     public void iCheckAuditTrialReportContentForTemplate() throws Exception {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkTemplateStatus(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-                this.reportTemplate.getStatus(), this.login.getLogin());
+                this.reportTemplate.getStatus(), this.reportTemplate.getPreviousStatus(), this.login.getLogin());
         this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-                this.reportTemplate.getStatus(), this.login.getLogin());
+                 this.login.getLogin());
     }
 
     @When("I verify audit logs for template update")
     public void iVerifyAuditLogsForTemplateCreate() {
-        reportPage.verifyAuditLogsForTemplateCreate(this.reportTemplate.getName());
+        reportPage.verifyAuditLogsForTemplateCreate(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
 
     @When("I verify below options availability")

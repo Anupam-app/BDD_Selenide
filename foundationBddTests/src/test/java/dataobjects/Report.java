@@ -990,7 +990,7 @@ public class Report {
         }
     }
 
-    public void checkTemplateStatus(String reportUrl, String templateName, String status, String userNameLoggedIn)
+    public void checkTemplateStatus(String reportUrl, String templateName, String status, String prevStatus, String userNameLoggedIn)
             throws IOException {
 
         URL url = new URL(reportUrl);
@@ -1044,15 +1044,25 @@ public class Report {
                         Assert.assertTrue(recordColumnValue.contains(templateName));
                         Assert.assertTrue(attributeColumnValue.contains("status"));
                         if (i == 1) {
-                            Assert.assertTrue(commentColumnValue
-                                    .contains(userNameLoggedIn + " approved andsigned Report Template"));
+                            if(status.equalsIgnoreCase("Approved")) {
+                                Assert.assertTrue(commentColumnValue.contains(userNameLoggedIn + " approved andsigned Report Template"));
+                            } else if (status.equalsIgnoreCase("Inactive")){
+                                Assert.assertTrue(commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
+                            }
                             Assert.assertTrue(currValueColumnValue.contains(status));
-                            Assert.assertTrue(preValueColumnValue.contains("In Review"));
+                            Assert.assertTrue(preValueColumnValue.contains(prevStatus));
                         } else {
-                            Assert.assertTrue(
+                            if(status.equalsIgnoreCase("Inactive")){
+                                Assert.assertTrue(
+                                    commentColumnValue.contains(userNameLoggedIn + " approved andsigned Report Template"));
+                                Assert.assertTrue(preValueColumnValue.contains("In Review"));
+                                Assert.assertTrue(currValueColumnValue.contains("Approved"));
+                            } else if(status.equalsIgnoreCase("Approved")){
+                                Assert.assertTrue(
                                     commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
-                            Assert.assertTrue(preValueColumnValue.contains("Draft"));
-                            Assert.assertTrue(currValueColumnValue.contains("In Review"));
+                                Assert.assertTrue(preValueColumnValue.contains("Draft"));
+                                Assert.assertTrue(currValueColumnValue.contains("In Review"));
+                            }
                         }
                     }
                 }
@@ -1061,7 +1071,7 @@ public class Report {
         }
     }
 
-    public void checkCreatedTemplate(String reportUrl, String templateName, String status, String userNameLoggedIn)
+    public void checkCreatedTemplate(String reportUrl, String templateName, String userNameLoggedIn)
             throws IOException {
         URL url = new URL(reportUrl);
         String attributeColumnValue = null;
