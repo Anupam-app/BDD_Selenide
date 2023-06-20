@@ -13,6 +13,7 @@ import com.codeborne.selenide.SelenideElement;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import pageobjects.components.SpinnerComponent;
@@ -26,17 +27,22 @@ public class SettingPage {
             "//*[@class='system-connect-dropdown-container']//*[@class='active-label' and text()='%s']";
     private final String XPATH_HEADER = "//div[contains(@class,'header')]";
 
-    private SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
-    private SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));
-    private SelenideElement generalText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "General")));
+    private final SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
+    private final SelenideElement systemComponentText =
+            $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));
+    private final SelenideElement generalText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "General")));
 
-    private SelenideElement languageDropDown = $(By.className("system-connect-dropdown-container"));
+    private final SelenideElement languageDropDown = $(By.className("system-connect-dropdown-container"));
 
-    private SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
-    private SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
-    private SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
-    private SelenideElement settingsHeader = $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
-
+    private final SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
+    private final SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
+    private final SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
+    private final SelenideElement settingsHeader =
+            $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
+    public static final String DATE_FORMAT = "MMM d, yyyy";
+    public static final String TIME_FORMAT = "kk:mm:ss";
+    private final String generalFormat = "(//div[@class='batch-id']/div)[%d]";
+    private final SelenideElement decimalFormat = $(By.xpath("(//div[@class='batch-id'])[4]"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToSettingsPage() {
@@ -89,7 +95,7 @@ public class SettingPage {
         settingsHeader.shouldBe(visible);
     }
 
-    private void zoomOut() throws AWTException {
+    public void zoomOut() throws AWTException {
         Robot robot = new Robot();
         for (int i = 0; i < 3; i++) {
             robot.keyPress(KeyEvent.VK_CONTROL);
@@ -97,6 +103,30 @@ public class SettingPage {
             robot.keyRelease(KeyEvent.VK_SUBTRACT);
             robot.keyRelease(KeyEvent.VK_CONTROL);
             Selenide.sleep(2000);
+        }
+    }
+
+    public void verifyGeneralTab(String options) {
+        switch (options) {
+            case "Language":
+                languageDropDown.shouldBe(visible);
+                $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "English (USA)"))).shouldBe(visible);
+                break;
+            case "Date Format":
+                String dateFormat = $(By.xpath(String.format(generalFormat, 2))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(dateFormat, DATE_FORMAT));
+                break;
+            case "Time Format":
+                String timeFormat = $(By.xpath(String.format(generalFormat, 3))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(timeFormat, TIME_FORMAT));
+                break;
+            case "Number Format":
+                decimalFormat.shouldHave(text("1,000.123"));
+                break;
+            case "Session Timeout":
+                $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "60 min"))).shouldBe(visible);
+                break;
+            default:
         }
     }
 
