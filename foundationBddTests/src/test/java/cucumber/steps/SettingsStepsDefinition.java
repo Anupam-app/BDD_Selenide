@@ -1,19 +1,21 @@
 package cucumber.steps;
 
+import java.awt.AWTException;
+import java.util.List;
+import org.junit.Assert;
+
 import cucumber.util.I18nUtils;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import java.awt.AWTException;
-
-import org.junit.Assert;
 import pageobjects.pages.SettingPage;
 import pageobjects.utility.SelenideHelper;
 
 public class SettingsStepsDefinition {
 
-    private SettingPage settingPage;
+    private final SettingPage settingPage;
 
     public SettingsStepsDefinition(SettingPage settingPage) {
         this.settingPage = settingPage;
@@ -35,7 +37,7 @@ public class SettingsStepsDefinition {
     }
 
     @When("I change custom label {string}")
-    public void iChangeSettings(String customLabelName) throws AWTException {
+    public void iChangeSettings(String customLabelName) {
         settingPage.changeSettings(customLabelName);
     }
 
@@ -68,4 +70,14 @@ public class SettingsStepsDefinition {
         settingPage.seeContent(expectedText);
         SelenideHelper.goParentFrame();
     }
+
+    @And("below information is displayed")
+    public void verifyGeneralTab(DataTable table) throws AWTException {
+        List<String> list = table.asList(String.class);
+        settingPage.zoomOut();
+        for (int i = 0; i < list.size(); i++) {
+            settingPage.verifyGeneralTab(list.get(i));
+        }
+    }
+
 }
