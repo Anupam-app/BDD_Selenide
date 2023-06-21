@@ -75,4 +75,3 @@ Feature: Roles Permissions Check
   Examples:
   |Permission|
   |View Recipe|
-  #|Create Recipe|

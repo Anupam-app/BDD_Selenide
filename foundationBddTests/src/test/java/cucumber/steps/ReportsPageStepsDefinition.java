@@ -902,8 +902,7 @@ public class ReportsPageStepsDefinition {
                 reportPage.switchToFrame();
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), this.login.getLogin(), action);
                 break;
-            case "Approve Recipe":
-                // audit check for approved recipe
+                
             default:
 
         }
