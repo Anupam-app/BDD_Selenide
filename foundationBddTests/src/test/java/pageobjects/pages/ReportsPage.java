@@ -256,7 +256,6 @@ public class ReportsPage {
         return templates;
     };
 
-
     public void goToReports() {
         commonWaiter(reportsManagementPage, visible);
         reportsManagementPage.click();

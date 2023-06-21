@@ -890,4 +890,22 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @When("I generate & verify audit logs for recipe with permission {string}")
+    public void iVerifyAuditLogsForRecipe(String action) throws InterruptedException, IOException {
+        iGenerateAuditTrailReport();
+        switch (action){
+            case "View Recipe":
+                iVerifyAuditTrailReportRolePermissions("permissions");
+                break;
+            case "Create Recipe":
+            case "Edit Recipe":
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), this.login.getLogin(), action);
+                break;
+                
+            default:
+
+        }
+        switchTo().parentFrame();
+    }
 }

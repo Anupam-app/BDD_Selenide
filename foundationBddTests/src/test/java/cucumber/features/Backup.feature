@@ -48,6 +48,8 @@ Feature: Backup creation
     And I see the notification message "Backup job scheduled"
     And I schedule backup with existing name "Daily"
     Then I see the notification message
+    And I go to backup mode
+    When I delete the backup
 
   Scenario: BIOCRS-5113| Unauthorized user cant create backup
     Given I am logged in as "reportUnauthUser" user
