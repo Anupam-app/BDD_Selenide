@@ -1,6 +1,5 @@
 package cucumber.steps;
 
-import java.awt.AWTException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -20,6 +19,8 @@ import io.cucumber.java.en.When;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
 import pageobjects.pages.UserPage;
+import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeTouchEnablerPage;
 
 public class RolePageStepsDefinition {
 
@@ -29,15 +30,19 @@ public class RolePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Login login;
     private final UserPage userPage;
+    private final RecipePage recipePage;
+    private final RecipeTouchEnablerPage recipeTouchEnablerPage;
 
     public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login,
-            UserPage userPage) {
+                                   UserPage userPage, RecipePage recipePage, RecipeTouchEnablerPage recipeTouchEnablerPage) {
         this.rolePage = rolePage;
         this.role = role;
         this.report = report;
         this.reportPage = reportPage;
         this.login = login;
         this.userPage = userPage;
+        this.recipePage = recipePage;
+        this.recipeTouchEnablerPage = recipeTouchEnablerPage;
         this.role.getPermissions()
                 .clear();
     }
@@ -296,4 +301,48 @@ public class RolePageStepsDefinition {
         rolePage.verifyRoleAfterDelete();
     }
 
+    @And("I update the role {string} with Permission {string}")
+    public void searchAndUpdateRolePermission(String roleName, String permission){
+        iSearchAndEditRole(roleName);
+        List <String> permissionSelected = rolePage.getPermissionList();
+        for (int i = 1; i < permissionSelected.size(); i++) {
+            this.role.getPermissions()
+                    .remove(permissionSelected.get(i));
+            rolePage.unSelectPermission(permissionSelected.get(i));
+        }
+        this.role.getPermissions().add(permission);
+        rolePage.clickOnPermission(permission);
+        rolePage.roleDependencyPopUp();
+        saveRole();
+    }
+
+    @And("I verify {string} permission")
+    public void verifyPermissionAccess(String permission){
+        switch(permission) {
+            case "View Recipe":
+                //verification to read only recipe
+                recipePage.goToEditMode();
+                recipePage.viewOnlyRecipeAccess();
+                recipeTouchEnablerPage.buttonDisabled("Import");
+                recipeTouchEnablerPage.buttonDisabled("Save");
+                recipeTouchEnablerPage.buttonDisabled("Save As");
+                recipeTouchEnablerPage.buttonDisabled("Export");
+                break;
+            case "Create Recipe":
+                //verification to create recipe
+                break;
+            case "Edit Recipe":
+                //verification to edit recipe
+                break;
+            case "Approve Recipe":
+                //verification to approve recipe
+                break;
+            case "Run Recipe":
+                //verification to run recipe
+                break;
+
+
+            default:
+        }
+    }
 }

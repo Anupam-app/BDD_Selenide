@@ -245,7 +245,7 @@ public class RecipePage {
     private final String selectCriteria = "//label[@data-contextmenu='%s']";
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
     private final String phaseSelectionFromPhaseLibrary = "//span[text()='%s']/ancestor::span/following-sibling::span//img[@title='View Phase']";
-
+    private final String TEXT_MESSAGE = "Please go to recipe browser tab to open a recipe";
     private final Recipe recipe;
 
     public RecipePage(Recipe recipe) {
@@ -1578,9 +1578,13 @@ public class RecipePage {
         saveButton.click();
     }
 
-    public void verifyRecipeActionStep(String actionstep) {
+    public void verifyRecipeActionStep(String actionStep) {
         commonWaiter($(By.xpath(String.format(stepNumber, "1"))), visible).click();
-        Assert.assertTrue(getActionValue().contains(actionstep));
+        Assert.assertTrue(getActionValue().contains(actionStep));
+    }
+
+    public void viewOnlyRecipeAccess(){
+        $(By.xpath(String.format(warningMessage, TEXT_MESSAGE))).shouldHave(text(TEXT_MESSAGE));
     }
 
 }

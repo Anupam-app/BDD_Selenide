@@ -61,3 +61,18 @@ Feature: Roles Permissions Check
     And I search "customRoleEdit" user to validate role "modifiedCustomRole" assigned
     And I generate audit trail report
     And I verify custom role modification-"roleName" details captured in audit trail for user
+
+  Scenario Outline: Verify Permission check for Recipe
+    Given I am logged in as "Bio4CAdmin" user
+    And I trigger roles mode
+    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
+    When I go to recipe page
+    Then I verify "<Permission>" permission
+    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
+    And I generate & verify audit logs for recipe with permission "<Permission>"
+
+  Examples:
+  |Permission|
+  |View Recipe|
+  #|Create Recipe|

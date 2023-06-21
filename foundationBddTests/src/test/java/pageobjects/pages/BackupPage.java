@@ -195,7 +195,7 @@ public class BackupPage {
                 Date date = new Date();
                 Calendar c = Calendar.getInstance();
                 c.setTime(date);
-                int minuteToWait = 1;
+                int minuteToWait = 2;
                 c.add(Calendar.MINUTE, minuteToWait);
                 Date currentDatePlusOne = c.getTime();
                 String d = dateFormat.format(currentDatePlusOne);
@@ -343,7 +343,7 @@ public class BackupPage {
     }
 
     public void waitForImmediateBackupSuccess() {
-        waitForScheduledBackupState(List.of(BackupStatus.Success), BACKUP_SCHEDULED_TIME_TO_WAIT);
+        waitForScheduledBackupState(List.of(BackupStatus.Success), BACKUP_FINISH_TIME_TO_WAIT);
     }
 
     public void notificationMessage(String message) {
