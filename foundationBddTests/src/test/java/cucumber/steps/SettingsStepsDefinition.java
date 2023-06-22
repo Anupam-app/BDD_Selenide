@@ -99,4 +99,24 @@ public class SettingsStepsDefinition {
         iApplySetting();
     }
 
+    @Given("I goto service card")
+    public void iGotoServiceCard() {
+        settingPage.goToServiceCard();
+    }
+
+    @Given("I goto maintenance tab")
+    public void iGotoMaintenanceTab() {
+        settingPage.goToMaintenanceTab();
+    }
+
+    @Given("I reset the last maintenance date")
+    public void iResetLastMaintenanceDate() {
+        settingPage.resetLastMaintenanceDate();
+    }
+
+    @Given("I verify the Maintenance details updated")
+    public void iVerifyMaintenanceDetails() {
+        settingPage.verifyMaintenanceDetails();
+    }
+
 }

@@ -1,4 +1,4 @@
-@CRS
+@CRS @IVI
 Feature: Settings Modification
 
   @CONFIG_SETTING_SYSTEM_COMPONENTS
@@ -58,3 +58,18 @@ Feature: Settings Modification
     When I provide random name to custom system name
     And I apply settings
     Then I see system name is updated in portal
+
+  Scenario: Verify Maintenance details Section
+    Given I am logged in as "bio4cadmin" user
+    And I goto settings page
+    When I goto service card
+    Then below information is displayed
+      | Report Issue |
+      | Maintenance  |
+    When I goto maintenance tab
+    Then below information is displayed
+      | Last Maintenance Date |
+      | Next Maintenance Date |
+      | Scheduled Maintenance |
+    And I reset the last maintenance date
+    Then I verify the Maintenance details updated
