@@ -2,9 +2,12 @@ package cucumber.steps;
 
 import java.awt.AWTException;
 import java.util.List;
+
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
 import cucumber.util.I18nUtils;
+import dataobjects.Setting;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -16,9 +19,11 @@ import pageobjects.utility.SelenideHelper;
 public class SettingsStepsDefinition {
 
     private final SettingPage settingPage;
+    private final Setting setting;
 
-    public SettingsStepsDefinition(SettingPage settingPage) {
+    public SettingsStepsDefinition(SettingPage settingPage, Setting setting) {
         this.settingPage = settingPage;
+        this.setting = setting;
     }
 
     @Given("I goto settings page")
@@ -78,6 +83,20 @@ public class SettingsStepsDefinition {
         for (int i = 0; i < list.size(); i++) {
             settingPage.verifyGeneralTab(list.get(i));
         }
+    }
+
+    @And("I provide random name to custom system name")
+    public void iUpdateCustomSystemName() {
+        this.setting.setCustomName(RandomStringUtils.randomAlphabetic(3));
+        settingPage.updateSystemName(this.setting.getCustomName());
+    }
+
+    @Then("I see system name is updated in portal")
+    public void iVerifyCustomSystemName() {
+        SelenideHelper.goParentFrame();
+        settingPage.iVerifyCustomSystemName(this.setting.getCustomName());
+        settingPage.updateSystemName("IVI");
+        iApplySetting();
     }
 
 }

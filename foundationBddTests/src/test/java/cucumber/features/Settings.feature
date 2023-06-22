@@ -42,3 +42,19 @@ Feature: Settings Modification
       | Time Format     |
       | Number Format   |
       | Session Timeout |
+
+  Scenario: Verify UI behavior of System Information & Settings
+    Given I am logged in as "bio4cadmin" user
+    And I goto settings page
+    When I goto system components
+    Then below information is displayed
+      | System Name           |
+      | Custom System Name    |
+      | System Family Name    |
+      | System Serial No.     |
+      | System Size           |
+      | Location              |
+      | Display Label Setting |
+    When I provide random name to custom system name
+    And I apply settings
+    Then I see system name is updated in portal
