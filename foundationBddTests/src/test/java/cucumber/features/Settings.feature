@@ -58,7 +58,7 @@ Feature: Settings Modification
     When I provide random name to custom system name
     And I apply settings
     Then I see system name is updated in portal
-@test
+
   Scenario: Verify About Section in Settings
     Given I am logged in as "bio4cadmin" user
     When I goto settings page
