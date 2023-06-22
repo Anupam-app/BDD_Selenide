@@ -1,5 +1,6 @@
 package pageobjects.pages;
 
+import static com.codeborne.selenide.Condition.empty;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -29,8 +30,7 @@ public class SettingPage {
     private final String XPATH_HEADER = "//div[contains(@class,'header')]";
 
     private final SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
-    private final SelenideElement systemComponentText =
-            $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));
+    private final SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System")));
     private final SelenideElement generalText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "General")));
 
     private final SelenideElement languageDropDown = $(By.className("system-connect-dropdown-container"));
@@ -42,10 +42,14 @@ public class SettingPage {
             $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
     public static final String DATE_FORMAT = "MMM d, yyyy";
     public static final String TIME_FORMAT = "kk:mm:ss";
-    private final String generalFormat = "(//div[@class='batch-id']/div)[%d]";
+    private final String GENERAL_FORMAT = "(//div[@class='batch-id']/div)[%d]";
     private final SelenideElement decimalFormat = $(By.xpath("(//div[@class='batch-id'])[4]"));
-    private String dateFormat = null;
-    private String timeFormat = null;
+    private String DATE_SETTINGS_PAGE = null;
+    private final String SYSTEM_PAGE_KEYS = "(//div[@class='system-connectivity-block']/*//label)[%d]";
+    private final String SYSTEM_PAGE_VALUES = "(//div[@class='system-connectivity-block']/div/div)[%d]";
+    private final String INPUT_FIELDS = "//input[@name='%s']";
+    private final String SYSTEM_PAGE_FIELDS = "//span[text()='%s']";
+    private final SelenideElement companyName = $(By.xpath("//li[@class='company-name']/div"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToSettingsPage() {
@@ -118,12 +122,12 @@ public class SettingPage {
                 $(By.xpath(String.format(XPATH_LANGUAGE_TEXT, "Deutsch (Deutschland)"))).click();
                 break;
             case "Date Format":
-                dateFormat = $(By.xpath(String.format(generalFormat, 2))).getText();
-                Assert.assertTrue(SelenideHelper.dateFormatCheck(dateFormat, DATE_FORMAT));
+                DATE_SETTINGS_PAGE = $(By.xpath(String.format(GENERAL_FORMAT, 2))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(DATE_SETTINGS_PAGE, DATE_FORMAT));
                 break;
             case "Time Format":
-                timeFormat = $(By.xpath(String.format(generalFormat, 3))).getText();
-                Assert.assertTrue(SelenideHelper.dateFormatCheck(timeFormat, TIME_FORMAT));
+                DATE_SETTINGS_PAGE = $(By.xpath(String.format(GENERAL_FORMAT, 3))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(DATE_SETTINGS_PAGE, TIME_FORMAT));
                 break;
             case "Number Format":
                 decimalFormat.shouldHave(text("1,000.123"));
@@ -131,8 +135,49 @@ public class SettingPage {
             case "Session Timeout":
                 $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "60 min"))).shouldBe(visible);
                 break;
+            case "System Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("System Name"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldHave(text("IVI"));
+                break;
+            case "Custom System Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 2))).shouldHave(text("Custom System Name"));
+                break;
+            case "System Family Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 3))).shouldHave(text("System Family Name"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldHave(text("IVIFamily"));
+                break;
+            case "System Serial No.":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 4))).shouldHave(text("System Serial No."));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 8))).shouldHave(text("123"));
+                break;
+            case "System Size":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 5))).shouldHave(text("System Size"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 10))).shouldBe(empty);
+                break;
+            case "Location":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 6))).shouldHave(text("Location"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 8))).shouldHave(text("Site"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 9))).shouldHave(text("Area"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 10))).shouldHave(text("Process Cell"));
+                $(By.xpath(String.format(INPUT_FIELDS, "site"))).setValue("site");
+                $(By.xpath(String.format(INPUT_FIELDS, "area"))).setValue("area");
+                $(By.xpath(String.format(INPUT_FIELDS, "processCell"))).setValue("processCell");
+                break;
+            case "Display Label Setting":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 11))).shouldHave(text("Display Label Setting"));
+                $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Custom Label"))).shouldBe(visible);
+                $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Factory Tag"))).shouldBe(visible);
+                break;
             default:
         }
+    }
+
+    public void updateSystemName(String customName) {
+        $(By.xpath(String.format(INPUT_FIELDS, "externalSystemName"))).setValue(customName);
+    }
+
+    public void iVerifyCustomSystemName(String customName) {
+        companyName.shouldHave(text(customName));
     }
 
 }
