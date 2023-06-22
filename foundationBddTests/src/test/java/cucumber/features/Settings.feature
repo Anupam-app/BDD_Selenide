@@ -58,3 +58,11 @@ Feature: Settings Modification
     When I provide random name to custom system name
     And I apply settings
     Then I see system name is updated in portal
+
+  Scenario: Verify About Section in Settings
+    Given I am logged in as "bio4cadmin" user
+    When I goto settings page
+    And I goto about components
+    Then I verify softwareInformation details
+    And I verify Third-party Licence Information
+    And I verify End User Licence Agreement Information
