@@ -53,7 +53,7 @@ public class SettingPage {
     private final String SYSTEM_PAGE_FIELDS = "//span[text()='%s']";
     private final SelenideElement companyName = $(By.xpath("//li[@class='company-name']/div"));
     private SelenideElement aboutText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "About")));
-    private final String softwareDetails = "//table//tr[%d]/td[%d]";
+    private final String SOFTWAREDETAILS = "//table//tr[%d]/td[%d]";
     private final SelenideElement thirdPartyLicence = $(By.xpath("//div[text()='Third-party Licence Information']"));
     private final ElementsCollection thirdPartyComponents = $$ (By.xpath("//table//tr/td"));
     private final SelenideElement endUserLicence = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "End User Licence Agreement")));
@@ -194,7 +194,7 @@ public class SettingPage {
 
     public void softwareInformation(){
         for(int i=1;i<=3;i++){
-            String value = ($(By.xpath(String.format(softwareDetails, i,1))).getText());
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,1))).getText());
             String expectedText = null;
             if (i==1){
                 expectedText = "Name";
@@ -206,7 +206,7 @@ public class SettingPage {
             Assert.assertEquals(expectedText,value);
         }
         for(int i=1;i<=3;i++){
-            String value = ($(By.xpath(String.format(softwareDetails, i,2))).getText());
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,2))).getText());
             Assert.assertNotNull(value);
         }
     }
@@ -215,7 +215,7 @@ public class SettingPage {
         thirdPartyLicence.click();
         for(int i=1;i<=4;i++){
             for(int j=1;j<=thirdPartyComponents.size();j++){
-                String value = ($(By.xpath(String.format(softwareDetails, i,j))).getText());
+                String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,j))).getText());
                 Assert.assertNotNull(value);
             }
         }
