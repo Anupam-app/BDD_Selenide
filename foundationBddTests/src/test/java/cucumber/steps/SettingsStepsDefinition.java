@@ -119,4 +119,8 @@ public class SettingsStepsDefinition {
         settingPage.endUserLicenceInformation();
     }
 
+    @And("I go to hamburger symbol")
+    public void iGoToHumburgerSymbol(){
+        settingPage.hamburger();
+    }
 }

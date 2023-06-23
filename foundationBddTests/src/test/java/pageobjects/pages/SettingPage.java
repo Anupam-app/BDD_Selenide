@@ -58,7 +58,8 @@ public class SettingPage {
     private final ElementsCollection thirdPartyComponents = $$ (By.xpath("//table//tr/td"));
     private final SelenideElement endUserLicence = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "End User Licence Agreement")));
     private final SelenideElement endUserLicenceInformation= $(By.xpath("//p[text()='Bio4C™ Application Control Engine Software License and Services End User Agreement']"));
-
+    private final SelenideElement hamburger = $(By.xpath("//img[@class='hamburger']"));
+    private SelenideElement restoreFactoryDefault = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Restore Factory Default")));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
 
     public void goToSettingsPage() {
@@ -177,6 +178,9 @@ public class SettingPage {
                 $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Custom Label"))).shouldBe(visible);
                 $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Factory Tag"))).shouldBe(visible);
                 break;
+            case "Restore Factory Default":
+                restoreFactoryDefault.shouldBe(visible);
+                break;
             default:
         }
     }
@@ -226,5 +230,10 @@ public class SettingPage {
         endUserLicence.click();
         endUserLicenceInformation.shouldBe(visible);
     }
+
+    public void hamburger(){
+        hamburger.click();
+    }
+
 
 }

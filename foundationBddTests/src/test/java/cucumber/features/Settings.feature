@@ -62,6 +62,9 @@ Feature: Settings Modification
   Scenario: Verify About Section in Settings
     Given I am logged in as "bio4cadmin" user
     When I goto settings page
+    And I go to hamburger symbol
+    And below information is displayed
+      |Restore Factory Default|
     And I goto about components
     Then I verify softwareInformation details
     And I verify Third-party Licence Information
