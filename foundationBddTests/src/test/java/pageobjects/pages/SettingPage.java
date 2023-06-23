@@ -6,9 +6,11 @@ import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
@@ -53,6 +55,14 @@ public class SettingPage {
     private final String INPUT_FIELDS = "//input[@name='%s']";
     private final String SYSTEM_PAGE_FIELDS = "//span[text()='%s']";
     private final SelenideElement companyName = $(By.xpath("//li[@class='company-name']/div"));
+    private SelenideElement aboutText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "About")));
+    private final String SOFTWAREDETAILS = "//table//tr[%d]/td[%d]";
+    private final SelenideElement thirdPartyLicence = $(By.xpath("//div[text()='Third-party Licence Information']"));
+    private final ElementsCollection thirdPartyComponents = $$ (By.xpath("//table//tr/td"));
+    private final SelenideElement endUserLicence = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "End User Licence Agreement")));
+    private final SelenideElement endUserLicenceInformation= $(By.xpath("//p[text()='Bio4C™ Application Control Engine Software License and Services End User Agreement']"));
+    private final SelenideElement hamburger = $(By.xpath("//img[@class='hamburger']"));
+    private SelenideElement restoreFactoryDefault = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Restore Factory Default")));
     private final SelenideElement lastMaintenanceDate = $(By.xpath("//button[text()='Reset Last Maintenance Date']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     LocalDate dateObj = LocalDate.now();
@@ -174,6 +184,8 @@ public class SettingPage {
                 $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Custom Label"))).shouldBe(visible);
                 $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Factory Tag"))).shouldBe(visible);
                 break;
+            case "Restore Factory Default":
+                restoreFactoryDefault.shouldBe(visible);
             case "Last Maintenance Date":
                 $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("Last Maintenance Date"));
                 $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldNotBe(empty);
@@ -203,6 +215,49 @@ public class SettingPage {
     public void iVerifyCustomSystemName(String customName) {
         companyName.shouldHave(text(customName));
     }
+    public void goToAboutComponent() {
+        aboutText.click();
+    }
+
+    public void softwareInformation(){
+        for(int i=1;i<=3;i++){
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,1))).getText());
+            String expectedText = null;
+            if (i==1){
+                expectedText = "Name";
+            }else if (i==2){
+                expectedText = "Version";
+            }else {
+                expectedText = "License Expiry Date";
+            }
+            Assert.assertEquals(expectedText,value);
+        }
+        for(int i=1;i<=3;i++){
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,2))).getText());
+            Assert.assertNotNull(value);
+        }
+    }
+
+    public void thirdPartyLicenceInformation(){
+        thirdPartyLicence.click();
+        for(int i=1;i<=4;i++){
+            for(int j=1;j<=thirdPartyComponents.size();j++){
+                String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,j))).getText());
+                Assert.assertNotNull(value);
+            }
+        }
+
+    }
+
+    public void endUserLicenceInformation(){
+        endUserLicence.click();
+        endUserLicenceInformation.shouldBe(visible);
+    }
+
+    public void hamburger(){
+        hamburger.click();
+    }
+
 
     public void goToServiceCard() {
         $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Service"))).click();

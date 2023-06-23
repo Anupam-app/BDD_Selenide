@@ -99,6 +99,31 @@ public class SettingsStepsDefinition {
         iApplySetting();
     }
 
+    @Given("I goto about components")
+    public void iGotoAboutComponents(){
+        settingPage.goToAboutComponent();
+    }
+
+    @Then("I verify softwareInformation details")
+    public void iVerifySoftwareInformationDetails(){
+        settingPage.softwareInformation();
+    }
+
+    @And("I verify Third-party Licence Information")
+    public void iVerifyThirdPartyLicenceInformation(){
+        settingPage.thirdPartyLicenceInformation();
+    }
+
+    @And("I verify End User Licence Agreement Information")
+    public void iVerifyEndUserLicenceAgreementInformation(){
+        settingPage.endUserLicenceInformation();
+    }
+
+    @And("I go to hamburger symbol")
+    public void iGoToHumburgerSymbol(){
+        settingPage.hamburger();
+    }
+
     @Given("I goto service card")
     public void iGotoServiceCard() {
         settingPage.goToServiceCard();
