@@ -219,11 +219,9 @@ public class SettingPage {
     public void verifyMaintenanceDetails() {
         lastMaintenanceDate.waitUntil(enabled, 5000);
         $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldHave(text("730"));
-        Assert.assertTrue($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).getText()
-                .equals(dateObj.format(formatter)));
-        Assert.assertTrue($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).getText()
-                .equals((dateObj.plusDays(730)
-                        .format(formatter))));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).getText(), dateObj.format(formatter));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).getText(), (dateObj.plusDays(730)
+                .format(formatter)));
     }
 
 }
