@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -16,6 +17,8 @@ import com.codeborne.selenide.SelenideElement;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
 import java.awt.AWTException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -60,7 +63,10 @@ public class SettingPage {
     private final SelenideElement endUserLicenceInformation= $(By.xpath("//p[text()='Bio4C™ Application Control Engine Software License and Services End User Agreement']"));
     private final SelenideElement hamburger = $(By.xpath("//img[@class='hamburger']"));
     private SelenideElement restoreFactoryDefault = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Restore Factory Default")));
+    private final SelenideElement lastMaintenanceDate = $(By.xpath("//button[text()='Reset Last Maintenance Date']"));
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+    LocalDate dateObj = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     public void goToSettingsPage() {
         SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible)
@@ -180,6 +186,23 @@ public class SettingPage {
                 break;
             case "Restore Factory Default":
                 restoreFactoryDefault.shouldBe(visible);
+            case "Last Maintenance Date":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("Last Maintenance Date"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldNotBe(empty);
+                break;
+            case "Next Maintenance Date":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 2))).shouldHave(text("Next Maintenance Date"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).shouldNotBe(empty);
+                break;
+            case "Scheduled Maintenance":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 3))).shouldHave(text("Scheduled Maintenance"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldNotBe(empty);
+                break;
+            case "Report Issue":
+                $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Report Issue"))).shouldBe(visible);
+                break;
+            case "Maintenance":
+                $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Maintenance"))).shouldBe(visible);
                 break;
             default:
         }
@@ -235,5 +258,25 @@ public class SettingPage {
         hamburger.click();
     }
 
+
+    public void goToServiceCard() {
+        $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Service"))).click();
+    }
+
+    public void goToMaintenanceTab() {
+        $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Maintenance"))).click();
+    }
+
+    public void resetLastMaintenanceDate() {
+        lastMaintenanceDate.click();
+    }
+
+    public void verifyMaintenanceDetails() {
+        lastMaintenanceDate.waitUntil(enabled, 5000);
+        $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldHave(text("730"));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).getText(), dateObj.format(formatter));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).getText(), (dateObj.plusDays(730)
+                .format(formatter)));
+    }
 
 }
