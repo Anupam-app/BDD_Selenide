@@ -64,6 +64,8 @@ public class SettingPage {
     private final SelenideElement hamburger = $(By.xpath("//img[@class='hamburger']"));
     private SelenideElement restoreFactoryDefault = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Restore Factory Default")));
     private final SelenideElement lastMaintenanceDate = $(By.xpath("//button[text()='Reset Last Maintenance Date']"));
+    private final SelenideElement noDataText = $(By.xpath("//p[text()='NoData']"));
+    private final String URLLINKS = "//table//tr[%d]/td[%d]/a";
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
     LocalDate dateObj = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
@@ -186,6 +188,7 @@ public class SettingPage {
                 break;
             case "Restore Factory Default":
                 restoreFactoryDefault.shouldBe(visible);
+                break;
             case "Last Maintenance Date":
                 $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("Last Maintenance Date"));
                 $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldNotBe(empty);
@@ -238,11 +241,17 @@ public class SettingPage {
         }
     }
 
-    public void thirdPartyLicenceInformation(){
+    public void thirdPartyLicenceInformation() {
         thirdPartyLicence.click();
-        for(int i=1;i<=4;i++){
-            for(int j=1;j<=thirdPartyComponents.size();j++){
-                String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,j))).getText());
+        String value = null;
+        noDataText.waitUntil(not(visible),10000,500);
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 4; j++) {
+                if (j == 1 || j == 2) {
+                    value = ($(By.xpath(String.format(SOFTWAREDETAILS, i, j))).getText());
+                } else {
+                    value = ($(By.xpath(String.format(URLLINKS, i, j))).getText());
+                }
                 Assert.assertNotNull(value);
             }
         }
