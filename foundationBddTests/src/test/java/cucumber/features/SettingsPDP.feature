@@ -1,4 +1,4 @@
-Feature: Settings Modification
+Feature: Settings Modification specific to PDP
 
   @CONFIG_SETTING_SYSTEM_COMPONENTS
   Scenario Outline: Change custom label
