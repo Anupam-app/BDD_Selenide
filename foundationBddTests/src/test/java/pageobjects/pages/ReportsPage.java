@@ -187,9 +187,9 @@ public class ReportsPage {
     private final ElementsCollection availableDates =
             $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
     private final String selectedDatePreviousMonth =
-            "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
+            "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(@class='available') and (text()='%d')]";
     private final String selectedDateCurrentMonth =
-            "//div[@class='drp-calendar right']/div/table/tbody/tr/td[(contains(@class,'available')) and (text()='%d')]";
+            "//div[@class='drp-calendar right']/div/table/tbody/tr/td[contains(@class,'available') and (text()='%d')]";
 
     private final SelenideElement processType = $(By.xpath("//div[text()='Process Type']"));
     private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
@@ -319,7 +319,7 @@ public class ReportsPage {
                     return $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))).isDisplayed();
                 });
 
-        SelenideHelper.commonWaiter($(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))), visible)
+        $(By.xpath(String.format(XPATH_OPTION_DROPDOWN, reportName))).waitUntil(visible, 5000)
                 .click();
     }
 
@@ -381,10 +381,12 @@ public class ReportsPage {
             previousMonth.click();
             LocalDate currentDate = LocalDate.now();
             int currentDay = currentDate.getDayOfMonth();
-            $(By.xpath(String.format(selectedDatePreviousMonth, currentDay))).click();
-            currentMonth.waitUntil(visible, 1000)
+            $(By.xpath(String.format(selectedDatePreviousMonth, currentDay))).waitUntil(visible, 10000)
                     .click();
-            $(By.xpath(String.format(selectedDateCurrentMonth, currentDay))).click();
+            currentMonth.waitUntil(visible, 2000)
+                    .click();
+            $(By.xpath(String.format(selectedDateCurrentMonth, currentDay))).waitUntil(visible, 10000)
+                    .click();
             commonWaiter(applyButton, visible).click();
         }
     }
@@ -1236,8 +1238,8 @@ public class ReportsPage {
 
     public void verifyAuditLogsForTemplateCreate(String templateName, String status) {
         int n = 4;
-        if(status.equalsIgnoreCase("Inactive")){
-            n=n+1;
+        if (status.equalsIgnoreCase("Inactive")) {
+            n = n + 1;
         }
         for (int rowNo = 1; rowNo < n; rowNo++) {
             for (int columnNo = 2; columnNo < 6; columnNo++) {
@@ -1251,24 +1253,30 @@ public class ReportsPage {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
                             .equalsIgnoreCase("Bio4CAdmin (Administrator Bio4C)"));
                 }
-                if(status.equalsIgnoreCase("Approved")) {
+                if (status.equalsIgnoreCase("Approved")) {
                     if (columnNo == 5 && rowNo == 1) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
                     } else if (columnNo == 5 && rowNo == 2) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
                     } else if (columnNo == 5 && rowNo == 3) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin created Report Template"));
                     }
-                }
-                else if(status.equalsIgnoreCase("Inactive")){
+                } else if (status.equalsIgnoreCase("Inactive")) {
                     if (columnNo == 5 && rowNo == 1) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
                     } else if (columnNo == 5 && rowNo == 2) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
                     } else if (columnNo == 5 && rowNo == 3) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
                     } else if (columnNo == 5 && rowNo == 4) {
-                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
+                                .equalsIgnoreCase("Bio4CAdmin created Report Template"));
                     }
                 }
             }
@@ -1535,3 +1543,4 @@ public class ReportsPage {
     }
 
 }
+
