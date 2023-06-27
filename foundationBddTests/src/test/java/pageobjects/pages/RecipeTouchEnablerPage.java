@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import com.codeborne.selenide.SelenideElement;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import static com.codeborne.selenide.Condition.visible;
@@ -40,18 +41,26 @@ public class RecipeTouchEnablerPage {
     private SelenideElement buttonClick = null;
     private final String phaseUnderLib = "//p[@data-path='Phase Library--->%s']";
 
-    /**
-     * Reusable method to verify button is enabled and select the button
-     * @param value : button name
-     */
     public void buttonClick(String value) {
-        if(value.equalsIgnoreCase("Before")){
-            value= "Paste Phase Before";
+        selectButton(buttonSelection(value));
+    }
+
+    public void buttonDisabled(String value) {
+        verifyLocatorDisabled(buttonSelection(value));
+    }
+
+    public void verifyPhaseInLibrary(String name) {
+        $(By.xpath(String.format(phaseUnderLib,name))).shouldBe(visible);
+    }
+
+    public SelenideElement buttonSelection(String buttonName){
+        if(buttonName.equalsIgnoreCase("Before")){
+            buttonName= "Paste Phase Before";
         }
-        else if(value.equalsIgnoreCase("After")){
-            value= "Paste Phase After";
+        else if(buttonName.equalsIgnoreCase("After")){
+            buttonName= "Paste Phase After";
         }
-        switch(value) {
+        switch(buttonName) {
             case "New Recipe":
                 buttonClick = $(By.xpath(String.format(BUTTON_LOCATOR, NEW_RECIPE_BUTTON)));
                 break;
@@ -124,12 +133,10 @@ public class RecipeTouchEnablerPage {
 
             default:
         }
-        SelenideHelper.takePicture();
-        selectButton(buttonClick);
+        return buttonClick;
     }
 
-    public void verifyPhaseInLibrary(String name) {
-        $(By.xpath(String.format(phaseUnderLib,name))).shouldBe(visible);
+    public void verifyLocatorDisabled(SelenideElement locator) {
+        Assert.assertFalse(locator.waitUntil(visible, 10000).isEnabled());
     }
-
 }

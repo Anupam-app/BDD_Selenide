@@ -95,6 +95,9 @@ public class RolePage {
     private final SelenideElement deleteRoleButton = $(By.xpath("//span[text()='Delete role']"));
     private final SelenideElement yesDeleteButton = $(By.xpath("//button[text()='Yes, delete']"));
     private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
+    private final String CHECKBOX_ATTRIBUTE = "//span[contains(text(),'%s')]/parent::label";
+    private final SelenideElement roleDependencyDialog = $(By.xpath("//div[@class='confirmation-modal-header']"));
+
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -397,4 +400,16 @@ public class RolePage {
         noRoleMessageStatus.waitUntil(visible,2000,1000).shouldHave(text("No result found for deleteRole"));
     }
 
+    public void unSelectPermission(String permission) {
+        if($(By.xpath(String.format(CHECKBOX_ATTRIBUTE,permission))).getAttribute("class").contains("checked")){
+            $x(String.format(PERMISSION_TEXT, permission)).click();
+            roleDependencyPopUp();
+        }
+    }
+
+    public void roleDependencyPopUp(){
+        if(roleDependencyDialog.isDisplayed()){
+            saveRoleButton.click();
+        }
+    }
 }

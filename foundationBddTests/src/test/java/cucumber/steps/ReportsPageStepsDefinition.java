@@ -480,6 +480,7 @@ public class ReportsPageStepsDefinition {
 
     @When("I change the template status Approved to Inactive")
     public void iChangeTemplateStatusApprovedToInactive() {
+        this.reportTemplate.setPreviousStatus(this.reportTemplate.getStatus());
         this.reportTemplate.setStatus(ReportTemplateStatus.IN_ACTIVE);
         reportPage.putReportTemplateToInactive(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
@@ -598,6 +599,7 @@ public class ReportsPageStepsDefinition {
     public void iSearchAndApproveTheReportTemplate() {
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         iPutTheReportTemplateInReview();
+        this.reportTemplate.setPreviousStatus(this.reportTemplate.getStatus());
         reportPage.saveReportTemplate();
         reportPage.searchReportOrTemplate(this.reportTemplate.getName());
         iApproveTheReportTemplate();
@@ -619,14 +621,14 @@ public class ReportsPageStepsDefinition {
     public void iCheckAuditTrialReportContentForTemplate() throws Exception {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkTemplateStatus(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-            this.reportTemplate.getStatus(), this.login.getLogin());
+            this.reportTemplate.getStatus(), this.reportTemplate.getPreviousStatus(), this.login.getLogin());
         this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-            this.reportTemplate.getStatus(), this.login.getLogin());
+            this.login.getLogin());
     }
 
     @When("I verify audit logs for template update")
     public void iVerifyAuditLogsForTemplateCreate() {
-        reportPage.verifyAuditLogsForTemplateCreate(this.reportTemplate.getName());
+        reportPage.verifyAuditLogsForTemplateCreate(this.reportTemplate.getName(), this.reportTemplate.getStatus());
     }
 
     @When("I verify below options availability")
@@ -881,5 +883,36 @@ public class ReportsPageStepsDefinition {
         this.report.setEndDate(END_DATE);
     }
 
+    @When("I verify audit logs for system hold and restart")
+    public void iVerifyAuditLogsForSystemHoldAndRestart() {
+        reportPage.switchToFrame();
+        reportPage.verifyAuditLogsForHoldAndRestart(this.user.getUserName(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @Then("I see the system hold and restart entries in report")
+    public void iVerifyPDFReportForSystemHoldAndRestart() throws Exception {
+        this.report.verifyAuditReportForSystemHoldAndRestart(reportPage.getPdfUrl(), this.login.getLogin());
+        switchTo().parentFrame();
+    }
+
+    @When("I generate & verify audit logs for recipe with permission {string}")
+    public void iVerifyAuditLogsForRecipe(String action) throws InterruptedException, IOException {
+        iGenerateAuditTrailReport();
+        switch (action){
+            case "View Recipe":
+                iVerifyAuditTrailReportRolePermissions("permissions");
+                break;
+            case "Create Recipe":
+            case "Edit Recipe":
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), this.login.getLogin(), action);
+                break;
+
+            default:
+
+        }
+        switchTo().parentFrame();
+    }
 }
 

@@ -350,12 +350,13 @@ Feature: Recipe Management console
     And I hold the system
     And I restart the system
     And I see Recipe should be executed
+    And I click on pause button
     And I hold the system
     And I restart the system
-    And I goto report management page
-    When I select report from dropdown "Audit Trail"
-    And I select user in dropdown "Bio4CAdmin"
-    And I check audit trial logs
+    And I generate audit trail report
+    And I verify audit logs for system hold and restart
+    And I check the audit trail report
+    Then I see the system hold and restart entries in report
 
   Scenario: BIOFOUND-11294: Verify state persistency of Recipe Console when system is on Hold and user switches the focus outside P&ID page
     Given I expand recipe console in pnid

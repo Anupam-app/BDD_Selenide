@@ -992,7 +992,7 @@ public class Report {
         }
     }
 
-    public void checkTemplateStatus(String reportUrl, String templateName, String status, String userNameLoggedIn)
+    public void checkTemplateStatus(String reportUrl, String templateName, String status, String prevStatus, String userNameLoggedIn)
             throws IOException {
 
         URL url = new URL(reportUrl);
@@ -1046,15 +1046,25 @@ public class Report {
                         Assert.assertTrue(recordColumnValue.contains(templateName));
                         Assert.assertTrue(attributeColumnValue.contains("status"));
                         if (i == 1) {
-                            Assert.assertTrue(commentColumnValue
-                                    .contains(userNameLoggedIn + " approved andsigned Report Template"));
+                            if(status.equalsIgnoreCase("Approved")) {
+                                Assert.assertTrue(commentColumnValue.contains(userNameLoggedIn + " approved andsigned Report Template"));
+                            } else if (status.equalsIgnoreCase("Inactive")){
+                                Assert.assertTrue(commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
+                            }
                             Assert.assertTrue(currValueColumnValue.contains(status));
-                            Assert.assertTrue(preValueColumnValue.contains("In Review"));
+                            Assert.assertTrue(preValueColumnValue.contains(prevStatus));
                         } else {
-                            Assert.assertTrue(
+                            if(status.equalsIgnoreCase("Inactive")){
+                                Assert.assertTrue(
+                                    commentColumnValue.contains(userNameLoggedIn + " approved andsigned Report Template"));
+                                Assert.assertTrue(preValueColumnValue.contains("In Review"));
+                                Assert.assertTrue(currValueColumnValue.contains("Approved"));
+                            } else if(status.equalsIgnoreCase("Approved")){
+                                Assert.assertTrue(
                                     commentColumnValue.contains(userNameLoggedIn + " updated ReportTemplate"));
-                            Assert.assertTrue(preValueColumnValue.contains("Draft"));
-                            Assert.assertTrue(currValueColumnValue.contains("In Review"));
+                                Assert.assertTrue(preValueColumnValue.contains("Draft"));
+                                Assert.assertTrue(currValueColumnValue.contains("In Review"));
+                            }
                         }
                     }
                 }
@@ -1063,7 +1073,7 @@ public class Report {
         }
     }
 
-    public void checkCreatedTemplate(String reportUrl, String templateName, String status, String userNameLoggedIn)
+    public void checkCreatedTemplate(String reportUrl, String templateName, String userNameLoggedIn)
             throws IOException {
         URL url = new URL(reportUrl);
         String attributeColumnValue = null;
@@ -1549,6 +1559,60 @@ public class Report {
                     .get(1)
                     .getText(false)
                     .contains(endDate.substring(1, 11)));
+            break;
+        }
+    }
+
+    public void verifyAuditReportForSystemHoldAndRestart(String reportUrl, String userNameLoggedIn) throws IOException {
+        URL url = new URL(reportUrl);
+        // get all tables of the report
+        List<PdfTable> reportTables = PdfTableExtractUtils.getTables(url.openStream());
+        for (PdfTable reportTable : reportTables) {
+            for (int i = 1; i < 3; i++) {
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(3)
+                        .getText(false)
+                        .contains(userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(1)
+                        .getText(false)
+                        .contains("RecipeManagement"));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(2)
+                        .getText(false)
+                        .contains("User -" + userNameLoggedIn));
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(5)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(6)
+                        .getText(false)
+                        .isEmpty());
+                Assert.assertTrue(reportTable.getRows()
+                        .get(i)
+                        .get(7)
+                        .getText(false)
+                        .isEmpty());
+                if (i == 1) {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " triggered a system restart action on the IVI").replaceAll("\\s", ""));
+                } else {
+                    Assert.assertEquals((reportTable.getRows()
+                            .get(i)
+                            .get(4)
+                            .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " triggered a system hold action on the IVI").replaceAll("\\s", ""));
+                }
+            }
             break;
         }
     }

@@ -264,7 +264,6 @@ public class ReportsPage {
         this.recipe = recipe;
     }
 
-
     public void goToReports() {
         commonWaiter(reportsManagementPage, visible);
         reportsManagementPage.click();
@@ -1243,8 +1242,12 @@ public class ReportsPage {
         templateNameTextBox.setValue(templateName);
     }
 
-    public void verifyAuditLogsForTemplateCreate(String templateName) {
-        for (int rowNo = 1; rowNo < 4; rowNo++) {
+    public void verifyAuditLogsForTemplateCreate(String templateName, String status) {
+        int n = 4;
+        if(status.equalsIgnoreCase("Inactive")){
+            n=n+1;
+        }
+        for (int rowNo = 1; rowNo < n; rowNo++) {
             for (int columnNo = 2; columnNo < 6; columnNo++) {
                 if (columnNo == 2) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
@@ -1255,15 +1258,26 @@ public class ReportsPage {
                 } else if (columnNo == 4) {
                     Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
                             .equalsIgnoreCase("Bio4CAdmin (Administrator Bio4C)"));
-                } else if (columnNo == 5 && rowNo == 1) {
-                    Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                            .equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
-                } else if (columnNo == 5 && rowNo == 2) {
-                    Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                            .equalsIgnoreCase("Bio4CAdmin updated Report Template"));
-                } else if (columnNo == 5 && rowNo == 3) {
-                    Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText()
-                            .equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                }
+                if(status.equalsIgnoreCase("Approved")) {
+                    if (columnNo == 5 && rowNo == 1) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
+                    } else if (columnNo == 5 && rowNo == 2) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                    } else if (columnNo == 5 && rowNo == 3) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                    }
+                }
+                else if(status.equalsIgnoreCase("Inactive")){
+                    if (columnNo == 5 && rowNo == 1) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                    } else if (columnNo == 5 && rowNo == 2) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin approved and signed Report Template"));
+                    } else if (columnNo == 5 && rowNo == 3) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin updated Report Template"));
+                    } else if (columnNo == 5 && rowNo == 4) {
+                        Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, rowNo, columnNo))).getText().equalsIgnoreCase("Bio4CAdmin created Report Template"));
+                    }
                 }
             }
         }
@@ -1517,8 +1531,19 @@ public class ReportsPage {
         }
     }
 
-    public void selectRunId(){
-        $(By.xpath(String.format(SELECTRUN,this.recipe.getRunId()))).waitUntil(visible,5000L,1000L).click();
+    public void selectRunId() {
+        $(By.xpath(String.format(SELECTRUN, this.recipe.getRunId()))).waitUntil(visible, 5000L, 1000L).click();
+    }
+
+    public void verifyAuditLogsForHoldAndRestart(String username, String loggedInUserName) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered a system restart action on the IVI", "")))
+                .shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " triggered a system hold action on the IVI", "")))
+                .shouldBe(visible);
+        for (int i = 1; i < 3; i++) {
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Recipe Management"));
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).shouldHave(text("User - " + username));
+        }
     }
 
 }

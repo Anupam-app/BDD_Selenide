@@ -1,18 +1,26 @@
 package pageobjects.pages;
 
+import static com.codeborne.selenide.Condition.empty;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
+import static com.codeborne.selenide.Selenide.$$;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.Selenide;
 import com.codeborne.selenide.SelenideElement;
 
-import java.awt.*;
+import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.awt.AWTException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
+import org.junit.Assert;
 import org.openqa.selenium.By;
 
 import pageobjects.components.SpinnerComponent;
@@ -26,18 +34,41 @@ public class SettingPage {
             "//*[@class='system-connect-dropdown-container']//*[@class='active-label' and text()='%s']";
     private final String XPATH_HEADER = "//div[contains(@class,'header')]";
 
-    private SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
-    private SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System Components")));
-    private SelenideElement generalText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "General")));
+    private final SelenideElement settingsPageLinkText = $(By.id("ConfigurationManagement"));
+    private final SelenideElement systemComponentText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "System")));
+    private final SelenideElement generalText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "General")));
 
-    private SelenideElement languageDropDown = $(By.className("system-connect-dropdown-container"));
+    private final SelenideElement languageDropDown = $(By.className("system-connect-dropdown-container"));
 
-    private SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
-    private SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
-    private SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
-    private SelenideElement settingsHeader = $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
-
+    private final SelenideElement inputCustomLabel = $(By.id("customerShortDescription"));
+    private final SelenideElement applyButton = $(By.xpath("//button[contains(text(),'Apply')]"));
+    private final SelenideElement customLabelText = $(By.xpath("//input[@id='customerShortDescription']"));
+    private final SelenideElement settingsHeader =
+            $(By.xpath("//div[text()='Settings' and @class='setting-header-title']"));
+    public static final String DATE_FORMAT = "MMM d, yyyy";
+    public static final String TIME_FORMAT = "kk:mm:ss";
+    private final String GENERAL_FORMAT = "(//div[@class='batch-id']/div)[%d]";
+    private final SelenideElement decimalFormat = $(By.xpath("(//div[@class='batch-id'])[4]"));
+    private String DATE_SETTINGS_PAGE = null;
+    private final String SYSTEM_PAGE_KEYS = "(//div[@class='system-connectivity-block']/*//label)[%d]";
+    private final String SYSTEM_PAGE_VALUES = "(//div[@class='system-connectivity-block']/div/div)[%d]";
+    private final String INPUT_FIELDS = "//input[@name='%s']";
+    private final String SYSTEM_PAGE_FIELDS = "//span[text()='%s']";
+    private final SelenideElement companyName = $(By.xpath("//li[@class='company-name']/div"));
+    private SelenideElement aboutText = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "About")));
+    private final String SOFTWAREDETAILS = "//table//tr[%d]/td[%d]";
+    private final SelenideElement thirdPartyLicence = $(By.xpath("//div[text()='Third-party Licence Information']"));
+    private final ElementsCollection thirdPartyComponents = $$ (By.xpath("//table//tr/td"));
+    private final SelenideElement endUserLicence = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "End User Licence Agreement")));
+    private final SelenideElement endUserLicenceInformation= $(By.xpath("//p[text()='Bio4C™ Application Control Engine Software License and Services End User Agreement']"));
+    private final SelenideElement hamburger = $(By.xpath("//img[@class='hamburger']"));
+    private SelenideElement restoreFactoryDefault = $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Restore Factory Default")));
+    private final SelenideElement lastMaintenanceDate = $(By.xpath("//button[text()='Reset Last Maintenance Date']"));
+    private final SelenideElement noDataText = $(By.xpath("//p[text()='NoData']"));
+    private final String URLLINKS = "//table//tr[%d]/td[%d]/a";
     private final SpinnerComponent spinnerComponent = new SpinnerComponent();
+    LocalDate dateObj = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_FORMAT);
 
     public void goToSettingsPage() {
         SelenideHelper.commonWaiter(settingsPageLinkText, Condition.visible)
@@ -89,7 +120,7 @@ public class SettingPage {
         settingsHeader.shouldBe(visible);
     }
 
-    private void zoomOut() throws AWTException {
+    public void zoomOut() throws AWTException {
         Robot robot = new Robot();
         for (int i = 0; i < 3; i++) {
             robot.keyPress(KeyEvent.VK_CONTROL);
@@ -98,6 +129,163 @@ public class SettingPage {
             robot.keyRelease(KeyEvent.VK_CONTROL);
             Selenide.sleep(2000);
         }
+    }
+
+    public void verifyGeneralTab(String options) {
+        switch (options) {
+            case "Language":
+                languageDropDown.shouldBe(visible);
+                $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "English (USA)"))).shouldBe(visible);
+                languageDropDown.click();
+                $(By.xpath(String.format(XPATH_LANGUAGE_TEXT, "Deutsch (Deutschland)"))).click();
+                break;
+            case "Date Format":
+                DATE_SETTINGS_PAGE = $(By.xpath(String.format(GENERAL_FORMAT, 2))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(DATE_SETTINGS_PAGE, DATE_FORMAT));
+                break;
+            case "Time Format":
+                DATE_SETTINGS_PAGE = $(By.xpath(String.format(GENERAL_FORMAT, 3))).getText();
+                Assert.assertTrue(SelenideHelper.dateFormatCheck(DATE_SETTINGS_PAGE, TIME_FORMAT));
+                break;
+            case "Number Format":
+                decimalFormat.shouldHave(text("1,000.123"));
+                break;
+            case "Session Timeout":
+                $(By.xpath(String.format(XPATH_LANGUAGE_ACTIVE_TEXT, "60 min"))).shouldBe(visible);
+                break;
+            case "System Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("System Name"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldHave(text("IVI"));
+                break;
+            case "Custom System Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 2))).shouldHave(text("Custom System Name"));
+                break;
+            case "System Family Name":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 3))).shouldHave(text("System Family Name"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldHave(text("IVIFamily"));
+                break;
+            case "System Serial No.":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 4))).shouldHave(text("System Serial No."));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 8))).shouldHave(text("123"));
+                break;
+            case "System Size":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 5))).shouldHave(text("System Size"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 10))).shouldBe(empty);
+                break;
+            case "Location":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 6))).shouldHave(text("Location"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 8))).shouldHave(text("Site"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 9))).shouldHave(text("Area"));
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 10))).shouldHave(text("Process Cell"));
+                $(By.xpath(String.format(INPUT_FIELDS, "site"))).setValue("site");
+                $(By.xpath(String.format(INPUT_FIELDS, "area"))).setValue("area");
+                $(By.xpath(String.format(INPUT_FIELDS, "processCell"))).setValue("processCell");
+                break;
+            case "Display Label Setting":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 11))).shouldHave(text("Display Label Setting"));
+                $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Custom Label"))).shouldBe(visible);
+                $(By.xpath(String.format(SYSTEM_PAGE_FIELDS, "Factory Tag"))).shouldBe(visible);
+                break;
+            case "Restore Factory Default":
+                restoreFactoryDefault.shouldBe(visible);
+                break;
+            case "Last Maintenance Date":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 1))).shouldHave(text("Last Maintenance Date"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).shouldNotBe(empty);
+                break;
+            case "Next Maintenance Date":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 2))).shouldHave(text("Next Maintenance Date"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).shouldNotBe(empty);
+                break;
+            case "Scheduled Maintenance":
+                $(By.xpath(String.format(SYSTEM_PAGE_KEYS, 3))).shouldHave(text("Scheduled Maintenance"));
+                $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldNotBe(empty);
+                break;
+            case "Report Issue":
+                $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Report Issue"))).shouldBe(visible);
+                break;
+            case "Maintenance":
+                $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Maintenance"))).shouldBe(visible);
+                break;
+            default:
+        }
+    }
+
+    public void updateSystemName(String customName) {
+        $(By.xpath(String.format(INPUT_FIELDS, "externalSystemName"))).setValue(customName);
+    }
+
+    public void iVerifyCustomSystemName(String customName) {
+        companyName.shouldHave(text(customName));
+    }
+    public void goToAboutComponent() {
+        aboutText.click();
+    }
+
+    public void softwareInformation(){
+        for(int i=1;i<=3;i++){
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,1))).getText());
+            String expectedText = null;
+            if (i==1){
+                expectedText = "Name";
+            }else if (i==2){
+                expectedText = "Version";
+            }else {
+                expectedText = "License Expiry Date";
+            }
+            Assert.assertEquals(expectedText,value);
+        }
+        for(int i=1;i<=3;i++){
+            String value = ($(By.xpath(String.format(SOFTWAREDETAILS, i,2))).getText());
+            Assert.assertNotNull(value);
+        }
+    }
+
+    public void thirdPartyLicenceInformation() {
+        thirdPartyLicence.click();
+        String value = null;
+        noDataText.waitUntil(not(visible),10000,500);
+        for (int i = 1; i <= 4; i++) {
+            for (int j = 1; j <= 4; j++) {
+                if (j == 1 || j == 2) {
+                    value = ($(By.xpath(String.format(SOFTWAREDETAILS, i, j))).getText());
+                } else {
+                    value = ($(By.xpath(String.format(URLLINKS, i, j))).getText());
+                }
+                Assert.assertNotNull(value);
+            }
+        }
+
+    }
+
+    public void endUserLicenceInformation(){
+        endUserLicence.click();
+        endUserLicenceInformation.shouldBe(visible);
+    }
+
+    public void hamburger(){
+        hamburger.click();
+    }
+
+
+    public void goToServiceCard() {
+        $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Service"))).click();
+    }
+
+    public void goToMaintenanceTab() {
+        $(By.xpath(String.format(XPATH_COMPONENT_TEXT, "Maintenance"))).click();
+    }
+
+    public void resetLastMaintenanceDate() {
+        lastMaintenanceDate.click();
+    }
+
+    public void verifyMaintenanceDetails() {
+        lastMaintenanceDate.waitUntil(enabled, 5000);
+        $(By.xpath(String.format(SYSTEM_PAGE_VALUES, 6))).shouldHave(text("730"));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 2))).getText(), dateObj.format(formatter));
+        Assert.assertEquals($(By.xpath(String.format(SYSTEM_PAGE_VALUES, 4))).getText(), (dateObj.plusDays(730)
+                .format(formatter)));
     }
 
 }
