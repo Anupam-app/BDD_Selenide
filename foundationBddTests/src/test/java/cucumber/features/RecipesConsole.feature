@@ -112,7 +112,6 @@ Feature: Recipe Management console
     When I enter special characters "@!#$%^&*" in comments section
     Then I should see special characters not allowed
     And I Verify manual run status in recipe console
-    And I click ok button
 
   @IVI-7599
   Scenario: BIOCRS-5494|BIOFOUND-8611|BIOFOUND-12071: Verify Pre-run modal during Recipe execution
@@ -126,8 +125,6 @@ Feature: Recipe Management console
     And I verify the Batch ID suggestion with unique Value
     When I enter special characters "@!#$%^&*" in run comments section
     Then I should see special characters not allowed
-    And I click ok button
-
 
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
     Given I expand recipe console in pnid
@@ -205,7 +202,7 @@ Feature: Recipe Management console
     Then I verify Recipe Run tab is "enabled"
 
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
+  @BIOCRS-9352 @IVI-7256 @IVI-7040 @IVI-7982
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
@@ -271,8 +268,6 @@ Feature: Recipe Management console
     When I enter special characters "@!#$%^&*" in comments section
     Then I should not see special characters not allowed
     And I Verify manual run status in recipe console
-    And I click ok button
-
 
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
     Given I expand recipe console
@@ -385,20 +380,3 @@ Feature: Recipe Management console
     And I enter "reportUnauthUser" as username and "MerckApp1@" as password
     And I push the login button
     Then I verify recipe console expand is disabled
-
-  @IVI-7256 @IVI-7040
-  Scenario: Verify manual run report PDF
-    Given I expand recipe console in pnid
-    When I select "MANUAL OPERATION" tab
-    When I start Manual run
-    And I wait for 4 seconds
-    When I Stop the RUN
-    Then I validate the date formats in Post run window and enter comments
-    And I click ok button
-    And I goto report management page
-    And I choose the run
-    And I click on generate button
-    And I goto report management page
-    And I trigger report mode
-    Then I should see the report file presence
-    And I check manual run report

@@ -1485,13 +1485,13 @@ public class Report {
         for (PdfTable reportTable : reportTables) {
             for (Map.Entry m : list.entrySet()) {
                 // check first row
-                for (int rowNo = 1; rowNo < 9; rowNo++) {
+                for (int rowNo = 0; rowNo < 9; rowNo++) {
                     if ((reportTable.getRows()
+                        .get(rowNo)
                         .get(0)
-                        .get(1)
                         .getText(false)).equals(m.getKey())) {
                         Assert.assertEquals(m.getValue(), reportTable.getRows()
-                            .get(0)
+                            .get(rowNo)
                             .get(1)
                             .getText(false));
                     }

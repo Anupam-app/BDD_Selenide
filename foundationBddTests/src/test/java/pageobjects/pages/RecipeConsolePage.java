@@ -460,6 +460,8 @@ public class RecipeConsolePage {
            batchIdTextbox.sendKeys(batchId);
            batchIdTextbox.sendKeys(Keys.ENTER);
            preRunCommentsText.sendKeys(beforeComments);
+           recipe.setStartDate(startDate.getText());
+           recipe.setEndDate(endDate.getText());
            okButton.click();
            return runId;
     }
@@ -686,11 +688,14 @@ public class RecipeConsolePage {
             okButton.waitUntil(Condition.visible, 5001)
                     .click();
         }
-
         manualOperationButton.waitUntil(visible, 50001)
                 .click();
         manualOperationSelected.shouldBe(visible);
         commonWaiter(start_Btn, visible).click();
+        if (manualWindowPopup.exists()) {
+            Assert.assertEquals("warning pop displayed: ", "Recipe is already loaded", manualWindowPopup.getText());
+            manualWindowPopup_Btn.click();
+        }
 
     }
 
