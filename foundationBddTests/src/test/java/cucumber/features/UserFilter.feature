@@ -20,6 +20,7 @@ Feature: User Filter
     And I search "testUser" user
     Then the user "testUser" exists
 
+  @SMXACE-3439
   Scenario Outline: BIOCRS-5493- Verify filter enabled functionality in User Management
     Given I am logged in as "Bio4cAdmin" user
     When I go to user page
