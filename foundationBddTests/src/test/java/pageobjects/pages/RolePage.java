@@ -412,4 +412,8 @@ public class RolePage {
             saveRoleButton.click();
         }
     }
+
+    public void userCannotViewRole(){
+        rolesLinkText.shouldNot(visible);
+    }
 }

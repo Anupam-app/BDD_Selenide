@@ -460,8 +460,6 @@ public class RecipeConsolePage {
            batchIdTextbox.sendKeys(batchId);
            batchIdTextbox.sendKeys(Keys.ENTER);
            preRunCommentsText.sendKeys(beforeComments);
-           recipe.setStartDate(startDate.getText());
-           recipe.setEndDate(endDate.getText());
            okButton.click();
            return runId;
     }
@@ -514,6 +512,8 @@ public class RecipeConsolePage {
         String startDate1 = startDate.getText();
         Assert.assertTrue(startDate1.matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
         postRunCommentsText.sendKeys("completed");
+        recipe.setStartDate(startDate.getText());
+        recipe.setEndDate(endDate.getText());
     }
 
     public void autoClosePostRun() {
