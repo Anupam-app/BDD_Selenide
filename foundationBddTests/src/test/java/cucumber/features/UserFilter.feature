@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: User Filter
 
   Scenario Outline: Verify the user preferred homepage is displayed based on the User Preferences
