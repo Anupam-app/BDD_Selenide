@@ -820,18 +820,18 @@ public class RecipeConsoleStepsDefinition {
         Map<String, String> list = new HashMap<>();
         list.put("Unit Operation name", "IVI");
         list.put("Batch ID", this.currentRecipe.getBatchId());
-        list.put("ProductID", this.currentRecipe.getBatchId());
+        list.put("ProductID", this.currentRecipe.getProductId());
         list.put("RunID", this.currentRecipe.getRunId());
         list.put("Start Date", this.currentRecipe.getStartDate());
         list.put("End Date", this.currentRecipe.getEndDate());
         list.put("Pre-run Comment",this.currentRecipe.getBeforeComments());
         list.put("Post-run Comment",this.currentRecipe.getAfterComments());
-        list.put("Run status", this.currentRecipe.getStatus());
+        list.put("Run Status", this.currentRecipe.getStatus());
         this.report.validateManualRunSummary(reportPage.getPdfUrl(),list);
         this.report.checkEventTable(reportPage.getPdfUrl());
         this.report.checkAuditTable(reportPage.getPdfUrl());
-        this.report.checkProcessAlarm(reportPage.getPdfUrl());
-        this.report.checkSystemAlarm(reportPage.getPdfUrl());
+        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(), "Process Alarm");
+        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(),"System Alarm");
     }
 
 }

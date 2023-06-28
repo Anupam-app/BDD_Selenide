@@ -511,7 +511,9 @@ public class RecipeConsolePage {
     public void verifyPostRunDate() {
         String startDate1 = startDate.getText();
         Assert.assertTrue(startDate1.matches(("([0-9]{2})/([aA-zZ]{3})/([0-9]{4}) ([0-9]{2}):([0-9]{2}):([0-9]{2})")));
+        recipe.setStatus(executionStatusText.getText());
         postRunCommentsText.sendKeys("completed");
+        this.recipe.setAfterComments("completed");
         recipe.setStartDate(startDate.getText());
         recipe.setEndDate(endDate.getText());
     }
