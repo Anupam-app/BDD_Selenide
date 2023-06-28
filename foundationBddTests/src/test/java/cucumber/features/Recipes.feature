@@ -323,7 +323,7 @@ Feature: Recipe management
       | testRecipeDraftToReject |
       | secondRecipe            |
       | ThirdRecipe             |
-
+  @test
   Scenario:BIOFOUND-27810|Recipe status after import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
