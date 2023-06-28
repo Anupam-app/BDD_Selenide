@@ -63,15 +63,15 @@ Feature: User Management
   @IVI-5849
   Scenario: IVI Bug IVI-5671|  BIOCRS-586 | User disable
     Given I am logged in as "Bio4CService" user
-#    And I go to user page
-#    When I search "testUserEnabled" user
-#    And I edit the user
-#    And I disable the user
-#    And I save my user changes
-#    #TODO until IVI-5671 is resolved
-#    #Then I check user notification is displayed
-#    When I edit the user
-#    And the user is disabled
+    And I go to user page
+    When I search "testUserEnabled" user
+    And I edit the user
+    And I disable the user
+    And I save my user changes
+    #TODO until IVI-5671 is resolved
+    #Then I check user notification is displayed
+    When I edit the user
+    And the user is disabled
     And I generate the "Audit Trail" Report for "Bio4CService" user
     And I click on generate button
     And I goto report management page

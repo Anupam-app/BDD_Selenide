@@ -285,12 +285,12 @@ Feature: Report Management
 
     Examples:
       | DateRange    |
-#      | Today        |
-#      | Yesterday    |
-#      | Last 7 Days  |
-#      | Last 30 Days |
-#      | This Month   |
-#      | Last Month   |
+      | Today        |
+      | Yesterday    |
+      | Last 7 Days  |
+      | Last 30 Days |
+      | This Month   |
+      | Last Month   |
       | Custom range |
 
   Scenario Outline: Generate custom report for System Alarm Summary Section based on dates
