@@ -189,7 +189,7 @@ public class ReportsPage {
     private final String selectedDatePreviousMonth =
             "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(@class='available') and (text()='%d')]";
     private final String selectedDateCurrentMonth =
-            "//div[@class='drp-calendar right']/div/table/tbody/tr/td[contains(@class,'available') and (text()='%d')]";
+            "//div[@class='drp-calendar right']/div/table/tbody/tr/td[contains(@class,'today') and (text()='%d')]";
 
     private final SelenideElement processType = $(By.xpath("//div[text()='Process Type']"));
     private final SelenideElement status = $(By.xpath("//div[text()='Status']"));
