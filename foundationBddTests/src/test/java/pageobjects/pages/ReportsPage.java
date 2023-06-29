@@ -187,7 +187,7 @@ public class ReportsPage {
     private final ElementsCollection availableDates =
             $$(By.xpath("//div[@class='drp-calendar left']/div/table/tbody/tr/td[@class='available']"));
     private final String selectedDatePreviousMonth =
-            "//div[@class='drp-calendar left']/div/table/tbody/tr/td[(@class='available') and (text()='%d')]";
+            "//div[@class='drp-calendar left']/div/table/tbody/tr/td[contains(@class,'available') and (text()='%d') and not(contains(@class,'off'))]";
     private final String selectedDateCurrentMonth =
             "//div[@class='drp-calendar right']/div/table/tbody/tr/td[contains(@class,'today') and (text()='%d')]";
 
