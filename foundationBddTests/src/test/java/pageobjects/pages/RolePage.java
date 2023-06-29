@@ -11,10 +11,7 @@ import static com.codeborne.selenide.Selenide.$x;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static pageobjects.utility.SelenideHelper.commonWaiter;
 
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.Condition;
-import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.*;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
@@ -27,6 +24,7 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 import dataobjects.RoleAction;
@@ -97,7 +95,7 @@ public class RolePage {
     private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
     private final String CHECKBOX_ATTRIBUTE = "//span[contains(text(),'%s')]/parent::label";
     private final SelenideElement roleDependencyDialog = $(By.xpath("//div[@class='confirmation-modal-header']"));
-
+    private final SelenideElement yesProceedButton = $(By.xpath("//b[text()='Yes, proceed']/parent::button[@id='save_Btn']"));
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -408,8 +406,9 @@ public class RolePage {
     }
 
     public void roleDependencyPopUp(){
+        Selenide.sleep(2000);
         if(roleDependencyDialog.isDisplayed()){
-            saveRoleButton.click();
+            yesProceedButton.click();
         }
     }
 }
