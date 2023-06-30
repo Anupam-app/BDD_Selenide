@@ -70,8 +70,10 @@ Feature: Roles Permissions Check
     When I go to recipe page
     Then I verify "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-    And I generate & verify audit logs for recipe with permission "<Permission>"
+    And I generate, verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
-    Examples:
-      | Permission  |
-      | View Recipe |
+  Examples:
+    |Permission|
+    |View Recipe|
+    |Create Recipe|
+

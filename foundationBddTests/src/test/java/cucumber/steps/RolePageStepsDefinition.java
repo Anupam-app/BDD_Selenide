@@ -4,13 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Assert;
-
 import dataobjects.Login;
+import dataobjects.Recipe;
 import dataobjects.Report;
 import dataobjects.Role;
 import dataobjects.RoleAction;
+
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Assert;
+
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -31,10 +33,11 @@ public class RolePageStepsDefinition {
     private final Login login;
     private final UserPage userPage;
     private final RecipePage recipePage;
+    private final Recipe recipe;
     private final RecipeTouchEnablerPage recipeTouchEnablerPage;
 
     public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login,
-                                   UserPage userPage, RecipePage recipePage, RecipeTouchEnablerPage recipeTouchEnablerPage) {
+                                   UserPage userPage, RecipePage recipePage, Recipe recipe, RecipeTouchEnablerPage recipeTouchEnablerPage) {
         this.rolePage = rolePage;
         this.role = role;
         this.report = report;
@@ -42,6 +45,7 @@ public class RolePageStepsDefinition {
         this.login = login;
         this.userPage = userPage;
         this.recipePage = recipePage;
+        this.recipe = recipe;
         this.recipeTouchEnablerPage = recipeTouchEnablerPage;
         this.role.getPermissions()
                 .clear();
@@ -320,7 +324,6 @@ public class RolePageStepsDefinition {
     public void verifyPermissionAccess(String permission){
         switch(permission) {
             case "View Recipe":
-                //verification to read only recipe
                 recipePage.goToEditMode();
                 recipePage.viewOnlyRecipeAccess();
                 recipeTouchEnablerPage.buttonDisabled("Import");
@@ -329,7 +332,7 @@ public class RolePageStepsDefinition {
                 recipeTouchEnablerPage.buttonDisabled("Export");
                 break;
             case "Create Recipe":
-                //verification to create recipe
+                createRecipe();
                 break;
             case "Edit Recipe":
                 //verification to edit recipe
@@ -345,4 +348,15 @@ public class RolePageStepsDefinition {
             default:
         }
     }
+
+    public void createRecipe(){
+        recipePage.goToEditMode();
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        recipePage.addFewSteps();
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
+
 }

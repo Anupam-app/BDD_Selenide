@@ -15,6 +15,7 @@ import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
+import com.codeborne.selenide.Selenide;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
@@ -97,6 +98,7 @@ public class RolePage {
     private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
     private final String CHECKBOX_ATTRIBUTE = "//span[contains(text(),'%s')]/parent::label";
     private final SelenideElement roleDependencyDialog = $(By.xpath("//div[@class='confirmation-modal-header']"));
+    private final SelenideElement yesProceedButton = $(By.xpath("//b[text()='Yes, proceed']/parent::button[@id='save_Btn']"));
     private final SelenideElement roleNameToolTip = $(By.xpath("//div[text()='User Created']/preceding-sibling::div"));
 
     public void clickOnPermission(String permission) {
@@ -411,9 +413,11 @@ public class RolePage {
         }
     }
 
-    public void roleDependencyPopUp() {
-        if (roleDependencyDialog.isDisplayed()) {
-            saveRoleButton.click();
+    public void roleDependencyPopUp(){
+        Selenide.sleep(2000);
+        if(roleDependencyDialog.isDisplayed()){
+            yesProceedButton.click();
         }
     }
+
 }
