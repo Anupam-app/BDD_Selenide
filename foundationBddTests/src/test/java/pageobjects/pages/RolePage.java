@@ -97,7 +97,7 @@ public class RolePage {
     private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
     private final String CHECKBOX_ATTRIBUTE = "//span[contains(text(),'%s')]/parent::label";
     private final SelenideElement roleDependencyDialog = $(By.xpath("//div[@class='confirmation-modal-header']"));
-
+    private final SelenideElement roleNameToolTip = $(By.xpath("//div[text()='User Created']/preceding-sibling::div"));
 
     public void clickOnPermission(String permission) {
         $x(String.format(PERMISSION_TEXT, permission)).click();
@@ -210,7 +210,7 @@ public class RolePage {
     }
 
     public void verifyRoleNameToolTip(String role) {
-        Assert.assertEquals($(By.xpath("//div[text()='User Created']/preceding-sibling::div")).getText(), role);
+        Assert.assertEquals(roleNameToolTip.getText(), role);
     }
 
     public void NoRolesTab() {
