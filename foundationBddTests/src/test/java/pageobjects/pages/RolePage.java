@@ -28,7 +28,6 @@ import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 
 import dataobjects.RoleAction;
@@ -415,4 +414,5 @@ public class RolePage {
             yesProceedButton.click();
         }
     }
+
 }
