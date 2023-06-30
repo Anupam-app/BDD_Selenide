@@ -11,8 +11,10 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 
 import com.codeborne.selenide.SelenideElement;
 import com.xceptance.neodymium.util.Neodymium;
-import dataobjects.User;
+
 import org.openqa.selenium.By;
+
+import dataobjects.User;
 import pageobjects.utility.SelenideHelper;
 
 public class LoginPage {
@@ -23,20 +25,23 @@ public class LoginPage {
     private final SelenideElement newPasswordTextBox = $(By.id("newPassword"));
     private final SelenideElement confirmPasswordTextBox = $(By.id("confirmPassword"));
 
-    private final SelenideElement loginButton = $(By.xpath("//div[@class='loginButton']//button"));
+    private final SelenideElement loginButton = $(By.xpath("//button[text()='LOGIN']"));
     private final SelenideElement userProfileIcon = $(By.xpath("//*[@id='userProfile']"));
 
     private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
     private final SelenideElement pnidLoginInfo = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
-	private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
-	private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
-	private final SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
+    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+    private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
+    private final SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private final SelenideElement currentPasswordTextBox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
-    private final SelenideElement tempPwd_submitButton = $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
-    private final SelenideElement tempPwd_ErrorNotification = $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
-    private final SelenideElement loginErrorNotificationText = $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
+    private final SelenideElement tempPwd_submitButton =
+            $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
+    private final SelenideElement tempPwd_ErrorNotification =
+            $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
+    private final SelenideElement loginErrorNotificationText =
+            $(By.xpath("//div[contains(@class,'alert-danger fade show')]"));
     private final SelenideElement unAppliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
     private final SelenideElement exitWithoutSaveButton = $(By.xpath("//span[text()='Exit without saving']"));
     private final SelenideElement userNotificationSection = $(By.xpath("//div[@id='userProfile']/parent::a"));
@@ -47,7 +52,7 @@ public class LoginPage {
     private final SelenideElement cancelRoleButton = $(By.className("roleBtnCancel"));
     private final User user;
 
-    public LoginPage(User user){
+    public LoginPage(User user) {
         this.user = user;
     }
 
@@ -62,7 +67,8 @@ public class LoginPage {
     }
 
     public void verifyLoginPageTitle() {
-        commonWaiter(loginPageTitle, visible).shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
+        commonWaiter(loginPageTitle, visible)
+                .shouldHave(text("Bio4C ACE™ Software for Inline Virus Inactivation System"));
     }
 
     public void setPassword(String password) {
@@ -121,25 +127,25 @@ public class LoginPage {
     }
 
     public void iLogout() {
-        if (addEditUserDialog.isDisplayed()
-                && (addEditUserDialog.getText().equalsIgnoreCase("Add User")
-                || addEditUserDialog.getText().equalsIgnoreCase("Edit User"))){
+        if (addEditUserDialog.isDisplayed() && (addEditUserDialog.getText()
+                .equalsIgnoreCase("Add User")
+                || addEditUserDialog.getText()
+                        .equalsIgnoreCase("Edit User"))) {
             cancelButton.click();
-        } else if (cancelRoleButton.isDisplayed()){
+        } else if (cancelRoleButton.isDisplayed()) {
             cancelRoleButton.click();
-        } else if(postRunWindow.isDisplayed()){
-            okButton.waitUntil(visible,3000)
+        } else if (postRunWindow.isDisplayed()) {
+            okButton.waitUntil(visible, 3000)
                     .click();
         }
         if (!newPasswordTextBox.isDisplayed()) {
             switchTo().parentFrame();
             if (userProfileIcon.isDisplayed()) {
-                if (!userNotificationSection.getAttribute("aria-expanded").equalsIgnoreCase("true")) {
-                    commonWaiter(userProfileIcon, visible)
-                            .click();
+                if (!userNotificationSection.getAttribute("aria-expanded")
+                        .equalsIgnoreCase("true")) {
+                    commonWaiter(userProfileIcon, visible).click();
                 }
-                commonWaiter(logOutButton, visible)
-                        .click();
+                commonWaiter(logOutButton, visible).click();
                 if (unAppliedChanges.exists()) {
                     commonWaiter(exitWithoutSaveButton, visible).click();
                 }
@@ -153,8 +159,8 @@ public class LoginPage {
         currentPasswordTextBox.setValue(newPassword);
     }
 
-    public void verifyNotification(String value){
-        commonWaiter(tempPwd_ErrorNotification,visible);
+    public void verifyNotification(String value) {
+        commonWaiter(tempPwd_ErrorNotification, visible);
         tempPwd_ErrorNotification.shouldHave(text(value));
     }
 

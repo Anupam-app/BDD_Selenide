@@ -52,18 +52,19 @@ public class UserPage {
             $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
 
     private final SelenideElement XPATH_NOTIFICATION_TEXT =
-            $(By.xpath("//*[@class='alarm_info_msg alert alert-info fade show']"));
+            $(By.xpath("//*[contains(@class,'alert alert-info fade show')]"));
 
     private final SelenideElement alertNotificationText = $(By.xpath("//*[@role='alert']"));
 
     private final SelenideElement XPATH_ERROR_NOTIFICATION_TEXT =
-            $(By.xpath("//*[@class='alarm_alert_msg alert alert-danger fade show']"));
+            $(By.xpath("//*[contains(@class,' alert alert-danger fade show')]"));
 
     private final SelenideElement selectOption = $(By.xpath("//span[@class='icon-down-arrow']"));
     private final SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
-    private final SelenideElement filterIcon = $(By.xpath("//div[@class='filter-icon']"));
-    private final SelenideElement upArrowIcon = $(By.xpath("//div[@class='arrowupuserfilter']"));
-    private final SelenideElement UsersLinkText = $(By.xpath("//*[@class='subMenu'][contains(text(),'Users')]"));
+    private final SelenideElement filterIcon = $(By.xpath("//div[contains(@class,'filter-icon')]"));
+    private final SelenideElement upArrowIcon = $(By.xpath("//div[contains(@class,'arrowupuserfilter')]"));
+    private final SelenideElement UsersLinkText =
+            $(By.xpath("//*[contains(@class,'subMenu')][contains(text(),'Users')]"));
     private final SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private final SelenideElement filterTagText = $(By.xpath("//div[@class='filter-criteria-tag']"));
     private final SelenideElement userSearchTextBox = $(By.xpath("//input[contains(@placeholder, 'Search...')]"));
@@ -83,7 +84,7 @@ public class UserPage {
     private final SelenideElement createUserPlusButton = $(By.xpath("//div[contains(@class,'Adduserplus')]"));
     private final SelenideElement applyFilterButton = $(By.xpath("//button/b[contains(text(),'Apply Filter')]"));
     private final SelenideElement savePreferenceButton = $(By.className("btn-user-preferences"));
-    private final SelenideElement roleNameTextBox = $(By.xpath("//span[@class='active-label']"));
+    private final SelenideElement roleNameTextBox = $(By.xpath("//span[contains(@class,'active-label')]"));
     private final SelenideElement selectRoleFromDropdown = $(By.id("role"));
     private final String xpathEditUserIcon = "//tr[td[contains(.,'%s')]]/td/div[contains(@class, 'edit-icon')]";
     private final SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
@@ -100,8 +101,8 @@ public class UserPage {
     private final SelenideElement changePwd = $(By.xpath("//span[text()='Change password']"));
     private final SelenideElement changePwdWindow = $(By.xpath("//h5[text()='Change Password']"));
     private final SelenideElement roleStatus = $(By.xpath("//table[@id='auditListTable']/tbody/tr/td[3]"));
-    private final SelenideElement closeUserPropertiesChangeModal =
-            $(By.xpath("//div[@id='userPropertiesChangeModal']/div/div[@class='crossicon']"));
+    private final SelenideElement closeUserPropertiesChangeModal = $(By.xpath(
+            "//div[contains(@class,'modal-dialog-centered modalDialog')]/div/div[contains(@class,'crossicon')]"));
     private final SelenideElement firstName = $(By.xpath("//div[@class='user-first-name-text']"));
     private final SelenideElement lastName = $(By.xpath("//div[@class='user-last-name-text']"));
     private final SelenideElement selectLanguageDropdown =
@@ -145,8 +146,8 @@ public class UserPage {
         var users = $$(By.xpath(String.format(XPATH_USER_COLUMNS, 1))).texts();
         for (var user : users) {
             if (user.equals("Bio4CAdmin") || user.equals("Bio4cService")) {
-                $(By.xpath(String.format(xpathEditUserIcon, user)))
-                        .shouldHave(attribute("class", "edit-icon disabled"));
+                Assert.assertTrue($(By.xpath(String.format(xpathEditUserIcon, user))).getAttribute("class")
+                        .contains("disabled"));
             } else {
                 $(By.xpath(String.format(xpathEditUserIcon, user))).shouldBe(enabled);
             }
@@ -180,7 +181,8 @@ public class UserPage {
     }
 
     public void goTo() {
-        idManagementPageLinkText.click();
+        idManagementPageLinkText.waitUntil(enabled, 10000)
+                .click();
     }
 
     public void cancel() {
@@ -472,10 +474,10 @@ public class UserPage {
         roleAssigned.shouldHave(text(role));
     }
 
-    public void verifyRoleIsNotPresent(String roleName){
+    public void verifyRoleIsNotPresent(String roleName) {
         selectRoleFromDropdown.click();
         for (SelenideElement role : rolesPresent) {
-            if (role.getText()!=roleName){
+            if (role.getText() != roleName) {
                 break;
             }
         }

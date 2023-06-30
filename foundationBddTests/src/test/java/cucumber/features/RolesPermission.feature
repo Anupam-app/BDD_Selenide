@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: Roles Permissions Check
 
   JIRAs test:
@@ -76,3 +76,4 @@ Feature: Roles Permissions Check
     |Permission|
     |View Recipe|
     |Create Recipe|
+
