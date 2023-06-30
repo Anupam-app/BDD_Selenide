@@ -1500,15 +1500,6 @@ public class Report {
                         .get(rowNo)
                         .get(0)
                         .getText(false))) {
-                        System.out.println((reportTable.getRows()
-                            .get(rowNo)
-                            .get(0)
-                            .getText(false)));
-                        System.out.println("--");
-                        System.out.println(reportTable.getRows()
-                            .get(rowNo)
-                            .get(1)
-                            .getText(false));
                         Assert.assertEquals(m.getValue(), reportTable.getRows()
                             .get(rowNo)
                             .get(1)
@@ -1516,7 +1507,6 @@ public class Report {
                         break;
                     }
                 }
-
             }
             break;
         }

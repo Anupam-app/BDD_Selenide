@@ -348,4 +348,5 @@ public class RolePageStepsDefinition {
     public void userCannotViewRole(){
         rolePage.userCannotViewRole();
     }
+
 }

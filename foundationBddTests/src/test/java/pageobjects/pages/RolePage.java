@@ -420,4 +420,5 @@ public class RolePage {
     public void userCannotViewRole(){
         rolesLinkText.shouldNot(visible);
     }
+
 }
