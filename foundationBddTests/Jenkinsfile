@@ -178,7 +178,6 @@ pipeline {
                         curl -k --fail https://$CIPHostName/useradminportal/actuator/health
                         curl -k --fail https://$CIPHostName/config-management/actuator/health
                         curl -k --fail https://$CIPHostName/reportingmanagement/actuator/health
-                        curl -k --fail https://$CIPHostName/trends/actuator/health
                         '''
                     }
                 }
