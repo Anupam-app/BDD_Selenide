@@ -71,15 +71,14 @@ Feature: Roles Permissions Check
     When I go to recipe page
     Then I verify "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-    And I generate & verify audit logs for recipe with permission "<Permission>"
+    And I generate, verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
     Examples:
-      |Permission |
+      |Permission|
       |View Recipe|
+      |Create Recipe|
 
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user
     And I go to user page
     And I verify unauthorized user cannot view role
-
-
