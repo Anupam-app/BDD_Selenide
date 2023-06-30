@@ -5,6 +5,7 @@ Feature: Roles Permissions Check
   https://stljirap.sial.com/browse/BIOFOUND-27763
   https://stljirap.sial.com/browse/BIOFOUND-27762
   https://stljirap.sial.com/browse/BIOCRS-5145
+  https://stljirap.sial.com/browse/BIOFOUND-29957
 
   Scenario: Verify user do not have permissions to roles
     Given I am logged in as "testRoleWithoutPerms" user
@@ -72,8 +73,12 @@ Feature: Roles Permissions Check
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I generate, verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
-  Examples:
-    |Permission|
-    |View Recipe|
-    |Create Recipe|
+    Examples:
+      |Permission|
+      |View Recipe|
+      |Create Recipe|
 
+  Scenario: Verify unauthorized user is not able to view the roles list
+    Given I am logged in as "noViewRoleUser" user
+    And I go to user page
+    And I verify unauthorized user cannot view role

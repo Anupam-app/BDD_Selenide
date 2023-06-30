@@ -4,7 +4,9 @@ import com.codeborne.selenide.Selenide;
 
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,18 +22,20 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipeConsolePage;
+import pageobjects.pages.ReportsPage;
 import pageobjects.utility.SelenideHelper;
 
 public class RecipeConsoleStepsDefinition {
 
     private final RecipeConsolePage recipeConsolePage;
     private Recipe currentRecipe;
-    private final List<Recipe> recipes;
+    private final List<Recipe>recipes;
     private final Report report;
     private final Analytics analytics;
+    private final ReportsPage reportPage;
 
     public RecipeConsoleStepsDefinition(RecipeConsolePage recipeConsolePage, Report report, Analytics analytics,
-            Recipe currentRecipe) {
+            Recipe currentRecipe, ReportsPage reportPage) {
         this.recipeConsolePage = recipeConsolePage;
         this.recipes = new ArrayList<>();
         this.report = report;
@@ -39,6 +43,7 @@ public class RecipeConsoleStepsDefinition {
         this.report.setRecipes(this.recipes);
         this.analytics.setRecipes(this.recipes);
         this.currentRecipe = currentRecipe;
+        this.reportPage = reportPage;
     }
 
     @Given("I expand recipe console in pnid")
@@ -405,10 +410,12 @@ public class RecipeConsoleStepsDefinition {
 
     // we enchance the code on merging (Run, Rerun & Start)
     @And("I start Manual run")
-    public void manualRun() {
+    public void manualRun() throws InterruptedException {
         generateRecipeValues(null, null);
-        recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+        String runId = recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
                 this.currentRecipe.getBeforeComments());
+        currentRecipe.setRunId(runId);
+        recipes.add(currentRecipe);
     }
 
     @Then("I validate the timer, stop button, run details")
@@ -806,6 +813,25 @@ public class RecipeConsoleStepsDefinition {
     @And("I verify the recipe name displayed on load recipe list")
     public void iVerifyTheRecipeNameDisplayed() {
         recipeConsolePage.iVerifyRecipeNameDisplayedOrTrimmed("Display");
+    }
+
+    @And("I check manual run report")
+    public void manualRunReportCheck() throws Exception {
+        Map<String, String> list = new HashMap<>();
+        list.put("Unit Operation name", "IVI");
+        list.put("Batch ID", this.currentRecipe.getBatchId());
+        list.put("ProductID", this.currentRecipe.getProductId());
+        list.put("RunID", this.currentRecipe.getRunId());
+        list.put("Start Date", this.currentRecipe.getStartDate());
+        list.put("End Date", this.currentRecipe.getEndDate());
+        list.put("Pre-run Comment",this.currentRecipe.getBeforeComments());
+        list.put("Post-run Comment",this.currentRecipe.getAfterComments());
+        list.put("Run Status", this.currentRecipe.getStatus());
+        this.report.validateManualRunSummary(reportPage.getPdfUrl(),list);
+        this.report.checkEventTable(reportPage.getPdfUrl());
+        this.report.checkAuditTable(reportPage.getPdfUrl());
+        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(), "Process Alarm");
+        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(),"System Alarm");
     }
 
 }

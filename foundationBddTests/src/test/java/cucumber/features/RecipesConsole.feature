@@ -126,7 +126,6 @@ Feature: Recipe Management console
     When I enter special characters "@!#$%^&*" in run comments section
     Then I should see special characters not allowed
 
-
   Scenario: BIOCRS-2687 Verify Jump to Step Functionality | Invalid Step
     Given I expand recipe console in pnid
     When I load recipe "testRecipeFlows"
@@ -145,7 +144,6 @@ Feature: Recipe Management console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-    # Maunual Run UI validation,Partial completed -Manual operation PDF validation is pending
   @BIOCRS-9352 @IVI-7256 @IVI-7040
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
@@ -202,21 +200,27 @@ Feature: Recipe Management console
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
 
-    # Manual Run UI validation,Partial completed -Manual operation PDF validation is pending
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
+  @BIOCRS-9352 @IVI-7256 @IVI-7040 @IVI-7982
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
-    When I start Manual run
+    When I select "MANUAL OPERATION" tab
+    And I start Manual run
     Then I validate the timer, stop button, run details
     When I Process hold the system
     Then I should see Process restart button
+    And I restart the Process hold
     And I validate the timer is incrementing
     When I Stop the RUN
     Then I validate the date formats in Post run window and enter comments
     And I wait for 1 min for the post run window to auto closed
-    And I validate the Start button is "disabled"
-    And I restart the Process hold
     And I validate the Start button is "enabled"
+    And I goto report management page
+    And I choose the run
+    And I click on generate button
+    And I goto report management page
+    And I trigger report mode
+    Then I should see the report file presence
+    And I check manual run report
 
   Scenario: FT_CF_Recipe Management_Verify recipe console extended view before recipe download when Process Hold or Process Restart actions are performed on system
     Given I expand recipe console in pnid

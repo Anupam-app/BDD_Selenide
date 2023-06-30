@@ -343,10 +343,13 @@ public class RolePageStepsDefinition {
             case "Run Recipe":
                 //verification to run recipe
                 break;
-
-
             default:
         }
+    }
+
+    @And("I verify unauthorized user cannot view role")
+    public void userCannotViewRole() {
+        rolePage.userCannotViewRole();
     }
 
     public void createRecipe(){

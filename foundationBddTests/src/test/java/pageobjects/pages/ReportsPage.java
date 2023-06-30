@@ -32,6 +32,7 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
+import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
@@ -231,6 +232,9 @@ public class ReportsPage {
     private final SelenideElement applyButton = $(By.xpath("//button[@class='applyBtn btn btn-sm btn-primary']"));
 
     private final ElementsCollection tableCount = $$(By.xpath("//table[@class='table']//tr"));
+    private final String SELECTRUN = "//tr[@class='tbl-row']//td[text()='%s']";
+
+    private final Recipe recipe;
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
         var users = $$(By.xpath(String.format(XPATH_REPORT_COLUMNS, index))).texts();
@@ -255,6 +259,10 @@ public class ReportsPage {
         templates.removeIf(e -> StringUtils.isEmpty(e.trim()));
         return templates;
     };
+
+    public ReportsPage(Recipe recipe) {
+        this.recipe = recipe;
+    }
 
     public void goToReports() {
         commonWaiter(reportsManagementPage, visible);
@@ -1529,6 +1537,10 @@ public class ReportsPage {
             expandReportFilter();
             $(By.xpath(String.format(XPATH_ESIGN_STATUS, name))).click();
         }
+    }
+
+    public void selectRunId() {
+        $(By.xpath(String.format(SELECTRUN, this.recipe.getRunId()))).waitUntil(visible, 5000L, 1000L).click();
     }
 
     public void verifyAuditLogsForHoldAndRestart(String username, String loggedInUserName) {
