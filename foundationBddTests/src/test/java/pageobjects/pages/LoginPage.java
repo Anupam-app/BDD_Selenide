@@ -45,7 +45,7 @@ public class LoginPage {
     private final SelenideElement unAppliedChanges = $(By.xpath("//h5[text()='Unapplied Changes']"));
     private final SelenideElement exitWithoutSaveButton = $(By.xpath("//span[text()='Exit without saving']"));
     private final SelenideElement userNotificationSection = $(By.xpath("//div[@id='userProfile']/parent::a"));
-    private final SelenideElement postRunWindow = $(By.xpath("//p[contains(text(),'Run Record')]"));
+    private final SelenideElement prePostRunWindow = $(By.xpath("//p[contains(text(),'Run Record')]"));
     private final SelenideElement okButton = $(By.xpath("//button[contains(text(),'Ok')]"));
     private final SelenideElement cancelButton = $(By.xpath("//button/b[contains(text(),'Cancel')]"));
     private final SelenideElement addEditUserDialog = $(By.xpath("//h5[@class='modal-title']"));
@@ -134,7 +134,7 @@ public class LoginPage {
             cancelButton.click();
         } else if (cancelRoleButton.isDisplayed()) {
             cancelRoleButton.click();
-        } else if (postRunWindow.isDisplayed()) {
+        } else if (prePostRunWindow.isDisplayed()) {
             okButton.waitUntil(visible, 3000)
                     .click();
         }
