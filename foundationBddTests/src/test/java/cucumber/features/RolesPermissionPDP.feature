@@ -7,10 +7,10 @@ Feature: Roles Permissions PDP specific
     Given I am logged in as "Bio4CAdmin" user
     When I trigger roles mode
     Then I verify default roles are disabled or enabled
-      | Bio4CService    |
-      | Administrator   |
-      | ProcessManager  |
-      | Operator        |
+      | Bio4CService   |
+      | Administrator  |
+      | ProcessManager |
+      | Operator       |
     And I verify "<UserRole>" list of "<roles>"
 
     @CRS
@@ -23,8 +23,16 @@ Feature: Roles Permissions PDP specific
 
     @IVI
     Examples:
-      | roles                                        | UserRole        |
-      | parameters/ivi/privilegeslist                | service         |
-      | parameters/ivi/privilegeslistofAdministrator | admin           |
-      | parameters/ivi/privilegeslistProcessManager  | processManager  |
-      | parameters/ivi/privilegeslistOperator        | operator        |
+      | roles                                        | UserRole       |
+      | parameters/ivi/privilegeslist                | service        |
+      | parameters/ivi/privilegeslistofAdministrator | admin          |
+      | parameters/ivi/privilegeslistProcessManager  | processManager |
+      | parameters/ivi/privilegeslistOperator        | operator       |
+
+    @SM
+    Examples:
+      | roles                                       | UserRole       |
+      | parameters/sm/privilegeslist                | service        |
+      | parameters/sm/privilegeslistofAdministrator | admin          |
+      | parameters/sm/privilegeslistProcessManager  | processManager |
+      | parameters/sm/privilegeslistOperator        | operator       |

@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: Roles Permissions Check
 
   JIRAs test:
@@ -72,6 +72,6 @@ Feature: Roles Permissions Check
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I generate & verify audit logs for recipe with permission "<Permission>"
 
-  Examples:
-  |Permission|
-  |View Recipe|
+    Examples:
+      | Permission  |
+      | View Recipe |
