@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: Roles Permissions Check
 
   JIRAs test:
@@ -81,3 +81,5 @@ Feature: Roles Permissions Check
     Given I am logged in as "noViewRoleUser" user
     And I go to user page
     And I verify unauthorized user cannot view role
+
+

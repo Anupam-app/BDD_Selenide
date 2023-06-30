@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: Role Filters
 
   Scenario: BIOCRS-5493- Verify search functionality in Role Management

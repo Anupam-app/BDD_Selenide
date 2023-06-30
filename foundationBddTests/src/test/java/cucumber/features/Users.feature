@@ -1,4 +1,4 @@
-@CRS @IVI @ORCHESTRATOR
+@CRS @IVI @ORCHESTRATOR @SM
 Feature: User Management
 
   Jira:
@@ -62,7 +62,7 @@ Feature: User Management
 
   @IVI-5849
   Scenario: IVI Bug IVI-5671|  BIOCRS-586 | User disable
-    Given I am logged in as "Bio4cService" user
+    Given I am logged in as "Bio4CService" user
     And I go to user page
     When I search "testUserEnabled" user
     And I edit the user
@@ -72,7 +72,7 @@ Feature: User Management
     #Then I check user notification is displayed
     When I edit the user
     And the user is disabled
-    And I generate the "Audit Trail" Report for "Bio4cService" user
+    And I generate the "Audit Trail" Report for "Bio4CService" user
     And I click on generate button
     And I goto report management page
     And I trigger report mode
@@ -86,7 +86,7 @@ Feature: User Management
 
   @IVI-5849
   Scenario: IVI Bug IVI-5671 IVI-5849| BIOCRS-586 | User enable
-    Given I am logged in as "Bio4cService" user
+    Given I am logged in as "Bio4CService" user
     And I go to user page
     When I search "testUserDisabled" user
     And I edit the user
@@ -97,7 +97,7 @@ Feature: User Management
     And I save my user changes
     And I edit the user
     And the user is enabled
-    And I generate the "Audit Trail" Report for "Bio4cService" user
+    And I generate the "Audit Trail" Report for "Bio4CService" user
     And I click on generate button
     And I goto report management page
     And I trigger report mode
