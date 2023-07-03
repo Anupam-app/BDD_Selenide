@@ -335,10 +335,12 @@ public class RolePageStepsDefinition {
                 createRecipe();
                 break;
             case "Edit Recipe":
-                //verification to edit recipe
+                editRecipe();
                 break;
             case "Approve Recipe":
-                //verification to approve recipe
+                this.recipe.setRecipeName("InReviewToApprovePermission");
+                recipePage.editRecipe(this.recipe.getRecipeName());
+                recipePage.inReviewToApproveRecipe("MerckApp1@");
                 break;
             case "Run Recipe":
                 //verification to run recipe
@@ -358,6 +360,16 @@ public class RolePageStepsDefinition {
         recipePage.addActionStep();
         recipePage.addFewSteps();
         this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
+
+    public void editRecipe(){
+        this.recipe.setRecipeName("testDraftRecipeToAddPhase");
+        recipePage.editRecipe(this.recipe.getRecipeName());
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
+        recipePage.keyboardActionRecipe();
+        recipePage.addActionStep("Setpoint");
         recipeTouchEnablerPage.buttonClick("Save");
         recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
     }

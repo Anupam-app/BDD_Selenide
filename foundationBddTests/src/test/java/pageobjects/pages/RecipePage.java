@@ -430,12 +430,7 @@ public class RecipePage {
         selectInReview.click();
         confirmButton.click();
         okButton.click();
-        commonWaiter(statusInReview, visible).click();
-        selectApprove.click();
-        $(By.xpath("//button[contains(text(),'Change')]")).click();
-        inputPassword.sendKeys(password);
-        $(By.xpath("//button[contains(text(),'SIGN')]")).click();
-        statusApproved.waitUntil(Condition.visible, 5000L);
+        inReviewToApproveRecipe(password);
     }
 
     public void inactiveRecipe(String password) {
@@ -1587,4 +1582,12 @@ public class RecipePage {
         $(By.xpath(String.format(warningMessage, TEXT_MESSAGE))).shouldHave(text(TEXT_MESSAGE));
     }
 
+    public void inReviewToApproveRecipe(String password){
+        commonWaiter(statusInReview, visible).click();
+        selectApprove.click();
+        $(By.xpath("//button[contains(text(),'Change')]")).click();
+        inputPassword.sendKeys(password);
+        $(By.xpath("//button[contains(text(),'SIGN')]")).click();
+        statusApproved.waitUntil(Condition.visible, 5000L);
+    }
 }
