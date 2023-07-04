@@ -912,13 +912,12 @@ public class ReportsPageStepsDefinition {
                 }
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), userName, action);
                 switchTo().parentFrame();
-                if(action.equalsIgnoreCase("Create Recipe") || action.equalsIgnoreCase("Edit Recipe")){
+                if(action.equalsIgnoreCase("Edit Recipe") || action.equalsIgnoreCase("created")){
                     iVerifyTheAuditTrailReport();
                     this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), userName,
                             action);
                     switchTo().parentFrame();
                 }
-
                 break;
 
             default:
@@ -926,5 +925,6 @@ public class ReportsPageStepsDefinition {
         }
         switchTo().parentFrame();
     }
+
 }
 
