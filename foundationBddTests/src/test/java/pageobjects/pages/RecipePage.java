@@ -246,6 +246,8 @@ public class RecipePage {
     private final String defaultStepWaitPopUp = "//*[text()='%s']";
     private final String phaseSelectionFromPhaseLibrary = "//span[text()='%s']/ancestor::span/following-sibling::span//img[@title='View Phase']";
     private final String TEXT_MESSAGE = "Please go to recipe browser tab to open a recipe";
+    private final String CONFIRM_BUTTON = "//button[contains(text(),'%s')]";
+
     private final Recipe recipe;
 
     public RecipePage(Recipe recipe) {
@@ -1585,9 +1587,9 @@ public class RecipePage {
     public void inReviewToApproveRecipe(String password){
         commonWaiter(statusInReview, visible).click();
         selectApprove.click();
-        $(By.xpath("//button[contains(text(),'Change')]")).click();
+        $(By.xpath(String.format(CONFIRM_BUTTON,"Change"))).click();
         inputPassword.sendKeys(password);
-        $(By.xpath("//button[contains(text(),'SIGN')]")).click();
+        $(By.xpath(String.format(CONFIRM_BUTTON,"SIGN"))).click();
         statusApproved.waitUntil(Condition.visible, 5000L);
     }
 }

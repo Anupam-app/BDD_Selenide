@@ -69,7 +69,7 @@ Feature: Roles Permissions Check
     And I update the role "testRoleForPermissions" with Permission "<Permission>"
     And I logout and login as "UserForPermissions" and password as "MerckApp1@"
     When I go to recipe page
-    Then I verify "<Permission>" permission
+    Then I verify recipe "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
