@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import dataobjects.Login;
-import dataobjects.Recipe;
-import dataobjects.Report;
 import dataobjects.Role;
 import dataobjects.RoleAction;
 
@@ -18,35 +15,19 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import pageobjects.pages.ReportsPage;
 import pageobjects.pages.RolePage;
 import pageobjects.pages.UserPage;
-import pageobjects.pages.RecipePage;
-import pageobjects.pages.RecipeTouchEnablerPage;
 
 public class RolePageStepsDefinition {
 
     private final RolePage rolePage;
     private final Role role;
-    private final Report report;
-    private final ReportsPage reportPage;
-    private final Login login;
     private final UserPage userPage;
-    private final RecipePage recipePage;
-    private final Recipe recipe;
-    private final RecipeTouchEnablerPage recipeTouchEnablerPage;
 
-    public RolePageStepsDefinition(RolePage rolePage, Role role, Report report, ReportsPage reportPage, Login login,
-                                   UserPage userPage, RecipePage recipePage, Recipe recipe, RecipeTouchEnablerPage recipeTouchEnablerPage) {
+    public RolePageStepsDefinition(RolePage rolePage, Role role, UserPage userPage) {
         this.rolePage = rolePage;
         this.role = role;
-        this.report = report;
-        this.reportPage = reportPage;
-        this.login = login;
         this.userPage = userPage;
-        this.recipePage = recipePage;
-        this.recipe = recipe;
-        this.recipeTouchEnablerPage = recipeTouchEnablerPage;
         this.role.getPermissions()
                 .clear();
     }
@@ -320,46 +301,9 @@ public class RolePageStepsDefinition {
         saveRole();
     }
 
-    @And("I verify {string} permission")
-    public void verifyPermissionAccess(String permission){
-        switch(permission) {
-            case "View Recipe":
-                recipePage.goToEditMode();
-                recipePage.viewOnlyRecipeAccess();
-                recipeTouchEnablerPage.buttonDisabled("Import");
-                recipeTouchEnablerPage.buttonDisabled("Save");
-                recipeTouchEnablerPage.buttonDisabled("Save As");
-                recipeTouchEnablerPage.buttonDisabled("Export");
-                break;
-            case "Create Recipe":
-                createRecipe();
-                break;
-            case "Edit Recipe":
-                //verification to edit recipe
-                break;
-            case "Approve Recipe":
-                //verification to approve recipe
-                break;
-            case "Run Recipe":
-                //verification to run recipe
-                break;
-            default:
-        }
-    }
-
     @And("I verify unauthorized user cannot view role")
     public void userCannotViewRole() {
         rolePage.userCannotViewRole();
-    }
-
-    public void createRecipe(){
-        recipePage.goToEditMode();
-        recipePage.addingPhaseByPlus();
-        recipePage.addActionStep();
-        recipePage.addFewSteps();
-        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
-        recipeTouchEnablerPage.buttonClick("Save");
-        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
     }
 
 }

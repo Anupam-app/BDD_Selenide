@@ -896,7 +896,7 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
-    @When("I generate, verify audit logs for recipe with permission {string} & {string}")
+    @When("I verify audit logs for recipe with permission {string} & {string}")
     public void iVerifyAuditLogsForRecipe(String action, String userName) throws InterruptedException, IOException {
         iGenerateAuditTrailReport();
         switch (action){
@@ -905,11 +905,19 @@ public class ReportsPageStepsDefinition {
                 break;
             case "Create Recipe":
             case "Edit Recipe":
+            case "Approve Recipe":
                 reportPage.switchToFrame();
                 if(action.equalsIgnoreCase("Create Recipe")){
                     action = "created";
                 }
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), userName, action);
+                switchTo().parentFrame();
+                if(action.equalsIgnoreCase("Edit Recipe") || action.equalsIgnoreCase("created")){
+                    iVerifyTheAuditTrailReport();
+                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), userName,
+                            action);
+                    switchTo().parentFrame();
+                }
                 break;
 
             default:
@@ -917,5 +925,6 @@ public class ReportsPageStepsDefinition {
         }
         switchTo().parentFrame();
     }
+
 }
 

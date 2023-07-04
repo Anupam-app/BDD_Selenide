@@ -19,6 +19,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeTouchEnablerPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
@@ -30,14 +31,16 @@ public class RecipePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
+    private final RecipeTouchEnablerPage recipeTouchEnablerPage;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage) {
+                                     ReportsPage reportPage, RecipeTouchEnablerPage recipeTouchEnablerPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
+        this.recipeTouchEnablerPage = recipeTouchEnablerPage;
     }
 
     @Given("I go to recipe page")
@@ -781,4 +784,52 @@ public class RecipePageStepsDefinition {
         recipePage.verifyRecipeActionStep(actionStep);
     }
 
+    @And("I verify recipe {string} permission")
+    public void verifyPermissionAccess(String permission){
+        switch(permission) {
+            case "View Recipe":
+                recipePage.goToEditMode();
+                recipePage.viewOnlyRecipeAccess();
+                recipeTouchEnablerPage.buttonDisabled("Import");
+                recipeTouchEnablerPage.buttonDisabled("Save");
+                recipeTouchEnablerPage.buttonDisabled("Save As");
+                recipeTouchEnablerPage.buttonDisabled("Export");
+                break;
+            case "Create Recipe":
+                createRecipe();
+                break;
+            case "Edit Recipe":
+                editRecipe();
+                break;
+            case "Approve Recipe":
+                this.recipe.setRecipeName("InReviewToApprovePermission");
+                recipePage.editRecipe(this.recipe.getRecipeName());
+                recipePage.inReviewToApproveRecipe("MerckApp1@");
+                break;
+            case "Run Recipe":
+                //verification to run recipe
+                break;
+            default:
+        }
+    }
+
+    public void createRecipe(){
+        recipePage.goToEditMode();
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        recipePage.addFewSteps();
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
+
+    public void editRecipe(){
+        this.recipe.setRecipeName("testDraftRecipeToAddPhase");
+        recipePage.editRecipe(this.recipe.getRecipeName());
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
+        recipePage.keyboardActionRecipe();
+        recipePage.addActionStep("Setpoint");
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
 }
