@@ -37,7 +37,8 @@ public class UserProfilePage {
 
     public void checkUserProfilePresence(boolean loggedInd) {
         if (loggedInd) {
-            userProfileIcon.should(be(visible));
+            userProfileIcon.waitUntil(visible, 5000)
+                    .should(be(visible));
         } else {
             userProfileIcon.shouldNot(be(visible));
         }

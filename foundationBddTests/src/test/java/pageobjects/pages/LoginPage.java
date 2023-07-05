@@ -1,6 +1,7 @@
 package pageobjects.pages;
 
 import static com.codeborne.selenide.Condition.be;
+import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
@@ -31,13 +32,13 @@ public class LoginPage {
     private final SelenideElement SUBMIT_LOGIN = $(SelenideHelper.byTestAttribute("submit_login"));
     private final SelenideElement pnidLoginInfo = $(SelenideHelper.byTestAttribute("pnid_login_info"));
 
-    private final SelenideElement userLoginAlertText = $(By.className("alertDanger"));
+    private final SelenideElement userLoginAlertText = $(By.xpath("//div[contains(@class,'alertDanger')]"));
     private final SelenideElement loadingIcon = $(By.xpath("//div[@class=\"loading-overlay\"]"));
     private final SelenideElement logOutButton = $(By.xpath("//button[text()='Log out']"));
     private final SelenideElement currentPasswordTextBox = $(By.xpath("//input[(@id='oldPassword')]"));
     private final SelenideElement savePassword = $(By.xpath("//button[@type='submit']/b[text()='Save Password']"));
     private final SelenideElement tempPwd_submitButton =
-            $(By.xpath("//button[@type='submit' and @class='user_btn btn_primary']"));
+            $(By.xpath("//button[@type='submit' and contains(@class,'user_btn')]"));
     private final SelenideElement tempPwd_ErrorNotification =
             $(By.xpath("//div[@class='temporary-notification-bar error-bar']"));
     private final SelenideElement loginErrorNotificationText =
@@ -118,7 +119,8 @@ public class LoginPage {
     public void setConfirmPassword(String newPassword) {
         confirmPasswordTextBox.clear();
         confirmPasswordTextBox.setValue(newPassword);
-        tempPwd_submitButton.click();
+        tempPwd_submitButton.waitUntil(enabled, 10000)
+                .click();
     }
 
     public void savePassword(String newPassword) {
