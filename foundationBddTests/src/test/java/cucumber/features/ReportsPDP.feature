@@ -22,11 +22,6 @@ Feature: Report Management PDP
       | parameters                  |
       | parameters/ivi/trendsParams |
 
-    @CRS
-    Examples:
-      | parameters                  |
-      | parameters/crs/trendsParams |
-
     @SM
     Examples:
       | parameters                 |
