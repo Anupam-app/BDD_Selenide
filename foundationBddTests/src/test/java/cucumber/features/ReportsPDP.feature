@@ -22,6 +22,16 @@ Feature: Report Management PDP
       | parameters                  |
       | parameters/ivi/trendsParams |
 
+    @CRS
+    Examples:
+      | parameters                  |
+      | parameters/crs/trendsParams |
+
+    @SM
+    Examples:
+      | parameters                 |
+      | parameters/sm/trendsParams |
+
   @SMOKE
   Scenario Outline: Generate and sign a custom report
     Given I am logged in as "testadmin" user
@@ -49,3 +59,8 @@ Feature: Report Management PDP
     Examples:
       | parameters                  |
       | parameters/ivi/trendsParams |
+
+    @SM
+    Examples:
+      | parameters                 |
+      | parameters/sm/trendsParams |

@@ -1,4 +1,4 @@
-@CRS @IVI
+@CRS @IVI @SM
 Feature: Recipe Filters
 
   Background:
