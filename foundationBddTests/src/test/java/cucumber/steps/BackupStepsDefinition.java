@@ -144,7 +144,7 @@ public class BackupStepsDefinition {
     public void verifyPermissionAccess(String permission) {
         switch (permission) {
             case "View Backup and Restore History":
-                backupPage.viewHistorydetails();
+                backupPage.viewHistoryDetails();
                 backupPage.verifyHistoryData();
                 break;
             case "Trigger on-demand backup":
@@ -163,7 +163,7 @@ public class BackupStepsDefinition {
     }
 
     @And("I wait until Backup is success for {string}")
-    public void waitUntilBackupSucess(String permission) {
+    public void waitUntilBackupSuccess(String permission) {
         if (permission.equalsIgnoreCase("Schedule periodic backup")) {
             iGotoBackupPage();
             iGoToHistory();

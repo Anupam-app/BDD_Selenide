@@ -383,8 +383,7 @@ public class BackupPage {
         }
     }
 
-    public void viewHistorydetails() {
-        // $(By.xpath(String.format(restoreColumnName, "Backup"))).shouldNotBe(visible);
+    public void viewHistoryDetails() {
         $(By.xpath(String.format(restoreColumnName, "Restore"))).shouldNotBe(visible);
     }
 

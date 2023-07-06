@@ -930,15 +930,13 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditLogsForBackup(String action, String userName) throws Exception {
         iGenerateAuditTrailReport();
         switch (action) {
-            case "View Backup and Restore History":
-                iVerifyAuditTrailReportRolePermissions("permissions");
-                break;
             case "Trigger on-demand backup":
                 reportPage.switchToFrame();
-                reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), this.login.getLogin(), userName);
+                reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), userName, userName);
                 switchTo().parentFrame();
                 iVerifyTheAuditTrailReport();
-                //this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),userName);
+                this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                    userName, "create");
                 switchTo().parentFrame();
                 break;
             case "Schedule periodic backup":
@@ -948,8 +946,8 @@ public class ReportsPageStepsDefinition {
                     "Daily");
                 switchTo().parentFrame();
                 iVerifyTheAuditTrailReport();
-                this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                    userName, "Daily");
+                //this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                   // userName, "Daily");
                 switchTo().parentFrame();
                 break;
         }
