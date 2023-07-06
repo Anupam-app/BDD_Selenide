@@ -1554,5 +1554,17 @@ public class ReportsPage {
         }
     }
 
+    public void verifyAuditLogsForScheduleBackUp(String backUpName, String loggedInUserName, String scheduledUser,String occurrence) {
+        $(By.xpath(String.format(userAuditLogs, loggedInUserName, " deactivated backup schedule named ", backUpName)))
+            .shouldBe(visible);
+        $(By.xpath(String.format(userAuditLogs, scheduledUser, (" scheduled " + occurrence + " backup named "),
+            backUpName))).shouldBe(visible);
+        for (int i = 1; i < 3; i++) {
+            Assert.assertTrue($(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 3))).getText()
+                .contains("Backup Schedule Name - " + backUpName));
+            $(By.xpath(String.format(XPATH_AUDITLOGS_VALUE, i, 2))).shouldHave(text("Backup Management"));
+        }
+    }
+
 }
 

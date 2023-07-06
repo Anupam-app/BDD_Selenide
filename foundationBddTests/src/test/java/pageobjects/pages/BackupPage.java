@@ -373,4 +373,26 @@ public class BackupPage {
                 .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
     }
 
+    public void verifyHistoryData(){
+        if (!(noData.isDisplayed())) {
+            for (int i = 1; i < 6; i++) {
+                Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
+            }
+        }else{
+            noData.shouldBe(visible);
+        }
+    }
+
+    public void viewHistorydetails() {
+        // $(By.xpath(String.format(restoreColumnName, "Backup"))).shouldNotBe(visible);
+        $(By.xpath(String.format(restoreColumnName, "Restore"))).shouldNotBe(visible);
+    }
+
+    public void backUpHistoryDetails() {
+        $(By.xpath(String.format(restoreColumnName, "Daily"))).shouldNotBe(visible);
+        $(By.xpath(String.format(restoreColumnName, "Weekly"))).shouldNotBe(visible);
+        $(By.xpath(String.format(restoreColumnName, "Monthly"))).shouldNotBe(visible);
+
+    }
+
 }

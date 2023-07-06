@@ -1,5 +1,6 @@
 package cucumber.steps;
 
+import io.cucumber.java.en.And;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
@@ -137,6 +138,46 @@ public class BackupStepsDefinition {
     @When("I delete the backup")
     public void iDeleteBackup() {
         backupPage.deleteBackUp(backupsetting.getBackupName());
+    }
+
+    @And("I verify backup {string} permission")
+    public void verifyPermissionAccess(String permission) {
+        switch (permission) {
+            case "View Backup and Restore History":
+                backupPage.viewHistorydetails();
+                backupPage.verifyHistoryData();
+                break;
+            case "Trigger on-demand backup":
+                backupPage.backUpHistoryDetails();
+                iTriggerBackup();
+                iVerifyNotificationMessage("On-demand backup job executed");
+                break;
+            case "Schedule periodic backup":
+                iScheduleBackup("Daily");
+                iVerifyNotificationMessage("Backup job scheduled");
+                iVerifyScheduledBackupDetails("Daily");
+                break;
+            default:
+        }
+
+    }
+
+    @And("I wait until Backup is success for {string}")
+    public void waitUntilBackupSucess(String permission) {
+        if (permission.equalsIgnoreCase("Schedule periodic backup")) {
+            iGotoBackupPage();
+            iGoToHistory();
+            iSeeBackupScheduledRunning();
+            iWaitTheEndOfScheduledBackup();
+            iVerifyBackup();
+            iGoToBackup();
+            iDeleteBackup();
+        } else if (permission.equalsIgnoreCase("Trigger on-demand backup")) {
+            iGotoBackupPage();
+            iGoToHistory();
+            iSeeBackupScheduledRunning();
+            iVerifyBackup();
+        }
     }
 
 }
