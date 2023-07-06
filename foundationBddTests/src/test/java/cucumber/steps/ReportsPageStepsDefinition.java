@@ -928,9 +928,9 @@ public class ReportsPageStepsDefinition {
 
     @When("I verify audit logs for backup with permission {string} & {string}")
     public void iVerifyAuditLogsForBackup(String action, String userName) throws Exception {
-        iGenerateAuditTrailReport();
         switch (action) {
             case "Trigger on-demand backup":
+                iGenerateAuditTrailReport();
                 reportPage.switchToFrame();
                 reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), userName, userName);
                 switchTo().parentFrame();
