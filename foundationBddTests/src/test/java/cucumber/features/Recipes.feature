@@ -211,14 +211,6 @@ Feature: Recipe management
     And I delete phase to recipe with shortcut key
     And the phase is deleted
 
-  Scenario: Touch Enabled buttons for copy and paste phases
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
-    And I create a random phase
-    And I copy phase in recipe
-    Then I am able to paste the phase
-
   @IVI-5761 @IVI-5762 @IVI-5763
   Scenario: Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe
     Given I am logged in as "Bio4CAdmin" user

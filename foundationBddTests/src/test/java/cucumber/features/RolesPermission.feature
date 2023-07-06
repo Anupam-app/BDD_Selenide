@@ -74,11 +74,13 @@ Feature: Roles Permissions Check
     And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
     Examples:
-      |Permission|
-      |View Recipe|
-      |Create Recipe|
-      |Edit Recipe  |
-      |Approve Recipe|
+      |Permission       |
+      |View Recipe      |
+      |Create Recipe    |
+      |Edit Recipe      |
+      |Approve Recipe   |
+      |Deactivate Recipe|
+      |Review Recipe    |
 
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user

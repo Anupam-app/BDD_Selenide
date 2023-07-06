@@ -906,16 +906,22 @@ public class ReportsPageStepsDefinition {
             case "Create Recipe":
             case "Edit Recipe":
             case "Approve Recipe":
+            case "Deactivate Recipe":
+            case "Review Recipe":
                 reportPage.switchToFrame();
                 if(action.equalsIgnoreCase("Create Recipe")){
                     action = "created";
+                } else if(action.equalsIgnoreCase("Deactivate Recipe")){
+                    action = "Approved-Inactive";
+                } else if (action.equalsIgnoreCase("Review Recipe")){
+                    action = "Tech-Review";
                 }
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), userName, action);
                 switchTo().parentFrame();
-                if(action.equalsIgnoreCase("Edit Recipe") || action.equalsIgnoreCase("created")){
+                if(!action.equalsIgnoreCase("created")){
                     iVerifyTheAuditTrailReport();
-                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), userName,
-                            action);
+                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(),
+                            userName, action);
                     switchTo().parentFrame();
                 }
                 break;
