@@ -96,6 +96,7 @@ public class BackupPage {
             "//div[@class='scheduled-row']/div[text()='%s']//following-sibling::div/div[@class='trash-icon']";
 
     private final SelenideElement datePicker = $(By.xpath("//input[@name='dateRange']"));
+    private final String backupTabs = "//div[contains(@class,'sub-menu')][contains(text(),'%s')]";
 
     public void goToBackupPage() {
         backupPageLinkText.click();
@@ -383,14 +384,12 @@ public class BackupPage {
         }
     }
 
-    public void viewHistoryDetails() {
-        $(By.xpath(String.format(restoreColumnName, "Restore"))).shouldNotBe(visible);
+    public void viewHistoryDetails(String tabs) {
+        $(By.xpath(String.format(backupTabs, tabs))).shouldNotBe(visible);
     }
 
-    public void backUpHistoryDetails() {
-        $(By.xpath(String.format(restoreColumnName, "Daily"))).shouldNotBe(visible);
-        $(By.xpath(String.format(restoreColumnName, "Weekly"))).shouldNotBe(visible);
-        $(By.xpath(String.format(restoreColumnName, "Monthly"))).shouldNotBe(visible);
+    public void backUpHistoryDetails(String shedulebackup) {
+        $(By.xpath(String.format(restoreColumnName, shedulebackup))).shouldNotBe(visible);
 
     }
 

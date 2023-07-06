@@ -144,11 +144,14 @@ public class BackupStepsDefinition {
     public void verifyPermissionAccess(String permission) {
         switch (permission) {
             case "View Backup and Restore History":
-                backupPage.viewHistoryDetails();
+                backupPage.viewHistoryDetails("Backup");
+                backupPage.viewHistoryDetails("Restore");
                 backupPage.verifyHistoryData();
                 break;
             case "Trigger on-demand backup":
-                backupPage.backUpHistoryDetails();
+                backupPage.backUpHistoryDetails("Daily");
+                backupPage.backUpHistoryDetails("Weekly");
+                backupPage.backUpHistoryDetails("Monthly");
                 iTriggerBackup();
                 iVerifyNotificationMessage("On-demand backup job executed");
                 break;
