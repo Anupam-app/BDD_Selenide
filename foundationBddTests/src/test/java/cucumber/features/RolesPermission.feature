@@ -79,7 +79,7 @@ Feature: Roles Permissions Check
       |Create Recipe|
       |Edit Recipe  |
       |Approve Recipe|
-
+   @test
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user
     And I go to user page
