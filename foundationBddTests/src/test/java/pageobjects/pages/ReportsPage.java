@@ -32,12 +32,12 @@ import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
 
-import dataobjects.Recipe;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.openqa.selenium.By;
 
+import dataobjects.Recipe;
 import dataobjects.Report;
 import pageobjects.components.SpinnerComponent;
 import pageobjects.utility.SelenideHelper;
@@ -425,7 +425,8 @@ public class ReportsPage {
     }
 
     public void gotoTemplate() {
-        templateTab.click();
+        templateTab.waitUntil(visible, 10000)
+                .click();
     }
 
     public void createTemplate(String templateName) {
@@ -1540,7 +1541,8 @@ public class ReportsPage {
     }
 
     public void selectRunId() {
-        $(By.xpath(String.format(SELECTRUN, this.recipe.getRunId()))).waitUntil(visible, 5000L, 1000L).click();
+        $(By.xpath(String.format(SELECTRUN, this.recipe.getRunId()))).waitUntil(visible, 5000L, 1000L)
+                .click();
     }
 
     public void verifyAuditLogsForHoldAndRestart(String username, String loggedInUserName) {

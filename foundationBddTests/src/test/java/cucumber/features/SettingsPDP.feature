@@ -1,6 +1,5 @@
 Feature: Settings Modification specific to PDP
 
-  @CONFIG_SETTING_SYSTEM_COMPONENTS
   Scenario Outline: Change custom label
     Given I am logged in as "bio4cadmin" user
     And I goto settings page
