@@ -1,4 +1,4 @@
-@CRS @IVI @SM
+@CRS @IVI
 Feature: Recipe management
 
   JIRAs tested:

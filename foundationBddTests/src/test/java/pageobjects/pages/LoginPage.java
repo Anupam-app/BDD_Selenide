@@ -78,7 +78,9 @@ public class LoginPage {
 
     public void openLogin() {
         waitPnidLoading();
-        commonWaiter(loginButton, visible).click();
+        loginButton.waitUntil(enabled, 10000)
+                .waitUntil(visible, 10000)
+                .click();
     }
 
     public void checkLoggedIn(boolean loggedInd) {
