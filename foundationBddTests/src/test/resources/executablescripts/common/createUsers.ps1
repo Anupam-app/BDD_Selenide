@@ -39,3 +39,6 @@ NET USER "customRoleEdit" "MerckApp1@" /ADD
 
 NET USER "testadmin" /DELETE
 NET USER "testadmin" "MerckApp1@" /ADD
+
+NET USER "UserForPermissions" /DELETE
+NET USER "UserForPermissions" "MerckApp1@" /ADD
