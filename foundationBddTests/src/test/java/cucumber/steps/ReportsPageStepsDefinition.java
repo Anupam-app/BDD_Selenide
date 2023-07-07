@@ -926,5 +926,32 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
+    @When("I verify audit logs for backup with permission {string} & {string}")
+    public void iVerifyAuditLogsForBackup(String action, String userName) throws Exception {
+        switch (action) {
+            case "Trigger on-demand backup":
+                iGenerateAuditTrailReport();
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), userName, userName);
+                switchTo().parentFrame();
+                iVerifyTheAuditTrailReport();
+                this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                    userName, "create");
+                switchTo().parentFrame();
+                break;
+            case "Schedule periodic backup":
+                iGenerateAuditTrailReport();
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(), userName,
+                    "Daily");
+                switchTo().parentFrame();
+                iVerifyTheAuditTrailReport();
+                //this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                   // userName, "Daily");
+                switchTo().parentFrame();
+                break;
+        }
+    }
+
 }
 

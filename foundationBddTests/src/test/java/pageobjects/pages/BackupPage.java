@@ -96,6 +96,7 @@ public class BackupPage {
             "//div[@class='scheduled-row']/div[text()='%s']//following-sibling::div/div[@class='trash-icon']";
 
     private final SelenideElement datePicker = $(By.xpath("//input[@name='dateRange']"));
+    private final String backupTabs = "//div[contains(@class,'sub-menu')][contains(text(),'%s')]";
 
     public void goToBackupPage() {
         backupPageLinkText.click();
@@ -371,6 +372,25 @@ public class BackupPage {
         confirmationPopUpAccept();
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, (backupName + " job is deactivated"))))
                 .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
+    }
+
+    public void verifyHistoryData(){
+        if (!(noData.isDisplayed())) {
+            for (int i = 1; i < 6; i++) {
+                Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
+            }
+        }else{
+            noData.shouldBe(visible);
+        }
+    }
+
+    public void viewHistoryDetails(String tabs) {
+        $(By.xpath(String.format(backupTabs, tabs))).shouldNotBe(visible);
+    }
+
+    public void backUpHistoryDetails(String shedulebackup) {
+        $(By.xpath(String.format(restoreColumnName, shedulebackup))).shouldNotBe(visible);
+
     }
 
 }

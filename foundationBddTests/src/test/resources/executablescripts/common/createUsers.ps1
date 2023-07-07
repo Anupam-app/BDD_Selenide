@@ -42,3 +42,7 @@ NET USER "testadmin" "MerckApp1@" /ADD
 
 NET USER "noViewRoleUser" /DELETE
 NET USER "noViewRoleUser" "MerckApp1@" /ADD
+
+NET USER "UserForPermissions" /DELETE
+NET USER "UserForPermissions" "MerckApp1@" /ADD
+
