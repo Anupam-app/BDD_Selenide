@@ -421,7 +421,7 @@ public class RecipePage {
         selectInReview.click();
         confirmButton.click();
         okButton.click();
-        recipeStatusChange(password,"Approve-Active");
+        recipeStatusChange(password,"Approved-Active");
     }
 
     public void inactiveRecipe(String password) {

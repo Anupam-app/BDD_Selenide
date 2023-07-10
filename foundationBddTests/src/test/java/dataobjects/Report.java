@@ -1353,7 +1353,7 @@ public class Report {
                                     .getText(false)).replaceAll("\\s", ""),
                             (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
                 }
-                if(recipeAction.equals("created") || recipeAction.equals("Edit Recipe")){
+                if(recipeAction.equals("created") || recipeAction.equals("Edit Recipe") || recipeAction.equalsIgnoreCase("modify")){
                     Assert.assertTrue(reportTable.getRows()
                             .get(1)
                             .get(5)
