@@ -21,3 +21,7 @@ net localgroup "editCustomRole" /add
 
 net localgroup "CustomRoleDisable" /delete
 net localgroup "CustomRoleDisable" /add
+
+net localgroup "testRoleForPermissions" /delete
+net localgroup "testRoleForPermissions" /add
+
