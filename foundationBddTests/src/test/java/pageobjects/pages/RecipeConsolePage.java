@@ -659,7 +659,7 @@ public class RecipeConsolePage {
     }
 
     public boolean verifyRecipeDetails(String batch_Id) {
-        return commonWaiter(batchId, visible).getText()
+        return commonWaiter(recipeRunBatchId, visible).getText()
             .equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed();
     }
 
