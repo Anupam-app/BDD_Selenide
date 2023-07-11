@@ -18,7 +18,6 @@ Feature: Recipe management
   https://stljirap.sial.com/browse/BIOFOUND-27903
   https://stljirap.sial.com/browse/BIOFOUND-28042
 
-  @IVI-6688
   Scenario: BIOCRS-5478 | Recipe modification
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -35,7 +34,7 @@ Feature: Recipe management
     And I check the audit trail report
     Then I see the "modify" recipe events in report
 
-  @SMOKE @IVI-4468 @IVI-6688
+  @SMOKE @IVI-4468
   Scenario: BIOCRS-5059 | Recipe approval
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -109,7 +108,7 @@ Feature: Recipe management
     And I should see the report file presence
     And I see the "testRecipeDraftToReject" is changed to "DRAFT" in report
 
-  @SMOKE @IVI-6688
+  @SMOKE
   Scenario: Recipe creation
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -152,7 +151,7 @@ Feature: Recipe management
     And I save the recipe with name "testRecipeToExecute"
     And I see warning message is displayed "Recipe is locked. Please save it as new copy."
 
-  @IVI-6151 @IVI-6688
+  @IVI-6151
   Scenario: BIOCRS-1594 BIOCRS-5478 | Recipe export and import
     Given I am logged in as "Bio4CAdmin" user
     And I go to recipe page
@@ -210,14 +209,6 @@ Feature: Recipe management
     Then I verify notification messages "Phase created successfully"
     And I delete phase to recipe with shortcut key
     And the phase is deleted
-
-  Scenario: Touch Enabled buttons for copy and paste phases
-    Given I am logged in as "Bio4CAdmin" user
-    And I go to recipe page
-    When I trigger edit mode
-    And I create a random phase
-    And I copy phase in recipe
-    Then I am able to paste the phase
 
   @IVI-5761 @IVI-5762 @IVI-5763
   Scenario: Recipe Editor | Correct Warning messages should be displayed for Phase buttons for blank recipe

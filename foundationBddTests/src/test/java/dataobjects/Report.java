@@ -1340,33 +1340,51 @@ public class Report {
                     .get(2)
                     .getText(false)
                     .contains("Recipe Name -" + recipeName));
-                Assert.assertTrue(reportTable.getRows()
-                    .get(1)
-                    .get(5)
-                    .getText(false)
-                    .isEmpty());
-                Assert.assertTrue(reportTable.getRows()
-                    .get(1)
-                    .get(6)
-                    .getText(false)
-                    .isEmpty());
-                Assert.assertTrue(reportTable.getRows()
-                    .get(1)
-                    .get(7)
-                    .getText(false)
-                    .isEmpty());
                 if (recipeAction.equals("created")) {
                     Assert.assertEquals((reportTable.getRows()
-                            .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
-                        (userNameLoggedIn + " created a new recipe" + recipeName).replaceAll("\\s", ""));
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " created a new recipe" + recipeName).replaceAll("\\s", ""));
                 } else {
                     Assert.assertEquals((reportTable.getRows()
+                                    .get(1)
+                                    .get(4)
+                                    .getText(false)).replaceAll("\\s", ""),
+                            (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
+                }
+                if(recipeAction.equals("created") || recipeAction.equals("Edit Recipe") || recipeAction.equalsIgnoreCase("modify")){
+                    Assert.assertTrue(reportTable.getRows()
                             .get(1)
-                            .get(4)
-                            .getText(false)).replaceAll("\\s", ""),
-                        (userNameLoggedIn + " edited recipe" + recipeName).replaceAll("\\s", ""));
+                            .get(5)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(6)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(7)
+                            .getText(false)
+                            .isEmpty());
+                } else {
+                    Assert.assertTrue(reportTable.getRows()
+                            .get(1)
+                            .get(5)
+                            .getText(false).replaceAll("\\s", "")
+                            .contains("status"));
+                    Assert.assertFalse(reportTable.getRows()
+                            .get(1)
+                            .get(6)
+                            .getText(false)
+                            .isEmpty());
+                    Assert.assertFalse(reportTable.getRows()
+                            .get(1)
+                            .get(7)
+                            .getText(false)
+                            .isEmpty());
                 }
             }
             break;

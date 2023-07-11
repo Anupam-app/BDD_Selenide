@@ -12,7 +12,6 @@ import org.junit.Assert;
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Recipe;
-import dataobjects.Report;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -802,12 +801,13 @@ public class RecipePageStepsDefinition {
                 editRecipe();
                 break;
             case "Approve Recipe":
-                this.recipe.setRecipeName("InReviewToApprovePermission");
-                recipePage.editRecipe(this.recipe.getRecipeName());
-                recipePage.inReviewToApproveRecipe("MerckApp1@");
+                recipeStatueChange("InReviewToApprovePermission", "MerckApp1@","Approved-Active");
                 break;
-            case "Run Recipe":
-                //verification to run recipe
+            case "Deactivate Recipe":
+                recipeStatueChange("DeactivateRecipe", "MerckApp1@", "Approved-Inactive");
+                break;
+            case "Review Recipe":
+                recipeStatueChange("reviewRecipe", "MerckApp1@", "Tech-Review");
                 break;
             default:
         }
@@ -832,4 +832,11 @@ public class RecipePageStepsDefinition {
         recipeTouchEnablerPage.buttonClick("Save");
         recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
     }
+
+    public void recipeStatueChange(String recipeName, String password, String status){
+        this.recipe.setRecipeName(recipeName);
+        recipePage.editRecipe(this.recipe.getRecipeName());
+        recipePage.recipeStatusChange(password,status);
+    }
+
 }
