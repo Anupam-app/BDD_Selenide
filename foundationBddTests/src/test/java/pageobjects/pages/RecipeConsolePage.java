@@ -304,18 +304,18 @@ public class RecipeConsolePage {
         $(By.xpath(String.format(LABEL_TEXT,"Pause"))).waitUntil(visible,5000);
     }
 
-    public boolean verifyResumeButton() {
-        return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).waitUntil(Condition.visible, 50001)
+    public void verifyResumeButton() {
+        Assert.assertTrue($(By.xpath(String.format(XPATH_CTRL_ICONS, "RESUME"))).waitUntil(Condition.visible, 50001)
             .isDisplayed());
     }
 
-    public boolean verifyPauseButton() {
-        return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 50001)
+    public void verifyPauseButton() {
+        Assert.assertTrue($(By.xpath(String.format(XPATH_CTRL_ICONS, "Group"))).waitUntil(Condition.visible, 50001)
             .isDisplayed());
     }
 
-    public boolean verifyReRunButton() {
-        return ($(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 50001)
+    public void verifyReRunButton() {
+        Assert.assertTrue($(By.xpath(String.format(XPATH_CTRL_ICONS, "RE-RUN"))).waitUntil(Condition.visible, 50001)
             .isDisplayed());
     }
 

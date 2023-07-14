@@ -31,15 +31,16 @@ public class RecipePageStepsDefinition {
     private final Recipe recipe;
     private final Login login;
     private final RecipeTouchEnablerPage recipeTouchEnablerPage;
-
+    private final RecipeConsoleStepsDefinition recipeConsoleStepsDefinition;
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage, RecipeTouchEnablerPage recipeTouchEnablerPage) {
+                                     ReportsPage reportPage, RecipeTouchEnablerPage recipeTouchEnablerPage, RecipeConsoleStepsDefinition recipeConsoleStepsDefinition) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
         this.recipeTouchEnablerPage = recipeTouchEnablerPage;
+        this.recipeConsoleStepsDefinition = recipeConsoleStepsDefinition;
     }
 
     @Given("I go to recipe page")
@@ -785,6 +786,9 @@ public class RecipePageStepsDefinition {
 
     @And("I verify recipe {string} permission")
     public void verifyPermissionAccess(String permission){
+        if(!permission.equalsIgnoreCase("Control Run")){
+            iGoToRecipePage();
+        }
         switch(permission) {
             case "View Recipe":
                 recipePage.goToEditMode();
@@ -808,6 +812,10 @@ public class RecipePageStepsDefinition {
                 break;
             case "Review Recipe":
                 recipeStatueChange("reviewRecipe", "MerckApp1@", "Tech-Review");
+                break;
+            case "Control Run":
+                SelenideHelper.goToDefault();
+                recipeConsoleStepsDefinition.runRecipe("testRecipeToExecute1min","3");
                 break;
             default:
         }

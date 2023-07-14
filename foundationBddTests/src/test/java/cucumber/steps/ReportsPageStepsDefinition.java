@@ -925,6 +925,9 @@ public class ReportsPageStepsDefinition {
                     switchTo().parentFrame();
                 }
                 break;
+            case "Control Run":
+                    iCheckAudiTrialLogs();
+                    break;
 
             default:
 
