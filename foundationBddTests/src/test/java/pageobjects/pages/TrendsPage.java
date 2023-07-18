@@ -459,7 +459,8 @@ public class TrendsPage {
     }
 
     public void listOfCollection(String name) {
-        arrowOfListOfCollection.waitUntil(visible,20000,1000).click();
+        arrowOfListOfCollection.waitUntil(visible, 20000, 1000)
+                .click();
         $(By.xpath(String.format(collectionNameRadioButton, name))).waitUntil(visible, 2000)
                 .click();
     }
@@ -483,6 +484,11 @@ public class TrendsPage {
     public void unCheckParameter(String name, String param1) {
         $(By.xpath(String.format(XPATH_PARAMETER_UNCHECK, name, param1))).click();
     }
+
+    public void trendsIconNotPresent() {
+        trends.shouldNotBe(visible);
+    }
+
 }
 
 

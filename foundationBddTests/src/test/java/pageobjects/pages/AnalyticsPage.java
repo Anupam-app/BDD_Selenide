@@ -372,4 +372,9 @@ public class AnalyticsPage {
             Assert.assertEquals(acceptedParams, expectedParams);
         }
     }
+
+    public void analyticsIconNotPresent() {
+        analyticsPageLinkText.shouldNotBe(visible);
+    }
+
 }

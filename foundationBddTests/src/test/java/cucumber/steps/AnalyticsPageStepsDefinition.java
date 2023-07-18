@@ -1,14 +1,16 @@
 package cucumber.steps;
 
+import com.codeborne.selenide.Selenide;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
-import cucumber.util.I18nUtils;
 
 import java.util.List;
-import com.codeborne.selenide.Selenide;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Assert;
 
+import cucumber.util.I18nUtils;
 import dataobjects.Analytics;
 import dataobjects.AnalyticsInterval;
 import dataobjects.AnalyticsMode;
@@ -18,7 +20,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import pageobjects.pages.AnalyticsPage;
 import pageobjects.utility.SelenideHelper;
 
@@ -244,4 +245,10 @@ public class AnalyticsPageStepsDefinition {
     public void iVerifyDefaultListOfParameters(String parameters) {
         analyticsPage.defaultCollectionTagsValidation(parameters);
     }
+
+    @And("I verify analytics icon is not visible")
+    public void analyticsIconPresence() {
+        analyticsPage.analyticsIconNotPresent();
+    }
+
 }
