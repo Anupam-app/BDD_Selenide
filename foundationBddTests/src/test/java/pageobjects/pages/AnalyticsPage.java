@@ -376,4 +376,5 @@ public class AnalyticsPage {
     public void analyticsIconNotPresent() {
         analyticsPageLinkText.shouldNotBe(visible);
     }
+
 }
