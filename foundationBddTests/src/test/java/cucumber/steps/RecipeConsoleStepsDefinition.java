@@ -194,17 +194,17 @@ public class RecipeConsoleStepsDefinition {
 
     @Then("control should be on resume button")
     public void ctrlOnResumeButton() {
-        Assert.assertTrue(recipeConsolePage.verifyResumeButton());
+        recipeConsolePage.verifyResumeButton();
     }
 
     @Then("control should be on pause button")
     public void ctrlOnPauseButton() {
-        Assert.assertTrue(recipeConsolePage.verifyPauseButton());
+        recipeConsolePage.verifyPauseButton();
     }
 
     @Then("control should be on rerun button")
     public void ctrlOnReRunButton() {
-        Assert.assertTrue(recipeConsolePage.verifyReRunButton());
+        recipeConsolePage.verifyReRunButton();
     }
 
     @When("I click on resume button")
@@ -832,6 +832,27 @@ public class RecipeConsoleStepsDefinition {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(), "Process Alarm");
         this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(),"System Alarm");
+    }
+
+    public void runRecipe(String recipeName, String stepNo){
+        recipeConsolePage.gotoRecipeConsole();
+        Selenide.sleep(2000);
+        this.currentRecipe = new Recipe();
+        this.currentRecipe.setRecipeName(recipeName);
+        recipeConsolePage.loadRecipe(recipeName);
+        generateRecipeValues(null, null);
+        this.currentRecipe.setSteps(recipeConsolePage.loadedRecipeStepCount());
+        recipeConsolePage.startRecipe(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
+                this.currentRecipe.getBeforeComments());
+        iClickOnPauseButton();
+        recipeConsolePage.verifyResumeButton();
+        recipeConsolePage.clickResumeButton();
+        recipeConsolePage.verifyPauseButton();
+        recipeConsolePage.clickOnJumpToStep(stepNo);
+        recipeConsolePage.clickOnAbortButton(this.currentRecipe.getAfterComments());
+        Assert.assertEquals("Aborted", this.recipeConsolePage.getExecutionStatusText());
+        recipeConsolePage.clickOnOk();
+        recipeConsolePage.verifyReRunButton();
     }
 
 }

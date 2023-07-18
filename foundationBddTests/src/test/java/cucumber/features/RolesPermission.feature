@@ -67,9 +67,8 @@ Feature: Roles Permissions Check
   Scenario Outline: Verify Permission check for Recipe
     Given I am logged in as "Bio4CAdmin" user
     And I trigger roles mode
-    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    When I update the role "testRoleForPermissions" with Permission "<Permission>"
     And I logout and login as "UserForPermissions" and password as "MerckApp1@"
-    When I go to recipe page
     Then I verify recipe "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
@@ -82,6 +81,7 @@ Feature: Roles Permissions Check
       |Approve Recipe   |
       |Deactivate Recipe|
       |Review Recipe    |
+      |Control Run      |
 
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user
