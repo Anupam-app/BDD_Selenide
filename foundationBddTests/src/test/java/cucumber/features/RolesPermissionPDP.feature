@@ -36,24 +36,3 @@ Feature: Roles Permissions PDP specific
       | parameters/sm/privilegeslistofAdministrator | admin          |
       | parameters/sm/privilegeslistProcessManager  | processManager |
       | parameters/sm/privilegeslistOperator        | operator       |
-      
-  Scenario Outline: Verify Permission check for Trends
-    Given I am logged in as "Bio4CAdmin" user
-    And I trigger roles mode
-    And I update the role "testRoleForPermissions" with Permission "View Trend"
-    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
-    When I navigate to trends page
-    And I choose "<Param1>","<Param2>" parameters as default collection
-    And I save as trends collections
-    And I choose collection
-    Then I see "<Param1>","<Param2>" parameters displayed
-
-    @CRS
-    Examples:
-      | Param1   | Param2   |
-      | PI101 PV | PI102 PV |
-
-    @IVI
-    Examples:
-      | Param1          | Param2          |
-      | P001 - Speed PV | P002 - Speed PV |   

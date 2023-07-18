@@ -31,3 +31,7 @@ Feature: Trends Common
       | Default Parameters Collection |
       | Starred Parameters Collection |
       | List of collection            |
+
+  Scenario: Unauthorized user cant create trends parameters collection
+    When I am logged in as "reportUnauthUser" user
+    Then I verify trends icon is not visible

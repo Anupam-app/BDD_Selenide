@@ -9,6 +9,7 @@ import org.junit.Assert;
 import cucumber.util.I18nUtils;
 import dataobjects.Trends;
 import io.cucumber.datatable.DataTable;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -213,4 +214,10 @@ public class TrendsPageStepsDefinition {
                 deviceShapeElementNotTranslated.isEmpty());
         SelenideHelper.goParentFrame();
     }
+
+    @And("I verify trends icon is not visible")
+    public void trendsIconPresence() {
+        trendsPage.trendsIconNotPresent();
+    }
+
 }
