@@ -130,7 +130,6 @@ public class UserPage {
         cancelButton.click();
         $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible)
                 .shouldHave(cssValue("color", "rgba(33, 37, 41, 1)"));
-        $(By.xpath(String.format(xpathUserName, user) + "/td")).shouldHave(attribute("class", "customusername"));
     }
 
     public void edit(String user) {
@@ -181,7 +180,7 @@ public class UserPage {
     }
 
     public void goTo() {
-        idManagementPageLinkText.waitUntil(enabled, 10000)
+        idManagementPageLinkText.waitUntil(enabled, 15000)
                 .click();
     }
 

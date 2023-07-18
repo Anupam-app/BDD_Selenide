@@ -12,13 +12,13 @@ import org.junit.Assert;
 import cucumber.util.I18nUtils;
 import dataobjects.Login;
 import dataobjects.Recipe;
-import dataobjects.Report;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import pageobjects.pages.RecipePage;
+import pageobjects.pages.RecipeTouchEnablerPage;
 import pageobjects.pages.ReportsPage;
 import pageobjects.pages.UserPage;
 import pageobjects.utility.SelenideHelper;
@@ -30,14 +30,16 @@ public class RecipePageStepsDefinition {
     private final ReportsPage reportPage;
     private final Recipe recipe;
     private final Login login;
+    private final RecipeTouchEnablerPage recipeTouchEnablerPage;
 
     public RecipePageStepsDefinition(RecipePage recipePage, UserPage userPage, Recipe recipe, Login login,
-                                     ReportsPage reportPage) {
+                                     ReportsPage reportPage, RecipeTouchEnablerPage recipeTouchEnablerPage) {
         this.recipePage = recipePage;
         this.userPage = userPage;
         this.recipe = recipe;
         this.login = login;
         this.reportPage = reportPage;
+        this.recipeTouchEnablerPage = recipeTouchEnablerPage;
     }
 
     @Given("I go to recipe page")
@@ -779,6 +781,62 @@ public class RecipePageStepsDefinition {
     @And("I verify action {string} in the step")
     public void iVerifyRecipeActionStep(String actionStep) {
         recipePage.verifyRecipeActionStep(actionStep);
+    }
+
+    @And("I verify recipe {string} permission")
+    public void verifyPermissionAccess(String permission){
+        switch(permission) {
+            case "View Recipe":
+                recipePage.goToEditMode();
+                recipePage.viewOnlyRecipeAccess();
+                recipeTouchEnablerPage.buttonDisabled("Import");
+                recipeTouchEnablerPage.buttonDisabled("Save");
+                recipeTouchEnablerPage.buttonDisabled("Save As");
+                recipeTouchEnablerPage.buttonDisabled("Export");
+                break;
+            case "Create Recipe":
+                createRecipe();
+                break;
+            case "Edit Recipe":
+                editRecipe();
+                break;
+            case "Approve Recipe":
+                recipeStatueChange("InReviewToApprovePermission", "MerckApp1@","Approved-Active");
+                break;
+            case "Deactivate Recipe":
+                recipeStatueChange("DeactivateRecipe", "MerckApp1@", "Approved-Inactive");
+                break;
+            case "Review Recipe":
+                recipeStatueChange("reviewRecipe", "MerckApp1@", "Tech-Review");
+                break;
+            default:
+        }
+    }
+
+    public void createRecipe(){
+        recipePage.goToEditMode();
+        recipePage.addingPhaseByPlus();
+        recipePage.addActionStep();
+        recipePage.addFewSteps();
+        this.recipe.setRecipeName(RandomStringUtils.randomAlphabetic(10));
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
+
+    public void editRecipe(){
+        this.recipe.setRecipeName("testDraftRecipeToAddPhase");
+        recipePage.editRecipe(this.recipe.getRecipeName());
+        this.recipe.setOrgStepCount(recipePage.actionsStepsCount());
+        recipePage.keyboardActionRecipe();
+        recipePage.addActionStep("Setpoint");
+        recipeTouchEnablerPage.buttonClick("Save");
+        recipePage.saveRecipeNewAndExisting(this.recipe.getRecipeName());
+    }
+
+    public void recipeStatueChange(String recipeName, String password, String status){
+        this.recipe.setRecipeName(recipeName);
+        recipePage.editRecipe(this.recipe.getRecipeName());
+        recipePage.recipeStatusChange(password,status);
     }
 
 }

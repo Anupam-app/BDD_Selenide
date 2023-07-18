@@ -14,8 +14,8 @@ import static pageobjects.utility.SelenideHelper.commonWaiter;
 import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.ElementsCollection;
-import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideElement;
 import com.typesafe.config.ConfigFactory;
 import com.typesafe.config.ConfigParseOptions;
 
@@ -42,7 +42,7 @@ public class RolePage {
             $(By.xpath("//*[@class='roleModalNotificationBar roleMgmtNotificationBar information-bar']"));
     private final ElementsCollection permissionsText =
             $$(By.xpath("//label[@class=\"ant-checkbox-wrapper ant-checkbox-wrapper-checked\"]"));
-    private final SelenideElement saveText = $(By.className("roleModalNotificationBar"));
+    private final SelenideElement saveText = $(By.xpath("//div[contains(@class,'roleModalNotificationBar')]"));
     private final SelenideElement inputRoleName = $(By.className("roleNameInput"));
 
     private final SelenideElement saveRoleButton = $(By.id("save_Btn"));
@@ -71,7 +71,7 @@ public class RolePage {
     private final SelenideElement administrator = $(By.xpath("//div[text()='Administrator']"));
     private final SelenideElement processManager = $(By.xpath("//div[text()='ProcessManager']"));
     private final SelenideElement operator = $(By.xpath("//div[text()='Operator']"));
-    private final String viewAll = "//div[contains(text(),'%s')]/following::div[2]/a";
+    private final String viewAll = "//div[contains(text(),'%s')]/following::div/a";
     private final SelenideElement closeIcon = $(By.xpath("//div[(@class='viewAll-crossicon')]"));
     private final SelenideElement adminEditeIcon =
             $(By.xpath("//div[(@class='roleCard')]/parent::div/div[3]/div[5]/div"));
@@ -89,7 +89,7 @@ public class RolePage {
     private final SelenideElement newUserRoleName = $(By
             .xpath("//td[text()='NewUserRole' and @class='customusername']/parent::tr/td/div/div[text()='TestRole']"));
     private final SelenideElement roleNameText = $(By.xpath("//div[@class='roleTableColumnOne roleCardMarginOne']"));
-    private final String disableEditButton = "//div[contains(text(),'%s')]/following-sibling::div[5]/button";
+    private final String disableEditButton = "//div[contains(text(),'%s')]/following-sibling::div[5]//button";
     private final String NOTIFICATION_ERROR = "Role name: %s already exists.";
     private final String DISABLE_ENABLE_ROLE_NOTIFICATION = "The role successfully %s.";
     private final SelenideElement notification_Text = $(By.xpath("//*[contains(@class,'roleModalNotificationBar')]"));
@@ -98,7 +98,8 @@ public class RolePage {
     private final SelenideElement noRoleMessageStatus = $(By.xpath("//div[text()='No result found for deleteRole']"));
     private final String CHECKBOX_ATTRIBUTE = "//span[contains(text(),'%s')]/parent::label";
     private final SelenideElement roleDependencyDialog = $(By.xpath("//div[@class='confirmation-modal-header']"));
-    private final SelenideElement yesProceedButton = $(By.xpath("//b[text()='Yes, proceed']/parent::button[@id='save_Btn']"));
+    private final SelenideElement yesProceedButton =
+            $(By.xpath("//b[text()='Yes, proceed']/parent::button[@id='save_Btn']"));
     private final SelenideElement roleNameToolTip = $(By.xpath("//div[text()='User Created']/preceding-sibling::div"));
 
     public void clickOnPermission(String permission) {
@@ -160,7 +161,7 @@ public class RolePage {
 
         }
 
-        saveText.shouldHave(text(expectedNotificationText));
+        commonWaiter(saveText, visible).shouldHave(text(expectedNotificationText));
 
         closeButton.click();
     }
@@ -413,14 +414,14 @@ public class RolePage {
         }
     }
 
-    public void roleDependencyPopUp(){
+    public void roleDependencyPopUp() {
         Selenide.sleep(2000);
-        if(roleDependencyDialog.isDisplayed()){
+        if (roleDependencyDialog.isDisplayed()) {
             yesProceedButton.click();
         }
     }
 
-    public void userCannotViewRole(){
+    public void userCannotViewRole() {
         rolesLinkText.shouldNot(visible);
     }
 

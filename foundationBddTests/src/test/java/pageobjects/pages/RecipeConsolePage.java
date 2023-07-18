@@ -97,7 +97,7 @@ public class RecipeConsolePage {
     private final SelenideElement manualOperationName = $(By.xpath("//input[@name ='recipeName']"));
     private final SelenideElement manualStopButton =
         $(By.xpath("//img[@src='/useradminportal/static/media/End_btn Copy-End_btn.fa5c7ba8.svg']"));
-    private final String MATCHID_BATCHID_RUNID = "//label[@id='trimString'])[%s]";
+    private final String MATCHID_BATCHID_RUNID = "(//label[@id='trimString'])[%s]";
     private final SelenideElement matchId = $(By.xpath(String.format(MATCHID_BATCHID_RUNID,"1")));
     private final SelenideElement batchId = $(By.xpath(String.format(MATCHID_BATCHID_RUNID,"2")));
     private final SelenideElement runId = $(By.xpath(String.format(MATCHID_BATCHID_RUNID,"3")));
@@ -659,7 +659,7 @@ public class RecipeConsolePage {
     }
 
     public boolean verifyRecipeDetails(String batch_Id) {
-        return commonWaiter(batchId, visible).getText()
+        return commonWaiter(recipeRunBatchId, visible).getText()
             .equalsIgnoreCase(batch_Id) && recipeStep.isDisplayed();
     }
 

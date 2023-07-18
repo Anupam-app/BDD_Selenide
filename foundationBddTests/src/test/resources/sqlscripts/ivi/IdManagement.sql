@@ -58,6 +58,8 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (42, 0x020000009AB71FE13B0EA9FEABDDFE3754DEA4805FA48C150ED1888B9238CAC5D58765B024636B0201CE81139B955F915EB158921B0498402AC67B29F49E25D4AE02BAA7B5FCAEBB81A6F1D691B44A0E4E217B9458FBBBBDA6D0090B07FC5DAF9567D0E1, N'lmfBmVVRt2lNo+5UnSp68A==', N'f3ta/vHmJo0lwa8h9rzLyQ==', 0, NULL)
 GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (43, 0x0200000084875C42DDDE72AD9D8DACC3D2E4A7D5A48B2B955C8067F230E7E8A3F0CD0488BCAA70D9E0FC693A76E554DCF5DC2710CC6D2D4C89FDCC15B626CC27D2DF8F008147E3971B31D94AAAE6C295FB72A7CA659C65BB606264AA4A046E0D15BECE99, N'oVZW0r5ZAn8yRsnNZByyww==', N'JFJzuHXkM+ofQW/EXKeiHg==', 0, NULL)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] ON
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (4, N'', N'alexis.thiebaut@merckgroup.com', N'faVppoqqKR', N'true', N'testUser', N'testUser', N'0123456789', N'testUser', 0, 0, NULL, 0)
@@ -107,6 +109,8 @@ GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (40, N'', N'varun.mittal@external.merckgroup.com', N'12345', N'true', N'Test', N'Admin', N'', N'testadmin', 0, 0, NULL, 0)
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (42, N'', N'sailesh.botcha@external.merckgroup.com', N'324243', N'true', N'permissionCheck', N'lastnameCheck', N'', N'UserForPermissions', 0, 0, NULL, 0)
+GO
+INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (43, N'', N'anupam.patra@external.merckgroup.com', N'123', N'true', N'noViewRoleUser', N'noRole', N'', N'noViewRoleUser', 0, 0, NULL, 0)
 GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
@@ -181,6 +185,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (40, 1)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (42, 15)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (43, 5)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO

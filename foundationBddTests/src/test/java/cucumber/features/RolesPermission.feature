@@ -6,6 +6,7 @@ Feature: Roles Permissions Check
   https://stljirap.sial.com/browse/BIOFOUND-27762
   https://stljirap.sial.com/browse/BIOCRS-5145
   https://stljirap.sial.com/browse/BIOFOUND-29957
+  https://stljirap.sial.com/browse/BIOCRS-8709
 
   Scenario: Verify user do not have permissions to roles
     Given I am logged in as "testRoleWithoutPerms" user
@@ -65,37 +66,54 @@ Feature: Roles Permissions Check
 
   Scenario Outline: Verify Permission check for Recipe
     Given I am logged in as "Bio4CAdmin" user
-    And I triggx  sroles mode
+    And I trigger roles mode
     And I update the role "testRoleForPermissions" with Permission "<Permission>"
     And I logout and login as "UserForPermissions" and password as "MerckApp1@"
     When I go to recipe page
-    Then I verify "<Permission>" permission
+    Then I verify recipe "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-    And I generate, verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
+    And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
     Examples:
-      |Permission   |
-      |View Recipe  |
-      |Create Recipe|
+      |Permission       |
+      |View Recipe      |
+      |Create Recipe    |
+      |Edit Recipe      |
+      |Approve Recipe   |
+      |Deactivate Recipe|
+      |Review Recipe    |
 
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user
     And I go to user page
     And I verify unauthorized user cannot view role
 
-  Scenario Outline: Verify Permission check for Report
+  Scenario Outline: Verify Permission check for backup
+    Given I am logged in as "Bio4CAdmin" user
+    And I trigger roles mode
+    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
+    When I goto backup page
+    Then I verify backup "<Permission>" permission
+    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
+    And I wait until Backup is success for "<Permission>"
+    And I verify audit logs for backup with permission "<Permission>" & "UserForPermissions"
+
+    Examples:
+      |Permission                           |
+      |View Backup and Restore History      |
+      |Trigger on-demand backup             |
+      |Schedule periodic backup             |
+
+  Scenario Outline: Verify Permission check for report
     Given I am logged in as "Bio4CAdmin" user
     And I trigger roles mode
     And I update the role "testRoleForPermissions" with Permission "<Permission>"
     And I logout and login as "UserForPermissions" and password as "MerckApp1@"
     When I goto report management page
-    Then I verify "<Permission>" permission
-    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-    And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
+    Then I verify report "<Permission>" permission
 
     Examples:
-      |Permission|
-      |View Recipe|
-      |Create Recipe|
-      |Edit Recipe  |
-      |Approve Recipe|
+      |Permission      |
+      |View Report     |
+      |Create Report   |

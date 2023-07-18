@@ -896,7 +896,7 @@ public class ReportsPageStepsDefinition {
         switchTo().parentFrame();
     }
 
-    @When("I generate, verify audit logs for recipe with permission {string} & {string}")
+    @When("I verify audit logs for recipe with permission {string} & {string}")
     public void iVerifyAuditLogsForRecipe(String action, String userName) throws InterruptedException, IOException {
         iGenerateAuditTrailReport();
         switch (action){
@@ -905,11 +905,25 @@ public class ReportsPageStepsDefinition {
                 break;
             case "Create Recipe":
             case "Edit Recipe":
+            case "Approve Recipe":
+            case "Deactivate Recipe":
+            case "Review Recipe":
                 reportPage.switchToFrame();
                 if(action.equalsIgnoreCase("Create Recipe")){
                     action = "created";
+                } else if(action.equalsIgnoreCase("Deactivate Recipe")){
+                    action = "Approved-Inactive";
+                } else if (action.equalsIgnoreCase("Review Recipe")){
+                    action = "Tech-Review";
                 }
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), userName, action);
+                switchTo().parentFrame();
+                if(!action.equalsIgnoreCase("created")){
+                    iVerifyTheAuditTrailReport();
+                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(),
+                        userName, action);
+                    switchTo().parentFrame();
+                }
                 break;
 
             default:
@@ -917,5 +931,46 @@ public class ReportsPageStepsDefinition {
         }
         switchTo().parentFrame();
     }
+
+    @When("I verify audit logs for backup with permission {string} & {string}")
+    public void iVerifyAuditLogsForBackup(String action, String userName) throws Exception {
+        switch (action) {
+            case "Trigger on-demand backup":
+                iGenerateAuditTrailReport();
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForBackUp(this.backupSetting.getBackupName(), userName, userName);
+                switchTo().parentFrame();
+                iVerifyTheAuditTrailReport();
+                this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                    userName, "create");
+                switchTo().parentFrame();
+                break;
+            case "Schedule periodic backup":
+                iGenerateAuditTrailReport();
+                reportPage.switchToFrame();
+                reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(), userName,
+                    "Daily");
+                switchTo().parentFrame();
+                iVerifyTheAuditTrailReport();
+                //this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
+                // userName, "Daily");
+                switchTo().parentFrame();
+                break;
+        }
+    }
+
+    @Then("I verify report {string} permission")
+    public void reportPermission(String permission){
+        switch (permission) {
+            case "View Report":
+                reportPage.gotoReportsTab();
+                reportPage.locatorIsVisible("View Report");
+                break;
+            case "Create Report":
+                reportPage.locatorIsVisible("Create Report");
+                break;
+        }
+    }
+
 }
 

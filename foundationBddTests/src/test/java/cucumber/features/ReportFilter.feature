@@ -1,4 +1,4 @@
-@CRS @IVI
+@CRS @IVI @SM
 Feature: Report Filter
 
   Background:
@@ -184,8 +184,8 @@ Feature: Report Filter
     And I select date range as "Last 7 Days"
     And I verify the batch dropdown is present
     And I verify the report filter options and status
-      | Operation     |
-      | Unit Procedure|
-      | Manual        |
-      | Completed     |
-      | Aborted       |
+      | Operation      |
+      | Unit Procedure |
+      | Manual         |
+      | Completed      |
+      | Aborted        |
