@@ -68,3 +68,7 @@ Feature: Analytics creation
       | Regression Charts with expand/collapse option |
       | Delete                                        |
 
+  @CRS @IVI
+  Scenario: Unauthorized user cant create aggregate
+    When I am logged in as "reportUnauthUser" user
+    Then I verify analytics icon is not visible
