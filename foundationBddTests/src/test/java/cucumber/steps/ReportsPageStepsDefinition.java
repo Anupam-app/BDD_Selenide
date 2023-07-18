@@ -5,7 +5,6 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import com.xceptance.neodymium.util.Neodymium;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -963,11 +962,10 @@ public class ReportsPageStepsDefinition {
     public void reportPermission(String permission){
         switch (permission) {
             case "View Report":
-                reportPage.gotoReportsTab();
-                reportPage.locatorIsVisible("View Report");
+                reportPage.viewReportPermission();
                 break;
             case "Create Report":
-                reportPage.locatorIsVisible("Create Report");
+                reportPage.createReportPermission("Create Report");
                 break;
         }
     }

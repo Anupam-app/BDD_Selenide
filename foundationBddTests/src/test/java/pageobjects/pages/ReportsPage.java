@@ -4,6 +4,7 @@ import static com.codeborne.selenide.Condition.appear;
 import static com.codeborne.selenide.Condition.disabled;
 import static com.codeborne.selenide.Condition.enabled;
 import static com.codeborne.selenide.Condition.not;
+import static com.codeborne.selenide.Condition.selected;
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -1568,15 +1569,14 @@ public class ReportsPage {
         }
     }
 
-    public void locatorIsVisible(String permission){
-        switch (permission) {
-            case "View Report":
-                reportViewButton.waitUntil(visible, 10000L, 5000L);
-                break;
-            case "Create Report":
-                reportGenerateButton.waitUntil(visible, 10000L, 5000L);
-                break;
-        }
+    public void createReportPermission(String permission){
+        reportGenerateButton.waitUntil(visible, 10000L, 5000L);
+        templateTab.shouldNot(visible);
+    }
+    public void viewReportPermission(){
+        reportViewButton.waitUntil(visible, 10000L, 5000L).shouldNot(selected);
+        runTab.shouldNot(visible);
+        templateTab.shouldNot(visible);
     }
 
 }
