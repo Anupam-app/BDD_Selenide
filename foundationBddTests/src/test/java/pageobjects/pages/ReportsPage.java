@@ -234,6 +234,8 @@ public class ReportsPage {
 
     private final ElementsCollection tableCount = $$(By.xpath("//table[@class='table']//tr"));
     private final String SELECTRUN = "//tr[@class='tbl-row']//td[text()='%s']";
+    private final SelenideElement vieSingleReport = $(By.xpath("(//*[@id='reportListTable']/tbody/tr)[1]"));
+    private final SelenideElement viewRunReport = $(By.xpath("//*[@class='tbl-row']//td[1]"));
 
     private final Recipe recipe;
 
@@ -1569,14 +1571,21 @@ public class ReportsPage {
         }
     }
 
-    public void createReportPermission(String permission){
-        reportGenerateButton.waitUntil(visible, 10000L, 5000L);
+    public void createReportPermission(){
+        runTab.should(visible);
         templateTab.shouldNot(visible);
+        reportGenerateButton.waitUntil(visible, 10000L, 5000L).shouldNot(selected);
+        viewRunReport.click();
+        chooseReportTemplate("testReportTemplate");
+        reportGenerateButton.waitUntil(visible,5000,1000).click();
     }
+
     public void viewReportPermission(){
         reportViewButton.waitUntil(visible, 10000L, 5000L).shouldNot(selected);
         runTab.shouldNot(visible);
         templateTab.shouldNot(visible);
+        vieSingleReport.waitUntil(visible,10000L,1000L).click();
+        reportViewButton.click();
     }
 
 }

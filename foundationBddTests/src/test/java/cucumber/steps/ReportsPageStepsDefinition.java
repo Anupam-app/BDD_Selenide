@@ -959,16 +959,24 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify report {string} permission")
-    public void reportPermission(String permission){
+    public void reportPermission(String permission) throws InterruptedException {
         switch (permission) {
             case "View Report":
                 reportPage.viewReportPermission();
                 break;
             case "Create Report":
-                reportPage.createReportPermission("Create Report");
+                reportPage.createReportPermission();
+                report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
+                reportPage.reportRequestNotificationVisibility();
                 break;
         }
     }
+
+    @And("I verify audit logs for report with permission {string} & {string}")
+    public void reportAuditTrail(){
+
+    }
+
 
 }
 
