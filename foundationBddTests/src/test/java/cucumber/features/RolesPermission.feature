@@ -112,8 +112,6 @@ Feature: Roles Permissions Check
     And I logout and login as "UserForPermissions" and password as "MerckApp1@"
     When I goto report management page
     Then I verify report "<Permission>" permission
-    And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
-    And I verify audit logs for report with permission "<Permission>" & "UserForPermissions"
 
     Examples:
       |Permission      |

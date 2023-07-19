@@ -972,11 +972,5 @@ public class ReportsPageStepsDefinition {
         }
     }
 
-    @And("I verify audit logs for report with permission {string} & {string}")
-    public void reportAuditTrail(){
-
-    }
-
-
 }
 
