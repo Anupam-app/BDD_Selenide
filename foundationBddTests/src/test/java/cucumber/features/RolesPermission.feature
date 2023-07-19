@@ -104,3 +104,16 @@ Feature: Roles Permissions Check
       |View Backup and Restore History      |
       |Trigger on-demand backup             |
       |Schedule periodic backup             |
+
+  Scenario Outline: Verify Permission check for report
+    Given I am logged in as "Bio4CAdmin" user
+    And I trigger roles mode
+    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
+    When I goto report management page
+    Then I verify report "<Permission>" permission
+
+    Examples:
+      |Permission      |
+      |View Report     |
+      |Create Report   |

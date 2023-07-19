@@ -5,7 +5,6 @@ import static com.codeborne.selenide.Selenide.switchTo;
 import com.xceptance.neodymium.util.Neodymium;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -921,7 +920,7 @@ public class ReportsPageStepsDefinition {
                 if(!action.equalsIgnoreCase("created")){
                     iVerifyTheAuditTrailReport();
                     this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(),
-                            userName, action);
+                        userName, action);
                     switchTo().parentFrame();
                 }
                 break;
@@ -956,8 +955,22 @@ public class ReportsPageStepsDefinition {
                 switchTo().parentFrame();
                 iVerifyTheAuditTrailReport();
                 //this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                   // userName, "Daily");
+                // userName, "Daily");
                 switchTo().parentFrame();
+                break;
+        }
+    }
+
+    @Then("I verify report {string} permission")
+    public void reportPermission(String permission) throws InterruptedException {
+        switch (permission) {
+            case "View Report":
+                reportPage.viewReportPermission();
+                break;
+            case "Create Report":
+                reportPage.createReportPermission();
+                report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
+                reportPage.reportRequestNotificationVisibility();
                 break;
         }
     }
