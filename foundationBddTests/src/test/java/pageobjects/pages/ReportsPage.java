@@ -236,7 +236,7 @@ public class ReportsPage {
     private final String SELECTRUN = "//tr[@class='tbl-row']//td[text()='%s']";
     private final SelenideElement viewSingleReport = $(By.xpath("(//*[@id='reportListTable']/tbody/tr)[1]"));
     private final SelenideElement viewRunReport = $(By.xpath("//*[@class='tbl-row']//td[1]"));
-
+    private final String XPATH_DISABLED_CHECKBOX = "//li[contains(@class,'disabled')]/div[text()='%s']";
     private final Recipe recipe;
 
     Function<Integer, List<String>> getReportColumns = (index) -> {
@@ -1607,14 +1607,13 @@ public class ReportsPage {
         templateCancelButton.shouldBe(visible);
         saveTemplateButton.shouldNotBe(visible);
         saveAs_btn.shouldNotBe(visible);
-
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Audit Trail"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Run Summary"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Alarms"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Trends"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Event Summary"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Calibration Summary"))).shouldBe(visible);
-        $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Run Header"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Audit Trail"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Run Summary"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Alarms"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Trends"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Event Summary"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Calibration Summary"))).shouldBe(visible);
+        $(By.xpath(String.format(XPATH_DISABLED_CHECKBOX, "Run Header"))).shouldBe(visible);
         $(By.xpath(String.format(XPATH_TEMPLATE_CHECKBOX, "Run Header"))).isSelected();
         $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Alarms"))).shouldNotBe(visible);
         $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Trends"))).shouldNotBe(visible);
