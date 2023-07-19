@@ -10,9 +10,9 @@ import java.io.InputStream;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.List;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -56,8 +56,8 @@ public class ReportsPageStepsDefinition {
     public String QUERY;
 
     public ReportsPageStepsDefinition(LoginPage loginPage, ReportsPage reportPage, Report report,
-                                      ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
-                                      Backupsetting backupSetting) {
+            ReportTemplate reportTemplate, User user, Login login, Role role, Recipe recipe,
+            Backupsetting backupSetting) {
         this.loginPage = loginPage;
         this.reportPage = reportPage;
         this.report = report;
@@ -90,7 +90,7 @@ public class ReportsPageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.verifyColumn(list.get(i)
-                .get(0), tab, i);
+                    .get(0), tab, i);
         }
     }
 
@@ -125,7 +125,7 @@ public class ReportsPageStepsDefinition {
     @And("I choose corresponding recipe run")
     public void iChooseCorrespondingRecipeRun() {
         report.getRecipes()
-            .forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
+                .forEach(recipe -> reportPage.selectRunWithWaiting(reportTemplate.getName(), recipe.getRunId()));
     }
 
     @When("I choose recipe run {string} for consolidation")
@@ -197,8 +197,8 @@ public class ReportsPageStepsDefinition {
     @When("I check audit trial logs")
     public void iCheckAudiTrialLogs() {
         report.getRecipes()
-            .forEach(
-                recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
+                .forEach(
+                        recipe -> reportPage.checkRecipeCTRLOperationLogs(recipe.getBatchId(), recipe.getRecipeName()));
     }
 
     @When("I should see the report file presence")
@@ -287,7 +287,7 @@ public class ReportsPageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
         for (int i = 1; i < list.size(); i++) {
             reportPage.selectParams(list.get(i)
-                .get(0));
+                    .get(0));
         }
     }
 
@@ -343,7 +343,7 @@ public class ReportsPageStepsDefinition {
     public void iApproveTheReportTemplate() {
         this.reportTemplate.setStatus(ReportTemplateStatus.APPROVED);
         reportPage.approveTemplate(this.reportTemplate.getName(), this.login.getPassword(),
-            this.reportTemplate.getStatus());
+                this.reportTemplate.getStatus());
     }
 
     @Then("I search and verify the report template")
@@ -380,7 +380,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the role added in report")
     public void iVerifyThatRoleIsAdded() throws Exception {
         this.report.checkAddedRole(reportPage.getPdfUrl(), this.role.getRoleName(), this.login.getLogin(),
-            this.role.getPermissions());
+                this.role.getPermissions());
         switchTo().parentFrame();
     }
 
@@ -451,15 +451,15 @@ public class ReportsPageStepsDefinition {
             reportPage.gotoRunTab();
             iSelectReportFromDropdown("Consolidated");
             waiting = !report.getRecipes()
-                .stream()
-                .allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
+                    .stream()
+                    .allMatch(recipe -> reportPage.isRunDisplayed(recipe.getRunId()));
         }
     }
 
     @When("I choose recipes from consolidation run")
     public void iChooseRecipeRunForConsolidation() {
         report.getRecipes()
-            .forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
+                .forEach(r -> reportPage.selectForConsolidationRun(r.getRunId()));
     }
 
     @Given("I select the report template")
@@ -547,10 +547,10 @@ public class ReportsPageStepsDefinition {
         iVerifyTheAuditTrailReport();
         if (attribute.equalsIgnoreCase("permissions")) {
             this.report.checkModifiedRolePermission(reportPage.getPdfUrl(), this.role.getRoleName(),
-                this.login.getLogin(), this.role.getPermissions(), this.role.getOldPermissions());
+                    this.login.getLogin(), this.role.getPermissions(), this.role.getOldPermissions());
         } else if (attribute.equalsIgnoreCase("roleName")) {
             this.report.checkModifiedRoleName(reportPage.getPdfUrl(), this.role.getUpdatedRoleName(),
-                this.role.getRoleName(), this.login.getLogin());
+                    this.role.getRoleName(), this.login.getLogin());
         }
         SelenideHelper.goToDefault();
     }
@@ -620,9 +620,8 @@ public class ReportsPageStepsDefinition {
     public void iCheckAuditTrialReportContentForTemplate() throws Exception {
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkTemplateStatus(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-            this.reportTemplate.getStatus(), this.reportTemplate.getPreviousStatus(), this.login.getLogin());
-        this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(),
-            this.login.getLogin());
+                this.reportTemplate.getStatus(), this.reportTemplate.getPreviousStatus(), this.login.getLogin());
+        this.report.checkCreatedTemplate(reportPage.getPdfUrl(), this.reportTemplate.getName(), this.login.getLogin());
     }
 
     @When("I verify audit logs for template update")
@@ -671,7 +670,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the role disabling enabling events in report")
     public void iVerifyThatRoleIsDisabledAndEnabled() throws Exception {
         this.report.verifyAuditReportForRoleDisableEnable(reportPage.getPdfUrl(), this.role.getRoleName(),
-            this.login.getLogin());
+                this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -686,7 +685,7 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditLogsForResetChangePassword(String passwordAction) {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForResetChangePassword(this.user.getUserName(), passwordAction,
-            this.login.getLogin());
+                this.login.getLogin());
         switchTo().parentFrame();
     }
 
@@ -700,7 +699,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the {string} recipe events in report")
     public void iVerifyRecipeEvents(String recipeAction) throws Exception {
         this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), this.login.getLogin(),
-            recipeAction);
+                recipeAction);
         switchTo().parentFrame();
     }
 
@@ -714,7 +713,7 @@ public class ReportsPageStepsDefinition {
     @Then("I see the {string} backup events in report")
     public void iVerifyBackUpEvent(String backUpAction) throws Exception {
         this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-            this.login.getLogin(), backUpAction);
+                this.login.getLogin(), backUpAction);
         switchTo().parentFrame();
     }
 
@@ -722,14 +721,14 @@ public class ReportsPageStepsDefinition {
     public void iVerifyAuditLogsForScheduleBackUp(String occurrence) {
         reportPage.switchToFrame();
         reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(),
-            occurrence);
+                occurrence);
         switchTo().parentFrame();
     }
 
     @Then("I see the {string} scheduled backup events in report")
     public void iVerifyScheduledBackUpEvent(String occurrence) throws Exception {
         this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-            this.login.getLogin(), occurrence);
+                this.login.getLogin(), occurrence);
         switchTo().parentFrame();
     }
 
@@ -756,71 +755,71 @@ public class ReportsPageStepsDefinition {
     }
 
     @Then("I verify custom summary report for {string}")
-    public void iVerifyCustomSummaryReport (String reportSection) throws Exception {
+    public void iVerifyCustomSummaryReport(String reportSection) throws Exception {
         this.report.verifyCustomReport(reportPage.getPdfUrl(), report.getRowCount(), report.getEndDate(),
-            report.getStartDate(), reportSection);
+                report.getStartDate(), reportSection);
     }
 
     @Given("I check the row count in DB for {string} {string}")
-    public void iGetTheRowCount (String reportSection, String dateRange) throws IOException, SQLException {
+    public void iGetTheRowCount(String reportSection, String dateRange) throws IOException, SQLException {
         setDateRangeFilter(dateRange);
         InputStream input = new FileInputStream("src/test/resources/application.properties");
         Properties prop = new Properties();
         prop.load(input);
         var dbURL = String.format(prop.getProperty("database.url"), Neodymium.configuration()
-            .host(), prop.getProperty("database.databaseName"));
+                .host(), prop.getProperty("database.databaseName"));
         var dbUserName = prop.get("database.dbRunTimeUser");
         var dbPassword = prop.get("database.password");
         DatabaseHelper.connectDB(dbURL, (String) dbUserName, (String) dbPassword);
         if (reportSection.equalsIgnoreCase("AuditTrail")) {
             QUERY = "select COUNT(*) from (select FORMAT(e1.EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n"
-                + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
-                + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
-                + "replace (e1.ValueString,'null','') as ValueString,\n"
-                + "replace (e1.PreviousValueString,'null','') as PreviousValueString\n"
-                + "FROM [Runtime].[dbo].[Events] e1 join [Runtime].[dbo].[Events] e2 on e1.User_Phone = e2.User_Phone\n"
-                + "and e1.Type=e2.Type\n" + "where e1.type='Manual'\n"
-                + "and e1.EventTime Between 'startDate' and 'endDate'\n"
-                + "and e2.EventTime Between 'startDate' and 'endDate'\n"
-                + "and lower(e2.Source_ProcessVariable) = 'parity_flag' and e2.ValueString = '1'\n"
-                + "and lower(e1.Source_ProcessVariable) != 'parity_flag'\n" + "union all\n"
-                + "Select FORMAT(EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n" + "Provider_ApplicationName,\n"
-                + "Source_Object,\n" + "User_Name,\n" + "Comment,\n"
-                + "replace(Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
-                + "replace (ValueString,'null','') as ValueString,\n"
-                + "replace (PreviousValueString,'null','') as PreviousValueString\n"
-                + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
-                + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
+                    + "e1.Provider_ApplicationName,\n" + "e1.Source_Object,\n" + "e1.User_Name,\n" + "e1.Comment,\n"
+                    + "replace(e1.Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
+                    + "replace (e1.ValueString,'null','') as ValueString,\n"
+                    + "replace (e1.PreviousValueString,'null','') as PreviousValueString\n"
+                    + "FROM [Runtime].[dbo].[Events] e1 join [Runtime].[dbo].[Events] e2 on e1.User_Phone = e2.User_Phone\n"
+                    + "and e1.Type=e2.Type\n" + "where e1.type='Manual'\n"
+                    + "and e1.EventTime Between 'startDate' and 'endDate'\n"
+                    + "and e2.EventTime Between 'startDate' and 'endDate'\n"
+                    + "and lower(e2.Source_ProcessVariable) = 'parity_flag' and e2.ValueString = '1'\n"
+                    + "and lower(e1.Source_ProcessVariable) != 'parity_flag'\n" + "union all\n"
+                    + "Select FORMAT(EventTime,'dd/MMM/yyyy HH:mm:ss') as EventTime,\n" + "Provider_ApplicationName,\n"
+                    + "Source_Object,\n" + "User_Name,\n" + "Comment,\n"
+                    + "replace(Source_ProcessVariable, 'null','') as Source_ProcessVariable,\n"
+                    + "replace (ValueString,'null','') as ValueString,\n"
+                    + "replace (PreviousValueString,'null','') as PreviousValueString\n"
+                    + "From  [Runtime].[dbo].[Events]\n" + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
+                    + "And Type = 'User.Write' and InTouchType = 'OPR' and Comment Is Not Null) as auditTrailRecords";
         } else if (reportSection.equalsIgnoreCase("EventSummary")) {
             QUERY = "SELECT COUNT(*)\n" + "FROM [Runtime].[dbo].[Events]\n"
-                + "where EventTime Between 'startDate' and 'endDate'\n"
-                + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
-                + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
-                + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
+                    + "where EventTime Between 'startDate' and 'endDate'\n"
+                    + "And (Type in ('Event', 'Application.Write') or (Type = 'User.Write' and InTouchType = 'OPR' And Comment Is Null)) And Source_ProcessVariable not in\n"
+                    + "('RunHeader.sRecipeRunID', 'SMART_Recipe.StepDataLog', 'RunHeader.sPreRunHeaderDataLog',\n"
+                    + "'RunHeader.sPreRunHeaderComment','RunHeader.sPostRunHeaderDataLog','RunHeader.sPostRunHeaderComment')";
         } else if (reportSection.equalsIgnoreCase("RunSummary")) {
             QUERY = "With CTE As (Select\n" + "Events.EventTime,\n"
-                + "Cast('<M>' + Replace(Replace(Events.ValueString,'&','and'), '©', '</M><M>') + '</M>' As XML)\n"
-                + "As [RecipeStep XML]\n" + "From Events\n"
-                + "Where Events.Source_ProcessVariable In ('SMART_Recipe.StepDataLog') And\n"
-                + "Events.EventTime Between 'startDate' and 'endDate')\n" + "Select COUNT(*) From CTE";
+                    + "Cast('<M>' + Replace(Replace(Events.ValueString,'&','and'), '©', '</M><M>') + '</M>' As XML)\n"
+                    + "As [RecipeStep XML]\n" + "From Events\n"
+                    + "Where Events.Source_ProcessVariable In ('SMART_Recipe.StepDataLog') And\n"
+                    + "Events.EventTime Between 'startDate' and 'endDate')\n" + "Select COUNT(*) From CTE";
         } else if (reportSection.equalsIgnoreCase("ProcessAlarms")) {
             QUERY = "Select COUNT(*) From [Runtime].[dbo].[Events]\n"
-                + "Where Events.EventTime Between 'startDate' and 'endDate' And\n"
-                + "Events.IsAlarm = 1 And Events.Alarm_Type = 'DSC' And\n" + "Events.Priority < 500 And\n"
-                + "(Events.Priority < 11 or Events.Priority > 100)";
+                    + "Where Events.EventTime Between 'startDate' and 'endDate' And\n"
+                    + "Events.IsAlarm = 1 And Events.Alarm_Type = 'DSC' And\n" + "Events.Priority < 500 And\n"
+                    + "(Events.Priority < 11 or Events.Priority > 100)";
         } else if (reportSection.equalsIgnoreCase("SystemAlarms")) {
             QUERY = "Select COUNT(*) From [Runtime].[dbo].[Events]\n"
-                + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
-                + "And Events.IsAlarm = 1 And Events.Priority < 500 and\n"
-                + "(Events.Alarm_Type = 'System' or (Events.Alarm_Type = 'DSC'\n"
-                + "and Events.Priority between 11 and 100))";
+                    + "Where Events.EventTime Between 'startDate' and 'endDate'\n"
+                    + "And Events.IsAlarm = 1 And Events.Priority < 500 and\n"
+                    + "(Events.Alarm_Type = 'System' or (Events.Alarm_Type = 'DSC'\n"
+                    + "and Events.Priority between 11 and 100))";
         }
         report.setRowCount(DatabaseHelper.fetchData(QUERY.replace("startDate", this.report.getStartDate())
-            .replace("endDate", this.report.getEndDate())));
+                .replace("endDate", this.report.getEndDate())));
         DatabaseHelper.close();
     }
 
-    public void setDateRangeFilter (String dateRange) {
+    public void setDateRangeFilter(String dateRange) {
         switch (dateRange) {
             case "Today": {
                 cal.set(Calendar.HOUR_OF_DAY, 0);
@@ -898,7 +897,7 @@ public class ReportsPageStepsDefinition {
     @When("I verify audit logs for recipe with permission {string} & {string}")
     public void iVerifyAuditLogsForRecipe(String action, String userName) throws InterruptedException, IOException {
         iGenerateAuditTrailReport();
-        switch (action){
+        switch (action) {
             case "View Recipe":
                 iVerifyAuditTrailReportRolePermissions("permissions");
                 break;
@@ -908,25 +907,25 @@ public class ReportsPageStepsDefinition {
             case "Deactivate Recipe":
             case "Review Recipe":
                 reportPage.switchToFrame();
-                if(action.equalsIgnoreCase("Create Recipe")){
+                if (action.equalsIgnoreCase("Create Recipe")) {
                     action = "created";
-                } else if(action.equalsIgnoreCase("Deactivate Recipe")){
+                } else if (action.equalsIgnoreCase("Deactivate Recipe")) {
                     action = "Approved-Inactive";
-                } else if (action.equalsIgnoreCase("Review Recipe")){
+                } else if (action.equalsIgnoreCase("Review Recipe")) {
                     action = "Tech-Review";
                 }
                 reportPage.verifyAuditLogsForRecipe(this.recipe.getRecipeName(), userName, action);
                 switchTo().parentFrame();
-                if(!action.equalsIgnoreCase("created")){
+                if (!action.equalsIgnoreCase("created")) {
                     iVerifyTheAuditTrailReport();
-                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(),
-                        userName, action);
+                    this.report.verifyAuditReportForRecipe(reportPage.getPdfUrl(), recipe.getRecipeName(), userName,
+                            action);
                     switchTo().parentFrame();
                 }
                 break;
             case "Control Run":
-                    iCheckAudiTrialLogs();
-                    break;
+                iCheckAudiTrialLogs();
+                break;
 
             default:
 
@@ -944,18 +943,18 @@ public class ReportsPageStepsDefinition {
                 switchTo().parentFrame();
                 iVerifyTheAuditTrailReport();
                 this.report.verifyAuditReportForBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                    userName, "create");
+                        userName, "create");
                 switchTo().parentFrame();
                 break;
             case "Schedule periodic backup":
                 iGenerateAuditTrailReport();
                 reportPage.switchToFrame();
-                reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(), userName,
-                    "Daily");
+                reportPage.verifyAuditLogsForScheduleBackUp(this.backupSetting.getBackupName(), this.login.getLogin(),
+                        userName, "Daily");
                 switchTo().parentFrame();
                 iVerifyTheAuditTrailReport();
-                //this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(), this.backupSetting.getBackupName(),
-                // userName, "Daily");
+                this.report.verifyAuditReportForScheduleBackUp(reportPage.getPdfUrl(),
+                        this.backupSetting.getBackupName(), userName, "Daily");
                 switchTo().parentFrame();
                 break;
         }
@@ -971,6 +970,27 @@ public class ReportsPageStepsDefinition {
                 reportPage.createReportPermission();
                 report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileGenerated());
                 reportPage.reportRequestNotificationVisibility();
+                break;
+            case "Approve Report":
+                reportPage.gotoReportsTab();
+                this.report.setName("AuditTrail_3187");
+                reportPage.eSignReports(this.report.getName(), this.login.getPassword());
+                report.setName(reportPage.waitAndGetGeneratedNameFromNotificationWhenFileSigned());
+                reportPage.switchToFrame();
+                reportPage.gotoRunTab();
+                reportPage.gotoReportsTab();
+                reportPage.checkSigned(this.report.getName(), this.login.getLogin());
+                break;
+            case "View Report Template":
+                reportPage.viewReportTemplatePermission();
+                break;
+            case "Create Report Template":
+                switchTo().parentFrame();
+                iCreateReportTemplate();
+                reportTemplate.setReportIncludeOption("Audit Trail");
+                reportPage.includeReport("Audit Trail");
+                reportPage.saveReportTemplate();
+                reportPage.searchReportOrTemplate(this.reportTemplate.getName());
                 break;
         }
     }

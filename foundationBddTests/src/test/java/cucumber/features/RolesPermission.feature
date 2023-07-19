@@ -74,14 +74,14 @@ Feature: Roles Permissions Check
     And I verify audit logs for recipe with permission "<Permission>" & "UserForPermissions"
 
     Examples:
-      |Permission       |
-      |View Recipe      |
-      |Create Recipe    |
-      |Edit Recipe      |
-      |Approve Recipe   |
-      |Deactivate Recipe|
-      |Review Recipe    |
-      |Control Run      |
+      | Permission        |
+      | View Recipe       |
+      | Create Recipe     |
+      | Edit Recipe       |
+      | Approve Recipe    |
+      | Deactivate Recipe |
+      | Review Recipe     |
+      | Control Run       |
 
   Scenario: Verify unauthorized user is not able to view the roles list
     Given I am logged in as "noViewRoleUser" user
@@ -100,10 +100,10 @@ Feature: Roles Permissions Check
     And I verify audit logs for backup with permission "<Permission>" & "UserForPermissions"
 
     Examples:
-      |Permission                           |
-      |View Backup and Restore History      |
-      |Trigger on-demand backup             |
-      |Schedule periodic backup             |
+      | Permission                      |
+      | View Backup and Restore History |
+      | Trigger on-demand backup        |
+      | Schedule periodic backup        |
 
   Scenario Outline: Verify Permission check for report
     Given I am logged in as "Bio4CAdmin" user
@@ -114,6 +114,15 @@ Feature: Roles Permissions Check
     Then I verify report "<Permission>" permission
 
     Examples:
-      |Permission      |
-      |View Report     |
-      |Create Report   |
+      | Permission             |
+      | View Report            |
+      | Create Report          |
+      | View Report Template   |
+      | Create Report Template |
+
+    @IVI-8133
+    Examples:
+
+      | Permission     |
+      | Approve Report |
+
