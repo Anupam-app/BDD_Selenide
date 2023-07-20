@@ -114,11 +114,13 @@ Feature: Roles Permissions Check
     Then I verify report "<Permission>" permission
 
     Examples:
-      | Permission             |
-      | View Report            |
-      | Create Report          |
-      | View Report Template   |
-      | Create Report Template |
+      | Permission                 |
+      | View Report                |
+      | Create Report              |
+      | View Report Template       |
+      | Create Report Template     |
+      | Approve Report Template    |
+      | Deactivate Report Template |
 
     @IVI-8133
     Examples:

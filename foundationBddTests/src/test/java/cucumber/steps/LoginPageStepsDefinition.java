@@ -1,5 +1,7 @@
 package cucumber.steps;
 
+import java.util.List;
+
 import cucumber.util.LoginUtils;
 import dataobjects.Login;
 import io.cucumber.datatable.DataTable;
@@ -7,7 +9,6 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import java.util.List;
 import pageobjects.pages.HomePage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipeConsolePage;
@@ -25,8 +26,8 @@ public class LoginPageStepsDefinition {
     private final UserPage userPage;
 
 
-    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage, Login login,
-                                    UserProfilePage userProfilePage, UserPage userPage) {
+    public LoginPageStepsDefinition(LoginPage loginPage, HomePage homepage, RecipeConsolePage recipeConsolePage,
+            Login login, UserProfilePage userProfilePage, UserPage userPage) {
         this.loginPage = loginPage;
         this.homepage = homepage;
         this.recipeConsolePage = recipeConsolePage;
@@ -74,11 +75,14 @@ public class LoginPageStepsDefinition {
         List<List<String>> list = table.asLists(String.class);
 
         for (int i = 1; i < list.size(); i++) {
-            loginPage.setUser(list.get(i).get(0));
-            loginPage.setPassword(list.get(i).get(1));
+            loginPage.setUser(list.get(i)
+                    .get(0));
+            loginPage.setPassword(list.get(i)
+                    .get(1));
             loginPage.pushLogin();
             loginPage.checkLoggedIn(false);
-            loginPage.checkMessage(list.get(i).get(2));
+            loginPage.checkMessage(list.get(i)
+                    .get(2));
         }
     }
 
@@ -143,6 +147,7 @@ public class LoginPageStepsDefinition {
         loginPage.openLogin();
         loginPage.setUser(username);
         loginPage.setPassword(password);
+        login.setPassword(password);
         loginPage.pushLogin();
     }
 
@@ -157,7 +162,7 @@ public class LoginPageStepsDefinition {
     }
 
     @And("I verify error message {string}")
-    public void iVerifyErrorMessage(String message){
+    public void iVerifyErrorMessage(String message) {
         loginPage.errorNotification(message);
     }
 }

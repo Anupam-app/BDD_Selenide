@@ -103,7 +103,11 @@ public class RolePage {
     private final SelenideElement roleNameToolTip = $(By.xpath("//div[text()='User Created']/preceding-sibling::div"));
 
     public void clickOnPermission(String permission) {
-        $x(String.format(PERMISSION_TEXT, permission)).click();
+        if (permission.equals("Approve Report Template")) {
+            $(By.xpath("//span[contains(text(),'Approve') and contains(text(),'Template')]")).click();
+        } else {
+            $x(String.format(PERMISSION_TEXT, permission)).click();
+        }
     }
 
     public void gotoRolesTab() {
@@ -407,11 +411,19 @@ public class RolePage {
     }
 
     public void unSelectPermission(String permission) {
-        if ($(By.xpath(String.format(CHECKBOX_ATTRIBUTE, permission))).getAttribute("class")
-                .contains("checked")) {
-            $x(String.format(PERMISSION_TEXT, permission)).click();
-            roleDependencyPopUp();
+        if (permission.equalsIgnoreCase("Approve Report Template")) {
+            String checkbox = "//span[contains(text(),'Approve') and contains(text(),'Template')]/parent::label";
+            if ($(By.xpath(String.format(checkbox))).getAttribute("class")
+                    .contains("checked")) {
+                $(By.xpath("//span[contains(text(),'Approve') and contains(text(),'Template')]")).click();
+            }
+        } else {
+            if ($(By.xpath(String.format(CHECKBOX_ATTRIBUTE, permission))).getAttribute("class")
+                    .contains("checked")) {
+                $x(String.format(PERMISSION_TEXT, permission)).click();
+            }
         }
+        roleDependencyPopUp();
     }
 
     public void roleDependencyPopUp() {

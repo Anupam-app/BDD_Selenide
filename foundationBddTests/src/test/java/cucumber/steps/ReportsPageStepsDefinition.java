@@ -992,6 +992,22 @@ public class ReportsPageStepsDefinition {
                 reportPage.saveReportTemplate();
                 reportPage.searchReportOrTemplate(this.reportTemplate.getName());
                 break;
+            case "Approve Report Template":
+                this.reportTemplate.setName("testReportPermissions");
+                iSearchAndApproveTheReportTemplate();
+                reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+                reportPage.openReportTemplate(this.reportTemplate.getName());
+                Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+                break;
+            case "Deactivate Report Template":
+                this.reportTemplate.setName("testReportPermissions");
+                iSearchTheReportTemplate();
+                iChangeTemplateStatusApprovedToInactive();
+                reportPage.searchReportOrTemplate(this.reportTemplate.getName());
+                reportPage.openReportTemplate(this.reportTemplate.getName());
+                Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+                break;
+
         }
     }
 
