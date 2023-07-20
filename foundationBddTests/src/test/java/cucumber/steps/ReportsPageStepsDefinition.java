@@ -997,7 +997,7 @@ public class ReportsPageStepsDefinition {
                 iSearchAndApproveTheReportTemplate();
                 reportPage.searchReportOrTemplate(this.reportTemplate.getName());
                 reportPage.openReportTemplate(this.reportTemplate.getName());
-                Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+                reportPage.verifyReportStatus(this.reportTemplate.getStatus());
                 break;
             case "Deactivate Report Template":
                 this.reportTemplate.setName("testReportPermissions");
@@ -1005,9 +1005,8 @@ public class ReportsPageStepsDefinition {
                 iChangeTemplateStatusApprovedToInactive();
                 reportPage.searchReportOrTemplate(this.reportTemplate.getName());
                 reportPage.openReportTemplate(this.reportTemplate.getName());
-                Assert.assertEquals(this.reportTemplate.getStatus(), this.reportPage.getStatus());
+                reportPage.verifyReportStatus(this.reportTemplate.getStatus());
                 break;
-
         }
     }
 
