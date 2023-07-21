@@ -1619,5 +1619,9 @@ public class ReportsPage {
         $(By.xpath(String.format(XPATH_TEMPLATE_EYE_ICON, "Trends"))).shouldNotBe(visible);
     }
 
+    public void verifyReportStatus(String savedStatus) {
+        Assert.assertEquals(savedStatus, getStatus());
+    }
+
 }
 
