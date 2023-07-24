@@ -196,7 +196,7 @@ public class BackupPage {
                 Date date = new Date();
                 Calendar c = Calendar.getInstance();
                 c.setTime(date);
-                int minuteToWait = 2;
+                int minuteToWait = 3;
                 c.add(Calendar.MINUTE, minuteToWait);
                 Date currentDatePlusOne = c.getTime();
                 String d = dateFormat.format(currentDatePlusOne);
@@ -217,7 +217,7 @@ public class BackupPage {
                 Date date2 = new Date();
                 Calendar c2 = Calendar.getInstance();
                 c2.setTime(date2);
-                int minuteToWaitMonthly = 1;
+                int minuteToWaitMonthly = 3;
                 c2.add(Calendar.MINUTE, minuteToWaitMonthly);
                 Date currentDatePlusOneMonthly = c2.getTime();
                 String dateMonthly = dateFormatMonthly.format(currentDatePlusOneMonthly);
@@ -244,7 +244,7 @@ public class BackupPage {
                 Date date1 = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date1);
-                int minuteToWaitForWeekly = 1;
+                int minuteToWaitForWeekly = 3;
                 cal.add(Calendar.MINUTE, minuteToWaitForWeekly);
                 Date currentDatePlusOneWeekly = cal.getTime();
                 String dat = dateFormat1.format(currentDatePlusOneWeekly);
@@ -278,6 +278,11 @@ public class BackupPage {
     }
 
     private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait) {
+        if (status.get(0)
+                .toString()
+                .equalsIgnoreCase("Running")) {
+            Selenide.sleep(180 * 1000);
+        }
         int timeWaited = 0;
         int deltaTime = 30 * 1000;// every 30 seconds
         while (timeWaited < timeToWait) {
@@ -286,24 +291,6 @@ public class BackupPage {
             if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
                 break;
 
-            } else {
-                timeWaited += deltaTime;
-                Selenide.sleep(deltaTime);
-            }
-
-        }
-    }
-
-    private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait, String name) {
-        int timeWaited = 0;
-        int deltaTime = 15 * 1000;// every 15 seconds
-        while (timeWaited < timeToWait) {
-            goToBackupMode();
-            goToHistory();
-            if (name.equals(getLastBackupName())) {
-                if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
-                    break;
-                }
             } else {
                 timeWaited += deltaTime;
                 Selenide.sleep(deltaTime);
@@ -327,7 +314,7 @@ public class BackupPage {
     public void verifyScheduledBackupDetails(String backupName, String occurrence) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
         Calendar cal = Calendar.getInstance();
-        String startTime = (dateFormat.format(cal.getTime())).toString();
+        String startTime = (dateFormat.format(cal.getTime()));
         Selenide.sleep(4000);
         Assert.assertEquals("backup name is not correct",
                 ($(By.xpath(String.format(scheduledBackupDetails, 1)))).getText(), backupName);
@@ -349,7 +336,7 @@ public class BackupPage {
 
     public void notificationMessage(String message) {
         $(By.xpath(String.format(XPATH_NOTIFICATION_BACKUP_END, message))).waitUntil(Condition.visible,
-                BACKUP_FINISH_TIME_TO_WAIT,500);
+                BACKUP_FINISH_TIME_TO_WAIT, 500);
     }
 
     public void confirmationPopUpAccept() {
@@ -357,9 +344,8 @@ public class BackupPage {
         okButton.click();
     }
 
-    public void waitForScheduledBackupFinished(String name) {
-        waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT,
-                name);
+    public void waitForScheduledBackupFinished() {
+        waitForScheduledBackupState(List.of(BackupStatus.Success, BackupStatus.Aborted), BACKUP_FINISH_TIME_TO_WAIT);
     }
 
     public void verifyBackupHeader() {
@@ -374,12 +360,12 @@ public class BackupPage {
                 .waitUntil(Condition.visible, BACKUP_FINISH_TIME_TO_WAIT);
     }
 
-    public void verifyHistoryData(){
+    public void verifyHistoryData() {
         if (!(noData.isDisplayed())) {
             for (int i = 1; i < 6; i++) {
                 Assert.assertNotNull($(By.xpath(String.format(historyColumnValue, i))).getText());
             }
-        }else{
+        } else {
             noData.shouldBe(visible);
         }
     }

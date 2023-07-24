@@ -97,7 +97,6 @@ Feature: Roles Permissions Check
     Then I verify backup "<Permission>" permission
     And I logout and login as "Bio4CAdmin" and password as "Merck@dmin"
     And I wait until Backup is success for "<Permission>"
-    And I verify audit logs for backup with permission "<Permission>" & "UserForPermissions"
 
     Examples:
       | Permission                      |

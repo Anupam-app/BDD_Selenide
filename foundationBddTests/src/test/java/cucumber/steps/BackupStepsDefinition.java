@@ -1,12 +1,12 @@
 package cucumber.steps;
 
-import io.cucumber.java.en.And;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Assert;
 
 import cucumber.util.I18nUtils;
 import dataobjects.BackupStatus;
 import dataobjects.Backupsetting;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -103,7 +103,7 @@ public class BackupStepsDefinition {
 
     @Then("I wait the end of scheduled backup")
     public void iWaitTheEndOfScheduledBackup() {
-        backupPage.waitForScheduledBackupFinished(backupsetting.getBackupName());
+        backupPage.waitForScheduledBackupFinished();
     }
 
 
