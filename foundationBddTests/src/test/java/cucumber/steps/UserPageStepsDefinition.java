@@ -28,10 +28,11 @@ import pageobjects.pages.ConfigurationPage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.pages.RolePage;
 import pageobjects.pages.SettingPage;
 import pageobjects.pages.TrendsPage;
 import pageobjects.pages.UserPage;
-import pageobjects.pages.RolePage;
+import pageobjects.pages.UserProfilePage;
 import pageobjects.utility.SelenideHelper;
 
 public class UserPageStepsDefinition {
@@ -50,11 +51,12 @@ public class UserPageStepsDefinition {
     private final ReportsPage reportPage;
     private final Login login;
     private final RolePage rolePage;
+    private final UserProfilePage userProfilePage;
 
     public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, LoginPage loginPage,
             RecipePage recipePage, TrendsPage trendsPage, AnalyticsPage analyticsPage, AlarmPage alarmPage,
             BackupPage backupPage, SettingPage settingPage, ConfigurationPage configurationPage, Report report,
-            User user, Login login, RolePage rolePage) {
+            User user, Login login, RolePage rolePage, UserProfilePage userProfilePage) {
         this.userPage = userPage;
         this.user = user;
         this.report = report;
@@ -69,6 +71,7 @@ public class UserPageStepsDefinition {
         this.configurationPage = configurationPage;
         this.settingPage = settingPage;
         this.rolePage = rolePage;
+        this.userProfilePage = userProfilePage;
     }
 
     @Given("I search {string} user")
@@ -492,6 +495,7 @@ public class UserPageStepsDefinition {
                 break;
             case "Unlock Account":
                 unlockAccount("permissionTest");
+                iLogoutAndLogin("permissionTest","MerckApp1@");
                 break;
             case "Reset User password":
                 resetPassword("testUserToResetPwd");
@@ -522,19 +526,6 @@ public class UserPageStepsDefinition {
         theUserNameIsEqualToTheExpectedOne();
     }
 
-    public void enableDisableUser(String userName){
-        iSearchUser(userName);
-        userPage.edit(userName);
-        iDisableTheUser();
-        iSaveMyChanges();
-        userPage.edit(userName);
-        theUserIsDisabled();
-        iEnableTheUser();
-        iSaveMyChanges();
-        userPage.edit(userName);
-        theUserIsEnabled();
-    }
-
     public void unlockAccount(String userName){
         iSearchUser(userName);
         iSeeUserLocked();
@@ -549,6 +540,16 @@ public class UserPageStepsDefinition {
         userPage.edit(userName);
         iClickOnResetPassword();
         iSeePasswordResetMessageDisplayed();
+    }
+
+    public void iLogoutAndLogin(String userName, String password){
+        loginPage.iLogout();
+        loginPage.openLogin();
+        loginPage.setUser(userName);
+        loginPage.setPassword(password);
+        login.setPassword(password);
+        loginPage.pushLogin();
+        userProfilePage.checkUserProfilePresence(true);
     }
 
 }
