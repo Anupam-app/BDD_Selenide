@@ -220,7 +220,7 @@ public class RolePage {
         Assert.assertEquals(roleNameToolTip.getText(), role);
     }
 
-    public void NoRolesTab() {
+    public void noRolesTab() {
         rolesLinkText.should(Condition.not(visible));
     }
 
@@ -434,7 +434,22 @@ public class RolePage {
     }
 
     public void userCannotViewRole() {
-        rolesLinkText.shouldNot(visible);
+        rolesLinkText.shouldNotBe(visible);
+    }
+
+    public void addRoleIsNotDisplayed(){
+        createRoleButton.shouldNotBe(visible);
+    }
+
+    public void viewRoleAccess(String roleName){
+        addRoleIsNotDisplayed();
+        searchRole(roleName);
+        $(By.xpath(String.format(xpathEditRoleIcon, roleName))).shouldNotBe(visible);
+        $(By.xpath(String.format(disableEditButton, roleName))).shouldNotBe(visible);
+    }
+
+    public void closeRoleModal(){
+        commonWaiter(closeButton,visible).click();
     }
 
 }
