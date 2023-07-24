@@ -217,7 +217,7 @@ public class BackupPage {
                 Date date2 = new Date();
                 Calendar c2 = Calendar.getInstance();
                 c2.setTime(date2);
-                int minuteToWaitMonthly = 1;
+                int minuteToWaitMonthly = 3;
                 c2.add(Calendar.MINUTE, minuteToWaitMonthly);
                 Date currentDatePlusOneMonthly = c2.getTime();
                 String dateMonthly = dateFormatMonthly.format(currentDatePlusOneMonthly);
@@ -244,7 +244,7 @@ public class BackupPage {
                 Date date1 = new Date();
                 Calendar cal = Calendar.getInstance();
                 cal.setTime(date1);
-                int minuteToWaitForWeekly = 1;
+                int minuteToWaitForWeekly = 3;
                 cal.add(Calendar.MINUTE, minuteToWaitForWeekly);
                 Date currentDatePlusOneWeekly = cal.getTime();
                 String dat = dateFormat1.format(currentDatePlusOneWeekly);
@@ -278,7 +278,9 @@ public class BackupPage {
     }
 
     private void waitForScheduledBackupState(List<BackupStatus> status, int timeToWait) {
-        if (status.equals("Running")) {
+        if (status.get(0)
+                .toString()
+                .equalsIgnoreCase("Running")) {
             Selenide.sleep(180 * 1000);
         }
         int timeWaited = 0;
@@ -312,7 +314,7 @@ public class BackupPage {
     public void verifyScheduledBackupDetails(String backupName, String occurrence) {
         DateFormat dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
         Calendar cal = Calendar.getInstance();
-        String startTime = (dateFormat.format(cal.getTime())).toString();
+        String startTime = (dateFormat.format(cal.getTime()));
         Selenide.sleep(4000);
         Assert.assertEquals("backup name is not correct",
                 ($(By.xpath(String.format(scheduledBackupDetails, 1)))).getText(), backupName);
