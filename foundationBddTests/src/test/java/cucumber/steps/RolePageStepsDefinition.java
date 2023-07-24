@@ -134,7 +134,7 @@ public class RolePageStepsDefinition {
 
     @Then("I do not see Roles mode")
     public void iDoNotSeeRolesMode() {
-        rolePage.NoRolesTab();
+        rolePage.noRolesTab();
     }
 
     @Then("I see the error message of role {string}")
@@ -304,6 +304,33 @@ public class RolePageStepsDefinition {
     @And("I verify unauthorized user cannot view role")
     public void userCannotViewRole() {
         rolePage.userCannotViewRole();
+    }
+
+    @And("I verify Role {string} permission")
+    public void verifyRolePermission(String permission) {
+        switch (permission) {
+            case "View Role":
+                userPage.userTabNotDisplayed();
+                rolePage.viewRoleAccess("testRoleForPermissions");
+                break;
+            case "Create Role":
+                createRole();
+                break;
+            case "Obsolete Role":
+                this.role.setRoleName("obsoleteRolePermission");
+                iSearchTheRole();
+                iDeleteTheRole();
+                break;
+            default :
+        }
+    }
+
+    public void createRole(){
+        iCreateRandomRole();
+        iAssignPermission("Basic navigation");
+        iAssignPermission("View User");
+        iSaveRole();
+        iSeeNotification();
     }
 
 }

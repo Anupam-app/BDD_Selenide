@@ -60,6 +60,8 @@ INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_tempor
 GO
 INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (43, 0x0200000084875C42DDDE72AD9D8DACC3D2E4A7D5A48B2B955C8067F230E7E8A3F0CD0488BCAA70D9E0FC693A76E554DCF5DC2710CC6D2D4C89FDCC15B626CC27D2DF8F008147E3971B31D94AAAE6C295FB72A7CA659C65BB606264AA4A046E0D15BECE99, N'oVZW0r5ZAn8yRsnNZByyww==', N'JFJzuHXkM+ofQW/EXKeiHg==', 0, NULL)
 GO
+INSERT [dbo].[user_password] ([id], [encrypt_password], [salt], [iv], [is_temporary_password], [password_expiry_date]) VALUES (46, 0x02000000ABF59B42508CE2ED1227AC61C0F7ACEE40769D13851FC71E1C55E84B95D1CA8000DE57DC0AB8C45E928926B1A233AF64EE87491642817715E63FF21044127D3397DEE96A1DFB1FB61DF0176CD95D82B4CE469F1D0C733BD88106221ECE29BFF8, N'mFMEs+lk1RvQrFTCakJOeA==', N'ouuKlc9I4+H82VG3lmkcwA==', 0, NULL)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] ON
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (4, N'', N'alexis.thiebaut@merckgroup.com', N'faVppoqqKR', N'true', N'testUser', N'testUser', N'0123456789', N'testUser', 0, 0, NULL, 0)
@@ -112,6 +114,8 @@ INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [firs
 GO
 INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (43, N'', N'anupam.patra@external.merckgroup.com', N'123', N'true', N'noViewRoleUser', N'noRole', N'', N'noViewRoleUser', 0, 0, NULL, 0)
 GO
+INSERT [dbo].[user_store] ([id], [dept], [email], [employee_id], [enable], [first_name], [last_name], [phoneno], [user_name], [is_locked], [unsuccessful_login_attempts], [last_failed_login_attempt], [is_catalog_user]) VALUES (46, N'', N'sailesh.botcha@external.merckgroup.com', N'123412', N'true', N'tester', N'testing', N'', N'permissionTest', 1, 5, NULL, 0)
+GO
 SET IDENTITY_INSERT [dbo].[user_store] OFF
 GO
 SET IDENTITY_INSERT [dbo].[role] ON
@@ -135,6 +139,8 @@ GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (14, N'deleteRole', N'deleteRole', N'deleteRole', NULL, N'deleteRole', N'User Created', 1, 0, N'ENABLED')
 GO
 INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (15, N'testRoleForPermissions', N'testRoleForPermissions', N'testRoleForPermissions', NULL, N'testRoleForPermissions', N'User Created', 1, 0, N'ENABLED')
+GO
+INSERT [dbo].[role] ([id], [description], [role_code], [role_name], [ccp_role_name], [windows_role_name], [role_type], [status], [internal_use_only], [role_status]) VALUES (16, N'obsoleteRolePermission', N'obsoleteRolePermission', N'obsoleteRolePermission', NULL, N'obsoleteRolePermission', N'User Created', 1, 0, N'ENABLED')
 GO
 SET IDENTITY_INSERT [dbo].[role] OFF
 GO
@@ -187,6 +193,8 @@ GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (42, 15)
 GO
 INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (43, 5)
+GO
+INSERT [dbo].[user_role] ([user_id], [role_id]) VALUES (46, 6)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (5, 1)
 GO
@@ -311,6 +319,16 @@ GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (15, 1)
 GO
 INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (15, 56)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (16, 1)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (16, 56)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (16, 57)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (16, 62)
+GO
+INSERT [dbo].[role_permission] ([role_id], [permission_id]) VALUES (16, 63)
 GO
 DELETE FROM dbo.user_preferences;
 GO

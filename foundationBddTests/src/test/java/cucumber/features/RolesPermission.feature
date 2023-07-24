@@ -128,3 +128,31 @@ Feature: Roles Permissions Check
       | Permission     |
       | Approve Report |
 
+  Scenario Outline: Verify Permission check for User
+    Given I am logged in as "Bio4CAdmin" user
+    And I trigger roles mode
+    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
+    When I go to user page
+    Then I verify User "<Permission>" permission
+
+    Examples:
+      | Permission          |
+      | View User           |
+      | Create User         |
+      | Unlock Account      |
+      | Reset User password |
+
+  Scenario Outline: Verify Permission check for Role
+    Given I am logged in as "Bio4CAdmin" user
+    And I trigger roles mode
+    And I update the role "testRoleForPermissions" with Permission "<Permission>"
+    And I logout and login as "UserForPermissions" and password as "MerckApp1@"
+    When I trigger roles mode
+    Then I verify Role "<Permission>" permission
+
+    Examples:
+      | Permission       |
+      | View Role        |
+      | Create Role      |
+      | Obsolete Role    |

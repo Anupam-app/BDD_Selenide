@@ -28,9 +28,11 @@ import pageobjects.pages.ConfigurationPage;
 import pageobjects.pages.LoginPage;
 import pageobjects.pages.RecipePage;
 import pageobjects.pages.ReportsPage;
+import pageobjects.pages.RolePage;
 import pageobjects.pages.SettingPage;
 import pageobjects.pages.TrendsPage;
 import pageobjects.pages.UserPage;
+import pageobjects.pages.UserProfilePage;
 import pageobjects.utility.SelenideHelper;
 
 public class UserPageStepsDefinition {
@@ -48,11 +50,13 @@ public class UserPageStepsDefinition {
     private final Report report;
     private final ReportsPage reportPage;
     private final Login login;
+    private final RolePage rolePage;
+    private final UserProfilePage userProfilePage;
 
     public UserPageStepsDefinition(ReportsPage reportPage, UserPage userPage, LoginPage loginPage,
             RecipePage recipePage, TrendsPage trendsPage, AnalyticsPage analyticsPage, AlarmPage alarmPage,
             BackupPage backupPage, SettingPage settingPage, ConfigurationPage configurationPage, Report report,
-            User user, Login login) {
+            User user, Login login, RolePage rolePage, UserProfilePage userProfilePage) {
         this.userPage = userPage;
         this.user = user;
         this.report = report;
@@ -66,6 +70,8 @@ public class UserPageStepsDefinition {
         this.backupPage = backupPage;
         this.configurationPage = configurationPage;
         this.settingPage = settingPage;
+        this.rolePage = rolePage;
+        this.userProfilePage = userProfilePage;
     }
 
     @Given("I search {string} user")
@@ -76,12 +82,12 @@ public class UserPageStepsDefinition {
 
     @When("I see the user is locked")
     public void iSeeUserLocked() {
-        userPage.UserLocked(this.user.getUserName());
+        userPage.userLocked(this.user.getUserName());
     }
 
     @When("I see the user is unlocked")
     public void iSeeUserUnLocked() {
-        userPage.UserUnLocked(this.user.getUserName());
+        userPage.userUnLocked(this.user.getUserName());
     }
 
     @When("I search the user")
@@ -476,6 +482,74 @@ public class UserPageStepsDefinition {
     @And("I verify {string} role is not present")
     public void verifyRoleIsNotPresent(String roleName){
         userPage.verifyRoleIsNotPresent(roleName);
+    }
+
+    @And("I verify User {string} permission")
+    public void verifyUserPermission(String permission){
+        switch (permission) {
+            case "View User":
+                viewUserPermissionCheck();
+                break;
+            case "Create User":
+                createRandomUser();
+                break;
+            case "Unlock Account":
+                unlockAccount("permissionTest");
+                iLogoutAndLogin("permissionTest","MerckApp1@");
+                break;
+            case "Reset User password":
+                resetPassword("testUserToResetPwd");
+                break;
+            default:
+        }
+    }
+
+    public void viewUserPermissionCheck(){
+        createUserIconPresence("not exists");
+        rolePage.userCannotViewRole();
+        iCannotModifyUser();
+    }
+
+    public void createRandomUser(){
+        iCreateRandomUsername();
+        iSelectRole("Operator");
+        iEnterRandomFirstName();
+        iEnterRandomLastName();
+        iEnterRandomEmployeeID();
+        iEnterRandomDepartment();
+        iEnterEmail("sailesh.botcha@external.merckgroup.com");
+        iEnterMobNum("9123412341");
+        iChooseUserLanguage("English");
+        iSaveNewUser();
+        iSearchTheUser();
+        iModifyUser();
+        theUserNameIsEqualToTheExpectedOne();
+    }
+
+    public void unlockAccount(String userName){
+        iSearchUser(userName);
+        iSeeUserLocked();
+        userPage.edit(userName);
+        iClickOnUnlockAccount();
+        iSeeAccountUnlockMessageDisplayed();
+        userPage.closeUserPropModal();
+    }
+
+    public void resetPassword(String userName){
+        iSearchUser(userName);
+        userPage.edit(userName);
+        iClickOnResetPassword();
+        iSeePasswordResetMessageDisplayed();
+    }
+
+    public void iLogoutAndLogin(String userName, String password){
+        loginPage.iLogout();
+        loginPage.openLogin();
+        loginPage.setUser(userName);
+        loginPage.setPassword(password);
+        login.setPassword(password);
+        loginPage.pushLogin();
+        userProfilePage.checkUserProfilePresence(true);
     }
 
 }

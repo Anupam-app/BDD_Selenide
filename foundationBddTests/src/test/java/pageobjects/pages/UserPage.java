@@ -63,7 +63,7 @@ public class UserPage {
     private final SelenideElement activeIcon = $(By.xpath("//div[@class='icontitle active']"));
     private final SelenideElement filterIcon = $(By.xpath("//div[contains(@class,'filter-icon')]"));
     private final SelenideElement upArrowIcon = $(By.xpath("//div[contains(@class,'arrowupuserfilter')]"));
-    private final SelenideElement UsersLinkText =
+    private final SelenideElement usersLinkText =
             $(By.xpath("//*[contains(@class,'subMenu')][contains(text(),'Users')]"));
     private final SelenideElement idManagementPageLinkText = $(By.id("UserManagement"));
     private final SelenideElement filterTagText = $(By.xpath("//div[@class='filter-criteria-tag']"));
@@ -111,7 +111,7 @@ public class UserPage {
     private final SelenideElement roleAssigned =
             $(By.xpath("//table[@id='foundusertable']/tbody/tr/td[@class='rolecss']/div/div"));
     private final String moduleName = "//div[text()='%s']";
-
+    private final SelenideElement closeUserPropModal = $(By.xpath("//div[contains(@class,'crossicon')]"));
     private final String unlockMessage = "The account was successfully unlocked";
     private final ElementsCollection rolesPresent = $$(By.xpath("//div[@class='role-dropdown']/following::ul/div/li"));
 
@@ -120,13 +120,13 @@ public class UserPage {
         userSearchTextBox.setValue(search);
     }
 
-    public void UserLocked(String user) {
+    public void userLocked(String user) {
         $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible)
                 .shouldHave(cssValue("color", "rgba(230, 30, 80, 1)"));
         $(By.xpath(String.format(xpathUserName, user))).shouldHave(attribute("class", "rowLockedUser"));
     }
 
-    public void UserUnLocked(String user) {
+    public void userUnLocked(String user) {
         cancelButton.click();
         $(By.xpath(String.format(xpathUserName, user))).shouldBe(visible)
                 .shouldHave(cssValue("color", "rgba(33, 37, 41, 1)"));
@@ -270,7 +270,7 @@ public class UserPage {
     }
 
     public void triggerUsersMode() throws AWTException {
-        UsersLinkText.click();
+        usersLinkText.click();
         zoomOut();
     }
 
@@ -321,7 +321,7 @@ public class UserPage {
         Assert.assertTrue(XPATH_NOTIFICATION_TEXT.getText()
                 .equalsIgnoreCase("User " + name
                         + " password reset successfully! New password has been sent to the user's registered email address."));
-        commonWaiter(cancelButton, visible).click();
+        closeUserPropModal();
     }
 
     public void isGeneratedNotificationWhenAccountUnlock() {
@@ -480,6 +480,14 @@ public class UserPage {
                 break;
             }
         }
+    }
+
+    public void closeUserPropModal(){
+        commonWaiter(closeUserPropModal,visible).click();
+    }
+
+    public void userTabNotDisplayed(){
+        usersLinkText.shouldNotBe(visible);
     }
 
 }
