@@ -144,29 +144,6 @@ Feature: Recipe Management console
     And I wait the end of the execution of the recipe during 25 seconds
     And Recipe should be executed
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
-  Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732|BIOFOUND-12586: Verify state of Manual Operation tab when Recipe execution is in progress
-    Given I expand recipe console in pnid
-    When I load recipe "testRecipeToExecute"
-    Then I verify Manual Operation tab is "enabled"
-    And I verify Recipe Run tab is "enabled"
-    When I start recipe execution
-    Then I verify Manual Operation tab is "disabled"
-    And I pause recipe and verify recipe paused and jump icon is disabled
-    And I verify Manual Operation tab is "disabled"
-    When I resume and verify recipe execution is resumed
-    Then I verify Manual Operation tab is "disabled"
-    #TO-DO: needs enhancement on scripting techniques
-    And I wait the end of the execution of the recipe during 12 seconds
-    And I should see the recipe run "Completed"
-    And I verify Manual Operation tab is "enabled"
-    And I verify Recipe Run tab is "enabled"
-    And I re-run the recipe
-    Then I verify Manual Operation tab is "disabled"
-    And I click on abort button
-    Then I should see the recipe run aborted
-    And I verify Manual Operation tab is "enabled"
-
   Scenario: BIOCRS-4047|4050|5480|BIOFOUND-9732: Verify state of Manual Operation tab when Recipe execution is in progress
     Given I expand recipe console in pnid
     When I load recipe "testRecipeToExecute"
