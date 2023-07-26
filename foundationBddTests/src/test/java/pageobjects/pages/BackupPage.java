@@ -300,7 +300,7 @@ public class BackupPage {
 
     private void waitForImmediateBackupState(List<BackupStatus> status, int timeToWait) {
         int timeWaited = 0;
-        int deltaTime = 30 * 1000;// every 30 seconds
+        int deltaTime = 15 * 1000;// every 30 seconds
         while (timeWaited < timeToWait) {
             goToBackupMode();
             goToHistory();
