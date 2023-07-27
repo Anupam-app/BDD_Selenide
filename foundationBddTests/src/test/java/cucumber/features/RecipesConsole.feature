@@ -97,10 +97,11 @@ Feature: Recipe Management console
     And I select date range as "Today"
     Then I verify recipe details captured in report run tab "testRecipeToExecute"
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
+  @BIOCRS-9352 @IVI-7256 @IVI-8163
   Scenario: BIOCRS-5496|BIOFOUND-12592: Verify Pre-run modal for Manual run Recipe execution
     When I expand recipe console in pnid
     And I select "MANUAL OPERATION" tab
+    Then I should see start button is displayed
     When I click on start button
     When I start manual recipe execution
     And I click ok button
@@ -177,7 +178,7 @@ Feature: Recipe Management console
     Then I verify Manual Operation tab is "enabled"
     Then I verify Recipe Run tab is "enabled"
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040 @IVI-7982
+  @BIOCRS-9352 @IVI-7256 @IVI-8163 @IVI-7982
   Scenario: BIOCRS-4049|5479: Verify Run start behavioral transitions during Manual Operation run & post-Run modal timeout verification
     Given I expand recipe console in pnid
     When I select "MANUAL OPERATION" tab
@@ -228,22 +229,6 @@ Feature: Recipe Management console
     And I expand recipe console in pnid
     And I verify the recipe execution details in console View
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
-  Scenario: Verify Pre-run modal for Manual run Recipe execution|BIOCRS-5496|
-    Given I expand recipe console in pnid
-    When I select "MANUAL OPERATION" tab
-    Then I should see start button is displayed
-    When I click on start button
-    When I start manual recipe execution
-    And I click ok button
-    And I click on start button
-    Then I should see "Mandatory field should not be empty." message
-    When I enter existing value in RUNID
-    Then I should see message "Run ID is already in use."
-    When I enter special characters "@!#$%^&*" in comments section
-    Then I should not see special characters not allowed
-    And I Verify manual run status in recipe console
-
   Scenario: BIOFOUND-13271: Verify recipe console extended view UI when a recipe having lengthy recipe title and description is downloaded
     Given I expand recipe console
     When I load recipe "testRecipeWithChar30NameLengt"
@@ -264,7 +249,7 @@ Feature: Recipe Management console
     And I Abort the recipe execution
     And I validate the RUNID BATCHID text displayed on Post run window
 
-  @BIOCRS-9352 @IVI-7256 @IVI-7040
+  @BIOCRS-9352 @IVI-7256 @IVI-8163
   Scenario: BIOFOUND-13275: Verify manual run UI from recipe console extended view.
     Given I expand recipe console
     When I select "Manual operation" tab
