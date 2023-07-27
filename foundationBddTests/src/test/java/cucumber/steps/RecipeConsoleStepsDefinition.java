@@ -29,7 +29,7 @@ public class RecipeConsoleStepsDefinition {
 
     private final RecipeConsolePage recipeConsolePage;
     private Recipe currentRecipe;
-    private final List<Recipe>recipes;
+    private final List<Recipe> recipes;
     private final Report report;
     private final Analytics analytics;
     private final ReportsPage reportPage;
@@ -412,8 +412,8 @@ public class RecipeConsoleStepsDefinition {
     @And("I start Manual run")
     public void manualRun() throws InterruptedException {
         generateRecipeValues(null, null);
-        String runId = recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(), this.currentRecipe.getBatchId(),
-                this.currentRecipe.getBeforeComments());
+        String runId = recipeConsolePage.manualRunStart(this.currentRecipe.getProductId(),
+                this.currentRecipe.getBatchId(), this.currentRecipe.getBeforeComments());
         currentRecipe.setRunId(runId);
         recipes.add(currentRecipe);
     }
@@ -720,6 +720,7 @@ public class RecipeConsoleStepsDefinition {
     @Then("I verify mouse hover on step displays tool tip with full step details")
     public void iVerifyMouseHoverStepDetails() {
         recipeConsolePage.iCheckStepDetailsWithMouseHover();
+        recipeConsolePage.clickOnAbortButton("Run is aborted.");
     }
 
     @And("I should see recipe execution started successfully")
@@ -824,17 +825,17 @@ public class RecipeConsoleStepsDefinition {
         list.put("RunID", this.currentRecipe.getRunId());
         list.put("Start Date", this.currentRecipe.getStartDate());
         list.put("End Date", this.currentRecipe.getEndDate());
-        list.put("Pre-run Comment",this.currentRecipe.getBeforeComments());
-        list.put("Post-run Comment",this.currentRecipe.getAfterComments());
+        list.put("Pre-run Comment", this.currentRecipe.getBeforeComments());
+        list.put("Post-run Comment", this.currentRecipe.getAfterComments());
         list.put("Run Status", this.currentRecipe.getStatus());
-        this.report.validateManualRunSummary(reportPage.getPdfUrl(),list);
+        this.report.validateManualRunSummary(reportPage.getPdfUrl(), list);
         this.report.checkEventTable(reportPage.getPdfUrl());
         this.report.checkAuditTable(reportPage.getPdfUrl());
         this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(), "Process Alarm");
-        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(),"System Alarm");
+        this.report.checkProcessSystemAlarm(reportPage.getPdfUrl(), "System Alarm");
     }
 
-    public void runRecipe(String recipeName, String stepNo){
+    public void runRecipe(String recipeName, String stepNo) {
         recipeConsolePage.gotoRecipeConsole();
         Selenide.sleep(2000);
         this.currentRecipe = new Recipe();

@@ -295,7 +295,22 @@ public class BackupPage {
                 timeWaited += deltaTime;
                 Selenide.sleep(deltaTime);
             }
+        }
+    }
 
+    private void waitForImmediateBackupState(List<BackupStatus> status, int timeToWait) {
+        int timeWaited = 0;
+        int deltaTime = 15 * 1000;// every 30 seconds
+        while (timeWaited < timeToWait) {
+            goToBackupMode();
+            goToHistory();
+            if (!getLastStatusText().equals("") && status.contains(BackupStatus.valueOf(getLastStatusText()))) {
+                break;
+
+            } else {
+                timeWaited += deltaTime;
+                Selenide.sleep(deltaTime);
+            }
         }
     }
 
@@ -327,7 +342,7 @@ public class BackupPage {
     }
 
     public void waitForImmediateBackupRunning() {
-        waitForScheduledBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
+        waitForImmediateBackupState(List.of(BackupStatus.Running), BACKUP_IMMEDIATE_TIME_TO_WAIT);
     }
 
     public void waitForImmediateBackupSuccess() {
