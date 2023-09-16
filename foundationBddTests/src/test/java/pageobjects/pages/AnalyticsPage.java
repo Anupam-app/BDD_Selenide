@@ -46,9 +46,9 @@ public class AnalyticsPage {
     private final SelenideElement cancelButton = $(By.xpath("//span[@class='cancel-aggregate']"));
 
     private final SelenideElement applyRelationalSettingsButton =
-            $(By.xpath("//*[@id = 'relational-apply'][@class = 'ant-btn relational-apply-button']"));
+            $(By.xpath("//*[@id = 'relational-apply']"));
     private final SelenideElement applyRegressionSettingsButton =
-            $(By.xpath("//*[@id = 'regression-apply'][@class = 'ant-btn regression-apply-button']"));
+            $(By.xpath("//*[@id = 'regression-apply']"));
     private final SelenideElement clickOnData = $(By.xpath("//span[text()='Data']"));
     private final SelenideElement clickOnScatter = $(By.xpath("//span[text()='Scatter']"));
     private final SelenideElement switchToXaxis = $(By.xpath("//img[@class='x-axis-switch']"));
